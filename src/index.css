@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #212529 !important;
+  margin: 0;
+}
+
+.dropdown-menu {
+  height: 150px;
+  overflow-y: scroll;
+}
+
+div.type-circle {
+  width: 25px;
+  height: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  line-height: 25px;
+}
+
+.event-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  height: auto;
+}
+
+.event-content.event-hide {
+  max-height: 0;
+}
+
+.event {
+  margin: 20px;
+  padding: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+}

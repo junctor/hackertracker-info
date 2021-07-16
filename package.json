@@ -1,6 +1,7 @@
 {
   "name": "ht-web",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.13",
@@ -17,7 +18,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "set \"INLINE_RUNTIME_CHUNK=false\" && craco build",
+    "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },

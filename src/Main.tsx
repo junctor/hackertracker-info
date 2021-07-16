@@ -25,44 +25,47 @@ const Main = () => {
 
   const theme = new Theme();
 
-  let filteredEvents = events;
+  const filterEvents = (htEvent: HTEvent): boolean => {
+    if (category) {
+      return htEvent.type.name === category;
+    }
 
-  if (weekday === "bookmarks") {
-    const bookmarks: string[] =
-      JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
-    filteredEvents = filteredEvents.filter((e) =>
-      bookmarks.includes(e.id.toString())
-    );
-  }
+    if (event) {
+      return htEvent.id.toString() === event;
+    }
 
-  if (conDays.includes(weekday)) {
-    filteredEvents = filteredEvents.filter(
-      (e) =>
-        eventWeekday(new Date(e.begin), "America/Los_Angeles", localTime) ===
-        weekday
-    );
-  }
-
-  if (category) {
-    filteredEvents = events.filter((e) => e.type.name === category);
-  }
-
-  if (event) {
-    filteredEvents = events.filter((e) => e.id.toString() === event);
-  }
-
-  if (searchQuery) {
-    filteredEvents = filteredEvents.filter(
-      (e) =>
-        e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        e.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        e.speakers
+    if (searchQuery) {
+      return (
+        htEvent.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        htEvent.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        htEvent.speakers
           .map((s) => s.name)
           .join()
           .toLowerCase()
           .includes(searchQuery.toLowerCase())
-    );
-  }
+      );
+    }
+
+    if (weekday === "bookmarks") {
+      const bookmarks: string[] =
+        JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
+      return bookmarks.includes(htEvent.id.toString());
+    }
+
+    if (conDays.includes(weekday)) {
+      return (
+        eventWeekday(
+          new Date(htEvent.begin),
+          "America/Los_Angeles",
+          localTime
+        ) === weekday
+      );
+    }
+
+    return false;
+  };
+
+  const filteredEvents = events.filter(filterEvents);
 
   useEffect(() => {
     (async () => {
@@ -117,7 +120,7 @@ const Main = () => {
       <div className='flex space-x-3'>
         <div className='flex-1'>
           <div>
-            {event == null ? (
+            {!event && !searchQuery ? (
               <ul className='flex'>
                 {conDays.map((conDay) => (
                   <li key={conDay} className='-mb-px mr-1'>

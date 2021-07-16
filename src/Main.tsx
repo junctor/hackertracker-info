@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SearchCircleIcon, StarIcon } from "@heroicons/react/solid";
+import { SearchCircleIcon, StarIcon, HomeIcon } from "@heroicons/react/solid";
 import { useParams } from "react-router-dom";
 import { eventData } from "./fb";
 import { eventDay, eventWeekday } from "./utils";
@@ -117,34 +117,49 @@ const Main = () => {
       <div className='flex space-x-3'>
         <div className='flex-1'>
           <div>
-            <ul className='flex'>
-              {conDays.map((conDay) => (
-                <li key={conDay} className='-mb-px mr-1'>
+            {event == null ? (
+              <ul className='flex'>
+                {conDays.map((conDay) => (
+                  <li key={conDay} className='-mb-px mr-1'>
+                    <button
+                      type='button'
+                      className={`inline-block ${
+                        conDay === weekday
+                          ? "border-l-4 border-t-4 border-r-4 rounded-t"
+                          : ""
+                      } py-2 px-4 text-${theme.color} font-semibold`}
+                      onClick={() => setWeekday(conDay)}>
+                      {conDay}
+                    </button>
+                  </li>
+                ))}
+                <li className='-mb-px mr-1'>
                   <button
                     type='button'
                     className={`inline-block ${
-                      conDay === weekday
+                      weekday === "bookmarks"
                         ? "border-l-4 border-t-4 border-r-4 rounded-t"
                         : ""
-                    } py-2 px-4 text-${theme.color} font-semibold`}
-                    onClick={() => setWeekday(conDay)}>
-                    {conDay}
+                    } py-2 px-4 text-orange font-semibold`}
+                    onClick={() => setWeekday("bookmarks")}>
+                    <StarIcon className='h-6 w-6 text-orange' />
                   </button>
                 </li>
-              ))}
-              <li className='-mb-px mr-1'>
-                <button
-                  type='button'
-                  className={`inline-block ${
-                    weekday === "bookmarks"
-                      ? "border-l-4 border-t-4 border-r-4 rounded-t"
-                      : ""
-                  } py-2 px-4 text-orange font-semibold`}
-                  onClick={() => setWeekday("bookmarks")}>
-                  <StarIcon className='h-6 w-6 text-orange' />
-                </button>
-              </li>
-            </ul>
+              </ul>
+            ) : (
+              <ul>
+                <li className='-mb-px mr-1'>
+                  <button
+                    type='button'
+                    className='inline-block py-2 px-4 text-blue font-semibold'
+                    onClick={() => {
+                      document.location.pathname = "";
+                    }}>
+                    <HomeIcon className='h-6 w-6 text-blue' />
+                  </button>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
         <div className='flex align-middle'>

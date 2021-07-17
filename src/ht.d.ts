@@ -100,10 +100,6 @@ type LoadingProps = {
   conf: string;
 };
 
-type EventParams = {
-  event: string | undefined;
-};
-
 interface HeadingLink {
   href: string;
   text: string;

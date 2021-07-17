@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { StarIcon } from "@heroicons/react/solid";
 import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
 import cal from "./cal";
-import { EventParams, EventProps } from "./ht";
+import { EventProps } from "./ht";
 import { Theme } from "./theme";
 import { eventTime, addBookmark, removeBookmark } from "./utils";
 
 const Events = ({ events, localTime }: EventProps) => {
-  const { event } = useParams<EventParams>();
+  const eventId = new URLSearchParams(document.location.search).get("event");
+
   const [bookmarks, setBookmarks] = useState<string[]>([]);
 
-  const showEvent = (eventId: string) => {
-    const content = document.getElementById(eventId);
+  const showEvent = (eventShow: string) => {
+    const content = document.getElementById(eventShow);
     content?.classList.toggle("event-hide");
   };
 
@@ -98,7 +98,7 @@ const Events = ({ events, localTime }: EventProps) => {
 
                   <div
                     id={data.id.toString()}
-                    className={`event-content ${event ? "" : "event-hide"}`}>
+                    className={`event-content ${eventId ? "" : "event-hide"}`}>
                     <div className='mt-5 mb-1 text-gray-dark text-sm'>
                       {`${eventTime(
                         new Date(data.begin),
@@ -140,8 +140,10 @@ const Events = ({ events, localTime }: EventProps) => {
                             document.URL.endsWith("/")
                               ? document.URL.slice(0, -1)
                               : document.URL
-                          ).replaceAll(`/${data.id}`, "");
-                          navigator.clipboard.writeText(`${url}/${data.id}`);
+                          ).replaceAll(`/?event=${data.id}`, "");
+                          navigator.clipboard.writeText(
+                            `${url}/?event=${data.id}`
+                          );
                         }}>
                         Copy Event Link
                       </button>

@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { firebaseInit } from "./fb";
 import { Heading } from "./Heading";
 import Main from "./Main";
@@ -21,16 +20,10 @@ const HackerTracker = () => {
   }, []);
 
   return (
-    <Router>
-      <Switch>
-        <Route path={["/:event", "/"]}>
-          <div>
-            <Heading />
-            <Main />
-          </div>
-        </Route>
-      </Switch>
-    </Router>
+    <div>
+      <Heading />
+      <Main />
+    </div>
   );
 };
 

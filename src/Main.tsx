@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { SearchCircleIcon, StarIcon, HomeIcon } from "@heroicons/react/solid";
-import { useParams } from "react-router-dom";
 import { eventData } from "./fb";
 import { eventDay, eventWeekday } from "./utils";
-import { HTEvent, EventParams } from "./ht";
+import { HTEvent } from "./ht";
 import Events from "./Events";
 import { Theme } from "./theme";
 
@@ -17,7 +16,7 @@ const Main = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { event } = useParams<EventParams>();
+  const eventId = new URLSearchParams(document.location.search).get("event");
 
   const conferenceCode = "DEFCON28";
 
@@ -30,8 +29,8 @@ const Main = () => {
       return htEvent.type.name === category;
     }
 
-    if (event) {
-      return htEvent.id.toString() === event;
+    if (eventId) {
+      return htEvent.id.toString() === eventId;
     }
 
     if (searchQuery) {
@@ -120,7 +119,7 @@ const Main = () => {
       <div className='flex space-x-3'>
         <div className='flex-1'>
           <div>
-            {!event && !searchQuery ? (
+            {!eventId && !searchQuery ? (
               <ul className='flex'>
                 {conDays.map((conDay) => (
                   <li key={conDay} className='-mb-px mr-1'>

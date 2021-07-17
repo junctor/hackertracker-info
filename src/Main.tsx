@@ -116,7 +116,41 @@ const Main = () => {
 
   return (
     <div id='main mb-5'>
-      <div className='flex space-x-3'>
+      <div className='flex space-x-1 flex-row-reverse'>
+        <div className='flex flex-initial'>
+          <div className='flex items-center rounded bg-white shadow-l border-green border-2 mb-4 mr-5 ml-2'>
+            <input
+              className='focus:outline-none bg-transparent border-none w-full ml-2'
+              type='text'
+              placeholder='search events...'
+              value={searchInput}
+              size={15}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  setSearchQuery(() => searchInput);
+                }
+              }}
+              aria-label='Search events'
+            />
+            <button className='flex-shrink-0' type='button'>
+              <SearchCircleIcon
+                className='h-7 w-7 text-green'
+                onClick={() => setSearchQuery(() => searchInput)}
+              />
+            </button>
+          </div>
+        </div>
+        <div className='flex-2'>
+          <button
+            className='inline-block text-sm p-2 mb-4 leading-none border rounded text-orange border-organge hover:border-blue hover:text-blue'
+            type='button'
+            onClick={() => setLocalTime(() => !localTime)}>
+            {localTime ? "local time" : "event time"}
+          </button>
+        </div>
+      </div>
+      <div className='flex space-x-1'>
         <div className='flex-1'>
           <div>
             {!eventId && !searchQuery ? (
@@ -162,40 +196,6 @@ const Main = () => {
                 </li>
               </ul>
             )}
-          </div>
-        </div>
-        <div className='flex align-middle'>
-          <div className='flex-2'>
-            <button
-              className='inline-block text-sm p-2 mb-4 leading-none border rounded text-orange border-organge hover:border-blue hover:text-blue'
-              type='button'
-              onClick={() => setLocalTime(() => !localTime)}>
-              {localTime ? "local time" : "event time"}
-            </button>
-          </div>
-          <div className='flex-3'>
-            <div className='flex items-center rounded bg-white shadow-l border-green border-2 mb-4 mr-5 ml-2'>
-              <input
-                className='focus:outline-none bg-transparent border-none w-full ml-2'
-                type='text'
-                placeholder='search events...'
-                value={searchInput}
-                size={15}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    setSearchQuery(() => searchInput);
-                  }
-                }}
-                aria-label='Search events'
-              />
-              <button className='flex-shrink-0' type='button'>
-                <SearchCircleIcon
-                  className='h-7 w-7 text-green'
-                  onClick={() => setSearchQuery(() => searchInput)}
-                />
-              </button>
-            </div>
           </div>
         </div>
       </div>

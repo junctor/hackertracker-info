@@ -20,6 +20,12 @@
     npm run build
 ```
 
+without inline scripts:
+
+```bash
+INLINE_RUNTIME_CHUNK=false npm run build
+```
+
 ## Misc
 
 Uses [React](https://reactjs.org), [TypeScript](https://www.typescriptlang.org), [Tailwind CSS](https://tailwindcss.com) and was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

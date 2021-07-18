@@ -104,3 +104,8 @@ interface HeadingLink {
   href: string;
   text: string;
 }
+
+interface SideMenu {
+  heading: string;
+  links: HeadingLink[];
+}

@@ -189,7 +189,11 @@ const Main = () => {
                     type='button'
                     className='inline-block py-2 px-4 text-blue font-semibold'
                     onClick={() => {
-                      document.location.pathname = "";
+                      if (eventId) {
+                        document.location.search = "";
+                      } else if (searchQuery) {
+                        setSearchQuery("");
+                      }
                     }}>
                     <HomeIcon className='h-6 w-6 text-blue' />
                   </button>

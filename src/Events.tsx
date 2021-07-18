@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/solid";
-import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
+import {
+  StarIcon as StarIconOutline,
+  LinkIcon,
+  CalendarIcon,
+} from "@heroicons/react/outline";
 import cal from "./cal";
 import { EventProps } from "./ht";
 import { Theme } from "./theme";
@@ -121,7 +125,7 @@ const Events = ({ events, localTime }: EventProps) => {
                     <div className='mt-5 mb-1'>
                       <button
                         type='button'
-                        className='border-blue border-2 text-blue p-1 hover:border-orange hover:text-orange rounded-md text-sm'
+                        className='border-blue border-2 text-blue p-1 hover:border-orange hover:text-orange rounded-md text-sm align-middle'
                         onClick={() => {
                           window.open(
                             `data:text/calendar;charset=utf8,${encodeURIComponent(
@@ -129,12 +133,13 @@ const Events = ({ events, localTime }: EventProps) => {
                             )}`
                           );
                         }}>
-                        Download iCal
+                        <CalendarIcon className='inline w-5 h-5' /> Download
+                        iCal
                       </button>
 
                       <button
                         type='button'
-                        className='border-blue border-2 text-blue p-1 hover:border-orange hover:text-orange rounded-md text-sm ml-5'
+                        className='border-blue border-2 text-blue p-1 hover:border-orange hover:text-orange rounded-md text-sm ml-5 align-middle'
                         onClick={() => {
                           const url = (
                             document.URL.endsWith("/")
@@ -145,7 +150,7 @@ const Events = ({ events, localTime }: EventProps) => {
                             `${url}/?event=${data.id}`
                           );
                         }}>
-                        Copy Event Link
+                        <LinkIcon className='inline w-5 h-5' /> Copy Event Link
                       </button>
                     </div>
                   </div>

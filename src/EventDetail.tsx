@@ -16,6 +16,8 @@ const EventDetail = ({ event, localTime }: EventDetailProps) => {
         urlRegex.test(word) ? (
           <a
             className='text-orange hover:text-blue'
+            target='_blank'
+            rel='noopener noreferrer'
             href={word}>{`${word} `}</a>
         ) : (
           `${word} `
@@ -26,7 +28,7 @@ const EventDetail = ({ event, localTime }: EventDetailProps) => {
   };
 
   return (
-    <div>
+    <div className='cursor-text'>
       <div className='mt-5 mb-1 text-gray-dark text-sm'>
         {`${eventTime(
           new Date(event.begin),

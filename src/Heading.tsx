@@ -33,10 +33,11 @@ export const Heading = () => {
       <div className={`${menu === true ? "block" : "hidden"} w-full flex-grow`}>
         <div className='text-sm lg:flex-grow'>
           {sideLinks().map((sl) => (
-            <div>
+            <div key={sl.heading}>
               <p className='text-lg mt-6 text-gray-light'>{sl.heading}</p>
               {sl.links.map((l) => (
                 <a
+                  key={l.href}
                   target='_blank'
                   rel='noopener noreferrer'
                   href={l.href}

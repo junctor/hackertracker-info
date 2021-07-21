@@ -15,6 +15,7 @@ const EventDetail = ({ event, localTime }: EventDetailProps) => {
       .map((word) =>
         urlRegex.test(word) ? (
           <a
+            key={word}
             className='text-orange hover:text-blue'
             target='_blank'
             rel='noopener noreferrer'

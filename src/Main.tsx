@@ -18,7 +18,7 @@ const Main = () => {
 
   const eventId = new URLSearchParams(document.location.search).get("event");
 
-  const conferenceCode = "DEFCON28";
+  const conferenceCode = "DEFCON29";
 
   const conDays = ["Thu", "Fri", "Sat", "Sun"];
 

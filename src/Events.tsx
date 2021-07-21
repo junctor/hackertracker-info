@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/solid";
-import {
-  StarIcon as StarIconOutline,
-  LinkIcon,
-  CalendarIcon,
-} from "@heroicons/react/outline";
-import cal from "./cal";
+import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
 import { EventProps } from "./ht";
 import { Theme } from "./theme";
-import { eventTime, addBookmark, removeBookmark } from "./utils";
+import { addBookmark, removeBookmark } from "./utils";
+import EventDetail from "./EventDetail";
 
 const Events = ({ events, localTime }: EventProps) => {
   const eventId = new URLSearchParams(document.location.search).get("event");
@@ -102,56 +98,7 @@ const Events = ({ events, localTime }: EventProps) => {
                   <div
                     id={data.id.toString()}
                     className={`event-content ${eventId ? "" : "event-hide"}`}>
-                    <div className='mt-5 mb-1 text-gray-dark text-sm'>
-                      {`${eventTime(
-                        new Date(data.begin),
-                        "America/Los_Angeles",
-                        localTime
-                      )} - ${eventTime(
-                        new Date(data.end),
-                        "America/Los_Angeles",
-                        localTime
-                      )}`}
-                    </div>
-                    <div className='text-gray-light'>
-                      {data.description.split("\n").map((d, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <div className='mt-2' key={`d-${index}`}>
-                          {d}
-                        </div>
-                      ))}
-                    </div>
-                    <div className='mt-5 mb-1'>
-                      <button
-                        type='button'
-                        className='border-blue border-2 text-blue p-1 hover:border-orange hover:text-orange rounded-md text-sm align-middle'
-                        onClick={() => {
-                          window.open(
-                            `data:text/calendar;charset=utf8,${encodeURIComponent(
-                              cal(data)
-                            )}`
-                          );
-                        }}>
-                        <CalendarIcon className='inline w-5 h-5' /> Download
-                        iCal
-                      </button>
-
-                      <button
-                        type='button'
-                        className='border-blue border-2 text-blue p-1 hover:border-orange hover:text-orange rounded-md text-sm ml-5 align-middle'
-                        onClick={() => {
-                          const url = (
-                            document.URL.endsWith("/")
-                              ? document.URL.slice(0, -1)
-                              : document.URL
-                          ).replaceAll(`/?event=${data.id}`, "");
-                          navigator.clipboard.writeText(
-                            `${url}/?event=${data.id}`
-                          );
-                        }}>
-                        <LinkIcon className='inline w-5 h-5' /> Copy Event Link
-                      </button>
-                    </div>
+                    <EventDetail event={data} localTime={localTime} />
                   </div>
                 </div>
               </div>

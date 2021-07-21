@@ -96,6 +96,11 @@ type EventProps = {
   localTime: boolean;
 };
 
+type EventDetailProps = {
+  event: HTEvent;
+  localTime: boolean;
+};
+
 type LoadingProps = {
   conf: string;
 };

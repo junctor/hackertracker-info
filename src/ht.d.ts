@@ -62,6 +62,7 @@ interface HTEvent {
   id: number;
   conferenceName: string;
   description: string;
+  android_description: string;
   begin: string;
   begin_timestamp: Timestamp;
   end: string;

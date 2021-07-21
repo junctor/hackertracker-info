@@ -44,11 +44,11 @@ export const sideLinks = (): SideMenu[] => {
       },
       {
         text: "Car Hacking Village",
-        href: "https://cloud-village.org/",
+        href: "https://www.carhackingvillage.com/",
       },
       {
         text: "Cloud Village",
-        href: "https://www.appsecvillage.com/",
+        href: "https://cloud-village.org/",
       },
       {
         text: "Crypto and Privacy Village",

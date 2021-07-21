@@ -85,14 +85,13 @@ const Events = ({ events, localTime }: EventProps) => {
                           <div
                             className='type-circle flex-initial'
                             style={{
-                              backgroundColor: data.type.color,
+                              backgroundColor:
+                                data.type.color === "#ababa"
+                                  ? "#e25238"
+                                  : data.type.color,
                             }}
                           />
-                          <span
-                            className='flex-initial ml-2'
-                            style={{
-                              color: data.type.color,
-                            }}>
+                          <span className='flex-initial ml-2 text-gray-light'>
                             {data.type.name}
                           </span>
                         </div>

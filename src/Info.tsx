@@ -15,6 +15,7 @@ const HackerTracker = () => {
       if (deltaTime > hourMs) {
         localStorage.removeItem("updated");
         localStorage.removeItem("events");
+        localStorage.removeItem("speakers");
       }
     }
   }, []);

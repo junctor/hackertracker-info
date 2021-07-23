@@ -9,6 +9,7 @@ import { eventData } from "./fb";
 import { eventDay, eventWeekday } from "./utils";
 import { HTEvent } from "./ht";
 import Events from "./Events";
+import Speakers from "./Speakers";
 import { Theme } from "./theme";
 
 const Main = () => {
@@ -221,7 +222,14 @@ const Main = () => {
         </div>
       </div>
       <div>
-        <Events events={groupedDates} localTime={localTime} />
+        {(() => {
+          switch (tab) {
+            case "speakers":
+              return <Speakers localTime={localTime} />;
+            default:
+              return <Events events={groupedDates} localTime={localTime} />;
+          }
+        })()}
       </div>
     </div>
   );

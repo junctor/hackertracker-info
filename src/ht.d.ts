@@ -12,7 +12,7 @@ interface HTLinks {
   label: string;
   url: string;
 }
-interface HTSpeakers {
+interface HTSpeaker {
   id: number;
   conferenceName: string;
   description: string;
@@ -20,6 +20,7 @@ interface HTSpeakers {
   name: string;
   title: string;
   twitter: string;
+  events: [HTEvent];
 }
 
 interface HTLocationModel {
@@ -71,7 +72,7 @@ interface HTEvent {
   links: HTLinks[];
   title: string;
   location: HTLocationModel;
-  speakers: HTSpeakers[];
+  speakers: HTSpeaker[];
   type: HTEventType;
 }
 
@@ -94,6 +95,15 @@ type HeaderProps = {
 
 type EventProps = {
   events: Record<string, [HTEvent]>;
+  localTime: boolean;
+};
+
+type SpeakerProps = {
+  localTime: boolean;
+};
+
+type SpeakerDetailProps = {
+  speaker: HTSpeaker;
   localTime: boolean;
 };
 

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { SearchCircleIcon, StarIcon, HomeIcon } from "@heroicons/react/solid";
+import {
+  SearchCircleIcon,
+  StarIcon,
+  HomeIcon,
+  UserGroupIcon,
+} from "@heroicons/react/solid";
 import { eventData } from "./fb";
 import { eventDay, eventWeekday } from "./utils";
 import { HTEvent } from "./ht";
@@ -9,7 +14,7 @@ import { Theme } from "./theme";
 const Main = () => {
   const [events, setEvents] = useState<HTEvent[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
-  const [weekday, setWeekday] = useState("Thu");
+  const [tab, setTab] = useState("Fri");
   const [localTime, setLocalTime] = useState<boolean>(true);
   const [, setCategories] = useState<Set<string>>(new Set<string>());
   const [category] = useState("");
@@ -20,7 +25,7 @@ const Main = () => {
 
   const conferenceCode = "DEFCON29";
 
-  const conDays = ["Thu", "Fri", "Sat", "Sun"];
+  const conDays = ["Fri", "Sat", "Sun"];
 
   const theme = new Theme();
 
@@ -45,19 +50,19 @@ const Main = () => {
       );
     }
 
-    if (weekday === "bookmarks") {
+    if (tab === "bookmarks") {
       const bookmarks: string[] =
         JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
       return bookmarks.includes(htEvent.id.toString());
     }
 
-    if (conDays.includes(weekday)) {
+    if (conDays.includes(tab)) {
       return (
         eventWeekday(
           new Date(htEvent.begin),
           "America/Los_Angeles",
           localTime
-        ) === weekday
+        ) === tab
       );
     }
 
@@ -160,11 +165,11 @@ const Main = () => {
                     <button
                       type='button'
                       className={`inline-block ${
-                        conDay === weekday
+                        conDay === tab
                           ? "border-l-4 border-t-4 border-r-4 rounded-t"
                           : ""
                       } py-2 px-4 text-${theme.color} font-semibold`}
-                      onClick={() => setWeekday(conDay)}>
+                      onClick={() => setTab(conDay)}>
                       {conDay}
                     </button>
                   </li>
@@ -173,11 +178,23 @@ const Main = () => {
                   <button
                     type='button'
                     className={`inline-block ${
-                      weekday === "bookmarks"
+                      tab === "speakers"
+                        ? "border-l-4 border-t-4 border-r-4 rounded-t"
+                        : ""
+                    } py-2 px-4 text-gray-light font-semibold`}
+                    onClick={() => setTab("speakers")}>
+                    <UserGroupIcon className='h-6 w-6 text-gray-light' />
+                  </button>
+                </li>
+                <li className='-mb-px mr-1'>
+                  <button
+                    type='button'
+                    className={`inline-block ${
+                      tab === "bookmarks"
                         ? "border-l-4 border-t-4 border-r-4 rounded-t"
                         : ""
                     } py-2 px-4 text-orange font-semibold`}
-                    onClick={() => setWeekday("bookmarks")}>
+                    onClick={() => setTab("bookmarks")}>
                     <StarIcon className='h-6 w-6 text-orange' />
                   </button>
                 </li>

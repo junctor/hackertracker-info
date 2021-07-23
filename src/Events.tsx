@@ -13,7 +13,7 @@ const Events = ({ events, localTime }: EventProps) => {
 
   const showEvent = (eventShow: string) => {
     const content = document.getElementById(eventShow);
-    content?.classList.toggle("event-hide");
+    content?.classList.toggle("hidden");
   };
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const Events = ({ events, localTime }: EventProps) => {
 
                   <div
                     id={data.id.toString()}
-                    className={`event-content ${eventId ? "" : "event-hide"}`}>
+                    className={`event-content ${eventId ? "" : "hidden"}`}>
                     <EventDetail event={data} localTime={localTime} />
                   </div>
                 </div>

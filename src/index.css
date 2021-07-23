@@ -31,10 +31,6 @@ div.type-circle {
   height: auto;
 }
 
-.event-content.event-hide {
-  max-height: 0;
-}
-
 .event {
   margin: 20px;
   padding: 12px;

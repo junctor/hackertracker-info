@@ -21,6 +21,8 @@ const Main = () => {
   const [localTime, setLocalTime] = useState<boolean>(true);
   const [categories, setCategories] = useState<Set<string>>(new Set<string>());
   const [category, setCategory] = useState("");
+  const [conDays, setConDays] = useState<string[]>([]);
+
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [showMenu, setShowMenu] = useState(false);
@@ -28,8 +30,6 @@ const Main = () => {
   const eventId = new URLSearchParams(document.location.search).get("event");
 
   const conferenceCode = "DEFCON29";
-
-  const conDays = ["Fri", "Sat", "Sun"];
 
   const theme = new Theme();
 
@@ -101,7 +101,22 @@ const Main = () => {
     }, new Set<string>());
 
     setCategories(categorySet);
-  }, [conferenceCode, events, setCategories]);
+  }, [events]);
+
+  useEffect(() => {
+    const conDaySet = events.reduce((set, e) => {
+      set.add(
+        eventWeekday(new Date(e.begin), "America/Los_Angeles", localTime)
+      );
+      return set;
+    }, new Set<string>());
+
+    setConDays(Array.from(conDaySet));
+
+    if (conDaySet.size > 0) {
+      setTab(Array.from(conDaySet)[0]);
+    }
+  }, [events, localTime]);
 
   /* eslint-disable no-param-reassign */
   const groupedDates: Record<string, [HTEvent]> = filteredEvents.reduce(
@@ -125,6 +140,11 @@ const Main = () => {
 
   const setCategoryMenu = (c: string) => {
     setCategory(c);
+    if (c === "") {
+      document.location.search = "";
+    } else {
+      setTab("");
+    }
     setShowMenu(() => false);
   };
 
@@ -190,7 +210,7 @@ const Main = () => {
             <div
               role='button'
               tabIndex={0}
-              className={`block px-4 py-2 text-${theme.color} hover:bg-${theme.color} hover:text-black`}
+              className={`block px-4 py-2 text-${theme.color} hover:bg-blue rounded hover:text-black`}
               onClick={() => setCategoryMenu("")}
               onKeyDown={() => setCategoryMenu("")}>
               All
@@ -202,7 +222,7 @@ const Main = () => {
                   key={c}
                   role='button'
                   tabIndex={i}
-                  className={`block px-4 py-2 text-${theme.color} hover:bg-${theme.color} hover:text-black`}
+                  className={`block px-4 py-2 text-${theme.color} hover:bg-blue rounded hover:text-black`}
                   onClick={() => setCategoryMenu(c)}
                   onKeyDown={() => setCategoryMenu(c)}>
                   {c}

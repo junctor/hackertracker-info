@@ -4,6 +4,7 @@ import {
   StarIcon,
   HomeIcon,
   UserGroupIcon,
+  ChevronDownIcon,
 } from "@heroicons/react/solid";
 import { eventData } from "./fb";
 import { eventDay, eventWeekday } from "./utils";
@@ -18,10 +19,11 @@ const Main = () => {
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [tab, setTab] = useState("Fri");
   const [localTime, setLocalTime] = useState<boolean>(true);
-  const [, setCategories] = useState<Set<string>>(new Set<string>());
-  const [category] = useState("");
+  const [categories, setCategories] = useState<Set<string>>(new Set<string>());
+  const [category, setCategory] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
 
   const eventId = new URLSearchParams(document.location.search).get("event");
 
@@ -115,11 +117,16 @@ const Main = () => {
 
   if (loadingEvents) {
     return (
-      <div className='text-4xl text-green animate-pulse ml-8'>
+      <div className='text-4xl text-green animate-pulse ml-8 mt-8'>
         Loading DEF CON events...
       </div>
     );
   }
+
+  const setCategoryMenu = (c: string) => {
+    setCategory(c);
+    setShowMenu(() => false);
+  };
 
   return (
     <div id='main mb-5'>
@@ -155,6 +162,47 @@ const Main = () => {
             onClick={() => setLocalTime(() => !localTime)}>
             {localTime ? "local time" : "event time"}
           </button>
+        </div>
+      </div>
+      <div>
+        <div className='flex justify-end'>
+          <div className='flex-none'>
+            <button
+              className='inline-block text-sm p-2 mr-5 leading-none border rounded text-blue border-blue hover:border-orange hover:text-orange'
+              type='button'
+              onClick={() => setShowMenu(() => !showMenu)}>
+              {category !== "" ? category : "category"}
+              <ChevronDownIcon className='h-5 w-5 inline text-orange' />
+            </button>
+          </div>
+        </div>
+        <div className='flex justify-end'>
+          <div
+            className={`p-2 mr-5 text-blue shadow-xl ${
+              !showMenu ? "hidden" : ""
+            }`}>
+            <div
+              role='button'
+              tabIndex={0}
+              className={`block px-4 py-2 text-${theme.color} hover:bg-${theme.color} hover:text-black`}
+              onClick={() => setCategoryMenu("")}
+              onKeyDown={() => setCategoryMenu("")}>
+              All
+            </div>
+            {Array.from(categories)
+              .sort()
+              .map((c, i) => (
+                <div
+                  key={c}
+                  role='button'
+                  tabIndex={i}
+                  className={`block px-4 py-2 text-${theme.color} hover:bg-${theme.color} hover:text-black`}
+                  onClick={() => setCategoryMenu(c)}
+                  onKeyDown={() => setCategoryMenu(c)}>
+                  {c}
+                </div>
+              ))}
+          </div>
         </div>
       </div>
       <div className='flex space-x-1'>
@@ -222,24 +270,18 @@ const Main = () => {
           </div>
         </div>
       </div>
-      <div>
-        {(() => {
-          switch (tab) {
-            case "speakers":
-              return (
-                <ErrorBoundary>
-                  <Speakers localTime={localTime} />;
-                </ErrorBoundary>
-              );
-            default:
-              return (
-                <ErrorBoundary>
-                  <Events events={groupedDates} localTime={localTime} />;
-                </ErrorBoundary>
-              );
-          }
-        })()}
-      </div>
+      <ErrorBoundary>
+        <div>
+          {(() => {
+            switch (tab) {
+              case "speakers":
+                return <Speakers localTime={localTime} />;
+              default:
+                return <Events events={groupedDates} localTime={localTime} />;
+            }
+          })()}
+        </div>
+      </ErrorBoundary>
     </div>
   );
 };

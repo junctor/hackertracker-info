@@ -24,7 +24,7 @@ export const Heading = () => {
               rel='noopener noreferrer'
               key={link.href}
               href={link.href}
-              className={`block mt-4 lg:inline-block text-${theme.color} hover:text-${theme.color}mr-4`}>
+              className={`block mt-4 lg:inline-block text-${theme.color} hover:text-gray-light mr-4`}>
               {link.text}
             </a>
           ))}
@@ -34,14 +34,14 @@ export const Heading = () => {
         <div className='text-sm lg:flex-grow'>
           {sideLinks().map((sl) => (
             <div key={sl.heading}>
-              <p className='text-lg mt-6 text-gray-light'>{sl.heading}</p>
+              <p className='text-lg mt-6 text-blue'>{sl.heading}</p>
               {sl.links.map((l) => (
                 <a
                   key={l.href}
                   target='_blank'
                   rel='noopener noreferrer'
                   href={l.href}
-                  className={`block mt-1 ml-2 text-${theme.color} hover:text-${theme.color}`}>
+                  className={`block mt-1 ml-2 text-gray-light hover:text-${theme.color}`}>
                   {l.text}
                 </a>
               ))}

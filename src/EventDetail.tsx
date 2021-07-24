@@ -67,12 +67,8 @@ const EventDetail = ({ event, localTime }: EventDetailProps) => {
           type='button'
           className='border-blue border-2 text-blue p-1 hover:border-orange hover:text-orange rounded-md text-sm ml-5 align-middle'
           onClick={() => {
-            const url = (
-              document.URL.endsWith("/")
-                ? document.URL.slice(0, -1)
-                : document.URL
-            ).replaceAll(`/?event=${event.id}`, "");
-            navigator.clipboard.writeText(`${url}/?event=${event.id}`);
+            const url = window.location.href.split("?")[0];
+            navigator.clipboard.writeText(`${url}?event=${event.id}`);
           }}>
           <LinkIcon className='inline w-5 h-5' /> Copy Event Link
         </button>

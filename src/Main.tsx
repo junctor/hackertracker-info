@@ -44,10 +44,6 @@ const Main = () => {
       return htEvent.type.name === category;
     }
 
-    if (eventId) {
-      return htEvent.id.toString() === eventId;
-    }
-
     if (searchQuery) {
       return (
         htEvent.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -58,6 +54,10 @@ const Main = () => {
           .toLowerCase()
           .includes(searchQuery.toLowerCase())
       );
+    }
+
+    if (eventId) {
+      return htEvent.id.toString() === eventId;
     }
 
     if (conDays.includes(tab)) {
@@ -139,9 +139,11 @@ const Main = () => {
   }
 
   const setCategoryMenu = (c: string) => {
+    const [baseUrl] = document.location.href.split("?");
+    window.history.pushState({}, document.title, baseUrl);
     setCategory(c);
     if (c === "") {
-      document.location.search = "";
+      document.location.href = baseUrl;
     } else {
       setTab("");
     }
@@ -162,6 +164,8 @@ const Main = () => {
               onChange={(e) => setSearchInput(e.target.value)}
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
+                  const [baseUrl] = document.location.href.split("?");
+                  window.history.pushState({}, document.title, baseUrl);
                   setSearchQuery(() => searchInput);
                   setCategory("");
                   setTab("");
@@ -175,7 +179,7 @@ const Main = () => {
                 onClick={() => {
                   setSearchQuery(() => searchInput);
                   setCategory("");
-                  setTab("");
+                  setTab(conDays[0]);
                 }}
               />
             </button>
@@ -282,7 +286,8 @@ const Main = () => {
                     type='button'
                     className='inline-block py-2 px-4 text-blue font-semibold'
                     onClick={() => {
-                      document.location.search = "";
+                      const [baseUrl] = document.location.href.split("?");
+                      document.location.href = baseUrl;
                     }}>
                     <HomeIcon className='h-6 w-6 text-blue' />
                   </button>

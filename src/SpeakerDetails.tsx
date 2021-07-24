@@ -3,9 +3,9 @@ import { StarIcon } from "@heroicons/react/solid";
 import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
 import { SpeakerDetailProps } from "./ht";
 import { addBookmark, removeBookmark } from "./utils";
-// import EventDetail from "./EventDetail";
+import EventDetail from "./EventDetail";
 
-const SpeakerDetails = ({ speaker }: SpeakerDetailProps) => {
+const SpeakerDetails = ({ speaker, localTime }: SpeakerDetailProps) => {
   const [bookmarks, setBookmarks] = useState<string[]>([]);
 
   useEffect(() => {
@@ -79,10 +79,7 @@ const SpeakerDetails = ({ speaker }: SpeakerDetailProps) => {
             </div>
 
             <div id={data.id.toString()} className='hidden'>
-              Testing...
-              {
-                // <EventDetail event={data} localTime={localTime} />
-              }
+              <EventDetail event={data} localTime={localTime} />
             </div>
           </div>
         </div>

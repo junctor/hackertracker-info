@@ -34,7 +34,7 @@ const Speakers = ({ localTime }: SpeakerProps) => {
 
   if (loadingEvents) {
     return (
-      <div className='text-4xl text-green animate-pulse ml-8'>
+      <div className='text-4xl text-green animate-pulse ml-8 mt-8'>
         Loading DEF CON speakers...
       </div>
     );
@@ -57,11 +57,11 @@ const Speakers = ({ localTime }: SpeakerProps) => {
               onClick={() => showDetails(s.id.toString())}
               onKeyDown={() => showDetails(s.id.toString())}>
               <div>
-                <h2 className='text-green text-xl'>{s.name}</h2>
+                <h2 className='text-red text-xl'>{s.name}</h2>
               </div>
             </div>
 
-            <div id={s.id.toString()} className='hidden'>
+            <div id={s.id.toString()} className='hidden mt-6'>
               <SpeakerDetails speaker={s} localTime={localTime} />
             </div>
           </div>

@@ -34,6 +34,12 @@ const Main = () => {
   const theme = new Theme();
 
   const filterEvents = (htEvent: HTEvent): boolean => {
+    if (tab === "bookmarks") {
+      const bookmarks: string[] =
+        JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
+      return bookmarks.includes(htEvent.id.toString());
+    }
+
     if (category) {
       return htEvent.type.name === category;
     }
@@ -52,12 +58,6 @@ const Main = () => {
           .toLowerCase()
           .includes(searchQuery.toLowerCase())
       );
-    }
-
-    if (tab === "bookmarks") {
-      const bookmarks: string[] =
-        JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
-      return bookmarks.includes(htEvent.id.toString());
     }
 
     if (conDays.includes(tab)) {
@@ -143,6 +143,8 @@ const Main = () => {
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   setSearchQuery(() => searchInput);
+                  setCategory("");
+                  setTab("");
                 }
               }}
               aria-label='Search events'
@@ -150,7 +152,11 @@ const Main = () => {
             <button className='flex-shrink-0' type='button'>
               <SearchCircleIcon
                 className='h-7 w-7 text-green'
-                onClick={() => setSearchQuery(() => searchInput)}
+                onClick={() => {
+                  setSearchQuery(() => searchInput);
+                  setCategory("");
+                  setTab("");
+                }}
               />
             </button>
           </div>
@@ -164,7 +170,7 @@ const Main = () => {
           </button>
         </div>
       </div>
-      <div>
+      <div className='mb-4'>
         <div className='flex justify-end'>
           <div className='flex-none'>
             <button
@@ -208,7 +214,7 @@ const Main = () => {
       <div className='flex space-x-1'>
         <div className='flex-1'>
           <div>
-            {!eventId && !searchQuery ? (
+            {!eventId && !searchQuery && !category ? (
               <ul className='flex'>
                 {conDays.map((conDay) => (
                   <li key={conDay} className='-mb-px mr-1'>
@@ -256,11 +262,7 @@ const Main = () => {
                     type='button'
                     className='inline-block py-2 px-4 text-blue font-semibold'
                     onClick={() => {
-                      if (eventId) {
-                        document.location.search = "";
-                      } else if (searchQuery) {
-                        setSearchQuery("");
-                      }
+                      document.location.search = "";
                     }}>
                     <HomeIcon className='h-6 w-6 text-blue' />
                   </button>

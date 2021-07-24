@@ -52,12 +52,12 @@ export const Heading = () => {
       <div>
         {menu ? (
           <ChevronDoubleUpIcon
-            className='ml-3 mt-3 mr-3 h-8 w-8 inline-block text-orange cursor-pointer'
+            className='ml-3 mt-3 mr-3 h-12 w-12 inline-block text-orange cursor-pointer'
             onClick={() => setMenu(!menu)}
           />
         ) : (
           <ChevronDoubleDownIcon
-            className='ml-3 mt-3 mr-3 h-8 w-8 inline-block text-orange cursor-pointer'
+            className='ml-3 mt-3 mr-3 h-12 w-12 inline-block text-orange cursor-pointer'
             onClick={() => setMenu(!menu)}
           />
         )}

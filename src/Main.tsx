@@ -11,6 +11,7 @@ import { HTEvent } from "./ht";
 import Events from "./Events";
 import Speakers from "./Speakers";
 import { Theme } from "./theme";
+import ErrorBoundary from "./ErrorBoundry";
 
 const Main = () => {
   const [events, setEvents] = useState<HTEvent[]>([]);
@@ -225,9 +226,17 @@ const Main = () => {
         {(() => {
           switch (tab) {
             case "speakers":
-              return <Speakers localTime={localTime} />;
+              return (
+                <ErrorBoundary>
+                  <Speakers localTime={localTime} />;
+                </ErrorBoundary>
+              );
             default:
-              return <Events events={groupedDates} localTime={localTime} />;
+              return (
+                <ErrorBoundary>
+                  <Events events={groupedDates} localTime={localTime} />;
+                </ErrorBoundary>
+              );
           }
         })()}
       </div>

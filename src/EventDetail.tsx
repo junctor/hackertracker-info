@@ -47,7 +47,7 @@ const EventDetail = ({ event, localTime }: EventDetailProps) => {
         {event.android_description.split("\n").map((d, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <div className='mt-2' key={`d-${index}`}>
-            <p className='text-gray-light text-lg'>{formatDescription(d)}</p>
+            <p className='text-gray-light text-sm'>{formatDescription(d)}</p>
           </div>
         ))}
       </div>

@@ -18,7 +18,7 @@ const Main = () => {
   const [events, setEvents] = useState<HTEvent[]>([]);
   const [speakers, setSpeakers] = useState<HTSpeaker[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
-  const [tab, setTab] = useState("Fri");
+  const [tab, setTab] = useState("Thu");
   const [localTime, setLocalTime] = useState<boolean>(true);
   const [categories, setCategories] = useState<Set<string>>(new Set<string>());
   const [category, setCategory] = useState("");
@@ -158,15 +158,26 @@ const Main = () => {
   }
 
   const setCategoryMenu = (c: string) => {
-    const [baseUrl] = document.location.href.split("?");
-    window.history.pushState({}, document.title, baseUrl);
     setCategory(c);
     if (c === "") {
-      document.location.href = baseUrl;
+      const [baseUrl] = document.location.href.split("?");
+      window.history.pushState({}, document.title, baseUrl);
+      setSearchQuery("");
     } else {
       setTab("");
     }
     setShowMenu(() => false);
+  };
+
+  const clearFilters = (resetTab: boolean = false) => {
+    const [baseUrl] = document.location.href.split("?");
+    window.history.pushState({}, document.title, baseUrl);
+    setSearchQuery("");
+    setCategoryMenu("");
+    setCategory("");
+    if (resetTab) {
+      setTab(conDays[0]);
+    }
   };
 
   return (
@@ -183,11 +194,11 @@ const Main = () => {
               onChange={(e) => setSearchInput(e.target.value)}
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
-                  const [baseUrl] = document.location.href.split("?");
-                  window.history.pushState({}, document.title, baseUrl);
+                  clearFilters(searchInput === "");
                   setSearchQuery(() => searchInput);
-                  setCategory("");
-                  setTab("");
+                  if (searchInput !== "") {
+                    setTab("");
+                  }
                 }
               }}
               aria-label='Search events'
@@ -196,9 +207,8 @@ const Main = () => {
               <SearchCircleIcon
                 className='h-7 w-7 text-green'
                 onClick={() => {
+                  clearFilters();
                   setSearchQuery(() => searchInput);
-                  setCategory("");
-                  setTab(conDays[0]);
                 }}
               />
             </button>
@@ -234,8 +244,8 @@ const Main = () => {
               role='button'
               tabIndex={0}
               className={`block px-4 py-2 text-${theme.color} hover:bg-blue rounded hover:text-black`}
-              onClick={() => setCategoryMenu("")}
-              onKeyDown={() => setCategoryMenu("")}>
+              onClick={() => clearFilters(true)}
+              onKeyDown={() => clearFilters(true)}>
               All
             </div>
             {Array.from(categories)
@@ -305,8 +315,7 @@ const Main = () => {
                     type='button'
                     className='inline-block py-2 px-4 text-blue font-semibold'
                     onClick={() => {
-                      const [baseUrl] = document.location.href.split("?");
-                      document.location.href = baseUrl;
+                      clearFilters(true);
                     }}>
                     <HomeIcon className='h-6 w-6 text-blue' />
                   </button>

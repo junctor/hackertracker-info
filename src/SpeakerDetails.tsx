@@ -23,14 +23,17 @@ const SpeakerDetails = ({ speaker, localTime }: SpeakerDetailProps) => {
     <div>
       <div className='cursor-text text-gray-light'>{speaker.description}</div>
       {speaker.events.map((data) => (
-        <div className='event' key={data.id} aria-hidden='true'>
+        <div
+          className='event'
+          key={`${speaker.id}-${data.id}`}
+          aria-hidden='true'>
           <div>
-            <div key={data.id} className='event-title'>
+            <div className='event-title'>
               <div
                 role='button'
-                tabIndex={data.id}
-                onClick={() => showEvent(data.id.toString())}
-                onKeyDown={() => showEvent(data.id.toString())}>
+                tabIndex={speaker.id}
+                onClick={() => showEvent(`${speaker.id}-${data.id}`)}
+                onKeyDown={() => showEvent(`${speaker.id}-${data.id}`)}>
                 <div>
                   <h2 className='text-green text-xl'>
                     {data.title}
@@ -78,7 +81,7 @@ const SpeakerDetails = ({ speaker, localTime }: SpeakerDetailProps) => {
               </div>
             </div>
 
-            <div id={data.id.toString()} className='hidden'>
+            <div id={`${speaker.id}-${data.id}`} className='hidden'>
               <EventDetail event={data} localTime={localTime} />
             </div>
           </div>

@@ -1,38 +1,15 @@
-import { useEffect, useState } from "react";
-import { speakerData } from "./fb";
 import { HTSpeaker, SpeakerProps } from "./ht";
 import SpeakerDetails from "./SpeakerDetails";
 import { Theme } from "./theme";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Speakers = ({ localTime }: SpeakerProps) => {
-  const [speakers, setSpeakers] = useState<HTSpeaker[]>([]);
-  const [loadingEvents, setLoadingEvents] = useState(true);
-
+const Speakers = ({ speakers, localTime }: SpeakerProps) => {
   const showDetails = (eventShow: string) => {
     const content = document.getElementById(eventShow);
     content?.classList.toggle("hidden");
   };
 
   const theme = new Theme();
-
-  useEffect(() => {
-    (async () => {
-      setLoadingEvents(true);
-
-      const localSpeakers = localStorage.getItem("speakers");
-
-      if (localSpeakers) {
-        const localSpeakerData: HTSpeaker[] = JSON.parse(localSpeakers);
-        setSpeakers(localSpeakerData);
-      } else {
-        const htSpeakers = await speakerData("DEFCON29");
-        setSpeakers(htSpeakers);
-        localStorage.setItem("speakers", JSON.stringify(htSpeakers));
-      }
-      setLoadingEvents(false);
-    })();
-  }, []);
 
   /* eslint-disable no-param-reassign */
   const groupedSpeakers: Record<string, [HTSpeaker]> = speakers.reduce(
@@ -45,14 +22,6 @@ const Speakers = ({ localTime }: SpeakerProps) => {
     {} as Record<string, [HTSpeaker]>
   );
   /* eslint-disable no-param-reassign */
-
-  if (loadingEvents) {
-    return (
-      <div className='text-4xl text-green animate-pulse ml-8 mt-8'>
-        Loading DEF CON speakers...
-      </div>
-    );
-  }
 
   return (
     <div id='speakers'>

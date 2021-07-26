@@ -95,11 +95,13 @@ type HeaderProps = {
 
 type EventProps = {
   events: Record<string, [HTEvent]>;
+  speakers: HTSpeaker[];
   localTime: boolean;
 };
 
 type SpeakerProps = {
   localTime: boolean;
+  speakers: HTSpeaker[];
 };
 
 type SpeakerDetailProps = {
@@ -110,6 +112,10 @@ type SpeakerDetailProps = {
 type EventDetailProps = {
   event: HTEvent;
   localTime: boolean;
+};
+
+type SpeakerBioProps = {
+  speaker: HTSpeaker;
 };
 
 type LoadingProps = {

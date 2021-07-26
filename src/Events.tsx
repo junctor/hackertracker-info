@@ -5,8 +5,9 @@ import { EventProps } from "./ht";
 import { Theme } from "./theme";
 import { addBookmark, removeBookmark } from "./utils";
 import EventDetail from "./EventDetail";
+import SpeakerBio from "./SpeakerBio";
 
-const Events = ({ events, localTime }: EventProps) => {
+const Events = ({ events, speakers, localTime }: EventProps) => {
   const eventId = new URLSearchParams(document.location.search).get("event");
 
   const [bookmarks, setBookmarks] = useState<string[]>([]);
@@ -72,9 +73,9 @@ const Events = ({ events, localTime }: EventProps) => {
                             />
                           )}
                         </h2>
-                        <h3 className='text-yellow text-sm'>
+                        <p className='text-yellow text-sm'>
                           {data.speakers.map((s) => s.name).join(", ")}
-                        </h3>
+                        </p>
 
                         <p className='text-gray mt-1'>{data.location.name}</p>
                         <div className='flex mt-3'>
@@ -94,11 +95,23 @@ const Events = ({ events, localTime }: EventProps) => {
                       </div>
                     </div>
                   </div>
-
                   <div
                     id={data.id.toString()}
                     className={`event-content ${eventId ? "" : "hidden"}`}>
                     <EventDetail event={data} localTime={localTime} />
+                    <div id={`speakers-${data.id}`}>
+                      {data.speakers.map((s) => {
+                        const speaker = speakers.find((sp) => sp.id === s.id);
+                        if (speaker) {
+                          return (
+                            <div className='mt-4'>
+                              <SpeakerBio speaker={speaker} />
+                            </div>
+                          );
+                        }
+                        return <div />;
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -6,9 +6,9 @@ import {
   UserGroupIcon,
   ChevronDownIcon,
 } from "@heroicons/react/solid";
-import { eventData } from "./fb";
+import { eventData, speakerData } from "./fb";
 import { eventDay, eventWeekday } from "./utils";
-import { HTEvent } from "./ht";
+import { HTEvent, HTSpeaker } from "./ht";
 import Events from "./Events";
 import Speakers from "./Speakers";
 import { Theme } from "./theme";
@@ -16,6 +16,7 @@ import ErrorBoundary from "./ErrorBoundry";
 
 const Main = () => {
   const [events, setEvents] = useState<HTEvent[]>([]);
+  const [speakers, setSpeakers] = useState<HTSpeaker[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [tab, setTab] = useState("Fri");
   const [localTime, setLocalTime] = useState<boolean>(true);
@@ -89,6 +90,24 @@ const Main = () => {
         setEvents(htEvents);
         localStorage.setItem("updated", new Date().getTime().toString());
         localStorage.setItem("events", JSON.stringify(htEvents));
+      }
+      setLoadingEvents(false);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      setLoadingEvents(true);
+
+      const localSpeakers = localStorage.getItem("speakers");
+
+      if (localSpeakers) {
+        const localSpeakerData: HTSpeaker[] = JSON.parse(localSpeakers);
+        setSpeakers(localSpeakerData);
+      } else {
+        const htSpeakers = await speakerData("DEFCON29");
+        setSpeakers(htSpeakers);
+        localStorage.setItem("speakers", JSON.stringify(htSpeakers));
       }
       setLoadingEvents(false);
     })();
@@ -302,9 +321,15 @@ const Main = () => {
           {(() => {
             switch (tab) {
               case "speakers":
-                return <Speakers localTime={localTime} />;
+                return <Speakers speakers={speakers} localTime={localTime} />;
               default:
-                return <Events events={groupedDates} localTime={localTime} />;
+                return (
+                  <Events
+                    events={groupedDates}
+                    speakers={speakers}
+                    localTime={localTime}
+                  />
+                );
             }
           })()}
         </div>

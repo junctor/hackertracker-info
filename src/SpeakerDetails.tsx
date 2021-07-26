@@ -21,7 +21,9 @@ const SpeakerDetails = ({ speaker, localTime }: SpeakerDetailProps) => {
 
   return (
     <div>
-      <div className='cursor-text text-gray-light'>{speaker.description}</div>
+      <div className='cursor-tex'>
+        <p className='text-gray-light text-sm'>{speaker.description}</p>
+      </div>
       {speaker.events.map((data) => (
         <div
           className='event'

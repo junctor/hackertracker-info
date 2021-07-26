@@ -31,7 +31,7 @@ const Events = ({ events, localTime }: EventProps) => {
           <div className='date-events'>
             <div
               className={`sticky top-0 z-100 border-4 border-${theme.color} bg-black`}>
-              <h4 className='text-gray-light p-1 ml-3'>{day}</h4>
+              <p className='text-gray-light text-xl p-1 ml-3'>{day}</p>
             </div>
             {dayEvents.sort().map((data) => (
               <div className='event' key={data.id} aria-hidden='true'>

@@ -30,22 +30,24 @@ const EventDetail = ({ event, localTime }: EventDetailProps) => {
 
   return (
     <div className='cursor-text'>
-      <div className='mt-5 mb-1 text-gray-dark text-sm'>
-        {`${eventTime(
-          new Date(event.begin),
-          "America/Los_Angeles",
-          localTime
-        )} - ${eventTime(
-          new Date(event.end),
-          "America/Los_Angeles",
-          localTime
-        )}`}
+      <div className='mt-5 mb-1'>
+        <p className='text-gray-dark text-sm'>
+          {`${eventTime(
+            new Date(event.begin),
+            "America/Los_Angeles",
+            localTime
+          )} - ${eventTime(
+            new Date(event.end),
+            "America/Los_Angeles",
+            localTime
+          )}`}
+        </p>
       </div>
-      <div className='text-gray-light'>
+      <div>
         {event.android_description.split("\n").map((d, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <div className='mt-2' key={`d-${index}`}>
-            {formatDescription(d)}
+            <p className='text-gray-light text-lg'>{formatDescription(d)}</p>
           </div>
         ))}
       </div>

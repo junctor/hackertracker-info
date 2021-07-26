@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { speakerData } from "./fb";
 import { HTSpeaker, SpeakerProps } from "./ht";
 import SpeakerDetails from "./SpeakerDetails";
+import { Theme } from "./theme";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Speakers = ({ localTime }: SpeakerProps) => {
@@ -12,6 +13,8 @@ const Speakers = ({ localTime }: SpeakerProps) => {
     const content = document.getElementById(eventShow);
     content?.classList.toggle("hidden");
   };
+
+  const theme = new Theme();
 
   useEffect(() => {
     (async () => {
@@ -30,6 +33,17 @@ const Speakers = ({ localTime }: SpeakerProps) => {
       setLoadingEvents(false);
     })();
   }, []);
+
+  /* eslint-disable no-param-reassign */
+  const groupedSpeakers: Record<string, [HTSpeaker]> = speakers.reduce(
+    (group, s) => {
+      const inital = s.name[0].toUpperCase();
+      group[inital] = group[inital] || [];
+      group[inital].push(s);
+      return group;
+    },
+    {} as Record<string, [HTSpeaker]>
+  );
   /* eslint-disable no-param-reassign */
 
   if (loadingEvents) {
@@ -42,28 +56,31 @@ const Speakers = ({ localTime }: SpeakerProps) => {
 
   return (
     <div id='speakers'>
-      {speakers
-        .sort((a, b) => {
-          if (a.name.toLowerCase() < b.name.toLowerCase()) {
-            return -1;
-          }
-          return 1;
-        })
-        .map((s) => (
-          <div className='event' key={s.id} aria-hidden='true'>
+      {Object.entries(groupedSpeakers)
+        .sort()
+        .map(([intial, groupedSpeaker]) => (
+          <div key={intial}>
             <div
-              role='button'
-              tabIndex={s.id}
-              onClick={() => showDetails(s.id.toString())}
-              onKeyDown={() => showDetails(s.id.toString())}>
-              <div>
-                <h2 className='text-red text-xl'>{s.name}</h2>
-              </div>
+              className={`sticky top-0 z-100 border-4 border-${theme.color} bg-black`}>
+              <h4 className='text-gray-light p-1 ml-3'>{intial}</h4>
             </div>
+            {groupedSpeaker.sort().map((s) => (
+              <div className='event' key={s.id} aria-hidden='true'>
+                <div
+                  role='button'
+                  tabIndex={s.id}
+                  onClick={() => showDetails(s.id.toString())}
+                  onKeyDown={() => showDetails(s.id.toString())}>
+                  <div>
+                    <h2 className='text-red text-xl'>{s.name}</h2>
+                  </div>
+                </div>
 
-            <div id={s.id.toString()} className='hidden mt-6'>
-              <SpeakerDetails speaker={s} localTime={localTime} />
-            </div>
+                <div id={s.id.toString()} className='hidden mt-6'>
+                  <SpeakerDetails speaker={s} localTime={localTime} />
+                </div>
+              </div>
+            ))}
           </div>
         ))}
     </div>

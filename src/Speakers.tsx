@@ -62,7 +62,9 @@ const Speakers = ({ localTime }: SpeakerProps) => {
           <div key={intial}>
             <div
               className={`sticky top-0 z-100 border-4 border-${theme.color} bg-black`}>
-              <h4 className='text-gray-light p-1 ml-3'>{intial}</h4>
+              <p className='text-gray-light text-xl font-bold p-1 ml-3'>
+                {intial}
+              </p>
             </div>
             {groupedSpeaker.sort().map((s) => (
               <div className='event' key={s.id} aria-hidden='true'>
@@ -72,7 +74,16 @@ const Speakers = ({ localTime }: SpeakerProps) => {
                   onClick={() => showDetails(s.id.toString())}
                   onKeyDown={() => showDetails(s.id.toString())}>
                   <div>
-                    <h2 className='text-red text-xl'>{s.name}</h2>
+                    <p className='text-red text-l inline'>{s.name}</p>
+                    {s.twitter && (
+                      <a
+                        className='text-blue text-sm inline ml-3'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        href={`https://www.twitter.com/${s.twitter}`}>
+                        {`@${s.twitter}`}
+                      </a>
+                    )}
                   </div>
                 </div>
 

@@ -6,6 +6,10 @@ export class Theme {
 
   index = 0;
 
+  constructor() {
+    this.colors.sort(() => Math.random() - 0.5);
+  }
+
   get color(): string {
     if (this.index >= this.colors.length) {
       this.index = 0;

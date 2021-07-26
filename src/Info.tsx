@@ -11,8 +11,8 @@ const HackerTracker = () => {
     if (updatedTime && navigator.onLine) {
       const now = new Date().getTime();
       const deltaTime = now - updatedTime;
-      const hourMs = 3600000;
-      if (deltaTime > hourMs) {
+      const timeOutMs = 1800000;
+      if (deltaTime > timeOutMs) {
         localStorage.removeItem("updated");
         localStorage.removeItem("events");
         localStorage.removeItem("speakers");

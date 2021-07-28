@@ -118,6 +118,10 @@ type SpeakerBioProps = {
   speaker: HTSpeaker;
 };
 
+type FormatDescProps = {
+  details: string;
+};
+
 type LoadingProps = {
   conf: string;
 };

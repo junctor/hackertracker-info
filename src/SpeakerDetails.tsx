@@ -4,6 +4,7 @@ import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
 import { SpeakerDetailProps } from "./ht";
 import { addBookmark, removeBookmark } from "./utils";
 import EventDetail from "./EventDetail";
+import FormatDesc from "./FormatDesc";
 
 const SpeakerDetails = ({ speaker, localTime }: SpeakerDetailProps) => {
   const [bookmarks, setBookmarks] = useState<string[]>([]);
@@ -22,7 +23,9 @@ const SpeakerDetails = ({ speaker, localTime }: SpeakerDetailProps) => {
   return (
     <div>
       <div className='cursor-tex'>
-        <p className='text-gray-light text-sm'>{speaker.description}</p>
+        <div className='text-gray-light text-sm'>
+          <FormatDesc details={speaker.description} />
+        </div>
       </div>
       {speaker.events.map((data) => (
         <div

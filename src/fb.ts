@@ -2,7 +2,7 @@
 import firebase from "firebase/app";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "firebase/firestore";
-import { HTEvent, HTSpeaker } from "./ht";
+import { HTConference, HTEvent, HTSpeaker } from "./ht";
 
 export async function firebaseInit() {
   const firebaseConfig = {
@@ -33,6 +33,20 @@ export async function speakerData(conference: string): Promise<HTSpeaker[]> {
   );
 
   return firebaseData;
+}
+
+export async function updatedDate(): Promise<string> {
+  const conf = await firebase
+    .firestore()
+    .collection("conferences")
+    .where("code", "==", "DEFCON29")
+    .get();
+
+  const firebaseData: HTConference[] = conf.docs.map(
+    (doc: { data: () => any }) => doc.data()
+  );
+
+  return firebaseData[0].updated_at;
 }
 
 export async function eventData(conference: string): Promise<HTEvent[]> {

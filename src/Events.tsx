@@ -104,7 +104,7 @@ const Events = ({ events, speakers, localTime }: EventProps) => {
                         const speaker = speakers.find((sp) => sp.id === s.id);
                         if (speaker) {
                           return (
-                            <div className='mt-4'>
+                            <div className='mt-4' key={s.id}>
                               <SpeakerBio speaker={speaker} />
                             </div>
                           );

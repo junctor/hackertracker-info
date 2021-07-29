@@ -178,6 +178,10 @@ const Main = () => {
     if (resetTab) {
       setTab(conDays[0]);
     }
+
+    if (eventId) {
+      window.location.reload();
+    }
   };
 
   return (

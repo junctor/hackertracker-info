@@ -4,6 +4,8 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import { HTConference, HTEvent, HTSpeaker } from "./ht";
 
+type Timestamp = firebase.firestore.Timestamp;
+
 export async function firebaseInit() {
   const firebaseConfig = {
     apiKey: "AIzaSyAsAP88rl0Qk0v4g_vYFpybKohS_hiyq-w",
@@ -35,7 +37,7 @@ export async function speakerData(conference: string): Promise<HTSpeaker[]> {
   return firebaseData;
 }
 
-export async function updatedDate(): Promise<string> {
+export async function updatedDate(): Promise<Timestamp> {
   const conf = await firebase
     .firestore()
     .collection("conferences")

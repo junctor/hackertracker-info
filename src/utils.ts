@@ -1,3 +1,5 @@
+import { updatedDate } from "./fb";
+
 export function timeDisplayParts(
   time: Date,
   eventTimeZone: string,
@@ -93,4 +95,41 @@ export function removeBookmark(eventId: string) {
     JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
   const newBookmarks = bookmarks.filter((b) => b !== eventId);
   localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
+}
+
+function removeCache() {
+  localStorage.removeItem("updated");
+  localStorage.removeItem("events");
+  localStorage.removeItem("speakers");
+}
+
+export async function invalidateCache() {
+  if (!navigator.onLine) {
+    return;
+  }
+
+  const cacheUpdatedDate = localStorage.getItem("updated");
+
+  if (!cacheUpdatedDate) {
+    removeCache();
+    return;
+  }
+
+  const cacheUpdatedTime = parseInt(cacheUpdatedDate, 10);
+
+  const now = new Date().getTime();
+  const deltaTime = now - cacheUpdatedTime;
+  const hourMs = 3600000;
+
+  if (deltaTime > hourMs) {
+    removeCache();
+    return;
+  }
+
+  const fbUpdated = await updatedDate();
+  const fbUpdatedTime = fbUpdated.toMillis();
+
+  if (fbUpdatedTime > cacheUpdatedTime) {
+    removeCache();
+  }
 }

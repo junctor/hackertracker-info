@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 import React from "react";
-import type { Timestamp } from "firebase";
+
+type Timestamp = firebase.firestore.Timestamp;
 
 interface HTMaps {
   file: string;
@@ -52,7 +53,7 @@ interface HTConference {
   link: string;
   hidden: false;
   codeofconduct?: string;
-  updated_at: string;
+  updated_at: Timestamp;
   id: number;
   timezone: string;
   description: string;

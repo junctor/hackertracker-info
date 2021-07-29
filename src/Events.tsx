@@ -99,12 +99,12 @@ const Events = ({ events, speakers, localTime }: EventProps) => {
                     id={data.id.toString()}
                     className={`event-content ${eventId ? "" : "hidden"}`}>
                     <EventDetail event={data} localTime={localTime} />
-                    <div id={`speakers-${data.id}`}>
+                    <div id={`speakers-${data.id}`} className='mt-5'>
                       {data.speakers.map((s) => {
                         const speaker = speakers.find((sp) => sp.id === s.id);
-                        if (speaker) {
+                        if (speaker && speaker.description) {
                           return (
-                            <div className='mt-4' key={s.id}>
+                            <div className='mt-3' key={s.id}>
                               <SpeakerBio speaker={speaker} />
                             </div>
                           );

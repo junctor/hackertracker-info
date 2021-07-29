@@ -2,7 +2,10 @@ import FormatDesc from "./FormatDesc";
 import { SpeakerBioProps } from "./ht";
 
 const SpeakerDetails = ({ speaker }: SpeakerBioProps) => (
-  <div className='cursor-text '>
+  <div className='cursor-text'>
+    <div>
+      <p className='text-yellow text-sm'>{speaker.name}</p>
+    </div>
     <div className='text-xs text-gray-light'>
       <FormatDesc details={speaker.description} />
     </div>

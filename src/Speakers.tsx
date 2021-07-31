@@ -35,32 +35,39 @@ const Speakers = ({ speakers, localTime }: SpeakerProps) => {
                 {intial}
               </p>
             </div>
-            {groupedSpeaker.sort().map((s) => (
-              <div className='event' key={s.id} aria-hidden='true'>
-                <div
-                  role='button'
-                  tabIndex={s.id}
-                  onClick={() => showDetails(s.id.toString())}
-                  onKeyDown={() => showDetails(s.id.toString())}>
-                  <div>
-                    <p className='text-red text-l inline'>{s.name}</p>
-                    {s.twitter && (
-                      <a
-                        className='text-blue text-sm inline ml-3'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        href={`https://www.twitter.com/${s.twitter}`}>
-                        {`@${s.twitter}`}
-                      </a>
-                    )}
+            {groupedSpeaker
+              .sort((a, b) => {
+                if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                  return 1;
+                }
+                return -1;
+              })
+              .map((s) => (
+                <div className='event' key={s.id} aria-hidden='true'>
+                  <div
+                    role='button'
+                    tabIndex={s.id}
+                    onClick={() => showDetails(s.id.toString())}
+                    onKeyDown={() => showDetails(s.id.toString())}>
+                    <div>
+                      <p className='text-red text-l inline'>{s.name}</p>
+                      {s.twitter && (
+                        <a
+                          className='text-blue text-sm inline ml-3'
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          href={`https://www.twitter.com/${s.twitter}`}>
+                          {`@${s.twitter}`}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  <div id={s.id.toString()} className='hidden mt-6'>
+                    <SpeakerDetails speaker={s} localTime={localTime} />
                   </div>
                 </div>
-
-                <div id={s.id.toString()} className='hidden mt-6'>
-                  <SpeakerDetails speaker={s} localTime={localTime} />
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         ))}
     </div>

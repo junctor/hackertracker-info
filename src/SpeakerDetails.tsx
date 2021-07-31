@@ -23,9 +23,12 @@ const SpeakerDetails = ({ speaker, localTime }: SpeakerDetailProps) => {
   return (
     <div>
       <div className='cursor-tex'>
-        <div className='text-gray-light text-sm'>
-          <FormatDesc details={speaker.description} />
-        </div>
+        {speaker.description.split("\n").map((d, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <div className='text-gray-light text-sm mt-2' key={`k=${index}`}>
+            <FormatDesc details={d} />
+          </div>
+        ))}
       </div>
       {speaker.events.map((data) => (
         <div

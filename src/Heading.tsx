@@ -31,7 +31,7 @@ export const Heading = () => {
         </div>
       </div>
       <div className={`${menu === true ? "block" : "hidden"} w-full flex-grow`}>
-        <div className='text-sm lg:flex-grow'>
+        <div className='text-sm overflow-y-auto h-72 mt-2'>
           {sideLinks().map((sl) => (
             <div key={sl.heading}>
               <p className='text-lg mt-6 text-blue'>{sl.heading}</p>

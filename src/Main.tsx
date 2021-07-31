@@ -27,6 +27,7 @@ const Main = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [showMenu, setShowMenu] = useState(false);
+  const [hideEvents, setHideEvents] = useState(true);
 
   const eventId = new URLSearchParams(document.location.search).get("event");
 
@@ -34,7 +35,18 @@ const Main = () => {
 
   const theme = new Theme();
 
+  const hideCompletedEvents = (htEvent: HTEvent) =>
+    new Date(htEvent.end).getTime() > Date.now();
+
   const filterEvents = (htEvent: HTEvent): boolean => {
+    if (eventId) {
+      return htEvent.id.toString() === eventId;
+    }
+
+    if (hideEvents && !hideCompletedEvents(htEvent)) {
+      return false;
+    }
+
     if (tab === "bookmarks") {
       const bookmarks: string[] =
         JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
@@ -55,10 +67,6 @@ const Main = () => {
           .toLowerCase()
           .includes(searchQuery.toLowerCase())
       );
-    }
-
-    if (eventId) {
-      return htEvent.id.toString() === eventId;
     }
 
     if (conDays.includes(tab)) {
@@ -123,19 +131,21 @@ const Main = () => {
   }, [events]);
 
   useEffect(() => {
-    const conDaySet = events.reduce((set, e) => {
-      set.add(
-        eventWeekday(new Date(e.begin), "America/Los_Angeles", localTime)
-      );
-      return set;
-    }, new Set<string>());
+    const conDaySet = events
+      .filter((e) => !hideEvents || hideCompletedEvents(e))
+      .reduce((set, e) => {
+        set.add(
+          eventWeekday(new Date(e.begin), "America/Los_Angeles", localTime)
+        );
+        return set;
+      }, new Set<string>());
 
     setConDays(Array.from(conDaySet));
 
     if (conDaySet.size > 0) {
       setTab(Array.from(conDaySet)[0]);
     }
-  }, [events, localTime]);
+  }, [events, localTime, hideEvents]);
 
   /* eslint-disable no-param-reassign */
   const groupedDates: Record<string, [HTEvent]> = filteredEvents.reduce(
@@ -220,11 +230,21 @@ const Main = () => {
         </div>
         <div className='flex-2'>
           <button
-            className='inline-block text-sm p-2 mb-4 leading-none border rounded text-orange border-organge hover:border-blue hover:text-blue'
+            className='inline-block text-sm p-2 mb-4 leading-none border rounded text-orange border-organge hover:border-blue hover:text-blue ml-2'
             type='button'
             onClick={() => setLocalTime(() => !localTime)}>
-            {localTime ? "local time" : "event time"}
+            {localTime ? "event time" : "local time"}
           </button>
+        </div>
+        <div className='flex-2'>
+          {!eventId && tab !== "speakers" && (
+            <button
+              className='inline-block text-sm p-2 mb-4 leading-none border rounded text-red border-organge hover:border-green hover:text-green'
+              type='button'
+              onClick={() => setHideEvents(() => !hideEvents)}>
+              {hideEvents ? "show completed" : "hide completed"}
+            </button>
+          )}
         </div>
       </div>
       <div className='mb-4'>
@@ -241,7 +261,7 @@ const Main = () => {
         </div>
         <div className='flex justify-end'>
           <div
-            className={`p-2 mr-5 text-blue shadow-xl ${
+            className={`p-2 mr-5 text-blue shadow-xl overflow-y-auto h-40 ${
               !showMenu ? "hidden" : ""
             }`}>
             <div
@@ -259,7 +279,7 @@ const Main = () => {
                   key={c}
                   role='button'
                   tabIndex={i}
-                  className={`block px-4 py-2 text-${theme.color} hover:bg-blue rounded hover:text-black`}
+                  className={`block px-4 py-2  text-${theme.color} hover:bg-blue rounded hover:text-black`}
                   onClick={() => setCategoryMenu(c)}
                   onKeyDown={() => setCategoryMenu(c)}>
                   {c}

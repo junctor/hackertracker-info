@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 import React from "react";
+import firebase from "firebase/app";
 
 type Timestamp = firebase.firestore.Timestamp;
 

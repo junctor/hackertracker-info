@@ -238,11 +238,11 @@ const Main = () => {
       <div className='flex space-x-1 justify-end'>
         <div className='flex items-center ml-5 mr-5'>
           <input
-            className='input w-full h-8 mr-2 input-bordered'
+            className='input text-base w-full mr-1 input-bordered'
             type='text'
             placeholder='search events...'
             value={searchInput}
-            size={15}
+            size={13}
             onChange={(e) => setSearchInput(e.target.value)}
             onKeyPress={(e) => {
               if (e.key === "Enter") {
@@ -257,7 +257,7 @@ const Main = () => {
           />
           <button className='flex-shrink-0' type='button'>
             <SearchCircleIcon
-              className='h-9 w-9 text-green'
+              className='h-12 w-12 text-green'
               onClick={() => {
                 clearFilters();
                 setSearchQuery(() => searchInput);

@@ -59,5 +59,33 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: "#eec643",
+          "primary-focus": "#e25238",
+          "primary-content": "#ffffff",
+          secondary: "#e25238",
+          "secondary-focus": "#eec643",
+          "secondary-content": "#ffffff",
+          accent: "#dc8530",
+          "accent-focus": "#4999e5",
+          "accent-content": "#ffffff",
+          neutral: "#4999e5",
+          "neutral-focus": "#64d576",
+          "neutral-content": "#ffffff",
+          "base-content": "#bbb",
+          "base-100": "#212529",
+          "base-200": "#bbb",
+          "base-300": "#777",
+          info: "#4999e5",
+          success: "#64d576",
+          warning: "#eec643",
+          error: "#e25238",
+        },
+      },
+    ],
+  },
 };

@@ -119,7 +119,6 @@ const Events = ({ events, speakers, localTime }: EventProps) => {
           </div>
         </div>
       ))}
-      ;
     </div>
   );
 };

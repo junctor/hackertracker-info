@@ -26,7 +26,6 @@ const Main = () => {
 
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showMenu, setShowMenu] = useState(false);
   const [hideEvents, setHideEvents] = useState(true);
 
   const eventId = new URLSearchParams(document.location.search).get("event");
@@ -176,7 +175,6 @@ const Main = () => {
     } else {
       setTab("");
     }
-    setShowMenu(() => false);
   };
 
   const clearFilters = (resetTab: boolean = false) => {
@@ -196,11 +194,43 @@ const Main = () => {
 
   return (
     <div id='main mb-5'>
-      <div className='flex space-x-1 flex-row-reverse'>
+      <div className='flex space-x-1 justify-end'>
         <div className='flex flex-initial'>
-          <div className='flex items-center rounded bg-white shadow-l border-green border-2 mb-4 mr-5 ml-2'>
+          <div className='dropdown dropdown-hover dropdown-left'>
+            <div className='m-1 btn btn-sm lowercase'>
+              {category !== "" ? category : "category"}
+              <ChevronDownIcon className='h-5 w-5 inline text-orange' />
+            </div>
+            <ul className='shadow menu dropdown-content bg-base-100 overflow-y-auto h-52 rounded-box w-52'>
+              <li>
+                <div
+                  role='button'
+                  tabIndex={0}
+                  className={`block px-4 py-2 text-${theme.color} hover:bg-blue rounded hover:text-black`}
+                  onClick={() => clearFilters(true)}
+                  onKeyDown={() => clearFilters(true)}>
+                  All
+                </div>
+              </li>
+              {Array.from(categories)
+                .sort()
+                .map((c, i) => (
+                  <li key={c}>
+                    <div
+                      role='button'
+                      tabIndex={i + 1}
+                      className={`block px-4 py-2  text-${theme.color} hover:bg-blue rounded hover:text-black`}
+                      onClick={() => setCategoryMenu(c)}
+                      onKeyDown={() => setCategoryMenu(c)}>
+                      {c}
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </div>
+          <div className='flex items-center ml-5 mr-5'>
             <input
-              className='focus:outline-none bg-transparent border-none w-full ml-2'
+              className='input w-full h-8 mr-2 input-bordered'
               type='text'
               placeholder='search events...'
               value={searchInput}
@@ -219,7 +249,7 @@ const Main = () => {
             />
             <button className='flex-shrink-0' type='button'>
               <SearchCircleIcon
-                className='h-7 w-7 text-green'
+                className='h-9 w-9 text-green'
                 onClick={() => {
                   clearFilters();
                   setSearchQuery(() => searchInput);
@@ -228,63 +258,32 @@ const Main = () => {
             </button>
           </div>
         </div>
-        <div className='flex-2'>
-          <button
-            className='inline-block text-sm p-2 mb-4 leading-none border rounded text-orange border-organge hover:border-blue hover:text-blue ml-2'
-            type='button'
-            onClick={() => setLocalTime(() => !localTime)}>
-            {localTime ? "event time" : "local time"}
-          </button>
-        </div>
-        <div className='flex-2'>
-          {!eventId && tab !== "speakers" && (
-            <button
-              className='inline-block text-sm p-2 mb-4 leading-none border rounded text-red border-organge hover:border-green hover:text-green'
-              type='button'
-              onClick={() => setHideEvents(() => !hideEvents)}>
-              {hideEvents ? "show completed" : "hide completed"}
-            </button>
-          )}
-        </div>
       </div>
-      <div className='mb-4'>
-        <div className='flex justify-end'>
-          <div className='flex-none'>
-            <button
-              className='inline-block text-sm p-2 mr-5 leading-none border rounded text-blue border-blue hover:border-orange hover:text-orange'
-              type='button'
-              onClick={() => setShowMenu(() => !showMenu)}>
-              {category !== "" ? category : "category"}
-              <ChevronDownIcon className='h-5 w-5 inline text-orange' />
-            </button>
+      <div className='flex justify-end mr-5'>
+        <div className='flex-2'>
+          <div className='form-control'>
+            <label className='cursor-pointer label' htmlFor='time-toggle'>
+              <span className='label-text'>display local time</span>
+              <input
+                id='time-toggle'
+                type='checkbox'
+                checked={localTime}
+                className='toggle toggle-secondary ml-2'
+                onClick={() => setLocalTime(() => !localTime)}
+              />
+            </label>
           </div>
-        </div>
-        <div className='flex justify-end'>
-          <div
-            className={`p-2 mr-5 text-blue shadow-xl overflow-y-auto h-40 ${
-              !showMenu ? "hidden" : ""
-            }`}>
-            <div
-              role='button'
-              tabIndex={0}
-              className={`block px-4 py-2 text-${theme.color} hover:bg-blue rounded hover:text-black`}
-              onClick={() => clearFilters(true)}
-              onKeyDown={() => clearFilters(true)}>
-              All
-            </div>
-            {Array.from(categories)
-              .sort()
-              .map((c, i) => (
-                <div
-                  key={c}
-                  role='button'
-                  tabIndex={i}
-                  className={`block px-4 py-2  text-${theme.color} hover:bg-blue rounded hover:text-black`}
-                  onClick={() => setCategoryMenu(c)}
-                  onKeyDown={() => setCategoryMenu(c)}>
-                  {c}
-                </div>
-              ))}
+          <div className='form-control'>
+            <label className='cursor-pointer label' htmlFor='time-toggle'>
+              <span className='label-text'>hide completed events</span>
+              <input
+                id='time-toggle'
+                type='checkbox'
+                checked={hideEvents}
+                className='toggle toggle-primary ml-2'
+                onClick={() => setHideEvents(() => !hideEvents)}
+              />
+            </label>
           </div>
         </div>
       </div>

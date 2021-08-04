@@ -8,7 +8,7 @@ import {
   LinkIcon,
 } from "@heroicons/react/solid";
 import { eventData, speakerData } from "./fb";
-import { eventDay, eventWeekday } from "./utils";
+import { eventDay, eventWeekday, getSetting, toggleSetting } from "./utils";
 import { HTEvent, HTSpeaker } from "./ht";
 import Events from "./Events";
 import Speakers from "./Speakers";
@@ -45,9 +45,21 @@ const Main = () => {
 
     setSearchQuery(searchParam ?? "");
 
+    const localTimeSetting = getSetting("localTime");
+
+    if (localTimeSetting) {
+      setLocalTime(localTimeSetting === "true");
+    }
+
     if (eventIdParam) {
       setEventID(eventIdParam);
       setHideEvents(false);
+    } else {
+      const hideCompletedSetting = getSetting("hideCompleted");
+
+      if (hideCompletedSetting) {
+        setHideEvents(hideCompletedSetting === "true");
+      }
     }
   }, []);
 
@@ -297,7 +309,10 @@ const Main = () => {
                 type='checkbox'
                 checked={localTime}
                 className='toggle toggle-secondary ml-2'
-                onChange={() => setLocalTime(() => !localTime)}
+                onChange={() => {
+                  toggleSetting("localTime", !localTime);
+                  setLocalTime(() => !localTime);
+                }}
               />
             </label>
           </div>
@@ -309,7 +324,10 @@ const Main = () => {
                 type='checkbox'
                 checked={hideEvents}
                 className='toggle toggle-primary ml-2'
-                onChange={() => setHideEvents(() => !hideEvents)}
+                onChange={() => {
+                  toggleSetting("hideCompleted", !hideEvents);
+                  setHideEvents(() => !hideEvents);
+                }}
               />
             </label>
           </div>

@@ -83,6 +83,17 @@ export function eventTime(
   return time.toLocaleTimeString(navigator.language, options);
 }
 
+export function toggleSetting(
+  setting: "hideCompleted" | "localTime",
+  on: boolean
+) {
+  localStorage.setItem(setting, `${on}`);
+}
+
+export function getSetting(setting: "hideCompleted" | "localTime") {
+  return localStorage.getItem(setting);
+}
+
 export function addBookmark(eventId: string) {
   const bookmarks: string[] =
     JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];

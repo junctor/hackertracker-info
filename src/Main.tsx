@@ -23,8 +23,6 @@ const Main = () => {
   const [categories, setCategories] = useState<Set<string>>(new Set<string>());
   const [category, setCategory] = useState("");
   const [conDays, setConDays] = useState<string[]>([]);
-
-  const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [hideEvents, setHideEvents] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
@@ -238,19 +236,20 @@ const Main = () => {
       <div className='flex space-x-1 justify-end'>
         <div className='flex items-center ml-5 mr-5'>
           <input
+            id='event-search'
             className='input text-base w-full mr-1 input-bordered'
             type='text'
             placeholder='search events...'
-            value={searchInput}
             size={13}
-            onChange={(e) => setSearchInput(e.target.value)}
             onKeyPress={(e) => {
               if (e.key === "Enter") {
-                clearFilters(searchInput === "");
-                setSearchQuery(() => searchInput);
-                if (searchInput !== "") {
+                const inputTarget = e.target as HTMLInputElement;
+                clearFilters(inputTarget.value === "");
+                setSearchQuery(() => inputTarget.value);
+                if (inputTarget.value !== "") {
                   setTab("");
                 }
+                inputTarget.blur();
               }
             }}
             aria-label='Search events'
@@ -259,8 +258,10 @@ const Main = () => {
             <SearchCircleIcon
               className='h-12 w-12 text-green'
               onClick={() => {
+                const searchInput: HTMLInputElement | null =
+                  document.querySelector("#event-search");
                 clearFilters();
-                setSearchQuery(() => searchInput);
+                setSearchQuery(() => searchInput?.value ?? "");
               }}
             />
           </button>
@@ -276,7 +277,7 @@ const Main = () => {
                 type='checkbox'
                 checked={localTime}
                 className='toggle toggle-secondary ml-2'
-                onClick={() => setLocalTime(() => !localTime)}
+                onChange={() => setLocalTime(() => !localTime)}
               />
             </label>
           </div>
@@ -288,7 +289,7 @@ const Main = () => {
                 type='checkbox'
                 checked={hideEvents}
                 className='toggle toggle-primary ml-2'
-                onClick={() => setHideEvents(() => !hideEvents)}
+                onChange={() => setHideEvents(() => !hideEvents)}
               />
             </label>
           </div>
@@ -339,7 +340,7 @@ const Main = () => {
                 </li>
               </ul>
             ) : (
-              <ul>
+              <ul className='flex'>
                 <li className='-mb-px mr-1'>
                   <button
                     type='button'
@@ -350,6 +351,26 @@ const Main = () => {
                     <HomeIcon className='h-6 w-6 text-blue' />
                   </button>
                 </li>
+
+                {searchQuery && !category && (
+                  <li className='-mb-px mr-1'>
+                    <button
+                      type='button'
+                      className='inline-block py-2 px-4 text-orange  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
+                      {searchQuery}
+                    </button>
+                  </li>
+                )}
+
+                {category && (
+                  <li className='-mb-px mr-1'>
+                    <button
+                      type='button'
+                      className='inline-block py-2 px-4 text-yellow  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
+                      {category}
+                    </button>
+                  </li>
+                )}
               </ul>
             )}
           </div>

@@ -21,11 +21,31 @@ const EventDetail = ({ event, localTime }: EventDetailProps) => (
     </div>
     <div>
       {event.android_description.split("\n").map((d, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <div className='mt-2 text-gray-light text-sm' key={`d-${index}`}>
+        <div
+          className='mt-2 text-gray-light text-sm'
+          // eslint-disable-next-line react/no-array-index-key
+          key={`${d}-${event.id}-${index}`}>
           <FormatDesc details={d} />
         </div>
       ))}
+
+      {event.links.length > 0 && (
+        <div className='mt-5 text-xs'>
+          {event.links.map((l) => (
+            <div className='mt-1'>
+              <p className='inline'>{`${l.label}: `}</p>
+              <a
+                key={l.url}
+                target='_blank'
+                rel='noopener noreferrer'
+                href={l.url}
+                className='text-blue hover:text-orange'>
+                {l.url}
+              </a>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
     <div className='mt-5 mb-1'>
       <button

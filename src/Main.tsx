@@ -5,6 +5,7 @@ import {
   HomeIcon,
   UserGroupIcon,
   ChevronDownIcon,
+  LinkIcon,
 } from "@heroicons/react/solid";
 import { eventData, speakerData } from "./fb";
 import { eventDay, eventWeekday } from "./utils";
@@ -26,8 +27,29 @@ const Main = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [hideEvents, setHideEvents] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
+  const [eventId, setEventID] = useState("");
 
-  const eventId = new URLSearchParams(document.location.search).get("event");
+  useEffect(() => {
+    const categoryParam = new URLSearchParams(document.location.search).get(
+      "category"
+    );
+    setCategory(() => categoryParam ?? "");
+
+    const eventIdParam = new URLSearchParams(document.location.search).get(
+      "event"
+    );
+
+    const searchParam = new URLSearchParams(document.location.search).get(
+      "search"
+    );
+
+    setSearchQuery(searchParam ?? "");
+
+    if (eventIdParam) {
+      setEventID(eventIdParam);
+      setHideEvents(false);
+    }
+  }, []);
 
   const conferenceCode = "DEFCON29";
 
@@ -167,13 +189,11 @@ const Main = () => {
 
   const setCategoryMenu = (c: string) => {
     setCategory(c);
-    if (c === "") {
-      const [baseUrl] = document.location.href.split("?");
-      window.history.pushState({}, document.title, baseUrl);
-      setSearchQuery("");
-    } else {
-      setTab("");
-    }
+    const [baseUrl] = document.location.href.split("?");
+    window.history.pushState({}, document.title, baseUrl);
+    setSearchQuery("");
+    setTab("");
+
     setShowMenu(() => false);
   };
 
@@ -359,6 +379,15 @@ const Main = () => {
                       className='inline-block py-2 px-4 text-orange  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
                       {searchQuery}
                     </button>
+                    <LinkIcon
+                      className='inline cursor-pointer ml-2 mb-2 w-7 h-7 text-blue'
+                      onClick={() => {
+                        const url = window.location.href.split("?")[0];
+                        navigator.clipboard.writeText(
+                          `${url}?search=${encodeURI(searchQuery)}`
+                        );
+                      }}
+                    />
                   </li>
                 )}
 
@@ -369,6 +398,16 @@ const Main = () => {
                       className='inline-block py-2 px-4 text-yellow  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
                       {category}
                     </button>
+
+                    <LinkIcon
+                      className='inline cursor-pointer ml-2 mb-2 w-7 h-7 text-blue'
+                      onClick={() => {
+                        const url = window.location.href.split("?")[0];
+                        navigator.clipboard.writeText(
+                          `${url}?category=${encodeURI(category)}`
+                        );
+                      }}
+                    />
                   </li>
                 )}
               </ul>

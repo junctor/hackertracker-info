@@ -5,6 +5,8 @@ const iCalDesc = (event: HTEvent) => {
   return `${event.description} - ${speakers}`;
 };
 
+const url = window.location.href.split("?")[0];
+
 const iCalDate = (eDate: Date) => {
   const day = `0${eDate.getUTCDate()}`.slice(-2);
   const month = `0${eDate.getUTCMonth() + 1}`.slice(-2);
@@ -26,6 +28,7 @@ DTEND:${iCalDate(new Date(event.end))}
 STATUS:CONFIRMED
 CATEGORIES:CONFERENCE
 SUMMARY:${event.title}
+URL:${url}?event=${event.id}
 LOCATION:${event.location.name}
 DESCRIPTION:${iCalDesc(event).replace(/(\r\n|\n|\r)/gm, " ")}
 END:VEVENT

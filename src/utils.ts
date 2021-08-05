@@ -132,17 +132,18 @@ export async function invalidateCache() {
   const now = new Date().getTime();
   const deltaTime = now - cacheUpdatedTime;
   const hourMs = 3600000;
+  const thirtyMinMs = hourMs / 3;
 
-  if (deltaTime > hourMs) {
-    removeCache();
-    return;
-  }
+  if (deltaTime > thirtyMinMs) {
+    try {
+      const fbUpdated = await updatedDate();
+      const fbUpdatedTime = fbUpdated.toMillis();
 
-  const fbUpdated = await updatedDate();
-  const fbUpdatedTime = fbUpdated.toMillis();
-
-  if (fbUpdatedTime > cacheUpdatedTime) {
-    removeCache();
+      if (fbUpdatedTime > cacheUpdatedTime || deltaTime > hourMs) {
+        removeCache();
+      }
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
   }
 }
 

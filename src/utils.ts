@@ -1,4 +1,5 @@
 import { updatedDate } from "./fb";
+import { HTEvent } from "./ht";
 
 export function timeDisplayParts(
   time: Date,
@@ -143,4 +144,44 @@ export async function invalidateCache() {
   if (fbUpdatedTime > cacheUpdatedTime) {
     removeCache();
   }
+}
+
+/* eslint-disable no-param-reassign */
+export const groupedDates = (
+  events: HTEvent[],
+  localTime: boolean = false
+): Record<string, [HTEvent]> =>
+  events.reduce((group, e) => {
+    const day = eventDay(new Date(e.begin), "America/Los_Angeles", localTime);
+    group[day] = group[day] || [];
+    group[day].push(e);
+    return group;
+  }, {} as Record<string, [HTEvent]>);
+/* eslint-disable no-param-reassign */
+
+export function filterEvents(events: HTEvent[]) {
+  return groupedDates(
+    events.filter((e) => {
+      const future = new Date();
+      future.setHours(future.getHours() + 5);
+
+      const now = new Date();
+
+      const end = new Date(e.end).getTime();
+
+      if (end > now.getTime() && end < future.getTime()) {
+        return true;
+      }
+
+      return false;
+    })
+  );
+}
+
+export function pageScroll() {
+  window.scrollBy({
+    top: 45,
+    left: 0,
+    behavior: "smooth",
+  });
 }

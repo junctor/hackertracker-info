@@ -8,17 +8,16 @@ import {
   LinkIcon,
   MapIcon,
 } from "@heroicons/react/solid";
-import { eventData, speakerData } from "./fb";
-import { eventDay, eventWeekday, getSetting, toggleSetting } from "./utils";
-import { HTEvent, HTSpeaker } from "./ht";
+import { speakerData } from "./fb";
+import { eventWeekday, getSetting, groupedDates, toggleSetting } from "./utils";
+import { HTEvent, HTSpeaker, MainProps } from "./ht";
 import Events from "./Events";
 import Speakers from "./Speakers";
 import { Theme } from "./theme";
 import ErrorBoundary from "./ErrorBoundry";
 import Map from "./Map";
 
-const Main = () => {
-  const [events, setEvents] = useState<HTEvent[]>([]);
+const Main = ({ events }: MainProps) => {
   const [speakers, setSpeakers] = useState<HTSpeaker[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [tab, setTab] = useState("Thu");
@@ -64,8 +63,6 @@ const Main = () => {
       }
     }
   }, []);
-
-  const conferenceCode = "DEFCON29";
 
   const theme = new Theme();
 
@@ -123,25 +120,6 @@ const Main = () => {
     (async () => {
       setLoadingEvents(true);
 
-      const localEvents = localStorage.getItem("events");
-
-      if (localEvents) {
-        const localEventData: HTEvent[] = JSON.parse(localEvents);
-        setEvents(localEventData);
-      } else {
-        const htEvents = await eventData(conferenceCode);
-        setEvents(htEvents);
-        localStorage.setItem("updated", new Date().getTime().toString());
-        localStorage.setItem("events", JSON.stringify(htEvents));
-      }
-      setLoadingEvents(false);
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      setLoadingEvents(true);
-
       const localSpeakers = localStorage.getItem("speakers");
 
       if (localSpeakers) {
@@ -181,18 +159,6 @@ const Main = () => {
       setTab(Array.from(conDaySet)[0]);
     }
   }, [events, localTime, hideEvents]);
-
-  /* eslint-disable no-param-reassign */
-  const groupedDates: Record<string, [HTEvent]> = filteredEvents.reduce(
-    (group, e) => {
-      const day = eventDay(new Date(e.begin), "America/Los_Angeles", localTime);
-      group[day] = group[day] || [];
-      group[day].push(e);
-      return group;
-    },
-    {} as Record<string, [HTEvent]>
-  );
-  /* eslint-disable no-param-reassign */
 
   if (loadingEvents) {
     return (
@@ -242,7 +208,7 @@ const Main = () => {
           </div>
           <div className='flex-initial'>
             <div
-              className={`p-2 mr-1 mb-2 mt-4 text-blue shadow-xl fixed rounded-box bg-background z-10 overflow-y-auto h-40 ${
+              className={`p-2 mr-1 mb-2 mt-2 absolute border text-blue shadow-xl rounded-box bg-background z-10 overflow-y-auto h-40 ${
                 !showMenu ? "hidden" : ""
               }`}>
               <div
@@ -459,7 +425,7 @@ const Main = () => {
               default:
                 return (
                   <Events
-                    events={groupedDates}
+                    events={groupedDates(filteredEvents, localTime)}
                     speakers={speakers}
                     localTime={localTime}
                   />

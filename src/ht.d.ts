@@ -79,10 +79,7 @@ interface HTEvent {
 }
 
 type MainProps = {
-  localTime: boolean;
-  category: string;
-  setCategories: React.Dispatch<React.SetStateAction<Set<string>>>;
-  searchQuery: string;
+  events: HTEvent[];
 };
 
 type HeaderProps = {
@@ -99,6 +96,10 @@ type EventProps = {
   events: Record<string, [HTEvent]>;
   speakers: HTSpeaker[];
   localTime: boolean;
+};
+
+type TVProps = {
+  events: HTEvent[];
 };
 
 type SpeakerProps = {

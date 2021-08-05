@@ -6,6 +6,7 @@ import {
   UserGroupIcon,
   ChevronDownIcon,
   LinkIcon,
+  MapIcon,
 } from "@heroicons/react/solid";
 import { eventData, speakerData } from "./fb";
 import { eventDay, eventWeekday, getSetting, toggleSetting } from "./utils";
@@ -14,6 +15,7 @@ import Events from "./Events";
 import Speakers from "./Speakers";
 import { Theme } from "./theme";
 import ErrorBoundary from "./ErrorBoundry";
+import Map from "./Map";
 
 const Main = () => {
   const [events, setEvents] = useState<HTEvent[]>([]);
@@ -240,13 +242,13 @@ const Main = () => {
           </div>
           <div className='flex-initial'>
             <div
-              className={`p-2 mr-1 mb-2 mt-4 text-blue shadow-xl overflow-y-auto h-40 ${
+              className={`p-2 mr-1 mb-2 mt-4 text-blue shadow-xl fixed rounded-box bg-background z-10 overflow-y-auto h-40 ${
                 !showMenu ? "hidden" : ""
               }`}>
               <div
                 role='button'
                 tabIndex={0}
-                className={`block px-4 py-2 text-${theme.color} text-xs hover:bg-blue rounded hover:text-black`}
+                className={`px-4 py-2 text-${theme.color} text-xs hover:bg-blue rounded hover:text-black`}
                 onClick={() => clearFilters(true)}
                 onKeyDown={() => clearFilters(true)}>
                 All
@@ -309,7 +311,7 @@ const Main = () => {
               id='time-toggle'
               type='checkbox'
               checked={localTime}
-              className='toggle toggle-secondary mr-5'
+              className='toggle toggle-secondary mr-5 ml-2'
               onChange={() => {
                 toggleSetting("localTime", !localTime);
                 setLocalTime(() => !localTime);
@@ -334,7 +336,7 @@ const Main = () => {
         </div>
       </div>
 
-      <div className='flex space-x-1'>
+      <div className='flex space-x-1 mt-1'>
         <div className='flex-1'>
           <div>
             {!eventId && !searchQuery && !category ? (
@@ -347,7 +349,7 @@ const Main = () => {
                         conDay === tab
                           ? "border-l-4 border-t-4 border-r-4 rounded-t"
                           : ""
-                      } py-2 px-4 text-${theme.color} font-semibold`}
+                      } py-1 px-3 text-${theme.color} font-semibold`}
                       onClick={() => setTab(conDay)}>
                       {conDay}
                     </button>
@@ -360,9 +362,21 @@ const Main = () => {
                       tab === "speakers"
                         ? "border-l-4 border-t-4 border-r-4 rounded-t"
                         : ""
-                    } py-2 px-4 text-gray-light font-semibold`}
+                    } py-1 px-3 text-gray font-semibold`}
                     onClick={() => setTab("speakers")}>
-                    <UserGroupIcon className='h-6 w-6 text-gray-light' />
+                    <UserGroupIcon className='h-6 w-6 text-gray' />
+                  </button>
+                </li>
+                <li className='-mb-px mr-1'>
+                  <button
+                    type='button'
+                    className={`inline-block ${
+                      tab === "map"
+                        ? "border-l-4 border-t-4 border-r-4 rounded-t"
+                        : ""
+                    } py-1 px-3 text-gray-light font-semibold`}
+                    onClick={() => setTab("map")}>
+                    <MapIcon className='h-6 w-6 text-gray-light' />
                   </button>
                 </li>
                 <li className='-mb-px mr-1'>
@@ -372,7 +386,7 @@ const Main = () => {
                       tab === "bookmarks"
                         ? "border-l-4 border-t-4 border-r-4 rounded-t"
                         : ""
-                    } py-2 px-4 text-orange font-semibold`}
+                    } py-1 px-3 text-orange font-semibold`}
                     onClick={() => setTab("bookmarks")}>
                     <StarIcon className='h-6 w-6 text-orange' />
                   </button>
@@ -383,7 +397,7 @@ const Main = () => {
                 <li className='-mb-px mr-1'>
                   <button
                     type='button'
-                    className='inline-block py-2 px-4 text-blue font-semibold'
+                    className='inline-block py-1 px-3 text-blue font-semibold'
                     onClick={() => {
                       clearFilters(true);
                     }}>
@@ -395,7 +409,7 @@ const Main = () => {
                   <li className='-mb-px mr-1'>
                     <button
                       type='button'
-                      className='inline-block py-2 px-4 text-orange  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
+                      className='inline-block py-1 px-3 text-orange  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
                       {searchQuery}
                     </button>
                     <LinkIcon
@@ -414,7 +428,7 @@ const Main = () => {
                   <li className='-mb-px mr-1'>
                     <button
                       type='button'
-                      className='inline-block py-2 px-4 text-yellow  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
+                      className='inline-block py-1 px-3 text-yellow  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
                       {category}
                     </button>
 
@@ -438,6 +452,8 @@ const Main = () => {
         <div>
           {(() => {
             switch (tab) {
+              case "map":
+                return <Map />;
               case "speakers":
                 return <Speakers speakers={speakers} localTime={localTime} />;
               default:

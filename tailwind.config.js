@@ -31,6 +31,9 @@ module.exports = {
       white: {
         DEFAULT: "#fff",
       },
+      background: {
+        DEFAULT: "#212529",
+      },
       black: {
         DEFAULT: "#000",
       },

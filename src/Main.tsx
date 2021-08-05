@@ -280,9 +280,6 @@ const Main = () => {
                   const inputTarget = e.target as HTMLInputElement;
                   clearFilters(inputTarget.value === "");
                   setSearchQuery(() => inputTarget.value);
-                  if (inputTarget.value !== "") {
-                    setTab("");
-                  }
                   inputTarget.blur();
                 }
               }}
@@ -294,7 +291,7 @@ const Main = () => {
                 onClick={() => {
                   const searchInput: HTMLInputElement | null =
                     document.querySelector("#event-search");
-                  clearFilters();
+                  clearFilters(searchInput?.value === "");
                   setSearchQuery(() => searchInput?.value ?? "");
                 }}
               />

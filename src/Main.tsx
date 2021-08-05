@@ -91,6 +91,7 @@ const Main = () => {
 
     if (searchQuery) {
       return (
+        htEvent.type.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         htEvent.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         htEvent.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         htEvent.speakers

@@ -349,7 +349,7 @@ const Main = () => {
                         conDay === tab
                           ? "border-l-4 border-t-4 border-r-4 rounded-t"
                           : ""
-                      } py-1 px-3 text-${theme.color} font-semibold`}
+                      } py-1 px-2 text-${theme.color} font-semibold`}
                       onClick={() => setTab(conDay)}>
                       {conDay}
                     </button>
@@ -362,7 +362,7 @@ const Main = () => {
                       tab === "speakers"
                         ? "border-l-4 border-t-4 border-r-4 rounded-t"
                         : ""
-                    } py-1 px-3 text-gray font-semibold`}
+                    } py-1 px-2 text-gray font-semibold`}
                     onClick={() => setTab("speakers")}>
                     <UserGroupIcon className='h-6 w-6 text-gray' />
                   </button>
@@ -374,7 +374,7 @@ const Main = () => {
                       tab === "map"
                         ? "border-l-4 border-t-4 border-r-4 rounded-t"
                         : ""
-                    } py-1 px-3 text-gray-light font-semibold`}
+                    } py-1 px-2 text-gray-light font-semibold`}
                     onClick={() => setTab("map")}>
                     <MapIcon className='h-6 w-6 text-gray-light' />
                   </button>
@@ -386,7 +386,7 @@ const Main = () => {
                       tab === "bookmarks"
                         ? "border-l-4 border-t-4 border-r-4 rounded-t"
                         : ""
-                    } py-1 px-3 text-orange font-semibold`}
+                    } py-1 px-2 text-orange font-semibold`}
                     onClick={() => setTab("bookmarks")}>
                     <StarIcon className='h-6 w-6 text-orange' />
                   </button>
@@ -397,7 +397,7 @@ const Main = () => {
                 <li className='-mb-px mr-1'>
                   <button
                     type='button'
-                    className='inline-block py-1 px-3 text-blue font-semibold'
+                    className='inline-block py-1 px-2 text-blue font-semibold'
                     onClick={() => {
                       clearFilters(true);
                     }}>
@@ -409,7 +409,7 @@ const Main = () => {
                   <li className='-mb-px mr-1'>
                     <button
                       type='button'
-                      className='inline-block py-1 px-3 text-orange  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
+                      className='inline-block py-1 px-2 text-orange  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
                       {searchQuery}
                     </button>
                     <LinkIcon
@@ -428,7 +428,7 @@ const Main = () => {
                   <li className='-mb-px mr-1'>
                     <button
                       type='button'
-                      className='inline-block py-1 px-3 text-yellow  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
+                      className='inline-block py-1 px-2 text-yellow  border-l-4 border-t-4 border-r-4 rounded-t font-semibold text-sm'>
                       {category}
                     </button>
 

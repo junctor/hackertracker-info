@@ -8,11 +8,11 @@ const Map = () => (
         target='_blank'
         rel='noopener noreferrer'
         className='inline mr-2 text-orange'>
-        Open Map in New Tab
+        open map in a new tab
       </a>
       /
       <a href={dcMap} className='text-green ml-2' download>
-        Dowload Map
+        dowload map
       </a>
     </div>
     <embed src={dcMap} width='100%' height='300px' type='application/pdf' />

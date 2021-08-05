@@ -12,6 +12,10 @@ export const sideLinks = (): SideMenu[] => {
         text: "Official Talks",
         href: "https://www.youtube.com/user/DEFCONConference",
       },
+      {
+        text: "DEFCON TV Information",
+        href: "https://dctv.defcon.org",
+      },
     ],
   };
 

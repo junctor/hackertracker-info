@@ -156,7 +156,14 @@ const Main = ({ events }: MainProps) => {
     setConDays(Array.from(conDaySet));
 
     if (conDaySet.size > 0) {
-      setTab(Array.from(conDaySet)[0]);
+      const now = new Date();
+      const nowWeekday = eventWeekday(now, "America/Los_Angeles", localTime);
+
+      if (conDaySet.has(nowWeekday)) {
+        setTab(nowWeekday);
+      } else {
+        setTab(Array.from(conDaySet)[0]);
+      }
     }
   }, [events, localTime, hideEvents]);
 

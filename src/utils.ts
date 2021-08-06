@@ -161,10 +161,23 @@ export const groupedDates = (
 /* eslint-disable no-param-reassign */
 
 export function filterEvents(events: HTEvent[]) {
+  const includedCats = [
+    "DEF CON Official Talk",
+    "DEF CON Music",
+    "DEF CON Policy Team Supplementary Programming",
+    "DEF CON Workshop",
+    "Parties & Meetups",
+    "Misc",
+    "Demo Lab",
+  ];
   return groupedDates(
     events.filter((e) => {
+      if (!includedCats.includes(e.type.name)) {
+        return false;
+      }
+
       const future = new Date();
-      future.setHours(future.getHours() + 4);
+      future.setHours(future.getHours() + 5);
 
       const now = new Date();
 

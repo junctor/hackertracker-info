@@ -134,7 +134,20 @@ interface HeadingLink {
   text: string;
 }
 
+interface VillagesLinks {
+  village: string;
+  loc: string;
+  home?: string;
+  yt?: string;
+  t?: string;
+}
+
 interface SideMenu {
   heading: string;
   links: HeadingLink[];
+}
+
+interface VillageMenu {
+  heading: string;
+  links: VillagesLinks[];
 }

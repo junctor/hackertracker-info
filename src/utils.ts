@@ -164,7 +164,7 @@ export function filterEvents(events: HTEvent[]) {
   return groupedDates(
     events.filter((e) => {
       const future = new Date();
-      future.setHours(future.getHours() + 5);
+      future.setHours(future.getHours() + 4);
 
       const now = new Date();
 

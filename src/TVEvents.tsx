@@ -53,7 +53,10 @@ const TVEvents = ({ events }: TVProps) => {
                             false
                           )}`}
                         </p>
-                        <p className='text-red text-2xl mt-1'>
+                        <p className='text-red text-2xl mt-1 mr-10 inline'>
+                          {data.type.name}
+                        </p>
+                        <p className='text-gray-light text-2xl mt-1 inline'>
                           {data.location.name}
                         </p>
                       </div>

@@ -207,7 +207,7 @@ const Main = ({ events }: MainProps) => {
           <div className='shadow stats'>
             <div className='stat'>
               <div className='stat-title'>Events</div>
-              <div className='stat-value text-primary'>{events.length}</div>
+              <div className='stat-value text-accent'>{events.length}</div>
             </div>
           </div>
         </div>
@@ -257,7 +257,7 @@ const Main = ({ events }: MainProps) => {
               id='event-search'
               className='input text-base w-full mr-1 input-bordered'
               type='text'
-              placeholder='search events...'
+              placeholder='search...'
               size={13}
               onKeyPress={(e) => {
                 if (e.key === "Enter") {

@@ -5,7 +5,7 @@ import {
 } from "@heroicons/react/outline";
 import { HomeIcon } from "@heroicons/react/solid";
 import { Theme } from "./theme";
-import { headingLinks, mainMenu, villagesMenu } from "./links";
+import { headingLinks, mainMenu, infoMenu, villagesMenu } from "./links";
 
 export const Heading = () => {
   const [menu, setMenu] = useState(false);
@@ -36,6 +36,19 @@ export const Heading = () => {
           <div>
             <p className='text-lg mt-6 text-blue'>{mainMenu.heading}</p>
             {mainMenu.links.map((l) => (
+              <a
+                key={l.href}
+                target='_blank'
+                rel='noopener noreferrer'
+                href={l.href}
+                className={`block mt-2 ml-2 text-gray-light hover:text-${theme.color}`}>
+                {l.text}
+              </a>
+            ))}
+          </div>
+          <div>
+            <p className='text-lg mt-6 text-blue'>{infoMenu.heading}</p>
+            {infoMenu.links.map((l) => (
               <a
                 key={l.href}
                 target='_blank'

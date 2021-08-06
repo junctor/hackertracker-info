@@ -18,6 +18,20 @@ export const mainMenu: SideMenu = {
   ],
 };
 
+export const infoMenu: SideMenu = {
+  heading: "Information",
+  links: [
+    {
+      text: "HackerTracker (iOS)",
+      href: "https://itunes.apple.com/us/app/hackertracker/id1021141595?mt=8",
+    },
+    {
+      text: "HackerTracker (Android)",
+      href: "https://play.google.com/store/apps/details?id=com.shortstack.hackertracker&hl=en_US",
+    },
+  ],
+};
+
 export const villagesMenu: VillageMenu = {
   heading: "Villages",
   links: [

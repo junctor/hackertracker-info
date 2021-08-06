@@ -202,7 +202,15 @@ const Main = ({ events }: MainProps) => {
 
   return (
     <div id='main mb-5'>
-      <div className='flex justify-end'>
+      <div className='flex justify-end items-center'>
+        <div className='flex-initial'>
+          <div className='shadow stats'>
+            <div className='stat'>
+              <div className='stat-title'>Events</div>
+              <div className='stat-value text-primary'>{events.length}</div>
+            </div>
+          </div>
+        </div>
         <div className='flex-initial'>
           <div>
             <button

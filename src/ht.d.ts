@@ -82,6 +82,11 @@ type MainProps = {
   events: HTEvent[];
 };
 
+type ClockProps = {
+  localTime: boolean;
+  size: string;
+};
+
 type HeaderProps = {
   categories: Set<string>;
   localTime: boolean;

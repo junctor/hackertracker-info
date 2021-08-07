@@ -16,6 +16,7 @@ import Speakers from "./Speakers";
 import { Theme } from "./theme";
 import ErrorBoundary from "./ErrorBoundry";
 import Map from "./Map";
+import Clock from "./Clock";
 
 const Main = ({ events }: MainProps) => {
   const [speakers, setSpeakers] = useState<HTSpeaker[]>([]);
@@ -192,7 +193,16 @@ const Main = ({ events }: MainProps) => {
     setCategoryMenu("");
     setCategory("");
     if (resetTab) {
-      setTab(conDays[0]);
+      if (conDays.length > 0) {
+        const now = new Date();
+        const nowWeekday = eventWeekday(now, "America/Los_Angeles", localTime);
+
+        if (conDays.includes(nowWeekday)) {
+          setTab(nowWeekday);
+        } else {
+          setTab(conDays[0]);
+        }
+      }
     }
 
     if (eventId) {
@@ -202,15 +212,21 @@ const Main = ({ events }: MainProps) => {
 
   return (
     <div id='main mb-5'>
-      <div className='flex justify-end items-center'>
-        <div className='flex-initial'>
-          <div className='shadow stats'>
-            <div className='stat'>
+      <div className='flex justify-end items-center mb-2'>
+        <div className='flex-initial mr-2'>
+          <Clock localTime={localTime} size='text-4xl' />
+        </div>
+        <div className='flex-initial mr-5'>
+          <div className='w-full shadow stats'>
+            <div className='stat place-items-center place-content-center'>
               <div className='stat-title'>Events</div>
               <div className='stat-value text-accent'>{events.length}</div>
+              <div className='stat-desc'>Can&apos;t Stop the Signal</div>
             </div>
           </div>
         </div>
+      </div>
+      <div className='flex justify-end items-center'>
         <div className='flex-initial'>
           <div>
             <button

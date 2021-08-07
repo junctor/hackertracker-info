@@ -177,7 +177,7 @@ export function filterEvents(events: HTEvent[]) {
       }
 
       const future = new Date();
-      future.setHours(future.getHours() + 5);
+      future.setHours(future.getHours() + 6);
 
       const now = new Date();
 

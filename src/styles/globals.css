@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-h1 {
-  font-style: italic;
+html {
+  background-color: #212529 !important;
 }

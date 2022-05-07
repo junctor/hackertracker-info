@@ -3,7 +3,12 @@ import glitch from "../styles/Glitch.module.scss";
 import { getCountdown } from "../utils/timer";
 
 export function Countdown() {
-  const [timer, setTimer] = useState<Timer>(getCountdown());
+  const [timer, setTimer] = useState<Timer>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
     const interval = setInterval(() => setTimer(getCountdown()), 1000);

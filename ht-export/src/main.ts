@@ -20,9 +20,6 @@ const CONF = "DEFCON29";
   await Promise.all([
     fs.promises.writeFile("./out/conference.json", JSON.stringify(htConf)),
     fs.promises.writeFile("./out/events.json", JSON.stringify(htEvents)),
-    await fs.promises.writeFile(
-      "./out/speakers.json",
-      JSON.stringify(htSpeakers)
-    ),
+    fs.promises.writeFile("./out/speakers.json", JSON.stringify(htSpeakers)),
   ]);
 })();

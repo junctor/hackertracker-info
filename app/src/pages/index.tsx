@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Countdown from "../components/Countdown";
+import Countdown from "../components/countdown/Countdown";
 
 const Home: NextPage = () => {
   return (

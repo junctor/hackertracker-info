@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import glitch from "../styles/Glitch.module.scss";
-import { getCountdown } from "../utils/timer";
+import glitch from "../../styles/Glitch.module.scss";
 
 export function Countdown() {
   const [timer, setTimer] = useState<Timer>({
@@ -9,6 +8,24 @@ export function Countdown() {
     minutes: 0,
     seconds: 0,
   });
+
+  function getCountdown(): Timer {
+    const now = new Date().valueOf();
+    const dc30 = new Date("2022-08-11T00:00:00.000-07:00").valueOf();
+    let d = (dc30 - now) / (24 * 60 * 60 * 1000);
+    let h = (d % 1) * 24;
+    let m = (h % 1) * 60;
+    let s = (m % 1) * 60;
+
+    let timer: Timer = {
+      days: Math.floor(d),
+      hours: Math.floor(h),
+      minutes: Math.floor(m),
+      seconds: Math.floor(s),
+    };
+
+    return timer;
+  }
 
   useEffect(() => {
     const interval = setInterval(() => setTimer(getCountdown()), 1000);

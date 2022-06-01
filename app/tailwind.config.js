@@ -12,6 +12,8 @@ module.exports = {
         "dc-drk-green": "#4b9560",
         "dc-red": "#c04c36",
         "dc-text": "#eeeeee",
+        "dc-gray": "#2D2D2D",
+        "dc-border": "#646464",
       },
     },
   },

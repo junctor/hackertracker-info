@@ -1,0 +1,3 @@
+interface EventCellProps {
+  event: HTEvent;
+}

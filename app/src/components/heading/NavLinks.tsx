@@ -19,9 +19,9 @@ export default function NavLinks() {
   return (
     <Menu>
       <Menu.Button>
-        <MenuIcon className='h-7 w-7' />
+        <MenuIcon className='h-7 w-7 text-white' />
       </Menu.Button>
-      <Menu.Items className='absolute bg-base-100'>
+      <Menu.Items className='absolute bg-black'>
         <Menu.Item>
           {({ active }: any) => (
             <PageLink href='/schedule' active={active}>

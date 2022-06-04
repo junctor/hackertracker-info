@@ -11,7 +11,7 @@ const SchedulePage: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <main>
+      <main className='bg-black'>
         <Schedule />
       </main>
     </div>

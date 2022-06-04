@@ -3,8 +3,8 @@ import { StarIcon } from "@heroicons/react/outline";
 
 export function EventCell({ event }: EventCellProps) {
   return (
-    <div className='mb-1'>
-      <div className='flex bg-dc-gray items-center'>
+    <div className='mt-2'>
+      <div className='flex bg-black items-center'>
         <div
           className='ml-1 w-2 md:h-24 h-24 bg-green-400'
           style={{
@@ -35,8 +35,8 @@ export function EventCell({ event }: EventCellProps) {
           />
           <p className='text-xs text-white inline-flex'>{event.type.name}</p>
         </div>
-        <div className='w-10 items-start ml-5'>
-          <StarIcon className='h-4 w-4' />
+        <div className='w-10 items-start ml-2 mr-2'>
+          <StarIcon className='h-7 w-7' />
         </div>
       </div>
     </div>

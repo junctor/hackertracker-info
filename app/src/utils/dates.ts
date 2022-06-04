@@ -5,11 +5,10 @@ export function timeDisplayParts(
 ): string[] {
   const date = new Date(time);
   const options: Intl.DateTimeFormatOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: "numeric",
+    minute: "numeric",
     timeZoneName: "short",
-    hour12: false,
-    weekday: "short",
+    hour12: true,
   };
 
   if (!localTime) {
@@ -29,11 +28,9 @@ export function eventDay(
 ): string {
   const options: Intl.DateTimeFormatOptions = {
     timeZoneName: "short",
-    weekday: "long",
     day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
+    year: "numeric",
+    month: "numeric",
     hour12: false,
   };
 
@@ -44,9 +41,57 @@ export function eventDay(
   const date = time
     .toLocaleTimeString(navigator.language, options)
     .split(",")
-    .slice(0, 2)
-    .join(", ")
-    .toUpperCase();
+    .slice(0, 1)
+    .join();
+  return date;
+}
+
+export function tabDateTitle(
+  day: string,
+  localTime: boolean,
+  eventTimeZone: string
+): string {
+  const time = new Date(day);
+
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+  };
+
+  if (!localTime) {
+    options.timeZone = eventTimeZone;
+  }
+
+  const date = time
+    .toLocaleTimeString(navigator.language, options)
+    .split(",")
+    .slice(0, 1)
+    .join();
+
+  return date;
+}
+
+export function dateGroupTitle(
+  day: string,
+  localTime: boolean,
+  eventTimeZone: string
+): string {
+  const time = new Date(day);
+
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "long",
+  };
+
+  if (!localTime) {
+    options.timeZone = eventTimeZone;
+  }
+
+  const date = time
+    .toLocaleTimeString(navigator.language, options)
+    .split(",")
+    .slice(0, 1)
+    .join();
 
   return date;
 }
@@ -92,20 +137,13 @@ export function eventTime(
 
 export const groupedDates = (
   events: HTEvent[],
-  localTime: boolean = false
+  localTime: boolean,
+  timeZone: string
 ): Map<string, HTEvent[]> =>
   events.reduce((group, e) => {
-    const day = eventDay(new Date(e.begin), "America/Los_Angeles", localTime);
+    const day = eventDay(new Date(e.begin), timeZone, localTime);
     const dayEvents = group.get(day) ?? [];
     dayEvents.push(e);
     group.set(day, dayEvents);
     return group;
   }, new Map<string, HTEvent[]>());
-
-export function pageScroll() {
-  window.scrollBy({
-    top: 45,
-    left: 0,
-    behavior: "smooth",
-  });
-}

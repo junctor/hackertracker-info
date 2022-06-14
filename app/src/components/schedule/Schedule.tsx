@@ -6,12 +6,10 @@ import { Tab } from "@headlessui/react";
 
 export const Schedule = () => {
   const componentRef = useRef<HTMLDivElement>(null);
-  const dayRef = useRef<HTMLDivElement>(null);
 
   const [events, setEvents] = useState<HTEvent[]>([]);
   const [dateGroup, setDateGroup] = useState<[string, HTEvent[]][]>([]);
-  const [activeTab, setActiveTab] = useState<string>("");
-  const [visableDays, setVisableDays] = useState<Set<string>>(new Set());
+  const [visableDay, setVisableDay] = useState<string>("");
 
   const localTime = false;
   const timeZOne = "America/Los_Angeles";
@@ -22,31 +20,26 @@ export const Schedule = () => {
     return data;
   }
   useEffect(() => {
+    if (!componentRef.current) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const visCopy = visableDays;
-        visCopy.clear();
-        setVisableDays(() => visCopy);
-        console.log(visableDays);
-        const elmId = entry.target.id ?? "";
         if (entry.isIntersecting) {
-          console.log(`vis ${elmId} `);
-          setVisableDays(() => new Set([...Array.from(visableDays), elmId]));
+          const elmId = entry.target.id ?? "";
+          setVisableDay(() => elmId);
         }
       },
-      { rootMargin: "-50px", threshold: 0 }
+      { root: null, rootMargin: "-130px 0px 0px 0px", threshold: 0 }
     );
 
-    const daysElements = document.querySelectorAll(".event-days");
-
-    daysElements.forEach((eE) => {
+    document.querySelectorAll(".event-days").forEach((eE) => {
       observer.observe(eE);
     });
 
     return () => {
       observer.disconnect();
     };
-  }, [visableDays]);
+  }, [dateGroup]);
 
   useEffect(() => {
     (async () => {
@@ -80,11 +73,8 @@ export const Schedule = () => {
           {dateGroup.map(([day]) => (
             <a
               key={day}
-              className={`tab ${
-                visableDays.has(divDay(day)) ? "tab-active" : ""
-              }`}
+              className={`tab ${visableDay == divDay(day) ? "tab-active" : ""}`}
               onClick={() => {
-                setActiveTab(day);
                 scrollToDay(day);
               }}>
               {tabDateTitle(day, localTime, timeZOne)}
@@ -93,7 +83,10 @@ export const Schedule = () => {
         </div>
       </div>
       {dateGroup.map(([day, htEvents]) => (
-        <div id={divDay(day)} key={day} className='event-days scroll-m-32'>
+        <div
+          id={divDay(day)}
+          key={day}
+          className='event-days scroll-m-32 mt-10 mb-10'>
           <div className='bg-black'>
             <p className='text-white text-2xl p-2 ml-3 mt-3 text-center'>
               {dateGroupTitle(day, localTime, timeZOne)}

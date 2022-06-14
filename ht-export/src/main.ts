@@ -1,5 +1,10 @@
 import fs from "fs";
-import { firebaseInit, getConference, getConfEvents } from "./fb";
+import {
+  firebaseInit,
+  getConference,
+  getConfEvents,
+  getSpeakerData,
+} from "./fb";
 
 const CONF = "DEFCON29";
 
@@ -9,7 +14,7 @@ const CONF = "DEFCON29";
   const [htConf, htEvents, htSpeakers] = await Promise.all([
     getConference(fbDb, CONF),
     getConfEvents(fbDb, CONF),
-    getConfEvents(fbDb, CONF),
+    getSpeakerData(fbDb, CONF),
   ]);
 
   const outputDir = "./out";

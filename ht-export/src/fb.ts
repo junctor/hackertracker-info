@@ -26,7 +26,7 @@ export async function firebaseInit() {
   return db;
 }
 
-export async function speakerData(
+export async function getSpeakerData(
   db: Firestore,
   conference: string
 ): Promise<HTSpeaker[]> {

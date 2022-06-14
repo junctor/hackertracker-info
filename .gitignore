@@ -37,3 +37,6 @@ yarn-error.log*
 # Export HT
 ht-export/dist
 ht-export/out
+
+# Ignore Exported HT
+app/public/static/*.json

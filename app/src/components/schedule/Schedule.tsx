@@ -17,7 +17,7 @@ export const Schedule = () => {
   const timeZOne = "America/Los_Angeles";
 
   async function loadEvents(): Promise<HTEvent[]> {
-    const res = await fetch("/static/events.json");
+    const res = await fetch("/static/conf/events.json");
     const data = await res.json();
     return data;
   }

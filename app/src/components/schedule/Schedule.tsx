@@ -2,14 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import Heading from "../heading/Heading";
 import { dateGroupTitle, groupedDates, tabDateTitle } from "../../utils/dates";
 import EventCell from "./EventCell";
-import { Tab } from "@headlessui/react";
 
 export const Schedule = () => {
   const componentRef = useRef<HTMLDivElement>(null);
 
-  const [events, setEvents] = useState<HTEvent[]>([]);
   const [dateGroup, setDateGroup] = useState<[string, HTEvent[]][]>([]);
-  const [visableDay, setVisableDay] = useState<string>("");
 
   const localTime = false;
   const timeZOne = "America/Los_Angeles";
@@ -19,32 +16,10 @@ export const Schedule = () => {
     const data = await res.json();
     return data;
   }
-  useEffect(() => {
-    if (!componentRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          const elmId = entry.target.id ?? "";
-          setVisableDay(() => elmId);
-        }
-      },
-      { root: null, rootMargin: "-130px 0px 0px 0px", threshold: 0 }
-    );
-
-    document.querySelectorAll(".event-days").forEach((eE) => {
-      observer.observe(eE);
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [dateGroup]);
 
   useEffect(() => {
     (async () => {
       let eventData = await loadEvents();
-      setEvents(eventData);
       setDateGroup(
         Array.from(groupedDates(eventData, localTime, timeZOne)).reverse()
       );
@@ -68,27 +43,22 @@ export const Schedule = () => {
   return (
     <div ref={componentRef}>
       <Heading />
-      <div className='bg-black sticky top-16 z-100'>
+      <div className='bg-black sticky top-16 z-30 pt-2'>
         <div className='tabs tabs-boxed bg-black justify-center'>
           {dateGroup.map(([day]) => (
-            <a
+            <button
               key={day}
-              className={`tab ${visableDay == divDay(day) ? "tab-active" : ""}`}
-              onClick={() => {
-                scrollToDay(day);
-              }}>
+              className={`btn btn-sm btn-ghost`}
+              onClick={() => scrollToDay(day)}>
               {tabDateTitle(day, localTime, timeZOne)}
-            </a>
+            </button>
           ))}
         </div>
       </div>
       {dateGroup.map(([day, htEvents]) => (
-        <div
-          id={divDay(day)}
-          key={day}
-          className='event-days scroll-m-32 mt-10 mb-10'>
-          <div className='bg-black'>
-            <p className='text-white text-2xl p-2 ml-3 mt-3 text-center'>
+        <div id={divDay(day)} key={day} className='scroll-m-28 mt-5 mb-10'>
+          <div className='bg-black sticky top-28 z-20'>
+            <p className='text-white text-2xl ml-3 mt-3 text-center'>
               {dateGroupTitle(day, localTime, timeZOne)}
             </p>
           </div>

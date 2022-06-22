@@ -24,9 +24,7 @@ export const Schedule = () => {
   useEffect(() => {
     (async () => {
       let eventData = await loadEvents();
-      setDateGroup(
-        Array.from(groupedDates(eventData, localTime, timeZOne)).reverse()
-      );
+      setDateGroup(Array.from(groupedDates(eventData, localTime, timeZOne)));
     })();
   }, [localTime]);
 

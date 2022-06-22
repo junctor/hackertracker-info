@@ -140,10 +140,12 @@ export const groupedDates = (
   localTime: boolean,
   timeZone: string
 ): Map<string, HTEvent[]> =>
-  events.reduce((group, e) => {
-    const day = eventDay(new Date(e.begin), timeZone, localTime);
-    const dayEvents = group.get(day) ?? [];
-    dayEvents.push(e);
-    group.set(day, dayEvents);
-    return group;
-  }, new Map<string, HTEvent[]>());
+  events
+    .sort((a, b) => a.begin_timestamp.seconds - b.begin_timestamp.seconds)
+    .reduce((group, e) => {
+      const day = eventDay(new Date(e.begin), timeZone, localTime);
+      const dayEvents = group.get(day) ?? [];
+      dayEvents.push(e);
+      group.set(day, dayEvents);
+      return group;
+    }, new Map<string, HTEvent[]>());

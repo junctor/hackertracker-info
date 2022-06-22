@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import Heading from "../heading/Heading";
 import { dateGroupTitle, groupedDates, tabDateTitle } from "../../utils/dates";
 import EventCell from "./EventCell";
+import NavLinks from "../heading/NavLinks";
+import { SearchIcon } from "@heroicons/react/outline";
+import Theme from "../../utils/theme";
 
 export const Schedule = () => {
   const componentRef = useRef<HTMLDivElement>(null);
@@ -10,6 +12,8 @@ export const Schedule = () => {
 
   const localTime = false;
   const timeZOne = "America/Los_Angeles";
+
+  const theme = new Theme();
 
   async function loadEvents(): Promise<HTEvent[]> {
     const res = await fetch("/static/conf/events.json");
@@ -42,13 +46,28 @@ export const Schedule = () => {
 
   return (
     <div ref={componentRef}>
-      <Heading />
-      <div className='bg-black sticky top-16 z-30 pt-2'>
+      <div className='navbar bg-black sticky top-0 z-50 h-16'>
+        <div className='navbar-start'>
+          <div className='dropdown'>
+            <NavLinks />
+          </div>
+        </div>
+        <div className='navbar-center'>
+          <p className='md:text-5xl lg:text-5xl text-4xl text-white font-bold font-mono'>
+            D<span className='text-dc-red'>3</span>F C
+            <span className='text-dc-red'>0</span>N
+          </p>
+        </div>
+        <div className='navbar-end'>
+          <SearchIcon className='h-6 w-6 mr-3 text-white' />
+        </div>
+      </div>
+      <div className='bg-black sticky top-16 z-30 h-12'>
         <div className='tabs tabs-boxed bg-black justify-center'>
           {dateGroup.map(([day]) => (
             <button
               key={day}
-              className={`btn btn-sm btn-ghost`}
+              className={`btn md:btn-md btn-sm btn-ghost text-${theme.nextColor}`}
               onClick={() => scrollToDay(day)}>
               {tabDateTitle(day, localTime, timeZOne)}
             </button>
@@ -56,9 +75,10 @@ export const Schedule = () => {
         </div>
       </div>
       {dateGroup.map(([day, htEvents]) => (
-        <div id={divDay(day)} key={day} className='scroll-m-28 mt-5 mb-10'>
-          <div className='bg-black sticky top-28 z-20'>
-            <p className='text-white text-2xl ml-3 mt-3 text-center'>
+        <div id={divDay(day)} key={day} className='scroll-m-28'>
+          <div className='bg-black sticky top-28 z-20 pb-2 pt-1'>
+            <p
+              className={`md:text-2xl lg:text-3xl text-xl text-center text-${theme.nextColor}`}>
               {dateGroupTitle(day, localTime, timeZOne)}
             </p>
           </div>

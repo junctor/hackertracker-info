@@ -3,6 +3,7 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: ["dc-pink", "dc-blue", "dc-green", "dc-drk-green", "dc-red"],
   theme: {
     extend: {
       colors: {

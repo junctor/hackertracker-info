@@ -17,15 +17,21 @@ export function EventCell({ event }: EventCellProps) {
         <div className='w-20 text-center '>
           {timeDisplayParts(event.begin, "America/Los_Angeles", false).map(
             (part) => (
-              <p key={part} className='text-xs font-bold text-dc-text'>
+              <p
+                key={part}
+                className='md:text-sm lg:text-base text-xs font-bold text-dc-text'>
                 {part}
               </p>
             )
           )}
         </div>
         <div className='w-4/5'>
-          <p className='text-l text-white'>{event.title}</p>
-          <p className='text-xs'>{event.location.name}</p>
+          <p className='md:text-xl lg:text-2xl text-lg text-white'>
+            {event.title}
+          </p>
+          <p className='md:text-lg lg:text-xl text-base'>
+            {event.location.name}
+          </p>
           <div
             className='rounded-full h-2 w-2 green inline-flex mr-2'
             style={{
@@ -33,10 +39,12 @@ export function EventCell({ event }: EventCellProps) {
                 event.type.color === "#ababa" ? "#e25238" : event.type.color,
             }}
           />
-          <p className='text-xs text-white inline-flex'>{event.type.name}</p>
+          <p className='md:text-sm lg:text-base text-xs text-white inline-flex'>
+            {event.type.name}
+          </p>
         </div>
         <div className='w-10 items-start ml-2 mr-2'>
-          <StarIcon className='h-7 w-7' />
+          <StarIcon className='md:h-6 lg:h-8 h-5' />
         </div>
       </div>
     </div>

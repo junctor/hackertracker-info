@@ -1,5 +1,6 @@
 import { eventWeekday, timeDisplayParts } from "../../utils/dates";
 import { StarIcon } from "@heroicons/react/outline";
+import Link from "next/link";
 
 export function EventCell({ event }: EventCellProps) {
   return (
@@ -26,9 +27,11 @@ export function EventCell({ event }: EventCellProps) {
           )}
         </div>
         <div className='w-4/5'>
-          <p className='md:text-xl lg:text-2xl text-lg text-white'>
-            {event.title}
-          </p>
+          <Link href={`/events/${event.id}`}>
+            <a className='md:text-xl lg:text-2xl text-lg text-white'>
+              {event.title}
+            </a>
+          </Link>
           <p className='md:text-lg lg:text-xl text-base'>
             {event.location.name}
           </p>

@@ -62,11 +62,7 @@ export function tabDateTitle(
     options.timeZone = eventTimeZone;
   }
 
-  const date = time
-    .toLocaleTimeString(navigator.language, options)
-    .split(",")
-    .slice(0, 1)
-    .join();
+  const date = time.toLocaleDateString(navigator.language, options);
 
   return date;
 }
@@ -87,11 +83,7 @@ export function dateGroupTitle(
     options.timeZone = eventTimeZone;
   }
 
-  const date = time
-    .toLocaleTimeString(navigator.language, options)
-    .split(",")
-    .slice(0, 1)
-    .join();
+  const date = time.toLocaleDateString(navigator.language, options);
 
   return date;
 }

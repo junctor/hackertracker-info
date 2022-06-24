@@ -38,7 +38,13 @@ export function EventDetails({ event }: EventProps) {
         </div>
       </div>
       <div className='mt-8'>
-        <p className='text-sm md:text-base lg:text-lg'>{event.description}</p>
+        <div className='text-sm md:text-base lg:text-lg w-11/12'>
+          {event.android_description.split("\n").map((d, index) => (
+            <div className='mt-2' key={`${d}-${event.id}-${index}`}>
+              <FormatDesc details={d} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

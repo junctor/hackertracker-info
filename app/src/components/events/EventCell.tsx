@@ -2,7 +2,7 @@ import { eventWeekday, timeDisplayParts } from "../../utils/dates";
 import { StarIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 
-export function EventCell({ event }: EventCellProps) {
+export function EventCell({ event }: EventProps) {
   return (
     <div className='mt-2'>
       <div className='flex bg-black items-center'>
@@ -27,7 +27,7 @@ export function EventCell({ event }: EventCellProps) {
           )}
         </div>
         <div className='w-4/5'>
-          <Link href={`/events/${event.id}`}>
+          <Link href={`/events/${event.id}`} prefetch={false}>
             <a className='md:text-xl lg:text-2xl text-lg text-white'>
               {event.title}
             </a>

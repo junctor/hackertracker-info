@@ -3,7 +3,7 @@ import { StarIcon, ClockIcon, MapIcon } from "@heroicons/react/outline";
 
 import Link from "next/link";
 
-export function EventDetails({ event }: EventCellProps) {
+export function EventDetails({ event }: EventProps) {
   return (
     <div className='mt-2 ml-5'>
       <div>

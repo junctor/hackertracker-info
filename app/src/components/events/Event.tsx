@@ -9,39 +9,10 @@ import EventDetails from "./EventDetails";
 import FourOhFour from "../../pages/404";
 import { StarIcon } from "@heroicons/react/outline";
 
-export const Event = () => {
-  const router = useRouter();
-  const { event: eventId } = router.query;
-
-  const [event, setEvent] = useState<HTEvent | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
-
-  const localTime = false;
-  const timeZOne = "America/Los_Angeles";
-
-  const theme = new Theme();
-
-  async function loadEvents(): Promise<HTEvent[]> {
-    const res = await fetch("/static/conf/events.json");
-    const data = await res.json();
-    return data;
-  }
-
+export const Event = ({ event }: EventProps) => {
   useEffect(() => {
-    (async () => {
-      let eventData = await loadEvents();
-      let selectedEvent = eventData.find((e) => e.id.toString() === eventId);
-      setEvent(selectedEvent);
-      if (selectedEvent?.title) {
-        document.title = selectedEvent?.title;
-      }
-      setLoading(false);
-    })();
-  }, [eventId]);
-
-  if (!loading && event == undefined) {
-    return <FourOhFour title={`Event ${eventId} Not Found`} />;
-  }
+    document.title = event.title;
+  }, [event]);
 
   return (
     <div>

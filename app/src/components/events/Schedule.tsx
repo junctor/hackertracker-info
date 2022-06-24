@@ -4,29 +4,24 @@ import EventCell from "./EventCell";
 import NavLinks from "../heading/NavLinks";
 import { SearchIcon } from "@heroicons/react/outline";
 import Theme from "../../utils/theme";
+import Events from "./Events";
+import Loading from "../misc/Loading";
 
-export const Schedule = () => {
+export const Schedule = ({ events }: ScheduleProps) => {
   const componentRef = useRef<HTMLDivElement>(null);
 
   const [dateGroup, setDateGroup] = useState<[string, HTEvent[]][]>([]);
+  const [loading, setLoading] = useState(true);
 
   const localTime = false;
   const timeZOne = "America/Los_Angeles";
 
-  const theme = new Theme();
-
-  async function loadEvents(): Promise<HTEvent[]> {
-    const res = await fetch("/static/conf/events.json");
-    const data = await res.json();
-    return data;
-  }
-
   useEffect(() => {
     (async () => {
-      let eventData = await loadEvents();
-      setDateGroup(Array.from(groupedDates(eventData, localTime, timeZOne)));
+      setDateGroup(Array.from(groupedDates(events, localTime, timeZOne)));
+      setLoading(false);
     })();
-  }, [localTime]);
+  }, [events, localTime]);
 
   const scrollToDay = (day: string) => {
     if (componentRef && componentRef.current) {
@@ -60,35 +55,15 @@ export const Schedule = () => {
           <SearchIcon className='h-6 w-6 mr-3 text-white' />
         </div>
       </div>
-      <div className='bg-black sticky top-16 z-30 h-12'>
-        <div className='tabs tabs-boxed bg-black justify-center'>
-          {dateGroup.map(([day]) => (
-            <button
-              key={day}
-              className={`btn md:btn-md btn-sm btn-ghost text-${theme.nextColor}`}
-              onClick={() => scrollToDay(day)}>
-              {tabDateTitle(day, localTime, timeZOne)}
-            </button>
-          ))}
-        </div>
-      </div>
-      {dateGroup.map(([day, htEvents]) => (
-        <div id={divDay(day)} key={day} className='scroll-m-28'>
-          <div className='bg-black sticky top-28 z-20 pb-2 pt-1'>
-            <p
-              className={`md:text-2xl lg:text-3xl text-xl text-center text-${theme.nextColor}`}>
-              {dateGroupTitle(day, localTime, timeZOne)}
-            </p>
-          </div>
-          {htEvents
-            .sort((e) => e.begin_timestamp.seconds - e.end_timestamp.seconds)
-            .map((htEvent) => (
-              <div key={htEvent.id}>
-                <EventCell event={htEvent} />
-              </div>
-            ))}
-        </div>
-      ))}
+      {loading ? (
+        <Loading />
+      ) : (
+        <Events
+          dateGroup={dateGroup}
+          localTime={localTime}
+          timeZOne={timeZOne}
+        />
+      )}
     </div>
   );
 };

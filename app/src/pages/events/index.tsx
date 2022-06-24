@@ -1,8 +1,11 @@
 import type { NextPage } from "next";
+import { promises as fs } from "fs";
+import path from "path";
 import Head from "next/head";
 import Schedule from "../../components/events/Schedule";
 
-const SchedulePage: NextPage = () => {
+const SchedulePage: NextPage<ScheduleProps> = (props) => {
+  const { events } = props;
   return (
     <div>
       <Head>
@@ -12,10 +15,29 @@ const SchedulePage: NextPage = () => {
       </Head>
 
       <main className='bg-black'>
-        <Schedule />
+        <Schedule events={events} />
       </main>
     </div>
   );
 };
+
+export async function getStaticProps() {
+  const fileToRead = path.join(
+    process.cwd(),
+    "./public/static/conf/events.json"
+  );
+
+  let eventFile = await fs.readFile(fileToRead, {
+    encoding: "utf-8",
+  });
+
+  let events: HTEvent[] = JSON.parse(eventFile) ?? [];
+
+  return {
+    props: {
+      events: events,
+    },
+  };
+}
 
 export default SchedulePage;

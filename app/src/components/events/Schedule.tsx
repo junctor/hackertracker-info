@@ -13,15 +13,12 @@ export const Schedule = ({ events }: ScheduleProps) => {
   const [dateGroup, setDateGroup] = useState<[string, HTEvent[]][]>([]);
   const [loading, setLoading] = useState(true);
 
-  const localTime = false;
-  const timeZOne = "America/Los_Angeles";
-
   useEffect(() => {
     (async () => {
-      setDateGroup(Array.from(groupedDates(events, localTime, timeZOne)));
+      setDateGroup(Array.from(groupedDates(events)));
       setLoading(false);
     })();
-  }, [events, localTime]);
+  }, [events]);
 
   const scrollToDay = (day: string) => {
     if (componentRef && componentRef.current) {
@@ -32,9 +29,7 @@ export const Schedule = ({ events }: ScheduleProps) => {
   };
 
   const divDay = (day: string) => {
-    return tabDateTitle(day, localTime, timeZOne)
-      .replaceAll(" ", "")
-      .toLowerCase();
+    return tabDateTitle(day).replaceAll(" ", "").toLowerCase();
   };
 
   return (
@@ -55,15 +50,7 @@ export const Schedule = ({ events }: ScheduleProps) => {
           <SearchIcon className='h-6 w-6 mr-3 text-white' />
         </div>
       </div>
-      {loading ? (
-        <Loading />
-      ) : (
-        <Events
-          dateGroup={dateGroup}
-          localTime={localTime}
-          timeZOne={timeZOne}
-        />
-      )}
+      {loading ? <Loading /> : <Events dateGroup={dateGroup} />}
     </div>
   );
 };

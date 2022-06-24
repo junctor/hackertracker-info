@@ -1,141 +1,92 @@
-export function timeDisplayParts(
-  time: string,
-  eventTimeZone: string,
-  localTime: boolean
-): string[] {
+export function timeDisplayParts(time: string): string[] {
   const date = new Date(time);
   const options: Intl.DateTimeFormatOptions = {
     hour: "numeric",
     minute: "numeric",
     timeZoneName: "short",
     hour12: true,
+    timeZone: "America/Los_Angeles",
   };
 
-  if (!localTime) {
-    options.timeZone = eventTimeZone;
-  }
-
-  return date
-    .toLocaleTimeString(navigator.language, options)
-    .replace(",", "")
-    .split(" ");
+  return date.toLocaleTimeString("en-US", options).replace(",", "").split(" ");
 }
 
-export function eventDay(
-  time: Date,
-  eventTimeZone: string,
-  localTime: boolean
-): string {
+export function eventDay(time: Date): string {
   const options: Intl.DateTimeFormatOptions = {
     timeZoneName: "short",
     day: "numeric",
     year: "numeric",
     month: "numeric",
     hour12: false,
+    timeZone: "America/Los_Angeles",
   };
 
-  if (!localTime) {
-    options.timeZone = eventTimeZone;
-  }
-
   const date = time
-    .toLocaleTimeString(navigator.language, options)
+    .toLocaleTimeString("en-US", options)
     .split(",")
     .slice(0, 1)
     .join();
   return date;
 }
 
-export function tabDateTitle(
-  day: string,
-  localTime: boolean,
-  eventTimeZone: string
-): string {
+export function tabDateTitle(day: string): string {
   const time = new Date(day);
 
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "short",
+    timeZone: "America/Los_Angeles",
   };
 
-  if (!localTime) {
-    options.timeZone = eventTimeZone;
-  }
-
-  const date = time.toLocaleDateString(navigator.language, options);
+  const date = time.toLocaleDateString("en-US", options);
 
   return date;
 }
 
-export function dateGroupTitle(
-  day: string,
-  localTime: boolean,
-  eventTimeZone: string
-): string {
+export function dateGroupTitle(day: string): string {
   const time = new Date(day);
 
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "long",
+    timeZone: "America/Los_Angeles",
   };
 
-  if (!localTime) {
-    options.timeZone = eventTimeZone;
-  }
-
-  const date = time.toLocaleDateString(navigator.language, options);
+  const date = time.toLocaleDateString("en-US", options);
 
   return date;
 }
 
-export function eventWeekday(
-  time: string,
-  eventTimeZone: string,
-  localTime: boolean
-): string {
+export function eventWeekday(time: string): string {
   const date = new Date(time);
   const options: Intl.DateTimeFormatOptions = {
     weekday: "short",
+    timeZone: "America/Los_Angeles",
   };
 
-  if (!localTime) {
-    options.timeZone = eventTimeZone;
-  }
-
-  return date.toLocaleString(navigator.language, options);
+  return date.toLocaleString("en-US", options);
 }
 
-export function eventTime(
-  time: Date,
-  eventTimeZone: string,
-  localTime: boolean
-): string {
+export function eventTime(time: Date): string {
   const options: Intl.DateTimeFormatOptions = {
     timeZoneName: "short",
     hour12: false,
-    weekday: "long",
+    weekday: "short",
     day: "numeric",
     month: "short",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "America/Los_Angeles",
   };
 
-  if (!localTime) {
-    options.timeZone = eventTimeZone;
-  }
-
-  return time.toLocaleTimeString(navigator.language, options);
+  return time.toLocaleTimeString("en-US", options);
 }
 
-export const groupedDates = (
-  events: HTEvent[],
-  localTime: boolean,
-  timeZone: string
-): Map<string, HTEvent[]> =>
+export const groupedDates = (events: HTEvent[]): Map<string, HTEvent[]> =>
   events
     .sort((a, b) => a.begin_timestamp.seconds - b.begin_timestamp.seconds)
     .reduce((group, e) => {
-      const day = eventDay(new Date(e.begin), timeZone, localTime);
+      const day = eventDay(new Date(e.begin));
       const dayEvents = group.get(day) ?? [];
       dayEvents.push(e);
       group.set(day, dayEvents);

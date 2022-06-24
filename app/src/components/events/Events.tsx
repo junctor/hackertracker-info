@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { dateGroupTitle, groupedDates, tabDateTitle } from "../../utils/dates";
 import EventCell from "./EventCell";
-import NavLinks from "../heading/NavLinks";
-import { SearchIcon } from "@heroicons/react/outline";
 import Theme from "../../utils/theme";
 
-export const Schedule = ({ dateGroup, localTime, timeZOne }: EventsProps) => {
+export const Schedule = ({ dateGroup }: EventsProps) => {
   const componentRef = useRef<HTMLDivElement>(null);
 
   const theme = new Theme();
@@ -19,9 +17,7 @@ export const Schedule = ({ dateGroup, localTime, timeZOne }: EventsProps) => {
   };
 
   const divDay = (day: string) => {
-    return tabDateTitle(day, localTime, timeZOne)
-      .replaceAll(" ", "")
-      .toLowerCase();
+    return tabDateTitle(day).replaceAll(" ", "").toLowerCase();
   };
 
   return (
@@ -33,7 +29,7 @@ export const Schedule = ({ dateGroup, localTime, timeZOne }: EventsProps) => {
               key={day}
               className={`btn md:btn-md btn-sm btn-ghost text-${theme.nextColor}`}
               onClick={() => scrollToDay(day)}>
-              {tabDateTitle(day, localTime, timeZOne)}
+              {tabDateTitle(day)}
             </button>
           ))}
         </div>
@@ -43,7 +39,7 @@ export const Schedule = ({ dateGroup, localTime, timeZOne }: EventsProps) => {
           <div className='bg-black sticky top-28 z-20 pb-2 pt-1'>
             <p
               className={`md:text-2xl lg:text-3xl text-xl text-center text-${theme.nextColor}`}>
-              {dateGroupTitle(day, localTime, timeZOne)}
+              {dateGroupTitle(day)}
             </p>
           </div>
           {htEvents

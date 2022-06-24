@@ -8,6 +8,4 @@ interface ScheduleProps {
 
 interface EventsProps {
   dateGroup: [string, HTEvent[]][];
-  localTime: boolean;
-  timeZOne: string;
 }

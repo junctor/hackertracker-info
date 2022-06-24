@@ -28,7 +28,7 @@ export default function NavLinks() {
         <Menu.Item>
           <div className='w-32'>
             <img
-              src='/static/img/skull.jpg'
+              src='/static/img/skull_200x200.png'
               alt='DEF CON Logo'
               width={100}
               height={100}

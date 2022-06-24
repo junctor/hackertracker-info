@@ -1,6 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { Menu } from "@headlessui/react";
 import { MenuIcon } from "@heroicons/react/solid";
+import { CalendarIcon, UserIcon } from "@heroicons/react/outline";
+
 import { forwardRef } from "react";
 
 export default function NavLinks() {
@@ -23,9 +26,32 @@ export default function NavLinks() {
       </Menu.Button>
       <Menu.Items className='absolute bg-black'>
         <Menu.Item>
+          <div className='w-32'>
+            <img
+              src='/static/img/skull.jpg'
+              alt='DEF CON Logo'
+              width={100}
+              height={100}
+            />
+          </div>
+        </Menu.Item>
+        <Menu.Item>
           {({ active }: any) => (
-            <PageLink href='/schedule' active={active}>
-              Schedule
+            <PageLink href='/events' active={active}>
+              <span className='flex mt-2 mb-2'>
+                <CalendarIcon className='w-6 mr-2' />
+                <p className=''>Schedule</p>
+              </span>
+            </PageLink>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }: any) => (
+            <PageLink href='/events' active={active}>
+              <span className='flex mt-2 mb-2'>
+                <UserIcon className='w-6 mr-2 mt' />
+                <p className=''>Speakers</p>
+              </span>
             </PageLink>
           )}
         </Menu.Item>

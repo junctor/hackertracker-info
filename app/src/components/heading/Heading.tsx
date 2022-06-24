@@ -10,11 +10,12 @@ export function Heading() {
         </div>
       </div>
       <div className='navbar-center'>
-        <p className='text-2xl text-white'>DEF CON 30</p>
+        <p className='md:text-5xl lg:text-5xl text-4xl text-white font-bold font-mono'>
+          D<span className='text-dc-red'>3</span>F C
+          <span className='text-dc-red'>0</span>N
+        </p>
       </div>
-      <div className='navbar-end'>
-        <SearchIcon className='h-6 w-6 mr-3 text-white' />
-      </div>
+      <div className='navbar-end'></div>
     </div>
   );
 }

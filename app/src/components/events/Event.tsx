@@ -10,10 +10,6 @@ import FourOhFour from "../../pages/404";
 import { StarIcon } from "@heroicons/react/outline";
 
 export const Event = ({ event }: EventProps) => {
-  useEffect(() => {
-    document.title = event.title;
-  }, [event]);
-
   return (
     <div>
       <div className='navbar bg-black sticky top-0 z-50 h-16'>

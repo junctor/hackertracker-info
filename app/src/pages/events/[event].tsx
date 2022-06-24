@@ -10,7 +10,7 @@ const EventPage: NextPage<EventProps> = (props) => {
   return (
     <div>
       <Head>
-        <title>D3F C0N Event</title>
+        <title>{event.title}</title>
         <meta name='description' content='DEF CON 30' />
         <link rel='icon' href='/favicon.ico' />
       </Head>

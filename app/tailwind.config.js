@@ -3,7 +3,18 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
-  safelist: ["dc-pink", "dc-blue", "dc-green", "dc-drk-green", "dc-red"],
+  safelist: [
+    "text-dc-pink",
+    "text-dc-blue",
+    "text-dc-green",
+    "text-dc-drk-green",
+    "text-dc-red",
+    "bg-dc-pink",
+    "bg-dc-blue",
+    "bg-dc-green",
+    "bg-dc-drk-green",
+    "bg-dc-red",
+  ],
   theme: {
     extend: {
       colors: {

@@ -24,11 +24,20 @@ export function EventDetails({ event }: EventProps) {
             {event.type.name}
           </p>
         </div>
-        <div className='flex items-center bg-dc-gray w-11/12  mt-2 md:h-14 lg:h-16 h-12 rounded-lg'>
-          <ClockIcon className='h-5 w-5 md:h-7 md:w-7 lg:w-8 lg:h-8 ml-3 mr-2' />
-          <p className='md:text-base lg:text-lg text-xs text-white '>
-            {event.type.name}
-          </p>
+        <div className='flex items-center bg-dc-gray w-11/12  mt-2 md:h-14 lg:h-16 h-12 rounded-lg cursor-pointer'>
+          <a
+            className='flex'
+            href={`data:text/calendar;charset=utf8,${encodeURIComponent(
+              cal(event)
+            )}`}
+            download={`dc30-${event.id}.ics`}>
+            <ClockIcon className='h-5 w-5 md:h-7 md:w-7 lg:w-8 lg:h-8 ml-3 mr-2' />
+            <p className='md:text-base lg:text-lg text-xs text-white '>
+              {`${eventTime(new Date(event.begin))} - ${eventTime(
+                new Date(event.end)
+              )}`}
+            </p>
+          </a>
         </div>
         <div className='flex items-center bg-dc-gray w-11/12  mt-2 md:h-14 lg:h-16 h-12 rounded-lg'>
           <MapIcon className='h-5 w-5 md:h-7 md:w-7 lg:w-8 lg:h-8 ml-3 mr-2' />

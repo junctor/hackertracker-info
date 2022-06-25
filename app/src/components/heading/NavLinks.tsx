@@ -1,8 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { Menu } from "@headlessui/react";
-import { MenuIcon } from "@heroicons/react/solid";
-import { CalendarIcon, UserIcon } from "@heroicons/react/outline";
+import {
+  MenuIcon,
+  UserIcon as UserIconSoild,
+  StarIcon as StarIconSoild,
+  CalendarIcon as CalendarIconSoild,
+} from "@heroicons/react/solid";
+import {
+  CalendarIcon as CalendarIconOutline,
+  StarIcon as StarIconOutline,
+  UserIcon as UserIconOutline,
+} from "@heroicons/react/outline";
 
 import { forwardRef } from "react";
 
@@ -22,7 +31,7 @@ export default function NavLinks() {
   return (
     <Menu>
       <Menu.Button>
-        <MenuIcon className='h-7 w-7 text-white' />
+        <MenuIcon className='h-7 w-7 text-white ml-3' />
       </Menu.Button>
       <Menu.Items className='absolute bg-black'>
         <Menu.Item>
@@ -39,18 +48,40 @@ export default function NavLinks() {
           {({ active }: any) => (
             <PageLink href='/events' active={active}>
               <span className='flex mt-2 mb-2'>
-                <CalendarIcon className='w-6 mr-2' />
-                <p className=''>Schedule</p>
+                {active ? (
+                  <CalendarIconSoild className='w-6 mr-2' />
+                ) : (
+                  <CalendarIconOutline className='w-6 mr-2' />
+                )}
+                <p>Schedule</p>
               </span>
             </PageLink>
           )}
         </Menu.Item>
         <Menu.Item>
           {({ active }: any) => (
-            <PageLink href='/events' active={active}>
+            <PageLink href='/events/bookmarks' active={active}>
               <span className='flex mt-2 mb-2'>
-                <UserIcon className='w-6 mr-2 mt' />
-                <p className=''>Speakers</p>
+                {active ? (
+                  <StarIconSoild className='w-6 mr-2' />
+                ) : (
+                  <StarIconOutline className='w-6 mr-2' />
+                )}
+                <p>Bookmarks</p>
+              </span>
+            </PageLink>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }: any) => (
+            <PageLink href='/speakers' active={active}>
+              <span className='flex mt-2 mb-2'>
+                {active ? (
+                  <UserIconSoild className='w-6 mr-2' />
+                ) : (
+                  <UserIconOutline className='w-6 mr-2' />
+                )}
+                <p>Speakers</p>
               </span>
             </PageLink>
           )}

@@ -1,13 +1,19 @@
-import { eventWeekday, timeDisplayParts } from "../../utils/dates";
-import { StarIcon, ClockIcon, MapIcon } from "@heroicons/react/outline";
+import { ClockIcon, MapIcon } from "@heroicons/react/outline";
+import { useEffect, useState } from "react";
+import cal from "../../utils/cal";
+import { eventTime } from "../../utils/dates";
+import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
+import Theme from "../../utils/theme";
+import FormatDesc from "../misc/FormatDesc";
 
-import Link from "next/link";
+export function EventDetails({ event }: EventDetailProps) {
+  const theme = new Theme();
+  theme.randomisze();
 
-export function EventDetails({ event }: EventProps) {
   return (
     <div className='mt-2 ml-5'>
       <div>
-        <h1 className='text-3xl md:text-4xl lg:text-5xl mb-5 text-white'>
+        <h1 className='text-2xl md:text-3xl lg:text-4xl mb-5 text-white'>
           {event.title}
         </h1>
       </div>
@@ -53,8 +59,49 @@ export function EventDetails({ event }: EventProps) {
               <FormatDesc details={d} />
             </div>
           ))}
+          {event.links.length > 0 && (
+            <div className='mt-5 text-xs'>
+              {event.links.map((l) => (
+                <div className='mt-1' key={l.url}>
+                  <p className='inline'>{`${l.label}: `}</p>
+                  <a
+                    key={l.url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    href={l.url}
+                    className='text-dc-pink hover:text-dc-blue'>
+                    {l.url}
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+      {event.speakers.length > 0 && (
+        <div className='mt-8 text-center'>
+          <h2 className='text-lg md:text-xl lg:text-2xl text-white'>
+            Speakers
+          </h2>
+          <div className=' items-center bg-dc-gray w-11/12 mt-2 rounded-lg mb-10 pt-2 pb-2'>
+            {event.speakers.map((s) => (
+              <div key={s.id} className='ml-3 flex mt-2 mb-2'>
+                <div
+                  className={`ml-1 h-8 md:h-10 lg:h-12 w-1 mr-3 bg-${theme.nextColor}`}
+                />
+                <div className='inline-block text-left'>
+                  <p className='text-white text-bold text-sm md:text-base lg:text-lg'>
+                    {s.name}
+                  </p>
+                  <p className='text-xs md:text-sm lg:text-base'>
+                    {s.title ?? "Hacker"}{" "}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,12 +1,18 @@
-import { useRef } from "react";
-import { dateGroupTitle, groupedDates, tabDateTitle } from "../../utils/dates";
+import { useEffect, useRef, useState } from "react";
+import { dateGroupTitle, tabDateTitle } from "../../utils/dates";
 import EventCell from "./EventCell";
 import Theme from "../../utils/theme";
+import { getBookmarks } from "../../utils/storage";
 
 export const Schedule = ({ dateGroup }: EventsProps) => {
-  const componentRef = useRef<HTMLDivElement>(null);
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
 
+  const componentRef = useRef<HTMLDivElement>(null);
   const theme = new Theme();
+
+  useEffect(() => {
+    setBookmarks(getBookmarks());
+  }, []);
 
   const scrollToDay = (day: string) => {
     if (componentRef && componentRef.current) {
@@ -45,8 +51,8 @@ export const Schedule = ({ dateGroup }: EventsProps) => {
           {htEvents
             .sort((e) => e.begin_timestamp.seconds - e.end_timestamp.seconds)
             .map((htEvent) => (
-              <div key={htEvent.id}>
-                <EventCell event={htEvent} />
+              <div key={htEvent.id} id={htEvent.id.toString()}>
+                <EventCell event={htEvent} bookmarks={bookmarks} />
               </div>
             ))}
         </div>

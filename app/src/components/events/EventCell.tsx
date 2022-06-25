@@ -1,8 +1,29 @@
-import { eventWeekday, timeDisplayParts } from "../../utils/dates";
-import { StarIcon } from "@heroicons/react/outline";
-import Link from "next/link";
+import { timeDisplayParts } from "../../utils/dates";
+import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
+import { StarIcon as StarIconSoild } from "@heroicons/react/solid";
 
-export function EventCell({ event }: EventProps) {
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
+
+export function EventCell({ event, bookmarks }: EventProps) {
+  const [bookmark, setBookmark] = useState(false);
+
+  useEffect(() => {
+    setBookmark(bookmarks?.some((b) => b === event.id.toString()));
+  }, [event, bookmarks]);
+
+  const eventBookmark = () => {
+    console.log(bookmark);
+    if (!bookmark) {
+      setBookmark(true);
+      addBookmark(event.id.toString());
+    } else {
+      setBookmark(false);
+      removeBookmark(event.id.toString());
+    }
+  };
+
   return (
     <div className='mt-2'>
       <div className='flex bg-black items-center'>
@@ -12,19 +33,16 @@ export function EventCell({ event }: EventProps) {
             content: "",
             backgroundColor:
               event.type.color === "#ababa" ? "#e25238" : event.type.color,
-          }}>
-          {" "}
-        </div>
+          }}
+        />
         <div className='w-20 text-center '>
-          {timeDisplayParts(event.begin, "America/Los_Angeles", false).map(
-            (part) => (
-              <p
-                key={part}
-                className='md:text-sm lg:text-base text-xs font-bold text-dc-text'>
-                {part}
-              </p>
-            )
-          )}
+          {timeDisplayParts(event.begin).map((part) => (
+            <p
+              key={part}
+              className='md:text-sm lg:text-base text-xs font-bold text-dc-text'>
+              {part}
+            </p>
+          ))}
         </div>
         <div className='w-4/5'>
           <Link href={`/events/${event.id}`} prefetch={false}>
@@ -46,8 +64,16 @@ export function EventCell({ event }: EventProps) {
             {event.type.name}
           </p>
         </div>
-        <div className='w-10 items-start ml-2 mr-2'>
-          <StarIcon className='md:h-6 lg:h-8 h-5' />
+        <div>
+          <button
+            className='w-10 items-start ml-2 mr-2 cursor-pointer'
+            onClick={() => eventBookmark()}>
+            {bookmark ? (
+              <StarIconSoild className='md:h-6 lg:h-8 h-5' />
+            ) : (
+              <StarIconOutline className='md:h-6 lg:h-8 h-5' />
+            )}
+          </button>
         </div>
       </div>
     </div>

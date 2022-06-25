@@ -1,15 +1,29 @@
-import { useEffect, useRef, useState } from "react";
-import { dateGroupTitle, groupedDates, tabDateTitle } from "../../utils/dates";
-import EventCell from "./EventCell";
 import NavLinks from "../heading/NavLinks";
-import Theme from "../../utils/theme";
-import { useRouter } from "next/router";
-import Heading from "../heading/Heading";
 import EventDetails from "./EventDetails";
-import FourOhFour from "../../pages/404";
-import { StarIcon } from "@heroicons/react/outline";
+import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
+import { StarIcon as StarIconSoild } from "@heroicons/react/solid";
+import { useEffect, useState } from "react";
+import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
 
 export const Event = ({ event }: EventProps) => {
+  const [bookmark, setBookmark] = useState(false);
+
+  useEffect(() => {
+    const bookmarks = getBookmarks();
+    setBookmark(bookmarks?.some((b) => b === event.id.toString()));
+  }, [event]);
+
+  const eventBookmark = () => {
+    console.log(bookmark);
+    if (!bookmark) {
+      setBookmark(true);
+      addBookmark(event.id.toString());
+    } else {
+      setBookmark(false);
+      removeBookmark(event.id.toString());
+    }
+  };
+
   return (
     <div>
       <div className='navbar bg-black sticky top-0 z-50 h-16'>
@@ -25,7 +39,13 @@ export const Event = ({ event }: EventProps) => {
           </p>
         </div>
         <div className='navbar-end'>
-          <StarIcon className='w-7 mr-3' />
+          <div onClick={() => eventBookmark()}>
+            {bookmark ? (
+              <StarIconSoild className='w-7 mr-3' />
+            ) : (
+              <StarIconOutline className='w-7 mr-3' />
+            )}
+          </div>
         </div>
       </div>
       {event && <EventDetails event={event} />}

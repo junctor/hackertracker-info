@@ -3,7 +3,7 @@ import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
 import { StarIcon as StarIconSoild } from "@heroicons/react/solid";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
 
 export function EventCell({ event, bookmarks }: EventProps) {
@@ -80,4 +80,4 @@ export function EventCell({ event, bookmarks }: EventProps) {
   );
 }
 
-export default EventCell;
+export default memo(EventCell);

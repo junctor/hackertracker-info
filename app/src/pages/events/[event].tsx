@@ -4,7 +4,7 @@ import Head from "next/head";
 import path from "path";
 import Event from "../../components/events/Event";
 
-const EventPage: NextPage<EventProps> = (props) => {
+const EventPage: NextPage<EventDetailProps> = (props) => {
   const { event } = props;
 
   return (

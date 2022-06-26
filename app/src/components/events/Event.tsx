@@ -5,7 +5,7 @@ import { StarIcon as StarIconSoild } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
 
-export const Event = ({ event }: EventProps) => {
+export const Event = ({ event }: EventDetailProps) => {
   const [bookmark, setBookmark] = useState(false);
 
   useEffect(() => {

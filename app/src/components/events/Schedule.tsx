@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Fragment } from "react";
+import { useEffect, useRef, useState, Fragment, useMemo } from "react";
 import { groupedDates, tabDateTitle } from "../../utils/dates";
 import NavLinks from "../heading/NavLinks";
 import { SearchIcon, AdjustmentsIcon } from "@heroicons/react/outline";
@@ -11,10 +11,15 @@ export const Schedule = ({ events }: ScheduleProps) => {
   const [dateGroup, setDateGroup] = useState<[string, HTEvent[]][]>([]);
   const [loading, setLoading] = useState(true);
 
+  const createDateGroup = useMemo(
+    () => Array.from(groupedDates(events)),
+    [events]
+  );
+
   useEffect(() => {
-    setDateGroup(Array.from(groupedDates(events)));
+    setDateGroup(createDateGroup);
     setLoading(false);
-  }, [events]);
+  }, [createDateGroup]);
 
   const scrollToDay = (day: string) => {
     if (componentRef && componentRef.current) {

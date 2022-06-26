@@ -32,13 +32,11 @@ export const Schedule = ({ dateGroup }: EventsProps) => {
 
   const EventDisplay = memo(({ htEvents }: { htEvents: HTEvent[] }) => (
     <div>
-      {htEvents
-        .sort((e) => e.begin_timestamp.seconds - e.end_timestamp.seconds)
-        .map((htEvent) => (
-          <div key={htEvent.id} id={htEvent.id.toString()}>
-            <EventCell event={htEvent} bookmarks={bookmarks} />
-          </div>
-        ))}
+      {htEvents.map((htEvent) => (
+        <div key={htEvent.id} id={htEvent.id.toString()}>
+          <EventCell event={htEvent} bookmarks={bookmarks} />
+        </div>
+      ))}
     </div>
   ));
 
@@ -48,7 +46,7 @@ export const Schedule = ({ dateGroup }: EventsProps) => {
     <div ref={componentRef}>
       <div className='bg-black sticky top-16 z-30 h-12'>
         <div className='tabs tabs-boxed bg-black justify-center'>
-          {dateGroup.map(([day]) => (
+          {Array.from(dateGroup).map(([day]) => (
             <button
               key={day}
               className={`btn md:btn-md btn-sm btn-ghost text-${theme.nextColor}`}
@@ -59,7 +57,7 @@ export const Schedule = ({ dateGroup }: EventsProps) => {
         </div>
       </div>
       <div>
-        {dateGroup.map(([day, htEvents]) => (
+        {Array.from(dateGroup).map(([day, htEvents]) => (
           <div
             id={scrollDay(day)}
             key={`${day}-events`}

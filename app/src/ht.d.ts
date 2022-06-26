@@ -8,9 +8,9 @@ interface EventDetailProps {
 }
 
 interface ScheduleProps {
-  dateGroup: [string, HTEvent[]][];
+  events: HTEvent[];
 }
 
 interface EventsProps {
-  dateGroup: [string, HTEvent[]][];
+  dateGroup: Map<string, HTEvent[]>;
 }

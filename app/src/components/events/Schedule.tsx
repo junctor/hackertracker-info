@@ -1,14 +1,34 @@
-import { useEffect, useRef, useState } from "react";
-import { tabDateTitle } from "../../utils/dates";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { groupedDates, tabDateTitle } from "../../utils/dates";
 import NavLinks from "../heading/NavLinks";
 import { SearchIcon, AdjustmentsIcon } from "@heroicons/react/outline";
 import Events from "./Events";
 import Loading from "../misc/Loading";
+import events from "../../pages/events";
 
-export const Schedule = ({ dateGroup }: ScheduleProps) => {
+export const Schedule = ({ events }: ScheduleProps) => {
   const componentRef = useRef<HTMLDivElement>(null);
 
+  const [dateGroup, setDateGroup] = useState<Map<string, HTEvent[]>>(new Map());
   const [loading, setLoading] = useState(false);
+
+  const createDateGroup = useMemo(
+    () =>
+      new Map(
+        Array.from(groupedDates(events)).map(([d, et]) => [
+          d,
+          et.sort(
+            (a, b) => a.begin_timestamp.seconds - b.begin_timestamp.seconds
+          ),
+        ])
+      ),
+    [events]
+  );
+
+  useEffect(() => {
+    setDateGroup(() => createDateGroup);
+    //setLoading(false);
+  }, [createDateGroup, events]);
 
   return (
     <div ref={componentRef}>

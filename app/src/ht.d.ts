@@ -8,7 +8,7 @@ interface EventDetailProps {
 }
 
 interface ScheduleProps {
-  events: HTEvent[];
+  dateGroup: [string, HTEvent[]][];
 }
 
 interface EventsProps {

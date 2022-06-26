@@ -1,37 +1,14 @@
-import { useEffect, useRef, useState, Fragment, useMemo } from "react";
-import { groupedDates, tabDateTitle } from "../../utils/dates";
+import { useEffect, useRef, useState } from "react";
+import { tabDateTitle } from "../../utils/dates";
 import NavLinks from "../heading/NavLinks";
 import { SearchIcon, AdjustmentsIcon } from "@heroicons/react/outline";
 import Events from "./Events";
 import Loading from "../misc/Loading";
 
-export const Schedule = ({ events }: ScheduleProps) => {
+export const Schedule = ({ dateGroup }: ScheduleProps) => {
   const componentRef = useRef<HTMLDivElement>(null);
 
-  const [dateGroup, setDateGroup] = useState<[string, HTEvent[]][]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const createDateGroup = useMemo(
-    () => Array.from(groupedDates(events)),
-    [events]
-  );
-
-  useEffect(() => {
-    setDateGroup(createDateGroup);
-    setLoading(false);
-  }, [createDateGroup]);
-
-  const scrollToDay = (day: string) => {
-    if (componentRef && componentRef.current) {
-      componentRef.current
-        .querySelector(`#${divDay(day)}`)
-        ?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const divDay = (day: string) => {
-    return tabDateTitle(day).replaceAll(" ", "").toLowerCase();
-  };
+  const [loading, setLoading] = useState(false);
 
   return (
     <div ref={componentRef}>
@@ -49,9 +26,6 @@ export const Schedule = ({ events }: ScheduleProps) => {
         </div>
         <div className='navbar-end mr-3'>
           <SearchIcon className='h-6 w-6 mr-3 pb-1 text-white' />
-          <button type='button'>
-            <AdjustmentsIcon className='h-6 w-6 text-white' />
-          </button>
         </div>
       </div>
       {loading ? <Loading /> : <Events dateGroup={dateGroup} />}

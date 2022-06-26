@@ -3,9 +3,10 @@ import { promises as fs } from "fs";
 import path from "path";
 import Head from "next/head";
 import Schedule from "../../components/events/Schedule";
+import { groupedDates } from "../../utils/dates";
 
 const SchedulePage: NextPage<ScheduleProps> = (props) => {
-  const { events } = props;
+  const { dateGroup } = props;
   return (
     <div>
       <Head>
@@ -15,7 +16,7 @@ const SchedulePage: NextPage<ScheduleProps> = (props) => {
       </Head>
 
       <main className='bg-black'>
-        <Schedule events={events} />
+        <Schedule dateGroup={dateGroup} />
       </main>
     </div>
   );
@@ -32,10 +33,11 @@ export async function getStaticProps() {
   });
 
   let events: HTEvent[] = JSON.parse(eventFile) ?? [];
+  let groupedEvents = Array.from(groupedDates(events));
 
   return {
     props: {
-      events: events,
+      dateGroup: groupedEvents,
     },
   };
 }

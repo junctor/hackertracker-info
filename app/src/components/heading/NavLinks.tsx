@@ -31,7 +31,7 @@ export default function NavLinks() {
   return (
     <Menu>
       <Menu.Button>
-        <MenuIcon className='h-7 w-7 text-white ml-3' />
+        <MenuIcon className='h-8 w-8 text-white ml-3' />
       </Menu.Button>
       <Menu.Items className='absolute bg-black'>
         <Menu.Item>

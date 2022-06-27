@@ -6,7 +6,7 @@ import Events from "./Events";
 import Loading from "../misc/Loading";
 import events from "../../pages/events";
 
-export const Schedule = ({ events }: ScheduleProps) => {
+export const Schedule = ({ events, title }: ScheduleProps) => {
   const componentRef = useRef<HTMLDivElement>(null);
 
   const [dateGroup, setDateGroup] = useState<Map<string, HTEvent[]>>(new Map());
@@ -39,10 +39,15 @@ export const Schedule = ({ events }: ScheduleProps) => {
           </div>
         </div>
         <div className='navbar-center'>
-          <p className='md:text-5xl lg:text-5xl text-4xl text-white font-bold font-mono'>
-            D<span className='text-dc-red'>3</span>F C
-            <span className='text-dc-red'>0</span>N
-          </p>
+          <div className='text-center mt-1 align-middle'>
+            <p className='md:text-4xl lg:text-5xl text-white font-bold font-mono'>
+              D<span className='text-dc-red'>3</span>F C
+              <span className='text-dc-red'>0</span>N
+            </p>
+            <p className={`md:text-lg lg:text-xl text-white font-mono`}>
+              {title}
+            </p>
+          </div>
         </div>
         <div className='navbar-end mr-3'>
           <SearchIcon className='h-6 w-6 mr-3 pb-1 text-white' />

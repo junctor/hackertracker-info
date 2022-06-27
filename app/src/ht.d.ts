@@ -9,6 +9,7 @@ interface EventDetailProps {
 
 interface ScheduleProps {
   events: HTEvent[];
+  title: string;
 }
 
 interface EventsProps {

@@ -3,7 +3,6 @@ import { promises as fs } from "fs";
 import path from "path";
 import Head from "next/head";
 import Schedule from "../../components/events/Schedule";
-import { groupedDates } from "../../utils/dates";
 
 const SchedulePage: NextPage<ScheduleProps> = (props) => {
   const { events } = props;

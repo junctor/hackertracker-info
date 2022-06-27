@@ -44,31 +44,27 @@ export const Schedule = ({ dateGroup }: EventsProps) => {
 
   return (
     <div ref={componentRef}>
-      <div className='bg-black sticky top-16 z-30 h-12'>
-        <div className='tabs tabs-boxed bg-black justify-center'>
-          {Array.from(dateGroup).map(([day]) => (
-            <button
-              key={day}
-              className={`btn md:btn-md btn-sm btn-ghost text-${theme.nextColor}`}
-              onClick={() => scrollToDay(day)}>
-              {tabDateTitle(day)}
-            </button>
-          ))}
-        </div>
-      </div>
       <div>
         {Array.from(dateGroup).map(([day, htEvents]) => (
           <div
             id={scrollDay(day)}
             key={`${day}-events`}
-            className='scroll-m-28'>
+            className='scroll-m-20'>
             <div
               id={divDay(day)}
-              className='bg-black sticky top-28 z-20 pb-2 pt-1 mb-5 mt-5 event-days'>
-              <p
-                className={`md:text-2xl lg:text-3xl text-xl text-center text-${theme.nextColor}`}>
-                {dateGroupTitle(day)}
-              </p>
+              className='bg-black sticky top-20 z-20 mb-5 event-days'>
+              <div className='tabs tabs-boxed bg-black justify-center'>
+                {Array.from(dateGroup).map(([tabDay]) => (
+                  <button
+                    key={tabDay}
+                    className={`btn md:btn-sm btn-xs text-${theme.nextColor} ${
+                      day == tabDay ? "btn-active btn-secondary" : "btn-ghost"
+                    }`}
+                    onClick={() => scrollToDay(tabDay)}>
+                    {tabDateTitle(tabDay)}
+                  </button>
+                ))}
+              </div>
             </div>
             <div>
               <EventDisplay htEvents={htEvents} />
@@ -80,4 +76,4 @@ export const Schedule = ({ dateGroup }: EventsProps) => {
   );
 };
 
-export default Schedule;
+export default memo(Schedule);

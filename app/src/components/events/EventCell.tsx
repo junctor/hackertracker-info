@@ -6,15 +6,14 @@ import Link from "next/link";
 import { memo, useEffect, useState } from "react";
 import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
 
-export function EventCell({ event, bookmarks }: EventProps) {
+export function EventCell({ event, bookmarked }: EventProps) {
   const [bookmark, setBookmark] = useState(false);
 
   useEffect(() => {
-    setBookmark(bookmarks?.some((b) => b === event.id.toString()));
-  }, [event, bookmarks]);
+    setBookmark(bookmarked);
+  }, [bookmarked]);
 
   const eventBookmark = () => {
-    console.log(bookmark);
     if (!bookmark) {
       setBookmark(true);
       addBookmark(event.id.toString());

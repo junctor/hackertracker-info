@@ -14,6 +14,18 @@ module.exports = {
     "bg-dc-green",
     "bg-dc-drk-green",
     "bg-dc-red",
+    "bg-[#000000]",
+    "hover:bg-[#000000]",
+    "bg-[#092047]",
+    "hover:bg-[#092047]",
+    "bg-[#6497DC]",
+    "hover:bg-[#6497DC]",
+    "bg-[#e23be0]",
+    "hover:bg-[#e23be0]",
+    "bg-[#e2463b]",
+    "hover:bg-[#e2463b]",
+    "bg-[#ffffff]",
+    "hover:bg-[#ffffff]",
   ],
   theme: {
     extend: {

@@ -92,3 +92,11 @@ export const groupedDates = (events: HTEvent[]): Map<string, HTEvent[]> =>
       group.set(day, dayEvents);
       return group;
     }, new Map<string, HTEvent[]>());
+
+export const createDateGroup = (events: HTEvent[]) =>
+  new Map(
+    Array.from(groupedDates(events)).map(([d, et]) => [
+      d,
+      et.sort((a, b) => a.begin_timestamp.seconds - b.begin_timestamp.seconds),
+    ])
+  );

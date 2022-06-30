@@ -1,6 +1,6 @@
 interface EventProps {
   event: HTEvent;
-  bookmarks: string[];
+  bookmarked: boolean;
 }
 
 interface EventDetailProps {
@@ -10,6 +10,22 @@ interface EventDetailProps {
 interface ScheduleProps {
   events: HTEvent[];
   title: string;
+}
+
+interface EventHeadingProps {
+  events: EventSearch[];
+  title: string;
+}
+
+interface EventSearching {
+  event: EventSearch;
+  active: boolean;
+}
+
+interface EventSearch {
+  id: number;
+  title: string;
+  color: string;
 }
 
 interface EventsProps {

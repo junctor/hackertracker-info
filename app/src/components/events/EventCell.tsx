@@ -27,13 +27,13 @@ export function EventCell({ event, bookmarked }: EventProps) {
     <div className='mt-2'>
       <div className='flex bg-black items-center'>
         <div
-          className='ml-1 w-2 md:h-24 h-24 bg-green-400'
-          style={{
-            content: "",
-            backgroundColor:
-              event.type.color === "#ababa" ? "#e25238" : event.type.color,
-          }}
-        />
+          className={`ml-1 w-2 h-24 ${
+            event.type.color === "#ababa"
+              ? "bg-dc-pink"
+              : `bg-[${event.type.color}]`
+          }`}>
+          &nbsp;
+        </div>
         <div className='w-20 text-center '>
           {timeDisplayParts(event.begin).map((part) => (
             <p

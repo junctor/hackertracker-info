@@ -72,14 +72,12 @@ export const Events = ({ dateGroup }: EventsProps) => {
             <div
               id={divDay(day)}
               className='bg-black sticky top-20 z-20 mb-5 event-days invisible'>
-              <div className='tabs tabs-boxed bg-black justify-center'>
+              <div className='btn-group bg-black justify-center'>
                 {Array.from(dateGroup).map(([tabDay]) => (
                   <button
                     key={tabDay}
-                    className={`btn md:btn-sm btn-xs group-active:btn-active text-${
-                      theme.nextColor
-                    } ${
-                      day == tabDay ? "btn-active btn-secondary" : "btn-ghost"
+                    className={`btn md:btn-sm btn-xs  text-white ${
+                      day == tabDay ? "btn-active" : "btn-ghost"
                     }`}
                     onClick={() => scrollToDay(tabDay)}>
                     {tabDateTitle(tabDay)}

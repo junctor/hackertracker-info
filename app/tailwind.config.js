@@ -42,4 +42,17 @@ module.exports = {
     },
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        dc: {
+          primary: "#326295",
+          secondary: "#c04c36",
+          accent: "#71cc98",
+          neutral: "#c16784",
+          "base-100": "#2D2D2D",
+        },
+      },
+    ],
+  },
 };

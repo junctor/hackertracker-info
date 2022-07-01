@@ -3,14 +3,22 @@ import Link from "next/link";
 import { Menu } from "@headlessui/react";
 import {
   MenuIcon,
+  InformationCircleIcon as InformationCircleIconSoild,
   UserIcon as UserIconSoild,
   StarIcon as StarIconSoild,
   CalendarIcon as CalendarIconSoild,
+  LocationMarkerIcon as LocationMarkerIconSoild,
+  TagIcon as TagIconSoild,
+  DeviceMobileIcon as DeviceMobileIconSoild,
 } from "@heroicons/react/solid";
 import {
+  InformationCircleIcon as InformationCircleIconOutline,
   CalendarIcon as CalendarIconOutline,
   StarIcon as StarIconOutline,
   UserIcon as UserIconOutline,
+  LocationMarkerIcon as LocationMarkerIconOutline,
+  TagIcon as TagIconOutline,
+  DeviceMobileIcon as DeviceMobileIconOutline,
 } from "@heroicons/react/outline";
 
 import { forwardRef } from "react";
@@ -33,9 +41,9 @@ export default function NavLinks() {
       <Menu.Button>
         <MenuIcon className='h-8 w-8 text-white ml-3' />
       </Menu.Button>
-      <Menu.Items className='absolute bg-black'>
+      <Menu.Items className='absolute bg-black rounded-b-lg py-2 px-2'>
         <Menu.Item>
-          <div className='w-32'>
+          <div className='w-32 hover:rotate-12'>
             <img
               src='/static/img/skull_200x200.png'
               alt='DEF CON Logo'
@@ -46,8 +54,36 @@ export default function NavLinks() {
         </Menu.Item>
         <Menu.Item>
           {({ active }: any) => (
+            <PageLink href='/' active={active}>
+              <span className='flex my-3'>
+                {active ? (
+                  <CalendarIconSoild className='w-6 mr-2' />
+                ) : (
+                  <CalendarIconOutline className='w-6 mr-2' />
+                )}
+                <p>Home</p>
+              </span>
+            </PageLink>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }: any) => (
+            <PageLink href='/nfo' active={active}>
+              <span className='flex my-3'>
+                {active ? (
+                  <InformationCircleIconSoild className='w-6 mr-2' />
+                ) : (
+                  <InformationCircleIconOutline className='w-6 mr-2' />
+                )}
+                <p>NFO</p>
+              </span>
+            </PageLink>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }: any) => (
             <PageLink href='/events' active={active}>
-              <span className='flex mt-2 mb-2'>
+              <span className='flex my-3'>
                 {active ? (
                   <CalendarIconSoild className='w-6 mr-2' />
                 ) : (
@@ -61,7 +97,7 @@ export default function NavLinks() {
         <Menu.Item>
           {({ active }: any) => (
             <PageLink href='/events/bookmarks' active={active}>
-              <span className='flex mt-2 mb-2'>
+              <span className='flex my-3'>
                 {active ? (
                   <StarIconSoild className='w-6 mr-2' />
                 ) : (
@@ -74,14 +110,56 @@ export default function NavLinks() {
         </Menu.Item>
         <Menu.Item>
           {({ active }: any) => (
+            <PageLink href='/categories' active={active}>
+              <span className='flex my-3'>
+                {active ? (
+                  <TagIconSoild className='w-6 mr-2' />
+                ) : (
+                  <TagIconOutline className='w-6 mr-2' />
+                )}
+                <p>Categories</p>
+              </span>
+            </PageLink>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }: any) => (
             <PageLink href='/speakers' active={active}>
-              <span className='flex mt-2 mb-2'>
+              <span className='flex my-3'>
                 {active ? (
                   <UserIconSoild className='w-6 mr-2' />
                 ) : (
                   <UserIconOutline className='w-6 mr-2' />
                 )}
                 <p>Speakers</p>
+              </span>
+            </PageLink>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }: any) => (
+            <PageLink href='/maps' active={active}>
+              <span className='flex my-3'>
+                {active ? (
+                  <LocationMarkerIconSoild className='w-6 mr-2' />
+                ) : (
+                  <LocationMarkerIconOutline className='w-6 mr-2' />
+                )}
+                <p>Maps</p>
+              </span>
+            </PageLink>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }: any) => (
+            <PageLink href='/hackertracker' active={active}>
+              <span className='flex'>
+                {active ? (
+                  <DeviceMobileIconSoild className='w-6 mr-2' />
+                ) : (
+                  <DeviceMobileIconOutline className='w-6 mr-2' />
+                )}
+                <p>Apps</p>
               </span>
             </PageLink>
           )}

@@ -17,6 +17,10 @@ interface EventHeadingProps {
   title: string;
 }
 
+interface EventSearchProps {
+  events: EventSearch[];
+}
+
 interface EventSearching {
   event: EventSearch;
   active: boolean;

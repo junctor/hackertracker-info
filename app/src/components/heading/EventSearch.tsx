@@ -20,8 +20,8 @@ export const EventSearch = ({ events }: EventSearchProps) => {
 
   return (
     <div
-      className={`relative mr-3 ${
-        query != "" ? "w-10/12" : "hover:w-10/12 focus:w-10/12 w-12"
+      className={`${
+        query != "" ? "w-60 sm:w-[500px] md:w-[600px] lg:w-[800px]" : "w-12"
       }`}>
       <Combobox
         value={""}
@@ -29,9 +29,9 @@ export const EventSearch = ({ events }: EventSearchProps) => {
           eventId && router.push(`/events/${eventId}`);
         }}
         nullable>
-        <div className='relative mt-1'>
+        <div className='relative'>
           <Combobox.Input
-            className='w-full input input-sm text-xs md:text-sm border border-dc-red'
+            className='w-full bg-dc-gray text-base border border-dc-red rounded-md p-2'
             displayValue={() => query}
             onChange={(e: any) => setQuery(e.target.value)}
           />
@@ -39,7 +39,7 @@ export const EventSearch = ({ events }: EventSearchProps) => {
             <SearchIcon className='h-5 w-5' aria-hidden='true' />
           </Combobox.Button>
           <Combobox.Options
-            className={`absolute mt-1 max-h-56 w-full overflow-auto rounded-md bg-black py-1 text-base shadow-lg border border-dc-blue focus:outline-none sm:text-sm ${
+            className={`absolute mt-1 max-h-56 w-full overflow-auto rounded-md bg-black py-1 shadow-lg border border-dc-blue focus:outline-none ${
               query != "" ? "visible" : "invisible"
             }`}>
             {searchedEvents.map((e) => (
@@ -71,7 +71,9 @@ const SearchLinks = ({ event, active }: EventSearching) => (
         &nbsp;
       </div>
       <div className='ml-2'>
-        <p className='text-xs md:text-sm text-white'>{event.title}</p>
+        <p className='text-sm sm:text-sm md:text-base lg:text-lg text-white'>
+          {event.title}
+        </p>
       </div>
     </div>
   </div>

@@ -3,27 +3,26 @@ import { EventSearch } from "./EventSearch";
 
 export const EventHeading = ({ events, title }: EventHeadingProps) => {
   return (
-    <div className='navbar bg-black sticky top-0 z-50 h-20'>
-      <div className='navbar-start'>
-        <div className='dropdown'>
-          <NavLinks />
+    <header className='sticky top-0 z-50 '>
+      <nav className='flex bg-black h-20 items-center justify-around pt-2'>
+        <div className='flex-none ml-1'>
+          <div>
+            <NavLinks />
+          </div>
         </div>
-      </div>
-      <div className='navbar-center'>
-        <div className='text-center items-center '>
-          <p className='md:text-4xl lg:text-5xl text-white font-bold font-mono'>
-            D<span className='text-dc-red'>3</span>F C
-            <span className='text-dc-red'>0</span>N
-          </p>
-          <p className={`md:text-lg lg:text-xl text-white font-mono`}>
-            {title}
-          </p>
+        <div className='flex-1 my-auto'>
+          <div className='text-center'>
+            <p className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold font-mono'>
+              D<span className='text-dc-red'>3</span>F C
+              <span className='text-dc-red'>0</span>N
+            </p>
+          </div>
         </div>
-      </div>
-      <div className='navbar-end'>
-        <EventSearch events={events} />
-      </div>
-    </div>
+        <div className='flex text-right mr-5'>
+          <EventSearch events={events} />
+        </div>
+      </nav>
+    </header>
   );
 };
 

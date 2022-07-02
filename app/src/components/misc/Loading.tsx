@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 export function Loading() {
   return (
-    <div className='mx-auto content-center'>
+    <div className='flex content-center h-screen'>
       <img
-        src='/static/img/skull_600x600.png'
+        src='/static/img/skull_200x200.png'
         alt='DEF CON Logo'
-        className='animate-pulse mx-auto object-cover '
+        className='animate-pulse m-auto w-24 block'
       />
     </div>
   );

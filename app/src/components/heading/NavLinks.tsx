@@ -39,7 +39,7 @@ export default function NavLinks() {
   return (
     <Menu>
       <Menu.Button>
-        <MenuIcon className='h-8 w-8 text-white ml-3' />
+        <MenuIcon className='h-8 w-8  ml-3' />
       </Menu.Button>
       <Menu.Items className='absolute bg-black rounded-b-lg py-2 px-2'>
         <Menu.Item>

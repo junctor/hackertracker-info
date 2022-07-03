@@ -5,3 +5,9 @@
 html {
   background-color: #000 !important;
 }
+
+@layer base {
+  html {
+    @apply text-dc-text;
+  }
+}

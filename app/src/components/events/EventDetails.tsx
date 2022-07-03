@@ -1,8 +1,6 @@
 import { ClockIcon, MapIcon } from "@heroicons/react/outline";
-import { useEffect, useState } from "react";
 import cal from "../../utils/cal";
 import { eventTime } from "../../utils/dates";
-import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
 import Theme from "../../utils/theme";
 import FormatDesc from "../misc/FormatDesc";
 
@@ -13,9 +11,7 @@ export function EventDetails({ event }: EventDetailProps) {
   return (
     <div className='mt-2 ml-5'>
       <div>
-        <h1 className='text-2xl md:text-3xl lg:text-4xl mb-5 text-white'>
-          {event.title}
-        </h1>
+        <h1 className='text-2xl md:text-3xl lg:text-4xl mb-5'>{event.title}</h1>
       </div>
       <div>
         <div className='flex items-center bg-dc-gray w-11/12 mt-2 md:h-14 lg:h-16 h-12 rounded-lg'>
@@ -26,9 +22,7 @@ export function EventDetails({ event }: EventDetailProps) {
                 event.type.color === "#ababa" ? "#e25238" : event.type.color,
             }}
           />
-          <p className='md:text-base lg:text-lg text-xs text-white '>
-            {event.type.name}
-          </p>
+          <p className='md:text-base lg:text-lg text-xs  '>{event.type.name}</p>
         </div>
         <div className='flex items-center bg-dc-gray w-11/12  mt-2 md:h-14 lg:h-16 h-12 rounded-lg cursor-pointer'>
           <a
@@ -38,7 +32,7 @@ export function EventDetails({ event }: EventDetailProps) {
             )}`}
             download={`dc30-${event.id}.ics`}>
             <ClockIcon className='h-5 w-5 md:h-7 md:w-7 lg:w-8 lg:h-8 ml-3 mr-2' />
-            <p className='md:text-base lg:text-lg text-xs text-white '>
+            <p className='md:text-base lg:text-lg text-xs'>
               {`${eventTime(new Date(event.begin))} - ${eventTime(
                 new Date(event.end)
               )}`}
@@ -47,7 +41,7 @@ export function EventDetails({ event }: EventDetailProps) {
         </div>
         <div className='flex items-center bg-dc-gray w-11/12  mt-2 md:h-14 lg:h-16 h-12 rounded-lg'>
           <MapIcon className='h-5 w-5 md:h-7 md:w-7 lg:w-8 lg:h-8 ml-3 mr-2' />
-          <p className='md:text-base lg:text-lg text-xs text-white '>
+          <p className='md:text-base lg:text-lg text-xs'>
             {event.location.name}
           </p>
         </div>
@@ -80,9 +74,7 @@ export function EventDetails({ event }: EventDetailProps) {
       </div>
       {event.speakers.length > 0 && (
         <div className='mt-8 text-center'>
-          <h2 className='text-lg md:text-xl lg:text-2xl text-white'>
-            Speakers
-          </h2>
+          <h2 className='text-lg md:text-xl lg:text-2xl '>Speakers</h2>
           <div className=' items-center bg-dc-gray w-11/12 mt-2 rounded-lg mb-10 pt-2 pb-2'>
             {event.speakers.map((s) => (
               <div key={s.id} className='ml-3 flex mt-2 mb-2'>
@@ -90,7 +82,7 @@ export function EventDetails({ event }: EventDetailProps) {
                   className={`ml-1 h-8 md:h-10 lg:h-12 w-1 mr-3 bg-${theme.nextColor}`}
                 />
                 <div className='inline-block text-left'>
-                  <p className='text-white text-bold text-sm md:text-base lg:text-lg'>
+                  <p className=' text-bold text-sm md:text-base lg:text-lg'>
                     {s.name}
                   </p>
                   <p className='text-xs md:text-sm lg:text-base'>

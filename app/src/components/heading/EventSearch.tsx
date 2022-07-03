@@ -31,7 +31,7 @@ export const EventSearch = ({ events }: EventSearchProps) => {
         nullable>
         <div className='relative'>
           <Combobox.Input
-            className='w-full bg-dc-gray text-base border border-dc-red rounded-md p-2'
+            className='w-full bg-dc-gray text-base border border-white rounded-md p-2'
             displayValue={() => query}
             onChange={(e: any) => setQuery(e.target.value)}
           />
@@ -56,7 +56,7 @@ export const EventSearch = ({ events }: EventSearchProps) => {
 
 const SearchLinks = ({ event, active }: EventSearching) => (
   <div
-    className={`py-1 ${
+    className={`py-1 mb-1 ${
       active
         ? event.color === "#ababa"
           ? "bg-dc-pink"
@@ -71,7 +71,7 @@ const SearchLinks = ({ event, active }: EventSearching) => (
         &nbsp;
       </div>
       <div className='ml-2'>
-        <p className='text-sm sm:text-sm md:text-base lg:text-lg text-white'>
+        <p className='text-sm sm:text-sm md:text-base lg:text-lg '>
           {event.title}
         </p>
       </div>

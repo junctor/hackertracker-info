@@ -46,7 +46,7 @@ export const Events = ({ dateGroup }: EventsProps) => {
     return tabDateTitle(day).replaceAll(" ", "s").toLowerCase();
   };
 
-  const EventDisplay = memo(({ htEvents }: { htEvents: HTEvent[] }) => (
+  const EventDisplay = memo(({ htEvents }: { htEvents: EventData[] }) => (
     <div>
       {htEvents.map((htEvent) => (
         <div key={htEvent.id} id={htEvent.id.toString()}>
@@ -71,13 +71,13 @@ export const Events = ({ dateGroup }: EventsProps) => {
             className='scroll-m-20'>
             <div
               id={divDay(day)}
-              className='bg-black sticky top-20 z-20 mb-5 event-days invisible'>
-              <div className='btn-group bg-black justify-center'>
+              className='bg-black sticky top-20 z-20 mb-5 pb-2 event-days invisible'>
+              <div className='bg-black justify-center items-center flex'>
                 {Array.from(dateGroup).map(([tabDay]) => (
                   <button
                     key={tabDay}
-                    className={`btn md:btn-sm btn-xs  text-white ${
-                      day == tabDay ? "btn-active" : "btn-ghost"
+                    className={`p-2 mx-1 rounded-lg text-xs sm:text-sm md:text-base lg:text-lg font-semibold ${
+                      day == tabDay ? "bg-dc-blue" : "hover:text-gray-400"
                     }`}
                     onClick={() => scrollToDay(tabDay)}>
                     {tabDateTitle(tabDay)}
@@ -85,7 +85,7 @@ export const Events = ({ dateGroup }: EventsProps) => {
                 ))}
               </div>
             </div>
-            <p className='text-white text-2xl ml-3 mt-3 text-center'>
+            <p className='text-xl sm:text-2xl md:text-3xl lg:text-4xl my-3 text-center font-bold'>
               {dateGroupTitle(day)}
             </p>
             <div>

@@ -24,13 +24,11 @@ export function EventCell({ event, bookmarked }: EventProps) {
   };
 
   return (
-    <div className='mt-2'>
+    <div className='my-2 ml-2 mr-3'>
       <div className='flex bg-black items-center'>
         <div
           className={`ml-1 w-2 h-24 ${
-            event.type.color === "#ababa"
-              ? "bg-dc-pink"
-              : `bg-[${event.type.color}]`
+            event.color === "#ababa" ? "bg-dc-pink" : `bg-[${event.color}]`
           }`}>
           &nbsp;
         </div>
@@ -38,34 +36,34 @@ export function EventCell({ event, bookmarked }: EventProps) {
           {timeDisplayParts(event.begin).map((part) => (
             <p
               key={part}
-              className='md:text-sm lg:text-base text-xs font-bold text-dc-text'>
+              className='text-xs sm:text-xs md:text-sm lg:text-base font-bold text-dc-text'>
               {part}
             </p>
           ))}
         </div>
-        <div className='w-4/5'>
+        <div className='w-11/12'>
           <Link href={`/events/${event.id}`} prefetch={false}>
-            <a className='md:text-xl lg:text-2xl text-lg text-white'>
+            <a className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold'>
               {event.title}
             </a>
           </Link>
-          <p className='md:text-lg lg:text-xl text-base'>
-            {event.location.name}
+          <p className='text-xs sm:text-base md:text-lg lg:text-xl'>
+            {event.location}
           </p>
           <div
-            className='rounded-full h-2 w-2 green inline-flex mr-2'
+            className='rounded-full h-3 w-3 green inline-flex mr-2'
             style={{
               backgroundColor:
-                event.type.color === "#ababa" ? "#e25238" : event.type.color,
+                event.color === "#ababa" ? "#e25238" : event.color,
             }}
           />
-          <p className='md:text-sm lg:text-base text-xs text-white inline-flex'>
-            {event.type.name}
+          <p className='text-xs sm:text-xs md:text-sm lg:text-base inline-flex'>
+            {event.category}
           </p>
         </div>
         <div>
           <button
-            className='w-10 items-start ml-2 mr-2 cursor-pointer'
+            className='flex w-10 items-start align-middle mx-2 cursor-pointer place-content-end'
             onClick={() => eventBookmark()}>
             {bookmark ? (
               <StarIconSoild className='md:h-6 lg:h-8 h-5' />

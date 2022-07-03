@@ -1,98 +1,51 @@
-interface ConfInfo {
-  villages: Village[];
+interface EventProps {
+  event: EventData;
+  bookmarked: boolean;
 }
 
-interface Village {
-  name: string;
-  home: string;
-  forum: string;
-  twitter: string;
-  discord: string;
-  youtube: string;
+interface EventDetailProps {
+  event: HTEvent;
 }
 
-interface Timer {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
+interface EventDetailHeaderProps {
+  eventId: number;
 }
 
-interface Timestamp {
-  seconds: number;
-  nanoseconds: number;
+interface ScheduleProps {
+  events: EventData[];
+  title: string;
 }
 
-interface HTMaps {
-  file: string;
-  name: string;
+interface EventHeadingProps {
+  events: EventSearch[];
+  title: string;
 }
 
-interface HTLinks {
-  label: string;
-  url: string;
+interface EventSearchProps {
+  events: EventSearch[];
 }
 
-interface HTLocationModel {
+interface EventSearching {
+  event: EventSearch;
+  active: boolean;
+}
+
+interface EventSearch {
   id: number;
-  conferenceName: string;
-  name: string;
-  hotel: string;
-}
-
-interface HTEventType {
-  id: number;
+  title: string;
   color: string;
-  conferenceName: string;
-  name: string;
-  description: string;
-  tags: string;
-  youtube_url: string;
-  discord_url: string;
-  subforum_url: string;
 }
 
-interface HTConference {
-  start_timestamp: Timestamp;
-  end_date: string;
-  maps?: HTMaps[];
-  name: string;
-  code: string;
-  start_date: string;
-  link: string;
-  hidden: false;
-  codeofconduct?: string;
-  updated_at: Timestamp;
-  id: number;
-  timezone: string;
-  description: string;
-  end_timestamp: Timestamp;
+interface EventsProps {
+  dateGroup: Map<string, EventData[]>;
 }
 
-interface HTEvent {
+interface EventData {
   id: number;
-  conferenceName: string;
-  description: string;
-  android_description: string;
   begin: string;
-  begin_timestamp: Timestamp;
-  end: string;
-  end_timestamp: Timestamp;
-  includes: string;
-  links: HTLinks[];
+  beginTimestampSeconds: number;
   title: string;
-  location: HTLocationModel;
-  speakers: HTSpeaker[];
-  type: HTEventType;
-}
-
-interface HTSpeaker {
-  id: number;
-  conferenceName: string;
-  description: string;
-  link: string;
-  name: string;
-  title: string;
-  twitter: string;
-  events: [HTEvent];
+  location: string;
+  color: string;
+  category: string;
 }

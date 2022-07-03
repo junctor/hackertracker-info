@@ -13,7 +13,7 @@ export const Schedule = ({ events, title }: ScheduleProps) => {
     .map((e) => ({
       title: e.title,
       id: e.id,
-      color: e.type.color,
+      color: e.color,
     }))
     .sort((a, b) => {
       if (a.title.toLowerCase() > b.title.toLowerCase()) {

@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import Head from "next/head";
 import Schedule from "../../components/events/Schedule";
+import { toEventsData } from "../../utils/misc";
 
 const SchedulePage: NextPage<ScheduleProps> = (props) => {
   const { events } = props;
@@ -37,9 +38,11 @@ export async function getStaticProps() {
 
   let events: HTEvent[] = JSON.parse(eventFile) ?? [];
 
+  let eventsData = toEventsData(events);
+
   return {
     props: {
-      events: events,
+      events: eventsData,
     },
   };
 }

@@ -82,21 +82,21 @@ export function eventTime(time: Date): string {
   return time.toLocaleTimeString("en-US", options);
 }
 
-export const groupedDates = (events: HTEvent[]): Map<string, HTEvent[]> =>
+export const groupedDates = (events: EventData[]): Map<string, EventData[]> =>
   events
-    .sort((a, b) => a.begin_timestamp.seconds - b.begin_timestamp.seconds)
+    .sort((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds)
     .reduce((group, e) => {
       const day = eventDay(new Date(e.begin));
       const dayEvents = group.get(day) ?? [];
       dayEvents.push(e);
       group.set(day, dayEvents);
       return group;
-    }, new Map<string, HTEvent[]>());
+    }, new Map<string, EventData[]>());
 
-export const createDateGroup = (events: HTEvent[]) =>
+export const createDateGroup = (events: EventData[]) =>
   new Map(
     Array.from(groupedDates(events)).map(([d, et]) => [
       d,
-      et.sort((a, b) => a.begin_timestamp.seconds - b.begin_timestamp.seconds),
+      et.sort((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds),
     ])
   );

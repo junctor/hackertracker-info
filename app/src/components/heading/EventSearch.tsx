@@ -1,8 +1,7 @@
 import NavLinks from "./NavLinks";
-import { SearchIcon } from "@heroicons/react/outline";
+import { SearchIcon, XCircleIcon } from "@heroicons/react/outline";
 import { Combobox, Transition } from "@headlessui/react";
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 export const EventSearch = ({ events }: EventSearchProps) => {
@@ -36,10 +35,19 @@ export const EventSearch = ({ events }: EventSearchProps) => {
             onChange={(e: any) => setQuery(e.target.value)}
           />
           <Combobox.Button className='absolute inset-y-0 right-0 flex items-center pr-2'>
-            <SearchIcon className='h-5 w-5' aria-hidden='true' />
+            {!query ? (
+              <SearchIcon className='h-5 w-5' aria-hidden='true' />
+            ) : (
+              <XCircleIcon
+                className='h-5 w-5'
+                aria-hidden='true'
+                onClick={() => setQuery("")}
+              />
+            )}
           </Combobox.Button>
           <Combobox.Options
-            className={`absolute mt-1 max-h-56 w-full overflow-auto rounded-md bg-black py-1 shadow-lg border border-dc-blue focus:outline-none ${
+            static
+            className={`absolute mt-1 max-h-56 w-full overflow-auto rounded-md bg-black py-1 shadow-lg  border-2 border-dc-blue focus:outline-none ${
               query != "" ? "visible" : "invisible"
             }`}>
             {searchedEvents.map((e) => (

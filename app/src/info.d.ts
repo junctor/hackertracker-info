@@ -18,7 +18,6 @@ interface ScheduleProps {
 
 interface EventHeadingProps {
   events: EventSearch[];
-  title: string;
 }
 
 interface EventSearchProps {
@@ -38,6 +37,7 @@ interface EventSearch {
 
 interface EventsProps {
   dateGroup: Map<string, EventData[]>;
+  title: string;
 }
 
 interface EventData {

@@ -25,8 +25,8 @@ export const Schedule = ({ events, title }: ScheduleProps) => {
 
   return (
     <div>
-      <EventHeading events={headingEvents} title={title} />
-      <Events dateGroup={dateGroup} />
+      <EventHeading events={headingEvents} />
+      <Events dateGroup={dateGroup} title={title} />
     </div>
   );
 };

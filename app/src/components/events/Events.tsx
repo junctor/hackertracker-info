@@ -4,7 +4,7 @@ import EventCell from "./EventCell";
 import Theme from "../../utils/theme";
 import { getBookmarks } from "../../utils/storage";
 
-export const Events = ({ dateGroup }: EventsProps) => {
+export const Events = ({ dateGroup, title }: EventsProps) => {
   const componentRef = useRef<HTMLDivElement>(null);
   const theme = new Theme();
 
@@ -60,6 +60,11 @@ export const Events = ({ dateGroup }: EventsProps) => {
 
   return (
     <div ref={componentRef}>
+      <div className='flex items-center justify-center mb-5'>
+        <h1 className='text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold font-mono'>
+          {title}
+        </h1>
+      </div>
       <div>
         {Array.from(dateGroup).map(([day, htEvents]) => (
           <div

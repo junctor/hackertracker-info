@@ -20,7 +20,7 @@ const SchedulePage: NextPage<ScheduleProps> = (props) => {
       </Head>
 
       <main className='bg-black'>
-        <Schedule events={events} title={"HOM3C0MING"} />
+        <Schedule events={events} title={"Schedule"} />
       </main>
     </div>
   );

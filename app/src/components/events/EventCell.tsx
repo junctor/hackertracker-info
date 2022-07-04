@@ -16,10 +16,10 @@ export function EventCell({ event, bookmarked }: EventProps) {
   const eventBookmark = () => {
     if (!bookmark) {
       setBookmark(true);
-      addBookmark(event.id.toString());
+      addBookmark(event.id);
     } else {
       setBookmark(false);
-      removeBookmark(event.id.toString());
+      removeBookmark(event.id);
     }
   };
 

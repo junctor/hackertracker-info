@@ -28,7 +28,7 @@ export const Events = ({ dateGroup }: EventsProps) => {
     });
   }, [dateGroup]);
 
-  const isBookMarked = (id: string) => bookmarks?.some((b) => b === id);
+  const isBookMarked = (id: number) => bookmarks.includes(id);
 
   const scrollToDay = (day: string) => {
     if (componentRef && componentRef.current) {
@@ -50,10 +50,7 @@ export const Events = ({ dateGroup }: EventsProps) => {
     <div>
       {htEvents.map((htEvent) => (
         <div key={htEvent.id} id={htEvent.id.toString()}>
-          <EventCell
-            event={htEvent}
-            bookmarked={isBookMarked(htEvent.id.toString())}
-          />
+          <EventCell event={htEvent} bookmarked={isBookMarked(htEvent.id)} />
         </div>
       ))}
     </div>

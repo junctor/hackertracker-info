@@ -9,17 +9,17 @@ export const EventDetailHeading = ({ eventId }: EventDetailHeaderProps) => {
 
   useEffect(() => {
     const bookmarks = getBookmarks();
-    setBookmark(bookmarks?.some((b) => b === eventId.toString()));
+    setBookmark(bookmarks.includes(eventId));
   }, [eventId]);
 
   const eventBookmark = () => {
     console.log(bookmark);
     if (!bookmark) {
       setBookmark(true);
-      addBookmark(eventId.toString());
+      addBookmark(eventId);
     } else {
       setBookmark(false);
-      removeBookmark(eventId.toString());
+      removeBookmark(eventId);
     }
   };
 

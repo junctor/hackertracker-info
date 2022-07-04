@@ -1,15 +1,15 @@
-export const addBookmark = (eventId: string) => {
+export const addBookmark = (eventId: number) => {
   if (typeof window !== "undefined") {
-    const bookmarks: string[] =
+    const bookmarks: number[] =
       JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
     const newBookmarks = [...bookmarks, eventId];
     localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
   }
 };
 
-export const removeBookmark = (eventId: string) => {
+export const removeBookmark = (eventId: number) => {
   if (typeof window !== "undefined") {
-    const bookmarks: string[] =
+    const bookmarks: number[] =
       JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
     const newBookmarks = bookmarks.filter((b) => b !== eventId);
     localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
@@ -21,7 +21,7 @@ export const getBookmarks = () => {
     return [];
   }
 
-  let bookmarks: string[] =
+  let bookmarks: number[] =
     JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
   return bookmarks;
 };

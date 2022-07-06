@@ -49,3 +49,21 @@ interface EventData {
   color: string;
   category: string;
 }
+
+interface CategoriesProps {
+  categories: CategoryData[];
+}
+
+interface CategoryData {
+  name: string;
+  data: HTEventType | undefined;
+}
+
+interface CategoryCellProps {
+  category: HTEventType;
+}
+
+interface CategoryPageProps {
+  category: string;
+  events: EventData[];
+}

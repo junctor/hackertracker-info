@@ -24,7 +24,7 @@ export const EventSearch = ({ events }: EventSearchProps) => {
           query != "" ? "w-60 sm:w-[500px] md:w-[600px] lg:w-[800px]" : "w-12"
         }`}>
         <Combobox
-          value={""}
+          value={query}
           onChange={(eventId) => {
             eventId && router.push(`/events/${eventId}`);
           }}

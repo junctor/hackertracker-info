@@ -66,9 +66,9 @@ export function EventCell({ event, bookmarked }: EventProps) {
             className='flex w-10 items-start align-middle mx-2 cursor-pointer place-content-end'
             onClick={() => eventBookmark()}>
             {bookmark ? (
-              <StarIconSoild className='md:h-6 lg:h-8 h-5' />
+              <StarIconSoild className='h-5 sm:h-6 md:h-7 lg:h-8' />
             ) : (
-              <StarIconOutline className='md:h-6 lg:h-8 h-5' />
+              <StarIconOutline className='h-5 sm:h-6 md:h-7 lg:h-8' />
             )}
           </button>
         </div>

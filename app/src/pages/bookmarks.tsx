@@ -2,8 +2,8 @@ import type { NextPage } from "next";
 import { promises as fs } from "fs";
 import path from "path";
 import Head from "next/head";
-import { toEventsData } from "../../utils/misc";
-import Bookmarks from "../../components/events/Bookmarks";
+import { toEventsData } from "../utils/misc";
+import Bookmarks from "../components/bookmarks/Bookmarks";
 
 const BookmarksPage: NextPage<ScheduleProps> = (props) => {
   const { events } = props;
@@ -11,7 +11,7 @@ const BookmarksPage: NextPage<ScheduleProps> = (props) => {
     <div>
       <Head>
         <title>D3F C0N Bookmarks</title>
-        <meta name='description' content='DEF CON 30' />
+        <meta name='description' content='DEF CON 30 Bookmarks' />
         <meta
           name='viewport'
           content='width=device-width, initial-scale=1, maximum-scale=1'

@@ -103,7 +103,7 @@ export default function NavLinks() {
           </Menu.Item>
           <Menu.Item>
             {({ active }: any) => (
-              <PageLink href='/events/bookmarks' active={active}>
+              <PageLink href='/bookmarks' active={active}>
                 <span className='flex my-3'>
                   {active ? (
                     <StarIconSoild className='w-6 mr-2' />

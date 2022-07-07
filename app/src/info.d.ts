@@ -67,3 +67,21 @@ interface CategoryPageProps {
   category: string;
   events: EventData[];
 }
+
+interface SpeakersProps {
+  speakers: Speaker[];
+}
+
+interface Speaker {
+  name: string;
+  id: number;
+}
+
+interface SpeakerListProps {
+  speakerGroup: Map<string, Speaker[]>;
+}
+
+interface SpeakerSearching {
+  speaker: Speaker;
+  active: boolean;
+}

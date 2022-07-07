@@ -22,3 +22,48 @@ export const toCategories = (events: HTEvent[]): CategoryData[] => {
 
   return catData;
 };
+
+export const toSpeakers = (events: HTEvent[]): Speaker[] => {
+  const speakerDataMap = events
+    .flatMap((e) => e.speakers)
+    .reduce((speakers, s) => {
+      speakers.set(s.name, s);
+      return speakers;
+    }, new Map<string, HTSpeaker>());
+
+  let speakerData: Speaker[] = Array.from(speakerDataMap.keys()).map((e) => ({
+    name: e,
+    id: speakerDataMap.get(e)?.id ?? 0,
+  }));
+
+  return speakerData;
+};
+
+const groupedSpeakers = (speakers: Speaker[]): Map<string, Speaker[]> =>
+  speakers.sort(sortSpeakers).reduce((group, s) => {
+    let firstLetter = s.name.toLowerCase()[0] ?? "";
+    const iSpeakers = group.get(firstLetter) ?? [];
+    iSpeakers.push(s);
+    group.set(firstLetter, iSpeakers);
+    return group;
+  }, new Map<string, Speaker[]>());
+
+export const createSpeakerGroup = (speakers: Speaker[]) =>
+  new Map(
+    Array.from(groupedSpeakers(speakers)).map(([d, et]) => [
+      d,
+      et.sort(sortSpeakers),
+    ])
+  );
+
+const sortSpeakers = (a: Speaker, b: Speaker) => {
+  if (a.name.toLowerCase() > b.name.toLowerCase()) {
+    return 1;
+  }
+
+  if (a.name.toLowerCase() < b.name.toLowerCase()) {
+    return -1;
+  }
+
+  return 0;
+};

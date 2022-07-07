@@ -25,18 +25,18 @@ export const SpeakerList = ({ speakerGroup }: SpeakerListProps) => {
     });
   }, [speakerGroup]);
 
-  const scrollToDay = (i: string) => {
+  const scrollToSpeaker = (i: string) => {
     if (componentRef && componentRef.current) {
-      componentRef.current
-        .querySelector(`#${i}`)
-        ?.scrollIntoView({ behavior: "smooth" });
+      componentRef.current.querySelector(`#${i}`)?.scrollIntoView({
+        behavior: "smooth",
+      });
     }
   };
 
   const SpeakerDisplay = memo(({ speakers }: { speakers: Speaker[] }) => (
     <div>
       {speakers.map((s) => (
-        <div key={s.id} className='ml-10 my-3'>
+        <div key={s.id} className='ml-10 my-5'>
           <Link href={`/speakers/${s.id}`} prefetch={false}>
             <a className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold'>
               {s.name}
@@ -69,7 +69,7 @@ export const SpeakerList = ({ speakerGroup }: SpeakerListProps) => {
                     className={`flex flex-wrap p-0.5 sm:p-1 md:p-2 mx-0 lg:mx-1 rounded sm:rounded-md text-xs sm:text-sm md:text-base lg:text-lg font-semibold ${
                       i == tabI ? "bg-dc-blue" : "hover:text-gray-400"
                     }`}
-                    onClick={() => scrollToDay(tabI)}>
+                    onClick={() => scrollToSpeaker(tabI)}>
                     {tabI}
                   </button>
                 ))}

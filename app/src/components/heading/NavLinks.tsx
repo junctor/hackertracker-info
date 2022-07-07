@@ -75,14 +75,14 @@ export default function NavLinks() {
           </Menu.Item>
           <Menu.Item>
             {({ active }: any) => (
-              <PageLink href='/nfo' active={active}>
+              <PageLink href='/info' active={active}>
                 <span className='flex my-3'>
                   {active ? (
                     <InformationCircleIconSoild className='w-6 mr-2' />
                   ) : (
                     <InformationCircleIconOutline className='w-6 mr-2' />
                   )}
-                  <p>NFO</p>
+                  <p>Info</p>
                 </span>
               </PageLink>
             )}

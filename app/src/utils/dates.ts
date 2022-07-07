@@ -82,7 +82,7 @@ export function eventTime(time: Date): string {
   return time.toLocaleTimeString("en-US", options);
 }
 
-export const groupedDates = (events: EventData[]): Map<string, EventData[]> =>
+const groupedDates = (events: EventData[]): Map<string, EventData[]> =>
   events
     .sort((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds)
     .reduce((group, e) => {

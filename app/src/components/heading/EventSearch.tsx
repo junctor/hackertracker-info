@@ -32,9 +32,9 @@ export const EventSearch = ({ events }: EventSearchProps) => {
           <div className='relative'>
             <Combobox.Input
               autoFocus
-              className='w-full bg-dc-gray text-base border border-white rounded-md p-2 ml-1'
+              className='w-full bg-dc-gray text-base border border-white rounded-md p-2 ml-1 placeholder-dc-red pl-3 placeholder:font-extrabold'
               displayValue={() => query}
-              placeholder=' _'
+              placeholder='|'
               onChange={(e: any) => setQuery(e.target.value)}
             />
             <Combobox.Button className='absolute inset-y-0 right-0 flex items-center pr-2'>

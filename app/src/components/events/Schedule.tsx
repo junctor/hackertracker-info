@@ -1,9 +1,5 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { createDateGroup, groupedDates } from "../../utils/dates";
-import NavLinks from "../heading/NavLinks";
-import { SearchIcon } from "@heroicons/react/outline";
+import { createDateGroup } from "../../utils/dates";
 import Events from "./Events";
-import Loading from "../misc/Loading";
 import EventHeading from "../heading/EventHeading";
 
 export const Schedule = ({ events, title }: ScheduleProps) => {

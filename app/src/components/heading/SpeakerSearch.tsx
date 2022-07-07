@@ -30,9 +30,10 @@ export const SpeakerSearch = ({ speakers }: SpeakersProps) => {
           nullable>
           <div className='relative'>
             <Combobox.Input
-              className='w-full bg-dc-gray text-base border border-white rounded-md p-2 caret-dc-red foc'
               autoFocus
+              className='w-full bg-dc-gray text-base border border-white rounded-md p-2 ml-1'
               displayValue={() => query}
+              placeholder=' _'
               onChange={(e: any) => setQuery(e.target.value)}
             />
             <Combobox.Button className='absolute inset-y-0 right-0 flex items-center pr-2'>

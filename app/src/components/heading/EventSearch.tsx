@@ -21,7 +21,7 @@ export const EventSearch = ({ events }: EventSearchProps) => {
     <>
       <div
         className={`${
-          query != "" ? "w-60 sm:w-[500px] md:w-[600px] lg:w-[800px]" : "w-12"
+          query != "" ? "w-60 sm:w-[500px] md:w-[600px] lg:w-[800px]" : "w-16"
         }`}>
         <Combobox
           value={query}
@@ -31,8 +31,10 @@ export const EventSearch = ({ events }: EventSearchProps) => {
           nullable>
           <div className='relative'>
             <Combobox.Input
-              className='w-full bg-dc-gray text-base border border-white rounded-md p-2'
+              autoFocus
+              className='w-full bg-dc-gray text-base border border-white rounded-md p-2 ml-1'
               displayValue={() => query}
+              placeholder=' _'
               onChange={(e: any) => setQuery(e.target.value)}
             />
             <Combobox.Button className='absolute inset-y-0 right-0 flex items-center pr-2'>

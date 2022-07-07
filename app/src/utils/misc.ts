@@ -23,13 +23,11 @@ export const toCategories = (events: HTEvent[]): CategoryData[] => {
   return catData;
 };
 
-export const toSpeakers = (events: HTEvent[]): Speaker[] => {
-  const speakerDataMap = events
-    .flatMap((e) => e.speakers)
-    .reduce((speakers, s) => {
-      speakers.set(s.name, s);
-      return speakers;
-    }, new Map<string, HTSpeaker>());
+export const toSpeakers = (events: HTSpeaker[]): Speaker[] => {
+  const speakerDataMap = events.reduce((speakers, s) => {
+    speakers.set(s.name, s);
+    return speakers;
+  }, new Map<string, HTSpeaker>());
 
   let speakerData: Speaker[] = Array.from(speakerDataMap.keys()).map((e) => ({
     name: e,

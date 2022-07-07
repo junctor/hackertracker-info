@@ -30,16 +30,16 @@ const SpeakersPage: NextPage<SpeakersProps> = (props) => {
 export async function getStaticProps() {
   const fileToRead = path.join(
     process.cwd(),
-    "./public/static/conf/events.json"
+    "./public/static/conf/speakers.json"
   );
 
-  let eventFile = await fs.readFile(fileToRead, {
+  let speakerFile = await fs.readFile(fileToRead, {
     encoding: "utf-8",
   });
 
-  let events: HTEvent[] = JSON.parse(eventFile) ?? [];
+  let speakers: HTSpeaker[] = JSON.parse(speakerFile) ?? [];
 
-  let speakerData = toSpeakers(events);
+  let speakerData = toSpeakers(speakers);
 
   return {
     props: {

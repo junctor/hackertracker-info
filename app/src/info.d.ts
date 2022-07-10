@@ -85,3 +85,7 @@ interface SpeakerSearching {
   speaker: Speaker;
   active: boolean;
 }
+
+interface SpeakerDetailProps {
+  speaker: HTSpeaker;
+}

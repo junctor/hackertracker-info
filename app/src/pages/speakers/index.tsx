@@ -28,12 +28,12 @@ const SpeakersPage: NextPage<SpeakersProps> = (props) => {
 };
 
 export async function getStaticProps() {
-  const fileToRead = path.join(
+  const confFile = path.join(
     process.cwd(),
     "./public/static/conf/speakers.json"
   );
 
-  let speakerFile = await fs.readFile(fileToRead, {
+  let speakerFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 

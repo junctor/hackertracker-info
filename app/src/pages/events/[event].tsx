@@ -11,7 +11,7 @@ const EventPage: NextPage<EventDetailProps> = (props) => {
     <div>
       <Head>
         <title>{event.title}</title>
-        <meta name='description' content='DEF CON 30' />
+        <meta name='description' content='DEF CON 30 Event' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
@@ -24,14 +24,11 @@ const EventPage: NextPage<EventDetailProps> = (props) => {
 
 export async function getStaticProps(context: { params: { event: string } }) {
   const { params } = context;
-  const eventId = params.event ?? 0;
+  const eventId = params.event ?? "";
 
-  const fileToRead = path.join(
-    process.cwd(),
-    "./public/static/conf/events.json"
-  );
+  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
 
-  let eventFile = await fs.readFile(fileToRead, {
+  let eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 
@@ -46,12 +43,9 @@ export async function getStaticProps(context: { params: { event: string } }) {
 }
 
 export async function getStaticPaths() {
-  const fileToRead = path.join(
-    process.cwd(),
-    "./public/static/conf/events.json"
-  );
+  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
 
-  let eventFile = await fs.readFile(fileToRead, {
+  let eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 

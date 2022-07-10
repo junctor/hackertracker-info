@@ -11,7 +11,7 @@ const SchedulePage: NextPage<ScheduleProps> = (props) => {
     <div>
       <Head>
         <title>D3F C0N Events</title>
-        <meta name='description' content='DEF CON 30' />
+        <meta name='description' content='DEF CON 30 Events' />
         <meta
           name='viewport'
           content='width=device-width, initial-scale=1, maximum-scale=1'
@@ -27,12 +27,9 @@ const SchedulePage: NextPage<ScheduleProps> = (props) => {
 };
 
 export async function getStaticProps() {
-  const fileToRead = path.join(
-    process.cwd(),
-    "./public/static/conf/events.json"
-  );
+  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
 
-  let eventFile = await fs.readFile(fileToRead, {
+  let eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 

@@ -27,12 +27,9 @@ const CategoriesPage: NextPage<CategoriesProps> = (props) => {
 };
 
 export async function getStaticProps() {
-  const fileToRead = path.join(
-    process.cwd(),
-    "./public/static/conf/events.json"
-  );
+  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
 
-  let eventFile = await fs.readFile(fileToRead, {
+  let eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 

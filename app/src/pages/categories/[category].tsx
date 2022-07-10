@@ -30,12 +30,9 @@ export async function getStaticProps(context: {
   const { params } = context;
   const catId = params.category ?? 0;
 
-  const fileToRead = path.join(
-    process.cwd(),
-    "./public/static/conf/events.json"
-  );
+  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
 
-  let eventFile = await fs.readFile(fileToRead, {
+  let eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 
@@ -53,12 +50,9 @@ export async function getStaticProps(context: {
 }
 
 export async function getStaticPaths() {
-  const fileToRead = path.join(
-    process.cwd(),
-    "./public/static/conf/events.json"
-  );
+  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
 
-  let eventFile = await fs.readFile(fileToRead, {
+  let eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 

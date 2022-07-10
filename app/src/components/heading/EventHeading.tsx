@@ -1,7 +1,7 @@
 import NavLinks from "./NavLinks";
-import { EventSearch } from "./EventSearch";
+import EventSearch from "./EventSearch";
 
-export const EventHeading = ({ events }: EventHeadingProps) => {
+function EventHeading({ events }: EventHeadingProps) {
   return (
     <header className='sticky top-0 z-50 pb-2'>
       <nav className='flex bg-black h-20 items-center justify-around py-1'>
@@ -24,6 +24,6 @@ export const EventHeading = ({ events }: EventHeadingProps) => {
       </nav>
     </header>
   );
-};
+}
 
 export default EventHeading;

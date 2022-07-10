@@ -1,10 +1,10 @@
-import NavLinks from "./NavLinks";
 import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
 import { StarIcon as StarIconSoild } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
+import NavLinks from "./NavLinks";
 import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
 
-export const EventDetailHeading = ({ eventId }: EventDetailHeaderProps) => {
+export function EventDetailHeading({ eventId }: EventDetailHeaderProps) {
   const [bookmark, setBookmark] = useState(false);
 
   useEffect(() => {
@@ -13,7 +13,6 @@ export const EventDetailHeading = ({ eventId }: EventDetailHeaderProps) => {
   }, [eventId]);
 
   const eventBookmark = () => {
-    console.log(bookmark);
     if (!bookmark) {
       setBookmark(true);
       addBookmark(eventId);
@@ -40,17 +39,17 @@ export const EventDetailHeading = ({ eventId }: EventDetailHeaderProps) => {
           </div>
         </div>
         <div className='flex text-right mr-5'>
-          <div onClick={() => eventBookmark()}>
+          <button type='button' onClick={() => eventBookmark()}>
             {bookmark ? (
               <StarIconSoild className='w-7 mr-3' />
             ) : (
               <StarIconOutline className='w-7 mr-3' />
             )}
-          </div>
+          </button>
         </div>
       </nav>
     </header>
   );
-};
+}
 
 export default EventDetailHeading;

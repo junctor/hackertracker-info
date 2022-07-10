@@ -1,12 +1,12 @@
-import { timeDisplayParts } from "../../utils/dates";
 import { StarIcon as StarIconOutline } from "@heroicons/react/outline";
 import { StarIcon as StarIconSoild } from "@heroicons/react/solid";
 
 import Link from "next/link";
 import { memo, useEffect, useState } from "react";
-import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
+import { timeDisplayParts } from "../../utils/dates";
+import { addBookmark, removeBookmark } from "../../utils/storage";
 
-export function EventCell({ event, bookmarked }: EventProps) {
+function EventCell({ event, bookmarked }: EventProps) {
   const [bookmark, setBookmark] = useState(false);
 
   useEffect(() => {
@@ -43,9 +43,11 @@ export function EventCell({ event, bookmarked }: EventProps) {
         </div>
         <div className='w-11/12'>
           <Link href={`/events/${event.id}`} prefetch={false}>
-            <a className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold'>
+            <button
+              type='button'
+              className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold'>
               {event.title}
-            </a>
+            </button>
           </Link>
           <p className='text-xs sm:text-base md:text-lg lg:text-xl'>
             {event.location}
@@ -63,6 +65,7 @@ export function EventCell({ event, bookmarked }: EventProps) {
         </div>
         <div>
           <button
+            type='button'
             className='flex w-10 items-start align-middle mx-2 cursor-pointer place-content-end'
             onClick={() => eventBookmark()}>
             {bookmark ? (

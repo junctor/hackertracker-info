@@ -1,7 +1,7 @@
 import NavLinks from "./NavLinks";
-import { SpeakerSearch } from "./SpeakerSearch";
+import SpeakerSearch from "./SpeakerSearch";
 
-export const SpeakerHeading = ({ speakers }: SpeakersProps) => {
+function SpeakerHeading({ speakers }: SpeakersProps) {
   return (
     <header className='sticky top-0 z-50 pb-2'>
       <nav className='flex bg-black h-20 items-center justify-around py-1'>
@@ -24,6 +24,6 @@ export const SpeakerHeading = ({ speakers }: SpeakersProps) => {
       </nav>
     </header>
   );
-};
+}
 
 export default SpeakerHeading;

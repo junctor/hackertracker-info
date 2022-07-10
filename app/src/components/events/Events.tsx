@@ -1,20 +1,15 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef } from "react";
 import { dateGroupTitle, tabDateTitle } from "../../utils/dates";
-import EventCell from "./EventCell";
-import Theme from "../../utils/theme";
-import { getBookmarks } from "../../utils/storage";
+import EventDisplay from "./EventDisplay";
 
-export const Events = ({ dateGroup, title }: EventsProps) => {
+function Events({ dateGroup, title }: EventsProps) {
   const componentRef = useRef<HTMLDivElement>(null);
-  const theme = new Theme();
-
-  const bookmarks = getBookmarks();
 
   useEffect(() => {
     if (!componentRef.current) return;
 
     document.querySelectorAll(".event-days").forEach((eE) => {
-      let element = eE as HTMLDivElement;
+      const element = eE as HTMLDivElement;
       const observer = new IntersectionObserver(
         ([entry]) =>
           element.classList.toggle("invisible", entry.isIntersecting),
@@ -28,7 +23,8 @@ export const Events = ({ dateGroup, title }: EventsProps) => {
     });
   }, [dateGroup]);
 
-  const isBookMarked = (id: number) => bookmarks.includes(id);
+  const scrollDay = (day: string) =>
+    tabDateTitle(day).replaceAll(" ", "s").toLowerCase();
 
   const scrollToDay = (day: string) => {
     if (componentRef && componentRef.current) {
@@ -38,25 +34,8 @@ export const Events = ({ dateGroup, title }: EventsProps) => {
     }
   };
 
-  const divDay = (day: string) => {
-    return tabDateTitle(day).replaceAll(" ", "").toLowerCase();
-  };
-
-  const scrollDay = (day: string) => {
-    return tabDateTitle(day).replaceAll(" ", "s").toLowerCase();
-  };
-
-  const EventDisplay = memo(({ htEvents }: { htEvents: EventData[] }) => (
-    <div>
-      {htEvents.map((htEvent) => (
-        <div key={htEvent.id} id={htEvent.id.toString()}>
-          <EventCell event={htEvent} bookmarked={isBookMarked(htEvent.id)} />
-        </div>
-      ))}
-    </div>
-  ));
-
-  EventDisplay.displayName = "EventDisplay";
+  const divDay = (day: string) =>
+    tabDateTitle(day).replaceAll(" ", "").toLowerCase();
 
   return (
     <div ref={componentRef}>
@@ -77,9 +56,10 @@ export const Events = ({ dateGroup, title }: EventsProps) => {
               <div className='bg-black justify-center items-center flex'>
                 {Array.from(dateGroup).map(([tabDay]) => (
                   <button
+                    type='button'
                     key={tabDay}
                     className={`p-2 mx-1 rounded-lg text-xs sm:text-sm md:text-base lg:text-lg font-semibold ${
-                      day == tabDay ? "bg-dc-blue" : "hover:text-gray-400"
+                      day === tabDay ? "bg-dc-blue" : "hover:text-gray-400"
                     }`}
                     onClick={() => scrollToDay(tabDay)}>
                     {tabDateTitle(tabDay)}
@@ -98,6 +78,6 @@ export const Events = ({ dateGroup, title }: EventsProps) => {
       </div>
     </div>
   );
-};
+}
 
 export default memo(Events);

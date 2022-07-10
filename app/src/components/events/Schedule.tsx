@@ -2,10 +2,10 @@ import { createDateGroup } from "../../utils/dates";
 import Events from "./Events";
 import EventHeading from "../heading/EventHeading";
 
-export const Schedule = ({ events, title }: ScheduleProps) => {
-  let dateGroup = createDateGroup(events);
+function Schedule({ events, title }: ScheduleProps) {
+  const dateGroup = createDateGroup(events);
 
-  let headingEvents: EventSearch[] = events
+  const headingEvents: EventSearch[] = events
     .map((e) => ({
       title: e.title,
       id: e.id,
@@ -14,9 +14,8 @@ export const Schedule = ({ events, title }: ScheduleProps) => {
     .sort((a, b) => {
       if (a.title.toLowerCase() > b.title.toLowerCase()) {
         return 1;
-      } else {
-        return -1;
       }
+      return -1;
     });
 
   return (
@@ -25,6 +24,6 @@ export const Schedule = ({ events, title }: ScheduleProps) => {
       <Events dateGroup={dateGroup} title={title} />
     </div>
   );
-};
+}
 
 export default Schedule;

@@ -1,17 +1,14 @@
-import { memo, useEffect, useRef, useState } from "react";
-import { dateGroupTitle, tabDateTitle } from "../../utils/dates";
-import Theme from "../../utils/theme";
-import { getBookmarks } from "../../utils/storage";
-import Link from "next/link";
+import { memo, useEffect, useRef } from "react";
+import SpeakerDisplay from "./SpeakerDisplay";
 
-export const SpeakerList = ({ speakerGroup }: SpeakerListProps) => {
+function SpeakerList({ speakerGroup }: SpeakerListProps) {
   const componentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!componentRef.current) return;
 
     document.querySelectorAll(".event-days").forEach((eE) => {
-      let element = eE as HTMLDivElement;
+      const element = eE as HTMLDivElement;
       const observer = new IntersectionObserver(
         ([entry]) =>
           element.classList.toggle("invisible", entry.isIntersecting),
@@ -33,22 +30,6 @@ export const SpeakerList = ({ speakerGroup }: SpeakerListProps) => {
     }
   };
 
-  const SpeakerDisplay = memo(({ speakers }: { speakers: Speaker[] }) => (
-    <div>
-      {speakers.map((s) => (
-        <div key={s.id} className='ml-10 my-5'>
-          <Link href={`/speakers/${s.id}`} prefetch={false}>
-            <a className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold'>
-              {s.name}
-            </a>
-          </Link>
-        </div>
-      ))}
-    </div>
-  ));
-
-  SpeakerDisplay.displayName = "EventDisplay";
-
   return (
     <div ref={componentRef}>
       <div className='flex items-center justify-center mb-5'>
@@ -65,9 +46,10 @@ export const SpeakerList = ({ speakerGroup }: SpeakerListProps) => {
               <div className='bg-black justify-center items-center flex'>
                 {Array.from(speakerGroup).map(([tabI]) => (
                   <button
+                    type='button'
                     key={tabI}
                     className={`flex flex-wrap p-0.5 sm:p-1 md:p-2 mx-0 lg:mx-1 rounded sm:rounded-md text-xs sm:text-sm md:text-base lg:text-lg font-semibold ${
-                      i == tabI ? "bg-dc-blue" : "hover:text-gray-400"
+                      i === tabI ? "bg-dc-blue" : "hover:text-gray-400"
                     }`}
                     onClick={() => scrollToSpeaker(tabI)}>
                     {tabI}
@@ -86,6 +68,6 @@ export const SpeakerList = ({ speakerGroup }: SpeakerListProps) => {
       </div>
     </div>
   );
-};
+}
 
 export default memo(SpeakerList);

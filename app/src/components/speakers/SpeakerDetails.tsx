@@ -1,13 +1,10 @@
-import { ClockIcon, MapIcon } from "@heroicons/react/outline";
+/* eslint-disable react/no-array-index-key */
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import cal from "../../utils/cal";
 import { eventTime } from "../../utils/dates";
-import { getBookmarks } from "../../utils/storage";
 import Theme from "../../utils/theme";
 import FormatDesc from "../misc/FormatDesc";
 
-export function EventDetails({ speaker }: SpeakerDetailProps) {
+function EventDetails({ speaker }: SpeakerDetailProps) {
   const theme = new Theme();
   theme.randomisze();
 
@@ -42,9 +39,11 @@ export function EventDetails({ speaker }: SpeakerDetailProps) {
                 />
                 <div className='inline-block text-left'>
                   <Link href={`/events/${e.id}`}>
-                    <a className=' text-bold text-xs sm:text-sm md:text-base lg:text-lg'>
+                    <button
+                      type='button'
+                      className=' text-bold text-xs sm:text-sm md:text-base lg:text-lg'>
                       {e.title}
-                    </a>
+                    </button>
                   </Link>
                   <p className='text-xs md:text-sm lg:text-base text-gray-400'>
                     {`${eventTime(new Date(e.begin))} - ${eventTime(

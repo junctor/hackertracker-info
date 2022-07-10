@@ -1,3 +1,4 @@
+/* eslint-disable react/function-component-definition */
 import { promises as fs } from "fs";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -28,16 +29,16 @@ export async function getStaticProps(context: { params: { event: string } }) {
 
   const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
 
-  let eventFile = await fs.readFile(confFile, {
+  const eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 
-  let events: HTEvent[] = JSON.parse(eventFile) ?? [];
-  let event = events.find((e) => e.id.toString() === eventId);
+  const events: HTEvent[] = JSON.parse(eventFile) ?? [];
+  const event = events.find((e) => e.id.toString() === eventId);
 
   return {
     props: {
-      event: event,
+      event,
     },
   };
 }
@@ -45,21 +46,19 @@ export async function getStaticProps(context: { params: { event: string } }) {
 export async function getStaticPaths() {
   const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
 
-  let eventFile = await fs.readFile(confFile, {
+  const eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 
-  let events: HTEvent[] = JSON.parse(eventFile) ?? [];
+  const events: HTEvent[] = JSON.parse(eventFile) ?? [];
 
-  const paths = events?.map((e) => {
-    return {
-      params: {
-        event: e.id.toString(),
-      },
-    };
-  });
+  const paths = events?.map((e) => ({
+    params: {
+      event: e.id.toString(),
+    },
+  }));
   return {
-    paths: paths,
+    paths,
     fallback: false,
   };
 }

@@ -5,7 +5,7 @@ import { eventTime } from "../../utils/dates";
 import Theme from "../../utils/theme";
 import FormatDesc from "../misc/FormatDesc";
 
-export function EventDetails({ event }: EventDetailProps) {
+function EventDetails({ event }: EventDetailProps) {
   const theme = new Theme();
   theme.randomisze();
 
@@ -26,7 +26,9 @@ export function EventDetails({ event }: EventDetailProps) {
             }}
           />
           <Link href={`/categories/${event.type.id}`}>
-            <a className='md:text-base lg:text-lg text-xs'>{event.type.name}</a>
+            <button type='button' className='md:text-base lg:text-lg text-xs'>
+              {event.type.name}
+            </button>
           </Link>
         </div>
         <div className='flex items-center bg-dc-gray w-11/12  mt-2 md:h-14 lg:h-16 h-12 rounded-lg cursor-pointer'>
@@ -54,6 +56,7 @@ export function EventDetails({ event }: EventDetailProps) {
       <div className='mt-8'>
         <div className='text-sm md:text-base lg:text-lg w-11/12'>
           {event.android_description.split("\n").map((d, index) => (
+            // eslint-disable-next-line react/no-array-index-key
             <div className='mt-2' key={`${d}-${event.id}-${index}`}>
               <FormatDesc details={d} />
             </div>
@@ -92,9 +95,11 @@ export function EventDetails({ event }: EventDetailProps) {
                 />
                 <div className='inline-block text-left'>
                   <Link href={`/speakers/${s.id}`}>
-                    <a className='text-bold text-xs sm:text-sm md:text-base lg:text-lg'>
+                    <button
+                      type='button'
+                      className='text-bold text-xs sm:text-sm md:text-base lg:text-lg'>
                       {s.name}
-                    </a>
+                    </button>
                   </Link>
                   <p className='text-xs md:text-sm lg:text-base text-gray-400'>
                     {s.title ?? "Hacker"}

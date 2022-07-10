@@ -5,7 +5,7 @@ import {
   AnnotationIcon,
 } from "@heroicons/react/outline";
 
-const CategoryCell = ({ category }: CategoryCellProps) => {
+function CategoryCell({ category }: CategoryCellProps) {
   return (
     <div className='my-2 ml-2 mr-3'>
       <div className='flex bg-black items-center'>
@@ -19,9 +19,11 @@ const CategoryCell = ({ category }: CategoryCellProps) => {
         </div>
         <div className='w-11/12 ml-2'>
           <Link href={`/categories/${category.id}`} prefetch={false}>
-            <a className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold'>
+            <button
+              type='button'
+              className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold'>
               {category.name}
-            </a>
+            </button>
           </Link>
         </div>
         <div className='flex mr-2'>
@@ -44,6 +46,6 @@ const CategoryCell = ({ category }: CategoryCellProps) => {
       </div>
     </div>
   );
-};
+}
 
 export default CategoryCell;

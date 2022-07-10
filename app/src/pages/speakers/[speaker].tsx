@@ -1,11 +1,9 @@
+/* eslint-disable react/function-component-definition */
 import { promises as fs } from "fs";
 import type { NextPage } from "next";
 import Head from "next/head";
 import path from "path";
-import Event from "../../components/events/Event";
-import EventDetails from "../../components/events/EventDetails";
 import Speaker from "../../components/speakers/Speaker";
-import SpeakerDetails from "../../components/speakers/SpeakerDetails";
 
 const SpeakerPage: NextPage<SpeakerDetailProps> = (props) => {
   const { speaker } = props;
@@ -34,17 +32,17 @@ export async function getStaticProps(context: { params: { speaker: string } }) {
     "./public/static/conf/speakers.json"
   );
 
-  let speakerFile = await fs.readFile(confFile, {
+  const speakerFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 
-  let speakers: HTSpeaker[] = JSON.parse(speakerFile) ?? [];
+  const speakers: HTSpeaker[] = JSON.parse(speakerFile) ?? [];
 
-  let speaker = speakers.find((s) => s.id.toString() === speakerId);
+  const speaker = speakers.find((s) => s.id.toString() === speakerId);
 
   return {
     props: {
-      speaker: speaker,
+      speaker,
     },
   };
 }
@@ -55,21 +53,19 @@ export async function getStaticPaths() {
     "./public/static/conf/speakers.json"
   );
 
-  let speakerFile = await fs.readFile(confFile, {
+  const speakerFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 
-  let speakers: HTSpeaker[] = JSON.parse(speakerFile) ?? [];
+  const speakers: HTSpeaker[] = JSON.parse(speakerFile) ?? [];
 
-  const paths = speakers?.map((s) => {
-    return {
-      params: {
-        speaker: s.id.toString(),
-      },
-    };
-  });
+  const paths = speakers?.map((s) => ({
+    params: {
+      speaker: s.id.toString(),
+    },
+  }));
   return {
-    paths: paths,
+    paths,
     fallback: false,
   };
 }

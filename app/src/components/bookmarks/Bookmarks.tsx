@@ -1,11 +1,11 @@
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createDateGroup } from "../../utils/dates";
 import Events from "../events/Events";
 import EventHeading from "../heading/EventHeading";
 import { getBookmarks } from "../../utils/storage";
 
-export const Bookmarks = ({ events, title }: ScheduleProps) => {
-  let [bookmarkedEvents, setBookmarkedEvents] = useState<EventData[]>([]);
+function Bookmarks({ events, title }: ScheduleProps) {
+  const [bookmarkedEvents, setBookmarkedEvents] = useState<EventData[]>([]);
 
   useEffect(() => {
     const bookmarks = getBookmarks();
@@ -13,9 +13,9 @@ export const Bookmarks = ({ events, title }: ScheduleProps) => {
     setBookmarkedEvents(bEvents);
   }, [events]);
 
-  let dateGroup = createDateGroup(bookmarkedEvents);
+  const dateGroup = createDateGroup(bookmarkedEvents);
 
-  let headingEvents: EventSearch[] = bookmarkedEvents
+  const headingEvents: EventSearch[] = bookmarkedEvents
     .map((e) => ({
       title: e.title,
       id: e.id,
@@ -24,9 +24,8 @@ export const Bookmarks = ({ events, title }: ScheduleProps) => {
     .sort((a, b) => {
       if (a.title.toLowerCase() > b.title.toLowerCase()) {
         return 1;
-      } else {
-        return -1;
       }
+      return -1;
     });
 
   return (
@@ -35,6 +34,6 @@ export const Bookmarks = ({ events, title }: ScheduleProps) => {
       <Events dateGroup={dateGroup} title={title} />
     </div>
   );
-};
+}
 
 export default Bookmarks;

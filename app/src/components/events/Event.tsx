@@ -1,8 +1,7 @@
 import { EventDetailHeading } from "../heading/EventDetailsHeading";
-import NavLinks from "../heading/NavLinks";
 import EventDetails from "./EventDetails";
 
-export const Event = ({ event }: EventDetailProps) => {
+function Event({ event }: EventDetailProps) {
   return (
     <div>
       {event && (
@@ -13,6 +12,6 @@ export const Event = ({ event }: EventDetailProps) => {
       )}{" "}
     </div>
   );
-};
+}
 
 export default Event;

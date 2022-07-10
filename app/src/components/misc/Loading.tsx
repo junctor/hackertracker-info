@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-export function Loading() {
+function Loading() {
   return (
     <div className='flex content-center h-screen'>
       <img

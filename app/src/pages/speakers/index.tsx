@@ -1,10 +1,10 @@
+/* eslint-disable react/function-component-definition */
 import type { NextPage } from "next";
 import { promises as fs } from "fs";
 import path from "path";
 import Head from "next/head";
-import Categories from "../../components/categories/Categories";
-import { toCategories, toSpeakers } from "../../utils/misc";
 import Speakers from "../../components/speakers/Speakers";
+import { toSpeakers } from "../../utils/misc";
 
 const SpeakersPage: NextPage<SpeakersProps> = (props) => {
   const { speakers } = props;
@@ -33,13 +33,13 @@ export async function getStaticProps() {
     "./public/static/conf/speakers.json"
   );
 
-  let speakerFile = await fs.readFile(confFile, {
+  const speakerFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 
-  let speakers: HTSpeaker[] = JSON.parse(speakerFile) ?? [];
+  const speakers: HTSpeaker[] = JSON.parse(speakerFile) ?? [];
 
-  let speakerData = toSpeakers(speakers);
+  const speakerData = toSpeakers(speakers);
 
   return {
     props: {

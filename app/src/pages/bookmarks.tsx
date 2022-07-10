@@ -1,3 +1,4 @@
+/* eslint-disable react/function-component-definition */
 import type { NextPage } from "next";
 import { promises as fs } from "fs";
 import path from "path";
@@ -20,7 +21,7 @@ const BookmarksPage: NextPage<ScheduleProps> = (props) => {
       </Head>
 
       <main className='bg-black'>
-        <Bookmarks events={events} title={"Bookmarks"} />
+        <Bookmarks events={events} title='Bookmarks' />
       </main>
     </div>
   );
@@ -29,13 +30,13 @@ const BookmarksPage: NextPage<ScheduleProps> = (props) => {
 export async function getStaticProps() {
   const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
 
-  let eventFile = await fs.readFile(confFile, {
+  const eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
   });
 
-  let events: HTEvent[] = JSON.parse(eventFile) ?? [];
+  const events: HTEvent[] = JSON.parse(eventFile) ?? [];
 
-  let eventsData = toEventsData(events);
+  const eventsData = toEventsData(events);
 
   return {
     props: {

@@ -2,8 +2,8 @@ import SpeakerList from "./SpeakerList";
 import SpeakerHeading from "../heading/SpeakerHeading";
 import { createSpeakerGroup } from "../../utils/misc";
 
-export const Speakers = ({ speakers }: SpeakersProps) => {
-  let speakerGroup = createSpeakerGroup(speakers);
+function Speakers({ speakers }: SpeakersProps) {
+  const speakerGroup = createSpeakerGroup(speakers);
 
   return (
     <div>
@@ -11,6 +11,6 @@ export const Speakers = ({ speakers }: SpeakersProps) => {
       <SpeakerList speakerGroup={speakerGroup} />
     </div>
   );
-};
+}
 
 export default Speakers;

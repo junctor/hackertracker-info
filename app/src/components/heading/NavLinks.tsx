@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
 import { Menu, Transition } from "@headlessui/react";
 import {
   MenuIcon,
@@ -20,22 +20,9 @@ import {
   TagIcon as TagIconOutline,
   DeviceMobileIcon as DeviceMobileIconOutline,
 } from "@heroicons/react/outline";
-
-import { forwardRef } from "react";
+import PageLink from "../misc/PageLink";
 
 export default function NavLinks() {
-  // eslint-disable-next-line react/display-name
-  const PageLink = forwardRef((props: any, ref: any) => {
-    let { href, children, active, ...rest } = props;
-    return (
-      <Link href={href}>
-        <a className={`block ${active}`} ref={ref} {...rest}>
-          {children}
-        </a>
-      </Link>
-    );
-  });
-
   return (
     <Menu>
       <Menu.Button>

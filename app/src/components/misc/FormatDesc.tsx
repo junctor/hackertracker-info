@@ -1,8 +1,6 @@
-const FormatDescription = ({ details }: { details: string }) => {
-  const urlRegex = new RegExp(
-    "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)",
-    "ig"
-  );
+function FormatDescription({ details }: { details: string }) {
+  const urlRegex =
+    /((https?|ftp|gopher|telnet|file):((\/\/)|(\\))+[\w\d:#@%/;$()~_?+-=\\.&]*)/gi;
 
   const text = details
     .replaceAll("\n", " ")
@@ -20,7 +18,7 @@ const FormatDescription = ({ details }: { details: string }) => {
       )
     );
 
-  return <>{text}</>;
-};
+  return <span>{text}</span>;
+}
 
 export default FormatDescription;

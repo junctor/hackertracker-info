@@ -3,8 +3,8 @@ import type { NextPage } from "next";
 import { promises as fs } from "fs";
 import path from "path";
 import Head from "next/head";
-import { toEventsData } from "../utils/misc";
-import Bookmarks from "../components/bookmarks/Bookmarks";
+import { toEventsData } from "../../utils/misc";
+import Bookmarks from "../../components/bookmarks/Bookmarks";
 
 const BookmarksPage: NextPage<ScheduleProps> = (props) => {
   const { events } = props;

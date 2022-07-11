@@ -3,6 +3,7 @@ import { StarIcon as StarIconSoild } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 import NavLinks from "./NavLinks";
 import { addBookmark, getBookmarks, removeBookmark } from "../../utils/storage";
+import HeadingLogo from "./HeadingLogo";
 
 export function EventDetailHeading({ eventId }: EventDetailHeaderProps) {
   const [bookmark, setBookmark] = useState(false);
@@ -31,12 +32,7 @@ export function EventDetailHeading({ eventId }: EventDetailHeaderProps) {
           </div>
         </div>
         <div className='flex-1 my-auto'>
-          <div className='text-center'>
-            <h1 className='text-xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-mono'>
-              D<span className='text-dc-red'>3</span>F C
-              <span className='text-dc-red'>0</span>N
-            </h1>
-          </div>
+          <HeadingLogo />
         </div>
         <div className='flex text-right mr-5'>
           <button type='button' onClick={() => eventBookmark()}>

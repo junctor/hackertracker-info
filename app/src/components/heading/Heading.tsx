@@ -1,3 +1,4 @@
+import HeadingLogo from "./HeadingLogo";
 import NavLinks from "./NavLinks";
 
 function Heading() {
@@ -9,10 +10,7 @@ function Heading() {
         </div>
       </div>
       <div className='navbar-center'>
-        <p className='md:text-5xl lg:text-5xl text-4xl font-bold font-mono'>
-          D<span className='text-dc-red'>3</span>F C
-          <span className='text-dc-red'>0</span>N
-        </p>
+        <HeadingLogo />
       </div>
       <div className='navbar-end' />
     </div>

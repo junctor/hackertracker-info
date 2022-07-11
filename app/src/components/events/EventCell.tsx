@@ -36,7 +36,7 @@ function EventCell({ event, bookmarked }: EventProps) {
           {timeDisplayParts(event.begin).map((part) => (
             <p
               key={part}
-              className='text-xs sm:text-xs md:text-sm lg:text-base font-bold text-dc-text'>
+              className='text-xs sm:text-sm md:text-sm lg:text-base font-bold text-dc-text'>
               {part}
             </p>
           ))}
@@ -45,7 +45,7 @@ function EventCell({ event, bookmarked }: EventProps) {
           <Link href={`/events/${event.id}`} prefetch={false}>
             <button
               type='button'
-              className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold'>
+              className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-left'>
               {event.title}
             </button>
           </Link>
@@ -59,7 +59,7 @@ function EventCell({ event, bookmarked }: EventProps) {
                 event.color === "#ababa" ? "#e25238" : event.color,
             }}
           />
-          <p className='text-xs sm:text-xs md:text-sm lg:text-base inline-flex'>
+          <p className='text-xs sm:text-xs sm:text-sm md:text-sm lg:text-base inline-flex'>
             {event.category}
           </p>
         </div>

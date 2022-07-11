@@ -12,7 +12,7 @@ function EventDetails({ event }: EventDetailProps) {
   return (
     <div className='mt-4 ml-5'>
       <div>
-        <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5'>
+        <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5 mr-3'>
           {event.title}
         </h1>
       </div>
@@ -101,7 +101,7 @@ function EventDetails({ event }: EventDetailProps) {
                       {s.name}
                     </button>
                   </Link>
-                  <p className='text-xs md:text-sm lg:text-base text-gray-400'>
+                  <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
                     {s.title ?? "Hacker"}
                   </p>
                 </div>

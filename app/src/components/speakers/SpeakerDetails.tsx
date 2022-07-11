@@ -11,7 +11,7 @@ function EventDetails({ speaker }: SpeakerDetailProps) {
   return (
     <div className='mt-4 ml-5'>
       <div>
-        <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5'>
+        <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5 mr-3'>
           {speaker.name}
         </h1>
       </div>
@@ -41,16 +41,16 @@ function EventDetails({ speaker }: SpeakerDetailProps) {
                   <Link href={`/events/${e.id}`}>
                     <button
                       type='button'
-                      className=' text-bold text-xs sm:text-sm md:text-base lg:text-lg'>
+                      className='text-bold text-xs sm:text-sm md:text-base lg:text-lg'>
                       {e.title}
                     </button>
                   </Link>
-                  <p className='text-xs md:text-sm lg:text-base text-gray-400'>
+                  <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
                     {`${eventTime(new Date(e.begin))} - ${eventTime(
                       new Date(e.end)
                     )}`}
                   </p>
-                  <p className='text-xs md:text-sm lg:text-base text-gray-400'>
+                  <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
                     {e.location.name}
                   </p>
                 </div>

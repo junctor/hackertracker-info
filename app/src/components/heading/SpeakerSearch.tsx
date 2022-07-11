@@ -35,7 +35,9 @@ function SpeakerSearch({ speakers }: SpeakersProps) {
       <Combobox
         value={query}
         onChange={(speakerId) => {
-          router.push(`/speakers/${speakerId}`);
+          if (speakerId) {
+            router.push(`/speakers/${speakerId}`);
+          }
         }}
         nullable>
         <div className='relative'>

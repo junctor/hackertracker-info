@@ -50,7 +50,9 @@ function EventSearch({ events }: EventSearchProps) {
       <Combobox
         value={query}
         onChange={(eventId) => {
-          router.push(`/events/${eventId}`);
+          if (eventId) {
+            router.push(`/events/${eventId}`);
+          }
         }}
         nullable>
         <div className='relative'>

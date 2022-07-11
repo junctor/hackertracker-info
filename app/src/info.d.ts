@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 interface EventProps {
   event: EventData;
   bookmarked: boolean;
@@ -88,4 +89,17 @@ interface SpeakerSearching {
 
 interface SpeakerDetailProps {
   speaker: HTSpeaker;
+}
+
+interface InfoProps {
+  conference: HTConference | null;
+}
+
+interface ConInfoProps {
+  conference: HTConference;
+}
+
+interface InfoSectionProps {
+  section: string;
+  content: string;
 }

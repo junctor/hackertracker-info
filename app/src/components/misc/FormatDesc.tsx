@@ -3,7 +3,6 @@ function FormatDescription({ details }: { details: string }) {
     /((https?|ftp|gopher|telnet|file):((\/\/)|(\\))+[\w\d:#@%/;$()~_?+-=\\.&]*)/gi;
 
   const text = details
-    .replaceAll("\n", " ")
     .split(/(\s+)/)
     .map((word) =>
       urlRegex.test(word) ? (
@@ -18,7 +17,11 @@ function FormatDescription({ details }: { details: string }) {
       )
     );
 
-  return <span>{text}</span>;
+  return (
+    <p className='text-xs sm:text-sm md:text-base lg:text-lg whitespace-pre-line'>
+      {text}
+    </p>
+  );
 }
 
 export default FormatDescription;

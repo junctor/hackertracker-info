@@ -97,3 +97,10 @@ interface HTSpeaker {
   twitter: string;
   events: [HTEvent];
 }
+
+interface HTFAQ {
+  id: number;
+  question: string;
+  answer: string;
+  updated_at: string;
+}

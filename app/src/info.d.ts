@@ -93,10 +93,20 @@ interface SpeakerDetailProps {
 
 interface InfoProps {
   conference: HTConference | null;
+  faq: HTFAQ[];
 }
 
 interface ConInfoProps {
   conference: HTConference;
+  faq: HTFAQ[];
+}
+
+interface InfoDisplayProps {
+  conference: HTConference;
+}
+
+interface FaqProps {
+  faq: HTFAQ[];
 }
 
 interface InfoSectionProps {

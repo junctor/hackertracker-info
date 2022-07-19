@@ -8,7 +8,7 @@ import {
   where,
 } from "firebase/firestore/lite";
 import { Firestore } from "firebase/firestore";
-import type { HTConference, HTEvent, HTSpeaker } from "./ht";
+import type { HTConference, HTEvent, HTFAQ, HTSpeaker } from "./ht";
 
 export async function firebaseInit() {
   const firebaseConfig = {
@@ -62,6 +62,20 @@ export async function getConfEvents(
   const docSnap = await getDocs(q);
   const firebaseData: HTEvent[] = docSnap.docs.map(
     (eventsDoc: { data: () => any }) => eventsDoc.data()
+  );
+
+  return firebaseData;
+}
+
+export async function getConfFAQ(
+  db: Firestore,
+  conference: string
+): Promise<HTFAQ[]> {
+  const docRef = collection(db, "conferences", conference, "faqs");
+  const q = query(docRef, orderBy("id", "desc"));
+  const docSnap = await getDocs(q);
+  const firebaseData: HTFAQ[] = docSnap.docs.map(
+    (faqDoc: { data: () => any }) => faqDoc.data()
   );
 
   return firebaseData;

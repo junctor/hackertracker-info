@@ -6,7 +6,7 @@ import Head from "next/head";
 import Info from "../../components/info/info";
 
 const InfoPage: NextPage<InfoProps> = (props) => {
-  const { conference } = props;
+  const { conference, faq } = props;
   return (
     <div>
       <Head>
@@ -20,7 +20,7 @@ const InfoPage: NextPage<InfoProps> = (props) => {
       </Head>
 
       <main className='bg-black'>
-        <Info conference={conference} />
+        <Info conference={conference} faq={faq} />
       </main>
     </div>
   );
@@ -36,11 +36,20 @@ export async function getStaticProps() {
     encoding: "utf-8",
   });
 
-  const conf: HTConference = JSON.parse(confData) ?? null;
+  const conference: HTConference = JSON.parse(confData) ?? null;
+
+  const faqFile = path.join(process.cwd(), "./public/static/conf/faq.json");
+
+  const faqData = await fs.readFile(faqFile, {
+    encoding: "utf-8",
+  });
+
+  const faq: HTFAQ = JSON.parse(faqData) ?? [];
 
   return {
     props: {
-      conference: conf,
+      conference,
+      faq,
     },
   };
 }

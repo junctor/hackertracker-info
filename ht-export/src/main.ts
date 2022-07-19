@@ -4,6 +4,7 @@ import {
   getConference,
   getConfEvents,
   getSpeakerData,
+  getConfFAQ,
 } from "./fb";
 
 const CONF = "DEFCON29";
@@ -11,10 +12,11 @@ const CONF = "DEFCON29";
 (async () => {
   const fbDb = await firebaseInit();
 
-  const [htConf, htEvents, htSpeakers] = await Promise.all([
+  const [htConf, htEvents, htSpeakers, htFAQ] = await Promise.all([
     getConference(fbDb, CONF),
     getConfEvents(fbDb, CONF),
     getSpeakerData(fbDb, CONF),
+    getConfFAQ(fbDb, CONF),
   ]);
 
   const outputDir = "./out";
@@ -26,5 +28,6 @@ const CONF = "DEFCON29";
     fs.promises.writeFile("./out/conference.json", JSON.stringify(htConf)),
     fs.promises.writeFile("./out/events.json", JSON.stringify(htEvents)),
     fs.promises.writeFile("./out/speakers.json", JSON.stringify(htSpeakers)),
+    fs.promises.writeFile("./out/faq.json", JSON.stringify(htFAQ)),
   ]);
 })();

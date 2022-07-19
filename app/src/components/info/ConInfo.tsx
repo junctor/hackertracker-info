@@ -1,8 +1,8 @@
 import InfoSection from "./InfoSection";
 
-function ConInfo({ conference }: ConInfoProps) {
+function ConInfo({ conference }: InfoDisplayProps) {
   return (
-    <div className='m-5'>
+    <div className='mt-5 mx-8'>
       {conference.description && (
         <InfoSection section='DEF CON 30' content={conference.description} />
       )}

@@ -9,13 +9,19 @@ function FaqSection({ section, content }: InfoSectionProps) {
       <Disclosure>
         {({ open }: { open: boolean }) => (
           <>
-            <Disclosure.Button className='flex w-full justify-between rounded-lg bg-dc-gray p-2 text-left font-bold text-sm sm:text-base md:text-lg lg:text-xl'>
-              <span>{section}</span>
-              <ChevronLeftIcon
-                className={`${
-                  open ? "-rotate-90 transform" : ""
-                } w-5 sm:w-6 md:w-7 lg:w-8 text-dc-red`}
-              />
+            <Disclosure.Button className='flex w-full rounded-lg bg-dc-gray p-2'>
+              <div className='flex text-start w-full'>
+                <div className='text-left font-bold text-sm sm:text-base md:text-lg lg:text-xl flex-1 w-11/12'>
+                  {section}
+                </div>
+                <div className='w-8 flex-none text-end self-center'>
+                  <ChevronLeftIcon
+                    className={`${
+                      open ? "-rotate-90 transform" : ""
+                    } w-5 sm:w-6 md:w-7 lg:w-8  text-dc-red`}
+                  />
+                </div>
+              </div>
             </Disclosure.Button>
             <Disclosure.Panel className='p-4'>
               <FormatDescription details={content} />

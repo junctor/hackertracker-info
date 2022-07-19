@@ -26,12 +26,7 @@ function EventCell({ event, bookmarked }: EventProps) {
   return (
     <div className='my-2 ml-2 mr-3'>
       <div className='flex bg-black items-center'>
-        <div
-          className={`ml-1 w-2 h-24 ${
-            event.color === "#ababa" ? "bg-dc-pink" : `bg-[${event.color}]`
-          }`}>
-          &nbsp;
-        </div>
+        <div className={`ml-1 w-2 h-24 bg-[${event.color}]`}>&nbsp;</div>
         <div className='w-20 text-center '>
           {timeDisplayParts(event.begin).map((part) => (
             <p
@@ -49,17 +44,14 @@ function EventCell({ event, bookmarked }: EventProps) {
               {event.title}
             </button>
           </Link>
+
           <p className='text-xs sm:text-base md:text-lg lg:text-xl'>
             {event.location}
           </p>
           <div
-            className='rounded-full h-3 w-3 green inline-flex mr-2'
-            style={{
-              backgroundColor:
-                event.color === "#ababa" ? "#e25238" : event.color,
-            }}
+            className={`rounded-full h-3 w-3 green inline-flex mr-2 bg-[${event.color}]`}
           />
-          <p className='text-xs sm:text-xs sm:text-sm md:text-sm lg:text-base inline-flex'>
+          <p className='text-xs sm:text-sm md:text-sm lg:text-base inline-flex'>
             {event.category}
           </p>
         </div>

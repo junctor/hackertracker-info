@@ -146,7 +146,7 @@ export default function NavLinks() {
           </Menu.Item>
           <Menu.Item>
             {({ active }: any) => (
-              <PageLink href='/hackertracker' active={active}>
+              <PageLink href='/apps' active={active}>
                 <span className='flex'>
                   {active ? (
                     <DeviceMobileIconSoild className='w-6 mr-2' />

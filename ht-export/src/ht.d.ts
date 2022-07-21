@@ -62,7 +62,7 @@ interface HTEvent {
   end: string;
   end_timestamp: Timestamp;
   includes: string;
-  links: HTLinks[];
+  links?: HTLinks[];
   title: string;
   location: HTLocationModel;
   speakers: HTSpeaker[];

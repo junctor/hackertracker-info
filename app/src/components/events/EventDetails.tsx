@@ -61,9 +61,9 @@ function EventDetails({ event }: EventDetailProps) {
               <FormatDesc details={d} />
             </div>
           ))}
-          {event.links.length > 0 && (
+          {(event.links ?? []).length > 0 && (
             <div className='mt-5 text-xs'>
-              {event.links.map((l) => (
+              {event.links?.map((l) => (
                 <div className='mt-1' key={l.url}>
                   <p className='inline'>{`${l.label}: `}</p>
                   <a

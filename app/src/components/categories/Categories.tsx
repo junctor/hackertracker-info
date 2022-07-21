@@ -13,7 +13,7 @@ function Categories({ categories }: CategoriesProps) {
           return -1;
         })
         .map((c) => (
-          <div key={c.data?.id}>
+          <div key={c.data?.id ?? 0}>
             {c.data && <CategoryCell category={c.data} />}
           </div>
         ))}

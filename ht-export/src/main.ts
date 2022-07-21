@@ -7,7 +7,7 @@ import {
   getConfFAQ,
 } from "./fb";
 
-const CONF = "DEFCON29";
+const CONF = "DEFCON30";
 
 (async () => {
   const fbDb = await firebaseInit();

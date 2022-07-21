@@ -15,7 +15,7 @@ export const toCategories = (events: HTEvent[]): CategoryData[] => {
     return cats;
   }, new Map<string, HTEventType>());
 
-  let catData: CategoryData[] = Array.from(catDataMap.keys()).map((e) => ({
+  const catData: CategoryData[] = Array.from(catDataMap.keys())?.map((e) => ({
     name: e,
     data: catDataMap.get(e),
   }));
@@ -29,7 +29,7 @@ export const toSpeakers = (events: HTSpeaker[]): Speaker[] => {
     return speakers;
   }, new Map<string, HTSpeaker>());
 
-  let speakerData: Speaker[] = Array.from(speakerDataMap.keys()).map((e) => ({
+  const speakerData: Speaker[] = Array.from(speakerDataMap.keys()).map((e) => ({
     name: e,
     id: speakerDataMap.get(e)?.id ?? 0,
   }));
@@ -37,9 +37,21 @@ export const toSpeakers = (events: HTSpeaker[]): Speaker[] => {
   return speakerData;
 };
 
+const sortSpeakers = (a: Speaker, b: Speaker) => {
+  if (a.name.toLowerCase() > b.name.toLowerCase()) {
+    return 1;
+  }
+
+  if (a.name.toLowerCase() < b.name.toLowerCase()) {
+    return -1;
+  }
+
+  return 0;
+};
+
 const groupedSpeakers = (speakers: Speaker[]): Map<string, Speaker[]> =>
   speakers.sort(sortSpeakers).reduce((group, s) => {
-    let firstLetter = s.name.toLowerCase()[0] ?? "";
+    const firstLetter = s.name.toLowerCase()[0] ?? "";
     const iSpeakers = group.get(firstLetter) ?? [];
     iSpeakers.push(s);
     group.set(firstLetter, iSpeakers);
@@ -53,15 +65,3 @@ export const createSpeakerGroup = (speakers: Speaker[]) =>
       et.sort(sortSpeakers),
     ])
   );
-
-const sortSpeakers = (a: Speaker, b: Speaker) => {
-  if (a.name.toLowerCase() > b.name.toLowerCase()) {
-    return 1;
-  }
-
-  if (a.name.toLowerCase() < b.name.toLowerCase()) {
-    return -1;
-  }
-
-  return 0;
-};

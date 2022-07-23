@@ -2,21 +2,11 @@
 import { Tab } from "@headlessui/react";
 
 /* eslint-disable @next/next/no-img-element */
-function MapsDisplay() {
-  const confMaps = [
-    {
-      name: "Forum",
-      map: "forum.webp",
-    },
-    {
-      name: "Flamingo",
-      map: "flamingo.webp",
-    },
-    {
-      name: "Linq",
-      map: "linq.webp",
-    },
-  ];
+function MapsDisplay({ conference }: MapProps) {
+  const confMaps = (conference?.maps ?? []).map((m) => ({
+    name: m.name,
+    map: m.file,
+  }));
 
   return (
     <div className='mt-10 w-full px-10'>
@@ -40,10 +30,11 @@ function MapsDisplay() {
         <Tab.Panels>
           {confMaps.map((m) => (
             <Tab.Panel key={m.name}>
-              <img
+              <embed
                 src={`/static/conf/maps/${m.map}`}
-                alt={`DEF CON ${m.name} Map`}
-                className='rounded-xl'
+                width='100%'
+                height='800px'
+                type='application/pdf'
               />
             </Tab.Panel>
           ))}

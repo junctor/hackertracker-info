@@ -96,6 +96,10 @@ interface InfoProps {
   faq: HTFAQ[];
 }
 
+interface MapProps {
+  conference: HTConference | null;
+}
+
 interface ConInfoProps {
   conference: HTConference;
   faq: HTFAQ[];

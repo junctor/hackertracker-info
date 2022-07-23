@@ -2,12 +2,12 @@ import Heading from "../heading/Heading";
 import PageTitle from "../misc/PageTitle";
 import MapsDisplay from "./MapsDisplay";
 
-function Apps() {
+function Apps({ conference }: MapProps) {
   return (
     <div>
       <Heading />
       <PageTitle title='Maps' />
-      <MapsDisplay />
+      <MapsDisplay conference={conference} />
     </div>
   );
 }

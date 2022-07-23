@@ -8,6 +8,7 @@ import {
   where,
 } from "firebase/firestore/lite";
 import { Firestore } from "firebase/firestore";
+import { getBytes, getStorage, ref } from "firebase/storage";
 import type { HTConference, HTEvent, HTFAQ, HTSpeaker } from "./ht";
 
 export async function firebaseInit() {
@@ -79,4 +80,14 @@ export async function getConfFAQ(
   );
 
   return firebaseData;
+}
+
+export async function getMaps(db: Firestore, conference: string, file: string) {
+  const storage = getStorage(db.app);
+  const pathReference = ref(storage, `${conference}/${file}`);
+  const bytes = await getBytes(pathReference);
+  return {
+    file,
+    bytes,
+  };
 }

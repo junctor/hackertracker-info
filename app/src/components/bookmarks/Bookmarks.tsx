@@ -3,6 +3,7 @@ import { createDateGroup } from "../../utils/dates";
 import Events from "../events/Events";
 import EventHeading from "../heading/EventHeading";
 import { getBookmarks } from "../../utils/storage";
+import NoBookmarks from "./NoBookmarks";
 
 function Bookmarks({ events, title }: ScheduleProps) {
   const [bookmarkedEvents, setBookmarkedEvents] = useState<EventData[]>([]);
@@ -31,7 +32,11 @@ function Bookmarks({ events, title }: ScheduleProps) {
   return (
     <div>
       <EventHeading events={headingEvents} />
-      <Events dateGroup={dateGroup} title={title} />
+      {bookmarkedEvents.length === 0 ? (
+        <NoBookmarks />
+      ) : (
+        <Events dateGroup={dateGroup} title={title} />
+      )}
     </div>
   );
 }

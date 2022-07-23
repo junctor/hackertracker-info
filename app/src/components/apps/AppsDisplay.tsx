@@ -9,32 +9,30 @@ function AppsDisplay() {
         <h1 className='text-base sm:text-lg md:text-xl llg:text-2xl font-mono my-2 text-dc-blue'>
           The official DEF CON app
         </h1>
-        <div className='flex place-items-center items-center justify-center mt-5'>
-          <div className=''>
-            <a href='https://play.google.com/store/apps/details?id=com.shortstack.hackertracker&hl=en_US'>
-              <img
-                src='/static/img/appstore-badge.svg'
-                width='150px'
-                alt='Download on the App Store'
-              />
-            </a>
-          </div>
+        <div className='flex place-items-center items-center justify-center mt-10 flex-col md:flex-row'>
+          <a href='https://itunes.apple.com/us/app/hackertracker/id1021141595?mt=8'>
+            <button
+              type='button'
+              className='m-2 bg-dc-red p-5 rounded-2xl font-bold text-xl w-48 hover:bg-dc-drk-green'>
+              iOS
+            </button>
+          </a>
           <div>
             <a href='https://play.google.com/store/apps/details?id=com.shortstack.hackertracker&hl=en_US'>
-              <img
-                src='/static/img/google-play-badge.png'
-                width='190px'
-                alt='Get it on Google Play'
-              />
+              <button
+                type='button'
+                className='m-2 bg-dc-blue p-5 rounded-2xl font-bold text-xl w-48 hover:bg-dc-drk-green'>
+                Android
+              </button>
             </a>
           </div>
         </div>
-        <div className='text-xs sm:text-sm md:text-sm lg:text-base mt-10'>
+        <div className='text-sm lg:text-base mt-10 mx-5'>
           <p className='my-1'>
             App Store and the App Store logo are registered trademarks of Apple
             Inc.
           </p>
-          <p className='my-1'>
+          <p className='my-2'>
             Google Play and the Google Play logo are trademarks of Google LLC.
           </p>
         </div>

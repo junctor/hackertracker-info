@@ -1,5 +1,6 @@
 import { memo, useEffect, useRef } from "react";
 import { dateGroupTitle, tabDateTitle } from "../../utils/dates";
+import PageTitle from "../misc/PageTitle";
 import EventDisplay from "./EventDisplay";
 
 function Events({ dateGroup, title }: EventsProps) {
@@ -39,11 +40,7 @@ function Events({ dateGroup, title }: EventsProps) {
 
   return (
     <div ref={componentRef}>
-      <div className='flex items-center justify-center mb-5'>
-        <h1 className='text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold font-mono'>
-          {title}
-        </h1>
-      </div>
+      <PageTitle title={title} />
       <div>
         {Array.from(dateGroup).map(([day, htEvents]) => (
           <div

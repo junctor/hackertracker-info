@@ -35,13 +35,13 @@ function EventDetails({ speaker }: SpeakerDetailProps) {
                 key={e.id}
                 className='ml-3 flex mt-2 mb-2 align-middle items-center'>
                 <div
-                  className={`ml-1 h-12 sm:h-14 md:h-16 lg:h-20 w-1 sm:w-2 mr-3 bg-[${e.type.color}]`}
+                  className={`ml-1 h-16 md:h-20 w-1 md:w-2 mr-3 bg-[${e.type.color}] rounded-md`}
                 />
                 <div className='inline-block text-left'>
                   <Link href={`/events/${e.id}`}>
                     <button
                       type='button'
-                      className='text-bold text-xs sm:text-sm md:text-base lg:text-lg'>
+                      className='text-bold text-xs sm:text-sm md:text-base lg:text-lg text-left'>
                       {e.title}
                     </button>
                   </Link>

@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 
 function SearchLinks({ speaker, active }: SpeakerSearching) {
   return (
-    <div className={`py-1 mb-1 ${active ? "bg-dc-red" : "bg-black"}`}>
+    <div className={`py-1 mb-1 ${active ? "bg-dc-red font-bold" : "bg-black"}`}>
       <div className='mx-5 text-left'>
         <p className='text-sm sm:text-sm md:text-base lg:text-lg '>
           {speaker.name}

@@ -8,17 +8,10 @@ function SearchLinks({ event, active }: EventSearching) {
   return (
     <div
       className={`py-1 mb-1 ${
-        active
-          ? event.color === "#ababa"
-            ? "bg-dc-pink"
-            : `bg-[${event.color}]`
-          : "bg-black"
+        active ? `bg-[${event.color}] font-bold` : "bg-black"
       }`}>
       <div className='mx-1 table items-center'>
-        <div
-          className={`w-1 h-full table-cell ${
-            event.color === "#ababa" ? "bg-dc-pink" : `bg-[${event.color}]`
-          }`}>
+        <div className={`w-1 h-full table-cell bg-[${event.color}]`}>
           &nbsp;
         </div>
         <div className='ml-2'>

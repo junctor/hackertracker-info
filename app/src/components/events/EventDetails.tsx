@@ -91,7 +91,7 @@ function EventDetails({ event }: EventDetailProps) {
                 key={s.id}
                 className='ml-3 flex mt-2 mb-2 align-middle items-center'>
                 <div
-                  className={`ml-1 h-10 sm:h-12 md:h-14 lg:h-16 w-1 sm:w-2 mr-3 bg-${theme.nextColor}`}
+                  className={`ml-1 h-10 sm:h-12 md:h-14 lg:h-16 w-1 sm:w-2 mr-3 bg-${theme.nextColor} rounded-md`}
                 />
                 <div className='inline-block text-left'>
                   <Link href={`/speakers/${s.id}`}>

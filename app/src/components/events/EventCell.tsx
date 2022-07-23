@@ -24,10 +24,12 @@ function EventCell({ event, bookmarked }: EventProps) {
   };
 
   return (
-    <div className='my-2 ml-2 mr-3'>
+    <div className='my-3 ml-2 mr-3'>
       <div className='flex bg-black items-center'>
-        <div className={`ml-1 w-2 h-24 bg-[${event.color}]`}>&nbsp;</div>
-        <div className='w-20 text-center '>
+        <div className={`ml-1 w-2 md:w-3 h-28 bg-[${event.color}] rounded-md`}>
+          &nbsp;
+        </div>
+        <div className='w-20 text-center'>
           {timeDisplayParts(event.begin).map((part) => (
             <p
               key={part}
@@ -40,12 +42,12 @@ function EventCell({ event, bookmarked }: EventProps) {
           <Link href={`/events/${event.id}`} prefetch={false}>
             <button
               type='button'
-              className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-left'>
+              className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-left break-words'>
               {event.title}
             </button>
           </Link>
 
-          <p className='text-xs sm:text-base md:text-lg lg:text-xl'>
+          <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
             {event.location}
           </p>
           <div
@@ -58,7 +60,7 @@ function EventCell({ event, bookmarked }: EventProps) {
         <div>
           <button
             type='button'
-            className='flex w-10 items-start align-middle mx-2 cursor-pointer place-content-end'
+            className='w-6 items-start align-middle mx-2 sm:mx-3 md:mx-4 lg:mx-5 cursor-pointer place-content-end'
             onClick={() => eventBookmark()}>
             {bookmark ? (
               <StarIconSoild className='h-5 sm:h-6 md:h-7 lg:h-8' />

@@ -1,9 +1,11 @@
+/* eslint-disable global-require */
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
   safelist: [
+    // DC30 Theme
     "text-dc-pink",
     "text-dc-blue",
     "text-dc-green",
@@ -14,18 +16,9 @@ module.exports = {
     "bg-dc-green",
     "bg-dc-drk-green",
     "bg-dc-red",
-    "bg-[#000000]",
-    "hover:bg-[#000000]",
-    "bg-[#092047]",
-    "hover:bg-[#092047]",
-    "bg-[#6497DC]",
-    "hover:bg-[#6497DC]",
-    "bg-[#e23be0]",
-    "hover:bg-[#e23be0]",
-    "bg-[#e2463b]",
-    "hover:bg-[#e2463b]",
-    "bg-[#ffffff]",
-    "hover:bg-[#ffffff]",
+    //  Event colors
+    "bg-[#2896ff]",
+    "hover:bg-[#2896ff]",
   ],
   theme: {
     extend: {

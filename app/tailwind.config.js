@@ -1,4 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
+
+const dcSafeList = require("./tailwind-ht-safelist.json");
+
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx}",
@@ -17,8 +21,9 @@ module.exports = {
     "bg-dc-drk-green",
     "bg-dc-red",
     //  Event colors
-    "bg-[#2896ff]",
-    "hover:bg-[#2896ff]",
+    ...dcSafeList.colors.map((c) => `bg-[${c}]`),
+    ...dcSafeList.colors.map((c) => `hover:text-[${c}]`),
+    ...dcSafeList.colors.map((c) => `hover:bg-[${c}]`),
   ],
   theme: {
     extend: {

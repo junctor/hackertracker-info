@@ -49,6 +49,7 @@ interface EventData {
   location: string;
   color: string;
   category: string;
+  speakers: string;
 }
 
 interface CategoriesProps {

@@ -1,5 +1,10 @@
-export const toEventsData = (events: HTEvent[]): EventData[] =>
-  events.map((e) => ({
+export const toEventsData = (events: HTEvent[]): EventData[] => {
+  const formatter = new Intl.ListFormat("en", {
+    style: "long",
+    type: "conjunction",
+  });
+
+  return events.map((e) => ({
     id: e.id,
     begin: e.begin,
     beginTimestampSeconds: e.begin_timestamp.seconds,
@@ -7,7 +12,9 @@ export const toEventsData = (events: HTEvent[]): EventData[] =>
     location: e.location.name,
     color: e.type.color,
     category: e.type.name,
+    speakers: formatter.format(e.speakers.map((s) => s.name)),
   }));
+};
 
 export const toCategories = (events: HTEvent[]): CategoryData[] => {
   const catDataMap = events.reduce((cats, e) => {

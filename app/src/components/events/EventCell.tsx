@@ -47,6 +47,9 @@ function EventCell({ event, bookmarked }: EventProps) {
             </button>
           </Link>
 
+          <p className='text-xs sm:text-sm md:text-sm lg:text-base '>
+            {event.speakers}
+          </p>
           <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
             {event.location}
           </p>

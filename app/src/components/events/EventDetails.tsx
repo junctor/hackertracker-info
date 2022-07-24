@@ -12,7 +12,7 @@ function EventDetails({ event }: EventDetailProps) {
   return (
     <div className='mt-4 ml-5'>
       <div>
-        <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5 mr-3'>
+        <h1 className='font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5 mr-3'>
           {event.title}
         </h1>
       </div>
@@ -40,7 +40,7 @@ function EventDetails({ event }: EventDetailProps) {
             download={`dc30-${event.id}.ics`}>
             <ClockIcon className='h-5 w-5 md:h-7 md:w-7 lg:w-8 lg:h-8 ml-3 mr-2' />
             <p className='md:text-base lg:text-lg text-xs'>
-              {`${eventTime(new Date(event.begin))} - ${eventTime(
+              {`${eventTime(new Date(event.begin), false)} - ${eventTime(
                 new Date(event.end)
               )}`}
             </p>
@@ -89,21 +89,23 @@ function EventDetails({ event }: EventDetailProps) {
             {event.speakers.map((s) => (
               <div
                 key={s.id}
-                className='ml-3 flex mt-2 mb-2 align-middle items-center'>
+                className='ml-3 table mt-2 mb-2 align-middle items-center'>
                 <div
-                  className={`ml-1 h-10 sm:h-12 md:h-14 lg:h-16 w-1 sm:w-2 mr-3 bg-${theme.nextColor} rounded-md`}
+                  className={`ml-1 table-cell h-full w-1 sm:w-2 mr-3 bg-${theme.nextColor} rounded-md`}
                 />
-                <div className='inline-block text-left'>
+                <div className='inline-block text-left ml-2'>
                   <Link href={`/speakers/${s.id}`}>
                     <button
                       type='button'
-                      className='text-bold text-xs sm:text-sm md:text-base lg:text-lg'>
+                      className='font-bold text-xs sm:text-sm md:text-base lg:text-lg'>
                       {s.name}
                     </button>
                   </Link>
-                  <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
-                    {s.title ?? "Hacker"}
-                  </p>
+                  {s.title && (
+                    <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
+                      {s.title}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}

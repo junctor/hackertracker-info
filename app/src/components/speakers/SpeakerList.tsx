@@ -57,7 +57,7 @@ function SpeakerList({ speakerGroup }: SpeakerListProps) {
                 ))}
               </div>
             </div>
-            <p className='text-xl sm:text-2xl md:text-3xl lg:text-4xl my-3 text-center font-bold'>
+            <p className='text-xl sm:text-2xl md:text-3xl lg:text-4xl my-3 text-center font-bold text-dc-green'>
               {i}
             </p>
             <div>

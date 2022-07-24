@@ -9,7 +9,7 @@ function SpeakerDisplay({ speakers }: { speakers: Speaker[] }) {
           <Link href={`/speakers/${s.id}`} prefetch={false}>
             <button
               type='button'
-              className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold'>
+              className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold hover:text-dc-red'>
               {s.name}
             </button>
           </Link>

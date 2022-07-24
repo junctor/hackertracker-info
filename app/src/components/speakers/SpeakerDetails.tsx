@@ -11,7 +11,7 @@ function EventDetails({ speaker }: SpeakerDetailProps) {
   return (
     <div className='mt-4 ml-5'>
       <div>
-        <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5 mr-3'>
+        <h1 className='font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5 mr-3'>
           {speaker.name}
         </h1>
       </div>
@@ -33,20 +33,20 @@ function EventDetails({ speaker }: SpeakerDetailProps) {
             {speaker.events.map((e) => (
               <div
                 key={e.id}
-                className='ml-3 flex mt-2 mb-2 align-middle items-center'>
+                className='ml-3 table mt-2 mb-2 align-middle items-center'>
                 <div
-                  className={`ml-1 h-16 md:h-20 w-1 md:w-2 mr-3 bg-[${e.type.color}] rounded-md`}
+                  className={`table-cell h-full w-1 md:w-2 bg-[${e.type.color}] rounded-md`}
                 />
-                <div className='inline-block text-left'>
+                <div className='text-left ml-2'>
                   <Link href={`/events/${e.id}`}>
                     <button
                       type='button'
-                      className='text-bold text-xs sm:text-sm md:text-base lg:text-lg text-left'>
+                      className='font-bold text-xs sm:text-sm md:text-base lg:text-lg text-left'>
                       {e.title}
                     </button>
                   </Link>
                   <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
-                    {`${eventTime(new Date(e.begin))} - ${eventTime(
+                    {`${eventTime(new Date(e.begin), false)} - ${eventTime(
                       new Date(e.end)
                     )}`}
                   </p>

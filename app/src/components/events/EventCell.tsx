@@ -25,11 +25,11 @@ function EventCell({ event, bookmarked }: EventProps) {
 
   return (
     <div className='my-3 ml-2 mr-3'>
-      <div className='flex bg-black items-center'>
-        <div className={`ml-1 w-2 md:w-3 h-28 bg-[${event.color}] rounded-md`}>
-          &nbsp;
-        </div>
-        <div className='w-20 text-center'>
+      <div className='bg-black items-center h-min-36 table'>
+        <div
+          className={`table-cell px-1 h-full md:w-3 bg-[${event.color}] rounded-md`}
+        />
+        <div className='text-center items-center table-cell px-3 align-middle'>
           {timeDisplayParts(event.begin).map((part) => (
             <p
               key={part}
@@ -38,11 +38,11 @@ function EventCell({ event, bookmarked }: EventProps) {
             </p>
           ))}
         </div>
-        <div className='w-11/12'>
+        <div className='w-11/12 table-cell'>
           <Link href={`/events/${event.id}`} prefetch={false}>
             <button
               type='button'
-              className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-left break-words'>
+              className={`text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-left break-words hover:text-[${event.color}]`}>
               {event.title}
             </button>
           </Link>
@@ -50,6 +50,7 @@ function EventCell({ event, bookmarked }: EventProps) {
           <p className='text-xs sm:text-sm md:text-sm lg:text-base '>
             {event.speakers}
           </p>
+
           <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
             {event.location}
           </p>
@@ -60,7 +61,7 @@ function EventCell({ event, bookmarked }: EventProps) {
             {event.category}
           </p>
         </div>
-        <div>
+        <div className='table-cell'>
           <button
             type='button'
             className='w-6 items-start align-middle mx-2 sm:mx-3 md:mx-4 lg:mx-5 cursor-pointer place-content-end'

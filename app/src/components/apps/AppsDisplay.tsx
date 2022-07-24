@@ -13,7 +13,7 @@ function AppsDisplay() {
           <a href='https://itunes.apple.com/us/app/hackertracker/id1021141595?mt=8'>
             <button
               type='button'
-              className='m-2 bg-dc-red p-5 rounded-2xl font-bold text-xl w-48 hover:bg-dc-drk-green'>
+              className='m-2 bg-dc-red p-5 rounded-2xl font-bold text-xl w-48 hover:bg-dc-green hover:text-black'>
               iOS
             </button>
           </a>
@@ -21,7 +21,7 @@ function AppsDisplay() {
             <a href='https://play.google.com/store/apps/details?id=com.shortstack.hackertracker&hl=en_US'>
               <button
                 type='button'
-                className='m-2 bg-dc-blue p-5 rounded-2xl font-bold text-xl w-48 hover:bg-dc-drk-green'>
+                className='m-2 bg-dc-blue p-5 rounded-2xl font-bold text-xl w-48 hover:bg-dc-green hover:text-black'>
                 Android
               </button>
             </a>

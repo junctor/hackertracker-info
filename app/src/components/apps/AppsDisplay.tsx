@@ -10,7 +10,10 @@ function AppsDisplay() {
           The official DEF CON app
         </h1>
         <div className='flex place-items-center items-center justify-center mt-10 flex-col md:flex-row'>
-          <a href='https://itunes.apple.com/us/app/hackertracker/id1021141595?mt=8'>
+          <a
+            href='https://itunes.apple.com/us/app/hackertracker/id1021141595?mt=8'
+            target='_blank'
+            rel='noopener noreferrer'>
             <button
               type='button'
               className='m-2 bg-dc-red p-5 rounded-2xl font-bold text-xl w-48 hover:bg-dc-green hover:text-black'>
@@ -18,7 +21,10 @@ function AppsDisplay() {
             </button>
           </a>
           <div>
-            <a href='https://play.google.com/store/apps/details?id=com.shortstack.hackertracker&hl=en_US'>
+            <a
+              href='https://play.google.com/store/apps/details?id=com.shortstack.hackertracker&hl=en_US'
+              target='_blank'
+              rel='noopener noreferrer'>
               <button
                 type='button'
                 className='m-2 bg-dc-blue p-5 rounded-2xl font-bold text-xl w-48 hover:bg-dc-green hover:text-black'>

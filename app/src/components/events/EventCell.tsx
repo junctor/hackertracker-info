@@ -64,13 +64,15 @@ function EventCell({ event, bookmarked }: EventProps) {
         <div className='table-cell'>
           <button
             type='button'
-            className='w-6 items-start align-middle mx-2 sm:mx-3 md:mx-4 lg:mx-5 cursor-pointer place-content-end'
+            className='w-6 align-middle mx-2 sm:mx-3 md:mx-4 lg:mx-5 cursor-pointer'
             onClick={() => eventBookmark()}>
-            {bookmark ? (
-              <StarIconSoild className='h-5 sm:h-6 md:h-7 lg:h-8' />
-            ) : (
-              <StarIconOutline className='h-5 sm:h-6 md:h-7 lg:h-8' />
-            )}
+            <div>
+              {bookmark ? (
+                <StarIconSoild className='h-5 sm:h-6 md:h-7 lg:h-8' />
+              ) : (
+                <StarIconOutline className='h-5 sm:h-6 md:h-7 lg:h-8' />
+              )}
+            </div>
           </button>
         </div>
       </div>

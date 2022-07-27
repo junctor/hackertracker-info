@@ -64,7 +64,7 @@ function Events({ dateGroup, title }: EventsProps) {
                 ))}
               </div>
             </div>
-            <p className='text-xl sm:text-2xl md:text-3xl lg:text-4xl my-2 text-center font-bold text-dc-green'>
+            <p className='text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center font-bold text-dc-green my-5'>
               {dateGroupTitle(day)}
             </p>
             <div>

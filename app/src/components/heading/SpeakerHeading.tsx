@@ -11,7 +11,7 @@ function SpeakerHeading({ speakers }: SpeakersProps) {
             <NavLinks />
           </div>
         </div>
-        <div className='flex-1 my-auto'>
+        <div className='flex w-screen my-auto text-left ml-2 sm:ml-3 md:ml-4 lg:ml-5'>
           <HeadingLogo />
         </div>
         <div className='flex text-right mr-5'>

@@ -3,17 +3,19 @@ import NavLinks from "./NavLinks";
 
 function Heading() {
   return (
-    <div className='navbar bg-black sticky top-0 z-50 h-16'>
-      <div className='navbar-start'>
-        <div className='dropdown'>
-          <NavLinks />
+    <header className='sticky top-0 z-50 pb-2'>
+      <nav className='flex bg-black h-20 items-center justify-around py-1'>
+        <div className='flex-none ml-1'>
+          <div>
+            <NavLinks />
+          </div>
         </div>
-      </div>
-      <div className='navbar-center'>
-        <HeadingLogo />
-      </div>
-      <div className='navbar-end' />
-    </div>
+        <div className='flex w-screen my-auto text-left ml-2 sm:ml-3 md:ml-4 lg:ml-5'>
+          <HeadingLogo />
+        </div>
+        <div className='flex text-right mr-5' />
+      </nav>
+    </header>
   );
 }
 

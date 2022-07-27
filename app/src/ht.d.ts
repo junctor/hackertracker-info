@@ -1,3 +1,5 @@
+import { StringifyOptions } from "querystring";
+
 /* eslint-disable no-use-before-define */
 interface ConfInfo {
   villages: Village[];
@@ -46,11 +48,7 @@ interface HTEventType {
   color: string;
   conferenceName: string;
   name: string;
-  description: string;
-  tags: string;
-  youtube_url: string;
-  discord_url: string;
-  subforum_url: string;
+  updated_at: string;
 }
 
 interface HTConference {
@@ -68,11 +66,17 @@ interface HTConference {
   timezone: string;
   description: string;
   end_timestamp: Timestamp;
+  supportdoc: string;
+  kickoff_timestamp_str: string;
+  kickoff_timestamp: Timestamp;
 }
 
 interface HTEvent {
+  updated_timestamp: Timestamp;
+  link: string;
   id: number;
   conferenceName: string;
+  conference_id: number;
   description: string;
   android_description: string;
   begin: string;
@@ -85,6 +89,8 @@ interface HTEvent {
   location: HTLocationModel;
   speakers: HTSpeaker[];
   type: HTEventType;
+  tag_ids: string[];
+  tags: string;
 }
 
 interface HTSpeaker {

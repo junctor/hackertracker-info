@@ -118,3 +118,21 @@ interface InfoSectionProps {
   section: string;
   content: string;
 }
+
+interface SplashProps {
+  data: SplashInfo;
+}
+
+interface SplashInfo {
+  counts: SplashCounts;
+  kickoff: string;
+}
+
+interface SplashCounts {
+  events: number;
+  speakers: number;
+}
+
+interface StatsProps {
+  counts: SplashCounts;
+}

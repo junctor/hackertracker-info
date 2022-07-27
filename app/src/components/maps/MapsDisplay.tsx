@@ -1,9 +1,10 @@
-/* eslint-disable react/no-unused-prop-types */
-import { Tab } from "@headlessui/react";
+import type { HTMaps } from "../../ht";
 
 /* eslint-disable @next/next/no-img-element */
 function MapsDisplay({ conference }: MapProps) {
-  const confMaps = (conference?.maps ?? []).map((m) => ({
+  const confMaps: { name: string; map: string }[] = (
+    conference?.maps ?? []
+  ).map((m: HTMaps) => ({
     name: m.name,
     map: m.file,
   }));
@@ -16,7 +17,7 @@ function MapsDisplay({ conference }: MapProps) {
             key={m.map}
             className='sm:inline p-2 mx-1 rounded-lg text-sm sm:text-base md:text-lg lg:text-xl font-bold hover:text-dc-pink'>
             <a
-              href={`/static/conf/maps/${m.map}`}
+              href={`/static/con/maps/${m.map}`}
               target='_blank'
               rel='noopener noreferrer'>
               {m.name}

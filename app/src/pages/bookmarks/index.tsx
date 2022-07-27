@@ -5,6 +5,7 @@ import path from "path";
 import Head from "next/head";
 import { toEventsData } from "../../utils/misc";
 import Bookmarks from "../../components/bookmarks/Bookmarks";
+import type { HTEvent } from "../../ht";
 
 const BookmarksPage: NextPage<ScheduleProps> = (props) => {
   const { events } = props;
@@ -28,7 +29,7 @@ const BookmarksPage: NextPage<ScheduleProps> = (props) => {
 };
 
 export async function getStaticProps() {
-  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
+  const confFile = path.join(process.cwd(), "./public/static/con/events.json");
 
   const eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",

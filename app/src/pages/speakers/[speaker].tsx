@@ -29,7 +29,7 @@ export async function getStaticProps(context: { params: { speaker: string } }) {
 
   const confFile = path.join(
     process.cwd(),
-    "./public/static/conf/speakers.json"
+    "./public/static/con/speakers.json"
   );
 
   const speakerFile = await fs.readFile(confFile, {
@@ -50,7 +50,7 @@ export async function getStaticProps(context: { params: { speaker: string } }) {
 export async function getStaticPaths() {
   const confFile = path.join(
     process.cwd(),
-    "./public/static/conf/speakers.json"
+    "./public/static/con/speakers.json"
   );
 
   const speakerFile = await fs.readFile(confFile, {

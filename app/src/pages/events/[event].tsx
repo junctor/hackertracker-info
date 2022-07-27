@@ -27,7 +27,7 @@ export async function getStaticProps(context: { params: { event: string } }) {
   const { params } = context;
   const eventId = params.event ?? "";
 
-  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
+  const confFile = path.join(process.cwd(), "./public/static/con/events.json");
 
   const eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",
@@ -44,7 +44,7 @@ export async function getStaticProps(context: { params: { event: string } }) {
 }
 
 export async function getStaticPaths() {
-  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
+  const confFile = path.join(process.cwd(), "./public/static/con/events.json");
 
   const eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",

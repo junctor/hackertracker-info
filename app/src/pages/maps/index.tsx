@@ -4,6 +4,7 @@ import Head from "next/head";
 import { promises as fs } from "fs";
 import path from "path";
 import Maps from "../../components/maps/Maps";
+import type { HTConference } from "../../ht";
 
 const MapsPage: NextPage<MapProps> = (props) => {
   const { conference } = props;
@@ -29,7 +30,7 @@ const MapsPage: NextPage<MapProps> = (props) => {
 export async function getStaticProps() {
   const confFile = path.join(
     process.cwd(),
-    "./public/static/conf/conference.json"
+    "./public/static/con/conference.json"
   );
 
   const confData = await fs.readFile(confFile, {

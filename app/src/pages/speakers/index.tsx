@@ -30,7 +30,7 @@ const SpeakersPage: NextPage<SpeakersProps> = (props) => {
 export async function getStaticProps() {
   const confFile = path.join(
     process.cwd(),
-    "./public/static/conf/speakers.json"
+    "./public/static/con/speakers.json"
   );
 
   const speakerFile = await fs.readFile(confFile, {

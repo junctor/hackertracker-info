@@ -28,7 +28,7 @@ const SchedulePage: NextPage<ScheduleProps> = (props) => {
 };
 
 export async function getStaticProps() {
-  const confFile = path.join(process.cwd(), "./public/static/conf/events.json");
+  const confFile = path.join(process.cwd(), "./public/static/con/events.json");
 
   const eventFile = await fs.readFile(confFile, {
     encoding: "utf-8",

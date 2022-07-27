@@ -39,4 +39,4 @@ ht-export/dist
 ht-export/out
 
 # Ignore Exported HT
-app/public/static/conf
+app/public/static/con

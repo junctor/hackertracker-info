@@ -80,10 +80,6 @@ export function eventTime(time: Date, tz = true): string {
     timeZone: "America/Los_Angeles",
   };
 
-  if (tz) {
-    options.timeZoneName = "short";
-  }
-
   return time.toLocaleTimeString("en-US", options);
 }
 

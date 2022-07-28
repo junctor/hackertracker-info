@@ -12,6 +12,9 @@ function ConInfo({ conference }: InfoDisplayProps) {
           content={conference.codeofconduct}
         />
       )}
+      {conference.supportdoc && (
+        <InfoSection section='Support' content={conference.supportdoc} />
+      )}
     </div>
   );
 }

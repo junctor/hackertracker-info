@@ -4,7 +4,6 @@ import Head from "next/head";
 import { promises as fs } from "fs";
 import path from "path";
 import Maps from "../../components/maps/Maps";
-import type { HTConference } from "../../ht";
 
 const MapsPage: NextPage<MapProps> = (props) => {
   const { conference } = props;

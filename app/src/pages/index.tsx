@@ -4,7 +4,6 @@ import Head from "next/head";
 import { promises as fs } from "fs";
 import path from "path";
 import Splash from "../components/splash/Splash";
-import type { HTConference, HTEvent, HTSpeaker } from "../ht";
 
 const Home: NextPage<SplashProps> = (props) => {
   const { data } = props;

@@ -4,7 +4,6 @@ import { promises as fs } from "fs";
 import path from "path";
 import Head from "next/head";
 import Info from "../../components/info/info";
-import type { HTConference, HTFAQ } from "../../ht";
 
 const InfoPage: NextPage<InfoProps> = (props) => {
   const { conference, faq } = props;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import type { Timer } from "../../ht";
 
 function Countdown({ kickoff }: { kickoff: string }) {
   const [timer, setTimer] = useState<Timer>({
@@ -9,31 +8,29 @@ function Countdown({ kickoff }: { kickoff: string }) {
     seconds: 0,
   });
 
-  function getCountdown(): Timer {
-    const now = new Date().valueOf();
-    const dc30 = new Date(kickoff).valueOf();
-    const d = (dc30 - now) / (24 * 60 * 60 * 1000);
-    const h = (d % 1) * 24;
-    const m = (h % 1) * 60;
-    const s = (m % 1) * 60;
-
-    const cdTimer: Timer = {
-      days: Math.floor(d),
-      hours: Math.floor(h),
-      minutes: Math.floor(m),
-      seconds: Math.floor(s),
-    };
-
-    return cdTimer;
-  }
-
   useEffect(() => {
-    console.log(kickoff);
+    const getCountdown = () => {
+      const now = new Date().valueOf();
+      const dc30 = new Date(kickoff).valueOf();
+      const d = (dc30 - now) / (24 * 60 * 60 * 1000);
+      const h = (d % 1) * 24;
+      const m = (h % 1) * 60;
+      const s = (m % 1) * 60;
+
+      const cdTimer: Timer = {
+        days: Math.floor(d),
+        hours: Math.floor(h),
+        minutes: Math.floor(m),
+        seconds: Math.floor(s),
+      };
+
+      return cdTimer;
+    };
     const interval = setInterval(() => setTimer(getCountdown()), 1000);
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [kickoff]);
 
   return (
     <div className='grid place-items-center mt-3 md:mt-5'>

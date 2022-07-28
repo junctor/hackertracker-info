@@ -1,5 +1,3 @@
-import type { HTMaps } from "../../ht";
-
 /* eslint-disable @next/next/no-img-element */
 function MapsDisplay({ conference }: MapProps) {
   const confMaps: { name: string; map: string }[] = (

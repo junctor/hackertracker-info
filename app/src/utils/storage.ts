@@ -21,7 +21,7 @@ export const getBookmarks = () => {
     return [];
   }
 
-  let bookmarks: number[] =
+  const bookmarks: number[] =
     JSON.parse(localStorage.getItem("bookmarks") ?? "[]") ?? [];
   return bookmarks;
 };

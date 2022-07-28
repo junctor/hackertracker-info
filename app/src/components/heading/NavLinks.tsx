@@ -25,8 +25,8 @@ import PageLink from "../misc/PageLink";
 export default function NavLinks() {
   return (
     <Menu>
-      <Menu.Button>
-        <MenuIcon className='h-8 w-8 ml-1' />
+      <Menu.Button className='align-middle'>
+        <MenuIcon className='w-7 sm:w-8 md:w-9 lg:w-10 ml-1' />
       </Menu.Button>
       <Transition
         enter='transition duration-100 ease-in'

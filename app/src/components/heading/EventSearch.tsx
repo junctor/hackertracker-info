@@ -40,7 +40,7 @@ function EventSearch({ events }: EventSearchProps) {
     <div className='flex items-center'>
       {query === "" && (
         <div className='mr-5'>
-          <Clock />{" "}
+          <Clock />
         </div>
       )}
       <div

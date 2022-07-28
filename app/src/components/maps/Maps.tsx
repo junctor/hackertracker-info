@@ -2,7 +2,7 @@ import Heading from "../heading/Heading";
 import PageTitle from "../misc/PageTitle";
 import MapsDisplay from "./MapsDisplay";
 
-function Apps({ conference }: MapProps) {
+function Maps({ conference }: MapProps) {
   return (
     <div>
       <Heading />
@@ -12,4 +12,4 @@ function Apps({ conference }: MapProps) {
   );
 }
 
-export default Apps;
+export default Maps;

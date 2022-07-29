@@ -52,20 +52,6 @@ function MapsDisplay({ conference }: MapProps) {
           ))}
         </Tab.Panels>
       </Tab.Group>
-      <div>
-        {confMaps.map((m) => (
-          <div
-            key={m.map}
-            className='sm:inline p-2 mx-1 rounded-lg text-sm sm:text-base md:text-lg lg:text-xl font-bold hover:text-dc-pink'>
-            <a
-              href={`/static/con/maps/${m.map}`}
-              target='_blank'
-              rel='noopener noreferrer'>
-              {m.name}
-            </a>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

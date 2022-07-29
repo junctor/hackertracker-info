@@ -38,5 +38,8 @@ yarn-error.log*
 ht-export/dist
 ht-export/out
 
-# Ignore Exported HT
+# Ignore exported HT static files
 app/public/static/con
+
+# Ignore generated safe colors
+app/tailwind-ht-safelist.json

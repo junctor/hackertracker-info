@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 
 function Clock() {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
     const updateClock = setInterval(() => {
@@ -10,7 +14,11 @@ function Clock() {
           timeZone: "America/Los_Angeles",
         })
       );
-      setTime(date);
+      setTime({
+        hours: date.getHours(),
+        minutes: date.getMinutes(),
+        seconds: date.getSeconds(),
+      });
     }, 100);
     return () => clearInterval(updateClock);
   }, []);
@@ -20,17 +28,17 @@ function Clock() {
       <span className='countdown flex text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold'>
         <span
           className='text-dc-pink'
-          style={{ "--value": time.getHours() } as React.CSSProperties}
+          style={{ "--value": time.hours } as React.CSSProperties}
         />
         :
         <span
           className='text-dc-blue'
-          style={{ "--value": time.getMinutes() } as React.CSSProperties}
+          style={{ "--value": time.minutes } as React.CSSProperties}
         />
         :
         <span
           className='text-dc-green'
-          style={{ "--value": time.getSeconds() } as React.CSSProperties}
+          style={{ "--value": time.seconds } as React.CSSProperties}
         />
       </span>
       <p className='flex ml-1 md:ml-2 lg:ml-3 text-xs sm:text-sm md:text-base lg:text-lg'>

@@ -25,16 +25,24 @@ const CONF = "DEFCON30";
     fs.promises.mkdir(outputDir);
   }
 
-  const mapsDir = "./out/maps";
+  const conDir = "./out/con";
+  if (!fs.existsSync(conDir)) {
+    fs.promises.mkdir(conDir);
+  }
+
+  const mapsDir = "./out/con/maps";
   if (!fs.existsSync(mapsDir)) {
     fs.promises.mkdir(mapsDir);
   }
 
   await Promise.all([
-    fs.promises.writeFile("./out/conference.json", JSON.stringify(htConf)),
-    fs.promises.writeFile("./out/events.json", JSON.stringify(htEvents)),
-    fs.promises.writeFile("./out/speakers.json", JSON.stringify(htSpeakers)),
-    fs.promises.writeFile("./out/faq.json", JSON.stringify(htFAQ)),
+    fs.promises.writeFile("./out/con/conference.json", JSON.stringify(htConf)),
+    fs.promises.writeFile("./out/con/events.json", JSON.stringify(htEvents)),
+    fs.promises.writeFile(
+      "./out/con/speakers.json",
+      JSON.stringify(htSpeakers)
+    ),
+    fs.promises.writeFile("./out/con/faq.json", JSON.stringify(htFAQ)),
   ]);
 
   fbDb.app.options.storageBucket = "gs://hackertest-5a202.appspot.com";

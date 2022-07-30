@@ -2,14 +2,10 @@ import Link from "next/link";
 
 function CategoryCell({ category }: CategoryCellProps) {
   return (
-    <div className='my-5 ml-5'>
-      <div className='flex bg-black items-center'>
+    <div className='my-5 ml-2'>
+      <div className='flex bg-black items-center text-left'>
         <div
-          className={`ml-1 w-2 h-10 ${
-            category.color === "#ababa"
-              ? "bg-dc-pink"
-              : `bg-[${category.color}]`
-          }`}>
+          className={`ml-1 w-1 md:w-2 h-7 sm:h-8 md:h-9 lg:h-10 ${`bg-[${category.color}]`}`}>
           &nbsp;
         </div>
         <div className='w-11/12 ml-2'>

@@ -37,9 +37,9 @@ export function EventDetailHeading({ eventId }: EventDetailHeaderProps) {
         <div className='flex text-right mr-5'>
           <button type='button' onClick={() => eventBookmark()}>
             {bookmark ? (
-              <StarIconSoild className='w-7 sm:w-7 md:w-8 lg:w-9 mr-3' />
+              <StarIconSoild className='w-5 sm:w-6 md:w-7 lg:w-8 mr-3' />
             ) : (
-              <StarIconOutline className='w-7 sm:w-7 md:w-8 lg:w-9 mr-3' />
+              <StarIconOutline className='w-5 sm:w-6 md:w-7 lg:w-8 mr-3' />
             )}
           </button>
         </div>

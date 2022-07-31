@@ -9,7 +9,13 @@ import {
 } from "firebase/firestore/lite";
 import { Firestore } from "firebase/firestore";
 import { getBytes, getStorage, ref } from "firebase/storage";
-import type { HTConference, HTEvent, HTFAQ, HTSpeaker } from "./ht";
+import type {
+  HTConference,
+  HTEvent,
+  HTFAQ,
+  HTLocations,
+  HTSpeaker,
+} from "./ht";
 
 export async function firebaseInit() {
   const firebaseConfig = {
@@ -25,6 +31,19 @@ export async function firebaseInit() {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   return db;
+}
+
+export async function getLocationData(
+  db: Firestore,
+  conference: string
+): Promise<HTLocations[]> {
+  const docRef = collection(db, "conferences", conference, "locations");
+  const docSnap = await getDocs(docRef);
+  const firebaseData: HTLocations[] = docSnap.docs.map(
+    (speakerDoc) => speakerDoc.data() as any
+  );
+
+  return firebaseData;
 }
 
 export async function getSpeakerData(

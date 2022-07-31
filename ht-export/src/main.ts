@@ -6,6 +6,7 @@ import {
   getSpeakerData,
   getConfFAQ,
   getMaps,
+  getLocationData,
 } from "./fb";
 
 const CONF = "DEFCON30";
@@ -13,11 +14,12 @@ const CONF = "DEFCON30";
 (async () => {
   const fbDb = await firebaseInit();
 
-  const [htConf, htEvents, htSpeakers, htFAQ] = await Promise.all([
+  const [htConf, htEvents, htSpeakers, htFAQ, htLocations] = await Promise.all([
     getConference(fbDb, CONF),
     getConfEvents(fbDb, CONF),
     getSpeakerData(fbDb, CONF),
     getConfFAQ(fbDb, CONF),
+    getLocationData(fbDb, CONF),
   ]);
 
   const outputDir = "./out";
@@ -43,6 +45,10 @@ const CONF = "DEFCON30";
       JSON.stringify(htSpeakers)
     ),
     fs.promises.writeFile("./out/con/faq.json", JSON.stringify(htFAQ)),
+    fs.promises.writeFile(
+      "./out/con/locations.json",
+      JSON.stringify(htLocations)
+    ),
   ]);
 
   fbDb.app.options.storageBucket = "gs://hackertest-5a202.appspot.com";

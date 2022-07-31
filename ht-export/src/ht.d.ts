@@ -86,3 +86,19 @@ interface HTFAQ {
   answer: string;
   updated_at: string;
 }
+
+interface HTLocations {
+  hier_extent_left: string;
+  schedule: string[];
+  parent_id: number;
+  updated_at: string;
+  id: number;
+  conference: string;
+  peer_sort_order: number;
+  default_status: string;
+  name: string;
+  hier_depth: number;
+  conference_id: number;
+  hotel: string;
+  hier_extent_right: number;
+}

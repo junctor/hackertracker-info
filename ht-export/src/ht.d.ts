@@ -87,9 +87,16 @@ interface HTFAQ {
   updated_at: string;
 }
 
+interface HTLocationSchedule {
+  end: string;
+  begin: string;
+  notes: string | null;
+  status: string;
+}
+
 interface HTLocations {
   hier_extent_left: string;
-  schedule: string[];
+  schedule: HTLocationSchedule[];
   parent_id: number;
   updated_at: string;
   id: number;

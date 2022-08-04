@@ -9,6 +9,28 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
   safelist: [
+    // Locations
+    "ml-4",
+    "ml-8",
+    "ml-12",
+    "ml-14",
+    "ml-16",
+    "ml-18",
+    "w-7",
+    "w-6",
+    "w-5",
+    "w-4",
+    "w-3",
+    "w-2",
+    "w-1",
+    "h-7",
+    "h-6",
+    "h-5",
+    "h-4",
+    "h-3",
+    "h-2",
+    "h-1",
+
     // DC30 Theme
     "text-dc-pink",
     "text-dc-blue",

@@ -108,3 +108,28 @@ interface HTFAQ {
   answer: string;
   updated_at: string;
 }
+
+interface HTLocationSchedule {
+  end: string;
+  begin: string;
+  notes: string | null;
+  status: string;
+}
+
+interface HTLocations {
+  hier_extent_left: number;
+  schedule: HTLocationSchedule[];
+  parent_id: number;
+  updated_at: string;
+  id: number;
+  conference_id: number;
+  conference: string;
+  peer_sort_order: number;
+  default_status: string;
+  name: string;
+  hier_depth: number;
+  conference_id: number;
+  hotel: string;
+  hier_extent_right: number;
+  short_name: string;
+}

@@ -3,7 +3,7 @@ import PageTitle from "../misc/PageTitle";
 import ConInfo from "./ConInfo";
 import FAQ from "./FAQ";
 
-function Info({ conference, faq }: InfoProps) {
+function Information({ conference, faq }: InfoProps) {
   return (
     <div>
       <Heading />
@@ -14,4 +14,4 @@ function Info({ conference, faq }: InfoProps) {
   );
 }
 
-export default Info;
+export default Information;

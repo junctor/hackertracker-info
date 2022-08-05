@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { promises as fs } from "fs";
 import path from "path";
 import Head from "next/head";
-import Info from "../../components/info/info";
+import Information from "../../components/info/Information";
 
 const InfoPage: NextPage<InfoProps> = (props) => {
   const { conference, faq } = props;
@@ -20,7 +20,7 @@ const InfoPage: NextPage<InfoProps> = (props) => {
       </Head>
 
       <main className='bg-black'>
-        <Info conference={conference} faq={faq} />
+        <Information conference={conference} faq={faq} />
       </main>
     </div>
   );

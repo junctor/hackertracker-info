@@ -4,6 +4,10 @@ interface EventProps {
   bookmarked: boolean;
 }
 
+interface TVEventProps {
+  event: EventData;
+}
+
 interface EventDetailProps {
   event: HTEvent;
 }
@@ -15,6 +19,10 @@ interface EventDetailHeaderProps {
 interface ScheduleProps {
   events: EventData[];
   title: string;
+}
+
+interface TVProps {
+  events: EventData[];
 }
 
 interface EventHeadingProps {
@@ -45,6 +53,7 @@ interface EventData {
   id: number;
   begin: string;
   beginTimestampSeconds: number;
+  end: string;
   title: string;
   location: string;
   color: string;

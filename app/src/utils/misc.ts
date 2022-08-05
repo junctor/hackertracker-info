@@ -8,6 +8,7 @@ export const toEventsData = (events: HTEvent[]): EventData[] => {
     id: e.id,
     begin: e.begin,
     beginTimestampSeconds: e.begin_timestamp.seconds,
+    end: e.end,
     title: e.title,
     location: e.location.name,
     color: e.type.color,

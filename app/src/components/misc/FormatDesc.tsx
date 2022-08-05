@@ -3,7 +3,7 @@ function FormatDescription({ details }: { details: string }) {
     /((https?|ftp|gopher|telnet|file):((\/\/)|(\\))+[\w\d:#@%/;$()~_?+-=\\.&]*)/gi;
 
   const text = details
-    .replaceAll(" ------------------------------ ", "\n\n")
+    .replaceAll("<br />", "\n")
     .split(/(\s+)/)
     .map((word) =>
       urlRegex.test(word) ? (

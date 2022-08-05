@@ -40,26 +40,27 @@ function EventCell({ event, bookmarked }: EventProps) {
         </div>
         <div className='w-11/12 table-cell'>
           <Link href={`/events/${event.id}`} prefetch={false}>
-            <button
-              type='button'
-              className={`text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-left break-words hover:text-[${event.color}]`}>
-              {event.title}
+            <button type='button' className='text-left'>
+              <h1
+                className={`text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-left break-words hover:text-[${event.color}]`}>
+                {event.title}
+              </h1>
+
+              <p className='text-xs sm:text-sm md:text-sm lg:text-base '>
+                {event.speakers}
+              </p>
+
+              <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
+                {event.location}
+              </p>
+              <div
+                className={`rounded-full h-3 w-3 green inline-flex mr-2 bg-[${event.color}]`}
+              />
+              <p className='text-xs sm:text-sm md:text-sm lg:text-base inline-flex'>
+                {event.category}
+              </p>
             </button>
           </Link>
-
-          <p className='text-xs sm:text-sm md:text-sm lg:text-base '>
-            {event.speakers}
-          </p>
-
-          <p className='text-xs sm:text-sm md:text-sm lg:text-base text-gray-400'>
-            {event.location}
-          </p>
-          <div
-            className={`rounded-full h-3 w-3 green inline-flex mr-2 bg-[${event.color}]`}
-          />
-          <p className='text-xs sm:text-sm md:text-sm lg:text-base inline-flex'>
-            {event.category}
-          </p>
         </div>
         <div className='mx-1 sm:mx-2 md:mx-3 lg:mx-4 table-cell w-1/12'>
           <button

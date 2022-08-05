@@ -14,7 +14,7 @@ function LocationsDisplay({ locations }: LocationsProps) {
   }, new Map<number, HTLocations[]>());
 
   return (
-    <div className='ml-10'>
+    <div className='ml-1'>
       {sortedLocations
         .filter((l) => l.hier_depth === 1)
         .map((l) => (

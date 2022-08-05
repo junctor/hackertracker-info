@@ -6,23 +6,40 @@ function LocationCell({
   childrenLocations: Map<number, HTLocations[]>;
 }) {
   const circleStatus = (): string => {
+    const timeNow = new Date();
+
     const { schedule } = location;
 
-    if (schedule.length === 0) {
-      switch (location.default_status) {
-        case "open":
-          return "bg-dc-green";
-        case "closed":
-          return "bg-dc-red";
-        default:
-          return "bg-dc-gray";
+    if (schedule.length > 0) {
+      if (
+        schedule.some(
+          (s) =>
+            s.status === "open" &&
+            timeNow >= new Date(s.begin) &&
+            timeNow <= new Date(s.end)
+        )
+      ) {
+        return "bg-dc-green";
       }
-    } else if (schedule.every((s) => s.status === "open")) {
-      return "bg-dc-green";
-    } else if (schedule.every((s) => s.status === "closed")) {
-      return "bg-dc-red";
-    } else {
-      return "bg-dc-gray";
+      if (
+        schedule.some(
+          (s) =>
+            s.status === "closed" &&
+            timeNow >= new Date(s.begin) &&
+            timeNow <= new Date(s.end)
+        )
+      ) {
+        return "bg-dc-red";
+      }
+    }
+
+    switch (location.default_status) {
+      case "open":
+        return "bg-dc-green";
+      case "closed":
+        return "bg-dc-red";
+      default:
+        return "bg-dc-gray";
     }
   };
 
@@ -82,7 +99,7 @@ function LocationCell({
       <div className='flex items-center'>
         {location.hier_depth !== 1 && (
           <div
-            className={`rounded-full w-${heirCirle()} h-${heirCirle()} mr-2 ${circleStatus()}`}
+            className={`flex-none rounded-full w-${heirCirle()} h-${heirCirle()} mr-2 ${circleStatus()}`}
           />
         )}
         <h2 className={`${locationTitle()}`}>{location.short_name}</h2>

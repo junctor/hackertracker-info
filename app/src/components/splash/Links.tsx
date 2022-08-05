@@ -8,6 +8,7 @@ import {
   LocationMarkerIcon as LocationMarkerIconSoild,
   TagIcon as TagIconSoild,
   DeviceMobileIcon as DeviceMobileIconSoild,
+  MapIcon as MapIconSoild,
 } from "@heroicons/react/solid";
 import {
   InformationCircleIcon as InformationCircleIconOutline,
@@ -17,6 +18,7 @@ import {
   LocationMarkerIcon as LocationMarkerIconOutline,
   TagIcon as TagIconOutline,
   DeviceMobileIcon as DeviceMobileIconOutline,
+  MapIcon as MapIconOutline,
 } from "@heroicons/react/outline";
 
 function Links() {
@@ -42,6 +44,18 @@ function Links() {
       active: StarIconSoild,
     },
     {
+      url: "/maps",
+      label: "Maps",
+      icon: MapIconOutline,
+      active: MapIconSoild,
+    },
+    {
+      url: "/locations",
+      label: "Locations",
+      icon: LocationMarkerIconOutline,
+      active: LocationMarkerIconSoild,
+    },
+    {
       url: "/categories",
       label: "Categories",
       icon: TagIconOutline,
@@ -54,12 +68,6 @@ function Links() {
       active: UserIconSoild,
     },
     {
-      url: "/maps",
-      label: "Maps",
-      icon: LocationMarkerIconOutline,
-      active: LocationMarkerIconSoild,
-    },
-    {
       url: "/apps",
       label: "Apps",
       icon: DeviceMobileIconOutline,
@@ -69,12 +77,12 @@ function Links() {
 
   return (
     <div className='flex items-center justify-center mt-6'>
-      <div className='text-center grid grid-cols-2 md:grid-cols-3 gap-1 gap-x-12 text-base sm:text-lg md:text-xl lg:text-2xl'>
+      <div className='text-center grid grid-cols-2 gap-1 gap-x-12 text-base sm:text-lg md:text-xl lg:text-2xl'>
         {links.map((l) => (
           <Link href={l.url} key={l.label}>
             <button
               type='button'
-              className='flex align-middle items-center p-1 last:col-span-2 md:last:col-span-3 last:justify-center'
+              className='flex align-middle items-center p-1'
               onMouseEnter={() => setActive(l.label)}
               onMouseLeave={() => setActive("")}>
               <div>

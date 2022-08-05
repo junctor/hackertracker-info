@@ -10,6 +10,7 @@ import {
   LocationMarkerIcon as LocationMarkerIconSoild,
   TagIcon as TagIconSoild,
   DeviceMobileIcon as DeviceMobileIconSoild,
+  MapIcon as MapIconSoild,
 } from "@heroicons/react/solid";
 import {
   InformationCircleIcon as InformationCircleIconOutline,
@@ -19,6 +20,7 @@ import {
   LocationMarkerIcon as LocationMarkerIconOutline,
   TagIcon as TagIconOutline,
   DeviceMobileIcon as DeviceMobileIconOutline,
+  MapIcon as MapIconOutline,
 } from "@heroicons/react/outline";
 import PageLink from "../misc/PageLink";
 
@@ -104,6 +106,34 @@ export default function NavLinks() {
           </Menu.Item>
           <Menu.Item>
             {({ active }: any) => (
+              <PageLink href='/maps' active={active}>
+                <span className='flex my-3'>
+                  {active ? (
+                    <MapIconSoild className='w-6 mr-2' />
+                  ) : (
+                    <MapIconOutline className='w-6 mr-2' />
+                  )}
+                  <p>Maps</p>
+                </span>
+              </PageLink>
+            )}
+          </Menu.Item>
+          <Menu.Item>
+            {({ active }: any) => (
+              <PageLink href='/locations' active={active}>
+                <span className='flex my-3'>
+                  {active ? (
+                    <LocationMarkerIconSoild className='w-6 mr-2' />
+                  ) : (
+                    <LocationMarkerIconOutline className='w-6 mr-2' />
+                  )}
+                  <p>Locations</p>
+                </span>
+              </PageLink>
+            )}
+          </Menu.Item>
+          <Menu.Item>
+            {({ active }: any) => (
               <PageLink href='/categories' active={active}>
                 <span className='flex my-3'>
                   {active ? (
@@ -126,20 +156,6 @@ export default function NavLinks() {
                     <UserIconOutline className='w-6 mr-2' />
                   )}
                   <p>Speakers</p>
-                </span>
-              </PageLink>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }: any) => (
-              <PageLink href='/maps' active={active}>
-                <span className='flex my-3'>
-                  {active ? (
-                    <LocationMarkerIconSoild className='w-6 mr-2' />
-                  ) : (
-                    <LocationMarkerIconOutline className='w-6 mr-2' />
-                  )}
-                  <p>Maps</p>
                 </span>
               </PageLink>
             )}

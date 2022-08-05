@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { dateGroupTitle, eventDay, eventTime } from "../../utils/dates";
+import { dateGroupTitle, eventDay } from "../../utils/dates";
 import Theme from "../../utils/theme";
 import TVClock from "../clock/TVClock";
 import TVEventCell from "./TVEventCell";

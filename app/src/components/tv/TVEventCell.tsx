@@ -5,7 +5,7 @@ function TVEventCell({ event }: TVEventProps) {
     <div className='my-3 ml-2 mr-3'>
       <div className='bg-black items-center h-min-36 table'>
         <div
-          className={`table-cell px-1 h-full w-3 bg-[${event.color}] rounded-md`}
+          className={`table-cell px-2 h-full w-3 bg-[${event.color}] rounded-md`}
         />
         <div className='text-center items-center table-cell px-3 align-middle'>
           {timeDisplayParts(event.begin).map((part) => (
@@ -23,7 +23,7 @@ function TVEventCell({ event }: TVEventProps) {
 
           <p className='text-base text-gray-400'>{event.location}</p>
           <div
-            className={`rounded-full h-3 w-3 green inline-flex mr-2 bg-[${event.color}]`}
+            className={`rounded-full h-3 w-3 inline-flex mr-2 bg-[${event.color}]`}
           />
           <p className='text-base inline-flex'>{event.category}</p>
         </div>

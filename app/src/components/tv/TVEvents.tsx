@@ -84,7 +84,7 @@ function TVEvents({ events }: TVProps) {
   }, [events]);
 
   return (
-    <div className='flex justify-end mb-2 mr-14'>
+    <div className='flex justify-end mb-2 mr-14 ml-5'>
       <div className='flex-initial w-full mr-2'>
         {Array.from(filteredEvents).map(([day, dayEvents]) => (
           <div key={day}>

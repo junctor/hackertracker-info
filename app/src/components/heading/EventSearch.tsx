@@ -3,7 +3,7 @@ import { SearchIcon, XCircleIcon } from "@heroicons/react/outline";
 import { Combobox, Transition } from "@headlessui/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import Clock from "../misc/Clock";
+import HeadingClock from "../clock/HeadingClock";
 
 function SearchLinks({ event, active }: EventSearching) {
   return (
@@ -40,7 +40,7 @@ function EventSearch({ events }: EventSearchProps) {
     <div className='flex items-center'>
       {query === "" && (
         <div className='mr-5'>
-          <Clock />
+          <HeadingClock />
         </div>
       )}
       <div

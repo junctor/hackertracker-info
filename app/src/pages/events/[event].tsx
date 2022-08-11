@@ -46,7 +46,9 @@ export async function getStaticProps(context: { params: { event: string } }) {
 
   const tagData = allTags.flatMap((t) => t.tags);
 
-  const tags = tagData.filter((t) => event?.tag_ids.includes(t.id));
+  const tags = tagData
+    .filter((t) => event?.tag_ids.includes(t.id))
+    .sort((a, b) => b.sort_order - a.sort_order);
 
   return {
     props: {

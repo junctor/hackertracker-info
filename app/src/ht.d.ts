@@ -79,6 +79,7 @@ interface Tag {
   color_foreground: string;
   color_background: string;
   label: string;
+  sort_order: number;
 }
 
 interface HTEvent {

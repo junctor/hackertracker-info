@@ -24,7 +24,7 @@ function EventCell({ event, bookmarked }: EventProps) {
   };
 
   return (
-    <div className='my-3 ml-2 mr-3'>
+    <div className='my-3 ml-2 mr-3' id={event.id.toString()}>
       <div className='bg-black items-center h-min-36 table'>
         <div
           className={`table-cell px-1 h-full md:w-3 bg-[${event.color}] rounded-md`}

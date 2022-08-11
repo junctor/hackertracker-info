@@ -24,6 +24,25 @@ function Events({ dateGroup, title }: EventsProps) {
     });
   }, [dateGroup]);
 
+  useEffect(() => {
+    const scrollToDiv = (id: number) => {
+      if (componentRef && componentRef.current) {
+        componentRef.current.querySelector(`div#e-${id}`)?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    };
+
+    const currentEvent = Array.from(dateGroup.entries())
+      .flatMap((e) => e[1])
+      .find((e) => new Date(e.begin) > new Date())?.id;
+
+    if (currentEvent !== undefined) {
+      scrollToDiv(currentEvent);
+    }
+  });
+
   const scrollDay = (day: string) =>
     tabDateTitle(day).replaceAll(" ", "s").toLowerCase();
 

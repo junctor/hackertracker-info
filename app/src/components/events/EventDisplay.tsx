@@ -10,7 +10,7 @@ function EventDisplay({ htEvents }: { htEvents: EventData[] }) {
   return (
     <div>
       {htEvents.map((htEvent) => (
-        <div key={htEvent.id} id={htEvent.id.toString()}>
+        <div key={htEvent.id} id={`e-${htEvent.id}`}>
           <EventCell event={htEvent} bookmarked={isBookMarked(htEvent.id)} />
         </div>
       ))}

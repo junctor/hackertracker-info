@@ -11,7 +11,9 @@ function Splash({ data }: SplashProps) {
           <span className='text-dc-red'>0</span>N
         </h1>
       </div>
-      <Countdown kickoff={data.kickoff} />
+      {new Date(data.kickoff) > new Date() && (
+        <Countdown kickoff={data.kickoff} />
+      )}
       <Links />
       <Stats counts={data.counts} />
     </div>

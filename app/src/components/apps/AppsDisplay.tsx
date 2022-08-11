@@ -32,8 +32,20 @@ function AppsDisplay() {
               </button>
             </a>
           </div>
+          <div>
+            <a
+              href='https://info.defcon.org'
+              target='_blank'
+              rel='noopener noreferrer'>
+              <button
+                type='button'
+                className='m-2 bg-dc-pink p-5 rounded-2xl font-bold text-xl w-48 hover:bg-dc-green hover:text-black'>
+                Web
+              </button>
+            </a>
+          </div>
         </div>
-        <div className='text-sm lg:text-base mt-10 mx-5'>
+        <div className='text-2xs lg:text-xs mt-10 mx-5'>
           <p className='my-1'>
             App Store and the App Store logo are registered trademarks of Apple
             Inc.

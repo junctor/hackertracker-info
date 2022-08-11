@@ -5,7 +5,7 @@ import { eventTime } from "../../utils/dates";
 import Theme from "../../utils/theme";
 import FormatDesc from "../misc/FormatDesc";
 
-function EventDetails({ event }: EventDetailProps) {
+function EventDetails({ event, tags }: EventDetailProps) {
   const theme = new Theme();
   theme.randomisze();
 
@@ -17,19 +17,24 @@ function EventDetails({ event }: EventDetailProps) {
         </h1>
       </div>
       <div>
-        <div className='flex items-center bg-dc-gray w-11/12 mt-2 md:h-14 lg:h-16 h-12 rounded-lg'>
-          <div
-            className='rounded-full h-5 w-5 md:h-7 md:w-7 lg:w-8 lg:h-8 ml-3 mr-2'
-            style={{
-              backgroundColor:
-                event.type.color === "#ababa" ? "#e25238" : event.type.color,
-            }}
-          />
-          <Link href={`/categories/${event.type.id}`}>
-            <button type='button' className='md:text-base lg:text-lg text-xs'>
-              {event.type.name}
-            </button>
-          </Link>
+        <div className='flex items-center'>
+          {tags?.map((t) => (
+            <div key={t.id} className='flex m-3'>
+              <div
+                className='rounded-full h-3 w-3 md:h-5 md:w-5 lg:w-7 lg:h-7 mr-2'
+                style={{
+                  backgroundColor: t.color_background,
+                }}
+              />
+              <Link href={`/categories/${t.id}}`}>
+                <button
+                  type='button'
+                  className='md:text-sm lg:text-base text-xs text-left'>
+                  {t.label}
+                </button>
+              </Link>
+            </div>
+          ))}
         </div>
         <div className='flex items-center bg-dc-gray w-11/12  mt-2 md:h-14 lg:h-16 h-12 rounded-lg cursor-pointer'>
           <a

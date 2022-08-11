@@ -15,6 +15,7 @@ import type {
   HTFAQ,
   HTLocations,
   HTSpeaker,
+  HTTag,
 } from "./ht";
 
 export async function firebaseInit() {
@@ -55,6 +56,18 @@ export async function getSpeakerData(
   const firebaseData: HTSpeaker[] = docSnap.docs.map(
     (speakerDoc) => speakerDoc.data() as any
   );
+
+  return firebaseData;
+}
+
+export async function getTags(
+  db: Firestore,
+  conference: string
+): Promise<HTTag[]> {
+  const docRef = collection(db, "conferences", conference, "tagtypes");
+  const docSnap = await getDocs(docRef);
+  const firebaseData: HTTag[] =
+    docSnap.docs.flatMap((tagsDoc) => tagsDoc.data() as any) ?? [];
 
   return firebaseData;
 }

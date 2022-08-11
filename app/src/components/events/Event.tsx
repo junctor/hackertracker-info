@@ -1,13 +1,13 @@
 import { EventDetailHeading } from "../heading/EventDetailsHeading";
 import EventDetails from "./EventDetails";
 
-function Event({ event }: EventDetailProps) {
+function Event({ event, tags }: EventDetailProps) {
   return (
     <div>
       {event && (
         <>
           <EventDetailHeading eventId={event.id} />
-          <EventDetails event={event} />
+          <EventDetails event={event} tags={tags} />
         </>
       )}{" "}
     </div>

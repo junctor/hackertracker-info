@@ -10,6 +10,7 @@ interface TVEventProps {
 
 interface EventDetailProps {
   event: HTEvent;
+  tags: Tag[];
 }
 
 interface EventDetailHeaderProps {

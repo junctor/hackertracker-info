@@ -69,6 +69,18 @@ interface HTConference {
   kickoff_timestamp: Timestamp;
 }
 
+interface HTTag {
+  tags: Tag[];
+}
+
+interface Tag {
+  id: number;
+  description: string;
+  color_foreground: string;
+  color_background: string;
+  label: string;
+}
+
 interface HTEvent {
   updated_timestamp: Timestamp;
   link: string;
@@ -87,7 +99,7 @@ interface HTEvent {
   location: HTLocationModel;
   speakers: HTSpeaker[];
   type: HTEventType;
-  tag_ids: string[];
+  tag_ids: number[];
   tags: string;
 }
 

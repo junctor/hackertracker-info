@@ -7,6 +7,7 @@ import {
   getConfFAQ,
   getMaps,
   getLocationData,
+  getTags,
 } from "./fb";
 
 const CONF = "DEFCON30";
@@ -14,13 +15,15 @@ const CONF = "DEFCON30";
 (async () => {
   const fbDb = await firebaseInit();
 
-  const [htConf, htEvents, htSpeakers, htFAQ, htLocations] = await Promise.all([
-    getConference(fbDb, CONF),
-    getConfEvents(fbDb, CONF),
-    getSpeakerData(fbDb, CONF),
-    getConfFAQ(fbDb, CONF),
-    getLocationData(fbDb, CONF),
-  ]);
+  const [htConf, htEvents, htSpeakers, htFAQ, htLocations, htTags] =
+    await Promise.all([
+      getConference(fbDb, CONF),
+      getConfEvents(fbDb, CONF),
+      getSpeakerData(fbDb, CONF),
+      getConfFAQ(fbDb, CONF),
+      getLocationData(fbDb, CONF),
+      getTags(fbDb, CONF),
+    ]);
 
   const outputDir = "./out";
   if (!fs.existsSync(outputDir)) {
@@ -45,6 +48,8 @@ const CONF = "DEFCON30";
       JSON.stringify(htSpeakers)
     ),
     fs.promises.writeFile("./out/con/faq.json", JSON.stringify(htFAQ)),
+    fs.promises.writeFile("./out/con/tags.json", JSON.stringify(htTags)),
+
     fs.promises.writeFile(
       "./out/con/locations.json",
       JSON.stringify(htLocations)

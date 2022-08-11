@@ -67,6 +67,19 @@ interface HTEvent {
   location: HTLocationModel;
   speakers: HTSpeaker[];
   type: HTEventType;
+  tag_ids: number[];
+}
+
+interface HTTag {
+  tags: Tag[];
+}
+
+interface Tag {
+  id: number;
+  description: string;
+  color_foreground: string;
+  color_background: string;
+  label: string;
 }
 
 interface HTSpeaker {

@@ -2,8 +2,12 @@ function FormatDescription({ details }: { details: string }) {
   const urlRegex =
     /((https?|ftp|gopher|telnet|file):((\/\/)|(\\))+[\w\d:#@%/;$()~_?+-=\\.&]*)/gi;
 
+  const ahrefRefex = /(<a href=")(.+)(">)(.+)(<\/a>)/gi;
+
   const text = details
     .replaceAll("<br />", "\n")
+    .replace(ahrefRefex, "$4")
+
     .split(/(\s+)/)
     .map((word) =>
       urlRegex.test(word) ? (

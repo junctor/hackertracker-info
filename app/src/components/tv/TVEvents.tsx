@@ -19,13 +19,15 @@ function TVEvents({ events }: TVProps) {
     const groupedDates = (
       displayEvents: EventData[]
     ): Map<string, EventData[]> =>
-      displayEvents.reduce((group, e) => {
-        const day = eventDay(new Date(e.begin));
-        const groups = group.get(day) || [];
-        groups.push(e);
-        group.set(day, groups);
-        return group;
-      }, new Map<string, EventData[]>());
+      displayEvents
+        .sort((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds)
+        .reduce((group, e) => {
+          const day = eventDay(new Date(e.begin));
+          const groups = group.get(day) || [];
+          groups.push(e);
+          group.set(day, groups);
+          return group;
+        }, new Map<string, EventData[]>());
 
     const filterEvents = () => {
       const filterTag = Number(l ?? 45241) ?? 45241;
@@ -41,9 +43,9 @@ function TVEvents({ events }: TVProps) {
 
           const now = new Date();
 
-          const end = new Date(e.end).getTime();
+          const begin = new Date(e.begin).getTime();
 
-          if (end >= now.getTime() && end <= future.getTime()) {
+          if (begin >= now.getTime() && begin <= future.getTime()) {
             return true;
           }
 
@@ -71,7 +73,7 @@ function TVEvents({ events }: TVProps) {
       }, 70000);
     }, 70100);
     return () => clearInterval(scrollPageInt);
-  }, [events, l]);
+  }, [events, l, t]);
 
   return (
     <div className='flex justify-end mb-2 mr-14 ml-5'>

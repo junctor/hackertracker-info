@@ -23,7 +23,7 @@ interface ScheduleProps {
 }
 
 interface TVProps {
-  events: EventData[];
+  events: TVEventData[];
 }
 
 interface EventHeadingProps {
@@ -60,6 +60,19 @@ interface EventData {
   color: string;
   category: string;
   speakers: string;
+}
+
+interface TVEventData {
+  id: number;
+  begin: string;
+  beginTimestampSeconds: number;
+  end: string;
+  title: string;
+  location: string;
+  color: string;
+  category: string;
+  speakers: string;
+  tags: number[];
 }
 
 interface CategoriesProps {

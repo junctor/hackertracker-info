@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { dateGroupTitle, eventDay } from "../../utils/dates";
 import Theme from "../../utils/theme";
 import TVClock from "../clock/TVClock";
@@ -11,6 +12,8 @@ function TVEvents({ events }: TVProps) {
   >(new Map());
 
   const theme = new Theme();
+  const router = useRouter();
+  const { l, t } = router.query;
 
   useEffect(() => {
     const groupedDates = (
@@ -25,24 +28,16 @@ function TVEvents({ events }: TVProps) {
       }, new Map<string, EventData[]>());
 
     const filterEvents = () => {
-      const includedCats = [
-        "DEF CON Official Talk",
-        "DEF CON Music",
-        "DEF CON Policy Team Supplementary Programming",
-        "DEF CON Workshop",
-        "Parties & Meetups",
-        "Misc",
-        "Demo Lab",
-      ];
+      const filterTag = Number(l ?? 45241) ?? 45241;
 
       return groupedDates(
         events.filter((e) => {
-          if (!includedCats.includes(e.category)) {
+          if (!e.tags.includes(filterTag)) {
             return false;
           }
 
           const future = new Date();
-          future.setHours(future.getHours() + 6);
+          future.setHours(future.getHours() + (Number(t ?? 6) ?? 6));
 
           const now = new Date();
 
@@ -76,7 +71,7 @@ function TVEvents({ events }: TVProps) {
       }, 70000);
     }, 70100);
     return () => clearInterval(scrollPageInt);
-  }, [events]);
+  }, [events, l]);
 
   return (
     <div className='flex justify-end mb-2 mr-14 ml-5'>

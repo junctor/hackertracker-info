@@ -3,10 +3,10 @@ import type { NextPage } from "next";
 import { promises as fs } from "fs";
 import path from "path";
 import Head from "next/head";
-import { toEventsData } from "../../utils/misc";
+import { toTVData } from "../../utils/misc";
 import TV from "../../components/tv/TV";
 
-const TVPage: NextPage<ScheduleProps> = (props) => {
+const TVPage: NextPage<TVProps> = (props) => {
   const { events } = props;
   return (
     <div>
@@ -36,7 +36,7 @@ export async function getStaticProps() {
 
   const events: HTEvent[] = JSON.parse(eventFile) ?? [];
 
-  const eventsData = toEventsData(events);
+  const eventsData = toTVData(events);
 
   return {
     props: {

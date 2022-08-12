@@ -46,14 +46,9 @@ function TVEvents({ events }: TVProps) {
 
           const now = new Date();
 
-          const begin = new Date(e.begin).getTime();
           const end = new Date(e.end).getTime();
 
-          if (
-            begin >= now.getTime() &&
-            end >= now.getTime() &&
-            end <= future.getTime()
-          ) {
+          if (end >= now.getTime() && end <= future.getTime()) {
             return true;
           }
 
@@ -95,11 +90,15 @@ function TVEvents({ events }: TVProps) {
                   {dateGroupTitle(day)}
                 </p>
               </div>
-              {dayEvents.sort().map((event) => (
-                <div className='event' key={event.id} aria-hidden='true'>
-                  <TVEventCell event={event} />
-                </div>
-              ))}
+              {dayEvents
+                .sort(
+                  (a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds
+                )
+                .map((event) => (
+                  <div className='event' key={event.id} aria-hidden='true'>
+                    <TVEventCell event={event} />
+                  </div>
+                ))}
             </div>
           </div>
         ))}

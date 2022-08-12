@@ -21,18 +21,14 @@ function EventDetails({ event, tags }: EventDetailProps) {
           {tags?.map((t) => (
             <div key={t.id} className='flex m-3'>
               <div
-                className='rounded-full h-3 w-3 md:h-5 md:w-5 lg:w-7 lg:h-7 mr-2'
+                className='rounded-full h-3 w-3 md:h-5 md:w-5 lg:w-7 lg:h-7 mr-2 flex-0'
                 style={{
                   backgroundColor: t.color_background,
                 }}
               />
-              <Link href={`/categories/${t.id}}`}>
-                <button
-                  type='button'
-                  className='md:text-sm lg:text-base text-xs text-left'>
-                  {t.label}
-                </button>
-              </Link>
+              <p className='md:text-sm lg:text-base text-xs text-left'>
+                {t.label}
+              </p>
             </div>
           ))}
         </div>

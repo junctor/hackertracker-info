@@ -57,10 +57,22 @@ export async function getStaticProps() {
 
   const speakers: HTSpeaker[] = JSON.parse(speakerFile) ?? [];
 
+  const clicksFile = path.join(
+    process.cwd(),
+    "./public/static/con/clicks.json"
+  );
+
+  const clickFile = await fs.readFile(clicksFile, {
+    encoding: "utf-8",
+  });
+
+  const clicks: Clicks | null = JSON.parse(clickFile);
+
   const splashData = {
     counts: {
       events: events.length,
       speakers: speakers.length,
+      clicks: clicks?.total ?? 0,
     },
     kickoff: conference?.kickoff_timestamp_str ?? "2022-08-12T17:00:00+00:00",
   };

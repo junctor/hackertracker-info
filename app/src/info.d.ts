@@ -158,8 +158,14 @@ interface SplashInfo {
 interface SplashCounts {
   events: number;
   speakers: number;
+  clicks: number;
 }
 
 interface StatsProps {
   counts: SplashCounts;
+}
+
+interface Clicks {
+  total: string;
+  clicks: string;
 }

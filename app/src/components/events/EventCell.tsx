@@ -65,7 +65,7 @@ function EventCell({ event, bookmarked }: EventProps) {
         <div className='mx-1 sm:mx-2 md:mx-3 lg:mx-4 table-cell w-1/12'>
           <button
             type='button'
-            className='w-6 align-middle mx-2 sm:mx-3 md:mx-4 lg:mx-5 cursor-pointer'
+            className='w-10 align-middle mx-2 sm:mx-3 md:mx-4 lg:mx-5 cursor-pointer'
             onClick={() => eventBookmark()}>
             <div>
               {bookmark ? (

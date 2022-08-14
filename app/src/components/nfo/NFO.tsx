@@ -24,7 +24,7 @@ function NFO() {
 
   const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-  const { data: clickData, error } = useSWR("/static/con/clicks.json", fetcher);
+  const { data: clickData } = useSWR("/static/con/clicks.json", fetcher);
 
   const options = {
     responsive: true,

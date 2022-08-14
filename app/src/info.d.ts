@@ -158,7 +158,6 @@ interface SplashInfo {
 interface SplashCounts {
   events: number;
   speakers: number;
-  clicks: number;
 }
 
 interface StatsProps {
@@ -166,6 +165,11 @@ interface StatsProps {
 }
 
 interface Clicks {
-  total: string;
-  clicks: string;
+  badges: Badges[];
+  total: number;
+}
+
+interface Badges {
+  owner_handle: string;
+  clicks: number;
 }

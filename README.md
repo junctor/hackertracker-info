@@ -1,6 +1,6 @@
 # info.defcon.org
 
-## Next.js Application (./app)
+## Next.js Application (./info)
 
 ### Install Dependancies
 

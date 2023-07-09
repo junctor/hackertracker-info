@@ -20,17 +20,13 @@
     npm run build
 ```
 
-### Static Export
+_Command [build](https://nextjs.org/docs/app/building-your-application/deploying/static-exports) static html to a generated `out` directory_
 
-```bash
-    npm run export
-```
-
-_Command [exports](https://nextjs.org/docs/advanced-features/static-html-export) static html to a generated `out` directory_
+[deploying static-only docs](https://nextjs.org/docs/app/building-your-application/deploying#static-only)
 
 ### Other
 
-### Safe List for Dynamic Event Colors
+### Safe List for Dynamic Event Colors [TODO]
 
 place in `app/tailwind.config.js`
 
@@ -38,7 +34,7 @@ place in `app/tailwind.config.js`
 jq '.[].type.color' events.json | sort -u | awk '{print "'"'"'bg-["$1"]'"'"',\n'"'"'hover:bg-["$1"]'"'"',"}' | tr -d \"
 ```
 
-## Export Static HackerTracker Data (./ht-export)
+## Export Static HackerTracker Data (./ht-export) [TODO]
 
 ### Install Dependancies
 

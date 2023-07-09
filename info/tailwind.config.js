@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        benguiat: ["var(--font-benguiat)"],
+      },
       colors: {
         "dc-purple": "#686EA0",
         "dc-teal": "#81C8BD",

@@ -1,9 +1,49 @@
 /** @type {import('tailwindcss').Config} */
+
+const htSafeList = require("./tailwind-ht-safelist.json");
+
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  safelist: [
+    // Locations
+    "ml-4",
+    "ml-8",
+    "ml-12",
+    "ml-14",
+    "ml-16",
+    "ml-18",
+    "w-7",
+    "w-6",
+    "w-5",
+    "w-4",
+    "w-3",
+    "w-2",
+    "w-1",
+    "h-7",
+    "h-6",
+    "h-5",
+    "h-4",
+    "h-3",
+    "h-2",
+    "h-1",
+
+    // DC30 Theme
+    "text-dc-purple",
+    "text-dc-teal",
+    "text-dc-yellow",
+    "text-dc-red",
+    "bg-dc-purple",
+    "bg-dc-teal",
+    "bg-dc-yellow",
+    "bg-dc-red",
+    //  Event colors
+    ...htSafeList.colors.map((c) => `bg-[${c}]`),
+    ...htSafeList.colors.map((c) => `hover:text-[${c}]`),
+    ...htSafeList.colors.map((c) => `hover:bg-[${c}]`),
   ],
   theme: {
     extend: {
@@ -15,6 +55,9 @@ module.exports = {
         "dc-teal": "#81C8BD",
         "dc-yellow": "#ECDA25",
         "dc-red": "#F8A28B",
+        "dc-text": "#eeeeee",
+        "dc-gray": "#2D2D2D",
+        "dc-border": "#646464",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -25,6 +68,15 @@ module.exports = {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: [],
+    themes: [
+      {
+        dc: {
+          primary: "#81C8BD",
+          secondary: "#686EA0",
+          accent: "#F8A28B",
+          neutral: "#ECDA25",
+        },
+      },
+    ],
   },
 };

@@ -39,7 +39,7 @@ ht-export/dist
 ht-export/out
 
 # Ignore exported HT static files
-app/public/static/con
+app/public/ht
 
 # Ignore generated safe colors
 app/tailwind-ht-safelist.json

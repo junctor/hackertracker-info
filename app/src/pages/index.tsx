@@ -1,7 +1,24 @@
-import Countdown from "@/components/Countdown";
+import Error from "@/components/misc/Error";
+import Loading from "@/components/misc/Loading";
+import Splash from "@/components/splash/Splash";
+import { fetcher } from "@/utils/misc";
 import Head from "next/head";
+import useSWR from "swr";
 
 export default function Home() {
+  const { data, error, isLoading } = useSWR<HTConference, Error>(
+    "/ht/conference.json",
+    fetcher
+  );
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (data === undefined || error !== undefined) {
+    return <Error />;
+  }
+
   return (
     <div>
       <Head>
@@ -11,7 +28,7 @@ export default function Home() {
       </Head>
 
       <main>
-        <Countdown />
+        <Splash conference={data} />
       </main>
     </div>
   );

@@ -1,10 +1,28 @@
 /* eslint-disable no-use-before-define */
-/* eslint-disable no-unused-vars */
-/* eslint-disable camelcase */
-import firebase from "firebase/app";
-import { Firestore } from "firebase/firestore";
+interface ConfInfo {
+  villages: Village[];
+}
 
-type Timestamp = firebase.firestore.Timestamp;
+interface Village {
+  name: string;
+  home: string;
+  forum: string;
+  twitter: string;
+  discord: string;
+  youtube: string;
+}
+
+interface Timer {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+interface Timestamp {
+  seconds: number;
+  nanoseconds: number;
+}
 
 interface HTMaps {
   file: string;
@@ -28,11 +46,7 @@ interface HTEventType {
   color: string;
   conferenceName: string;
   name: string;
-  description: string;
-  tags: string;
-  youtube_url: string;
-  discord_url: string;
-  subforum_url: string;
+  updated_at: string;
 }
 
 interface HTConference {
@@ -50,11 +64,30 @@ interface HTConference {
   timezone: string;
   description: string;
   end_timestamp: Timestamp;
+  supportdoc: string;
+  kickoff_timestamp_str: string;
+  kickoff_timestamp: Timestamp;
+}
+
+interface HTTag {
+  tags: Tag[];
+}
+
+interface Tag {
+  id: number;
+  description: string;
+  color_foreground: string;
+  color_background: string;
+  label: string;
+  sort_order: number;
 }
 
 interface HTEvent {
+  updated_timestamp: Timestamp;
+  link: string;
   id: number;
   conferenceName: string;
+  conference_id: number;
   description: string;
   android_description: string;
   begin: string;
@@ -68,18 +101,7 @@ interface HTEvent {
   speakers: HTSpeaker[];
   type: HTEventType;
   tag_ids: number[];
-}
-
-interface HTTag {
-  tags: Tag[];
-}
-
-interface Tag {
-  id: number;
-  description: string;
-  color_foreground: string;
-  color_background: string;
-  label: string;
+  tags: string;
 }
 
 interface HTSpeaker {
@@ -108,11 +130,12 @@ interface HTLocationSchedule {
 }
 
 interface HTLocations {
-  hier_extent_left: string;
+  hier_extent_left: number;
   schedule: HTLocationSchedule[];
   parent_id: number;
   updated_at: string;
   id: number;
+  conference_id: number;
   conference: string;
   peer_sort_order: number;
   default_status: string;
@@ -121,4 +144,5 @@ interface HTLocations {
   conference_id: number;
   hotel: string;
   hier_extent_right: number;
+  short_name: string;
 }

@@ -15,7 +15,7 @@ function Information({
       <Heading />
       <PageTitle title="Info" />
       <ConInfo conference={conference} />
-      <FAQ faq={faq} />
+      {faq.length > 0 && <FAQ faq={faq} />}
     </div>
   );
 }

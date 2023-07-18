@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 interface ConfInfo {
   villages: Village[];
 }
@@ -25,48 +24,69 @@ interface Timestamp {
 }
 
 interface HTMaps {
+  description: string;
   file: string;
+  filename: string;
+  id: number;
+  name_text: string;
   name: string;
+  sort_order: number;
+  url: string;
 }
 
 interface HTLinks {
   label: string;
+  type: string;
   url: string;
 }
 
-interface HTLocationModel {
-  id: number;
-  conferenceName: string;
-  name: string;
+interface HTLocation {
+  conference_id: number;
+  conference: string;
   hotel: string;
+  id: number;
+  name: string;
+  parent_id: number;
+  short_name: string;
+  updated_at: string;
 }
 
 interface HTEventType {
-  id: number;
   color: string;
-  conferenceName: string;
+  conference_id: number;
+  conference: string;
+  id: number;
   name: string;
   updated_at: string;
 }
 
 interface HTConference {
-  start_timestamp: Timestamp;
-  end_date: string;
-  maps?: HTMaps[];
-  name: string;
   code: string;
-  start_date: string;
-  link: string;
-  hidden: false;
   codeofconduct?: string;
-  updated_at: Timestamp;
-  id: number;
-  timezone: string;
+  conference_id: number;
   description: string;
+  enable_merch: boolean;
+  end_date: string;
+  end_timestamp_str: string;
   end_timestamp: Timestamp;
-  supportdoc: string;
+  hidden: boolean;
+  hidden: false;
+  id: number;
   kickoff_timestamp_str: string;
   kickoff_timestamp: Timestamp;
+  link: string;
+  maps: HTMaps[];
+  name: string;
+  start_date: string;
+  start_timestamp_str: string;
+  start_timestamp: Timestamp;
+  supportdoc: string | null;
+  tagline_text: string;
+  timezone: string;
+  updated_at: Timestamp;
+  enable_merch_cart: boolean;
+  kickoff_timestamp_str: string;
+  updated_at: Timestamp;
 }
 
 interface HTTag {
@@ -83,36 +103,60 @@ interface Tag {
 }
 
 interface HTEvent {
-  updated_timestamp: Timestamp;
-  link: string;
-  id: number;
-  conferenceName: string;
-  conference_id: number;
-  description: string;
   android_description: string;
-  begin: string;
   begin_timestamp: Timestamp;
-  end: string;
+  begin: string;
+  conference_id: number;
+  conference: string;
+  description: string;
   end_timestamp: Timestamp;
+  end: string;
+  id: number;
   includes: string;
+  link: string;
   links?: HTLinks[];
-  title: string;
-  location: HTLocationModel;
+  location: HTLocation;
+  people: HTPeople[];
+  spans_timebands: string;
   speakers: HTSpeaker[];
-  type: HTEventType;
   tag_ids: number[];
   tags: string;
+  title: string;
+  type: HTEventType;
+  updated_timestamp: Timestamp;
+  village_id: number | null;
+}
+
+interface HTPeople {
+  tag_id: number;
+  sort_order: number;
+  person_id: number;
 }
 
 interface HTSpeaker {
-  id: number;
-  conferenceName: string;
+  conference_id: number;
+  event_ids: [number];
   description: string;
+  events: [HTEvent];
+  id: number;
   link: string;
   name: string;
-  title: string;
+  title?: string;
   twitter: string;
-  events: [HTEvent];
+  affiliations: [HTSpeakerAffiliations];
+  pronouns: string | null;
+}
+
+interface HTSpeakerLinks {
+  description: string;
+  title: string;
+  sort_order: number;
+  url: string;
+}
+
+interface HTSpeakerAffiliations {
+  organization: string;
+  title: string;
 }
 
 interface HTFAQ {

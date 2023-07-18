@@ -17,7 +17,7 @@ const iCalDate = (eDate: Date) => {
 export const generateCal = (event: HTEvent) =>
   `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//hackertracker//${event.conferenceName} Calendar 1.0//EN
+PRODID:-//hackertracker//${event.conference} Calendar 1.0//EN
 BEGIN:VEVENT
 DTSTAMP:${iCalDate(new Date())}
 UID:${event.id}

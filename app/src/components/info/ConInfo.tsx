@@ -12,7 +12,7 @@ function ConInfo({ conference }: { conference: HTConference }) {
           content={conference.codeofconduct}
         />
       )}
-      {conference.supportdoc.length > 0 && (
+      {conference.supportdoc !== null && (
         <InfoSection section="Support" content={conference.supportdoc} />
       )}
     </div>

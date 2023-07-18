@@ -106,7 +106,7 @@ function EventDetails({ event, tags }: { event: HTEvent; tags: Tag[] }) {
                       {s.name}
                     </button>
                   </Link>
-                  {s.title.length > 0 && (
+                  {s.title != null && (
                     <p className="text-xs sm:text-sm md:text-sm lg:text-base text-gray-400">
                       {s.title}
                     </p>

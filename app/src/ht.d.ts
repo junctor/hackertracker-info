@@ -90,6 +90,14 @@ interface HTConference {
 }
 
 interface HTTag {
+  category: string;
+  conference_id: number;
+  conference: string;
+  id: number;
+  is_browsable: false;
+  is_single_valued: boolean;
+  label: string;
+  sort_order: number;
   tags: Tag[];
 }
 

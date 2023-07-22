@@ -13,7 +13,7 @@ export default function EventPage() {
     isLoading: eventsIsLoading,
   } = useSWR<HTEvent[], Error>("/ht/events.json", fetcher);
 
-  const { data: tagsData, isLoading: tagsIsLoading } = useSWR<HTTag[], Error>(
+  const { data: tags, isLoading: tagsIsLoading } = useSWR<HTTag[], Error>(
     "/ht/tags.json",
     fetcher
   );
@@ -29,12 +29,6 @@ export default function EventPage() {
     return <Error />;
   }
   const event = eventsData?.find((e) => e.id.toString() === eventId);
-
-  const tags =
-    tagsData
-      ?.flatMap((t) => t.tags)
-      .filter((t) => event?.tag_ids.includes(t.id))
-      .sort((a, b) => b.sort_order - a.sort_order) ?? [];
 
   if (
     eventsData === undefined ||
@@ -53,7 +47,7 @@ export default function EventPage() {
       </Head>
 
       <main className="bg-black">
-        <Event event={event} tags={tags} />
+        <Event event={event} tags={tags ?? []} />
       </main>
     </div>
   );

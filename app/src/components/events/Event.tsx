@@ -1,7 +1,7 @@
 import { EventDetailHeading } from "../heading/EventDetailsHeading";
 import EventDetails from "./EventDetails";
 
-function Event({ event, tags }: { event: HTEvent; tags: Tag[] }) {
+function Event({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
   return (
     <div>
       <EventDetailHeading eventId={event.id} />

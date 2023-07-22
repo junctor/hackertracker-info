@@ -5,9 +5,15 @@ import { eventTime } from "../../utils/dates";
 import Theme from "../../utils/theme";
 import ReactMarkdown from "react-markdown";
 
-function EventDetails({ event, tags }: { event: HTEvent; tags: Tag[] }) {
+function EventDetails({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
   const theme = new Theme();
   theme.randomisze();
+
+  const eventTags =
+    tags
+      ?.flatMap((t) => t.tags)
+      .filter((t) => event?.tag_ids.includes(t.id))
+      .sort((a, b) => b.sort_order - a.sort_order) ?? [];
 
   return (
     <div className="mt-4 ml-5">
@@ -18,7 +24,7 @@ function EventDetails({ event, tags }: { event: HTEvent; tags: Tag[] }) {
       </div>
       <div>
         <div className="flex items-center">
-          {tags?.map((t) => (
+          {eventTags?.map((t) => (
             <div key={t.id} className="flex m-3">
               <div
                 className="rounded-full h-3 w-3 md:h-5 md:w-5 lg:w-7 lg:h-7 mr-2 flex-0"
@@ -77,41 +83,76 @@ function EventDetails({ event, tags }: { event: HTEvent; tags: Tag[] }) {
         </div>
       </div>
       {event.speakers.length > 0 && (
-        <div className="mt-8 text-center">
+        <div className="mt-8 text-left">
           <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
             Speakers
           </h2>
           <div className=" items-center bg-dc-gray w-11/12 mt-2 rounded-lg mb-10 pt-2 pb-2">
-            {event.speakers.map((s) => (
-              <div
-                key={s.id}
-                className="ml-3 table mt-2 mb-2 align-middle items-center"
-              >
+            {event.speakers
+              .sort(
+                (a, b) =>
+                  (findSortOrder(event.people, a.id) ?? 0) -
+                  (findSortOrder(event.people, a.id) ?? 0)
+              )
+              .map((s) => (
                 <div
-                  className={`ml-1 table-cell h-full w-1 sm:w-2 mr-3 bg-${theme.nextColor} rounded-md`}
-                />
-                <div className="inline-block text-left ml-2">
-                  <Link href={`/speaker?id=${s.id}`}>
-                    <button
-                      type="button"
-                      className="font-bold text-xs sm:text-sm md:text-base lg:text-lg"
-                    >
-                      {s.name}
-                    </button>
-                  </Link>
-                  {s.title != null && (
-                    <p className="text-xs sm:text-sm md:text-sm lg:text-base text-gray-400">
-                      {s.title}
-                    </p>
-                  )}
+                  key={s.id}
+                  className="ml-3 table mt-2 mb-2 align-middle items-center"
+                >
+                  <div
+                    className={`ml-1 table-cell h-full w-1 sm:w-2 mr-3 bg-${theme.nextColor} rounded-md`}
+                  />
+                  <div className="inline-block text-left ml-2">
+                    <Link href={`/speaker?id=${s.id}`}>
+                      <button type="button" className="text-left">
+                        <p className="font-bold text-sm sm:text-md md:text-base lg:text-lg">
+                          {s.name}
+                        </p>
+
+                        <p className="text-xs sm:text-sm md:text-sm lg:text-base text-gray-400">
+                          {findSpeakerRole(event.people, tags, s.id) ??
+                            "Speaker"}
+                        </p>
+
+                        {s.title != null && (
+                          <p className="text-xs sm:text-xs md:text-xs lg:text-sm text-gray-400">
+                            {s.title}
+                          </p>
+                        )}
+                      </button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       )}
     </div>
   );
+}
+
+function findSortOrder(people: HTPeople[], id: number) {
+  return people.find((p) => p.person_id === id)?.sort_order;
+}
+
+function findSpeakerRole(people: HTPeople[], tags: HTTag[], id: number) {
+  const tagId = findTagId(people, id);
+
+  if (tagId === undefined) {
+    return tagId;
+  }
+
+  return findRole(tags, tagId);
+}
+
+function findTagId(people: HTPeople[], id: number) {
+  return people.find((p) => p.person_id === id)?.tag_id;
+}
+
+function findRole(tags: HTTag[], id: number) {
+  return tags
+    .find((t) => t.category === "content-person")
+    ?.tags.find((t) => t.id === id)?.label;
 }
 
 export default EventDetails;

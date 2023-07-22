@@ -3,7 +3,7 @@ import Link from "next/link";
 import cal from "../../utils/cal";
 import { eventTime } from "../../utils/dates";
 import Theme from "../../utils/theme";
-import FormatDesc from "../misc/FormatDesc";
+import ReactMarkdown from "react-markdown";
 
 function EventDetails({ event, tags }: { event: HTEvent; tags: Tag[] }) {
   const theme = new Theme();
@@ -57,28 +57,21 @@ function EventDetails({ event, tags }: { event: HTEvent; tags: Tag[] }) {
       </div>
       <div className="mt-8">
         <div className="text-sm md:text-base lg:text-lg w-11/12">
-          {event.android_description.split("\n").map((d, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div className="mt-2" key={`${d}-${event.id}-${index}`}>
-              <FormatDesc details={d} />
-            </div>
-          ))}
+          <div className="prose lg:prose-xl">
+            <ReactMarkdown>{event.description}</ReactMarkdown>
+          </div>
           {(event.links ?? []).length > 0 && (
-            <div className="mt-5 text-xs">
-              {event.links?.map((l) => (
-                <div className="mt-1" key={l.url}>
-                  <p className="inline">{`${l.label}: `}</p>
-                  <a
-                    key={l.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={l.url}
-                    className="text-dc-purple hover:text-dc-teal"
-                  >
-                    {l.url}
-                  </a>
-                </div>
-              ))}
+            <div className="mt-8 text-left">
+              <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
+                Links
+              </h2>
+              <ul className="list-disc text-xs sm:text-sm md:text-base lg:text-lg ml-5 mt-2">
+                {(event.links ?? []).map((l) => (
+                  <li key={l.url}>
+                    <a href={l.url}>{l.label}</a>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
         </div>

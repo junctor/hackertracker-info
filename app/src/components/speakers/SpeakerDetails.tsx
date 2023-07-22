@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { eventTime } from "../../utils/dates";
 import Theme from "../../utils/theme";
-import FormatDesc from "../misc/FormatDesc";
+import ReactMarkdown from "react-markdown";
 
-function EventDetails({ speaker }: { speaker: HTSpeaker }) {
+function SpeakerDetails({ speaker }: { speaker: HTSpeaker }) {
   const theme = new Theme();
   theme.randomisze();
 
@@ -16,11 +16,9 @@ function EventDetails({ speaker }: { speaker: HTSpeaker }) {
       </div>
       <div className="mt-8">
         <div className="text-sm md:text-base lg:text-lg w-11/12">
-          {speaker.description.split("\n").map((d, index) => (
-            <div className="mt-2" key={`${d}-${speaker.id}-${index}`}>
-              <FormatDesc details={d} />
-            </div>
-          ))}
+          <div className="prose lg:prose-xl">
+            <ReactMarkdown>{speaker.description}</ReactMarkdown>
+          </div>
         </div>
       </div>
       {speaker.events.length > 0 && (
@@ -64,4 +62,4 @@ function EventDetails({ speaker }: { speaker: HTSpeaker }) {
   );
 }
 
-export default EventDetails;
+export default SpeakerDetails;

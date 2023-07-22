@@ -34,7 +34,7 @@ interface HTMaps {
   url: string;
 }
 
-interface HTLinks {
+interface HTEventLink {
   label: string;
   type: string;
   url: string;
@@ -122,7 +122,7 @@ interface HTEvent {
   id: number;
   includes: string;
   link: string;
-  links?: HTLinks[];
+  links?: HTEventLink[];
   location: HTLocation;
   people: HTPeople[];
   spans_timebands: string;
@@ -141,21 +141,29 @@ interface HTPeople {
   person_id: number;
 }
 
-interface HTSpeaker {
-  conference_id: number;
-  event_ids: [number];
+interface HTSpeakerLink {
   description: string;
+  title: string;
+  sort_order: number;
+  url: string;
+}
+
+interface HTSpeaker {
+  affiliations: [HTSpeakerAffiliations];
+  conference_id: number;
+  description: string;
+  event_ids: [number];
   events: [HTEvent];
   id: number;
   link: string;
+  links: HTSpeakerLink[];
   name: string;
+  pronouns: string | null;
   title?: string;
   twitter: string;
-  affiliations: [HTSpeakerAffiliations];
-  pronouns: string | null;
 }
 
-interface HTSpeakerLinks {
+interface HTSpeakerLink {
   description: string;
   title: string;
   sort_order: number;

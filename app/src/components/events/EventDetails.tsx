@@ -48,9 +48,11 @@ function EventDetails({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
           >
             <ClockIcon className="h-5 w-5 md:h-7 md:w-7 lg:w-8 lg:h-8 ml-3 mr-2" />
             <p className="md:text-base lg:text-lg text-xs">
-              {`${eventTime(new Date(event.begin), false)} - ${eventTime(
-                new Date(event.end)
-              )}`}
+              {event.end_timestamp.seconds !== event.begin_timestamp.seconds
+                ? `${eventTime(new Date(event.begin), false)} - ${eventTime(
+                    new Date(event.end)
+                  )}`
+                : `${eventTime(new Date(event.begin), false)}`}
             </p>
           </a>
         </div>

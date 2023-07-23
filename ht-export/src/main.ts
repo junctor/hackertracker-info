@@ -26,18 +26,13 @@ const CONF = "DEFCON31";
     ]);
 
   const outputDir = "./out";
-  const conDir = "./out/ht";
-  const mapsDir = "./out/ht/maps";
+  const childDir = "./out/ht/maps";
 
-  fs.rmSync(outputDir, { recursive: true });
+  if (fs.existsSync(outputDir)) {
+    fs.rmSync(outputDir, { recursive: true });
+  }
 
-  const dirs = [outputDir, conDir, mapsDir];
-
-  dirs.forEach((dir) => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
-  });
+  fs.mkdirSync(childDir, { recursive: true });
 
   await Promise.all([
     fs.promises.writeFile("./out/ht/conference.json", JSON.stringify(htConf)),
@@ -60,7 +55,7 @@ const CONF = "DEFCON31";
 
   await Promise.all(
     maps.map((m) =>
-      fs.promises.writeFile(`${mapsDir}/${m.file}`, Buffer.from(m.bytes))
+      fs.promises.writeFile(`${childDir}/${m.file}`, Buffer.from(m.bytes))
     )
   );
 })();

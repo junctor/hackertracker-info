@@ -77,8 +77,8 @@ export default function NavLinks() {
               </Link>
             )}
           </Menu.Item>
-          {/* <Menu.Item>
-            {({ active }: any) => (
+          <Menu.Item>
+            {({ active }: { active: boolean }) => (
               <Link href="/info">
                 <span className="flex my-3">
                   {active ? (
@@ -90,9 +90,9 @@ export default function NavLinks() {
                 </span>
               </Link>
             )}
-          </Menu.Item> 
+          </Menu.Item>
           <Menu.Item>
-            {({ active }: any) => (
+            {({ active }: { active: boolean }) => (
               <Link href="/bookmarks">
                 <span className="flex my-3">
                   {active ? (
@@ -106,7 +106,7 @@ export default function NavLinks() {
             )}
           </Menu.Item>
           <Menu.Item>
-            {({ active }: any) => (
+            {({ active }: { active: boolean }) => (
               <Link href="/maps">
                 <span className="flex my-3">
                   {active ? (
@@ -120,7 +120,7 @@ export default function NavLinks() {
             )}
           </Menu.Item>
           <Menu.Item>
-            {({ active }: any) => (
+            {({ active }: { active: boolean }) => (
               <Link href="/locations">
                 <span className="flex my-3">
                   {active ? (
@@ -134,7 +134,7 @@ export default function NavLinks() {
             )}
           </Menu.Item>
           <Menu.Item>
-            {({ active }: any) => (
+            {({ active }: { active: boolean }) => (
               <Link href="/categories">
                 <span className="flex my-3">
                   {active ? (
@@ -148,7 +148,7 @@ export default function NavLinks() {
             )}
           </Menu.Item>
           <Menu.Item>
-            {({ active }: any) => (
+            {({ active }: { active: boolean }) => (
               <Link href="/speakers">
                 <span className="flex my-3">
                   {active ? (
@@ -161,7 +161,7 @@ export default function NavLinks() {
               </Link>
             )}
           </Menu.Item>
-          */}
+
           <Menu.Item>
             {({ active }: { active: boolean }) => (
               <Link href="/apps">

@@ -1,6 +1,6 @@
 import { Disclosure } from "@headlessui/react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import FormatDescription from "../misc/FormatDesc";
+import ReactMarkdown from "react-markdown";
 
 function FaqSection({
   section,
@@ -29,7 +29,9 @@ function FaqSection({
               </div>
             </Disclosure.Button>
             <Disclosure.Panel className="p-4">
-              <FormatDescription details={content} />
+              <div className="prose lg:prose-xl">
+                <ReactMarkdown>{content}</ReactMarkdown>
+              </div>
             </Disclosure.Panel>
           </>
         )}

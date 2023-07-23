@@ -1,4 +1,4 @@
-import FormatDescription from "../misc/FormatDesc";
+import ReactMarkdown from "react-markdown";
 
 function InfoSection({
   section,
@@ -12,8 +12,8 @@ function InfoSection({
       <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
         {section}
       </h2>
-      <div className="mt-5">
-        <FormatDescription details={content} />
+      <div className="prose lg:prose-xl">
+        <ReactMarkdown>{content}</ReactMarkdown>
       </div>
     </div>
   );

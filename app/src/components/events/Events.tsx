@@ -94,9 +94,9 @@ export default function Events({
                 ))}
               </div>
             </div>
-            <p className="text-xl sm:text-xl md:text-2xl lg:text-3xl text-left font-bold my-5 ml-2">
+            <h2 className="text-xl sm:text-xl md:text-2xl lg:text-3xl text-left font-bold my-5 ml-2">
               {dateGroupTitle(day)}
-            </p>
+            </h2>
             <div>
               <EventDisplay htEvents={htEvents} />
             </div>

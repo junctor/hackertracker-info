@@ -65,9 +65,9 @@ export default function SpeakerList({
                 ))}
               </div>
             </div>
-            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl my-3 text-center font-bold text-dc-yellow">
+            <h2 className="text-xl sm:text-xl md:text-2xl lg:text-3xl text-left font-extrabold my-5 ml-10 text-dc-purple">
               {i}
-            </p>
+            </h2>
             <div>
               <SpeakerDisplay speakers={speakers} />
             </div>

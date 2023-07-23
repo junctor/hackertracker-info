@@ -4,7 +4,7 @@ export default function SpeakerDisplay({ speakers }: { speakers: Speaker[] }) {
   return (
     <div>
       {speakers.map((s) => (
-        <div key={s.id} className="ml-10 my-5">
+        <div key={s.id} className="ml-5 my-5">
           <Link href={`/speaker?id=${s.id}`} prefetch={false}>
             <button
               type="button"

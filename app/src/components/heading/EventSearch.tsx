@@ -36,12 +36,8 @@ function EventSearch({ events }: { events: EventSearch[] }) {
           .slice(0, 50);
 
   return (
-    <div className="flex items-center">
-      <div
-        className={`${
-          query !== "" ? "w-60 sm:w-[500px] md:w-[600px] lg:w-[800px]" : "w-16"
-        }`}
-      >
+    <div className="flex items-center my-5">
+      <div className="w-80 sm:w-[500px] md:w-[600px] lg:w-[800px]">
         <Combobox
           value={query}
           onChange={(eventId) => {
@@ -54,9 +50,9 @@ function EventSearch({ events }: { events: EventSearch[] }) {
           <div className="relative">
             <Combobox.Input
               autoFocus
-              className="w-full bg-dc-gray text-base border border-white rounded-md p-2 ml-1 placeholder-dc-red pl-3 placeholder:font-extrabold"
+              className="w-full bg-dc-gray text-base border border-white rounded-md p-2 ml-1 placeholder-dc-red pl-3 placeholder:font-light"
               displayValue={() => query}
-              placeholder="|"
+              placeholder="Search events"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setQuery(e.target.value);
               }}
@@ -82,7 +78,7 @@ function EventSearch({ events }: { events: EventSearch[] }) {
             >
               <Combobox.Options
                 static
-                className="absolute mt-1 max-h-56 w-full overflow-auto rounded-md bg-black py-1 shadow-lg  border-2 border-dc-teal focus:outline-none"
+                className="absolute mt-1 max-h-48 min-h-24 w-full overflow-auto rounded-md bg-black py-1 shadow-lg  border-2 border-dc-teal focus:outline-none cursor-pointer"
               >
                 {searchedEvents.map((e) => (
                   <Combobox.Option key={e.id} value={e.id}>

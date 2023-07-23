@@ -37,7 +37,7 @@ export default function CategoryPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-black">
+      <main className="bg-black mb-20">
         <Schedule events={events} title={catEventName} />
       </main>
     </div>

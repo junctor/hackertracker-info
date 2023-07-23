@@ -15,7 +15,7 @@ const AppsPage: NextPage = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    <main className="bg-black">
+    <main className="bg-black mb-20">
       <Apps />
     </main>
   </div>

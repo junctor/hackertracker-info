@@ -31,7 +31,7 @@ export default function MapsPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-black">
+      <main className="bg-black mb-20">
         <Maps conference={data} />
       </main>
     </div>

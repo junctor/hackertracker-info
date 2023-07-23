@@ -43,7 +43,7 @@ export default function InfoPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-black">
+      <main className="bg-black mb-20">
         <Information conference={conferenceData} faq={faqData} />
       </main>
     </div>

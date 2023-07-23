@@ -33,7 +33,7 @@ export default function Events() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-black">
+      <main className="bg-black mb-20">
         <Schedule events={events} title="Schedule" />
       </main>
     </div>

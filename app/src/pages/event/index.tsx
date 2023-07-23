@@ -46,7 +46,7 @@ export default function EventPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-black">
+      <main className="bg-black mb-20">
         <Event event={event} tags={tags ?? []} />
       </main>
     </div>

@@ -20,9 +20,17 @@ export default function SpeakerPage() {
     return <Loading />;
   }
 
+  if (speakerId == null || speakerId === "") {
+    return <Error msg="No speaker id provided" />;
+  }
+
   const speaker = speakersData?.find((s) => s.id.toString() === speakerId);
 
-  if (speaker == null || speakersError !== undefined) {
+  if (speaker === undefined) {
+    return <Error msg={`No speaker found for id ${speakerId}`} />;
+  }
+
+  if (speakersError !== undefined) {
     return <Error />;
   }
   return (

@@ -25,16 +25,16 @@ export default function EventPage() {
     return <Loading />;
   }
 
-  if (eventId == null) {
-    return <Error />;
+  if (eventId == null || eventId === "") {
+    return <Error msg="No event id provided" />;
   }
   const event = eventsData?.find((e) => e.id.toString() === eventId);
 
-  if (
-    eventsData === undefined ||
-    eventsError !== undefined ||
-    event === undefined
-  ) {
+  if (event === undefined) {
+    return <Error msg={`No event found for id ${eventId}`} />;
+  }
+
+  if (eventsData === undefined || eventsError !== undefined) {
     return <Error />;
   }
 

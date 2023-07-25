@@ -78,7 +78,7 @@ function EventSearch({ events }: { events: EventSearch[] }) {
             >
               <Combobox.Options
                 static
-                className="absolute mt-1 max-h-48 min-h-24 w-full overflow-auto rounded-md bg-black py-1 shadow-lg  border-2 border-dc-teal focus:outline-none cursor-pointer"
+                className="absolute mt-1 max-h-48 min-h-24 w-full overflow-auto rounded-md bg-black text-white py-1 shadow-lg  border-2 border-dc-teal focus:outline-none cursor-pointer"
               >
                 {searchedEvents.map((e) => (
                   <Combobox.Option key={e.id} value={e.id}>

@@ -39,7 +39,7 @@ export default function NavLinks() {
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-50 opacity-0"
       >
-        <Menu.Items className="absolute bg-black rounded-b-lg py-2 px-2">
+        <Menu.Items className="absolute bg-black text-white rounded-b-lg py-2 px-2">
           <Menu.Item>
             <div>
               <Image

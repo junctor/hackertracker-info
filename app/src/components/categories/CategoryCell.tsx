@@ -3,7 +3,7 @@ import Link from "next/link";
 function CategoryCell({ category }: { category: HTEventType }) {
   return (
     <div className="my-5 ml-2">
-      <div className="table bg-black items-center text-left">
+      <div className="table bg-black text-white items-center text-left">
         <div
           className={`table-cell ml-1 w-1 md:w-2 ${`bg-[${category.color}]`}`}
         >

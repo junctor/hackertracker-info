@@ -27,7 +27,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <main className="bg-black mb-20 text-white">
         <Splash conference={data} />
       </main>
     </div>

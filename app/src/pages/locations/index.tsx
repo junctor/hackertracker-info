@@ -31,7 +31,7 @@ export default function LocationsPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-black mb-20">
+      <main className="bg-black mb-20 text-white">
         <Locations locations={data} />
       </main>
     </div>

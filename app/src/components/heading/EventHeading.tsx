@@ -11,7 +11,7 @@ function EventHeading({ events }: { events: EventSearch[] }) {
   return (
     <div className="sticky top-0 z-50 pb-2">
       <header>
-        <nav className="flex bg-black h-20 items-center text-center justify-around py-1">
+        <nav className="flex bg-black text-white h-20 items-center text-center justify-around py-1">
           <div className="flex-none ml-1">
             <div>
               <NavLinks />
@@ -49,7 +49,7 @@ function EventHeading({ events }: { events: EventSearch[] }) {
               setIsSearch(() => !isSearch);
             }}
             as="div"
-            className="fixed inset-0 z-30 overflow-y-auto flex bg-black w-screen min-h-full items-center justify-center p-5"
+            className="fixed inset-0 z-30 overflow-y-auto flex bg-black text-white w-screen min-h-full items-center justify-center p-5"
           >
             <Dialog.Panel>
               <Dialog.Title>Event Search</Dialog.Title>

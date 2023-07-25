@@ -34,7 +34,7 @@ export default function SpeakersPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-black mb-20">
+      <main className="bg-black mb-20 text-white">
         <Speakers speakers={speakers} />
       </main>
     </div>

@@ -25,7 +25,7 @@ export function EventDetailHeading({ eventId }: { eventId: number }) {
 
   return (
     <header className="sticky top-0 z-50 ">
-      <nav className="flex bg-black h-20 items-center align-middle text-center justify-around py-1">
+      <nav className="flex bg-black text-white h-20 items-center align-middle text-center justify-around py-1">
         <div className="flex-none ml-1">
           <div>
             <NavLinks />

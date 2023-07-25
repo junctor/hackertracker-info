@@ -33,7 +33,7 @@ export default function CategoriesPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-black mb-20">
+      <main className="bg-black mb-20 text-white">
         <Categories categories={categoryData} />
       </main>
     </div>

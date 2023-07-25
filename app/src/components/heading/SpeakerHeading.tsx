@@ -26,7 +26,7 @@ function SpeakerHeading({ speakers }: { speakers: Speaker[] }) {
                 setIsSearch(true);
               }}
             >
-              <MagnifyingGlassIcon className="h-7 w-7 hover:text-dc-teal" />
+              <MagnifyingGlassIcon className="h-6 w-6 md:h-7 md:w-7 hover:text-dc-teal" />
             </button>
           </div>
         </nav>
@@ -52,7 +52,7 @@ function SpeakerHeading({ speakers }: { speakers: Speaker[] }) {
             className="fixed inset-0 z-20 overflow-y-auto flex bg-black w-screen min-h-full items-center justify-center p-5"
           >
             <Dialog.Panel>
-              <Dialog.Title>Event Search</Dialog.Title>
+              <Dialog.Title>Speaker Search</Dialog.Title>
               <Dialog.Description></Dialog.Description>
               <SpeakerSearch speakers={speakers} />
             </Dialog.Panel>

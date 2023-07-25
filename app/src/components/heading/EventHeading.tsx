@@ -26,7 +26,7 @@ function EventHeading({ events }: { events: EventSearch[] }) {
                 setIsSearch(true);
               }}
             >
-              <MagnifyingGlassIcon className="h-7 w-7 hover:text-dc-teal" />
+              <MagnifyingGlassIcon className="h-6 w-6 md:h-7 md:w-7 hover:text-dc-teal" />
             </button>
           </div>
         </nav>

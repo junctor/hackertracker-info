@@ -12,10 +12,15 @@ export default function CategoryPage() {
     fetcher
   );
 
+  const { data: tags, isLoading: tagsIsLoading } = useSWR<HTTag[], Error>(
+    "/ht/tags.json",
+    fetcher
+  );
+
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("id");
 
-  if (isLoading) {
+  if (isLoading || tagsIsLoading) {
     return <Loading />;
   }
 
@@ -27,7 +32,7 @@ export default function CategoryPage() {
     data.find((e) => e.type.id.toString() === categoryId)?.type.name ?? "";
   const catEvents = data.filter((e) => e.type.id.toString() === categoryId);
 
-  const events = toEventsData(catEvents);
+  const events = toEventsData(catEvents, tags ?? []);
 
   return (
     <div>

@@ -11,7 +11,12 @@ export default function Events() {
     fetcher
   );
 
-  if (isLoading) {
+  const { data: tags, isLoading: tagsIsLoading } = useSWR<HTTag[], Error>(
+    "/ht/tags.json",
+    fetcher
+  );
+
+  if (isLoading || tagsIsLoading) {
     return <Loading />;
   }
 
@@ -19,7 +24,7 @@ export default function Events() {
     return <Error />;
   }
 
-  const events = toEventsData(data);
+  const events = toEventsData(data, tags ?? []);
 
   return (
     <div>

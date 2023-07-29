@@ -4,16 +4,13 @@ import cal from "../../utils/cal";
 import { eventTime } from "../../utils/dates";
 import Theme from "../../utils/theme";
 import ReactMarkdown from "react-markdown";
+import { getEventTags } from "@/utils/tags";
 
 function EventDetails({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
   const theme = new Theme();
   theme.randomisze();
 
-  const eventTags =
-    tags
-      ?.flatMap((t) => t.tags)
-      .filter((t) => event?.tag_ids.includes(t.id))
-      .sort((a, b) => b.sort_order - a.sort_order) ?? [];
+  const eventTags = getEventTags(event, tags);
 
   return (
     <div className="mt-4 ml-5">
@@ -25,12 +22,9 @@ function EventDetails({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
       <div>
         <div className="flex items-center">
           {eventTags?.map((t) => (
-            <div key={t.id} className="flex m-3">
+            <div key={t.id} className="flex m-3 items-center">
               <div
-                className="rounded-full h-3 w-3 md:h-5 md:w-5 lg:w-7 lg:h-7 mr-2 flex-0"
-                style={{
-                  backgroundColor: t.color_background,
-                }}
+                className={`rounded-full h-3 w-3 md:h-5 md:w-5 lg:w-7 lg:h-7green inline-flex flex-none mr-2 bg-[${t.color_background}]`}
               />
               <p className="md:text-sm lg:text-base text-xs text-left">
                 {t.label}

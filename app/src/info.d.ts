@@ -21,20 +21,8 @@ interface EventData {
   location: string;
   color: string;
   category: string;
+  tags: Tag[];
   speakers: string;
-}
-
-interface TVEventData {
-  id: number;
-  begin: string;
-  beginTimestampSeconds: number;
-  end: string;
-  title: string;
-  location: string;
-  color: string;
-  category: string;
-  speakers: string;
-  tags: number[];
 }
 
 interface CategoryData {

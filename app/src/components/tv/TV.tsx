@@ -1,6 +1,6 @@
 import TVEvents from "./TVEvents";
 
-function TV({ events }: { events: TVEventData[] }) {
+function TV({ events }: { events: EventData[] }) {
   return <TVEvents events={events} />;
 }
 

@@ -1,7 +1,9 @@
+import { getEventTags } from "./tags";
+
 export const fetcher = async (...args: Parameters<typeof fetch>) =>
   await fetch(...args).then(async (res) => await res.json());
 
-export const toEventsData = (events: HTEvent[]): EventData[] => {
+export const toEventsData = (events: HTEvent[], tags: HTTag[]): EventData[] => {
   const formatter = new Intl.ListFormat("en", {
     style: "long",
     type: "conjunction",
@@ -16,27 +18,8 @@ export const toEventsData = (events: HTEvent[]): EventData[] => {
     location: e.location.name,
     color: e.type.color,
     category: e.type.name,
+    tags: getEventTags(e, tags),
     speakers: formatter.format(e.speakers.map((s) => s.name)),
-  }));
-};
-
-export const toTVData = (events: HTEvent[]): TVEventData[] => {
-  const formatter = new Intl.ListFormat("en", {
-    style: "long",
-    type: "conjunction",
-  });
-
-  return events.map((e) => ({
-    id: e.id,
-    begin: e.begin,
-    beginTimestampSeconds: e.begin_timestamp.seconds,
-    end: e.end,
-    title: e.title,
-    location: e.location.name,
-    color: e.type.color,
-    category: e.type.name,
-    speakers: formatter.format(e.speakers.map((s) => s.name)),
-    tags: e.tag_ids,
   }));
 };
 

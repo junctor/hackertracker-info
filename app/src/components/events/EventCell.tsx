@@ -59,12 +59,19 @@ export default function EventCell({
               <p className="text-xs sm:text-sm md:text-sm lg:text-base text-gray-400">
                 {event.location}
               </p>
-              <div
-                className={`rounded-full h-3 w-3 green inline-flex mr-2 bg-[${event.color}]`}
-              />
-              <p className="text-xs sm:text-sm md:text-sm lg:text-base inline-flex">
-                {event.category}
-              </p>
+              <div className="flex items-center">
+                {event.tags?.map((t) => (
+                  <div key={t.id} className="flex m-3 items-center ">
+                    <div
+                      className={`rounded-full h-3 w-3 green inline-flex flex-none mr-2 bg-[${t.color_background}]`}
+                    />
+
+                    <p className="text-xs sm:text-sm md:text-sm lg:text-base inline-flex">
+                      {t.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </button>
           </Link>
         </div>

@@ -5,7 +5,7 @@ import Theme from "../../utils/theme";
 import TVClock from "../clock/TVClock";
 import TVEventCell from "./TVEventCell";
 
-function TVEvents({ events }: { events: TVEventData[] }) {
+function TVEvents({ events }: { events: EventData[] }) {
   const [filteredEvents, setFilteredEvents] = useState<
     Map<string, EventData[]>
   >(new Map());
@@ -34,7 +34,7 @@ function TVEvents({ events }: { events: TVEventData[] }) {
 
       return groupedDates(
         events.filter((e) => {
-          if (!e.tags.includes(filterTag)) {
+          if (!e.tags.map((t) => t.id).includes(filterTag)) {
             return false;
           }
 

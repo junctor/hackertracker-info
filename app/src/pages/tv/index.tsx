@@ -1,7 +1,7 @@
 import Head from "next/head";
 import TV from "../../components/tv/TV";
 import useSWR from "swr";
-import { fetcher, toTVData } from "@/utils/misc";
+import { fetcher, toEventsData } from "@/utils/misc";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 
@@ -11,7 +11,12 @@ export default function TVPage() {
     fetcher
   );
 
-  if (isLoading) {
+  const { data: tags, isLoading: tagsIsLoading } = useSWR<HTTag[], Error>(
+    "/ht/tags.json",
+    fetcher
+  );
+
+  if (isLoading || tagsIsLoading) {
     return <Loading />;
   }
 
@@ -19,7 +24,7 @@ export default function TVPage() {
     return <Error />;
   }
 
-  const events = toTVData(data);
+  const events = toEventsData(data, tags ?? []);
 
   return (
     <div>

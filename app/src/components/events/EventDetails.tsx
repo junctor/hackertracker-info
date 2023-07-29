@@ -50,9 +50,10 @@ function EventDetails({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
             <p className="md:text-base lg:text-lg text-xs">
               {event.end_timestamp.seconds !== event.begin_timestamp.seconds
                 ? `${eventTime(new Date(event.begin), false)} - ${eventTime(
-                    new Date(event.end)
+                    new Date(event.end),
+                    true
                   )}`
-                : `${eventTime(new Date(event.begin), false)}`}
+                : `${eventTime(new Date(event.begin), true)}`}
             </p>
           </a>
         </div>

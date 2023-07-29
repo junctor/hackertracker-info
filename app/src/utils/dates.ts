@@ -1,11 +1,10 @@
 export function timeDisplayParts(time: string): string[] {
   const date = new Date(time);
   const options: Intl.DateTimeFormatOptions = {
-    weekday: "short",
     hour: "numeric",
     minute: "numeric",
     timeZoneName: "short",
-    hour12: true,
+    hour12: false,
     timeZone: "America/Los_Angeles",
   };
 
@@ -36,7 +35,7 @@ export function tabDateTitle(day: string): string {
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "short",
-    timeZone: "UTC",
+    timeZone: "America/Los_Angeles",
   };
 
   const date = time.toLocaleDateString("en-US", options);
@@ -50,7 +49,7 @@ export function dateGroupTitle(day: string): string {
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "long",
-    timeZone: "UTC",
+    timeZone: "America/Los_Angeles",
   };
 
   const date = time.toLocaleDateString("en-US", options);
@@ -62,7 +61,7 @@ export function eventWeekday(time: string): string {
   const date = new Date(time);
   const options: Intl.DateTimeFormatOptions = {
     weekday: "short",
-    timeZone: "UTC",
+    timeZone: "America/Los_Angeles",
   };
 
   return date.toLocaleString("en-US", options);
@@ -71,7 +70,8 @@ export function eventWeekday(time: string): string {
 export function eventTime(time: Date, tz = true): string {
   const options: Intl.DateTimeFormatOptions = {
     timeZoneName: tz ? "short" : undefined,
-    hour12: true,
+    weekday: "short",
+    hour12: false,
     day: "numeric",
     month: "short",
     hour: "2-digit",

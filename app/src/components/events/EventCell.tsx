@@ -32,8 +32,10 @@ export default function EventCell({
   return (
     <div className="my-3 ml-2 mr-3" id={event.id.toString()}>
       <div className="bg-black items-center h-min-36 table">
-        <div className={`table-cell px-1 bg-[${event.color}] rounded-sm`} />
-        <div className="text-center items-center table-cell px-3 align-middle">
+        <div
+          className={`table-cell w-0/12 px-1 bg-[${event.color}] rounded-sm`}
+        />
+        <div className="text-center items-center table-cell w-1/12 px-3 align-middle">
           {timeDisplayParts(event.begin).map((part) => (
             <p
               key={part}
@@ -43,7 +45,7 @@ export default function EventCell({
             </p>
           ))}
         </div>
-        <div className="w-11/12 table-cell">
+        <div className="w-10/12 table-cell pr-1">
           <Link href={`/event?id=${event.id}`} prefetch={false}>
             <button type="button" className="text-left">
               <h1
@@ -59,23 +61,30 @@ export default function EventCell({
               <p className="text-xs sm:text-sm md:text-sm lg:text-base text-gray-400">
                 {event.location}
               </p>
-              <div className="flex items-center">
-                {event.tags?.map((t) => (
-                  <div key={t.id} className="flex m-3 items-center ">
-                    <div
-                      className={`rounded-full h-3 w-3 green inline-flex flex-none mr-2 bg-[${t.color_background}]`}
-                    />
 
-                    <p className="text-xs sm:text-sm md:text-sm lg:text-base inline-flex">
-                      {t.label}
-                    </p>
-                  </div>
-                ))}
+              <div className="flex items-center">
+                <div className="grid justify-items-start grid-cols-2 md:grid-cols-3 lg:grid-col-4 gap-2 md:gap-3">
+                  {event.tags?.map((t) => (
+                    <div
+                      key={t.id}
+                      className="flex items-center max-w-xs md:max-w-sm"
+                    >
+                      <span
+                        className={`rounded-full h-3 w-3 md:h-4 md:w-4 lg:h-5 lg:w-5 green inline-flex flex-none mr-2 bg-[${t.color_background}]`}
+                      />
+
+                      <p className="text-xs md:text-sm lg:text-base break-normal w-24 md:w-28">
+                        {t.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </button>
           </Link>
         </div>
-        <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 table-cell w-1/12">
+
+        <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 table-cell w-1/12 items-end ">
           <button
             type="button"
             className="w-10 align-middle mx-2 sm:mx-3 md:mx-4 lg:mx-5 cursor-pointer"

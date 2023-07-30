@@ -21,16 +21,22 @@ function EventDetails({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
       </div>
       <div>
         <div className="flex items-center">
-          {eventTags?.map((t) => (
-            <div key={t.id} className="flex m-3 items-center">
+          <div className="grid justify-items-start grid-cols-2 md:grid-cols-3 lg:grid-col-4 gap-2 md:gap-3">
+            {eventTags.map((t) => (
               <div
-                className={`rounded-full h-3 w-3 md:h-5 md:w-5 lg:w-7 lg:h-7green inline-flex flex-none mr-2 bg-[${t.color_background}]`}
-              />
-              <p className="md:text-sm lg:text-base text-xs text-left">
-                {t.label}
-              </p>
-            </div>
-          ))}
+                key={t.id}
+                className="mr-2 flex items-center max-w-xs md:max-w-sm"
+              >
+                <span
+                  className={`rounded-full h-3 w-3 md:h-4 md:w-4 lg:h-5 lg:w-5 green inline-flex flex-none mr-2 bg-[${t.color_background}]`}
+                />
+
+                <p className="text-xs md:text-sm lg:text-base break-normal w-28">
+                  {t.label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="flex items-center bg-dc-gray w-11/12  mt-2 md:h-14 lg:h-16 h-12 rounded-lg cursor-pointer">
           <a

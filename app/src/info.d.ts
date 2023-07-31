@@ -30,6 +30,11 @@ interface CategoryData {
   data: HTEventType | undefined;
 }
 
+interface TagData {
+  name: string;
+  data: Tag;
+}
+
 interface Speaker {
   name: string;
   id: number;

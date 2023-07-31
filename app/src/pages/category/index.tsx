@@ -24,26 +24,32 @@ export default function CategoryPage() {
     return <Loading />;
   }
 
-  if (data === undefined || error !== undefined) {
+  if (data === undefined || tags === undefined || error !== undefined) {
     return <Error />;
   }
 
-  const catEventName =
-    data.find((e) => e.type.id.toString() === categoryId)?.type.name ?? "";
-  const catEvents = data.filter((e) => e.type.id.toString() === categoryId);
+  const foundTag = tags
+    .flatMap((t) => t.tags)
+    .find((t) => String(t.id) === categoryId);
 
-  const events = toEventsData(catEvents, tags ?? []);
+  if (foundTag === undefined) {
+    return <Error />;
+  }
+
+  const tagEvents = data.filter((e) => e.tag_ids.includes(foundTag.id));
+
+  const events = toEventsData(tagEvents, tags);
 
   return (
     <div>
       <Head>
-        <title>{catEventName}</title>
+        <title>{foundTag.label}</title>
         <meta name="description" content="DEF CON 31" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="bg-black mb-20 text-white">
-        <Schedule events={events} title={catEventName} />
+        <Schedule events={events} title={foundTag.label} />
       </main>
     </div>
   );

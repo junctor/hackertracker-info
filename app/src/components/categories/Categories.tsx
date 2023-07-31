@@ -1,30 +1,27 @@
 import Heading from "../heading/Heading";
 import CategoryCell from "./CategoryCell";
 
-export default function Categories({
-  categories,
-}: {
-  categories: CategoryData[];
-}) {
+export default function Categories({ tags }: { tags: HTTag[] }) {
   return (
     <>
       <Heading />
       <div className="mx-5">
-        <div className="flex items-center justify-center mb-5">
-          <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold font-mono">
-            Categories
-          </h1>
-        </div>
-        {Array.from(categories)
-          .sort((a, b) => {
-            if (a.name.toLowerCase() > b.name.toLowerCase()) {
-              return 1;
-            }
-            return -1;
-          })
-          .map((c) => (
-            <div key={c.data?.id ?? 0} className="my-5">
-              {c.data != null && <CategoryCell category={c.data} />}
+        {tags
+          .sort((a, b) => a.sort_order - b.sort_order)
+          .map((t) => (
+            <div key={t.id}>
+              <div className="flex my-10 sticky top-20 z-20  bg-black ">
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold font-mono">
+                  {t.label}
+                </h1>
+              </div>
+              {t.tags
+                .sort((a, b) => a.sort_order - b.sort_order)
+                .map((c) => (
+                  <div key={c.id} className="my-5">
+                    {c.id != null && <CategoryCell category={c} />}
+                  </div>
+                ))}
             </div>
           ))}
       </div>

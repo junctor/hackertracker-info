@@ -37,6 +37,17 @@ export const toCategories = (events: HTEvent[]): CategoryData[] => {
   return catData;
 };
 
+export const toTags = (tags: HTTag[]) => {
+  const tagData: TagData[] = tags
+    .flatMap((t) => t.tags)
+    .map((t) => ({
+      name: t.label,
+      data: t,
+    }));
+
+  return tagData;
+};
+
 export const toSpeakers = (events: HTSpeaker[]): Speaker[] => {
   const speakerDataMap = events.reduce((speakers, s) => {
     speakers.set(s.name, s);

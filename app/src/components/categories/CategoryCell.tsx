@@ -1,22 +1,19 @@
 import Link from "next/link";
 
-function CategoryCell({ category }: { category: HTEventType }) {
+function CategoryCell({ category }: { category: Tag }) {
   return (
     <div className="my-5 ml-2">
       <div className="table bg-black text-white items-center text-left">
         <div
-          className={`table-cell ml-1 w-1 md:w-2 ${`bg-[${category.color}]`}`}
+          className={`table-cell ml-1 w-1 md:w-2 ${`bg-[${category.color_background}]`}`}
         >
           &nbsp;
         </div>
         <div className="ml-2 w-full">
           <Link href={`/category/?id=${category.id}`} prefetch={false}>
-            <button
-              type="button"
-              className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-left"
-            >
-              {category.name}
-            </button>
+            <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-left">
+              {category.label}
+            </h2>
           </Link>
         </div>
       </div>

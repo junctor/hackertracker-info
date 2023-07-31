@@ -1,13 +1,13 @@
 import Head from "next/head";
 import Categories from "../../components/categories/Categories";
 import useSWR from "swr";
-import { fetcher, toCategories } from "@/utils/misc";
+import { fetcher } from "@/utils/misc";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 
 export default function CategoriesPage() {
-  const { data, error, isLoading } = useSWR<HTEvent[], Error>(
-    "/ht/events.json",
+  const { data, isLoading, error } = useSWR<HTTag[], Error>(
+    "/ht/tags.json",
     fetcher
   );
 
@@ -18,8 +18,6 @@ export default function CategoriesPage() {
   if (data === undefined || error !== undefined) {
     return <Error />;
   }
-
-  const categoryData = toCategories(data);
 
   return (
     <div>
@@ -34,7 +32,7 @@ export default function CategoriesPage() {
       </Head>
 
       <main className="bg-black mb-20 text-white">
-        <Categories categories={categoryData} />
+        <Categories tags={data} />
       </main>
     </div>
   );

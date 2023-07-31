@@ -10,7 +10,8 @@ const freewayFont = localFont({
   variable: "--font-freeway",
 });
 
-export default function Splash({ conference }: { conference: HTConference }) {
+export default function Splash() {
+  const kickoffTimestamp = 1691769600 * 1000;
   return (
     <div className="my-12">
       <div className="flex w-full justify-center items-center text-center mt-5">
@@ -29,9 +30,7 @@ export default function Splash({ conference }: { conference: HTConference }) {
           The Future Will Prevail
         </div>
       </div>
-      {new Date(conference.kickoff_timestamp.seconds) < new Date() && (
-        <Countdown />
-      )}
+      {new Date(kickoffTimestamp) > new Date() && <Countdown />}
       <Links />
     </div>
   );

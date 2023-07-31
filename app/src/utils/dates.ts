@@ -12,25 +12,28 @@ export function timeDisplayParts(time: string): string[] {
 }
 
 export function eventDay(time: Date): string {
-  time.setHours(3, 0, 0);
-
   const options: Intl.DateTimeFormatOptions = {
     timeZoneName: "short",
     day: "numeric",
     year: "numeric",
     month: "numeric",
     hour12: false,
+    timeZone: "America/Los_Angeles",
   };
 
-  const date = time.toLocaleTimeString("en-US", options);
+  const date = time
+    .toLocaleTimeString("en-US", options)
+    .split(",")
+    .slice(0, 1)
+    .join();
 
   console.log(date);
-
   return date;
 }
 
 export function tabDateTitle(day: string): string {
   const time = new Date(day);
+  time.setHours(3, 0, 0);
 
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
@@ -45,6 +48,7 @@ export function tabDateTitle(day: string): string {
 
 export function dateGroupTitle(day: string): string {
   const time = new Date(day);
+  time.setHours(3, 0, 0);
 
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",

@@ -28,7 +28,7 @@ export default function Home() {
       </Head>
 
       <main className="bg-black mb-20 text-white">
-        <Splash conference={data} />
+        <Splash />
       </main>
     </div>
   );

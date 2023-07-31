@@ -12,7 +12,7 @@ export function timeDisplayParts(time: string): string[] {
 }
 
 export function eventDay(time: Date): string {
-  time.setHours(0, 0, 0);
+  time.setHours(3, 0, 0);
 
   const options: Intl.DateTimeFormatOptions = {
     timeZoneName: "short",

@@ -6,7 +6,7 @@ import Apps from "../../components/apps/Apps";
 const AppsPage: NextPage = () => (
   <div>
     <Head>
-      <title>D3F C0N Apps</title>
+      <title>DEF CON 31 Apps</title>
       <meta name="description" content="DEF CON 31 Apps" />
       <meta
         name="viewport"

@@ -6,7 +6,7 @@ import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import { useSearchParams } from "next/navigation";
 
-export default function CategoryPage() {
+export default function TagPage() {
   const { data, error, isLoading } = useSWR<HTEvent[], Error>(
     "/ht/events.json",
     fetcher
@@ -18,7 +18,7 @@ export default function CategoryPage() {
   );
 
   const searchParams = useSearchParams();
-  const categoryId = searchParams.get("id");
+  const tagId = searchParams.get("id");
 
   if (isLoading || tagsIsLoading) {
     return <Loading />;
@@ -30,7 +30,7 @@ export default function CategoryPage() {
 
   const foundTag = tags
     .flatMap((t) => t.tags)
-    .find((t) => String(t.id) === categoryId);
+    .find((t) => String(t.id) === tagId);
 
   if (foundTag === undefined) {
     return <Error />;
@@ -43,7 +43,7 @@ export default function CategoryPage() {
   return (
     <div>
       <Head>
-        <title>{foundTag.label}</title>
+        <title>{`DEF CON 31 ${foundTag.label}`}</title>
         <meta name="description" content="DEF CON 31" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

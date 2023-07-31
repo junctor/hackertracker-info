@@ -29,7 +29,7 @@ export default function Events() {
   return (
     <div>
       <Head>
-        <title>D3F C0N Events</title>
+        <title>DEF CON 31 Events</title>
         <meta name="description" content="DEF CON 31 Events" />
         <meta
           name="viewport"

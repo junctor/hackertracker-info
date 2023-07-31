@@ -36,7 +36,7 @@ export default function SpeakerPage() {
   return (
     <div>
       <Head>
-        <title>{speaker.name}</title>
+        <title>{`DEF CON 31 ${speaker.name}`}</title>
         <meta name="description" content="DEF CON 31 Speaker" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

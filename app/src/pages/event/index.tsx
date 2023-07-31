@@ -41,7 +41,7 @@ export default function EventPage() {
   return (
     <div>
       <Head>
-        <title>{event.title}</title>
+        <title>{`DEF CON 31 ${event.title}`}</title>
         <meta name="description" content="DEF CON 31 Event" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

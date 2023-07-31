@@ -22,7 +22,7 @@ export default function MapsPage() {
   return (
     <div>
       <Head>
-        <title>D3F C0N Maps</title>
+        <title>DEF CON 31 Maps</title>
         <meta name="description" content="DEF CON 31 Maps" />
         <meta
           name="viewport"

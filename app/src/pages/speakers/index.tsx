@@ -25,7 +25,7 @@ export default function SpeakersPage() {
   return (
     <div>
       <Head>
-        <title>D3F C0N Speakers</title>
+        <title>DEF CON 31 Speakers</title>
         <meta name="description" content="DEF CON 31 Speakers" />
         <meta
           name="viewport"

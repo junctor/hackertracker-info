@@ -29,7 +29,7 @@ export default function BookmarksPage() {
   return (
     <div>
       <Head>
-        <title>D3F C0N Bookmarks</title>
+        <title>DEF CON 31 Bookmarks</title>
         <meta name="description" content="DEF CON 31 Bookmarks" />
         <meta
           name="viewport"

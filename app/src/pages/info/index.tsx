@@ -34,7 +34,7 @@ export default function InfoPage() {
   return (
     <div>
       <Head>
-        <title>D3F C0N Info</title>
+        <title>DEF CON 31 Info</title>
         <meta name="description" content="DEF CON 31 Info" />
         <meta
           name="viewport"

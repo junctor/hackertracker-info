@@ -1,18 +1,18 @@
 import Link from "next/link";
 
-function CategoryCell({ category }: { category: Tag }) {
+function TagCell({ tag }: { tag: Tag }) {
   return (
     <div className="my-5 ml-2">
       <div className="table bg-black text-white items-center text-left">
         <div
-          className={`table-cell ml-1 w-1 md:w-2 ${`bg-[${category.color_background}]`}`}
+          className={`table-cell ml-1 w-1 md:w-2 ${`bg-[${tag.color_background}]`}`}
         >
           &nbsp;
         </div>
         <div className="ml-2 w-full">
-          <Link href={`/category/?id=${category.id}`} prefetch={false}>
+          <Link href={`/tag/?id=${tag.id}`} prefetch={false}>
             <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-left">
-              {category.label}
+              {tag.label}
             </h2>
           </Link>
         </div>
@@ -21,4 +21,4 @@ function CategoryCell({ category }: { category: Tag }) {
   );
 }
 
-export default CategoryCell;
+export default TagCell;

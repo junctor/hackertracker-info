@@ -1,7 +1,7 @@
 import Heading from "../heading/Heading";
-import CategoryCell from "./CategoryCell";
+import TagCell from "./TagCell";
 
-export default function Categories({ tags }: { tags: HTTag[] }) {
+export default function Tags({ tags }: { tags: HTTag[] }) {
   return (
     <>
       <Heading />
@@ -19,7 +19,7 @@ export default function Categories({ tags }: { tags: HTTag[] }) {
                 .sort((a, b) => a.sort_order - b.sort_order)
                 .map((c) => (
                   <div key={c.id} className="my-5">
-                    {c.id != null && <CategoryCell category={c} />}
+                    {c.id != null && <TagCell tag={c} />}
                   </div>
                 ))}
             </div>

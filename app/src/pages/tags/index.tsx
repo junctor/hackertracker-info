@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Categories from "../../components/categories/Categories";
+import Tags from "../../components/tags/Tags";
 import useSWR from "swr";
 import { fetcher } from "@/utils/misc";
 import Loading from "@/components/misc/Loading";
@@ -19,10 +19,12 @@ export default function CategoriesPage() {
     return <Error />;
   }
 
+  const tags = data.filter((t) => t.category === "content");
+
   return (
     <div>
       <Head>
-        <title>D3F C0N Categories</title>
+        <title>DEF CON 31 Tags</title>
         <meta name="description" content="DEF CON 31 Categories" />
         <meta
           name="viewport"
@@ -32,7 +34,7 @@ export default function CategoriesPage() {
       </Head>
 
       <main className="bg-black mb-20 text-white">
-        <Categories tags={data} />
+        <Tags tags={tags} />
       </main>
     </div>
   );

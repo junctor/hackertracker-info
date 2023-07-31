@@ -135,14 +135,14 @@ export default function NavLinks() {
           </Menu.Item>
           <Menu.Item>
             {({ active }: { active: boolean }) => (
-              <Link href="/categories">
+              <Link href="/tags">
                 <span className="flex my-3">
                   {active ? (
                     <TagIconSoild className="w-6 mr-2" />
                   ) : (
                     <TagIconOutline className="w-6 mr-2" />
                   )}
-                  <p>Categories</p>
+                  <p>Tags</p>
                 </span>
               </Link>
             )}

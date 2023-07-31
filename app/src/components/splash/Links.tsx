@@ -57,8 +57,8 @@ function Links() {
       active: LocationMarkerIconSoild,
     },
     {
-      url: "/categories",
-      label: "Categories",
+      url: "/tags",
+      label: "Tags",
       icon: TagIconOutline,
       active: TagIconSoild,
     },

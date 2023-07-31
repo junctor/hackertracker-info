@@ -12,20 +12,20 @@ export function timeDisplayParts(time: string): string[] {
 }
 
 export function eventDay(time: Date): string {
+  time.setHours(0, 0, 0);
+
   const options: Intl.DateTimeFormatOptions = {
     timeZoneName: "short",
     day: "numeric",
     year: "numeric",
     month: "numeric",
     hour12: false,
-    timeZone: "America/Los_Angeles",
   };
 
-  const date = time
-    .toLocaleTimeString("en-US", options)
-    .split(",")
-    .slice(0, 1)
-    .join();
+  const date = time.toLocaleTimeString("en-US", options);
+
+  console.log(date);
+
   return date;
 }
 

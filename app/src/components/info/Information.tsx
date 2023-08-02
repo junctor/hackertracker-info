@@ -6,15 +6,17 @@ import FAQ from "./FAQ";
 function Information({
   conference,
   faq,
+  news,
 }: {
   conference: HTConference;
   faq: HTFAQ[];
+  news: HTNews[];
 }) {
   return (
     <div>
       <Heading />
       <PageTitle title="Info" />
-      <ConInfo conference={conference} />
+      <ConInfo conference={conference} news={news} />
       {faq.length > 0 && <FAQ faq={faq} />}
     </div>
   );

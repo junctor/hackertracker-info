@@ -206,3 +206,12 @@ interface HTLocations {
   hier_extent_right: number;
   short_name: string;
 }
+
+interface HTNews {
+  conference_id: number;
+  conference: string;
+  updated_at: Timestamp;
+  name: string;
+  text: strng;
+  id: number;
+}

@@ -2,12 +2,13 @@ import fs from "fs";
 import {
   firebaseInit,
   getConference,
-  getConfEvents,
-  getSpeakerData,
-  getConfFAQ,
+  getEvents,
+  getSpeakers,
+  getFAQ,
   getMaps,
-  getLocationData,
+  getLocations,
   getTags,
+  getNews,
 } from "./fb";
 
 const CONF = "DEFCON31";
@@ -15,14 +16,15 @@ const CONF = "DEFCON31";
 (async () => {
   const fbDb = await firebaseInit();
 
-  const [htConf, htEvents, htSpeakers, htFAQ, htLocations, htTags] =
+  const [htConf, htEvents, htSpeakers, htFAQ, htLocations, htTags, htNews] =
     await Promise.all([
       getConference(fbDb, CONF),
-      getConfEvents(fbDb, CONF),
-      getSpeakerData(fbDb, CONF),
-      getConfFAQ(fbDb, CONF),
-      getLocationData(fbDb, CONF),
+      getEvents(fbDb, CONF),
+      getSpeakers(fbDb, CONF),
+      getFAQ(fbDb, CONF),
+      getLocations(fbDb, CONF),
       getTags(fbDb, CONF),
+      getNews(fbDb, CONF),
     ]);
 
   const outputDir = "./out";
@@ -40,7 +42,7 @@ const CONF = "DEFCON31";
     fs.promises.writeFile("./out/ht/speakers.json", JSON.stringify(htSpeakers)),
     fs.promises.writeFile("./out/ht/faq.json", JSON.stringify(htFAQ)),
     fs.promises.writeFile("./out/ht/tags.json", JSON.stringify(htTags)),
-
+    fs.promises.writeFile("./out/ht/news.json", JSON.stringify(htNews)),
     fs.promises.writeFile(
       "./out/ht/locations.json",
       JSON.stringify(htLocations)
@@ -50,7 +52,7 @@ const CONF = "DEFCON31";
   fbDb.app.options.storageBucket = "gs://hackertest-5a202.appspot.com";
 
   const maps = await Promise.all(
-    htConf?.maps?.map((m) => getMaps(fbDb, CONF, m.file)) ?? []
+    htConf?.maps?.map((m: any) => getMaps(fbDb, CONF, m.file)) ?? []
   );
 
   await Promise.all(

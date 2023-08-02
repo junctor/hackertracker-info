@@ -31,6 +31,23 @@ export function eventDay(time: Date): string {
   return date;
 }
 
+export function newsDate(s: number): string {
+  const time = new Date(s * 1000);
+
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "America/Los_Angeles",
+  };
+
+  const date = time.toLocaleDateString("en-US", options);
+
+  return date;
+}
+
 export function tabDateTitle(day: string): string {
   const time = new Date(day);
   time.setHours(3, 0, 0);

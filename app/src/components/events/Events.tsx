@@ -2,6 +2,13 @@ import { useEffect, useRef } from "react";
 import { dateGroupTitle, tabDateTitle } from "../../utils/dates";
 import PageTitle from "../misc/PageTitle";
 import EventDisplay from "./EventDisplay";
+import localFont from "next/font/local";
+
+const freewayFont = localFont({
+  src: "../../../public/fonts/freeway-gothic.woff2",
+  display: "swap",
+  variable: "--font-freeway",
+});
 
 export default function Events({
   dateGroup,
@@ -84,7 +91,7 @@ export default function Events({
                     key={tabDay}
                     className={`p-2 mx-1 rounded-lg text-xs sm:text-sm md:text-base lg:text-lg font-semibold ${
                       day === tabDay ? "bg-dc-teal" : "hover:text-gray-400"
-                    }`}
+                    } ${freewayFont.className}`}
                     onClick={() => {
                       scrollToDay(tabDay);
                     }}
@@ -94,7 +101,9 @@ export default function Events({
                 ))}
               </div>
             </div>
-            <h2 className="text-xl sm:text-xl md:text-2xl lg:text-3xl text-left font-bold my-5 ml-2">
+            <h2
+              className={`text-xl sm:text-xl md:text-2xl lg:text-3xl text-left font-bold my-5 ml-2 ${freewayFont.className}`}
+            >
               {dateGroupTitle(day)}
             </h2>
             <div>

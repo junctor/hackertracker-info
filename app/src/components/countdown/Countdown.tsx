@@ -21,27 +21,27 @@ export function Countdown() {
 
   return (
     <div className="grid place-items-center mt-3 md:mt-10 text-center">
-      <div className="grid grid-flow-row md:grid-flow-col gap-4 md:gap-12 text-center auto-cols-max">
+      <div className="grid grid-flow-col gap-4 md:gap-12 text-center auto-cols-max">
         <div>
-          <span className="countdown font-mono font-bold text-6xl md:text-7xl text-dc-purple">
+          <span className="countdown font-mono font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-purple">
             <span style={{ "--value": timer.days } as React.CSSProperties} />
           </span>
           days
         </div>
         <div>
-          <span className="countdown font-mono font-bold text-6xl md:text-7xl text-dc-teal">
+          <span className="countdown font-mono font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl  text-dc-teal">
             <span style={{ "--value": timer.hours } as React.CSSProperties} />
           </span>
           hours
         </div>
         <div>
-          <span className="countdown font-mono font-bold text-6xl md:text-7xl text-dc-yellow">
+          <span className="countdown font-mono font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-yellow">
             <span style={{ "--value": timer.minutes } as React.CSSProperties} />
           </span>
           min
         </div>
         <div>
-          <span className="countdown font-mono font-bold text-6xl md:text-7xl text-dc-red">
+          <span className="countdown font-mono font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-red">
             <span style={{ "--value": timer.seconds } as React.CSSProperties} />
           </span>
           sec

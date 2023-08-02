@@ -12,22 +12,21 @@ export default function InfoPage() {
     isLoading: conferenceIsLoading,
   } = useSWR<HTConference, Error>("/ht/conference.json", fetcher);
 
-  const {
-    data: faqData,
-    error: faqError,
-    isLoading: faqIsLoading,
-  } = useSWR<HTFAQ[], Error>("/ht/faq.json", fetcher);
+  const { data: faqData, isLoading: faqIsLoading } = useSWR<HTFAQ[], Error>(
+    "/ht/faq.json",
+    fetcher
+  );
 
-  if (conferenceIsLoading || faqIsLoading) {
+  const { data: newsData, isLoading: newsIsLoading } = useSWR<HTNews[], Error>(
+    "/ht/news.json",
+    fetcher
+  );
+
+  if (conferenceIsLoading || faqIsLoading || newsIsLoading) {
     return <Loading />;
   }
 
-  if (
-    conferenceData === undefined ||
-    conferenceError !== undefined ||
-    faqData === undefined ||
-    faqError !== undefined
-  ) {
+  if (conferenceData === undefined || conferenceError !== undefined) {
     return <Error />;
   }
 
@@ -44,7 +43,11 @@ export default function InfoPage() {
       </Head>
 
       <main className="bg-black mb-20 text-white">
-        <Information conference={conferenceData} faq={faqData} />
+        <Information
+          conference={conferenceData}
+          faq={faqData ?? []}
+          news={newsData ?? []}
+        />
       </main>
     </div>
   );

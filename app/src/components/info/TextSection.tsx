@@ -2,7 +2,7 @@ import { Disclosure } from "@headlessui/react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import ReactMarkdown from "react-markdown";
 
-function FaqSection({
+function TextSection({
   section,
   content,
 }: {
@@ -19,7 +19,7 @@ function FaqSection({
                 <div className="text-left font-bold text-sm sm:text-base md:text-lg lg:text-xl flex-1 w-11/12">
                   {section}
                 </div>
-                <div className="w-8 flex-none text-end self-center">
+                <div className="flex ml-auto">
                   <ChevronLeftIcon
                     className={`${
                       open ? "-rotate-90 transform" : ""
@@ -40,4 +40,4 @@ function FaqSection({
   );
 }
 
-export default FaqSection;
+export default TextSection;

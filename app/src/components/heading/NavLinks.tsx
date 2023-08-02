@@ -2,28 +2,20 @@
 import { Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon as MenuIcon,
-  InformationCircleIcon as InformationCircleIconSoild,
-  UserIcon as UserIconSoild,
-  BookmarkIcon as BookmarkIconSoild,
-  CalendarIcon as CalendarIconSoild,
-  MapPinIcon as LocationMarkerIconSoild,
-  TagIcon as TagIconSoild,
-  DevicePhoneMobileIcon as DeviceMobileIconSoild,
-  MapIcon as MapIconSoild,
+  HomeIcon as HomeIconSoild,
 } from "@heroicons/react/24/solid";
-import {
-  InformationCircleIcon as InformationCircleIconOutline,
-  CalendarIcon as CalendarIconOutline,
-  BookmarkIcon as BookmarkIconOutline,
-  UserIcon as UserIconOutline,
-  MapPinIcon as LocationMarkerIconOutline,
-  TagIcon as TagIconOutline,
-  DevicePhoneMobileIcon as DeviceMobileIconOutline,
-  MapIcon as MapIconOutline,
-} from "@heroicons/react/24/outline";
+import { HomeIcon as HomeIconOutline } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import skullLogo from "../../../public/images/skull_200x200.png";
 import Image from "next/image";
+import localFont from "next/font/local";
+import { links } from "../../utils/links";
+
+const benguiatFont = localFont({
+  src: "../../../public/fonts/benguiat.woff",
+  display: "swap",
+  variable: "--font-benguiat",
+});
 
 export default function NavLinks() {
   return (
@@ -54,128 +46,31 @@ export default function NavLinks() {
               <Link href="/">
                 <span className="flex my-3">
                   {active ? (
-                    <CalendarIconSoild className="w-6 mr-2" />
+                    <HomeIconSoild className="w-6 mr-2" />
                   ) : (
-                    <CalendarIconOutline className="w-6 mr-2" />
+                    <HomeIconOutline className="w-6 mr-2" />
                   )}
-                  <p>Home</p>
+                  <p className={`${benguiatFont.className}`}>Home</p>
                 </span>
               </Link>
             )}
           </Menu.Item>
-          <Menu.Item>
-            {({ active }: { active: boolean }) => (
-              <Link href="/events">
-                <span className="flex my-3">
-                  {active ? (
-                    <CalendarIconSoild className="w-6 mr-2" />
-                  ) : (
-                    <CalendarIconOutline className="w-6 mr-2" />
-                  )}
-                  <p>Schedule</p>
-                </span>
-              </Link>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }: { active: boolean }) => (
-              <Link href="/info">
-                <span className="flex my-3">
-                  {active ? (
-                    <InformationCircleIconSoild className="w-6 mr-2" />
-                  ) : (
-                    <InformationCircleIconOutline className="w-6 mr-2" />
-                  )}
-                  <p>Info</p>
-                </span>
-              </Link>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }: { active: boolean }) => (
-              <Link href="/bookmarks">
-                <span className="flex my-3">
-                  {active ? (
-                    <BookmarkIconSoild className="w-6 mr-2" />
-                  ) : (
-                    <BookmarkIconOutline className="w-6 mr-2" />
-                  )}
-                  <p>Bookmarks</p>
-                </span>
-              </Link>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }: { active: boolean }) => (
-              <Link href="/maps">
-                <span className="flex my-3">
-                  {active ? (
-                    <MapIconSoild className="w-6 mr-2" />
-                  ) : (
-                    <MapIconOutline className="w-6 mr-2" />
-                  )}
-                  <p>Maps</p>
-                </span>
-              </Link>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }: { active: boolean }) => (
-              <Link href="/locations">
-                <span className="flex my-3">
-                  {active ? (
-                    <LocationMarkerIconSoild className="w-6 mr-2" />
-                  ) : (
-                    <LocationMarkerIconOutline className="w-6 mr-2" />
-                  )}
-                  <p>Locations</p>
-                </span>
-              </Link>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }: { active: boolean }) => (
-              <Link href="/tags">
-                <span className="flex my-3">
-                  {active ? (
-                    <TagIconSoild className="w-6 mr-2" />
-                  ) : (
-                    <TagIconOutline className="w-6 mr-2" />
-                  )}
-                  <p>Tags</p>
-                </span>
-              </Link>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }: { active: boolean }) => (
-              <Link href="/speakers">
-                <span className="flex my-3">
-                  {active ? (
-                    <UserIconSoild className="w-6 mr-2" />
-                  ) : (
-                    <UserIconOutline className="w-6 mr-2" />
-                  )}
-                  <p>Speakers</p>
-                </span>
-              </Link>
-            )}
-          </Menu.Item>
-
-          <Menu.Item>
-            {({ active }: { active: boolean }) => (
-              <Link href="/apps">
-                <span className="flex">
-                  {active ? (
-                    <DeviceMobileIconSoild className="w-6 mr-2" />
-                  ) : (
-                    <DeviceMobileIconOutline className="w-6 mr-2" />
-                  )}
-                  <p>Apps</p>
-                </span>
-              </Link>
-            )}
-          </Menu.Item>
+          {links.map((l) => (
+            <Menu.Item key={l.label}>
+              {({ active }: { active: boolean }) => (
+                <Link href={`/${l.url}`}>
+                  <span className="flex my-3">
+                    {active ? (
+                      <l.active className="w-6 mr-2" />
+                    ) : (
+                      <l.icon className="w-6 mr-2" />
+                    )}
+                    <p className={`${benguiatFont.className}`}>{l.label}</p>
+                  </span>
+                </Link>
+              )}
+            </Menu.Item>
+          ))}
         </Menu.Items>
       </Transition>
     </Menu>

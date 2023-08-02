@@ -12,7 +12,7 @@ function InfoSection({
       <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
         {section}
       </h2>
-      <div className="prose lg:prose-xl">
+      <div className="prose-sm md:prose lg:prose-xl">
         <ReactMarkdown>{content}</ReactMarkdown>
       </div>
     </div>

@@ -6,8 +6,8 @@ import Head from "next/head";
 import useSWR from "swr";
 
 export default function Home() {
-  const { data, error, isLoading } = useSWR<HTConference, Error>(
-    "/ht/conference.json",
+  const { data, error, isLoading } = useSWR<HTNews[], Error>(
+    "/ht/news.json",
     fetcher
   );
 
@@ -28,7 +28,7 @@ export default function Home() {
       </Head>
 
       <main className="bg-black mb-20 text-white">
-        <Splash />
+        <Splash news={data} />
       </main>
     </div>
   );

@@ -4,7 +4,7 @@ import EventDetails from "./EventDetails";
 function Event({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
   return (
     <div>
-      <EventDetailHeading eventId={event.id} />
+      <EventDetailHeading event={event} />
       <EventDetails event={event} tags={tags} />
     </div>
   );

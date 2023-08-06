@@ -27,7 +27,6 @@ export function eventDay(time: Date): string {
     .slice(0, 1)
     .join();
 
-  console.log(date);
   return date;
 }
 
@@ -40,6 +39,7 @@ export function newsDate(s: number): string {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
+    timeZoneName: "short",
     timeZone: "America/Los_Angeles",
   };
 
@@ -50,7 +50,7 @@ export function newsDate(s: number): string {
 
 export function tabDateTitle(day: string): string {
   const time = new Date(day);
-  time.setHours(3, 0, 0);
+  time.setHours(8, 0, 0);
 
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
@@ -65,7 +65,7 @@ export function tabDateTitle(day: string): string {
 
 export function dateGroupTitle(day: string): string {
   const time = new Date(day);
-  time.setHours(3, 0, 0);
+  time.setHours(8, 0, 0);
 
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",

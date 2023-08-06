@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.shortstack.hackertracker",
+      "sha256_cert_fingerprints":
+      ["59:9D:35:A0:E1:2A:0A:02:6F:5C:9E:95:E8:98:53:2C:1A:56:B2:C1:48:0A:D4:D0:E1:F6:9C:6C:56:F0:D0:5B"]
+    }
+  }]

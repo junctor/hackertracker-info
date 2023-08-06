@@ -31,7 +31,7 @@ export default function EventPage() {
   const event = eventsData?.find((e) => e.id.toString() === eventId);
 
   if (event === undefined) {
-    return <Error msg={`No event found for id ${eventId}`} />;
+    return <Error msg="No event found for id" />;
   }
 
   if (eventsData === undefined || eventsError !== undefined) {

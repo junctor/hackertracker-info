@@ -6,7 +6,7 @@ import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 
 export default function LocationsPage() {
-  const { data, error, isLoading } = useSWR<HTLocations[], Error>(
+  const { data, error, isLoading } = useSWR<HTLocation[], Error>(
     "/ht/locations.json",
     fetcher
   );

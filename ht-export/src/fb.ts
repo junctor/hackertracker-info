@@ -108,3 +108,25 @@ export async function getMaps(db: Firestore, conference: string, file: string) {
     bytes,
   };
 }
+
+export async function getProducts(db: Firestore, conference: string) {
+  const docRef = collection(db, "conferences", conference, "products");
+  const q = query(docRef, orderBy("id", "desc"));
+  const docSnap = await getDocs(q);
+  const firebaseData = docSnap.docs.map((faqDoc: { data: () => any }) =>
+    faqDoc.data()
+  );
+
+  return firebaseData;
+}
+
+export async function getOrganizations(db: Firestore, conference: string) {
+  const docRef = collection(db, "conferences", conference, "organizations");
+  const q = query(docRef, orderBy("id", "desc"));
+  const docSnap = await getDocs(q);
+  const firebaseData = docSnap.docs.map((faqDoc: { data: () => any }) =>
+    faqDoc.data()
+  );
+
+  return firebaseData;
+}

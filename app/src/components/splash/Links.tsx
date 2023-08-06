@@ -15,7 +15,7 @@ function Links() {
 
   return (
     <div className="flex items-center justify-center mt-6">
-      <div className="text-center grid grid-cols-2 gap-1 gap-x-12">
+      <div className="text-center grid grid-cols-2 gap-1 gap-x-12 lg:grid-cols-3">
         {links.map((l) => (
           <Link href={l.url} key={l.label}>
             <button

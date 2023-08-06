@@ -7,6 +7,9 @@ import {
   TagIcon as TagIconSoild,
   DevicePhoneMobileIcon as DeviceMobileIconSoild,
   MapIcon as MapIconSoild,
+  BuildingOffice2Icon as BuildingOffice2IconSoild,
+  ShoppingBagIcon as ShoppingBagIconSoild,
+  UserGroupIcon as UserGroupIconSoild,
 } from "@heroicons/react/24/solid";
 import {
   InformationCircleIcon as InformationCircleIconOutline,
@@ -17,6 +20,9 @@ import {
   TagIcon as TagIconOutline,
   DevicePhoneMobileIcon as DeviceMobileIconOutline,
   MapIcon as MapIconOutline,
+  BuildingOffice2Icon as BuildingOffice2IconOutline,
+  ShoppingBagIcon as ShoppingBagIconOutline,
+  UserGroupIcon as UserGroupIconOutline,
 } from "@heroicons/react/24/outline";
 
 export const links = [
@@ -61,6 +67,24 @@ export const links = [
     label: "Speakers",
     icon: UserIconOutline,
     active: UserIconSoild,
+  },
+  {
+    url: "/villages",
+    label: "Villages",
+    icon: UserGroupIconOutline,
+    active: UserGroupIconSoild,
+  },
+  {
+    url: "/exhibitors",
+    label: "Exhibitors",
+    icon: BuildingOffice2IconOutline,
+    active: BuildingOffice2IconSoild,
+  },
+  {
+    url: "/vendors",
+    label: "Vendors",
+    icon: ShoppingBagIconOutline,
+    active: ShoppingBagIconSoild,
   },
   {
     url: "/apps",

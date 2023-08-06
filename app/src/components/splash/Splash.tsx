@@ -18,7 +18,7 @@ export default function Splash({ news }: { news: HTNews[] }) {
   const kickoffTimestamp = 1691769600 * 1000;
 
   const newsItem = news.sort(
-    (a, b) => a.updated_at.seconds - b.updated_at.seconds
+    (a, b) => b.updated_at.seconds - a.updated_at.seconds
   )[0];
 
   return (
@@ -42,9 +42,14 @@ export default function Splash({ news }: { news: HTNews[] }) {
       {new Date(kickoffTimestamp) > new Date() && <Countdown />}
       {news.length > 0 && (
         <div className="flex w-full justify-center items-center text-center mt-5 ">
-          <div className="w-3/4 sm:w-1/3 md:w-1/2 lg:w-1/2">
-            <div className="text-center font-bold text-lg md:text-xl  flex-none w-full p-2">
-              {`Latest News (${newsDate(newsItem.updated_at.seconds)})`}
+          <div className="w-3/4 md:w-1/2 lg:w-1/3">
+            <div className="flex items-center justify-center text-center">
+              <div className="font-bold text-lg md:text-xl p-2">
+                Latest News
+              </div>
+              <div className="text-sm md:text-base p-2">
+                {`(${newsDate(newsItem.updated_at.seconds)})`}
+              </div>
             </div>
 
             <Disclosure>
@@ -52,7 +57,7 @@ export default function Splash({ news }: { news: HTNews[] }) {
                 <>
                   <Disclosure.Button className="flex w-full rounded-lg bg-dc-gray p-2">
                     <div className="flex text-start w-full">
-                      <div className="text-left font-bold text-sm sm:text-base md:text-lg lg:text-xl flex">
+                      <div className="text-left font-bold text-sm sm:text-base md:text-lg lg:text-xl flex text-dc-yellow">
                         {newsItem.name}
                       </div>
 

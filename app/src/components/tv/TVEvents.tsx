@@ -4,6 +4,13 @@ import { dateGroupTitle, eventDay } from "../../utils/dates";
 import Theme from "../../utils/theme";
 import TVClock from "../clock/TVClock";
 import TVEventCell from "./TVEventCell";
+import localFont from "next/font/local";
+
+const freewayFont = localFont({
+  src: "../../../public/fonts/freeway-gothic.woff2",
+  display: "swap",
+  variable: "--font-freeway",
+});
 
 function TVEvents({ events }: { events: EventData[] }) {
   const [filteredEvents, setFilteredEvents] = useState<
@@ -30,7 +37,7 @@ function TVEvents({ events }: { events: EventData[] }) {
         }, new Map<string, EventData[]>());
 
     const filterEvents = () => {
-      const filterTag = Number(l ?? 45241) ?? 45241;
+      const filterTag = Number(l ?? 45589) ?? 45589;
 
       return groupedDates(
         events.filter((e) => {
@@ -107,10 +114,13 @@ function TVEvents({ events }: { events: EventData[] }) {
       </div>
       <div className="flex-initial ml-5 mt-4">
         <div className="sticky top-36 z-100">
-          <p className="text-center text-9xl mb-10 font-bold">Info Booth</p>
-          <p>Current time:</p>
+          <p
+            className={`text-center text-9xl mb-10 font-bold ${freewayFont.className}`}
+          >
+            NFO Node
+          </p>
+          <p className="text-xl">Current time:</p>
           <TVClock />
-          <p className="text-center text-2xl">Hacker Homecoming</p>
         </div>
       </div>
     </div>

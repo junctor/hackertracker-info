@@ -91,7 +91,7 @@ export default function Events({
                     key={tabDay}
                     className={`p-2 mx-1 rounded-lg text-xs sm:text-sm md:text-base lg:text-lg font-semibold ${
                       day === tabDay ? "bg-dc-teal" : "hover:text-gray-400"
-                    } ${freewayFont.className}`}
+                    }`}
                     onClick={() => {
                       scrollToDay(tabDay);
                     }}

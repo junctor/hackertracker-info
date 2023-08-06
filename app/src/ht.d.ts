@@ -189,7 +189,7 @@ interface HTLocationSchedule {
   status: string;
 }
 
-interface HTLocations {
+interface HTLocation {
   hier_extent_left: number;
   schedule: HTLocationSchedule[];
   parent_id: number;
@@ -214,4 +214,93 @@ interface HTNews {
   name: string;
   text: strng;
   id: number;
+}
+
+interface HTProduct {
+  code: string;
+  description: string;
+  media: [
+    {
+      hash_sha256: string;
+      filetype: string;
+      product_id: number;
+      hash_md5: string;
+      name: string;
+      hash_crc32c: string;
+      filesize: number;
+      asset_id: number;
+      sort_order: number;
+      url: string;
+    },
+  ];
+  title: string;
+  price_min: number;
+  eligibility_restriction_text: null;
+  tags: [number];
+  product_id: number;
+  id: number;
+  sort_order: number;
+  price_max: number;
+  is_eligibility_restricted: string;
+  variants: [
+    {
+      stock_status: string;
+      variant_id: number;
+      code: string;
+      price: number;
+      product_id: number;
+      title: string;
+      sort_order: number;
+      tags: [number, number];
+    },
+  ];
+}
+
+interface HTOrganization {
+  tag_ids: [number];
+  conference: string;
+  documents: [];
+  description: string;
+  media: [
+    {
+      hash_sha256: string;
+      filetype: string;
+      hash_md5: string;
+      orga_id: number;
+      name: string;
+      is_logo: string;
+      hash_crc32c: string;
+      filesize: number;
+      asset_id: number;
+      sort_order: number;
+      url: string;
+    },
+  ];
+  people: [];
+  conference_id: number;
+  updated_at: string;
+  name: string;
+  logo: {
+    hash_sha256: string;
+    filetype: string;
+    hash_md5: string;
+    name: string;
+    orga_id: number;
+    hash_crc32c: string;
+    is_logo: string;
+    asset_id: number;
+    filesize: number;
+    sort_order: number;
+    url: string;
+  };
+  links: [
+    {
+      label: string;
+      type: string;
+      url: string;
+    },
+  ];
+  locations: [{ location_id: number }];
+  id: number;
+  tag_id_as_organizer: number | null;
 }

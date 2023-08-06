@@ -2,8 +2,8 @@ function LocationCell({
   location,
   childrenLocations,
 }: {
-  location: HTLocations;
-  childrenLocations: Map<number, HTLocations[]>;
+  location: HTLocation;
+  childrenLocations: Map<number, HTLocation[]>;
 }) {
   const circleStatus = (): string => {
     const timeNow = new Date();
@@ -104,13 +104,15 @@ function LocationCell({
         )}
         <h2 className={`${locationTitle()}`}>{location.short_name}</h2>
       </div>
-      {childrenLocations.get(location.id)?.map((l) => (
-        <LocationCell
-          key={l.id}
-          location={l}
-          childrenLocations={childrenLocations}
-        />
-      ))}
+      {childrenLocations
+        .get(location.id)
+        ?.map((l) => (
+          <LocationCell
+            key={l.id}
+            location={l}
+            childrenLocations={childrenLocations}
+          />
+        ))}
     </div>
   );
 }

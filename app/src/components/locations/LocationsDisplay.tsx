@@ -1,6 +1,6 @@
 import LocationCell from "./LocationCell";
 
-function LocationsDisplay({ locations }: { locations: HTLocations[] }) {
+function LocationsDisplay({ locations }: { locations: HTLocation[] }) {
   const sortedLocations = locations.sort(
     (a, b) => a.hier_extent_left - b.hier_extent_left
   );
@@ -11,7 +11,7 @@ function LocationsDisplay({ locations }: { locations: HTLocations[] }) {
       sortedLocations.filter((l) => l.parent_id === loc.id)
     );
     return dict;
-  }, new Map<number, HTLocations[]>());
+  }, new Map<number, HTLocation[]>());
 
   return (
     <div className="ml-1">

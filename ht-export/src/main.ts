@@ -9,7 +9,6 @@ import {
   getLocations,
   getTags,
   getNews,
-  // getProducts,
   getOrganizations,
 } from "./fb";
 
@@ -27,7 +26,6 @@ const CONF = "DEFCON31";
     htTags,
     htNews,
     htOrgs,
-    // htProducts,
   ] = await Promise.all([
     getConference(fbDb, CONF),
     getEvents(fbDb, CONF),
@@ -37,7 +35,6 @@ const CONF = "DEFCON31";
     getTags(fbDb, CONF),
     getNews(fbDb, CONF),
     getOrganizations(fbDb, CONF),
-    // getProducts(fbDb, "DEFCON30"),
   ]);
 
   const outputDir = "./out";
@@ -60,7 +57,6 @@ const CONF = "DEFCON31";
       "./out/ht/organizations.json",
       JSON.stringify(htOrgs)
     ),
-    // fs.promises.writeFile("./out/ht/products.json", JSON.stringify(htProducts)),
 
     fs.promises.writeFile(
       "./out/ht/locations.json",

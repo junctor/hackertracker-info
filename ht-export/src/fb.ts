@@ -92,8 +92,8 @@ export async function getNews(db: Firestore, conference: string) {
   const docRef = collection(db, "conferences", conference, "articles");
   const q = query(docRef, orderBy("id", "desc"));
   const docSnap = await getDocs(q);
-  const firebaseData = docSnap.docs.map((faqDoc: { data: () => any }) =>
-    faqDoc.data()
+  const firebaseData = docSnap.docs.map((newsDoc: { data: () => any }) =>
+    newsDoc.data()
   );
 
   return firebaseData;
@@ -113,8 +113,8 @@ export async function getProducts(db: Firestore, conference: string) {
   const docRef = collection(db, "conferences", conference, "products");
   const q = query(docRef, orderBy("id", "desc"));
   const docSnap = await getDocs(q);
-  const firebaseData = docSnap.docs.map((faqDoc: { data: () => any }) =>
-    faqDoc.data()
+  const firebaseData = docSnap.docs.map((productDoc: { data: () => any }) =>
+    productDoc.data()
   );
 
   return firebaseData;
@@ -124,8 +124,8 @@ export async function getOrganizations(db: Firestore, conference: string) {
   const docRef = collection(db, "conferences", conference, "organizations");
   const q = query(docRef, orderBy("id", "desc"));
   const docSnap = await getDocs(q);
-  const firebaseData = docSnap.docs.map((faqDoc: { data: () => any }) =>
-    faqDoc.data()
+  const firebaseData = docSnap.docs.map((orgDoc: { data: () => any }) =>
+    orgDoc.data()
   );
 
   return firebaseData;

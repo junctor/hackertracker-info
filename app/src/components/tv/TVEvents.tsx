@@ -93,7 +93,7 @@ function TVEvents({ events }: { events: EventData[] }) {
           <div key={day}>
             <div className="date-events">
               <div
-                className={`sticky top-0 z-10 border-4 border-white bg-${theme.nextColor} rounded-b-lg`}
+                className={`border-4 border-white bg-${theme.nextColor} rounded-b-lg`}
               >
                 <p className="text-gray-light text-4xl p-2 ml-1">
                   {dateGroupTitle(day)}

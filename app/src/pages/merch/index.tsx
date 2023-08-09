@@ -22,7 +22,7 @@ export default function MerchPage() {
   return (
     <div>
       <Head>
-        <title>DEF CON 31 Speakers</title>
+        <title>DEF CON 31 Merch</title>
         <meta name="description" content="DEF CON 31 Merch" />
         <meta
           name="viewport"

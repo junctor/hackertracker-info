@@ -11,10 +11,16 @@ export default function Merch({ products }: { products: FBProducts }) {
     };
   }, []);
 
-  const productsSorted = products.documents.sort(
-    (a, b) =>
-      a.fields.sort_order.integerValue - b.fields.sort_order.integerValue
-  );
+  const productsSorted = products.documents
+    .sort(
+      (a, b) =>
+        a.fields.sort_order.integerValue - b.fields.sort_order.integerValue
+    )
+    .filter((p) =>
+      p.fields.variants.arrayValue.values.find(
+        (v) => v.mapValue.fields.stock_status.stringValue !== "OUT"
+      )
+    );
 
   const productsOneSize = productsSorted.filter((p) =>
     p.fields.variants.arrayValue.values.find(
@@ -45,12 +51,12 @@ export default function Merch({ products }: { products: FBProducts }) {
   return (
     <main className="bg-black text-white">
       <div>
-        <table className="border-separate border-spacing-x-4 border-spacing-y-2 border border-slate-500 ...">
+        <table className="border-collapse border-spacing-x-4 border-spacing-y-2 border-2 border-indigo-900">
           <thead>
             <tr className="bg-white text-dc-purple text-xs md:text-lg font-extrabold">
-              <th className="border border-slate-600 p-2">Name</th>
+              <th className="border-2 border-indigo-900 p-2">Name</th>
               {productSizes.map((s) => (
-                <th key={s} className="border border-slate-600 p-2">
+                <th key={s} className="border-2 border-indigo-900 p-2">
                   {s}
                 </th>
               ))}
@@ -62,13 +68,13 @@ export default function Merch({ products }: { products: FBProducts }) {
                 key={p.fields.id.integerValue}
                 className="odd:bg-dc-purple even:bg-black"
               >
-                <th className=" border border-slate-600">
+                <th className=" border-2 border-indigo-900">
                   {p.fields.title.stringValue}
                 </th>
                 {productSizes.map((s) => (
                   <td
                     key={`${p.fields.id.integerValue}-${s}`}
-                    className="text-center  border border-slate-600 p-2"
+                    className="text-center border-2 border-indigo-900 p-2"
                   >
                     {(() => {
                       switch (
@@ -78,7 +84,7 @@ export default function Merch({ products }: { products: FBProducts }) {
                         "OUT"
                       ) {
                         case "OUT":
-                          return <p className="text-dc-red">X</p>;
+                          return <></>;
                         case "LOW":
                           return <p className="text-dc-yellow">{s}</p>;
                         case "IN":
@@ -94,8 +100,8 @@ export default function Merch({ products }: { products: FBProducts }) {
           </tbody>
           <thead className="mt-1">
             <tr className="bg-white text-dc-purple text-xs md:text-lg font-extrabold">
-              <th className="border border-slate-600">Name</th>
-              <th className="border border-slate-600">One-Size</th>
+              <th className="border-2 border-indigo-900">Name</th>
+              <th className="border-2 border-indigo-900">One-Size</th>
             </tr>
           </thead>
           <tbody>
@@ -106,7 +112,7 @@ export default function Merch({ products }: { products: FBProducts }) {
               >
                 <th className="">{p.fields.title.stringValue}</th>
 
-                <td className="text-center border border-slate-600 p-2">
+                <td className="text-center border-2 border-indigo-900 p-2">
                   {(() => {
                     switch (
                       p.fields.variants.arrayValue.values.find(
@@ -116,7 +122,7 @@ export default function Merch({ products }: { products: FBProducts }) {
                       "OUT"
                     ) {
                       case "OUT":
-                        return <p className="text-dc-red">X</p>;
+                        return <></>;
                       case "LOW":
                         return <p className="text-dc-yellow">OS</p>;
                       case "IN":

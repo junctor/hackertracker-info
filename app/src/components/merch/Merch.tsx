@@ -22,6 +22,10 @@ export default function Merch({ products }: { products: FBProducts }) {
     )
   );
 
+  setTimeout(function () {
+    location.reload();
+  }, 120000);
+
   const productSizes = Array.from(
     productsMultiSize
       .flatMap((p) => p.fields.variants.arrayValue.values)
@@ -41,7 +45,7 @@ export default function Merch({ products }: { products: FBProducts }) {
       <div className="overflow-x-auto">
         <table className="table table-xs table-pin-cols">
           <thead>
-            <tr className="bg-black">
+            <tr className="bg-black text-dc-purple text-xs md:text-sm font-extrabold">
               <th>Name</th>
               {productSizes.map((s) => (
                 <th key={s}>{s}</th>
@@ -87,10 +91,9 @@ export default function Merch({ products }: { products: FBProducts }) {
               </tr>
             ))}
           </tbody>
-          <thead>
-            <tr className="bg-black">
+          <thead className="mt-1">
+            <tr className="bg-black text-dc-purple text-xs md:text-sm font-extrabold">
               <th>Name</th>
-
               <th>One-Size</th>
             </tr>
           </thead>

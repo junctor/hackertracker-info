@@ -7,7 +7,7 @@ import Merch from "@/components/merch/Merch";
 
 export default function MerchPage() {
   const { data, error, isLoading } = useSWR<FBProducts, Error>(
-    "https://firestore.googleapis.com/v1/projects/hackertest-5a202/databases/(default)/documents/conferences/DEFCON30/products?pageSize=1000",
+    "https://firestore.googleapis.com/v1/projects/hackertest-5a202/databases/(default)/documents/conferences/DEFCON31/products?pageSize=1000",
     fetcher
   );
 

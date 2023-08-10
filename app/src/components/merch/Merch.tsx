@@ -4,7 +4,19 @@ import {
   CheckCircleIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
+
 export default function Merch({ products }: { products: FBProducts }) {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      location.reload();
+    }, 120000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   const productsSorted = products.documents.sort(
     (a, b) =>
       a.fields.sort_order.integerValue - b.fields.sort_order.integerValue
@@ -21,10 +33,6 @@ export default function Merch({ products }: { products: FBProducts }) {
       (v) => v.mapValue.fields.title.stringValue !== "One-Size"
     )
   );
-
-  setTimeout(function () {
-    location.reload();
-  }, 120000);
 
   const productSizes = Array.from(
     productsMultiSize

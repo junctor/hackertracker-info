@@ -1,9 +1,3 @@
-import {
-  XCircleIcon,
-  ExclamationTriangleIcon,
-  CheckCircleIcon,
-  QuestionMarkCircleIcon,
-} from "@heroicons/react/24/outline";
 import { useEffect } from "react";
 
 export default function Merch({ products }: { products: FBProducts }) {
@@ -50,24 +44,31 @@ export default function Merch({ products }: { products: FBProducts }) {
 
   return (
     <main className="bg-black text-white">
-      <div className="overflow-x-auto">
-        <table className="table table-xs table-pin-cols">
+      <div>
+        <table className="border-separate border-spacing-x-4 border-spacing-y-2 border border-slate-500 ...">
           <thead>
-            <tr className="bg-black text-dc-purple text-xs md:text-sm font-extrabold">
-              <th>Name</th>
+            <tr className="bg-white text-dc-purple text-xs md:text-lg font-extrabold">
+              <th className="border border-slate-600 p-2">Name</th>
               {productSizes.map((s) => (
-                <th key={s}>{s}</th>
+                <th key={s} className="border border-slate-600 p-2">
+                  {s}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {productsMultiSize.map((p) => (
-              <tr key={p.fields.id.integerValue}>
-                <th className="bg-black">{p.fields.title.stringValue}</th>
+              <tr
+                key={p.fields.id.integerValue}
+                className="odd:bg-dc-purple even:bg-black"
+              >
+                <th className=" border border-slate-600">
+                  {p.fields.title.stringValue}
+                </th>
                 {productSizes.map((s) => (
                   <td
                     key={`${p.fields.id.integerValue}-${s}`}
-                    className="text-center"
+                    className="text-center  border border-slate-600 p-2"
                   >
                     {(() => {
                       switch (
@@ -77,21 +78,13 @@ export default function Merch({ products }: { products: FBProducts }) {
                         "OUT"
                       ) {
                         case "OUT":
-                          return (
-                            <XCircleIcon className="w-5 md:w-6 lg:w-7 text-dc-red" />
-                          );
+                          return <p className="text-dc-red">X</p>;
                         case "LOW":
-                          return (
-                            <ExclamationTriangleIcon className="w-5 md:w-6 lg:w-7 text-dc-yellow" />
-                          );
+                          return <p className="text-dc-yellow">{s}</p>;
                         case "IN":
-                          return (
-                            <CheckCircleIcon className="w-5 md:w-6 lg:w-7 text-dc-teal" />
-                          );
+                          return <p className="text-dc-teal">{s}</p>;
                         default:
-                          return (
-                            <QuestionMarkCircleIcon className="w-5 md:w-6 lg:w-7 text-dc-purple" />
-                          );
+                          return <p>?</p>;
                       }
                     })()}
                   </td>
@@ -100,17 +93,20 @@ export default function Merch({ products }: { products: FBProducts }) {
             ))}
           </tbody>
           <thead className="mt-1">
-            <tr className="bg-black text-dc-purple text-xs md:text-sm font-extrabold">
-              <th>Name</th>
-              <th>One-Size</th>
+            <tr className="bg-white text-dc-purple text-xs md:text-lg font-extrabold">
+              <th className="border border-slate-600">Name</th>
+              <th className="border border-slate-600">One-Size</th>
             </tr>
           </thead>
           <tbody>
             {productsOneSize.map((p) => (
-              <tr key={p.fields.id.integerValue}>
-                <th className="bg-black">{p.fields.title.stringValue}</th>
+              <tr
+                key={p.fields.id.integerValue}
+                className="odd:bg-dc-purple even:bg-black"
+              >
+                <th className="">{p.fields.title.stringValue}</th>
 
-                <td className="text-center">
+                <td className="text-center border border-slate-600 p-2">
                   {(() => {
                     switch (
                       p.fields.variants.arrayValue.values.find(
@@ -120,21 +116,13 @@ export default function Merch({ products }: { products: FBProducts }) {
                       "OUT"
                     ) {
                       case "OUT":
-                        return (
-                          <XCircleIcon className="w-5 md:w-6 lg:w-7 text-dc-red" />
-                        );
+                        return <p className="text-dc-red">X</p>;
                       case "LOW":
-                        return (
-                          <ExclamationTriangleIcon className="w-5 md:w-6 lg:w-7 text-dc-yellow" />
-                        );
+                        return <p className="text-dc-yellow">OS</p>;
                       case "IN":
-                        return (
-                          <CheckCircleIcon className="w-5 md:w-6 lg:w-7 text-dc-teal" />
-                        );
+                        return <p className="text-dc-teal">OS</p>;
                       default:
-                        return (
-                          <QuestionMarkCircleIcon className="w-5 md:w-6 lg:w-7 text-dc-purple" />
-                        );
+                        return <p>?</p>;
                     }
                   })()}
                 </td>

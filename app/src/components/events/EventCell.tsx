@@ -36,14 +36,31 @@ export default function EventCell({
           className={`table-cell w-0/12 px-1 bg-[${event.color}] rounded-sm`}
         />
         <div className="text-center items-center table-cell w-1/12 px-3 align-middle">
-          {timeDisplayParts(event.begin).map((part) => (
-            <p
-              key={part}
-              className="text-xs sm:text-sm md:text-sm lg:text-base font-bold text-dc-text"
-            >
-              {part}
-            </p>
-          ))}
+          {timeDisplayParts(event.begin, event.begin === event.end).map(
+            (part) => (
+              <p
+                key={part}
+                className="text-xs sm:text-sm md:text-sm lg:text-base font-bold text-dc-text"
+              >
+                {part}
+              </p>
+            )
+          )}
+          {event.begin !== event.end && (
+            <>
+              <p className="text-xs sm:text-sm md:text-sm lg:text-base font-bold text-dc-text text-gray-400 leading-3 sm:leading-3 md:leading-3 lg:leading-3">
+                -
+              </p>
+              {timeDisplayParts(event.end, true).map((part) => (
+                <p
+                  key={part}
+                  className="text-xs sm:text-sm md:text-sm lg:text-base font-bold text-dc-text"
+                >
+                  {part}
+                </p>
+              ))}
+            </>
+          )}
         </div>
         <div className="w-10/12 table-cell pr-1">
           <Link href={`/event?id=${event.id}`} prefetch={false}>

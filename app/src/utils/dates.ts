@@ -1,9 +1,9 @@
-export function timeDisplayParts(time: string): string[] {
+export function timeDisplayParts(time: string, tz = true): string[] {
   const date = new Date(time);
   const options: Intl.DateTimeFormatOptions = {
     hour: "numeric",
     minute: "numeric",
-    timeZoneName: "short",
+    timeZoneName: tz ? "short" : undefined,
     hourCycle: "h23",
     timeZone: "America/Los_Angeles",
   };

@@ -48,13 +48,13 @@ export default function EventCell({
           )}
           {event.begin !== event.end && (
             <>
-              <p className="text-xs sm:text-sm md:text-sm lg:text-base font-bold text-dc-text text-gray-400 leading-3 sm:leading-3 md:leading-3 lg:leading-3">
+              <p className="text-xs sm:text-xs md:text-xs lg:text-sm font-light text-dc-text text-gray-400 leading-3 sm:leading-3 md:leading-3 lg:leading-3">
                 -
               </p>
               {timeDisplayParts(event.end, true).map((part) => (
                 <p
                   key={part}
-                  className="text-xs sm:text-sm md:text-sm lg:text-base font-bold text-dc-text"
+                  className="text-xs sm:text-xs md:text-xs lg:text-sm font-light text-dc-text text-gray-400"
                 >
                   {part}
                 </p>

@@ -4,7 +4,7 @@ export function timeDisplayParts(time: string): string[] {
     hour: "numeric",
     minute: "numeric",
     timeZoneName: "short",
-    hour12: false,
+    hourCycle: "h23",
     timeZone: "America/Los_Angeles",
   };
 
@@ -17,7 +17,7 @@ export function eventDay(time: Date): string {
     day: "numeric",
     year: "numeric",
     month: "numeric",
-    hour12: false,
+    hourCycle: "h23",
     timeZone: "America/Los_Angeles",
   };
 
@@ -38,7 +38,7 @@ export function newsDate(s: number): string {
     month: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hourCycle: "h23",
     timeZoneName: "short",
     timeZone: "America/Los_Angeles",
   };
@@ -92,7 +92,7 @@ export function eventTime(time: Date, tz = true): string {
   const options: Intl.DateTimeFormatOptions = {
     timeZoneName: tz ? "short" : undefined,
     weekday: "short",
-    hour12: false,
+    hourCycle: "h23",
     day: "numeric",
     month: "short",
     hour: "2-digit",

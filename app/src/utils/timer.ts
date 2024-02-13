@@ -1,6 +1,6 @@
 export function getCountdown(): Timer {
   const now = new Date();
-  const dc32 = new Date("2024-08-08T00:00:00");
+  const dc32 = new Date("2024-08-09T09:00:00-07:00");
   const timeDiff = dc32.valueOf() - now.valueOf();
   const mm = timeDiff / (30 * 24 * 60 * 60 * 1000);
   const d = (mm % 1) * 30;

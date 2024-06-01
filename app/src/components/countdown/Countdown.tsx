@@ -18,7 +18,6 @@ const latoFont = localFont({
 
 export function Countdown() {
   const [timer, setTimer] = useState<Timer>({
-    months: 0,
     days: 0,
     hours: 0,
     minutes: 0,
@@ -39,12 +38,6 @@ export function Countdown() {
       <div
         className={`grid grid-flow-col gap-4 md:gap-12 text-center md:auto-cols-max ${sofachromeFont.className}`}
       >
-        <div>
-          <span className="countdown font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-red">
-            <span style={{ "--value": timer.months } as React.CSSProperties} />
-          </span>
-          <span className={latoFont.className}>month</span>
-        </div>
         <div>
           <span className="countdown font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-purple">
             <span style={{ "--value": timer.days } as React.CSSProperties} />

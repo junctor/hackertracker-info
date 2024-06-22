@@ -12,7 +12,7 @@ import {
   getOrganizations,
 } from "./fb";
 
-const CONF = "DEFCON31";
+const CONF = "DEFCON32";
 
 (async () => {
   const fbDb = await firebaseInit();

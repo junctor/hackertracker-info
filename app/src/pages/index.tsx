@@ -1,3 +1,4 @@
+import Heading from "@/components/heading/Heading";
 import Splash from "@/components/splash/Splash";
 import Head from "next/head";
 
@@ -10,7 +11,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-black mb-20 text-white">
+      <main className="mb-20">
+        <Heading />
         <Splash />
       </main>
     </div>

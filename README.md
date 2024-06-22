@@ -40,6 +40,13 @@ _Command [build](https://nextjs.org/docs/app/building-your-application/deploying
 
 _Fetches data from Firebase and exports static json files to a generated `out` directory_
 
+### HackerTracker Team
+
+- [Advice-Dog](https://github.com/Advice-Dog)
+- [aNullValue](https://github.com/aNullValue)
+- [cak](https://github.com/cak)
+- [sethlaw](https://github.com/sethlaw)
+
 ### Misc
 
-Developed with [Next.js](https://nextjs.org) and styled with [Tailwind CSS](https://tailwindcss.com) + [daisyUI](https://daisyui.com).
+Developed with [Next.js](https://nextjs.org) and styled with [Tailwind CSS](https://tailwindcss.com) + [shadcn/ui](https://ui.shadcn.com).

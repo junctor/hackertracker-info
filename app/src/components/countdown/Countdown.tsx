@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getCountdown } from "../../utils/timer";
+import { getCountdown } from "../../lib/utils/timer";
 import localFont from "next/font/local";
 
 const sofachromeFont = localFont({
@@ -35,30 +35,28 @@ export function Countdown() {
 
   return (
     <div className="grid place-items-center mt-3 md:mt-10 text-center mx-5">
-      <div
-        className={`grid grid-flow-col gap-4 md:gap-12 text-center md:auto-cols-max ${sofachromeFont.className}`}
-      >
+      <div className="grid grid-flow-col gap-4 md:gap-12 text-center md:auto-cols-max">
         <div>
-          <span className="countdown font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-purple">
-            <span style={{ "--value": timer.days } as React.CSSProperties} />
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-purple mr-1 font-mono">
+            {timer.days}
           </span>
           <span className={latoFont.className}>day</span>
         </div>
         <div>
-          <span className="countdown font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl  text-dc-teal">
-            <span style={{ "--value": timer.hours } as React.CSSProperties} />
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl  text-dc-teal mr-1 font-mono">
+            {timer.hours}
           </span>
           <span className={latoFont.className}>hour</span>
         </div>
         <div>
-          <span className="countdown font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-yellow">
-            <span style={{ "--value": timer.minutes } as React.CSSProperties} />
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-yellow mr-1 font-mono">
+            {timer.minutes}
           </span>
           <span className={latoFont.className}>min</span>
         </div>
         <div>
-          <span className="countdown font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-red">
-            <span style={{ "--value": timer.seconds } as React.CSSProperties} />
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-red mr-1 font-mono">
+            {timer.seconds}
           </span>
           <span className={latoFont.className}>sec</span>
         </div>

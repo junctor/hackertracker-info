@@ -1,4 +1,5 @@
 import OrgCell from "./OrgCell";
+import React from "react";
 
 export default function Orgs({
   orgs,

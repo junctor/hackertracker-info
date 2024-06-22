@@ -1,4 +1,5 @@
 import Link from "next/link";
+import React from "react";
 
 function OrgCell({ org }: { org: HTOrganization }) {
   return (

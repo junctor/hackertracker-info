@@ -5,6 +5,7 @@ import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import { useSearchParams } from "next/navigation";
 import OrgDetails from "@/components/organization/OrganizationDetails";
+import React from "react";
 
 export default function ExhibitorPage() {
   const { data, error, isLoading } = useSWR<HTOrganization[], Error>(

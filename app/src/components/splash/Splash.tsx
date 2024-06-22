@@ -1,13 +1,7 @@
+import React from "react";
 import Countdown from "../countdown/Countdown";
 import Image from "next/image";
 import dc32Logo from "../../../public/images/dc32-logo-2color-halftonegradient.webp";
-import localFont from "next/font/local";
-
-const neuropolXFont = localFont({
-  src: "../../../public/fonts/neuropol_x.woff2",
-  display: "swap",
-  variable: "--font-neuropol-x",
-});
 
 export default function Splash() {
   return (

@@ -1,26 +1,20 @@
 import Link from "next/link";
 import Theme from "../../lib/utils/theme";
 import ReactMarkdown from "react-markdown";
-import { useState } from "react";
-import { CalendarIcon as CalendarIconSoild } from "@heroicons/react/24/solid";
-import { CalendarIcon as CalendarIconOutline } from "@heroicons/react/24/outline";
 import Heading from "../heading/Heading";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { tagsOrgs } from "@/lib/utils/orgs";
+import React from "react";
 
 function OrgDetails({ org }: { org: HTOrganization }) {
   const theme = new Theme();
   theme.randomisze();
-  const themeColor = theme.nextColor;
-
-  const [active, setActive] = useState(false);
 
   const orgId = org.tag_ids.find((t) => tagsOrgs.has(t)) ?? 0;
 

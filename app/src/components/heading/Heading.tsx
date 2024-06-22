@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import Navigation from "./Navigation";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import React from "react";
 
 export default function Heading() {
   const { theme } = useTheme();

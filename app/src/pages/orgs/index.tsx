@@ -7,6 +7,7 @@ import Orgs from "@/components/organization/Organizations";
 import Heading from "@/components/heading/Heading";
 import { useSearchParams } from "next/navigation";
 import { getOrg } from "@/lib/utils/orgs";
+import React from "react";
 
 export default function ExhibitorsPage() {
   const { data, isLoading, error } = useSWR<HTOrganization[], Error>(

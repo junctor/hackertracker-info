@@ -1,6 +1,7 @@
 import Heading from "@/components/heading/Heading";
 import Splash from "@/components/splash/Splash";
 import Head from "next/head";
+import React from "react";
 
 export default function Home() {
   return (

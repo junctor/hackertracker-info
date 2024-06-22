@@ -3,12 +3,7 @@
 import { useEffect, useState } from "react";
 import { getCountdown } from "../../lib/utils/timer";
 import localFont from "next/font/local";
-
-const sofachromeFont = localFont({
-  src: "../../../public/fonts/sofachrome.woff2",
-  display: "swap",
-  variable: "--font-sofachrome",
-});
+import React from "react";
 
 const latoFont = localFont({
   src: "../../../public/fonts/lato.woff2",

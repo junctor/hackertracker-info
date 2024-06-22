@@ -1,3 +1,5 @@
+import React from "react";
+
 function FormatDescription({ details }: { details: string }) {
   const urlRegex =
     /((https?|ftp|gopher|telnet|file):((\/\/)|(\\))+[\w\d:#@%/;$()~_?+-=\\.&]*)/gi;

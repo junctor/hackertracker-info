@@ -27,7 +27,7 @@ export default function Navigation() {
             <NavigationMenuContent>
               <ul className="grid grid-cols-2 w-56">
                 {orgs.map((o) => (
-                  <li>
+                  <li key={o[1]}>
                     <Link href={`/orgs?id=${o[0]}`}>
                       <NavigationMenuLink
                         className={navigationMenuTriggerStyle()}

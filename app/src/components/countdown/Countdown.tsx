@@ -11,6 +11,10 @@ const latoFont = localFont({
   variable: "--font-lato",
 });
 
+function padTime(num: number): string {
+  return num.toString().padStart(2, "0");
+}
+
 export function Countdown() {
   const [timer, setTimer] = useState<Timer>({
     days: 0,
@@ -33,27 +37,27 @@ export function Countdown() {
       <div className="grid grid-flow-col gap-4 md:gap-12 text-center md:auto-cols-max">
         <div>
           <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-purple mr-1 font-mono">
-            {timer.days}
+            {padTime(timer.days)}
           </span>
-          <span className={latoFont.className}>day</span>
+          <span className={latoFont.className}>days</span>
         </div>
         <div>
           <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl  text-dc-teal mr-1 font-mono">
-            {timer.hours}
+            {padTime(timer.hours)}
           </span>
-          <span className={latoFont.className}>hour</span>
+          <span className={latoFont.className}>hours</span>
         </div>
         <div>
-          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-yellow mr-1 font-mono">
-            {timer.minutes}
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-yellow mr-1 font-mono ">
+            {padTime(timer.minutes)}
           </span>
-          <span className={latoFont.className}>min</span>
+          <span className={latoFont.className}>minutes</span>
         </div>
         <div>
           <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-red mr-1 font-mono">
-            {timer.seconds}
+            {padTime(timer.seconds)}
           </span>
-          <span className={latoFont.className}>sec</span>
+          <span className={latoFont.className}>seconds</span>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import dc32Logo from "../../../public/images/dc32-logo-2color-halftonegradient.w
 
 export default function Splash() {
   return (
-    <div className="my-12">
+    <div className="my-14">
       <div className="flex w-full justify-center items-center text-center mt-5">
         <div>
           <Image

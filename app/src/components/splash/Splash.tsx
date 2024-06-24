@@ -11,7 +11,7 @@ export default function Splash() {
           <Image
             src={dc32Logo}
             alt="DEF CON 32 Logo"
-            className="md:w-96 w-64 relative"
+            className="md:w-96 w-64"
           />
         </div>
       </div>

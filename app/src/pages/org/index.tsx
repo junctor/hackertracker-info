@@ -33,7 +33,7 @@ export default function ExhibitorPage() {
   return (
     <div>
       <Head>
-        <title>{`DEF CON 32 ${foundOrg.name}`}</title>
+        <title>{`DC32 ${foundOrg.name}`}</title>
         <meta name="description" content="DEF CON 32" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

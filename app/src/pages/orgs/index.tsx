@@ -40,7 +40,7 @@ export default function ExhibitorsPage() {
   return (
     <div>
       <Head>
-        <title>{`DEF CON 32 ${tagOrg.org}`}</title>
+        <title>{`DC32 ${tagOrg.org}`}</title>
         <meta name="description" content="DEF CON 32 Categories" />
         <meta
           name="viewport"

@@ -39,7 +39,7 @@ export default function Orgs({
               >
                 <TableCell>
                   <Avatar>
-                    <AvatarImage src={o.logo.url} />
+                    <AvatarImage src={`/ht/img/${o.logo.name}`} />
                     <AvatarFallback>{o.name[0]}</AvatarFallback>
                   </Avatar>
                 </TableCell>

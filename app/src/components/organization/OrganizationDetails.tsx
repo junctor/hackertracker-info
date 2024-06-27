@@ -43,7 +43,7 @@ function OrgDetails({ org }: { org: HTOrganization }) {
         </div>
         <div className="mt-8">
           <div className="text-sm md:text-base lg:text-lg w-11/12">
-            <div className="prose lg:prose-xl">
+            <div className="prose lg:prose-xl whitespace-pre-wrap">
               <ReactMarkdown>{org.description}</ReactMarkdown>
             </div>
           </div>

@@ -15,7 +15,14 @@ import {
 const CONF = "DEFCON32";
 
 (async () => {
-  const fbDb = await firebaseInit();
+  const apiKey = process.env.FIREBASE_API_KEY;
+
+  if (apiKey === undefined) {
+    console.log("FIREBASE_API_KEY environment variable is not set");
+    return;
+  }
+
+  const fbDb = await firebaseInit(apiKey);
 
   const [
     htConf,

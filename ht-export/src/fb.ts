@@ -10,15 +10,15 @@ import {
 import { Firestore } from "firebase/firestore";
 import { getBytes, getStorage, ref } from "firebase/storage";
 
-export async function firebaseInit() {
+export async function firebaseInit(apiKey: string) {
   const firebaseConfig = {
-    apiKey: "AIzaSyAsAP88rl0Qk0v4g_vYFpybKohS_hiyq-w",
-    authDomain: "hackertest-5a202.firebaseapp.com",
-    databaseURL: "https://hackertest-5a202.firebaseio.com",
-    projectId: "hackertest-5a202",
-    messagingSenderId: "611899979455",
-    appId: "1:611899979455:web:e52aa3314edcf7a2",
-    measurementId: "G-RBXLKX75MN",
+    apiKey,
+    authDomain: "junctor-hackertracker.firebaseapp.com",
+    projectId: "junctor-hackertracker",
+    storageBucket: "junctor-hackertracker.appspot.com",
+    messagingSenderId: "552364409858",
+    appId: "1:552364409858:web:ceb163b5ca77ebe00d131b",
+    measurementId: "G-JSP9RM82KG",
   };
 
   const app = initializeApp(firebaseConfig);

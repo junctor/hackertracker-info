@@ -5,7 +5,7 @@ import {
   getEvents,
   getSpeakers,
   getFAQ,
-  getMaps,
+  getFbStorage,
   getLocations,
   getTags,
   getNews,
@@ -45,13 +45,15 @@ const CONF = "DEFCON32";
   ]);
 
   const outputDir = "./out";
-  const childDir = "./out/ht/maps";
+  const mapsDir = "./out/ht/maps";
+  const imgDir = "./out/ht/img";
 
   if (fs.existsSync(outputDir)) {
     fs.rmSync(outputDir, { recursive: true });
   }
 
-  fs.mkdirSync(childDir, { recursive: true });
+  fs.mkdirSync(mapsDir, { recursive: true });
+  fs.mkdirSync(imgDir, { recursive: true });
 
   await Promise.all([
     fs.promises.writeFile("./out/ht/conference.json", JSON.stringify(htConf)),
@@ -74,12 +76,24 @@ const CONF = "DEFCON32";
   fbDb.app.options.storageBucket = "gs://hackertest-5a202.appspot.com";
 
   const maps = await Promise.all(
-    htConf?.maps?.map((m: any) => getMaps(fbDb, CONF, m.file)) ?? []
+    htConf?.maps?.map((m: any) => getFbStorage(fbDb, CONF, m.file)) ?? []
   );
 
   await Promise.all(
     maps.map((m) =>
-      fs.promises.writeFile(`${childDir}/${m.file}`, Buffer.from(m.bytes))
+      fs.promises.writeFile(`${mapsDir}/${m.file}`, Buffer.from(m.bytes))
+    )
+  );
+
+  const imgs = await Promise.all(
+    htOrgs?.flatMap((o: any) =>
+      o.media.map((m: any) => getFbStorage(fbDb, CONF, m.name))
+    ) ?? []
+  );
+
+  await Promise.all(
+    imgs.map((m) =>
+      fs.promises.writeFile(`${imgDir}/${m.file}`, Buffer.from(m.bytes))
     )
   );
 })();

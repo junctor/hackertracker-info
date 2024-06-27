@@ -99,7 +99,11 @@ export async function getNews(db: Firestore, conference: string) {
   return firebaseData;
 }
 
-export async function getMaps(db: Firestore, conference: string, file: string) {
+export async function getFbStorage(
+  db: Firestore,
+  conference: string,
+  file: string
+) {
   const storage = getStorage(db.app);
   const pathReference = ref(storage, `${conference}/${file}`);
   const bytes = await getBytes(pathReference);

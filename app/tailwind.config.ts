@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-const htSafeList = require("./tailwind-ht-safelist.json");
+import htSafeList from "./tailwind-ht-safelist.json";
 
 const config = {
   darkMode: "class",

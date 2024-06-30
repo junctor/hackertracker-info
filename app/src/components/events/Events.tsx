@@ -72,7 +72,7 @@ export default function Events({
       <div className="ml-2 md:ml-5 items-center grid bg-background py-3 align-middle grid-cols-2 md:grid-cols-4 gap-1">
         <div>
           <h1 className="text-base sm:text-base md:text-lg lg:text-xl font-bold row-span-2 md:row-span-1">
-            Test
+            Schedule
           </h1>
         </div>
         <div className="col-span-2 order-last md:order-none md:items-center md:justify-center">

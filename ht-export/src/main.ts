@@ -87,13 +87,17 @@ const CONF = "DEFCON32";
 
   const imgs = await Promise.all(
     htOrgs?.flatMap((o: any) =>
-      o.media.map((m: any) => getFbStorage(fbDb, CONF, m.name))
+      o.media.map((m: any) =>
+        getFbStorage(fbDb, CONF, m.name).catch((error) => console.error(error))
+      )
     ) ?? []
   );
 
   await Promise.all(
-    imgs.map((m) =>
-      fs.promises.writeFile(`${imgDir}/${m.file}`, Buffer.from(m.bytes))
-    )
+    imgs
+      .filter((m) => m?.file)
+      .map((m) => {
+        fs.promises.writeFile(`${imgDir}/${m.file}`, Buffer.from(m.bytes));
+      })
   );
 })();

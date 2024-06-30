@@ -23,6 +23,13 @@ export default function Navigation() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
+            <Link href="/events" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Schedule
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
             <NavigationMenuTrigger>Organizations</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid grid-cols-2 w-56">

@@ -145,17 +145,19 @@ function Event({ event }: { event: HTEvent }) {
                   <div
                     className={`ml-1 table-cell h-full w-1 sm:w-2 mr-3 rounded-md`}
                   />
-                  <div className="inline-block text-left ml-2">
-                    <p className="font-bold text-sm sm:text-md md:text-base lg:text-lg">
-                      {s.name}
-                    </p>
-
-                    {s.title != null && (
-                      <p className="text-xs sm:text-xs md:text-xs lg:text-sm">
-                        {s.title}
+                  <Link href={`/speaker?id=${s.id}`}>
+                    <div className="inline-block text-left ml-2">
+                      <p className="font-bold text-sm sm:text-md md:text-base lg:text-lg">
+                        {s.name}
                       </p>
-                    )}
-                  </div>
+
+                      {s.title != null && (
+                        <p className="text-xs sm:text-xs md:text-xs lg:text-sm">
+                          {s.title}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
                 </div>
               ))}
           </div>

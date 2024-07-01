@@ -4,8 +4,6 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -23,14 +21,11 @@ export default function Orgs({
   return (
     <>
       <div className="mx-5 bg-background">
+        <h1 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
+          {title}
+        </h1>
         <Table>
           <TableCaption>{title}</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-20"></TableHead>
-              <TableHead>{title}</TableHead>
-            </TableRow>
-          </TableHeader>
           <TableBody>
             {orgs.map((o) => (
               <TableRow

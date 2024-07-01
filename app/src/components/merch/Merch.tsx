@@ -52,6 +52,9 @@ export default function Merch({ products }: { products: FBProducts }) {
   return (
     <main>
       <div>
+        <h1 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
+          Merch
+        </h1>
         <table className="border-collapse border-spacing-x-4 border-spacing-y-2 border-2 border-indigo-900">
           <thead>
             <tr className="bg-white text-dc-purple text-xs md:text-lg font-extrabold">

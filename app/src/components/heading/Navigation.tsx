@@ -33,7 +33,7 @@ const pages = [
   // { title: "Merch", link: "/merch" },
   // { title: "Locations", link: "/locations" },
   ...orgs,
-];
+].sort((a, b) => a.title.localeCompare(b.title));
 
 export default function Navigation() {
   return (

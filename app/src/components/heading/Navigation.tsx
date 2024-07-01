@@ -15,7 +15,25 @@ import {
 import Link from "next/link";
 import { tagsOrgs } from "@/lib/utils/orgs";
 
-const orgs = Array.from(tagsOrgs).sort(([, a], [, b]) => a.localeCompare(b));
+const orgs = Array.from(tagsOrgs)
+  .sort(([, a], [, b]) => a.localeCompare(b))
+  .map((o) => {
+    return {
+      title: o[1],
+      link: `/orgs?id=${o[0]}`,
+    };
+  });
+
+const pages = [
+  { title: "Schedule", link: "/events" },
+  { title: "Speakers", link: "/speakers" },
+  { title: "News", link: "/news" },
+  { title: "Apps", link: "/apps" },
+  // { title: "Maps", link: "/maps" },
+  // { title: "Merch", link: "/merch" },
+  // { title: "Locations", link: "/locations" },
+  ...orgs,
+];
 
 export default function Navigation() {
   return (
@@ -30,16 +48,16 @@ export default function Navigation() {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Organizations</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Pages</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid grid-cols-2 w-56">
-                {orgs.map((o) => (
-                  <li key={o[1]}>
-                    <Link href={`/orgs?id=${o[0]}`}>
+                {pages.map((p) => (
+                  <li key={p.title}>
+                    <Link href={p.link}>
                       <NavigationMenuLink
                         className={navigationMenuTriggerStyle()}
                       >
-                        {o[1]}
+                        {p.title}
                       </NavigationMenuLink>
                     </Link>
                   </li>

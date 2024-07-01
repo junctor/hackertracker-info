@@ -43,14 +43,14 @@ export default function Events({
 
   const [categories, setCategories] = useState(categoriesMap);
 
-  const locationsMap = Array.from(dateGroup.values())
-    .flat()
-    .reduce((acc, event) => {
-      acc.set(event.location, true);
-      return acc;
-    }, new Map<string, boolean>());
+  // const locationsMap = Array.from(dateGroup.values())
+  //   .flat()
+  //   .reduce((acc, event) => {
+  //     acc.set(event.location, true);
+  //     return acc;
+  //   }, new Map<string, boolean>());
 
-  const [locations, setLocations] = useState(locationsMap);
+  // const [locations, setLocations] = useState(locationsMap);
 
   const categoryColors = Array.from(dateGroup.values())
     .flat()
@@ -59,9 +59,9 @@ export default function Events({
       return acc;
     }, new Map<string, string>());
 
-  function toggleLocations(key: string) {
-    setLocations((prev) => new Map(prev).set(key, !(prev.get(key) ?? false)));
-  }
+  // function toggleLocations(key: string) {
+  //   setLocations((prev) => new Map(prev).set(key, !(prev.get(key) ?? false)));
+  // }
 
   function toggleCategory(key: string) {
     setCategories((prev) => new Map(prev).set(key, !(prev.get(key) ?? false)));
@@ -71,7 +71,7 @@ export default function Events({
     <div>
       <div className="ml-2 md:ml-5 items-center grid bg-background py-3 align-middle grid-cols-2 md:grid-cols-4 gap-1">
         <div>
-          <h1 className="text-base sm:text-base md:text-lg lg:text-xl font-bold row-span-2 md:row-span-1">
+          <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold font-mono">
             Schedule
           </h1>
         </div>
@@ -105,7 +105,7 @@ export default function Events({
                   <DialogTitle>Filters</DialogTitle>
                   <DialogDescription>
                     <div>
-                      <div className="my-2">
+                      {/* <div className="my-2">
                         <h3 className="text-sm md:text-base font-bold">
                           Locations
                         </h3>
@@ -128,7 +128,7 @@ export default function Events({
                               </div>
                             ))}
                         </div>
-                      </div>
+                      </div> */}
                       <div className="my-2 mt-5">
                         <h3 className="text-sm md:text-base font-bold my-2 mt-1">
                           Categories
@@ -171,9 +171,8 @@ export default function Events({
           <TableBody>
             {(dateGroup.get(day) ?? [])
               .filter(
-                (e) =>
-                  (categories.get(e.category) ?? false) &&
-                  locations.get(e.location)
+                (e) => categories.get(e.category) ?? false
+                // && locations.get(e.location)
               )
               .map((htEvent) => (
                 <TableRow key={htEvent.id} id={`e-${htEvent.id}`}>

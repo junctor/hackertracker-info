@@ -25,7 +25,7 @@ const orgs = Array.from(tagsOrgs)
   });
 
 const pages = [
-  { title: "Schedule", link: "/events" },
+  // { title: "Schedule", link: "/events" },
   { title: "Speakers", link: "/speakers" },
   { title: "News", link: "/news" },
   { title: "Apps", link: "/apps" },

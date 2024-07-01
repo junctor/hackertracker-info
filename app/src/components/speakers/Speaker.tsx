@@ -3,17 +3,38 @@ import { eventTime } from "../../lib/utils/dates";
 import Theme from "../../lib/utils/theme";
 import ReactMarkdown from "react-markdown";
 import React from "react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 function Speaker({ speaker }: { speaker: HTSpeaker }) {
   const theme = new Theme();
   theme.randomisze();
 
   return (
-    <div className="mt-4 ml-5">
+    <div className="mx-5">
+      <div className="mt-2 ml-5 mb-5 justify-start flex-auto">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="../speakers">Schedule</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="my-3">
+          <h1 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5 mr-3">
+            {speaker.name}
+          </h1>
+        </div>
+      </div>
       <div>
-        <h1 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-1 md:mb-2 mr-3">
-          {speaker.name}
-        </h1>
         {speaker.affiliations.length > 0 && (
           <div>
             {speaker.affiliations.map((a) => (

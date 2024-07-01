@@ -24,8 +24,8 @@ export default function MerchPage() {
   return (
     <div>
       <Head>
-        <title>DEF CON 31 Merch</title>
-        <meta name="description" content="DEF CON 31 Merch" />
+        <title>DC32 Merch</title>
+        <meta name="description" content="DEF CON 32 Merch" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"

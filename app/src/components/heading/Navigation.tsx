@@ -47,7 +47,7 @@ export default function Navigation() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          <NavigationMenuItem className="md:block hidden">
             <NavigationMenuTrigger>Mobile</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid grid-cols-2 w-56">

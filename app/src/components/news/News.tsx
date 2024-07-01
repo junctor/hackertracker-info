@@ -8,7 +8,7 @@ import React from "react";
 
 function News({ news }: { news: HTNews[] }) {
   return (
-    <div>
+    <div className="mx-5">
       <h1 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
         News
       </h1>

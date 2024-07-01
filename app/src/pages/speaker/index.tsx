@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import React from "react";
+import Heading from "@/components/heading/Heading";
 
 export default function SpeakerPage() {
   const {
@@ -37,12 +38,13 @@ export default function SpeakerPage() {
   return (
     <div>
       <Head>
-        <title>{`DEF CON 31 ${speaker.name}`}</title>
-        <meta name="description" content="DEF CON 31 Speaker" />
+        <title>{`DC32 ${speaker.name}`}</title>
+        <meta name="description" content="DEF CON 32 Speaker" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="mb-20 ">
+      <main>
+        <Heading />
         <Speaker speaker={speaker} />
       </main>
     </div>

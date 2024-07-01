@@ -35,13 +35,11 @@ export default function Speakers({ speakers }: { speakers: Speaker[] }) {
   };
 
   return (
-    <div ref={componentRef}>
-      <div className="flex items-center justify-center mb-5">
+    <div>
+      <div className="mx-5">
         <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold font-mono">
           Speakers
         </h1>
-      </div>
-      <div>
         <div className="justify-center items-center flex">
           {Array.from(speakerGroup).map(([tabI]) => (
             <button

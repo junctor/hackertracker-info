@@ -25,8 +25,8 @@ DTSTART:${iCalDate(new Date(event.begin))}
 DTEND:${iCalDate(new Date(event.end))}
 STATUS:CONFIRMED
 CATEGORIES:CONFERENCE
-SUMMARY:${event.conference}
-URL:${BASEURL}/conferences/${event.conference}/event/?id=${event.id}
+SUMMARY:${event.title}
+URL:${BASEURL}/event/?id=${event.id}
 LOCATION:${event.location.name}
 DESCRIPTION:${iCalDesc(event).replace(/(\r\n|\n|\r)/gm, " ")}
 END:VEVENT

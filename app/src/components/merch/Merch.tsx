@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import React from "react";
+import Error from "@/components/misc/Error";
 
 export default function Merch({ products }: { products: FBProducts }) {
   useEffect(() => {
@@ -12,16 +13,21 @@ export default function Merch({ products }: { products: FBProducts }) {
     };
   }, []);
 
-  const productsSorted = products.documents
-    .sort(
-      (a, b) =>
-        a.fields.sort_order.integerValue - b.fields.sort_order.integerValue
-    )
-    .filter((p) =>
-      p.fields.variants.arrayValue.values.find(
-        (v) => v.mapValue.fields.stock_status.stringValue !== "OUT"
+  if (products.documents == null) {
+    return <Error msg="Merch is closed" />;
+  }
+
+  const productsSorted =
+    products.documents
+      ?.sort(
+        (a, b) =>
+          a.fields.sort_order.integerValue - b.fields.sort_order.integerValue
       )
-    );
+      ?.filter((p) =>
+        p.fields.variants.arrayValue.values.find(
+          (v) => v.mapValue.fields.stock_status.stringValue !== "OUT"
+        )
+      ) ?? [];
 
   const productsOneSize = productsSorted.filter((p) =>
     p.fields.variants.arrayValue.values.find(

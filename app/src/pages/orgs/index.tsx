@@ -49,7 +49,7 @@ export default function ExhibitorsPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="mb-20">
+      <main>
         <Heading />
         <Orgs orgs={orgs} title={tagOrg.org} />
       </main>

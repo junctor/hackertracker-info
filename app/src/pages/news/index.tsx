@@ -34,7 +34,7 @@ export default function InfoPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="mb-20 ">
+      <main>
         <Heading />
         <News news={newsData ?? []} />
       </main>

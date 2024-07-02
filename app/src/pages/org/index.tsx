@@ -38,7 +38,7 @@ export default function ExhibitorPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="mb-20">
+      <main>
         <OrgDetails org={foundOrg} />
       </main>
     </div>

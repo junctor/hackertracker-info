@@ -9,7 +9,7 @@ import Heading from "@/components/heading/Heading";
 
 export default function MerchPage() {
   const { data, error, isLoading } = useSWR<FBProducts, Error>(
-    "https://firestore.googleapis.com/v1/projects/hackertest-5a202/databases/(default)/documents/conferences/DEFCON31/products?pageSize=1000",
+    "https://firestore.googleapis.com/v1/projects/hackertest-5a202/databases/(default)/documents/conferences/DEFCON32/products?pageSize=1000",
     fetcher
   );
 

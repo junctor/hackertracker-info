@@ -73,8 +73,6 @@ const CONF = "DEFCON32";
     ),
   ]);
 
-  fbDb.app.options.storageBucket = "gs://hackertest-5a202.appspot.com";
-
   const maps = await Promise.all(
     htConf?.maps?.map((m: any) => getFbStorage(fbDb, CONF, m.file)) ?? []
   );

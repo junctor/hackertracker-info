@@ -1,9 +1,9 @@
 export const tagsOrgs = new Map<number, string>([
-  [46173, "Exhibitor"],
-  [46171, "Vendor"],
-  [46172, "Village"],
+  [46173, "Exhibitors"],
+  // [46171, "Vendors"],
+  [46172, "Villages"],
   [46358, "Community"],
-  [46361, "Contest"],
+  [46361, "Contests"],
 ]);
 
 export function getOrg(tagId: string): { id: number; org: string } {

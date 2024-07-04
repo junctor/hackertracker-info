@@ -34,7 +34,7 @@ export default function ExhibitorPage() {
     <div>
       <Head>
         <title>{`DC32 ${foundOrg.name}`}</title>
-        <meta name="description" content="DEF CON 32" />
+        <meta name="description" content="DEF CON 32 Org" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

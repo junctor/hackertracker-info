@@ -22,7 +22,7 @@ function Speaker({ speaker }: { speaker: HTSpeaker }) {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="../speakers">Schedule</Link>
+                <Link href="../speakers">Speakers</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />

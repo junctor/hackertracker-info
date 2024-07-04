@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import React from "react";
 import {
   Table,
@@ -8,8 +7,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from "next/router";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-export default function Speakers({ speakers }: { speakers: Speaker[] }) {
+export default function Speakers({ speakers }: { speakers: HTSpeaker[] }) {
   const router = useRouter();
 
   return (
@@ -30,6 +30,12 @@ export default function Speakers({ speakers }: { speakers: Speaker[] }) {
                   key={s.id}
                   onClick={() => router.push(`/speaker?id=${s.id}`)}
                 >
+                  <TableCell>
+                    <Avatar>
+                      <AvatarImage src={`/ht/img/${s.media[0]?.name}`} />
+                      <AvatarFallback>{s.name[0]}</AvatarFallback>
+                    </Avatar>
+                  </TableCell>
                   <TableCell>{s.name}</TableCell>
                 </TableRow>
               ))}

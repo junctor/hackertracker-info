@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Speakers from "../../components/speakers/Speakers";
-import { fetcher, toSpeakers } from "../../lib/utils/misc";
+import { fetcher } from "../../lib/utils/misc";
 import useSWR from "swr";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
@@ -9,7 +9,7 @@ import Heading from "@/components/heading/Heading";
 
 export default function SpeakersPage() {
   const {
-    data: speakersData,
+    data: speakers,
     error: speakersError,
     isLoading: speakersIsLoading,
   } = useSWR<HTSpeaker[], Error>("/ht/speakers.json", fetcher);
@@ -18,11 +18,9 @@ export default function SpeakersPage() {
     return <Loading />;
   }
 
-  if (speakersError !== undefined || speakersData === undefined) {
+  if (speakersError !== undefined || speakers === undefined) {
     return <Error />;
   }
-
-  const speakers = toSpeakers(speakersData);
 
   return (
     <div>

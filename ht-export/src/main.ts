@@ -83,7 +83,7 @@ const CONF = "DEFCON32";
     )
   );
 
-  const imgs = await Promise.all(
+  const orgImags = await Promise.all(
     htOrgs?.flatMap((o: any) =>
       o.media.map((m: any) =>
         getFbStorage(fbDb, CONF, m.name).catch((error) => console.error(error))
@@ -92,7 +92,25 @@ const CONF = "DEFCON32";
   );
 
   await Promise.all(
-    imgs
+    orgImags
+      .filter((m) => m?.file)
+      .map((m) => {
+        fs.promises.writeFile(`${imgDir}/${m.file}`, Buffer.from(m.bytes));
+      })
+  );
+
+  const speakerImags = await Promise.all(
+    htSpeakers?.flatMap((o: any) =>
+      o.media.map((m: any) =>
+        getFbStorage(fbDb, CONF, m.name).catch((error) => console.error(error))
+      )
+    ) ?? []
+  );
+
+  console.log(speakerImags);
+
+  await Promise.all(
+    speakerImags
       .filter((m) => m?.file)
       .map((m) => {
         fs.promises.writeFile(`${imgDir}/${m.file}`, Buffer.from(m.bytes));

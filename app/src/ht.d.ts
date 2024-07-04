@@ -161,6 +161,7 @@ interface HTSpeaker {
   pronouns: string | null;
   title?: string;
   twitter: string;
+  media: [HTMedia];
 }
 
 interface HTSpeakerLink {
@@ -219,20 +220,7 @@ interface HTNews {
 interface HTProduct {
   code: string;
   description: string;
-  media: [
-    {
-      hash_sha256: string;
-      filetype: string;
-      product_id: number;
-      hash_md5: string;
-      name: string;
-      hash_crc32c: string;
-      filesize: number;
-      asset_id: number;
-      sort_order: number;
-      url: string;
-    },
-  ];
+  media: [HTMedia];
   title: string;
   price_min: number;
   eligibility_restriction_text: null;
@@ -256,26 +244,26 @@ interface HTProduct {
   ];
 }
 
+interface HTMedia {
+  hash_sha256: string;
+  filetype: string;
+  hash_md5: string;
+  orga_id: number;
+  name: string;
+  is_logo: string;
+  hash_crc32c: string;
+  filesize: number;
+  asset_id: number;
+  sort_order: number;
+  url: string;
+}
+
 interface HTOrganization {
   tag_ids: [number];
   conference: string;
   documents: [];
   description: string;
-  media: [
-    {
-      hash_sha256: string;
-      filetype: string;
-      hash_md5: string;
-      orga_id: number;
-      name: string;
-      is_logo: string;
-      hash_crc32c: string;
-      filesize: number;
-      asset_id: number;
-      sort_order: number;
-      url: string;
-    },
-  ];
+  media: [HTMedia];
   people: [];
   conference_id: number;
   updated_at: string;

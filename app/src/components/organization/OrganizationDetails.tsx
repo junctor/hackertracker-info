@@ -24,7 +24,7 @@ function OrgDetails({ org }: { org: HTOrganization }) {
     <div>
       <Heading />
       <div className="mt-4 ml-5">
-        <div className="mt-2 ml-5 mb-5 justify-start flex-auto">
+        <div className="my-2 justify-start flex-auto">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -35,7 +35,7 @@ function OrgDetails({ org }: { org: HTOrganization }) {
               <BreadcrumbSeparator />
             </BreadcrumbList>
           </Breadcrumb>
-          <div className="my-3">
+          <div>
             <h1 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-5 mr-3">
               {org.name}
             </h1>

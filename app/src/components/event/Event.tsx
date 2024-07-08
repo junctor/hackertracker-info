@@ -22,7 +22,7 @@ function Event({ event }: { event: HTEvent }) {
   return (
     <div className="mx-5">
       <div className="flex">
-        <div className="mt-2 ml-5 mb-5 justify-start flex-auto">
+        <div className="my-2 justify-start flex-auto">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -41,7 +41,7 @@ function Event({ event }: { event: HTEvent }) {
             </h1>
           </div>
         </div>
-        <div className="mr-10 ml-5 content-center justify-end flex-none">
+        <div className="mr-10 ml-5 content-center justify-end flex-none hidden md:block">
           <div className="flex">
             <a
               href={`data:text/calendar;charset=utf8,${encodeURIComponent(
@@ -71,7 +71,7 @@ function Event({ event }: { event: HTEvent }) {
         </div>
       </div>
       <div className="font-bold">
-        <div className="flex items-center w-11/12 my-2 cursor-pointer mx-2">
+        <div className="flex items-center w-11/12 my-2 cursor-pointer">
           <a
             className="flex"
             href={`data:text/calendar;charset=utf8,${encodeURIComponent(
@@ -90,13 +90,13 @@ function Event({ event }: { event: HTEvent }) {
             </p>
           </a>
         </div>
-        <div className="flex items-center w-11/12 my-2 mx-2">
+        <div className="flex items-center w-11/12 my-2">
           <MapIcon className="h-5 w-5 md:h-7 md:w-7 lg:w-8 lg:h-8 mr-2" />
           <p className="md:text-base lg:text-lg text-xs">
             {event.location.name}
           </p>
         </div>
-        <div className="flex items-center w-11/12 my-2 mx-2">
+        <div className="flex items-center w-11/12 my-2">
           <span
             className={`rounded-full h-4 w-4 md:h-5 md:w-5 lg:w-6 lg:h-6 mr-2 green inline-flex flex-none bg-[${event.type.color}]`}
           />

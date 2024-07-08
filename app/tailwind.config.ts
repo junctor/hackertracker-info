@@ -23,6 +23,7 @@ const config = {
     //  Event colors
     ...htSafeList.colors.map((c: string) => `bg-[${c}]`),
     ...htSafeList.colors.map((c: string) => `hover:text-[${c}]`),
+    ...htSafeList.colors.map((c: string) => `text-[${c}]`),
     ...htSafeList.colors.map((c: string) => `hover:bg-[${c}]`),
   ],
   prefix: "",

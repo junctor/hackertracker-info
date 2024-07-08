@@ -7,7 +7,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from "next/router";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function Speakers({ speakers }: { speakers: HTSpeaker[] }) {
   const router = useRouter();
@@ -30,12 +29,6 @@ export default function Speakers({ speakers }: { speakers: HTSpeaker[] }) {
                   key={s.id}
                   onClick={() => router.push(`/speaker?id=${s.id}`)}
                 >
-                  <TableCell>
-                    <Avatar>
-                      <AvatarImage src={`/ht/img/${s.media[0]?.name}`} />
-                      <AvatarFallback>{s.name[0]}</AvatarFallback>
-                    </Avatar>
-                  </TableCell>
                   <TableCell>{s.name}</TableCell>
                 </TableRow>
               ))}

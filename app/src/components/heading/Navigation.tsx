@@ -41,16 +41,9 @@ export default function Navigation() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link href="/events" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Schedule
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Pages</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Menu</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid grid-cols-2 w-56">
+              <ul className="grid grid-cols-2 w-72">
                 {pages.map((p) => (
                   <li key={p.title}>
                     <Link href={p.link}>
@@ -65,10 +58,17 @@ export default function Navigation() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href="/events" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Schedule
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
           <NavigationMenuItem className="md:block hidden">
             <NavigationMenuTrigger>Mobile</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid grid-cols-2 w-56">
+              <ul className="grid grid-cols-2 w-72">
                 <li>
                   <Link
                     href="https://play.google.com/store/apps/details?id=com.shortstack.hackertracker&hl=en_US"

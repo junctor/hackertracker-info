@@ -90,28 +90,28 @@ interface HTConference {
 }
 
 interface HTTag {
-  category: string;
   conference_id: number;
-  conference: string;
-  id: number;
-  is_browsable: false;
   is_single_valued: boolean;
+  conference: string;
+  is_browsable: boolean;
   label: string;
+  id: number;
+  category: string;
   sort_order: number;
-  tags: Tag[];
+  tags: HTTags[];
 }
 
-interface Tag {
-  id: number;
-  description: string;
+interface HTTags {
   color_foreground: string;
   color_background: string;
+  description: string;
   label: string;
+  id: number;
   sort_order: number;
 }
 
 interface HTEvent {
-  android_description: string;
+  andrsoid_description: string;
   begin_timestamp: Timestamp;
   begin: string;
   conference_id: number;

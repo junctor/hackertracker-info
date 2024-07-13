@@ -28,18 +28,13 @@ interface EventData {
   location: string;
   color: string;
   category: string;
-  tags?: Tag[];
+  tags: HTTags[] | undefined;
   speakers: string;
 }
 
 interface CategoryData {
   name: string;
   data: HTEventType | undefined;
-}
-
-interface TagData {
-  name: string;
-  data: Tag;
 }
 
 interface Speaker {

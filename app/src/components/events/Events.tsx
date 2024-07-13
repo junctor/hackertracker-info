@@ -12,60 +12,36 @@ import {
   TableCaption,
   TableRow,
 } from "@/components/ui/table";
+
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { AdjustmentsHorizontalIcon } from "@heroicons/react/16/solid";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function Events({
   dateGroup,
+  tags,
 }: {
   dateGroup: Map<string, EventData[]>;
+  tags: HTTag[];
 }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tagId = searchParams.get("tag") ?? "0";
+  console.log(tagId);
+
   const [day, setDay] = useState(
     (dateGroup.keys().next().value as string) ?? ""
   );
 
-  const categoriesMap = Array.from(dateGroup.values())
-    .flat()
-    .reduce((acc, event) => {
-      acc.set(event.category, true);
-      return acc;
-    }, new Map<string, boolean>());
-
-  const [categories, setCategories] = useState(categoriesMap);
-
-  // const locationsMap = Array.from(dateGroup.values())
-  //   .flat()
-  //   .reduce((acc, event) => {
-  //     acc.set(event.location, true);
-  //     return acc;
-  //   }, new Map<string, boolean>());
-
-  // const [locations, setLocations] = useState(locationsMap);
-
-  const categoryColors = Array.from(dateGroup.values())
-    .flat()
-    .reduce((acc, event) => {
-      acc.set(event.category, event.color);
-      return acc;
-    }, new Map<string, string>());
-
-  // function toggleLocations(key: string) {
-  //   setLocations((prev) => new Map(prev).set(key, !(prev.get(key) ?? false)));
-  // }
-
-  function toggleCategory(key: string) {
-    setCategories((prev) => new Map(prev).set(key, !(prev.get(key) ?? false)));
-  }
+  const [selectedTag, setSelectedTag] = useState(parseInt(tagId));
 
   return (
     <div>
@@ -92,75 +68,48 @@ export default function Events({
             </TabsList>
           </Tabs>
         </div>
-        <div className="justify-self-end pr-5 align-middle">
-          <span className="mr-1">
-            <Dialog>
-              <DialogTrigger>
-                <Button variant="ghost" size="icon">
-                  <AdjustmentsHorizontalIcon className="h-6" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Filters</DialogTitle>
-                  <DialogDescription>
-                    <div>
-                      {/* <div className="my-2">
-                        <h3 className="text-sm md:text-base font-bold">
-                          Locations
-                        </h3>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-row gap-4">
-                          {Array.from(locations.keys())
-                            .sort()
-                            .map((location) => (
-                              <div
-                                className="flex items-center space-x-2 my-3"
-                                key={location}
-                              >
-                                <Switch
-                                  id={location}
-                                  checked={locations.get(location) ?? false}
-                                  onCheckedChange={() => {
-                                    toggleLocations(location);
-                                  }}
-                                />
-                                <Label htmlFor={location}>{location}</Label>
-                              </div>
-                            ))}
-                        </div>
-                      </div> */}
-                      <div className="my-2 mt-5">
-                        <h3 className="text-sm md:text-base font-bold my-2 mt-1">
-                          Categories
-                        </h3>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-row gap-4">
-                          {Array.from(categories.keys())
-                            .sort()
-                            .map((category) => (
-                              <div
-                                className="flex items-center space-x-2 my-2"
-                                key={category}
-                              >
-                                <Switch
-                                  className={`data-[state=checked]:bg-[${categoryColors.get(
-                                    category
-                                  )}] bg-[${categoryColors.get(category)}]`}
-                                  id={category}
-                                  checked={categories.get(category) ?? false}
-                                  onCheckedChange={() => {
-                                    toggleCategory(category);
-                                  }}
-                                />
-                                <Label htmlFor={category}>{category}</Label>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    </div>
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
+        <div className="justify-self-end pr-5 align-middle flex my-5">
+          <span className="mr-5">
+            <Select
+              onValueChange={(e) => {
+                setSelectedTag(parseInt(e) ?? 0);
+                router.push(
+                  {
+                    pathname: "/events",
+                    query: { tag: e },
+                  },
+                  undefined,
+                  { shallow: true }
+                );
+              }}
+            >
+              <SelectTrigger className="w-44">
+                <SelectValue placeholder="Select a tag" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="0">All events</SelectItem>
+                </SelectGroup>
+                {tags
+                  .filter(
+                    (tag) =>
+                      tag.is_browsable &&
+                      tag.tags.length > 0 &&
+                      tag.category == "content"
+                  )
+                  .sort((a, b) => (a.sort_order > b.sort_order ? 1 : -1))
+                  .map((tag) => (
+                    <SelectGroup key={tag.id}>
+                      <SelectLabel>{tag.label}</SelectLabel>
+                      {tag.tags.map((t) => (
+                        <SelectItem key={t.id} value={t.id.toString()}>
+                          {t.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  ))}
+              </SelectContent>
+            </Select>
           </span>
           <Search dateGroup={dateGroup} />
         </div>
@@ -171,8 +120,8 @@ export default function Events({
           <TableBody>
             {(dateGroup.get(day) ?? [])
               .filter(
-                (e) => categories.get(e.category) ?? false
-                // && locations.get(e.location)
+                (e) =>
+                  selectedTag === 0 || e.tags?.some((t) => t.id == selectedTag)
               )
               .map((htEvent) => (
                 <TableRow key={htEvent.id} id={`e-${htEvent.id}`}>

@@ -10,20 +10,25 @@ import Head from "next/head";
 
 export default function EventsPage() {
   const {
-    data: htData,
-    error,
-    isLoading,
+    data: eventsJson,
+    error: eventsError,
+    isLoading: eventsLoading,
   } = useSWR<HTEvent[], Error>(`../../../ht/events.json`, fetcher);
 
-  if (isLoading) {
+  const { data: tagsJson, isLoading: tagsLoading } = useSWR<HTTag[], Error>(
+    `../../../ht/tags.json`,
+    fetcher
+  );
+
+  if (eventsLoading || tagsLoading) {
     return <Loading />;
   }
 
-  if (htData === undefined || error !== undefined) {
-    return <Error msg={error?.message} />;
+  if (eventsJson === undefined || eventsError !== undefined) {
+    return <Error />;
   }
 
-  const eventData = toEventsData(htData);
+  const eventData = toEventsData(eventsJson, tagsJson ?? []);
 
   return (
     <div>
@@ -39,7 +44,7 @@ export default function EventsPage() {
 
       <main>
         <Heading />
-        <Events dateGroup={createDateGroup(eventData)} />
+        <Events dateGroup={createDateGroup(eventData)} tags={tagsJson ?? []} />
       </main>
     </div>
   );

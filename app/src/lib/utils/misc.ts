@@ -1,11 +1,13 @@
 export const fetcher = async (...args: Parameters<typeof fetch>) =>
   await fetch(...args).then(async (res) => await res.json());
 
-export const toEventsData = (events: HTEvent[]): EventData[] => {
+export const toEventsData = (events: HTEvent[], tags: HTTag[]): EventData[] => {
   const formatter = new Intl.ListFormat("en", {
     style: "long",
     type: "conjunction",
   });
+
+  const allTags = tags?.flatMap((t) => t.tags) ?? [];
 
   return events.map((e) => ({
     id: e.id,
@@ -16,6 +18,9 @@ export const toEventsData = (events: HTEvent[]): EventData[] => {
     location: e.location.name,
     color: e.type.color,
     category: e.type.name,
+    tags: (e.tag_ids
+      .map((t) => allTags.find((a) => a.id === t))
+      .filter((tag) => tag !== undefined) ?? []) as HTTags[],
     speakers: formatter.format(e.speakers.map((s) => s.name)),
   }));
 };

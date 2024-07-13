@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Theme from "../../lib/utils/theme";
 import ReactMarkdown from "react-markdown";
 import Heading from "../heading/Heading";
 import {
@@ -11,11 +10,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import { tagsOrgs } from "@/lib/utils/orgs";
 import React from "react";
+import { CalendarIcon } from "@heroicons/react/24/outline";
 
 function OrgDetails({ org }: { org: HTOrganization }) {
-  const theme = new Theme();
-  theme.randomisze();
-
   const orgId = org.tag_ids.find((t) => tagsOrgs.has(t)) ?? 0;
 
   const orgName = tagsOrgs.get(orgId) ?? "Unknown";
@@ -48,25 +45,15 @@ function OrgDetails({ org }: { org: HTOrganization }) {
             </div>
           </div>
         </div>
-        {/* {org.tag_id_as_organizer !== null && (
-          <div className={`m-5 hover:text-${themeColor}`}>
-            <Link href={`/tag?id=${org.tag_id_as_organizer}`}>
+        {org.tag_id_as_organizer !== null && (
+          <div className="m-5">
+            <Link href={`/events?tag=${org.tag_id_as_organizer}`}>
               <button
                 type="button"
                 className="flex align-middle items-center p-1"
-                onMouseEnter={() => {
-                  setActive(true);
-                }}
-                onMouseLeave={() => {
-                  setActive(false);
-                }}
               >
                 <div className="mr-2">
-                  {!active ? (
-                    <CalendarIconOutline className="h-5 sm:h-6 md:h-7 lg:h-8 mr-2" />
-                  ) : (
-                    <CalendarIconSoild className="h-5 sm:h-6 md:h-7 lg:h-8 mr-2" />
-                  )}
+                  <CalendarIcon className="h-5 sm:h-6 md:h-7 lg:h-8 mr-2" />
                 </div>
                 <h3 className="text-sm sm:text-base md:text-lg lg:text-xl">
                   {`${org.name} Events`}
@@ -74,7 +61,7 @@ function OrgDetails({ org }: { org: HTOrganization }) {
               </button>
             </Link>
           </div>
-        )} */}
+        )}
 
         {org.links.length > 0 && (
           <div className="mt-8 text-left">

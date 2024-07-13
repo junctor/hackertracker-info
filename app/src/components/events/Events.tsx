@@ -35,7 +35,6 @@ export default function Events({
   const router = useRouter();
   const searchParams = useSearchParams();
   const tagId = searchParams.get("tag") ?? "0";
-  console.log(tagId);
 
   const [day, setDay] = useState(
     (dateGroup.keys().next().value as string) ?? ""

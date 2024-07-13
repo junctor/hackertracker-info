@@ -29,7 +29,7 @@ const pages = [
   { title: "Speakers", link: "/speakers" },
   { title: "News", link: "/news" },
   { title: "Apps", link: "/apps" },
-  // { title: "Maps", link: "/maps" },
+  { title: "Maps", link: "/maps" },
   // { title: "Merch", link: "/merch" },
   // { title: "Locations", link: "/locations" },
   ...orgs,

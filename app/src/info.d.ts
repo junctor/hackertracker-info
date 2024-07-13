@@ -28,7 +28,7 @@ interface EventData {
   location: string;
   color: string;
   category: string;
-  tags: HTTags[] | undefined;
+  tags: HTTags[];
   speakers: string;
 }
 

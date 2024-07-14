@@ -17,7 +17,7 @@ export default function EventCell({ event }: { event: EventData }) {
             </p>
           ))}
         </TableCell>
-        <TableCell>
+        <TableCell className="max-w-96 sm:max-w-[640px] md:max-w-full">
           <h1
             className={`text-base md:text-lg lg:text-xl font-bold text-left break-words hover:text-[${event.color}]`}
           >

@@ -58,30 +58,14 @@ export default function Events({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <div className="ml-2 md:ml-5 items-center grid bg-background py-3 align-middle grid-cols-2 md:grid-cols-4 gap-1">
+        <div className="ml-2 md:ml-5 items-center grid bg-background mx-2 my-5 align-middle grid-cols-2 gap-1">
           <div>
-            <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold font-mono">
+            <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold font-mono ml-2">
               Schedule
             </h1>
           </div>
-          <div className="col-span-2 order-last md:order-none md:items-center md:justify-center">
-            <Tabs
-              value={day}
-              defaultValue={day}
-              onValueChange={(value) => {
-                setDay(value);
-              }}
-            >
-              <TabsList>
-                {Array.from(dateGroup).map(([tabDay]) => (
-                  <TabsTrigger value={tabDay} key={tabDay}>
-                    <p className="text-xs md:text-sm">{tabDateTitle(tabDay)}</p>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-          <div className="justify-self-end pr-5 align-middle flex my-5">
+
+          <div className="justify-self-end align-middle flex">
             <span className="mr-5">
               <Select
                 onValueChange={(e) => {
@@ -128,6 +112,23 @@ export default function Events({
             </span>
             <Search dateGroup={dateGroup} />
           </div>
+        </div>
+        <div className="mb-5 place-content-center flex ">
+          <Tabs
+            value={day}
+            defaultValue={day}
+            onValueChange={(value) => {
+              setDay(value);
+            }}
+          >
+            <TabsList>
+              {Array.from(dateGroup).map(([tabDay]) => (
+                <TabsTrigger value={tabDay} key={tabDay}>
+                  <p className="text-xs md:text-sm">{tabDateTitle(tabDay)}</p>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
         <div className="mb-10">
           <Table>

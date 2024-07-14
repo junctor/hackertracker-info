@@ -22,7 +22,7 @@ export default function Speakers({ speakers }: { speakers: HTSpeaker[] }) {
           <TableBody>
             {speakers
               .sort((a, b) =>
-                a.name.toLowerCase() > b.name.toLowerCase() ? 0 : -1
+                a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
               )
               .map((s) => (
                 <TableRow

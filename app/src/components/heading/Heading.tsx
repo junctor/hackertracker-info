@@ -20,7 +20,7 @@ export default function Heading() {
       </Link>
       <Navigation />
       <div className="flex flex-grow justify-end pr-5 items-center mb-1">
-        <Button variant="ghost" size="icon" className="mr-1 md:block hidden">
+        <Button variant="ghost" size="icon" className="mr-1">
           <a
             href="https://github.com/junctor/hackertracker-info"
             target="_blank"

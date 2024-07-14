@@ -17,7 +17,7 @@ function Speaker({ speaker }: { speaker: HTSpeaker }) {
 
   return (
     <div className="mx-5">
-      <div className="mt-2 ml-5 mb-5 justify-start flex-auto">
+      <div className="my-2 justify-start flex-auto">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>

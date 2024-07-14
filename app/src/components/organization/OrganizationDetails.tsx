@@ -20,7 +20,7 @@ function OrgDetails({ org }: { org: HTOrganization }) {
   return (
     <div>
       <Heading />
-      <div className="mt-4 ml-5">
+      <div className="mx-5">
         <div className="my-2 justify-start flex-auto">
           <Breadcrumb>
             <BreadcrumbList>

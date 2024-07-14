@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Event from "../../components/event/Event";
 import useSWR from "swr";
 import { fetcher } from "../../lib/utils/misc";
@@ -7,17 +6,22 @@ import Error from "@/components/misc/Error";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import Heading from "@/components/heading/Heading";
+import Head from "next/head";
 
 export default function EventPage() {
   const searchParams = useSearchParams();
 
+  const { data: tagsJson, isLoading: tagsLoading } = useSWR<HTTag[], Error>(
+    `../../../ht/tags.json`,
+    fetcher
+  );
   const {
     data: eventsData,
     error: eventsError,
     isLoading: eventsIsLoading,
   } = useSWR<HTEvent[], Error>(`../../../ht/events.json`, fetcher);
 
-  if (eventsIsLoading) {
+  if (eventsIsLoading || tagsLoading) {
     return <Loading />;
   }
 
@@ -46,10 +50,9 @@ export default function EventPage() {
         <meta name="description" content="DEF CON 32 Event" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <main>
         <Heading />
-        <Event event={event} />
+        <Event event={event} tags={tagsJson ?? []} />
       </main>
     </div>
   );

@@ -18,7 +18,14 @@ import Link from "next/link";
 import { BASEURL } from "@/lib/utils/const";
 import React from "react";
 
-function Event({ event }: { event: HTEvent }) {
+function Event({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
+  const allTags = tags?.flatMap((t) => t.tags) ?? [];
+
+  const eventTags =
+    event.tag_ids
+      .map((t) => allTags.find((a) => a.id === t))
+      .filter((tag) => tag !== undefined) ?? [];
+
   return (
     <div className="mx-5">
       <div className="flex">
@@ -101,6 +108,18 @@ function Event({ event }: { event: HTEvent }) {
             className={`rounded-full h-4 w-4 md:h-5 md:w-5 lg:w-6 lg:h-6 mr-2 green inline-flex flex-none bg-[${event.type.color}]`}
           />
           <p className={`text-xs md:text-sm lg:text-base`}>{event.type.name}</p>
+        </div>
+        <div className="flex items-center">
+          {eventTags
+            ?.sort((a, b) => (a.sort_order > b.sort_order ? 1 : -1))
+            ?.map((tag) => (
+              <div className="flex items-center mx-2" key={tag.id}>
+                <span
+                  className={`rounded-full h-2 w-2 md:h-3 md:w-3 lg:h-4 lg:w-4 green inline-flex flex-none mr-1 bg-[${tag.color_background}]`}
+                />
+                <p className={`text-xs md:text-sm lg:text-base`}>{tag.label}</p>
+              </div>
+            ))}
         </div>
       </div>
 

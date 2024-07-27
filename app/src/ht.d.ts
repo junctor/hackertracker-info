@@ -153,7 +153,6 @@ interface HTSpeaker {
   conference_id: number;
   description: string;
   event_ids: [number];
-  events: [HTEvent];
   id: number;
   link: string;
   links: HTSpeakerLink[];

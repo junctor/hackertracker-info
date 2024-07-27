@@ -15,10 +15,15 @@ export default function SpeakerPage() {
     isLoading: speakersIsLoading,
   } = useSWR<HTSpeaker[], Error>("/ht/speakers.json", fetcher);
 
+  const { data: eventsData, isLoading: eventsIsLoading } = useSWR<
+    HTEvent[],
+    Error
+  >(`../../../ht/events.json`, fetcher);
+
   const searchParams = useSearchParams();
   const speakerId = searchParams.get("id");
 
-  if (speakersIsLoading) {
+  if (speakersIsLoading || eventsIsLoading) {
     return <Loading />;
   }
 
@@ -28,6 +33,9 @@ export default function SpeakerPage() {
 
   const speaker = speakersData?.find((s) => s.id.toString() === speakerId);
 
+  const speakerEvents =
+    eventsData?.filter((e) => speaker?.event_ids.includes(e.id)) ?? [];
+
   if (speaker === undefined) {
     return <Error msg={`No speaker found for id ${speakerId}`} />;
   }
@@ -35,6 +43,7 @@ export default function SpeakerPage() {
   if (speakersError !== undefined) {
     return <Error />;
   }
+
   return (
     <div>
       <Head>
@@ -45,7 +54,7 @@ export default function SpeakerPage() {
 
       <main>
         <Heading />
-        <Speaker speaker={speaker} />
+        <Speaker speaker={speaker} events={speakerEvents} />
       </main>
     </div>
   );

@@ -34,7 +34,7 @@ export default function EventCell({ event }: { event: EventData }) {
               {event.tags
                 ?.sort((a, b) => (a.sort_order > b.sort_order ? 1 : -1))
                 ?.map((tag) => (
-                  <div className="flex items-center mx-2" key={tag.id}>
+                  <div className="flex items-center mr-2" key={tag.id}>
                     <span
                       className={`rounded-full h-2 w-2 md:h-3 md:w-3 lg:h-4 lg:w-4 green inline-flex flex-none mr-1 bg-[${tag.color_background}]`}
                     />

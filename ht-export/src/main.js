@@ -10,19 +10,12 @@ import {
   getTags,
   getNews,
   getOrganizations,
-} from "./fb";
+} from "./fb.js";
 
 const CONF = "DEFCON32";
 
 (async () => {
-  const apiKey = process.env.FIREBASE_API_KEY;
-
-  if (apiKey === undefined) {
-    console.log("FIREBASE_API_KEY environment variable is not set");
-    return;
-  }
-
-  const fbDb = await firebaseInit(apiKey);
+  const fbDb = await firebaseInit();
 
   const [
     htConf,
@@ -33,6 +26,7 @@ const CONF = "DEFCON32";
     htTags,
     htNews,
     htOrgs,
+    htContent,
   ] = await Promise.all([
     getConference(fbDb, CONF),
     getEvents(fbDb, CONF),
@@ -62,6 +56,7 @@ const CONF = "DEFCON32";
     fs.promises.writeFile("./out/ht/faq.json", JSON.stringify(htFAQ)),
     fs.promises.writeFile("./out/ht/tags.json", JSON.stringify(htTags)),
     fs.promises.writeFile("./out/ht/news.json", JSON.stringify(htNews)),
+
     fs.promises.writeFile(
       "./out/ht/organizations.json",
       JSON.stringify(htOrgs)
@@ -74,7 +69,7 @@ const CONF = "DEFCON32";
   ]);
 
   const maps = await Promise.all(
-    htConf?.maps?.map((m: any) => getFbStorage(fbDb, CONF, m.file)) ?? []
+    htConf?.maps?.map((m) => getFbStorage(fbDb, CONF, m.file)) ?? []
   );
 
   await Promise.all(
@@ -84,8 +79,8 @@ const CONF = "DEFCON32";
   );
 
   const orgImgs = await Promise.all(
-    htOrgs?.flatMap((o: any) =>
-      o.media.map((m: any) =>
+    htOrgs?.flatMap((o) =>
+      o.media.map((m) =>
         getFbStorage(fbDb, CONF, m.name).catch((error) => console.error(error))
       )
     ) ?? []

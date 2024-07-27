@@ -41,7 +41,7 @@ function OrgDetails({ org }: { org: HTOrganization }) {
         {org.media.length > 0 && (
           <div className="mt-2 flex">
             <img
-              src={org.media[0].url}
+              src={`/ht/img/${org.media[0].name}`}
               alt="org graphic"
               className="w-1/2 rounded-md"
             />

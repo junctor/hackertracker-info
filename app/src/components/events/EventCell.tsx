@@ -32,7 +32,7 @@ export default function EventCell({ event }: { event: EventData }) {
             </p>
           </div>
           <div>
-            <div className="flex items-center">
+            <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-0.5 md:gap-1 lg:gap-2 mt-2">
               {event.tags
                 ?.sort((a, b) => (a.sort_order > b.sort_order ? 1 : -1))
                 ?.map((tag) => (

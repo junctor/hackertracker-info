@@ -103,7 +103,7 @@ function Event({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
             {event.location.name}
           </p>
         </div>
-        <div className="flex items-center">
+        <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-1 md:gap-2 lg:gap-3">
           {eventTags
             ?.sort((a, b) => (a.sort_order > b.sort_order ? 1 : -1))
             ?.map((tag) => (

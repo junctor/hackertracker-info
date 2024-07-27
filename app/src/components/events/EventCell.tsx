@@ -23,14 +23,12 @@ export default function EventCell({ event }: { event: EventData }) {
           >
             {event.title}
           </h1>
-          <p className="text-xs md:text-sm lg:text-base font-bold">
+          <p className="text-xs md:text-sm lg:text-base font-bold mt-1">
             {event.speakers}
           </p>
-          <div className="flex items-center">
-            <p className="text-xs md:text-sm lg:text-base text-gray-400 mr-5">
-              {event.location}
-            </p>
-          </div>
+          <p className="text-xs md:text-sm lg:text-base text-gray-400 mt-1">
+            {event.location}
+          </p>
           <div>
             <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-0.5 md:gap-1 lg:gap-2 mt-2">
               {event.tags

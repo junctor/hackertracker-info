@@ -38,6 +38,15 @@ function OrgDetails({ org }: { org: HTOrganization }) {
             </h1>
           </div>
         </div>
+        {org.media.length > 0 && (
+          <div className="mt-2 flex">
+            <img
+              src={org.media[0].url}
+              alt="org graphic"
+              className="w-1/2 rounded-md"
+            />
+          </div>
+        )}
         <div className="mt-8">
           <div className="text-sm md:text-base lg:text-lg w-11/12">
             <div className="prose lg:prose-xl whitespace-pre-wrap">

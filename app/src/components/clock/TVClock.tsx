@@ -1,12 +1,5 @@
-import localFont from "next/font/local";
 import { useEffect, useState } from "react";
 import React from "react";
-
-const latoFont = localFont({
-  src: "../../../public/fonts/lato.woff2",
-  display: "swap",
-  variable: "--font-lato",
-});
 
 function padTime(num: number): string {
   return num.toString().padStart(2, "0");
@@ -39,24 +32,27 @@ function TVClock() {
 
   return (
     <div className="grid place-items-center text-center mx-5">
-      <div className="grid grid-flow-col gap-4 md:gap-12 text-center md:auto-cols-max">
+      <div className="grid grid-flow-col gap-0 text-center md:auto-cols-max">
         <div>
-          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl  text-dc-teal mr-1 font-mono">
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-teal font-mono">
             {padTime(time.hours)}
           </span>
-          <span className={latoFont.className}>hours</span>
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-white font-mono">
+            :
+          </span>
         </div>
         <div>
-          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-yellow mr-1 font-mono ">
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-yellow font-mono">
             {padTime(time.minutes)}
           </span>
-          <span className={latoFont.className}>minutes</span>
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-white font-mono">
+            :
+          </span>
         </div>
         <div>
-          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-red mr-1 font-mono">
+          <span className="font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl text-dc-red font-mono">
             {padTime(time.seconds)}
           </span>
-          <span className={latoFont.className}>seconds</span>
         </div>
       </div>
     </div>

@@ -78,32 +78,20 @@ const CONF = "DEFCON32";
     )
   );
 
-  const orgImgs = await Promise.all(
-    htOrgs?.flatMap((o) =>
-      o.media.map((m) =>
-        getFbStorage(fbDb, CONF, m.name).catch((error) => console.error(error))
-      )
-    ) ?? []
+  const images = [
+    ...htOrgs?.flatMap((o) => o.media?.map((m) => m.name)),
+    ...htSpeakers?.flatMap((s) => s.media?.map((m) => m.name)),
+    ...htEvents?.flatMap((e) => e.media?.map((m) => m.name)),
+  ].filter((i) => i != null && !i?.startsWith("https://info.defcon.org"));
+
+  const fbImages = await Promise.all(
+    images.map((i) =>
+      getFbStorage(fbDb, CONF, i).catch((error) => console.error(error))
+    )
   );
 
   await Promise.all(
-    orgImgs
-      .filter((m) => m?.file)
-      .map((m) => {
-        fs.promises.writeFile(`${imgDir}/${m.file}`, Buffer.from(m.bytes));
-      })
-  );
-
-  const speakerImgs = await Promise.all(
-    htSpeakers?.flatMap((o) =>
-      o.media.map((m) =>
-        getFbStorage(fbDb, CONF, m.name).catch((error) => console.error(error))
-      )
-    ) ?? []
-  );
-
-  await Promise.all(
-    speakerImgs
+    fbImages
       .filter((m) => m?.file)
       .map((m) => {
         fs.promises.writeFile(`${imgDir}/${m.file}`, Buffer.from(m.bytes));

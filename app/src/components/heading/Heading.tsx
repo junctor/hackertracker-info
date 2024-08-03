@@ -20,12 +20,12 @@ export default function Heading() {
       </Link>
       <Navigation />
       <div className="flex flex-grow justify-end pr-5 items-center mb-1">
-        <Button variant="ghost" size="icon" className="mr-1">
-          <a
-            href="https://github.com/junctor/hackertracker-info"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        <a
+          href="https://github.com/junctor/hackertracker-info"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button variant="ghost" size="icon" className="mr-1">
             {theme !== "light" ? (
               <svg
                 width="20"
@@ -56,8 +56,8 @@ export default function Heading() {
                 />
               </svg>
             )}
-          </a>
-        </Button>
+          </Button>
+        </a>
         <ThemeMode />
       </div>
       <Separator className="my-1" />

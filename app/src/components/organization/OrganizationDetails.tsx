@@ -39,7 +39,7 @@ function OrgDetails({ org }: { org: HTOrganization }) {
           </div>
         </div>
         {org.media.length > 0 && (
-          <div className="mt-2 flex">
+          <div className="mt-2 flex max-w-96">
             <img
               src={`/ht/img/${org.media[0].name}`}
               alt="org graphic"

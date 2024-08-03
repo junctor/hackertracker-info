@@ -144,7 +144,7 @@ function Event({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
       {event.speakers.length > 0 && (
         <div className="mt-10 text-left">
           <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
-            Speakers
+            People
           </h2>
           <div className="items-center w-11/12 mt-1 mb-2 pt-2 pb-2">
             {event.speakers

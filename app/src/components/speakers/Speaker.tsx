@@ -55,6 +55,15 @@ function Speaker({
           </div>
         )}
       </div>
+      {speaker.media.length > 0 && (
+        <div className="mt-2 flex">
+          <img
+            src={`/ht/img/${speaker.media[0].name}`}
+            alt="org graphic"
+            className="w-1/2 rounded-md max-w-96"
+          />
+        </div>
+      )}
       <div className="mt-8">
         <div className="text-sm md:text-base lg:text-lg w-11/12">
           <div className="prose lg:prose-xl">

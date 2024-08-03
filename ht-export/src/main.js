@@ -94,19 +94,19 @@ const CONF = "DEFCON32";
       })
   );
 
-  // const speakerImgs = await Promise.all(
-  //   htSpeakers?.flatMap((o: any) =>
-  //     o.media.map((m: any) =>
-  //       getFbStorage(fbDb, CONF, m.name).catch((error) => console.error(error))
-  //     )
-  //   ) ?? []
-  // );
+  const speakerImgs = await Promise.all(
+    htSpeakers?.flatMap((o) =>
+      o.media.map((m) =>
+        getFbStorage(fbDb, CONF, m.name).catch((error) => console.error(error))
+      )
+    ) ?? []
+  );
 
-  // await Promise.all(
-  //   speakerImgs
-  //     .filter((m) => m?.file)
-  //     .map((m) => {
-  //       fs.promises.writeFile(`${imgDir}/${m.file}`, Buffer.from(m.bytes));
-  //     })
-  // );
+  await Promise.all(
+    speakerImgs
+      .filter((m) => m?.file)
+      .map((m) => {
+        fs.promises.writeFile(`${imgDir}/${m.file}`, Buffer.from(m.bytes));
+      })
+  );
 })();

@@ -133,6 +133,7 @@ interface HTEvent {
   type: HTEventType;
   updated_timestamp: Timestamp;
   village_id: number | null;
+  media?: [HTMedia] | null;
 }
 
 interface HTPeople {

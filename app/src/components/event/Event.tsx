@@ -119,7 +119,15 @@ function Event({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
             ))}
         </div>
       </div>
-
+      {event.media && event.media.length > 0 && (
+        <div className="mt-2 flex max-w-96">
+          <img
+            src={`/ht/img/${event.media[0].name}`}
+            alt="org graphic"
+            className="w-1/2 rounded-md"
+          />
+        </div>
+      )}
       <div className="mt-10">
         <div className="text-sm md:text-base lg:text-lg w-11/12">
           <div className="prose lg:prose-xl whitespace-pre-wrap">

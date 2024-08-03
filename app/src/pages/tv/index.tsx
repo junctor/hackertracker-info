@@ -5,8 +5,12 @@ import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import React from "react";
 import { fetcher, toEventsData } from "@/lib/utils/misc";
+import { useTheme } from "next-themes";
 
 export default function TVPage() {
+  const { setTheme } = useTheme();
+  setTheme("dark");
+
   const { data, error, isLoading } = useSWR<HTEvent[], Error>(
     "/ht/events.json",
     fetcher

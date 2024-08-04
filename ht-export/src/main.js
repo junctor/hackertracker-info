@@ -1,18 +1,18 @@
 import fs from "fs";
+import { Buffer } from "buffer";
 import {
   firebaseInit,
   getConference,
   getEvents,
   getSpeakers,
-  getFAQ,
   getFbStorage,
   getLocations,
   getTags,
   getNews,
   getOrganizations,
+  getDocuments,
+  getMenus,
 } from "./fb.js";
-
-const CONF = "DEFCON32";
 
 (async () => {
   const fbDb = await firebaseInit();
@@ -21,21 +21,22 @@ const CONF = "DEFCON32";
     htConf,
     htEvents,
     htSpeakers,
-    htFAQ,
     htLocations,
     htTags,
     htNews,
     htOrgs,
-    htContent,
+    htDocuments,
+    htMenus,
   ] = await Promise.all([
-    getConference(fbDb, CONF),
-    getEvents(fbDb, CONF),
-    getSpeakers(fbDb, CONF),
-    getFAQ(fbDb, CONF),
-    getLocations(fbDb, CONF),
-    getTags(fbDb, CONF),
-    getNews(fbDb, CONF),
-    getOrganizations(fbDb, CONF),
+    getConference(fbDb),
+    getEvents(fbDb),
+    getSpeakers(fbDb),
+    getLocations(fbDb),
+    getTags(fbDb),
+    getNews(fbDb),
+    getOrganizations(fbDb),
+    getDocuments(fbDb),
+    getMenus(fbDb),
   ]);
 
   const outputDir = "./out";
@@ -53,10 +54,13 @@ const CONF = "DEFCON32";
     fs.promises.writeFile("./out/ht/conference.json", JSON.stringify(htConf)),
     fs.promises.writeFile("./out/ht/events.json", JSON.stringify(htEvents)),
     fs.promises.writeFile("./out/ht/speakers.json", JSON.stringify(htSpeakers)),
-    fs.promises.writeFile("./out/ht/faq.json", JSON.stringify(htFAQ)),
     fs.promises.writeFile("./out/ht/tags.json", JSON.stringify(htTags)),
     fs.promises.writeFile("./out/ht/news.json", JSON.stringify(htNews)),
-
+    fs.promises.writeFile("./out/ht/menus.json", JSON.stringify(htMenus)),
+    fs.promises.writeFile(
+      "./out/ht/documents.json",
+      JSON.stringify(htDocuments)
+    ),
     fs.promises.writeFile(
       "./out/ht/organizations.json",
       JSON.stringify(htOrgs)
@@ -69,7 +73,7 @@ const CONF = "DEFCON32";
   ]);
 
   const maps = await Promise.all(
-    htConf?.maps?.map((m) => getFbStorage(fbDb, CONF, m.file)) ?? []
+    htConf?.maps?.map((m) => getFbStorage(fbDb, m.file)) ?? []
   );
 
   await Promise.all(
@@ -79,14 +83,14 @@ const CONF = "DEFCON32";
   );
 
   const images = [
-    ...htOrgs?.flatMap((o) => o.media?.map((m) => m.name)),
-    ...htSpeakers?.flatMap((s) => s.media?.map((m) => m.name)),
-    ...htEvents?.flatMap((e) => e.media?.map((m) => m.name)),
+    ...(htOrgs?.flatMap((o) => o.media?.map((m) => m.name)) ?? []),
+    ...(htSpeakers?.flatMap((s) => s.media?.map((m) => m.name)) ?? []),
+    ...(htEvents?.flatMap((e) => e.media?.map((m) => m.name)) ?? []),
   ].filter((i) => i != null && !i?.startsWith("https://info.defcon.org"));
 
   const fbImages = await Promise.all(
     images.map((i) =>
-      getFbStorage(fbDb, CONF, i).catch((error) => console.error(error))
+      getFbStorage(fbDb, i).catch((error) => console.error(error))
     )
   );
 

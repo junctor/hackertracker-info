@@ -7,8 +7,8 @@ import {
   orderBy,
   where,
 } from "firebase/firestore/lite";
-import { Firestore } from "firebase/firestore";
 import { getBytes, getStorage, ref } from "firebase/storage";
+import { CONF as conference } from "./const.js";
 
 export async function firebaseInit() {
   const firebaseConfig = {
@@ -25,7 +25,7 @@ export async function firebaseInit() {
   return db;
 }
 
-export async function getLocations(db, conference) {
+export async function getLocations(db) {
   const docRef = collection(db, "conferences", conference, "locations");
   const docSnap = await getDocs(docRef);
   const firebaseData = docSnap.docs.map((speakerDoc) => speakerDoc.data());
@@ -33,7 +33,7 @@ export async function getLocations(db, conference) {
   return firebaseData;
 }
 
-export async function getSpeakers(db, conference) {
+export async function getSpeakers(db) {
   const docRef = collection(db, "conferences", conference, "speakers");
   const docSnap = await getDocs(docRef);
   const firebaseData = docSnap.docs.map((speakerDoc) => speakerDoc.data());
@@ -41,7 +41,7 @@ export async function getSpeakers(db, conference) {
   return firebaseData;
 }
 
-export async function getTags(db, conference) {
+export async function getTags(db) {
   const docRef = collection(db, "conferences", conference, "tagtypes");
   const docSnap = await getDocs(docRef);
   const firebaseData = docSnap.docs.flatMap((tagsDoc) => tagsDoc.data()) ?? [];
@@ -49,7 +49,7 @@ export async function getTags(db, conference) {
   return firebaseData;
 }
 
-export async function getConference(db, conference) {
+export async function getConference(db) {
   const docRef = collection(db, "conferences");
   const q = query(docRef, where("code", "==", conference));
   const docSnap = await getDocs(q);
@@ -58,7 +58,7 @@ export async function getConference(db, conference) {
   return firebaseData[0];
 }
 
-export async function getEvents(db, conference) {
+export async function getEvents(db) {
   const docRef = collection(db, "conferences", conference, "events");
   const q = query(docRef, orderBy("begin_timestamp", "desc"));
   const docSnap = await getDocs(q);
@@ -67,16 +67,7 @@ export async function getEvents(db, conference) {
   return firebaseData;
 }
 
-export async function getFAQ(db, conference) {
-  const docRef = collection(db, "conferences", conference, "faqs");
-  const q = query(docRef, orderBy("id", "desc"));
-  const docSnap = await getDocs(q);
-  const firebaseData = docSnap.docs.map((faqDoc) => faqDoc.data());
-
-  return firebaseData;
-}
-
-export async function getNews(db, conference) {
+export async function getNews(db) {
   const docRef = collection(db, "conferences", conference, "articles");
   const q = query(docRef, orderBy("id", "desc"));
   const docSnap = await getDocs(q);
@@ -85,7 +76,7 @@ export async function getNews(db, conference) {
   return firebaseData;
 }
 
-export async function getFbStorage(db, conference, file) {
+export async function getFbStorage(db, file) {
   const storage = getStorage(db.app);
   const pathReference = ref(storage, `${conference}/${file}`);
   const bytes = await getBytes(pathReference);
@@ -95,7 +86,7 @@ export async function getFbStorage(db, conference, file) {
   };
 }
 
-export async function getProducts(db, conference) {
+export async function getProducts(db) {
   const docRef = collection(db, "conferences", conference, "products");
   const q = query(docRef, orderBy("id", "desc"));
   const docSnap = await getDocs(q);
@@ -104,11 +95,29 @@ export async function getProducts(db, conference) {
   return firebaseData;
 }
 
-export async function getOrganizations(db, conference) {
+export async function getOrganizations(db) {
   const docRef = collection(db, "conferences", conference, "organizations");
   const q = query(docRef, orderBy("id", "desc"));
   const docSnap = await getDocs(q);
   const firebaseData = docSnap.docs.map((orgDoc) => orgDoc.data());
+
+  return firebaseData;
+}
+
+export async function getDocuments(db) {
+  const docRef = collection(db, "conferences", conference, "documents");
+  const q = query(docRef, orderBy("id", "desc"));
+  const docSnap = await getDocs(q);
+  const firebaseData = docSnap.docs.map((doc) => doc.data());
+
+  return firebaseData;
+}
+
+export async function getMenus(db) {
+  const docRef = collection(db, "conferences", conference, "menus");
+  const q = query(docRef, orderBy("id", "desc"));
+  const docSnap = await getDocs(q);
+  const firebaseData = docSnap.docs.map((doc) => doc.data());
 
   return firebaseData;
 }

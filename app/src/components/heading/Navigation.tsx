@@ -13,29 +13,38 @@ import {
 } from "@/components/ui/navigation-menu";
 
 import Link from "next/link";
-import { tagsOrgs } from "@/lib/utils/orgs";
-
-const orgs = Array.from(tagsOrgs)
-  .sort(([, a], [, b]) => a.localeCompare(b))
-  .map((o) => {
-    return {
-      title: o[1],
-      link: `/orgs?id=${o[0]}`,
-    };
-  });
-
-const pages = [
-  // { title: "Schedule", link: "/events" },
-  { title: "Speakers", link: "/speakers" },
-  { title: "News", link: "/news" },
-  { title: "Apps", link: "/apps" },
-  { title: "Maps", link: "/maps" },
-  // { title: "Merch", link: "/merch" },
-  // { title: "Locations", link: "/locations" },
-  ...orgs,
-].sort((a, b) => a.title.localeCompare(b.title));
+import useSWR from "swr";
+import { fetcher } from "@/lib/utils/misc";
 
 export default function Navigation() {
+  const { data: menuData } = useSWR<HTMenu[], Error>("/ht/menus.json", fetcher);
+
+  const orgs = (
+    menuData?.[menuData?.length - 1]?.items?.filter(
+      (m) => m.function === "organizations"
+    ) ?? []
+  )
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .filter((o) => o.applied_tag_ids.length > 0 && o.title_text !== "Vendors")
+    .map((o) => {
+      return {
+        title: o.title_text,
+        link: `/orgs?id=${o.applied_tag_ids[0]}`,
+      };
+    });
+
+  console.log(menuData?.[menuData?.length - 1]?.items ?? []);
+
+  const pages = [
+    { title: "Announcements", link: "/news" },
+    { title: "People", link: "/speakers" },
+    { title: "Maps", link: "/maps" },
+    { title: "Apps", link: "/apps" },
+    // { title: "Merch", link: "/merch" },
+    // { title: "Locations", link: "/locations" },
+    ...orgs,
+  ];
+
   return (
     <div className="ml-2">
       <NavigationMenu>

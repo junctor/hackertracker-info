@@ -217,6 +217,27 @@ interface HTNews {
   id: number;
 }
 
+interface HTMenu {
+  conference_id: number;
+  conference: string;
+  title_text: string;
+  id: number;
+  items: [
+    {
+      applied_tag_ids: [number];
+      function: string;
+      title_text: string;
+      id: number;
+      apple_sfsymbol: string;
+      document_id: null;
+      sort_order: number;
+      google_materialsymbol: string;
+      menu_id: null;
+      prohibit_tag_filter: "Y" | "N";
+    },
+  ];
+}
+
 interface HTProduct {
   code: string;
   description: string;

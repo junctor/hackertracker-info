@@ -96,6 +96,19 @@ export function eventTime(time: Date, tz = true): string {
   return time.toLocaleTimeString("en-US", options);
 }
 
+export function newsTime(time: Date, tz = true): string {
+  const options: Intl.DateTimeFormatOptions = {
+    timeZoneName: tz ? "short" : undefined,
+    hour12: false,
+    day: "numeric",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+
+  return time.toLocaleTimeString("en-US", options);
+}
+
 const groupedDates = (events: EventData[]): Map<string, EventData[]> =>
   events
     .sort((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds)

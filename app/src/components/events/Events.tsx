@@ -37,15 +37,21 @@ export default function Events({
   const searchParams = useSearchParams();
   const tagId = searchParams.get("tag") ?? "0";
 
-  const [day, setDay] = useState(
-    (dateGroup.keys().next().value as string) ?? ""
-  );
-
   const [selectedTag, setSelectedTag] = useState(parseInt(tagId));
+
+  const days = [...dateGroup]
+    .filter(
+      (dg) =>
+        selectedTag === 0 ||
+        dg[1].some((e) => e.tags?.some((t) => t.id == selectedTag))
+    )
+    .map((dg) => dg[0]);
 
   const selectedTagDetails = tags
     .flatMap((t) => t.tags)
     .find((e) => e.id === parseInt(tagId));
+
+  const [day, setDay] = useState(days[0] ?? "");
 
   return (
     <>
@@ -122,7 +128,7 @@ export default function Events({
             }}
           >
             <TabsList>
-              {Array.from(dateGroup).map(([tabDay]) => (
+              {days.map((tabDay) => (
                 <TabsTrigger value={tabDay} key={tabDay}>
                   <p className="text-xs md:text-sm">{tabDateTitle(tabDay)}</p>
                 </TabsTrigger>

@@ -41,7 +41,7 @@ export default function OrgsPage() {
     <div>
       <Head>
         <title>{`DC32 ${tagOrg.org}`}</title>
-        <meta name="description" content="DEF CON 32 Categories" />
+        <meta name="description" content={`DEF CON 32 ${tagOrg.org}`} />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"

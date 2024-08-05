@@ -27,7 +27,7 @@ export default function OrgPage() {
   const foundOrg = data.find((o) => String(o.id) === tagId);
 
   if (foundOrg === undefined) {
-    return <Error msg="No Exhibitor found for ID" />;
+    return <Error msg="No Org found for ID" />;
   }
 
   return (

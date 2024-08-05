@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import OrgDetails from "@/components/organization/OrganizationDetails";
 import React from "react";
 
-export default function ExhibitorPage() {
+export default function OrgPage() {
   const { data, error, isLoading } = useSWR<HTOrganization[], Error>(
     "/ht/organizations.json",
     fetcher

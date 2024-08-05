@@ -1,6 +1,6 @@
 export const tagsOrgs = new Map<number, string>([
   [46173, "Exhibitors"],
-  // [46171, "Vendors"],
+  [46171, "Vendors"],
   [46172, "Villages"],
   [46358, "Community"],
   [46361, "Contests"],

@@ -25,7 +25,7 @@ export default function Navigation() {
     ) ?? []
   )
     .sort((a, b) => a.sort_order - b.sort_order)
-    .filter((o) => o.applied_tag_ids.length > 0 && o.title_text !== "Vendors")
+    .filter((o) => o.applied_tag_ids.length > 0)
     .map((o) => {
       return {
         title: o.title_text,

@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { getOrg } from "@/lib/utils/orgs";
 import React from "react";
 
-export default function ExhibitorsPage() {
+export default function OrgsPage() {
   const { data, isLoading, error } = useSWR<HTOrganization[], Error>(
     "/ht/organizations.json",
     fetcher
@@ -28,7 +28,7 @@ export default function ExhibitorsPage() {
   }
 
   const orgs = data
-    .filter((t) => t.tag_ids.includes(tagOrg.id))
+    .filter((t) => t.tag_ids?.includes(tagOrg.id))
     .sort((a, b) => {
       if (a.name.toLowerCase() > b.name.toLowerCase()) {
         return 1;

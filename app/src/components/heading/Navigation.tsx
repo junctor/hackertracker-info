@@ -33,15 +33,29 @@ export default function Navigation() {
       };
     });
 
-  console.log(menuData?.[menuData?.length - 1]?.items ?? []);
+  const displayDocs = (
+    menuData?.[menuData?.length - 1]?.items?.filter(
+      (m) => m.function === "document"
+    ) ?? []
+  )
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((d) => {
+      return {
+        title: d.title_text,
+        link: `/doc?id=${d.document_id}`,
+      };
+    });
 
   const pages = [
     { title: "Announcements", link: "/news" },
     { title: "People", link: "/speakers" },
     { title: "Maps", link: "/maps" },
     { title: "Apps", link: "/apps" },
+    { title: "Documents", link: "/docs" },
+
     // { title: "Merch", link: "/merch" },
     // { title: "Locations", link: "/locations" },
+    ...displayDocs,
     ...orgs,
   ];
 
@@ -52,7 +66,7 @@ export default function Navigation() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Menu</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid grid-cols-2 w-72">
+              <ul className="grid grid-cols-2 w-80">
                 {pages.map((p) => (
                   <li key={p.title}>
                     <Link href={p.link}>
@@ -77,7 +91,7 @@ export default function Navigation() {
           <NavigationMenuItem className="md:block hidden">
             <NavigationMenuTrigger>Mobile</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid grid-cols-2 w-72">
+              <ul className="grid grid-cols-2 w-80">
                 <li>
                   <Link
                     href="https://play.google.com/store/apps/details?id=com.shortstack.hackertracker&hl=en_US"

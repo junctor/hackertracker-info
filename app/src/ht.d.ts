@@ -208,6 +208,15 @@ interface HTLocation {
   short_name: string;
 }
 
+interface HTDocument {
+  conference_id: number;
+  conference: string;
+  updated_at: { seconds: number; nanoseconds: number };
+  body_text: string;
+  title_text: string;
+  id: number;
+}
+
 interface HTNews {
   conference_id: number;
   conference: string;

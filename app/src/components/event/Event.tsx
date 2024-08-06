@@ -6,7 +6,6 @@ import {
 } from "@heroicons/react/24/outline";
 import cal from "../../lib/utils/cal";
 import { eventTime } from "../../lib/utils/dates";
-import ReactMarkdown from "react-markdown";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,6 +16,7 @@ import {
 import Link from "next/link";
 import { BASEURL } from "@/lib/utils/const";
 import React from "react";
+import Markdown from "../markdown/Markdown";
 
 function Event({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
   const allTags = tags?.flatMap((t) => t.tags) ?? [];
@@ -130,9 +130,7 @@ function Event({ event, tags }: { event: HTEvent; tags: HTTag[] }) {
       )}
       <div className="mt-10">
         <div className="text-sm md:text-base lg:text-lg w-11/12">
-          <div className="prose lg:prose-xl whitespace-pre-wrap">
-            <ReactMarkdown>{event.description}</ReactMarkdown>
-          </div>
+          <Markdown content={event.description} />
           {(event.links ?? []).length > 0 && (
             <div className="mt-5 text-left">
               <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">

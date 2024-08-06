@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
 import Heading from "../heading/Heading";
 import {
   Breadcrumb,
@@ -11,6 +10,7 @@ import {
 import { tagsOrgs } from "@/lib/utils/orgs";
 import React from "react";
 import { CalendarIcon } from "@heroicons/react/24/outline";
+import Markdown from "../markdown/Markdown";
 
 function OrgDetails({ org }: { org: HTOrganization }) {
   const orgId = org.tag_ids.find((t) => tagsOrgs.has(t)) ?? 0;
@@ -49,9 +49,7 @@ function OrgDetails({ org }: { org: HTOrganization }) {
         )}
         <div className="mt-8">
           <div className="text-sm md:text-base lg:text-lg w-11/12">
-            <div className="prose lg:prose-xl whitespace-pre-wrap">
-              <ReactMarkdown>{org.description}</ReactMarkdown>
-            </div>
+            <Markdown content={org.description} />
           </div>
         </div>
         {org.tag_id_as_organizer !== null && (

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
 import Heading from "../heading/Heading";
 import {
   Breadcrumb,
@@ -9,6 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import React from "react";
+import Markdown from "../markdown/Markdown";
 
 export default function DocumentDetails({ doc }: { doc: HTDocument }) {
   return (
@@ -35,9 +35,7 @@ export default function DocumentDetails({ doc }: { doc: HTDocument }) {
 
         <div className="mt-8">
           <div className="text-sm md:text-base lg:text-lg w-11/12">
-            <div className="prose lg:prose-xl whitespace-pre-wrap">
-              <ReactMarkdown>{doc.body_text}</ReactMarkdown>
-            </div>
+            <Markdown content={doc.body_text} />
           </div>
         </div>
       </div>

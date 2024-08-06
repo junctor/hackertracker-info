@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { eventTime } from "../../lib/utils/dates";
 import Theme from "../../lib/utils/theme";
-import ReactMarkdown from "react-markdown";
 import React from "react";
 import {
   Breadcrumb,
@@ -10,6 +9,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import Markdown from "../markdown/Markdown";
 
 function Speaker({
   speaker,
@@ -66,9 +66,7 @@ function Speaker({
       )}
       <div className="mt-8">
         <div className="text-sm md:text-base lg:text-lg w-11/12">
-          <div className="prose lg:prose-xl">
-            <ReactMarkdown>{speaker.description}</ReactMarkdown>
-          </div>
+          <Markdown content={speaker.description} />
         </div>
       </div>
       {speaker.event_ids.length > 0 && (

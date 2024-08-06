@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { newsTime } from "@/lib/utils/dates";
 import React from "react";
-import ReactMarkdown from "react-markdown";
+import Markdown from "../markdown/Markdown";
 
 function News({ news }: { news: HTNews[] }) {
   const sortedNews = news.sort(
@@ -34,9 +34,7 @@ function News({ news }: { news: HTNews[] }) {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <div className="prose lg:prose-xl whitespace-pre-wrap">
-                <ReactMarkdown>{n.text}</ReactMarkdown>
-              </div>
+              <Markdown content={n.text} />
             </AccordionContent>
           </AccordionItem>
         ))}

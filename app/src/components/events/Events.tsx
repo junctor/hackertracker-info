@@ -153,9 +153,7 @@ export default function Events({
                     e.tags?.some((t) => t.id == selectedTag)
                 )
                 .map((htEvent) => (
-                  <TableRow key={htEvent.id} id={`e-${htEvent.id}`}>
-                    <EventCell event={htEvent} />
-                  </TableRow>
+                  <EventCell key={htEvent.id} event={htEvent} />
                 ))}
             </TableBody>
           </Table>

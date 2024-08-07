@@ -6,12 +6,7 @@ import { eventDay, tabDateTitle } from "../../lib/utils/dates";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Search from "./Search";
 import EventCell from "./EventCell";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCaption } from "@/components/ui/table";
 
 import {
   Select,

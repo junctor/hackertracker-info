@@ -12,7 +12,6 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-import Link from "next/link";
 import useSWR from "swr";
 import { fetcher } from "@/lib/utils/misc";
 
@@ -69,54 +68,48 @@ export default function Navigation() {
               <ul className="grid grid-cols-2 w-80">
                 {pages.map((p) => (
                   <li key={p.title}>
-                    <Link href={p.link}>
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
-                      >
-                        {p.title}
-                      </NavigationMenuLink>
-                    </Link>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                      href={p.link}
+                    >
+                      {p.title}
+                    </NavigationMenuLink>
                   </li>
                 ))}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/events" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Schedule
-              </NavigationMenuLink>
-            </Link>
+            <NavigationMenuLink
+              className={navigationMenuTriggerStyle()}
+              href="/events"
+            >
+              Schedule
+            </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem className="md:block hidden">
             <NavigationMenuTrigger>Mobile</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid grid-cols-2 w-80">
                 <li>
-                  <Link
+                  <NavigationMenuLink
+                    className={navigationMenuTriggerStyle()}
                     href="https://play.google.com/store/apps/details?id=com.shortstack.hackertracker&hl=en_US"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      Android
-                    </NavigationMenuLink>
-                  </Link>
+                    Android
+                  </NavigationMenuLink>
                 </li>
                 <li>
-                  <Link
+                  <NavigationMenuLink
+                    className={navigationMenuTriggerStyle()}
                     href="https://itunes.apple.com/us/app/hackertracker/id1021141595?mt=8"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      iOS
-                    </NavigationMenuLink>
-                  </Link>
+                    iOS
+                  </NavigationMenuLink>
                 </li>
               </ul>
             </NavigationMenuContent>

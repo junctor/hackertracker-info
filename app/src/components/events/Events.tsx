@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useState } from "react";
-import { tabDateTitle } from "../../lib/utils/dates";
+import { eventDay, tabDateTitle } from "../../lib/utils/dates";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Search from "./Search";
 import EventCell from "./EventCell";
@@ -51,7 +51,13 @@ export default function Events({
     .flatMap((t) => t.tags)
     .find((e) => e.id === parseInt(tagId));
 
-  const [day, setDay] = useState(days[0] ?? "");
+  const nowDay = eventDay(new Date());
+
+  const dayIndex = days.findIndex((d) => d === nowDay);
+
+  const [day, setDay] = useState(
+    (dayIndex === -1 ? days[0] : days[dayIndex]) ?? ""
+  );
 
   return (
     <>

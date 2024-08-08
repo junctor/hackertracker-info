@@ -5,8 +5,12 @@ import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import Merch from "@/components/merch/Merch";
 import React from "react";
+import { useTheme } from "next-themes";
 
 export default function MerchPage() {
+  const { setTheme } = useTheme();
+  setTheme("dark");
+
   const { data, error, isLoading } = useSWR<FBProducts, Error>(
     "https://firestore.googleapis.com/v1/projects/junctor-hackertracker/databases/(default)/documents/conferences/DEFCON32/products?pageSize=1000",
     fetcher

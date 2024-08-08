@@ -72,13 +72,15 @@ export default function Merch({ products }: { products: FBProducts }) {
   return (
     <>
       {s !== "os" ? (
-        <Table className="">
+        <Table className="md:text-base">
           <TableCaption>DEF CON 32 Merch</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="bg-white text-black h-8">Name</TableHead>
+              <TableHead className="bg-white text-black !py-0 h-8">
+                Name
+              </TableHead>
               {productSizes.map((s) => (
-                <TableHead key={s} className="bg-white text-black h-8">
+                <TableHead key={s} className="bg-white text-black !py-0 h-8">
                   {s}
                 </TableHead>
               ))}
@@ -90,11 +92,14 @@ export default function Merch({ products }: { products: FBProducts }) {
                 key={p.fields.id.integerValue}
                 className="even:bg-muted/50"
               >
-                <TableHead className="font-bold text-white">
+                <TableHead className="font-bold text-white !py-0">
                   {p.fields.title.stringValue}
                 </TableHead>
                 {productSizes.map((s) => (
-                  <TableCell key={`${p.fields.id.integerValue}-${s}`}>
+                  <TableCell
+                    key={`${p.fields.id.integerValue}-${s}`}
+                    className="!py-0"
+                  >
                     {(() => {
                       switch (
                         p.fields.variants.arrayValue.values.find(
@@ -121,11 +126,13 @@ export default function Merch({ products }: { products: FBProducts }) {
           </TableBody>
         </Table>
       ) : (
-        <Table>
+        <Table className="md:text-base">
           <TableHeader>
             <TableRow className="font-bold">
-              <TableHead className="bg-white text-black h-8">Name</TableHead>
-              <TableHead className="bg-white text-black h-8">
+              <TableHead className="bg-white text-black h-8 !py-0">
+                Name
+              </TableHead>
+              <TableHead className="bg-white text-black h-8 !py-0">
                 One-Size
               </TableHead>
             </TableRow>
@@ -136,11 +143,11 @@ export default function Merch({ products }: { products: FBProducts }) {
                 key={p.fields.id.integerValue}
                 className="even:bg-muted/50"
               >
-                <TableHead className="font-bold text-white">
+                <TableHead className="font-bold text-white !py-0">
                   {p.fields.title.stringValue}
                 </TableHead>
 
-                <TableCell>
+                <TableCell className="!py-0">
                   {(() => {
                     switch (
                       p.fields.variants.arrayValue.values.find(

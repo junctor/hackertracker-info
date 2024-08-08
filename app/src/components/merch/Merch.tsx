@@ -72,15 +72,13 @@ export default function Merch({ products }: { products: FBProducts }) {
   return (
     <>
       {s !== "os" ? (
-        <Table>
+        <Table className="">
           <TableCaption>DEF CON 32 Merch</TableCaption>
           <TableHeader>
-            <TableRow className="font-bold text-sm lg:text-base">
-              <TableHead className="min-w-60 bg-white text-black">
-                Name
-              </TableHead>
+            <TableRow>
+              <TableHead className="bg-white text-black h-8">Name</TableHead>
               {productSizes.map((s) => (
-                <TableHead key={s} className="bg-white text-black">
+                <TableHead key={s} className="bg-white text-black h-8">
                   {s}
                 </TableHead>
               ))}
@@ -88,15 +86,15 @@ export default function Merch({ products }: { products: FBProducts }) {
           </TableHeader>
           <TableBody>
             {productsMultiSize.map((p) => (
-              <TableRow key={p.fields.id.integerValue}>
+              <TableRow
+                key={p.fields.id.integerValue}
+                className="even:bg-muted/50"
+              >
                 <TableHead className="font-bold text-white">
                   {p.fields.title.stringValue}
                 </TableHead>
                 {productSizes.map((s) => (
-                  <TableCell
-                    className="text-sm lg:text-base"
-                    key={`${p.fields.id.integerValue}-${s}`}
-                  >
+                  <TableCell key={`${p.fields.id.integerValue}-${s}`}>
                     {(() => {
                       switch (
                         p.fields.variants.arrayValue.values.find(
@@ -125,21 +123,24 @@ export default function Merch({ products }: { products: FBProducts }) {
       ) : (
         <Table>
           <TableHeader>
-            <TableRow className="font-bold text-sm lg:text-base">
-              <TableHead className="min-w-60 bg-white text-black">
-                Name
+            <TableRow className="font-bold">
+              <TableHead className="bg-white text-black h-8">Name</TableHead>
+              <TableHead className="bg-white text-black h-8">
+                One-Size
               </TableHead>
-              <TableHead className="bg-white text-black">One-Size</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {productsOneSize.map((p) => (
-              <TableRow key={p.fields.id.integerValue}>
+              <TableRow
+                key={p.fields.id.integerValue}
+                className="even:bg-muted/50"
+              >
                 <TableHead className="font-bold text-white">
                   {p.fields.title.stringValue}
                 </TableHead>
 
-                <TableCell className="text-sm lg:text-base">
+                <TableCell>
                   {(() => {
                     switch (
                       p.fields.variants.arrayValue.values.find(

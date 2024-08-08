@@ -5,7 +5,6 @@ import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import Merch from "@/components/merch/Merch";
 import React from "react";
-import Heading from "@/components/heading/Heading";
 
 export default function MerchPage() {
   const { data, error, isLoading } = useSWR<FBProducts, Error>(
@@ -34,7 +33,6 @@ export default function MerchPage() {
       </Head>
 
       <main>
-        <Heading />
         <Merch products={data} />
       </main>
     </div>

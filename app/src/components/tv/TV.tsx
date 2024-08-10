@@ -88,7 +88,6 @@ function TV({ events }: { events: EventData[] }) {
     };
   }, [events, l, t]);
 
-  console.log(filteredEvents);
   return (
     <div className="flex justify-end mb-2 mr-14 ml-5">
       <div className="flex-initial w-full mr-2">

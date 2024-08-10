@@ -60,8 +60,6 @@ export default function Upcoming({
     ],
   ]);
 
-  console.log(tabs);
-
   const [tab, setTab] = useState("On Now");
 
   return (

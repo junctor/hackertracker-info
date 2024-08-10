@@ -48,6 +48,7 @@ export default function Navigation() {
   const pages = [
     { title: "Announcements", link: "/news" },
     { title: "People", link: "/speakers" },
+    { title: "On Now & Upcoming", link: "/upcoming" },
     { title: "Maps", link: "/maps" },
     { title: "Apps", link: "/apps" },
     { title: "Documents", link: "/docs" },

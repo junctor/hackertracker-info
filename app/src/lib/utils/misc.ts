@@ -14,6 +14,7 @@ export const toEventsData = (events: HTEvent[], tags: HTTag[]): EventData[] => {
     begin: e.begin,
     beginTimestampSeconds: e.begin_timestamp.seconds,
     end: e.end,
+    endTimestampSeconds: e.end_timestamp.seconds,
     title: e.title,
     location: e.location.name,
     color: e.type.color,

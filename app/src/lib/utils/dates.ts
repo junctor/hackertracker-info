@@ -10,6 +10,20 @@ export function timeDisplayParts(time: string): string[] {
   return date.toLocaleTimeString("en-US", options).replace(",", "").split(" ");
 }
 
+export function upcomongTimeDisplayParts(time: string): string[] {
+  const date = new Date(time);
+  const options: Intl.DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    timeZoneName: "short",
+    hour12: false,
+  };
+
+  return date.toLocaleTimeString("en-US", options).replace(",", "").split(" ");
+}
+
 export function eventDay(time: Date): string {
   const options: Intl.DateTimeFormatOptions = {
     timeZoneName: "short",

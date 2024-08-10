@@ -23,6 +23,7 @@ interface EventData {
   id: number;
   begin: string;
   beginTimestampSeconds: number;
+  endTimestampSeconds: number;
   end: string;
   title: string;
   location: string;

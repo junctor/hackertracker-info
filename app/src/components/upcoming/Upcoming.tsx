@@ -2,13 +2,8 @@
 
 import React from "react";
 import { useState } from "react";
-import { eventDay, tabDateTitle } from "../../lib/utils/dates";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Search from "./Search";
-import EventCell from "./EventCell";
 import { Table, TableBody, TableCaption } from "@/components/ui/table";
-import { ClockIcon } from "@heroicons/react/16/solid";
-
 import {
   Select,
   SelectContent,
@@ -21,13 +16,13 @@ import {
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { Button } from "../ui/button";
+import UpcomingCell from "./UpcomingCell";
 
-export default function Events({
-  dateGroup,
+export default function Upcoming({
+  events,
   tags,
 }: {
-  dateGroup: Map<string, EventData[]>;
+  events: EventData[];
   tags: HTTag[];
 }) {
   const router = useRouter();
@@ -36,33 +31,46 @@ export default function Events({
 
   const [selectedTag, setSelectedTag] = useState(parseInt(tagId));
 
-  const days = [...dateGroup]
-    .filter(
-      (dg) =>
-        selectedTag === 0 ||
-        dg[1].some((e) => e.tags?.some((t) => t.id == selectedTag))
-    )
-    .map((dg) => dg[0]);
-
   const selectedTagDetails = tags
     .flatMap((t) => t.tags)
     .find((e) => e.id === parseInt(tagId));
 
-  const nowDay = eventDay(new Date());
+  const nowSeconds = new Date().getTime() / 1000;
 
-  const dayIndex = days.findIndex((d) => d === nowDay);
+  const filteredEvents = (
+    tagId !== "0"
+      ? events.filter((e) => e.tags?.some((t) => t.id == selectedTag))
+      : events
+  ).sort((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds);
 
-  const [day, setDay] = useState(
-    (dayIndex === -1 ? days[0] : days[dayIndex]) ?? ""
-  );
+  const tabs = new Map([
+    [
+      "On Now",
+      filteredEvents.filter(
+        (e) =>
+          e.beginTimestampSeconds < nowSeconds &&
+          e.endTimestampSeconds > nowSeconds
+      ),
+    ],
+    [
+      "Upcoming",
+      filteredEvents
+        .filter((e) => e.beginTimestampSeconds > nowSeconds)
+        .slice(0, 25),
+    ],
+  ]);
+
+  console.log(tabs);
+
+  const [tab, setTab] = useState("On Now");
 
   return (
     <>
       <Head>
-        <title>{`DC32 ${selectedTagDetails?.label ?? ""} Events`}</title>
+        <title>{`DC32 ${selectedTagDetails?.label ?? ""} On Now & Upcoming`}</title>
         <meta
           name="description"
-          content={`DEF CON 32 ${selectedTagDetails?.label} Events`}
+          content={`DEF CON 32 ${selectedTagDetails?.label} On Now and Upcoming Events`}
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -70,7 +78,7 @@ export default function Events({
         <div className="ml-2 md:ml-5 items-center grid bg-background mx-2 my-5 align-middle grid-cols-2 gap-1">
           <div>
             <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold font-mono ml-2">
-              Schedule
+              On Now and Upcoming
             </h1>
           </div>
 
@@ -81,7 +89,7 @@ export default function Events({
                   setSelectedTag(parseInt(e) ?? 0);
                   router.push(
                     {
-                      pathname: "/events",
+                      pathname: "/upcoming",
                       query: { tag: e },
                     },
                     undefined,
@@ -119,29 +127,21 @@ export default function Events({
                 </SelectContent>
               </Select>
             </span>
-            <div className="flex items-center mx-1">
-              <Button variant="ghost" size="icon">
-                <ClockIcon
-                  className="h-6"
-                  onClick={() => window.open("/upcoming")}
-                />
-              </Button>
-            </div>
-            <Search dateGroup={dateGroup} />
           </div>
         </div>
+
         <div className="mb-5 place-content-center flex ">
           <Tabs
-            value={day}
-            defaultValue={day}
+            value={tab}
+            defaultValue={tab}
             onValueChange={(value) => {
-              setDay(value);
+              setTab(value);
             }}
           >
             <TabsList>
-              {days.map((tabDay) => (
-                <TabsTrigger value={tabDay} key={tabDay}>
-                  <p className="text-xs md:text-sm">{tabDateTitle(tabDay)}</p>
+              {Array.from(tabs.keys()).map((t) => (
+                <TabsTrigger value={t} key={t}>
+                  <p className="text-xs md:text-sm">{t}</p>
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -149,17 +149,11 @@ export default function Events({
         </div>
         <div className="mb-10">
           <Table>
-            <TableCaption>Events for DEF CON 32</TableCaption>
+            <TableCaption>{`${tab} Events for DEF CON 32`}</TableCaption>
             <TableBody>
-              {(dateGroup.get(day) ?? [])
-                .filter(
-                  (e) =>
-                    selectedTag === 0 ||
-                    e.tags?.some((t) => t.id == selectedTag)
-                )
-                .map((htEvent) => (
-                  <EventCell key={htEvent.id} event={htEvent} />
-                ))}
+              {(tabs.get(tab) ?? []).map((htEvent) => (
+                <UpcomingCell key={htEvent.id} event={htEvent} />
+              ))}
             </TableBody>
           </Table>
         </div>

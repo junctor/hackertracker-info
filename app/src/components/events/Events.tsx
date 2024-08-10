@@ -22,6 +22,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function Events({
   dateGroup,
@@ -121,10 +122,9 @@ export default function Events({
             </span>
             <div className="flex items-center mx-1">
               <Button variant="ghost" size="icon">
-                <ClockIcon
-                  className="h-6"
-                  onClick={() => window.open("/upcoming")}
-                />
+                <Link href="/upcoming">
+                  <ClockIcon className="h-6" />
+                </Link>
               </Button>
             </div>
             <Search dateGroup={dateGroup} />

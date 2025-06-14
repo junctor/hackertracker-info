@@ -1,5 +1,3 @@
-/* eslint-disable no-use-before-define */
-
 interface Timer {
   days: number;
   hours: number;
@@ -29,7 +27,7 @@ interface EventData {
   color: string;
   category: string;
   tags: HTTags[];
-  speakers: string;
+  speakers: string | null;
 }
 
 interface CategoryData {

@@ -4,8 +4,9 @@ import { eventTimeTable } from "@/lib/dates";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Bookmark } from "lucide-react";
+import { ScheduleEvent } from "@/types/scheduleTypes";
 
-function EventCellComponent({ event }: { event: EventData }) {
+function EventCellComponent({ event }: { event: ScheduleEvent }) {
   const sortedTags = [...(event.tags ?? [])].sort((a, b) =>
     a.sort_order !== b.sort_order
       ? a.sort_order - b.sort_order
@@ -26,7 +27,7 @@ function EventCellComponent({ event }: { event: EventData }) {
         <TableCell className="relative align-middle px-2">
           <div
             className="absolute top-1 bottom-1 left-1 w-1 md:w-2 lg:w-3 rounded"
-            style={{ backgroundColor: event.color }}
+            style={{ backgroundColor: event.color ?? "#000" }}
           />
         </TableCell>
 

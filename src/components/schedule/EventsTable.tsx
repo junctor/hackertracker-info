@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/table";
 import EventCell from "./EventCell";
 import { Button } from "@/components/ui/button";
+import { GroupedSchedule } from "@/types/scheduleTypes";
 
 interface Props {
-  dateGroup: Record<string, EventData[]>;
+  dateGroup: GroupedSchedule;
 }
 
 export default function EventsTable({ dateGroup }: Props) {

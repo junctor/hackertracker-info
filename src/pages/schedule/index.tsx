@@ -5,16 +5,14 @@ import Error from "@/components/misc/Error";
 import React from "react";
 import Heading from "@/components/heading/Heading";
 import Events from "@/components/schedule/Events";
+import { GroupedSchedule } from "@/types/scheduleTypes";
 
 export default function EventsPage() {
   const {
     data: eventsJson,
     error: eventsError,
     isLoading: eventsLoading,
-  } = useSWR<{ [key: string]: EventData[] }, Error>(
-    `../../../ht/schedule.json`,
-    fetcher
-  );
+  } = useSWR<GroupedSchedule, Error>(`../../../ht/schedule.json`, fetcher);
 
   if (eventsLoading) {
     return <Loading />;

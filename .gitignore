@@ -9,8 +9,8 @@ node_modules/
 /coverage
 
 # next.js
-app/.next/
-app/out/
+.next/
+out/
 
 # production
 /build
@@ -34,12 +34,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# Export HT
-ht-export/dist
-ht-export/out
-
 # Ignore exported HT static files
-app/public/ht
-
-# Ignore generated safe colors
-app/tailwind-ht-safelist.json
+public/ht

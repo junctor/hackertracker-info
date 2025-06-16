@@ -1,4 +1,4 @@
-import { ScheduleEvent } from "@/types/scheduleTypes";
+import { ScheduleEvent } from "@/types/info";
 
 const BASEURL = "https://info.defcon.org";
 const PRODID = "-//hackertracker//DEFCON33 Calendar 1.0//EN";

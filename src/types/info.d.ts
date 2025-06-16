@@ -5,37 +5,70 @@ interface Timer {
   seconds: number;
 }
 
-interface EventSearching {
-  event: EventSearch;
-  active: boolean;
+interface PersonMedia {
+  asset_id: number;
+  sort_order: number;
+  url: string;
 }
 
-interface EventSearch {
+interface Person {
+  id: number;
+  name: string;
+  affiliations: { organization: string; title: string }[];
+  description: string;
+  links: { sort_order: number; title: string; url: string }[];
+  event_ids: number[];
+  media: PersonMedia[];
+  events: PersonEvent[];
+}
+
+interface PersonEvent {
   id: number;
   title: string;
-  color: string;
-}
-
-interface EventData {
-  id: number;
   begin: string;
-  beginTimestampSeconds: number;
-  endTimestampSeconds: number;
   end: string;
-  title: string;
-  location: string;
-  color: string;
-  category: string;
-  tags: HTTags[];
-  speakers: string | null;
+  location: { name: string };
+  type: { color: string };
 }
 
-interface CategoryData {
-  name: string;
-  data: HTEventType | undefined;
-}
+export type People = Person[];
 
-interface Speaker {
-  name: string;
+export type GroupedSchedule = Record<string, ScheduleEvent[]>;
+
+export interface ScheduleTag {
   id: number;
+  label: string;
+  color_background: string;
+  color_foreground: string;
+  sort_order: number;
+}
+
+export interface ScheduleSpeaker {
+  id: number;
+  name: string;
+  title: string | null;
+  sort_order: number | null;
+}
+
+export interface ScheduleLink {
+  label: string;
+  url: string;
+  type?: string;
+}
+
+export interface ScheduleEvent {
+  id: number;
+  title: string;
+  description: string;
+  begin: string;
+  end: string;
+  beginTimestampSeconds: number | null;
+  endTimestampSeconds: number | null;
+  location: string | null;
+  color: string | null;
+  category: string | null;
+  tags: ScheduleTag[];
+  speakers: string | null;
+  speaker_details: ScheduleSpeaker[];
+  links: ScheduleLink[];
 }

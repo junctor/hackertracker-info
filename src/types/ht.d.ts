@@ -142,13 +142,6 @@ interface HTPeople {
   person_id: number;
 }
 
-interface HTSpeakerLink {
-  description: string;
-  title: string;
-  sort_order: number;
-  url: string;
-}
-
 interface HTSpeaker {
   affiliations: [HTSpeakerAffiliations];
   conference_id: number;

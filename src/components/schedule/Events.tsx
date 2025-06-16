@@ -2,7 +2,7 @@
 
 import React from "react";
 import EventsTable from "./EventsTable";
-import { GroupedSchedule } from "@/types/scheduleTypes";
+import { GroupedSchedule } from "@/types/info";
 
 export default function Events({ events }: { events: GroupedSchedule }) {
   return (

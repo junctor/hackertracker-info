@@ -5,7 +5,7 @@ import Error from "@/components/misc/Error";
 import React from "react";
 import Heading from "@/components/heading/Heading";
 import Events from "@/components/schedule/Events";
-import { GroupedSchedule } from "@/types/scheduleTypes";
+import { GroupedSchedule } from "@/types/info";
 
 export default function EventsPage() {
   const {

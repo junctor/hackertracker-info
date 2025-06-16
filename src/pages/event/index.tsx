@@ -6,11 +6,11 @@ import React, { useMemo } from "react";
 import Heading from "@/components/heading/Heading";
 import { useSearchParams } from "next/navigation";
 import Event from "@/components/event/Event";
-import { GroupedSchedule, ScheduleEvent } from "@/types/scheduleTypes";
+import { GroupedSchedule, ScheduleEvent } from "@/types/info";
 
 export default function EventPage() {
   const searchParams = useSearchParams();
-  const eventId = searchParams.get("event");
+  const eventId = searchParams.get("id");
 
   const {
     data: eventsJson,

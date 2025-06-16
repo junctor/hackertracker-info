@@ -17,7 +17,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ScheduleEvent } from "@/types/scheduleTypes";
+import { ScheduleEvent } from "@/types/info";
 
 export default function Event({ event }: { event: ScheduleEvent }) {
   const icsHref = `data:text/calendar;charset=utf8,${encodeURIComponent(
@@ -25,34 +25,38 @@ export default function Event({ event }: { event: ScheduleEvent }) {
   )}`;
 
   return (
-    <div className="mx-5">
+    <div className="min-h-screen text-gray-100 container mx-auto px-4 py-8">
       {/* Header + Breadcrumb */}
       <div className="flex flex-wrap justify-between items-start">
-        <div className="my-2 flex-auto">
-          <Breadcrumb>
+        <div className="flex-auto space-y-2">
+          <Breadcrumb className="text-gray-500">
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/schedule">Schedule</Link>
+                  <Link href="/schedule" className="hover:text-gray-100">
+                    Schedule
+                  </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator className="mx-2" />
             </BreadcrumbList>
           </Breadcrumb>
+
           <h1
-            className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl my-4"
-            style={{ color: event?.color ?? "#000" }}
+            className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl"
+            style={{ color: event.color ?? "#fff" }}
           >
             {event.title}
           </h1>
         </div>
-        <div className="hidden md:flex items-center gap-3 mt-2">
+
+        <div className="hidden md:flex items-center gap-4 mt-2 text-gray-400">
           <a href={icsHref} download={`DEF_CON_33-${event.id}.ics`}>
-            <CalendarIcon className="h-6 w-6 lg:h-7 lg:w-7" />
+            <CalendarIcon className="h-6 w-6 hover:text-gray-200" />
           </a>
           {typeof navigator.share === "function" && (
             <Share2Icon
-              className="h-6 w-6 lg:h-7 lg:w-7 cursor-pointer"
+              className="h-6 w-6 cursor-pointer hover:text-gray-200"
               onClick={async () => {
                 try {
                   await navigator.share({
@@ -69,17 +73,17 @@ export default function Event({ event }: { event: ScheduleEvent }) {
       </div>
 
       {/* Time + Location */}
-      <div className="font-bold">
-        <div className="flex items-center my-2">
+      <div className="mt-6 space-y-4">
+        <div className="flex items-center text-gray-300">
           <a
             href={icsHref}
             download={`DEF_CON_33-${event.id}.ics`}
-            className="flex items-center"
+            className="flex items-center hover:text-gray-100"
           >
             <ClockIcon className="h-5 w-5 mr-2" />
-            <time className="text-xs md:text-sm lg:text-base">
+            <time className="text-sm md:text-base">
               {event.endTimestampSeconds !== event.beginTimestampSeconds
-                ? `${eventTime(new Date(event.begin), false)} - ${eventTime(
+                ? `${eventTime(new Date(event.begin), false)} – ${eventTime(
                     new Date(event.end),
                     true
                   )}`
@@ -89,14 +93,14 @@ export default function Event({ event }: { event: ScheduleEvent }) {
         </div>
 
         {event.location && (
-          <div className="flex items-center my-2">
+          <div className="flex items-center text-gray-300">
             <SewingPinIcon className="h-5 w-5 mr-2" />
-            <p className="text-xs md:text-sm lg:text-base">{event.location}</p>
+            <p className="text-sm md:text-base">{event.location}</p>
           </div>
         )}
 
         {/* Tags */}
-        <div className="inline-grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-2 md:gap-y-3 w-10/12">
+        <div className="mt-4 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {event.tags
             .sort((a, b) =>
               a.sort_order !== b.sort_order
@@ -104,29 +108,36 @@ export default function Event({ event }: { event: ScheduleEvent }) {
                 : a.label.localeCompare(b.label)
             )
             .map((tag) => (
-              <div key={tag.id} className="flex items-center mr-3">
+              <div key={tag.id} className="flex items-center">
                 <span
                   className="rounded-full h-3 w-3 md:h-4 md:w-4 mr-2 flex-none"
                   style={{ backgroundColor: tag.color_background }}
                 />
-                <p className="text-xs md:text-sm">{tag.label}</p>
+                <p className="text-xs md:text-sm text-gray-200">{tag.label}</p>
               </div>
             ))}
         </div>
       </div>
 
       {/* Description & Links */}
-      <div className="mt-10 text-sm md:text-base">
-        <Markdown content={event.description} />
+      <div className="mt-10">
+        <div className="prose prose-invert max-w-none text-gray-100">
+          <Markdown content={event.description} />
+        </div>
         {event.links.length > 0 && (
-          <div className="mt-5 text-left">
-            <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
+          <div className="mt-6">
+            <h2 className="font-bold text-lg sm:text-xl md:text-2xl mb-3 text-gray-100">
               Links
             </h2>
-            <ul className="list-disc text-xs sm:text-sm md:text-base lg:text-lg ml-5 mt-2">
+            <ul className="list-disc ml-5 space-y-2">
               {event.links.map((link) => (
                 <li key={link.url}>
-                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-indigo-400 hover:text-indigo-200 hover:underline"
+                  >
                     {link.label}
                   </a>
                 </li>
@@ -138,28 +149,28 @@ export default function Event({ event }: { event: ScheduleEvent }) {
 
       {/* Speakers */}
       {event.speaker_details.length > 0 && (
-        <div className="mt-10 text-left">
-          <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
+        <div className="mt-10">
+          <h2 className="font-bold text-lg sm:text-xl md:text-2xl mb-3 text-gray-100">
             People
           </h2>
-          <div className="mt-2 space-y-3">
+          <div className="space-y-4">
             {event.speaker_details
               .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
               .map((speaker) => (
-                <div key={speaker.id} className="ml-3">
-                  <Link href={`/person?person=${speaker.id}`}>
-                    <div className="ml-2">
-                      <p className="font-bold text-sm sm:text-md md:text-base lg:text-lg">
-                        {speaker.name}
-                      </p>
-                      {speaker.title && (
-                        <p className="text-xs md:text-sm text-muted-foreground">
-                          {speaker.title}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
-                </div>
+                <Link
+                  key={speaker.id}
+                  href={`/person?id=${speaker.id}`}
+                  className="block hover:bg-gray-800 p-2 rounded-md transition"
+                >
+                  <p className="font-bold text-sm sm:text-base text-gray-100">
+                    {speaker.name}
+                  </p>
+                  {speaker.title && (
+                    <p className="text-xs sm:text-sm text-gray-400">
+                      {speaker.title}
+                    </p>
+                  )}
+                </Link>
               ))}
           </div>
         </div>

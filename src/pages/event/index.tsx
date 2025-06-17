@@ -1,45 +1,41 @@
+import React, { useMemo } from "react";
 import useSWR from "swr";
-import { fetcher } from "../../lib/misc";
+import { fetcher } from "@/lib/misc";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
-import React, { useMemo } from "react";
 import Heading from "@/components/heading/Heading";
-import { useSearchParams } from "next/navigation";
 import Event from "@/components/event/Event";
+import { useSearchParams } from "next/navigation";
 import { GroupedSchedule, ScheduleEvent } from "@/types/info";
 
 export default function EventPage() {
-  const searchParams = useSearchParams();
-  const eventId = searchParams.get("id");
+  const params = useSearchParams();
+  const idParam = params.get("id");
+  const eventId = useMemo(() => (idParam ? Number(idParam) : null), [idParam]);
 
   const {
-    data: eventsJson,
-    error: eventsError,
-    isLoading: eventsLoading,
-  } = useSWR<GroupedSchedule, Error>(`../../../ht/schedule.json`, fetcher);
+    data: schedule,
+    error,
+    isLoading,
+  } = useSWR<GroupedSchedule>("/ht/schedule.json", fetcher);
 
   const event: ScheduleEvent | null = useMemo(() => {
-    if (!eventId || !eventsJson) return null;
-
-    const id = Number(eventId);
-    for (const day of Object.keys(eventsJson)) {
-      const match = eventsJson[day].find((e) => e.id === id);
+    if (!schedule || eventId === null) return null;
+    for (const day of Object.values(schedule)) {
+      const match = day.find((e) => e.id === eventId);
       if (match) return match;
     }
-
     return null;
-  }, [eventId, eventsJson]);
+  }, [schedule, eventId]);
 
-  if (eventsLoading) return <Loading />;
-  if (eventsError) return <Error />;
-  if (!eventId || event === null) return <Error msg="Event not found" />;
+  if (isLoading) return <Loading />;
+  if (error) return <Error />;
+  if (eventId === null || !event) return <Error msg="Event not found" />;
 
   return (
-    <div>
-      <main>
-        <Heading />
-        <Event event={event} />
-      </main>
-    </div>
+    <main>
+      <Heading />
+      <Event event={event} />
+    </main>
   );
 }

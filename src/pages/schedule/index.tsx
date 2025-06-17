@@ -1,33 +1,30 @@
+// src/pages/schedule/index.tsx
+import React, { useMemo } from "react";
 import useSWR from "swr";
-import { fetcher } from "../../lib/misc";
+import { fetcher } from "@/lib/misc";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
-import React from "react";
 import Heading from "@/components/heading/Heading";
 import Events from "@/components/schedule/Events";
 import { GroupedSchedule } from "@/types/info";
+import { getBookmarks } from "@/lib/storage";
 
-export default function EventsPage() {
+export default function SchedulePage() {
   const {
-    data: eventsJson,
-    error: eventsError,
-    isLoading: eventsLoading,
-  } = useSWR<GroupedSchedule, Error>(`../../../ht/schedule.json`, fetcher);
+    data: schedule,
+    error,
+    isLoading,
+  } = useSWR<GroupedSchedule>("/ht/schedule.json", fetcher);
 
-  if (eventsLoading) {
-    return <Loading />;
-  }
+  const bookmarks = useMemo(() => getBookmarks(), []);
 
-  if (eventsJson === undefined || eventsError !== undefined) {
-    return <Error />;
-  }
+  if (isLoading) return <Loading />;
+  if (error || !schedule) return <Error />;
 
   return (
-    <div>
-      <main>
-        <Heading />
-        <Events events={eventsJson} />
-      </main>
-    </div>
+    <main>
+      <Heading />
+      <Events dateGroup={schedule} bookmarks={bookmarks} />
+    </main>
   );
 }

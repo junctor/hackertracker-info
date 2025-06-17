@@ -7,6 +7,7 @@ import Heading from "@/components/heading/Heading";
 import Event from "@/components/event/Event";
 import { useSearchParams } from "next/navigation";
 import { GroupedSchedule, ScheduleEvent } from "@/types/info";
+import { getBookmarks } from "@/lib/storage";
 
 export default function EventPage() {
   const params = useSearchParams();
@@ -28,6 +29,8 @@ export default function EventPage() {
     return null;
   }, [schedule, eventId]);
 
+  const bookmarks = useMemo(() => getBookmarks(), []);
+
   if (isLoading) return <Loading />;
   if (error) return <Error />;
   if (eventId === null || !event) return <Error msg="Event not found" />;
@@ -35,7 +38,7 @@ export default function EventPage() {
   return (
     <main>
       <Heading />
-      <Event event={event} />
+      <Event event={event} isBookmarked={bookmarks.includes(event.id)} />
     </main>
   );
 }

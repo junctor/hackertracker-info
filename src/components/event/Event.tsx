@@ -18,11 +18,21 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { ScheduleEvent } from "@/types/info";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { Bookmark } from "lucide-react";
 
-export default function Event({ event }: { event: ScheduleEvent }) {
+export default function Event({
+  event,
+  isBookmarked,
+}: {
+  event: ScheduleEvent;
+  isBookmarked: boolean;
+}) {
   const icsHref = `data:text/calendar;charset=utf8,${encodeURIComponent(
     cal(event)
   )}`;
+
+  const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
 
   return (
     <div className="min-h-screen text-gray-100 container mx-auto px-4 py-8">
@@ -69,6 +79,18 @@ export default function Event({ event }: { event: ScheduleEvent }) {
               }}
             />
           )}
+          <Bookmark
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleBookmark();
+            }}
+            aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
+            className={`h-6 w-6 cursor-pointer ${
+              bookmark
+                ? "fill-current text-indigo-400"
+                : "stroke-current text-gray-500"
+            }`}
+          />
         </div>
       </div>
 

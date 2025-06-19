@@ -1,45 +1,190 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import {
+  MagnifyingGlassIcon,
+  PersonIcon,
+  GlobeIcon,
+  FileTextIcon,
+  SpeakerLoudIcon,
+  BackpackIcon,
+  GroupIcon,
+  ListBulletIcon,
+  MobileIcon,
+  RocketIcon,
+} from "@radix-ui/react-icons";
 
 const GitHubIcon = () => (
   <svg
     width="20"
     height="20"
-    xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 100 100"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="white"
   >
     <path
       fillRule="evenodd"
       clipRule="evenodd"
       d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
-      fill="#fff"
-      preserveAspectRatio="none"
     />
   </svg>
 );
 
+const RAW_MENU = [
+  {
+    sort_order: 2,
+    title: "Content",
+    href: "/content",
+    description: "Explore all talks, tags, and sessions by category.",
+    icon: MagnifyingGlassIcon,
+  },
+  {
+    sort_order: 6,
+    title: "Speakers",
+    href: "/people",
+    description: "Browse bios and sessions for all DEF CON 33 participants.",
+    icon: PersonIcon,
+  },
+  {
+    sort_order: 8,
+    title: "Maps",
+    href: "/maps",
+    description: "Navigate DEF CON with venue and floor maps.",
+    icon: GlobeIcon,
+  },
+  {
+    sort_order: 10,
+    title: "Code of Conduct",
+    href: "/code-of-conduct",
+    description: "Community expectations and event rules.",
+    icon: FileTextIcon,
+  },
+  {
+    sort_order: 12,
+    title: "Announcements",
+    href: "/announcements",
+    description: "Live updates and important news during the event.",
+    icon: SpeakerLoudIcon,
+  },
+  {
+    sort_order: 14,
+    title: "Villages",
+    href: "/villages",
+    description: "Hands-on areas for learning, building, and hacking.",
+    icon: BackpackIcon,
+  },
+  {
+    sort_order: 16,
+    title: "Communities",
+    href: "/communities",
+    description: "Meetups and informal groups at DEF CON.",
+    icon: GroupIcon,
+  },
+  {
+    sort_order: 18,
+    title: "Contests",
+    href: "/contests",
+    description: "Compete in challenges from lockpicking to CTFs.",
+    icon: ListBulletIcon,
+  },
+];
+
+// Pre-sort once
+const navMenuList = RAW_MENU.slice().sort(
+  (a, b) => a.sort_order - b.sort_order
+);
+
 export default function Heading() {
   return (
-    <header className="sticky top-0 z-50 bg-background text-white flex items-center justify-between px-5 py-3">
-      <h1 className="text-2xl md:text-3xl font-bold">DEF CON 33</h1>
-      <Button
-        variant="link"
-        size="icon"
-        className="mr-1 cursor-pointer"
-        aria-label="View on GitHub"
-        onClick={() =>
-          window.open(
-            "https://github.com/junctor/hackertracker-info",
-            "_blank",
-            "noopener,noreferrer"
-          )
-        }
-      >
-        <GitHubIcon />
-      </Button>
+    <header className="sticky top-0 z-50 bg-background text-white px-5 py-3 border-b border-border">
+      <div className="max-w-screen-xl mx-auto flex items-center justify-between">
+        {/* Logo + Primary Nav */}
+        <div className="flex items-center space-x-6">
+          <h1 className="text-2xl md:text-3xl font-bold">DEF CON 33</h1>
+
+          <NavigationMenu>
+            <NavigationMenuList className="flex items-center space-x-4">
+              {/* Schedule Link */}
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link href="/schedule">Schedule</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              {/* Explore Dropdown */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="flex items-center gap-1">
+                  <RocketIcon className="w-4 h-4 flex-shrink-0" />
+                  <span>Explore</span>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-56 md:w-80 gap-4 p-2">
+                    {navMenuList.map(
+                      ({ title, href, description, icon: Icon }) => (
+                        <li key={title}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href={href}
+                              className="flex flex-col gap-1 px-2 py-1 hover:bg-accent rounded-md"
+                            >
+                              <div className="flex items-center gap-2">
+                                <Icon className="w-5 h-5 flex-shrink-0" />
+                                <span className="font-medium">{title}</span>
+                              </div>
+                              <p className="text-sm text-muted-foreground">
+                                {description}
+                              </p>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+
+        {/* Action Icons */}
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Mobile Apps"
+            onClick={() =>
+              window.open("/apps", "_blank", "noopener,noreferrer")
+            }
+          >
+            <MobileIcon className="w-5 h-5" />
+          </Button>
+          <Button
+            variant="link"
+            size="icon"
+            aria-label="View on GitHub"
+            onClick={() =>
+              window.open(
+                "https://github.com/junctor/hackertracker-info",
+                "_blank",
+                "noopener,noreferrer"
+              )
+            }
+          >
+            <GitHubIcon />
+          </Button>
+        </div>
+      </div>
       <Separator className="absolute bottom-0 left-0 right-0" />
     </header>
   );

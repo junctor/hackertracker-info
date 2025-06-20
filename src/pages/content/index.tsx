@@ -1,37 +1,65 @@
+"use client";
 import React, { useMemo } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
-import PersonDisplay from "@/components/people/person";
+import ContentList from "@/components/content/ContentList";
+import ContentDetail from "@/components/content/ContentDetail";
+import Head from "next/head";
 import { useSearchParams } from "next/navigation";
-import { People, Person } from "@/types/info";
+import type { ProcessedContent, ProcessedContents } from "@/types/info";
 
-export default function PersonPage() {
+export default function ContentPage() {
   const params = useSearchParams();
   const idParam = params.get("id");
-  const personId = useMemo(() => (idParam ? Number(idParam) : null), [idParam]);
+  const contentId = useMemo(
+    () => (idParam ? Number(idParam) : null),
+    [idParam]
+  );
 
   const {
-    data: people,
+    data: items,
     error,
     isLoading,
-  } = useSWR<People>("/ht/people.json", fetcher);
+  } = useSWR<ProcessedContents>("/ht/processedContent.json", fetcher);
 
-  const person: Person | null = useMemo(() => {
-    if (!people || personId === null) return null;
-    return people.find((p) => p.id === personId) ?? null;
-  }, [people, personId]);
+  const selectedContent = useMemo<ProcessedContent | null>(() => {
+    if (!items || contentId === null) return null;
+    return items.find((c) => c.id === contentId) ?? null;
+  }, [items, contentId]);
 
   if (isLoading) return <Loading />;
-  if (error) return <Error />;
-  if (personId === null || !person) return <Error msg="Person not found" />;
+  if (error) return <Error msg="Failed to load content" />;
+  if (contentId !== null && !selectedContent)
+    return <Error msg="Content not found" />;
 
   return (
-    <main>
-      <Heading />
-      <PersonDisplay person={person} />
-    </main>
+    <>
+      <Head>
+        <title>
+          {selectedContent
+            ? selectedContent.title + " | DEF CON Content"
+            : "Content | DEF CON"}
+        </title>
+        <meta
+          name="description"
+          content={
+            selectedContent
+              ? selectedContent.description
+              : "All DEF CON 33 content items."
+          }
+        />
+      </Head>
+      <main className="container mx-auto px-4 py-8">
+        <Heading />
+        {selectedContent ? (
+          <ContentDetail content={selectedContent} />
+        ) : (
+          <ContentList content={items!} />
+        )}
+      </main>
+    </>
   );
 }

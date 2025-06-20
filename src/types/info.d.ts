@@ -137,3 +137,35 @@ export interface Organization {
   id: number;
   description: string;
 }
+
+export type ProcessedContents = ProcessedContent[];
+
+export interface ProcessedContent {
+  id: number;
+  title: string;
+  description: string;
+
+  sessions: ContentSessionLite[];
+  links: ContentLink[];
+  people: ContentPersonWithName[];
+}
+
+export interface ContentSessionLite {
+  session_id: number;
+  begin_tsz: string;
+  end_tsz: string;
+  timezone_name: string;
+  location_id: number | null;
+}
+
+export interface ContentLink {
+  label: string;
+  url: string;
+  type: string;
+}
+
+export interface ContentPersonWithName {
+  person_id: number;
+  sort_order: number;
+  name: string | null;
+}

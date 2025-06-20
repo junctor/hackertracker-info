@@ -93,3 +93,47 @@ interface Document {
   title_text: string;
   id: number;
 }
+
+export type Organizations = Organization[];
+
+export interface OrganizationLink {
+  label: string;
+  url: string;
+  type: string;
+}
+
+export interface OrganizationMedia {
+  name: string;
+  hash_sha256: string;
+  filesize: number;
+  filetype: string;
+  hash_md5: string;
+  url: string;
+  is_logo: string; // values like "Y"
+  sort_order: number;
+  orga_id: number;
+  hash_crc32c: string;
+  asset_id: number;
+}
+
+export interface OrganizationLocation {
+  location_id: number;
+}
+
+export interface Organization {
+  conference_id: number;
+  tag_ids: number[];
+  updated_tsz: string;
+  documents: []; // currently always empty
+  people: []; // currently always empty
+  links: OrganizationLink[];
+  conference: string;
+  name: string;
+  updated_at: string;
+  logo: OrganizationMedia;
+  tag_id_as_organizer: number;
+  media: OrganizationMedia[];
+  locations: OrganizationLocation[];
+  id: number;
+  description: string;
+}

@@ -8,6 +8,7 @@ import Heading from "@/components/heading/Heading";
 import Events from "@/components/schedule/Events";
 import { GroupedSchedule } from "@/types/info";
 import { getBookmarks } from "@/lib/storage";
+import Head from "next/head";
 
 export default function SchedulePage() {
   const {
@@ -22,9 +23,18 @@ export default function SchedulePage() {
   if (error || !schedule) return <Error />;
 
   return (
-    <main>
-      <Heading />
-      <Events dateGroup={schedule} bookmarks={bookmarks} />
-    </main>
+    <>
+      <Head>
+        <title>Schedule | DEF CON</title>
+        <meta
+          name="description"
+          content="Full DEF CON 33 schedule of sessions, talks, and events."
+        />
+      </Head>
+      <main>
+        <Heading />
+        <Events dateGroup={schedule} bookmarks={bookmarks} />
+      </main>
+    </>
   );
 }

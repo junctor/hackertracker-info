@@ -7,6 +7,7 @@ import Heading from "@/components/heading/Heading";
 import PersonDisplay from "@/components/people/person";
 import { useSearchParams } from "next/navigation";
 import { People, Person } from "@/types/info";
+import Head from "next/head";
 
 export default function PersonPage() {
   const params = useSearchParams();
@@ -29,9 +30,18 @@ export default function PersonPage() {
   if (personId === null || !person) return <Error msg="Person not found" />;
 
   return (
-    <main>
-      <Heading />
-      <PersonDisplay person={person} />
-    </main>
+    <>
+      <Head>
+        <title>{person.name} | Speaker at DEF CON 33</title>
+        <meta
+          name="description"
+          content={`Learn more about ${person.name}, a speaker at DEF CON 33. See their bio, sessions, and contributions.`}
+        />
+      </Head>
+      <main>
+        <Heading />
+        <PersonDisplay person={person} />
+      </main>
+    </>
   );
 }

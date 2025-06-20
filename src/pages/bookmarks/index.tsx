@@ -8,6 +8,7 @@ import Heading from "@/components/heading/Heading";
 import Events from "@/components/schedule/Events";
 import { GroupedSchedule } from "@/types/info";
 import { getBookmarks } from "@/lib/storage";
+import Head from "next/head";
 
 export default function BookmarksPage() {
   const {
@@ -31,15 +32,24 @@ export default function BookmarksPage() {
   if (error || !allEvents) return <Error />;
 
   return (
-    <main>
-      <Heading />
-      {bookmarks.length === 0 ? (
-        <p className="mt-8 text-center text-gray-500">
-          You haven’t bookmarked any events yet.
-        </p>
-      ) : (
-        <Events dateGroup={dateGroup} bookmarks={bookmarks} />
-      )}
-    </main>
+    <>
+      <Head>
+        <title>Bookmarks | DEF CON</title>
+        <meta
+          name="description"
+          content="View and manage your bookmarked DEF CON 33 events and sessions."
+        />
+      </Head>
+      <main>
+        <Heading />
+        {bookmarks.length === 0 ? (
+          <p className="mt-8 text-center text-gray-500">
+            You haven’t bookmarked any events yet.
+          </p>
+        ) : (
+          <Events dateGroup={dateGroup} bookmarks={bookmarks} />
+        )}
+      </main>
+    </>
   );
 }

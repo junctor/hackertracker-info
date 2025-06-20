@@ -6,6 +6,7 @@ import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
 import { Articles } from "@/types/info";
 import Announcements from "@/components/announcements/Announcements";
+import Head from "next/head";
 
 export default function AnnoucementsPage() {
   const {
@@ -18,9 +19,18 @@ export default function AnnoucementsPage() {
   if (error || !articles) return <Error />;
 
   return (
-    <main>
-      <Heading />
-      <Announcements announcements={articles} />
-    </main>
+    <>
+      <Head>
+        <title>Announcements | DEF CON</title>
+        <meta
+          name="description"
+          content="Live updates and important news during the event."
+        />
+      </Head>
+      <main>
+        <Heading />
+        <Announcements announcements={articles} />
+      </main>
+    </>
   );
 }

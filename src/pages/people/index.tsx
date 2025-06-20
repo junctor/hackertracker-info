@@ -6,6 +6,7 @@ import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
 import PeopleDisplay from "@/components/people/people";
 import { People } from "@/types/info";
+import Head from "next/head";
 
 export default function PeoplePage() {
   const {
@@ -18,9 +19,18 @@ export default function PeoplePage() {
   if (error || !people) return <Error />;
 
   return (
-    <main>
-      <Heading />
-      <PeopleDisplay people={people} />
-    </main>
+    <>
+      <Head>
+        <title>People | DEF CON</title>
+        <meta
+          name="description"
+          content="Browse bios and sessions for all DEF CON 33 participants."
+        />
+      </Head>
+      <main>
+        <Heading />
+        <PeopleDisplay people={people} />
+      </main>
+    </>
   );
 }

@@ -6,6 +6,7 @@ import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
 import { Documents } from "@/types/info";
 import CodeOfConduct from "@/components/code-of-conduct/CodeOfConduct";
+import Head from "next/head";
 
 export default function CodeOfConductPage() {
   const {
@@ -24,9 +25,18 @@ export default function CodeOfConductPage() {
   }
 
   return (
-    <main>
-      <Heading />
-      <CodeOfConduct text={getCoC.body_text} />
-    </main>
+    <>
+      <Head>
+        <title>Code of Conduct | DEF CON</title>
+        <meta
+          name="description"
+          content="Community expectations and event rules."
+        />
+      </Head>
+      <main>
+        <Heading />
+        <CodeOfConduct text={getCoC.body_text} />
+      </main>
+    </>
   );
 }

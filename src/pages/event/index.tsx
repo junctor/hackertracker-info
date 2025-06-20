@@ -8,6 +8,7 @@ import Event from "@/components/event/Event";
 import { useSearchParams } from "next/navigation";
 import { GroupedSchedule, ScheduleEvent } from "@/types/info";
 import { getBookmarks } from "@/lib/storage";
+import Head from "next/head";
 
 export default function EventPage() {
   const params = useSearchParams();
@@ -36,9 +37,18 @@ export default function EventPage() {
   if (eventId === null || !event) return <Error msg="Event not found" />;
 
   return (
-    <main>
-      <Heading />
-      <Event event={event} isBookmarked={bookmarks.includes(event.id)} />
-    </main>
+    <>
+      <Head>
+        <title>{event.title} | DEF CON 33</title>
+        <meta
+          name="description"
+          content={`Details for "${event.title}" at DEF CON 33. Find the time, location, speakers, and session overview.`}
+        />
+      </Head>
+      <main>
+        <Heading />
+        <Event event={event} isBookmarked={bookmarks.includes(event.id)} />
+      </main>
+    </>
   );
 }

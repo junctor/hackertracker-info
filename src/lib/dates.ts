@@ -47,7 +47,7 @@ export function eventTime(value: string | Date, showTz = true): string {
   });
 }
 
-export function newsTime(time: Date, tz = true): string {
+export function newsTime(time: Date): string {
   const options: Intl.DateTimeFormatOptions = {
     timeZone: TZ,
     hour12: false,

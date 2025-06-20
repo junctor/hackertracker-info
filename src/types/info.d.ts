@@ -72,3 +72,13 @@ export interface ScheduleEvent {
   speaker_details: ScheduleSpeaker[];
   links: ScheduleLink[];
 }
+
+export type Articles = Article[];
+
+export interface Article {
+  id: string;
+  name: string;
+  text: string;
+  updated_tsz: string;
+  updated_at: { seconds: number; nanoseconds: number };
+}

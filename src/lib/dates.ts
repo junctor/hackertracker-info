@@ -46,3 +46,16 @@ export function eventTime(value: string | Date, showTz = true): string {
     timeZoneName: showTz ? "short" : undefined,
   });
 }
+
+export function newsTime(time: Date, tz = true): string {
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: TZ,
+    hour12: false,
+    day: "numeric",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+
+  return time.toLocaleTimeString(LOCALE, options);
+}

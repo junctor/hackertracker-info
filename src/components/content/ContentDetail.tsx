@@ -11,7 +11,7 @@ interface Props {
 
 export default function ContentDetail({ content }: Props) {
   return (
-    <div className="space-y-8 my-10">
+    <div className="space-y-8 my-10 mx-5">
       <div>
         <Link href="/content">
           <Button variant="outline" className="flex items-center gap-2">

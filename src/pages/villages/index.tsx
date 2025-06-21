@@ -26,7 +26,7 @@ export default function VillagesPage() {
         <title>Villages | DEF CON</title>
         <meta name="description" content="Explore all DEF CON Villages" />
       </Head>
-      <main className="container mx-auto px-4 py-8">
+      <main>
         <Heading />
         <Orgs orgs={villages} title="Villages" />
       </main>

@@ -19,7 +19,7 @@ export default function ContentList({ content }: Props) {
   );
 
   return (
-    <section className="px-4 md:px-8 lg:px-16 my-10">
+    <section className="px-4 md:px-8 lg:px-16 my-10 mx-5">
       {/* Search Input */}
       <div className="mb-8 flex justify-center">
         <Input

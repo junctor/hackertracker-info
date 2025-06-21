@@ -28,7 +28,7 @@ export default function CommunitiesPage() {
         <title>Communities | DEF CON</title>
         <meta name="description" content="Explore all DEF CON Communities" />
       </Head>
-      <main className="container mx-auto px-4 py-8">
+      <main>
         <Heading />
         <Orgs orgs={communities} title="Communities" />
       </main>

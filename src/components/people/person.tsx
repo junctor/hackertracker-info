@@ -23,7 +23,7 @@ export default function PersonDisplay({ person }: { person: Person }) {
   const avatarUrl = person.media.find((p) => p.sort_order === 1)?.url || "";
 
   return (
-    <div className="min-h-screen text-gray-100 container mx-auto px-4 py-8">
+    <div className="min-h-screen text-gray-100 container mx-5 py-8">
       {/* Breadcrumb */}
       <Breadcrumb className="text-gray-400">
         <BreadcrumbList>

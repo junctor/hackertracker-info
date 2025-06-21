@@ -26,7 +26,7 @@ export default function ContestsPage() {
         <title>Contests | DEF CON</title>
         <meta name="description" content="Explore all DEF CON Contests" />
       </Head>
-      <main className="container mx-auto px-4 py-8">
+      <main>
         <Heading />
         <Orgs orgs={contests} title="Contests" />
       </main>

@@ -31,7 +31,7 @@ export default function OrganizationPage() {
         <meta name="description" content={org.description.slice(0, 150)} />
       </Head>
 
-      <main className="container mx-auto px-4 py-8">
+      <main>
         <Heading />
         <OrgDetails org={org} />
       </main>

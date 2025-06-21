@@ -52,7 +52,7 @@ export default function ContentPage() {
           }
         />
       </Head>
-      <main className="container mx-auto px-4 py-8">
+      <main>
         <Heading />
         {selectedContent ? (
           <ContentDetail content={selectedContent} />

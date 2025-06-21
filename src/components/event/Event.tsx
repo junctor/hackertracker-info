@@ -35,7 +35,7 @@ export default function Event({
   const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
 
   return (
-    <div className="min-h-screen text-gray-100 container mx-auto px-4 py-8">
+    <div className="min-h-screen text-gray-100 container mx-5 py-8">
       {/* Header + Breadcrumb */}
       <div className="flex flex-wrap justify-between items-start">
         <div className="flex-auto space-y-2">

@@ -21,7 +21,7 @@ export default function Orgs({ orgs, title }: OrgsProps) {
   );
 
   return (
-    <section className="mx-2 my-10">
+    <section className="my-10 mx-5">
       <h2 className="mb-4 text-2xl font-semibold">{title}</h2>
 
       {/* Search */}

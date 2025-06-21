@@ -9,7 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export default function OrgDetails({ org }: { org: Organization }) {
   return (
-    <article className="space-y-8 my-10">
+    <article className="space-y-8 my-10 mx-5">
       {/* Hero header */}
       <header className="flex flex-col md:flex-row items-center md:items-start gap-6">
         <div className="relative w-32 h-32 rounded-lg overflow-hidden bg-gray-100">

@@ -37,7 +37,7 @@ const RAW_MENU = [
   },
   {
     sort_order: 6,
-    title: "Speakers",
+    title: "People",
     href: "/people",
     description: "Browse bios and sessions for all DEF CON 33 participants.",
     icon: PersonIcon,

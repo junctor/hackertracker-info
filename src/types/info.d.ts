@@ -144,9 +144,9 @@ export interface ProcessedContent {
   id: number;
   title: string;
   description: string;
-
   sessions: ContentSessionLite[];
   links: ContentLink[];
+  tags: ScheduleTag[];
   people: ContentPersonWithName[];
 }
 
@@ -169,3 +169,13 @@ export interface ContentPersonWithName {
   sort_order: number;
   name: string | null;
 }
+
+export type SearchType = "person" | "event" | "content" | "organization";
+
+export interface SearchItem {
+  id: number;
+  text: string;
+  type: SearchType;
+}
+
+export type SearchIndex = SearchItem[];

@@ -65,9 +65,7 @@ export default function PeopleDisplay({ people }: { people: People }) {
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
-    return people
-      .filter((person) => person.name.toLowerCase().includes(q))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    return people.filter((person) => person.name.toLowerCase().includes(q));
   }, [people, query]);
 
   return (

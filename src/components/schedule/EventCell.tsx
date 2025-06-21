@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import Link from "next/link";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -15,14 +15,6 @@ function EventCell({
   isBookmarked: boolean;
 }) {
   const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
-
-  const sortedTags = useMemo(() => {
-    return [...(event.tags ?? [])].sort((a, b) =>
-      a.sort_order !== b.sort_order
-        ? a.sort_order - b.sort_order
-        : a.label.localeCompare(b.label)
-    );
-  }, [event.tags]);
 
   return (
     <TableRow className="hover:bg-gray-800 focus-within:ring-2 focus-within:ring-indigo-500 transition-colors">
@@ -51,7 +43,7 @@ function EventCell({
           )}
           <p className="mt-1 text-gray-300">{event.location}</p>
           <div className="flex flex-wrap gap-1 uppercase text-sm mt-2">
-            {sortedTags.map((tag) => (
+            {event.tags.map((tag) => (
               <Badge
                 key={tag.id}
                 className="font-medium"

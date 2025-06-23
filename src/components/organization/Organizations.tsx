@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react";
+
 import { Organizations } from "@/types/info";
 
 interface OrgsProps {
@@ -22,22 +23,22 @@ export default function Orgs({ orgs, title }: OrgsProps) {
 
   return (
     <section className="my-10 mx-5">
-      <h2 className="mb-4 text-2xl font-semibold">{title}</h2>
+      <h2 className="mb-4 text-2xl font-semibold text-gray-100">{title}</h2>
 
       {/* Search */}
-      <div className="mb-6 flex items-center space-x-2">
-        <SearchIcon className="w-5 h-5 text-muted-foreground" />
+      <div className="mb-6 flex items-center space-x-3">
+        <SearchIcon className="w-5 h-5 text-gray-400" />
         <Input
           type="text"
           placeholder={`Search ${title}…`}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1"
+          className="flex-1 bg-gray-700 placeholder-gray-400 text-gray-100 rounded-full focus:ring-indigo-500"
         />
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-center text-muted-foreground">
+        <p className="text-center text-gray-400">
           No {title.toLowerCase()} found.
         </p>
       ) : (
@@ -48,9 +49,20 @@ export default function Orgs({ orgs, title }: OrgsProps) {
               href={`/organization/?id=${o.id}`}
               className="block transform hover:scale-[1.02] transition-transform duration-200"
             >
-              <Card>
-                <CardHeader className="flex items-center space-x-4 pb-0">
-                  <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+              <Card
+                className="
+                  bg-gray-800
+                  border border-gray-700
+                  shadow-lg
+                  rounded-2xl
+                  hover:bg-gray-700
+                  hover:ring-2 hover:ring-indigo-500
+                  transition-all duration-200
+                  overflow-hidden
+                "
+              >
+                <CardHeader className="flex items-center space-x-4 p-4 pb-0">
+                  <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gray-900">
                     <Image
                       src={o.logo.url}
                       alt={`${o.name} logo`}
@@ -58,7 +70,9 @@ export default function Orgs({ orgs, title }: OrgsProps) {
                       style={{ objectFit: "contain" }}
                     />
                   </div>
-                  <h3 className="text-lg font-medium">{o.name}</h3>
+                  <h3 className="text-lg font-medium text-gray-100">
+                    {o.name}
+                  </h3>
                 </CardHeader>
               </Card>
             </Link>

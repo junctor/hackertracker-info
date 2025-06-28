@@ -1,102 +1,108 @@
 # info.defcon.org
 
-## Overview
+[![version](https://img.shields.io/badge/version-33.1.0-blue.svg)](https://www.npmjs.com/package/ht-info) [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE) [![Next.js](https://img.shields.io/badge/platform-Next.js-black.svg?logo=next.js)](https://nextjs.org)
 
-This project is a Next.js application designed to show events and schedules for DEF CON 32. It will be hosted at [info.defcon.org](https://info.defcon.org).
+> **Official schedule and event guide for DEF CON 33.** Explore talks, villages, workshops, and more at your fingertips.
 
 ## Table of Contents
 
-- [Prerequisites](#prerequisites)
-- [Next.js Application (./app)](#nextjs-application-app)
-  - [Install Dependencies](#install-dependencies)
-  - [Start Development Server](#start-development-server)
-  - [Production Static Export](#production-static-export)
-- [Export Static HackerTracker Data (./ht-export)](#export-static-hackertracker-data-ht-export)
-  - [Install Dependencies](#install-dependencies-1)
-  - [Export Static Data](#export-static-data)
-  - [Firebase API Key](#firebase-api-key)
-- [HackerTracker Team](#hackertracker-team)
-- [Technologies Used](#technologies-used)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Static Data Export](#static-data-export)
+- [Team](#team)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Prerequisites
+## Tech Stack
 
-Before you begin, ensure you have met the following requirements:
+- **Framework:** Next.js 15.3.2
+- **Language:** React 19 & TypeScript 5
+- **Styling:** Tailwind CSS 4 & shadcn/ui
+- **UI Components:** Radix UI & Lucide icons
+- **Data Fetching:** SWR
+- **Search:** cmdk
+- **Markdown Rendering:** react-markdown & remark-gfm
+- **Animations:** GSAP
+- **Utilities:** tailwind-merge, clsx
 
-- Node.js (v14 or later)
-- npm (v6 or later)
+## Getting Started
 
-## Next.js Application (./app)
+### Prerequisites
 
-### Install Dependencies
+- **Node.js** ≥ v18
+- **npm** ≥ v8
 
-To install the necessary dependencies, run:
+### Installation
 
 ```bash
+git clone https://github.com/junctor/hackertracker-info.git
+cd hackertracker-info
 npm install
 ```
 
-### Start Development Server
+### Development
 
-To start the development server, run:
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-### Production Static Export
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To build the project for production and export static HTML, run:
+### Production Build
 
-```bash
-npm run export
-```
-
-This command will [build](https://nextjs.org/docs/app/building-your-application/deploying/static-exports) static HTML files into a generated `out` directory.
-
-For more information, refer to the [Next.js documentation on deploying static-only sites](https://nextjs.org/docs/pages/building-your-application/deploying#static-only).
-
-## Export Static HackerTracker Data (./ht-export)
-
-### Install Dependencies
-
-To install the necessary dependencies, run:
+Generate a production-ready static site:
 
 ```bash
-npm install
+npm run build
 ```
 
-### Export Static Data
+The output will be in the `out` directory.
 
-To fetch data from Firebase and export static JSON files, run:
+### Linting & Formatting
+
+Check code quality and style:
 
 ```bash
-npm run export
+npm run lint
 ```
 
-The static JSON files will be generated in the `out` directory.
+## Static Data Export
 
-### Firebase API Key
+This project relies on pre-generated JSON from the [info-export](https://github.com/junctor/info-export) tool, which pulls schedule data from Firebase.
 
-The script requires the Firebase API key to be set as the `FIREBASE_API_KEY` environment variable. This stops [@Advice-Dog](https://github.com/Advice-Dog) from getting alerted every time I leak the key, but you are all hackers and undoubtedly you’ll find it anyway.
+1. Clone and install `info-export`:
 
-## HackerTracker Team
+   ```bash
+   git clone https://github.com/junctor/info-export.git
+   cd info-export
+   npm install
+   ```
+
+2. Export the Firebase data:
+
+   ```bash
+   npm run export
+   ```
+
+3. Copy the generated JSON into this project’s public assets:
+
+   ```bash
+   cp -r out/ht ../hackertracker-info/public
+   ```
+
+## Team
 
 - [Advice-Dog](https://github.com/Advice-Dog)
 - [aNullValue](https://github.com/aNullValue)
 - [cak](https://github.com/cak)
 - [sethlaw](https://github.com/sethlaw)
 
-## Technologies Used
-
-- Developed with [Next.js](https://nextjs.org)
-- Styled with [Tailwind CSS](https://tailwindcss.com) and [shadcn/ui](https://ui.shadcn.com)
-
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or fixes.
+Contributions, issues, and feature requests are welcome! Feel free to open an issue or submit a pull request.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License.

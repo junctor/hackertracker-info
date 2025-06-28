@@ -26,6 +26,7 @@ import {
   LightningBoltIcon,
 } from "@radix-ui/react-icons";
 import GlobalSearch from "./GlobalSearch";
+import localFont from "next/font/local";
 
 const RAW_MENU = [
   {
@@ -91,13 +92,26 @@ const navMenuList = RAW_MENU.slice().sort(
   (a, b) => a.sort_order - b.sort_order
 );
 
+const museoFont = localFont({
+  src: "../../../public/fonts/Museo700-Regular.woff2",
+  display: "swap",
+  variable: "--font-museo",
+});
+
 export default function Heading() {
   return (
     <header className="sticky top-0 z-50 bg-background text-white px-5 py-3 border-b border-border">
       <div className="max-w-screen-xl mx-auto flex items-center justify-between">
         {/* Logo + Primary Nav */}
         <div className="flex items-center space-x-6">
-          <h1 className="text-2xl md:text-3xl font-bold">DEF CON 33</h1>
+          <Link href="https://defcon.org/html/defcon-33/dc-33-index.html">
+            <h1
+              className={`${museoFont.className} text-2xl md:text-3xl font-bold`}
+            >
+              <span className="block md:hidden">DC33</span>
+              <span className="hidden md:block">DEF CON 33</span>
+            </h1>
+          </Link>
 
           <NavigationMenu>
             <NavigationMenuList className="flex items-center space-x-4">
@@ -154,7 +168,7 @@ export default function Heading() {
               window.open("/apps", "_blank", "noopener,noreferrer")
             }
           >
-            <MobileIcon className="w-5 h-5" />
+            <MobileIcon />
           </Button>
           <Button
             variant="ghost"

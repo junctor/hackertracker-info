@@ -33,6 +33,17 @@ interface PersonEvent {
 
 export type People = Person[];
 
+export type GroupedTags = Record<number, GroupedTag>;
+
+export interface GroupedTag {
+  id: number;
+  label: string;
+  color_background: string;
+  color_foreground: string;
+  sort_order: number;
+  schedule: GroupedSchedule;
+}
+
 export type GroupedSchedule = Record<string, ScheduleEvent[]>;
 
 export interface ScheduleTag {
@@ -179,3 +190,26 @@ export interface SearchItem {
 }
 
 export type SearchIndex = SearchItem[];
+
+export type TagTypes = TagType[];
+
+export interface Tag {
+  label: string;
+  color_background: string;
+  id: number;
+  sort_order: number;
+  description: string;
+  color_foreground: string;
+}
+
+export interface TagType {
+  label: string;
+  conference_id: number;
+  is_browsable: boolean;
+  category: string;
+  sort_order: number;
+  id: number;
+  is_single_valued: boolean;
+  tags: Tag[];
+  conference: string;
+}

@@ -16,6 +16,8 @@ import {
 import EventCell from "./EventCell";
 import { Button } from "@/components/ui/button";
 import { GroupedSchedule } from "@/types/info";
+import { Bookmark, Tag } from "lucide-react";
+import Link from "next/link";
 
 export default function Events({
   dateGroup,
@@ -67,6 +69,20 @@ export default function Events({
 
   return (
     <div className="min-h-screen text-gray-100">
+      <div className="sticky top-0 bg-background z-40 p-2 border-b border-gray-700 flex gap-2 justify-end">
+        <div className="flex gap-2">
+          <Link href="/bookmarks">
+            <Button variant="ghost" size="icon" aria-label="Filter by books">
+              <Bookmark />
+            </Button>
+          </Link>
+          <Link href="/tags">
+            <Button variant="ghost" size="icon" aria-label="Filter by tags">
+              <Tag />
+            </Button>
+          </Link>
+        </div>
+      </div>
       {/* Sticky day tabs */}
       <div className="sticky top-[60px] bg-background z-30 flex flex-wrap justify-center gap-2 py-2 border-b border-gray-700">
         {days.map(({ day }) => (

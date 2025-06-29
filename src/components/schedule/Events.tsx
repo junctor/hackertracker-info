@@ -72,7 +72,11 @@ export default function Events({
       <div className="sticky top-0 bg-background z-40 p-2 border-b border-gray-700 flex gap-2 justify-end">
         <div className="flex gap-2">
           <Link href="/bookmarks">
-            <Button variant="ghost" size="icon" aria-label="Filter by books">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Filter by bookmarks"
+            >
               <Bookmark />
             </Button>
           </Link>

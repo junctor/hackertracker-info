@@ -26,9 +26,7 @@ export default function Tags({ tagTypes }: { tagTypes: TagType[] }) {
     return tagTypes
       .filter(
         (tt) =>
-          tt.is_browsable &&
-          tt.is_single_valued &&
-          tt.label === "Event Category"
+          tt.is_browsable && tt.tags.length > 0 && tt.category == "content"
       )
       .reduce<Record<string, TagType[]>>((acc, tt) => {
         acc[tt.category] = acc[tt.category] || [];

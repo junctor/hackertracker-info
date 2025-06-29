@@ -1,7 +1,7 @@
 import React from "react";
 import useSWR from "swr";
 import Head from "next/head";
-import { fetcher } from "@/lib/misc";
+import { alphaSort, fetcher } from "@/lib/misc";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
@@ -18,9 +18,11 @@ export default function CommunitiesPage() {
   if (isLoading) return <Loading />;
   if (error || !organizations) return <Error />;
 
-  const communities = organizations.filter((org) =>
-    org.tag_ids.includes(47621)
-  );
+  const communities = organizations
+    .filter((org) => org.tag_ids.includes(47621))
+    .sort((a, b) => {
+      return alphaSort(a.name, b.name);
+    });
 
   return (
     <>

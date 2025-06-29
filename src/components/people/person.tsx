@@ -15,10 +15,7 @@ import { Person } from "@/types/info";
 
 export default function PersonDisplay({ person }: { person: Person }) {
   // derive avatar initials
-  const initials = person.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("");
+  const initials = person.name.charAt(0);
 
   const avatarUrl = person.media.find((p) => p.sort_order === 1)?.url || "";
 

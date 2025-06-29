@@ -1,21 +1,38 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
-import type { ProcessedContent } from "@/types/info";
+import type { ProcessedContent, TagTypes } from "@/types/info";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Props {
   content: ProcessedContent[];
+  tags: TagTypes;
 }
 
-export default function ContentList({ content }: Props) {
+export default function ContentList({ content, tags }: Props) {
   const [search, setSearch] = useState("");
+  const [selectedTag, setSelectedTag] = useState<number | null>(null);
+
   const filtered = useMemo(
     () =>
-      content.filter((c) =>
-        c.title.toLowerCase().includes(search.toLowerCase())
-      ),
-    [content, search]
+      content
+        .filter((c) =>
+          search ? c.title.toLowerCase().includes(search.toLowerCase()) : true
+        )
+        .filter((c) => {
+          if (!selectedTag) return true;
+          return c.tags.some((tag) => tag.id === selectedTag);
+        }),
+    [content, search, selectedTag]
   );
 
   return (
@@ -28,9 +45,42 @@ export default function ContentList({ content }: Props) {
           onChange={(e) => setSearch(e.target.value)}
           className="w-full max-w-xl"
         />
+        {/* Tag Filter */}
+        <div className="ml-4">
+          <Select
+            onValueChange={(value) => {
+              setSelectedTag(Number(value));
+            }}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Tags" />
+            </SelectTrigger>
+            <SelectContent>
+              {tags
+                .filter(
+                  (tag) =>
+                    tag.is_browsable &&
+                    tag.tags.length > 0 &&
+                    tag.category == "content"
+                )
+                .sort((a, b) => a.sort_order - b.sort_order)
+                .map((tag) => (
+                  <SelectGroup key={tag.id}>
+                    <SelectLabel>{tag.label}</SelectLabel>
+                    {tag.tags
+                      .sort((a, b) => a.sort_order - b.sort_order)
+                      .map((item) => (
+                        <SelectItem key={item.id} value={item.id.toString()}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                  </SelectGroup>
+                ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
-      {/* Dark-themed Content List */}
       <ul className="divide-y divide-gray-700 leading-relaxed">
         {filtered.map((item) => (
           <li

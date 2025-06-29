@@ -33,7 +33,7 @@ const RAW_MENU = [
     sort_order: 2,
     title: "Content",
     href: "/content",
-    description: "Explore all talks, tags, and sessions by category.",
+    description: "Explore all content for DEF CON 33.",
     icon: ListBulletIcon,
   },
   {

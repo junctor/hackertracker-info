@@ -9,7 +9,11 @@ import ContentList from "@/components/content/ContentList";
 import ContentDetail from "@/components/content/ContentDetail";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
-import type { ProcessedContent, ProcessedContents } from "@/types/info";
+import type {
+  ProcessedContent,
+  ProcessedContents,
+  TagTypes,
+} from "@/types/info";
 
 export default function ContentPage() {
   const params = useSearchParams();
@@ -25,15 +29,23 @@ export default function ContentPage() {
     isLoading,
   } = useSWR<ProcessedContents>("/ht/processedContent.json", fetcher);
 
+  const {
+    data: tags,
+    error: tagError,
+    isLoading: tagIsLoading,
+  } = useSWR<TagTypes>("/ht/tagTypes.json", fetcher);
+
   const selectedContent = useMemo<ProcessedContent | null>(() => {
     if (!items || contentId === null) return null;
     return items.find((c) => c.id === contentId) ?? null;
   }, [items, contentId]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || tagIsLoading) return <Loading />;
   if (error) return <Error msg="Failed to load content" />;
   if (contentId !== null && !selectedContent)
     return <Error msg="Content not found" />;
+
+  if (tagError) return <Error msg="Failed to load tags" />;
 
   return (
     <>
@@ -57,7 +69,7 @@ export default function ContentPage() {
         {selectedContent ? (
           <ContentDetail content={selectedContent} />
         ) : (
-          <ContentList content={items!} />
+          <ContentList content={items!} tags={tags ?? []} />
         )}
       </main>
     </>

@@ -26,7 +26,7 @@ export default function OrgDetails({ org }: { org: Organization }) {
           <h1 className="text-3xl font-bold text-gray-100">{org.name}</h1>
 
           {org.tag_id_as_organizer && (
-            <Link href={`/events?tag=${org.tag_id_as_organizer}`} passHref>
+            <Link href={`/tag?id=${org.tag_id_as_organizer}`} passHref>
               <Button
                 variant="secondary"
                 size="default"

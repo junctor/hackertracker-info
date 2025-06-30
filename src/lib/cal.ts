@@ -1,4 +1,4 @@
-import { ScheduleEvent } from "@/types/info";
+import { ContentSessionLite, ProcessedContentId } from "@/types/info";
 
 const BASEURL = "https://info.defcon.org";
 const PRODID = "-//hackertracker//DEFCON33 Calendar 1.0//EN";
@@ -39,18 +39,21 @@ const foldLine = (line: string) => {
 };
 
 /** Build a plain-text description including speakers */
-const buildDescription = (e: ScheduleEvent) => {
-  const speakers = e.speaker_details.map((s) => s.name).join(", ");
-  return [e.description, speakers].filter(Boolean).join("\\n");
+const buildDescription = (content: ProcessedContentId) => {
+  const speakers = content.people.map((s) => s.name).join(", ");
+  return [content.description, speakers].filter(Boolean).join("\\n");
 };
 
 /** Generate a full iCal string for an event */
-export const generateICal = (event: ScheduleEvent): string => {
+export const generateICal = (
+  content: ProcessedContentId,
+  session: ContentSessionLite
+): string => {
   const now = new Date();
   const dtstamp = formatICalDate(now);
-  const dtstart = formatICalDate(new Date(event.begin));
-  const dtend = formatICalDate(new Date(event.end));
-  const uid = `defcon33-${event.id}@info.defcon.org`;
+  const dtstart = formatICalDate(new Date(session.begin_tsz));
+  const dtend = formatICalDate(new Date(session.end_tsz));
+  const uid = `defcon33-${content.id}@info.defcon.org`;
 
   const lines = [
     "BEGIN:VCALENDAR",
@@ -65,10 +68,10 @@ export const generateICal = (event: ScheduleEvent): string => {
     `DTEND:${dtend}`,
     "STATUS:CONFIRMED",
     "CATEGORIES:CONFERENCE",
-    `SUMMARY:${escapeICalText(event.title)}`,
-    `URL:${BASEURL}/event?event=${event.id}`,
-    `LOCATION:${escapeICalText(event.location ?? "")}`,
-    `DESCRIPTION:${escapeICalText(buildDescription(event))}`,
+    `SUMMARY:${escapeICalText(content.title)}`,
+    `URL:${BASEURL}/content?id=${content.id}`,
+    `LOCATION:${escapeICalText(session.location_name ?? "")}`,
+    `DESCRIPTION:${escapeICalText(buildDescription(content))}`,
     "END:VEVENT",
     "END:VCALENDAR",
   ];

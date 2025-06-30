@@ -19,7 +19,7 @@ function EventCell({
   return (
     <TableRow className="hover:bg-gray-800 focus-within:ring-2 focus-within:ring-indigo-500 transition-colors">
       <Link
-        href={`../event?id=${event.id}`}
+        href={`../content?id=${event.content_id}`}
         className="contents cursor-pointer"
       >
         <TableCell

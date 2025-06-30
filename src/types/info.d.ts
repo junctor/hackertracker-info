@@ -17,13 +17,13 @@ interface Person {
   affiliations: { organization: string; title: string }[];
   description: string;
   links: { sort_order: number; title: string; url: string }[];
-  event_ids: number[];
   media: PersonMedia[];
   events: PersonEvent[];
 }
 
 interface PersonEvent {
   id: number;
+  content_id: number;
   title: string;
   begin: string;
   end: string;
@@ -69,19 +69,16 @@ export interface ScheduleLink {
 
 export interface ScheduleEvent {
   id: number;
+  content_id: number;
   title: string;
-  description: string;
   begin: string;
   end: string;
   beginTimestampSeconds: number | null;
   endTimestampSeconds: number | null;
   location: string | null;
   color: string | null;
-  category: string | null;
   tags: ScheduleTag[];
   speakers: string | null;
-  speaker_details: ScheduleSpeaker[];
-  links: ScheduleLink[];
 }
 
 export type Articles = Article[];
@@ -154,6 +151,15 @@ export type ProcessedContents = ProcessedContent[];
 export interface ProcessedContent {
   id: number;
   title: string;
+  tags: ScheduleTag[];
+  people: string[];
+}
+
+export type ProcessedContentById = Record<number, ProcessedContentId>;
+
+export interface ProcessedContentId {
+  id: number;
+  title: string;
   description: string;
   sessions: ContentSessionLite[];
   links: ContentLink[];
@@ -167,6 +173,7 @@ export interface ContentSessionLite {
   end_tsz: string;
   timezone_name: string;
   location_id: number | null;
+  location_name: string | null;
 }
 
 export interface ContentLink {
@@ -181,7 +188,7 @@ export interface ContentPersonWithName {
   name: string | null;
 }
 
-export type SearchType = "person" | "event" | "content" | "organization";
+export type SearchType = "person" | "content" | "organization";
 
 export interface SearchItem {
   id: number;

@@ -32,7 +32,7 @@ const RAW_MENU = [
   {
     sort_order: 2,
     title: "Content",
-    href: "/content",
+    href: "/contents",
     description: "Explore all content for DEF CON 33.",
     icon: ListBulletIcon,
   },

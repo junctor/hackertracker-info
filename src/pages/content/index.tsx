@@ -5,15 +5,10 @@ import { fetcher } from "@/lib/misc";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
-import ContentList from "@/components/content/ContentList";
-import ContentDetail from "@/components/content/ContentDetail";
+import Content from "@/components/content/Content";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
-import type {
-  ProcessedContent,
-  ProcessedContents,
-  TagTypes,
-} from "@/types/info";
+import type { ProcessedContentById, ProcessedContentId } from "@/types/info";
 
 export default function ContentPage() {
   const params = useSearchParams();
@@ -24,53 +19,29 @@ export default function ContentPage() {
   );
 
   const {
-    data: items,
+    data: contentsById,
     error,
     isLoading,
-  } = useSWR<ProcessedContents>("/ht/processedContent.json", fetcher);
+  } = useSWR<ProcessedContentById>("/ht/processedContentById.json", fetcher);
 
-  const {
-    data: tags,
-    error: tagError,
-    isLoading: tagIsLoading,
-  } = useSWR<TagTypes>("/ht/tagTypes.json", fetcher);
+  const selectedContent = useMemo<ProcessedContentId | null>(() => {
+    if (contentId === null) return null;
+    return contentsById ? (contentsById[contentId] ?? null) : null;
+  }, [contentsById, contentId]);
 
-  const selectedContent = useMemo<ProcessedContent | null>(() => {
-    if (!items || contentId === null) return null;
-    return items.find((c) => c.id === contentId) ?? null;
-  }, [items, contentId]);
-
-  if (isLoading || tagIsLoading) return <Loading />;
+  if (isLoading) return <Loading />;
   if (error) return <Error msg="Failed to load content" />;
-  if (contentId !== null && !selectedContent)
-    return <Error msg="Content not found" />;
-
-  if (tagError) return <Error msg="Failed to load tags" />;
+  if (selectedContent === null) return <Error msg="Content not found" />;
 
   return (
     <>
       <Head>
-        <title>
-          {selectedContent
-            ? selectedContent.title + " | DEF CON Content"
-            : "Content | DEF CON"}
-        </title>
-        <meta
-          name="description"
-          content={
-            selectedContent
-              ? selectedContent.description
-              : "All DEF CON 33 content items."
-          }
-        />
+        <title>{selectedContent.title + " | DEF CON Content"}</title>
+        <meta name="description" content={selectedContent.description} />
       </Head>
       <main>
         <Heading />
-        {selectedContent ? (
-          <ContentDetail content={selectedContent} />
-        ) : (
-          <ContentList content={items!} tags={tags ?? []} />
-        )}
+        <Content content={selectedContent} />
       </main>
     </>
   );

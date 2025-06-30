@@ -2,13 +2,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { eventTime } from "@/lib/dates";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Card, CardContent } from "@/components/ui/card";
 import Markdown from "@/components/markdown/Markdown";
 import { Person } from "@/types/info";
@@ -21,25 +14,6 @@ export default function PersonDisplay({ person }: { person: Person }) {
 
   return (
     <div className="min-h-screen text-gray-100 container mx-5 py-8">
-      {/* Breadcrumb */}
-      <Breadcrumb className="text-gray-400">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/people" className="hover:text-gray-100">
-                People
-              </Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator className="mx-2" />
-          <BreadcrumbItem>
-            <BreadcrumbLink className="text-gray-200">
-              {person.name}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
       {/* Header */}
       <h1 className="mt-4 text-4xl font-extrabold">{person.name}</h1>
 
@@ -126,13 +100,9 @@ export default function PersonDisplay({ person }: { person: Person }) {
                     key={e.id}
                     className="bg-gray-700 border border-gray-600 flex items-start p-4 hover:shadow-lg transition-shadow"
                   >
-                    <span
-                      style={{ backgroundColor: e.type.color }}
-                      className="block w-1 h-full rounded-md mr-4"
-                    />
                     <CardContent className="p-0">
                       <Link
-                        href={`/event?id=${e.id}`}
+                        href={`/content?id=${e.content_id}`}
                         className="text-lg font-semibold text-gray-100 hover:underline"
                       >
                         {e.title}

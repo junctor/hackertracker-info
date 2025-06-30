@@ -12,7 +12,6 @@ import {
 import {
   MagnifyingGlassIcon,
   PersonIcon,
-  CalendarIcon,
   FileTextIcon,
   GlobeIcon,
   Cross1Icon,
@@ -37,7 +36,6 @@ export default function GlobalSearch() {
 
   const icons: Record<SearchType, React.ElementType> = {
     person: PersonIcon,
-    event: CalendarIcon,
     content: FileTextIcon,
     organization: GlobeIcon,
   };

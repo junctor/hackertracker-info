@@ -12,9 +12,9 @@ import {
   ListBulletIcon,
   MobileIcon,
   CalendarIcon,
-  GitHubLogoIcon,
   LightningBoltIcon,
 } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 const RAW_MENU = [
   { sort_order: 1, title: "Schedule", href: "/schedule", icon: CalendarIcon },
@@ -47,48 +47,56 @@ const RAW_MENU = [
     icon: LightningBoltIcon,
   },
   { sort_order: 19, title: "Apps", href: "/apps", icon: MobileIcon },
-  {
-    sort_order: 20,
-    title: "GitHub",
-    href: "https://github.com/junctor/hackertracker-info",
-    icon: GitHubLogoIcon,
-  },
 ];
 
 export default function Splash() {
   return (
-    <div className="my-14">
-      {/* Logo */}
-      <div className="flex justify-center mt-5">
-        <Image src={dc33Logo} alt="DEF CON 33 Logo" priority />
-      </div>
-
-      {/* Countdown */}
-      <div className="mt-6 text-center">
+    <main className="py-16 max-w-6xl mx-auto px-4">
+      {/* Hero */}
+      <div className="text-center space-y-4">
+        <Image
+          src={dc33Logo}
+          alt="DEF CON 33 | Aug 6–9 2025 in Las Vegas"
+          priority
+        />
         <Countdown />
       </div>
 
-      {/* Menu Grid */}
-      <div className="mt-12 max-w-6xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+      {/* Menu */}
+      <section className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
         {RAW_MENU.sort((a, b) => a.sort_order - b.sort_order).map((item) => {
           const Icon = item.icon;
           const isExternal = item.href.startsWith("http");
-          return (
+
+          return isExternal ? (
             <a
               key={item.sort_order}
               href={item.href}
-              target={isExternal ? "_blank" : undefined}
-              rel={isExternal ? "noopener noreferrer" : undefined}
-              className="bg-gray-800 hover:bg-gray-700 active:scale-[.98] transition-all p-4 sm:p-5 rounded-xl shadow-md flex flex-col items-center text-center"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={item.title}
+              className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition"
             >
-              <Icon className="h-3 w-3 sm:h-5 sm:w-5 mb-2 text-gray-200" />
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-100">
+              <Icon className="h-6 w-6 mb-2 text-gray-200" />
+              <span className="text-sm font-semibold text-gray-100">
                 {item.title}
-              </h3>
+              </span>
             </a>
+          ) : (
+            <Link
+              key={item.sort_order}
+              href={item.href}
+              aria-label={item.title}
+              className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition"
+            >
+              <Icon className="h-6 w-6 mb-2 text-gray-200" />
+              <span className="text-sm font-semibold text-gray-100">
+                {item.title}
+              </span>
+            </Link>
           );
         })}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

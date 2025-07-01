@@ -59,3 +59,35 @@ export function newsTime(time: Date): string {
 
   return time.toLocaleTimeString(LOCALE, options);
 }
+
+export function formatSessionTime(begin: Date, end: Date): string {
+  const sameDate = begin.toDateString() === end.toDateString();
+
+  if (sameDate) {
+    const dateStr = begin.toLocaleDateString(LOCALE, {
+      timeZone: TZ,
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    });
+
+    const startTime = begin.toLocaleTimeString(LOCALE, {
+      timeZone: TZ,
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const endTime = end.toLocaleTimeString(LOCALE, {
+      timeZone: TZ,
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZoneName: "short",
+    });
+
+    return `${dateStr} at ${startTime} – ${endTime}`;
+  }
+
+  return `${eventTime(begin, false)} – ${eventTime(end, true)}`;
+}

@@ -34,16 +34,22 @@ export default function Events({
     () => Object.entries(dateGroup).map(([day, events]) => ({ day, events })),
     [dateGroup]
   );
-  const dayRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const [activeDay, setActiveDay] = useState<string>(days[0]?.day || "");
 
-  // track which section is in view
+  const [activeDays, setActiveDays] = useState<string[]>([]);
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const day = entry.target.getAttribute("data-day")!;
+          // When any part of the section is in view, mark it active
           if (entry.isIntersecting) {
-            setActiveDay(entry.target.getAttribute("data-day")!);
+            setActiveDays((prev) =>
+              prev.includes(day) ? prev : [...prev, day]
+            );
+          } else {
+            setActiveDays((prev) => prev.filter((d) => d !== day));
           }
         });
       },
@@ -52,13 +58,16 @@ export default function Events({
         threshold: 0,
       }
     );
-    Object.values(dayRefs.current).forEach((el) => el && observer.observe(el));
+
+    Object.values(sectionRefs.current).forEach(
+      (el) => el && observer.observe(el)
+    );
     return () => observer.disconnect();
   }, [days, SCROLL_OFFSET]);
 
   const scrollToDay = useCallback(
     (day: string) => {
-      const el = dayRefs.current[day];
+      const el = sectionRefs.current[day];
       if (!el) return;
       const top =
         el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
@@ -69,6 +78,7 @@ export default function Events({
 
   return (
     <div className="min-h-screen text-gray-100">
+      {/* Top toolbar */}
       <div className="sticky top-0 bg-background z-40 p-2 border-b border-gray-700 flex gap-2 justify-end">
         <div className="flex gap-2">
           <Link href="/bookmarks">
@@ -87,33 +97,34 @@ export default function Events({
           </Link>
         </div>
       </div>
+
       {/* Sticky day tabs */}
       <div className="sticky top-[60px] bg-background z-30 flex flex-wrap justify-center gap-2 py-2 border-b border-gray-700">
         {days.map(({ day }) => (
           <Button
             key={day}
             className="mx-1"
-            variant={activeDay === day ? "secondary" : "outline"}
+            variant={activeDays.includes(day) ? "secondary" : "outline"}
             onClick={() => scrollToDay(day)}
-            aria-current={activeDay === day ? "date" : undefined}
+            aria-current={activeDays.includes(day) ? "date" : undefined}
           >
             {tabDateTitle(day)}
           </Button>
         ))}
       </div>
 
+      {/* Day sections */}
       {days.map(({ day, events }) => (
-        <section key={day}>
-          <h2
-            ref={(el) => {
-              dayRefs.current[day] = el;
-            }}
-            data-day={day}
-            className="scroll-mt-[116px] font-bold text-xl md:text-2xl ml-5 mt-6 mb-3 text-gray-100"
-          >
+        <section
+          key={day}
+          ref={(el: HTMLDivElement | null) => {
+            sectionRefs.current[day] = el;
+          }}
+          data-day={day}
+        >
+          <h2 className="scroll-mt-[116px] font-bold text-xl md:text-2xl ml-5 mt-6 mb-3 text-gray-100">
             {eventDayTable(day)}
           </h2>
-
           <div className="overflow-x-auto px-5">
             <Table className="w-full mb-8 table-fixed min-w-full">
               <colgroup>

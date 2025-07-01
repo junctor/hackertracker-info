@@ -22,8 +22,8 @@ import {
   ListBulletIcon,
   MobileIcon,
   RocketIcon,
-  GitHubLogoIcon,
   LightningBoltIcon,
+  GitHubLogoIcon,
 } from "@radix-ui/react-icons";
 import GlobalSearch from "./GlobalSearch";
 import localFont from "next/font/local";
@@ -104,7 +104,7 @@ export default function Heading() {
       <div className="max-w-screen-xl mx-auto flex items-center justify-between">
         {/* Logo + Primary Nav */}
         <div className="flex items-center space-x-6">
-          <Link href="https://defcon.org/html/defcon-33/dc-33-index.html">
+          <Link href="/">
             <h1
               className={`${museoFont.className} text-2xl md:text-3xl font-bold`}
             >
@@ -159,7 +159,6 @@ export default function Heading() {
 
         {/* Action Icons */}
         <div className="flex items-center space-x-2">
-          <GlobalSearch />
           <Button
             variant="ghost"
             size="icon"
@@ -184,6 +183,7 @@ export default function Heading() {
           >
             <GitHubLogoIcon />
           </Button>
+          <GlobalSearch />
         </div>
       </div>
       <Separator className="absolute bottom-0 left-0 right-0" />

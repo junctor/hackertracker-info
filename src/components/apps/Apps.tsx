@@ -81,7 +81,7 @@ export default function Apps() {
         backgroundSize: "200% 200%",
         backgroundPosition: "0% 0%",
       }}
-      className="min-h-screen bg-gradient-to-br from-[#283] via-[#47A] to-[#6CE] text-white flex flex-col items-center justify-center px-4 text-center"
+      className="min-h-screen text-white flex flex-col items-center px-4 text-center my-10"
     >
       <h1
         ref={titleRef}

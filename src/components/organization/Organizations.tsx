@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Card, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react";
 
@@ -20,6 +20,14 @@ export default function Orgs({ orgs, title }: OrgsProps) {
       orgs.filter((o) => o.name.toLowerCase().includes(search.toLowerCase())),
     [orgs, search]
   );
+
+  const getInitials = (name: string) =>
+    name
+      .split(" ")
+      .map((w) => w[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
 
   return (
     <section className="my-10 mx-5">
@@ -51,29 +59,43 @@ export default function Orgs({ orgs, title }: OrgsProps) {
             >
               <Card
                 className="
-                  bg-gray-800
+                  bg-gradient-to-br from-gray-800 to-gray-700
                   border border-gray-700
                   shadow-lg
                   rounded-2xl
-                  hover:bg-gray-700
-                  hover:ring-2 hover:ring-indigo-500
+                  hover:from-gray-700 hover:to-gray-600
+                  ring-offset-2 ring-indigo-500 hover:ring-2
                   transition-all duration-200
                   overflow-hidden
                 "
               >
-                <CardHeader className="flex items-center space-x-4 p-4 pb-0">
-                  <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gray-900">
-                    <Image
-                      src={o.logo.url}
-                      alt={`${o.name} logo`}
-                      fill
-                      style={{ objectFit: "contain" }}
-                    />
-                  </div>
-                  <h3 className="text-lg font-medium text-gray-100">
+                <CardContent className="flex flex-col items-center p-6 space-y-4">
+                  {/* logo or initials fallback */}
+                  {o.logo?.url ? (
+                    <div className="relative w-24 h-24">
+                      <Image
+                        src={o.logo.url}
+                        alt={`${o.name} logo`}
+                        fill
+                        style={{ objectFit: "contain" }}
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="
+                        flex items-center justify-center
+                        w-24 h-24 rounded-full
+                        bg-indigo-600
+                        text-white text-2xl font-bold
+                      "
+                    >
+                      {getInitials(o.name)}
+                    </div>
+                  )}
+                  <h3 className="text-lg font-medium text-gray-100 text-center">
                     {o.name}
                   </h3>
-                </CardHeader>
+                </CardContent>
               </Card>
             </Link>
           ))}

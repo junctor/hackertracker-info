@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,35 +10,58 @@ import { ExternalLinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-export default function OrgDetails({ org }: { org: Organization }) {
+interface OrgDetailsProps {
+  org: Organization;
+}
+
+export default function OrgDetails({ org }: OrgDetailsProps) {
+  // helper to grab up to 2 initials
+  const getInitials = (name: string) =>
+    name
+      .split(" ")
+      .map((w) => w[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+
   return (
-    <article className="space-y-8 my-10 mx-5">
+    <article className="space-y-8 my-10 mx-5 max-w-screen-lg">
       {/* Hero header */}
-      <header className="flex flex-col md:flex-row items-center md:items-start gap-6">
-        <div className="relative w-32 h-32 rounded-lg overflow-hidden bg-gray-900">
-          <Image
-            src={org.logo.url}
-            alt={`${org.name} logo`}
-            layout="fill"
-            objectFit="contain"
-          />
+      <header className="flex flex-col md:flex-row items-center md:items-start gap-8 bg-gradient-to-br from-gray-800 to-gray-700 rounded-2xl p-6">
+        {/* Logo or Initials */}
+        <div className="flex-shrink-0 relative w-32 h-32 rounded-lg overflow-hidden bg-gradient-to-tr from-indigo-600 to-indigo-400">
+          {org.logo?.url ? (
+            <Image
+              src={org.logo.url}
+              alt={`${org.name} logo`}
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          ) : (
+            <div className="flex items-center justify-center w-full h-full text-white text-3xl font-bold">
+              {getInitials(org.name)}
+            </div>
+          )}
         </div>
 
-        <div className="flex-1 space-y-2">
-          <h1 className="text-3xl font-bold text-gray-100">{org.name}</h1>
+        {/* Title + Action */}
+        <div className="flex-1 space-y-4">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white">
+            {org.name}
+          </h1>
 
           {org.tag_id_as_organizer && (
             <Link href={`/tag?id=${org.tag_id_as_organizer}`} passHref>
               <Button
+                asChild
                 variant="secondary"
                 size="default"
-                className="
-                  inline-flex items-center space-x-2
-                  transform transition hover:scale-105
-                "
+                className="inline-flex items-center space-x-2 transition-transform hover:scale-105"
               >
-                <CalendarIcon className="h-5 w-5 text-indigo-500" />
-                <span>See {org.name} Events</span>
+                <a>
+                  <CalendarIcon className="h-5 w-5 text-indigo-400" />
+                  <span>See {org.name} Events</span>
+                </a>
               </Button>
             </Link>
           )}

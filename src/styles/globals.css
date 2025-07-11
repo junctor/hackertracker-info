@@ -143,3 +143,13 @@ body {
   --dc-gray: "#2D2D2D";
   --dc-border: "#646464";
 }
+
+h1.logo {
+  transition:
+    transform 0.2s ease,
+    letter-spacing 0.2s ease;
+}
+h1.logo:hover {
+  transform: scale(1.05);
+  letter-spacing: 0.05em;
+}

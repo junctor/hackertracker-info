@@ -31,7 +31,7 @@ export default function Heading() {
         <div className="flex items-center space-x-6">
           <Link href="/">
             <h1
-              className={`${museoFont.className} text-2xl md:text-3xl font-bold`}
+              className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
             >
               <span className="block md:hidden">DC33</span>
               <span className="hidden md:block">DEF CON 33</span>

@@ -2,51 +2,27 @@ import React from "react";
 import Countdown from "@/components/countdown/Countdown";
 import Image from "next/image";
 import dc33Logo from "../../public/images/33-calls-header-2.webp";
-import {
-  PersonIcon,
-  GlobeIcon,
-  FileTextIcon,
-  SpeakerLoudIcon,
-  BackpackIcon,
-  GroupIcon,
-  ListBulletIcon,
-  MobileIcon,
-  CalendarIcon,
-  LightningBoltIcon,
-} from "@radix-ui/react-icons";
 import Link from "next/link";
+import { SITE_MENU } from "@/lib/menu";
+import { CalendarIcon } from "lucide-react";
+import { MobileIcon } from "@radix-ui/react-icons";
 
-const RAW_MENU = [
-  { sort_order: 1, title: "Schedule", href: "/schedule", icon: CalendarIcon },
-  { sort_order: 2, title: "Content", href: "/contents", icon: ListBulletIcon },
-  { sort_order: 6, title: "People", href: "/people", icon: PersonIcon },
-  { sort_order: 8, title: "Maps", href: "/maps", icon: GlobeIcon },
+const navMenu = [
   {
-    sort_order: 10,
-    title: "Code of Conduct",
-    href: "/code-of-conduct",
-    icon: FileTextIcon,
+    sort_order: 0,
+    title: "Schedule",
+    href: "/schedule",
+    description: "View the full schedule of talks and events.",
+    icon: CalendarIcon,
   },
+  ...SITE_MENU,
   {
-    sort_order: 12,
-    title: "Announcements",
-    href: "/announcements",
-    icon: SpeakerLoudIcon,
+    sort_order: 19,
+    title: "Apps",
+    href: "/apps",
+    description: "View the available apps.",
+    icon: MobileIcon,
   },
-  { sort_order: 14, title: "Villages", href: "/villages", icon: BackpackIcon },
-  {
-    sort_order: 16,
-    title: "Communities",
-    href: "/communities",
-    icon: GroupIcon,
-  },
-  {
-    sort_order: 18,
-    title: "Contests",
-    href: "/contests",
-    icon: LightningBoltIcon,
-  },
-  { sort_order: 19, title: "Apps", href: "/apps", icon: MobileIcon },
 ];
 
 export default function Splash() {
@@ -64,7 +40,7 @@ export default function Splash() {
 
       {/* Menu */}
       <section className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-        {RAW_MENU.sort((a, b) => a.sort_order - b.sort_order).map((item) => {
+        {navMenu.map((item) => {
           const Icon = item.icon;
           const isExternal = item.href.startsWith("http");
 

@@ -12,85 +12,10 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import {
-  PersonIcon,
-  GlobeIcon,
-  FileTextIcon,
-  SpeakerLoudIcon,
-  BackpackIcon,
-  GroupIcon,
-  ListBulletIcon,
-  MobileIcon,
-  RocketIcon,
-  LightningBoltIcon,
-  GitHubLogoIcon,
-} from "@radix-ui/react-icons";
+import { MobileIcon, RocketIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
 import GlobalSearch from "./GlobalSearch";
 import localFont from "next/font/local";
-
-const RAW_MENU = [
-  {
-    sort_order: 2,
-    title: "Content",
-    href: "/contents",
-    description: "Explore all content for DEF CON 33.",
-    icon: ListBulletIcon,
-  },
-  {
-    sort_order: 6,
-    title: "People",
-    href: "/people",
-    description: "Browse bios and sessions for all DEF CON 33 participants.",
-    icon: PersonIcon,
-  },
-  {
-    sort_order: 8,
-    title: "Maps",
-    href: "/maps",
-    description: "Navigate DEF CON with venue and floor maps.",
-    icon: GlobeIcon,
-  },
-  {
-    sort_order: 10,
-    title: "Code of Conduct",
-    href: "/code-of-conduct",
-    description: "Community expectations and event rules.",
-    icon: FileTextIcon,
-  },
-  {
-    sort_order: 12,
-    title: "Announcements",
-    href: "/announcements",
-    description: "Live updates and important news during the event.",
-    icon: SpeakerLoudIcon,
-  },
-  {
-    sort_order: 14,
-    title: "Villages",
-    href: "/villages",
-    description: "Hands-on areas for learning, building, and hacking.",
-    icon: BackpackIcon,
-  },
-  {
-    sort_order: 16,
-    title: "Communities",
-    href: "/communities",
-    description: "Meetups and informal groups at DEF CON.",
-    icon: GroupIcon,
-  },
-  {
-    sort_order: 18,
-    title: "Contests",
-    href: "/contests",
-    description: "Compete in challenges from lockpicking to CTFs.",
-    icon: LightningBoltIcon,
-  },
-];
-
-// Pre-sort once
-const navMenuList = RAW_MENU.slice().sort(
-  (a, b) => a.sort_order - b.sort_order
-);
+import { SITE_MENU } from "@/lib/menu";
 
 const museoFont = localFont({
   src: "../../../public/fonts/Museo700-Regular.woff2",
@@ -126,11 +51,11 @@ export default function Heading() {
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="flex items-center gap-1">
                   <RocketIcon className="w-4 h-4 flex-shrink-0" />
-                  <span>Explore</span>
+                  <span className="hidden md:block">Explore</span>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-56 md:w-80 gap-4 p-2">
-                    {navMenuList.map(
+                  <ul className="grid w-56 md:w-80 gap-4 p-2 max-h-[calc(100vh-4rem)] overflow-y-auto">
+                    {SITE_MENU.map(
                       ({ title, href, description, icon: Icon }) => (
                         <li key={title}>
                           <NavigationMenuLink asChild>

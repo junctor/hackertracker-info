@@ -20,7 +20,7 @@ export default function ContentsPage() {
     data: tags,
     error: tagError,
     isLoading: tagIsLoading,
-  } = useSWR<TagTypes>("/ht/tagTypes.json", fetcher);
+  } = useSWR<TagTypes>("/ht/tagtypes.json", fetcher);
 
   if (isLoading || tagIsLoading) return <Loading />;
   if (error) return <Error msg="Failed to load content" />;

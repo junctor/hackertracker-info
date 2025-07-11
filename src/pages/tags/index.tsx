@@ -14,7 +14,7 @@ export default function TagsPage() {
     data: tags,
     error,
     isLoading,
-  } = useSWR<TagTypes>("/ht/tagTypes.json", fetcher);
+  } = useSWR<TagTypes>("/ht/tagtypes.json", fetcher);
 
   if (isLoading) return <Loading />;
   if (error || !tags) return <Error />;

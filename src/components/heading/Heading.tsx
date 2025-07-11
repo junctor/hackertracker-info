@@ -67,7 +67,7 @@ export default function Heading() {
                                 <Icon className="w-5 h-5 flex-shrink-0" />
                                 <span className="font-medium">{title}</span>
                               </div>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-muted-foreground hidden sm:block">
                                 {description}
                               </p>
                             </Link>

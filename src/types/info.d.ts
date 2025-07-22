@@ -220,3 +220,64 @@ export interface TagType {
   tags: Tag[];
   conference: string;
 }
+
+export interface FirestoreTimestamp {
+  type: "firestore/timestamp/1.0";
+  seconds: number;
+  nanoseconds: number;
+}
+
+// Map object interface
+export interface ConferenceMap {
+  name: string;
+  name_text: string;
+  filename: string;
+  url: string;
+  id: number;
+  sort_order: number;
+  file: string;
+  description: string;
+}
+
+// Main Conference interface
+export interface Conference {
+  conference_id: number;
+  id: number;
+  name: string;
+  code: string;
+  tagline_text: string;
+  description: string;
+  timezone: string;
+
+  start_date: string; // e.g., "2025-08-07"
+  end_date: string; // e.g., "2025-08-10"
+
+  start_timestamp_str: string;
+  end_timestamp_str: string;
+  kickoff_timestamp_str: string;
+
+  begin_tsz: string;
+  end_tsz: string;
+  kickoff_tsz: string;
+
+  start_timestamp: FirestoreTimestamp;
+  end_timestamp: FirestoreTimestamp;
+  kickoff_timestamp: FirestoreTimestamp;
+  updated_at: FirestoreTimestamp;
+
+  feedbackform_ratelimit_seconds: number;
+
+  home_menu_id: number;
+  enable_merch: boolean;
+  enable_merch_cart: boolean;
+  merch_mandatory_acknowledgement: string;
+  merch_tax_statement: string;
+  supportdoc: string;
+  codeofconduct: string;
+  link: string;
+  hidden: boolean;
+
+  emergency_document_id: number | null;
+
+  maps?: ConferenceMap[];
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import Countdown from "@/components/countdown/Countdown";
 import Image from "next/image";
-import dc33Logo from "../../public/images/33-calls-header-2.webp";
+import dc33Logo from "../../../public/images/33-calls-header-2.webp";
 import Link from "next/link";
 import { SITE_MENU } from "@/lib/menu";
 import { CalendarIcon } from "lucide-react";

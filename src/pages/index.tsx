@@ -1,4 +1,4 @@
-import Splash from "@/components/Splash";
+import Splash from "@/components/splash/Splash";
 import Head from "next/head";
 import React from "react";
 

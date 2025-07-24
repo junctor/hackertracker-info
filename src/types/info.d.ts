@@ -227,7 +227,6 @@ export interface FirestoreTimestamp {
   nanoseconds: number;
 }
 
-// Map object interface
 export interface ConferenceMap {
   name: string;
   name_text: string;
@@ -237,9 +236,9 @@ export interface ConferenceMap {
   sort_order: number;
   file: string;
   description: string;
+  svg_url: string;
 }
 
-// Main Conference interface
 export interface Conference {
   conference_id: number;
   id: number;

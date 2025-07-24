@@ -19,7 +19,7 @@ export default function MapsPage() {
   if (error || !conference) return <Error />;
 
   const mapLinks =
-    conference.maps?.map((map) => ({ name: map.name, url: map.url })) ?? [];
+    conference.maps?.sort((a, b) => a.sort_order - b.sort_order) ?? [];
 
   return (
     <>

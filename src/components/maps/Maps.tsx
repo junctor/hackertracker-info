@@ -30,7 +30,7 @@ function MapCard({ map }: { map: ConferenceMap }) {
 
       {!svgError ? (
         <img
-          src={map.svg_url}
+          src={new URL(map.svg_url).pathname}
           alt={`Map of ${map.name}`}
           className="w-full h-auto rounded border mb-4"
           onError={() => setSvgError(true)}

@@ -32,7 +32,7 @@ export default function OrgDetails({ org }: OrgDetailsProps) {
         <div className="flex-shrink-0 relative w-32 h-32 rounded-lg overflow-hidden bg-gradient-to-tr from-indigo-600 to-indigo-400">
           {org.logo?.url ? (
             <Image
-              src={org.logo.url}
+              src={new URL(org.logo.url).pathname}
               alt={`${org.name} logo`}
               fill
               style={{ objectFit: "contain" }}

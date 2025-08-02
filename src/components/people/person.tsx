@@ -23,7 +23,7 @@ export default function PersonDisplay({ person }: { person: Person }) {
           {avatarUrl && (
             <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-lg bg-gray-700">
               <Image
-                src={avatarUrl}
+                src={new URL(avatarUrl).pathname}
                 alt={`${person.name} avatar`}
                 fill
                 className="object-contain"

@@ -1,7 +1,6 @@
 import {
   PersonIcon,
   GlobeIcon,
-  FileTextIcon,
   SpeakerLoudIcon,
   BackpackIcon,
   GroupIcon,
@@ -14,19 +13,19 @@ import {
 
 export const SITE_MENU = [
   {
+    sort_order: 1,
+    title: "readme.nfo",
+    href: "/readme.nfo",
+    description: "A collection of information related to DEF CON.",
+    icon: InfoCircledIcon,
+  },
+  {
     sort_order: 2,
     title: "Content",
     href: "/contents",
     description:
       "Browse all talks, workshops, and presentations at DEF CON 33.",
     icon: ListBulletIcon,
-  },
-  {
-    sort_order: 1,
-    title: "readme.nfo",
-    href: "/readme.nfo",
-    description: "A collection of information related to DEF CON.",
-    icon: InfoCircledIcon,
   },
   {
     sort_order: 4,
@@ -41,13 +40,6 @@ export const SITE_MENU = [
     href: "/maps",
     description: "View detailed venue layouts and floor plans.",
     icon: GlobeIcon,
-  },
-  {
-    sort_order: 8,
-    title: "Code of Conduct",
-    href: "/code-of-conduct",
-    description: "Read DEF CON’s community guidelines and event policies.",
-    icon: FileTextIcon,
   },
   {
     sort_order: 10,

@@ -7,125 +7,111 @@ import Markdown from "@/components/markdown/Markdown";
 import { Person } from "@/types/info";
 
 export default function PersonDisplay({ person }: { person: Person }) {
-  // primary avatar if present
-  const avatarUrl = person.media.find((p) => p.sort_order === 1)?.url;
-
+  const avatar = person.media.find((m) => m.sort_order === 1)?.url;
   return (
-    <div className="min-h-screen text-gray-100 max-w-7xl mx-auto px-4 py-10 overflow-x-hidden">
-      {/* Header */}
-      <header className="mb-8">
-        <h1 className="text-5xl font-extrabold">{person.name}</h1>
-      </header>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Sidebar: Optional Avatar + Details */}
-        <aside className="space-y-6">
-          {avatarUrl && (
-            <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-lg bg-gray-700">
-              <Image
-                src={new URL(avatarUrl).pathname}
-                alt={`${person.name} avatar`}
-                fill
-                className="object-contain"
-                style={{ objectPosition: "center top" }}
-              />
+    <div className="max-w-screen-lg mx-auto px-4 py-10 space-y-10">
+      {/* Hero */}
+      <Card className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6">
+        {avatar ? (
+          <div className="w-32 h-32 rounded-full overflow-hidden shadow-lg bg-gray-700">
+            <Image
+              src={new URL(avatar).pathname}
+              alt={person.name}
+              width={128}
+              height={128}
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <div className="w-32 h-32 flex items-center justify-center text-3xl text-white bg-gray-700 rounded-full">
+            {person.name
+              .split(" ")
+              .map((w) => w[0])
+              .slice(0, 2)
+              .join("")}
+          </div>
+        )}
+        <div className="flex-1 space-y-3">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white">
+            {person.name}
+          </h1>
+          <div className="space-y-1 text-gray-300">
+            {person.affiliations.map((a) => (
+              <p key={a.organization} className="text-sm">
+                {a.title} @ {a.organization}
+              </p>
+            ))}
+          </div>
+          {person.links.length > 0 && (
+            <div className="flex flex-wrap gap-3">
+              {person.links
+                .sort((a, b) => a.sort_order - b.sort_order)
+                .map((l) => (
+                  <a
+                    key={l.url}
+                    href={l.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-indigo-400 hover:underline text-sm transition"
+                  >
+                    {l.title}
+                  </a>
+                ))}
             </div>
           )}
+        </div>
+      </Card>
 
-          {person.affiliations.length > 0 && (
-            <Card className="bg-gray-800">
-              <CardContent>
-                <h2 className="text-xl font-semibold text-gray-100 mb-2">
-                  Affiliations
-                </h2>
-                <ul className="space-y-2 text-gray-300">
-                  {person.affiliations.map((a) => (
-                    <li key={a.organization}>
-                      <p className="font-medium text-gray-200">
-                        {a.organization}
-                      </p>
-                      <p className="text-sm italic">{a.title}</p>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          )}
+      {/* About */}
+      {person.description && (
+        <section>
+          <h2 className="text-2xl font-semibold text-gray-200 mb-4">About</h2>
+          <div className="prose prose-invert max-w-none text-gray-300">
+            <Markdown content={person.description} />
+          </div>
+        </section>
+      )}
 
-          {person.links.length > 0 && (
-            <Card className="bg-gray-800">
-              <CardContent>
-                <h2 className="text-xl font-semibold text-gray-100 mb-2">
-                  Links
-                </h2>
-                <ul className="space-y-2">
-                  {person.links
-                    .sort((a, b) => a.sort_order - b.sort_order)
-                    .map((l) => (
-                      <li key={l.url}>
-                        <a
-                          href={l.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-indigo-400 hover:text-indigo-200 hover:underline"
-                        >
-                          {l.title}
-                        </a>
-                      </li>
-                    ))}
-                </ul>
-              </CardContent>
-            </Card>
-          )}
-        </aside>
-
-        {/* Main: Bio + Events */}
-        <main className="lg:col-span-2 space-y-12">
-          {/* Bio Section */}
-          {person.description && (
-            <section>
-              <h2 className="text-2xl font-semibold text-gray-100 mb-4">
-                About
-              </h2>
-              <div className="prose prose-invert max-w-none">
-                <Markdown content={person.description} />
-              </div>
-            </section>
-          )}
-
-          {/* Events Section */}
-          {person.events.length > 0 && (
-            <section>
-              <h2 className="text-2xl font-semibold text-gray-100 mb-4">
-                Events
-              </h2>
-              <div className="grid gap-4">
-                {person.events.map((e) => (
-                  <Card
-                    key={e.id}
-                    className="bg-gray-700 border border-gray-600 hover:shadow-lg transition"
+      {/* Events */}
+      {person.events.length > 0 && (
+        <section>
+          <h2 className="text-2xl font-semibold text-gray-200 mb-4">Events</h2>
+          <div className="relative">
+            <ul className="space-y-8">
+              {person.events.map((e) => (
+                <li key={e.id}>
+                  <Link
+                    href={`/content?id=${e.content_id}`}
+                    className="block w-full group"
                   >
-                    <CardContent>
-                      <Link
-                        href={`/content?id=${e.content_id}`}
-                        className="text-lg font-semibold text-gray-100 hover:underline"
-                      >
-                        {e.title}
-                      </Link>
-                      <p className="text-sm text-gray-400 mt-1">
-                        {`${eventTime(new Date(e.begin), false)} – ${eventTime(
-                          new Date(e.end)
-                        )}`}
-                      </p>
-                      <p className="text-sm text-gray-400">{e.location.name}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </section>
-          )}
-        </main>
-      </div>
+                    <Card
+                      className="
+                        bg-gray-700 border-l-4 border-indigo-400 pl-5 h-full
+                        transition-shadow duration-200 ease-out
+                        group-hover:shadow-md
+                        group-hover:bg-gray-600
+                        group-hover:border-indigo-300
+                      "
+                    >
+                      <CardContent className="p-4">
+                        <h3 className="text-lg font-semibold text-gray-100">
+                          {e.title}
+                        </h3>
+                        <p className="mt-1 text-sm text-gray-400">
+                          {`${eventTime(new Date(e.begin), false)} – ${eventTime(new Date(e.end))}`}
+                        </p>
+                        <p className="text-sm text-gray-400">
+                          {e.location.name}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

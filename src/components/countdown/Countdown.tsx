@@ -1,7 +1,8 @@
+// src/components/countdown/Countdown.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getCountdown } from "../../lib/timer";
+import { getCountdown, TARGET_DATE_MS } from "../../lib/timer";
 import localFont from "next/font/local";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -12,7 +13,6 @@ const atkinsonFont = localFont({
   display: "swap",
   variable: "--font-atkinson",
 });
-
 const museoFont = localFont({
   src: "../../../public/fonts/Museo700-Regular.woff2",
   display: "swap",
@@ -24,19 +24,32 @@ function padTime(num: number): string {
 }
 
 function Countdown() {
-  const [timer, setTimer] = useState<Timer>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  const [expired, setExpired] = useState(false);
+  const [timer, setTimer] = useState(getCountdown());
+
+  useEffect(() => {
+    // one-time setup: check immediately, then every second
+    const tick = () => {
+      const now = Date.now();
+      if (now >= TARGET_DATE_MS) {
+        setExpired(true);
+      } else {
+        setTimer(getCountdown());
+      }
+    };
+
+    tick(); // do it immediately on mount
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  if (expired) return null;
 
   const animateCountdownFlip = (
     el: HTMLElement | null,
     flashColor: string = "#6CE"
   ) => {
     if (!el) return;
-
     gsap.fromTo(
       el,
       { y: 10, opacity: 0, color: flashColor },
@@ -58,41 +71,29 @@ function Countdown() {
     );
   };
 
-  const secondsRef = useRef<HTMLDivElement>(null);
-  const minutesRef = useRef<HTMLDivElement>(null);
-  const hoursRef = useRef<HTMLDivElement>(null);
   const daysRef = useRef<HTMLDivElement>(null);
+  const hoursRef = useRef<HTMLDivElement>(null);
+  const minutesRef = useRef<HTMLDivElement>(null);
+  const secondsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer(getCountdown());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useGSAP(() => {
-    animateCountdownFlip(daysRef.current, "#47A");
-  }, [timer.days]);
-
-  useGSAP(() => {
-    animateCountdownFlip(hoursRef.current, "#E67");
-  }, [timer.hours]);
-
-  useGSAP(() => {
-    animateCountdownFlip(minutesRef.current, "#CB4");
-  }, [timer.minutes]);
-
-  useGSAP(() => {
-    animateCountdownFlip(secondsRef.current, "#6CE");
-  }, [timer.seconds]);
+  useGSAP(() => animateCountdownFlip(daysRef.current, "#47A"), [timer.days]);
+  useGSAP(() => animateCountdownFlip(hoursRef.current, "#E67"), [timer.hours]);
+  useGSAP(
+    () => animateCountdownFlip(minutesRef.current, "#CB4"),
+    [timer.minutes]
+  );
+  useGSAP(
+    () => animateCountdownFlip(secondsRef.current, "#6CE"),
+    [timer.seconds]
+  );
 
   return (
     <div className="grid place-items-center mt-3 md:mt-10 text-center mx-5 grid-cols-2 sm:grid-cols-4 gap-4 px-20">
+      {/** Days **/}
       <div>
         <span
-          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block dc-purple ${atkinsonFont.className}`}
           ref={daysRef}
+          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block dc-purple ${atkinsonFont.className}`}
         >
           {padTime(timer.days)}
         </span>
@@ -103,10 +104,11 @@ function Countdown() {
         </span>
       </div>
 
+      {/** Hours **/}
       <div>
         <span
-          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block ${atkinsonFont.className}`}
           ref={hoursRef}
+          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block ${atkinsonFont.className}`}
         >
           {padTime(timer.hours)}
         </span>
@@ -117,10 +119,11 @@ function Countdown() {
         </span>
       </div>
 
+      {/** Minutes **/}
       <div>
         <span
-          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block ${atkinsonFont.className}`}
           ref={minutesRef}
+          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block ${atkinsonFont.className}`}
         >
           {padTime(timer.minutes)}
         </span>
@@ -131,10 +134,11 @@ function Countdown() {
         </span>
       </div>
 
+      {/** Seconds **/}
       <div>
         <span
-          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block ${atkinsonFont.className}`}
           ref={secondsRef}
+          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block ${atkinsonFont.className}`}
         >
           {padTime(timer.seconds)}
         </span>

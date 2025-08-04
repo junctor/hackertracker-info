@@ -9,6 +9,7 @@ import {
   CubeIcon,
   MagicWandIcon,
   InfoCircledIcon,
+  BookmarkIcon,
 } from "@radix-ui/react-icons";
 
 export const SITE_MENU = [
@@ -26,6 +27,13 @@ export const SITE_MENU = [
     description:
       "Browse all talks, workshops, and presentations at DEF CON 33.",
     icon: ListBulletIcon,
+  },
+  {
+    sort_order: 3,
+    title: "Bookmarks",
+    href: "/bookmarks",
+    description: "Save your favorite talks, workshops, and presentations.",
+    icon: BookmarkIcon,
   },
   {
     sort_order: 4,

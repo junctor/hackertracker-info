@@ -11,18 +11,7 @@ type CodeProps = {
 
 export default function Markdown({ content }: { content: string }) {
   return (
-    <div
-      className={[
-        "prose dark:prose-invert antialiased",
-        "prose-sm sm:prose-base md:prose-lg",
-        "break-words",
-        "prose-headings:text-gray-100",
-        "prose-p:text-gray-200 prose-li:text-gray-200 prose-strong:text-gray-100",
-        "prose-a:text-indigo-300 hover:prose-a:text-indigo-200",
-        "prose-code:text-gray-100",
-        "prose-hr:border-gray-700",
-      ].join(" ")}
-    >
+    <div className="prose dark:prose-invert antialiased prose-sm sm:prose-base md:prose-lg break-words prose-headings:text-gray-100 prose-p:text-gray-200 prose-li:text-gray-200 prose-strong:text-gray-100 prose-a:text-indigo-300 hover:prose-a:text-indigo-200 prose-code:text-gray-100 prose-hr:border-gray-700 md:max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{

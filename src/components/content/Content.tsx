@@ -2,15 +2,15 @@ import React from "react";
 import Link from "next/link";
 import Markdown from "../markdown/Markdown";
 import type { ProcessedContentId } from "@/types/info";
-import { eventTime, formatSessionTime } from "@/lib/dates";
-import cal from "@/lib/cal";
-import { CalendarIcon, Share2Icon } from "@radix-ui/react-icons";
+import { Share2Icon } from "@radix-ui/react-icons";
+import Session from "./Session";
 
 interface Props {
   content: ProcessedContentId;
+  bookmarks: number[];
 }
 
-export default function Content({ content }: Props) {
+export default function Content({ content, bookmarks }: Props) {
   const handleShare = async () => {
     try {
       await navigator.share({
@@ -56,45 +56,14 @@ export default function Content({ content }: Props) {
                   new Date(a.begin_tsz).getTime() -
                   new Date(b.begin_tsz).getTime()
               )
-              .map((s) => {
-                const begin = new Date(s.begin_tsz);
-                const end = new Date(s.end_tsz);
-                const sameTime = s.end_tsz === s.begin_tsz;
-
-                return (
-                  <li
-                    key={s.session_id}
-                    className="group flex flex-col md:flex-row md:items-center md:justify-between bg-gray-800/50 p-4 rounded-lg transition-shadow hover:shadow-lg"
-                  >
-                    <div className="flex-1">
-                      <div className="text-base text-gray-200 font-medium">
-                        {sameTime
-                          ? eventTime(begin, true)
-                          : formatSessionTime(begin, end)}
-                      </div>
-                      {s.location_name && (
-                        <div className="text-sm text-gray-400 mt-1">
-                          {s.location_name}
-                        </div>
-                      )}
-                    </div>
-                    <div className="mt-3 md:mt-0 md:ml-4">
-                      <a
-                        href={`data:text/calendar;charset=utf8,${encodeURIComponent(
-                          cal(content, s)
-                        )}`}
-                        download={`DEF_CON_33-${s.session_id}.ics`}
-                        role="button"
-                        title={`Download calendar invite for session: ${content.title}`}
-                        aria-label={`Download calendar invite for session: ${content.title}`}
-                        className="text-gray-400 hover:text-white"
-                      >
-                        <CalendarIcon className="h-6 w-6" />
-                      </a>
-                    </div>
-                  </li>
-                );
-              })}
+              .map((s) => (
+                <Session
+                  key={s.session_id}
+                  session={s}
+                  content={content}
+                  isBookmarked={bookmarks.includes(s.session_id)}
+                />
+              ))}
           </ul>
         </section>
       )}

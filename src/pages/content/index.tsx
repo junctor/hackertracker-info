@@ -9,6 +9,7 @@ import Content from "@/components/content/Content";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import type { ProcessedContentById, ProcessedContentId } from "@/types/info";
+import { getBookmarks } from "@/lib/storage";
 
 export default function ContentPage() {
   const params = useSearchParams();
@@ -23,6 +24,8 @@ export default function ContentPage() {
     error,
     isLoading,
   } = useSWR<ProcessedContentById>("/ht/processedContentById.json", fetcher);
+
+  const bookmarks = useMemo(() => getBookmarks(), []);
 
   const selectedContent = useMemo<ProcessedContentId | null>(() => {
     if (contentId === null) return null;
@@ -41,7 +44,7 @@ export default function ContentPage() {
       </Head>
       <main>
         <Heading />
-        <Content content={selectedContent} />
+        <Content content={selectedContent} bookmarks={bookmarks} />
       </main>
     </>
   );

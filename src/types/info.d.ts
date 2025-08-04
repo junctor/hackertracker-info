@@ -165,6 +165,7 @@ export interface ProcessedContentId {
   links: ContentLink[];
   tags: ScheduleTag[];
   people: ContentPersonWithName[];
+  related_content_ids: number[] | null;
 }
 
 export interface ContentSessionLite {

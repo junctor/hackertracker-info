@@ -14,37 +14,57 @@ import { getBookmarks } from "@/lib/storage";
 export default function ContentPage() {
   const params = useSearchParams();
   const idParam = params.get("id");
-  const contentId = useMemo(
+
+  const contentId = useMemo<number | null>(
     () => (idParam ? Number(idParam) : null),
     [idParam]
   );
 
-  const {
-    data: contentsById,
-    error,
-    isLoading,
-  } = useSWR<ProcessedContentById>("/ht/processedContentById.json", fetcher);
+  const { data: contentsById, error } = useSWR<ProcessedContentById>(
+    "/ht/processedContentById.json",
+    fetcher
+  );
+
+  const selectedContent = useMemo<ProcessedContentId | undefined>(
+    () =>
+      contentId !== null && contentsById ? contentsById[contentId] : undefined,
+    [contentsById, contentId]
+  );
+
+  const relatedContent = useMemo<ProcessedContentId[]>(() => {
+    if (!selectedContent?.related_content_ids) return [];
+    return selectedContent.related_content_ids
+      .map((rid) => contentsById![rid])
+      .filter(Boolean) as ProcessedContentId[];
+  }, [contentsById, selectedContent]);
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
-  const selectedContent = useMemo<ProcessedContentId | null>(() => {
-    if (contentId === null) return null;
-    return contentsById ? (contentsById[contentId] ?? null) : null;
-  }, [contentsById, contentId]);
+  if (error) {
+    return <Error msg="Failed to load content" />;
+  }
 
-  if (isLoading) return <Loading />;
-  if (error) return <Error msg="Failed to load content" />;
-  if (selectedContent === null) return <Error msg="Content not found" />;
+  if (!contentsById || contentId === null) {
+    return <Loading />;
+  }
+
+  if (!selectedContent) {
+    return <Error msg="Content not found" />;
+  }
 
   return (
     <>
       <Head>
-        <title>{selectedContent.title + " | DEF CON Content"}</title>
+        <title>{`${selectedContent.title} | DEF CON Content`}</title>
         <meta name="description" content={selectedContent.description} />
       </Head>
       <main>
         <Heading />
-        <Content content={selectedContent} bookmarks={bookmarks} />
+        <Content
+          content={selectedContent}
+          related_content={relatedContent}
+          bookmarks={bookmarks}
+        />
       </main>
     </>
   );

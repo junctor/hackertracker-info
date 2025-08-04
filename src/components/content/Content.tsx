@@ -1,116 +1,131 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import Markdown from "../markdown/Markdown";
 import type { ProcessedContentId } from "@/types/info";
-import { Share2Icon } from "@radix-ui/react-icons";
+import { Share2Icon, PersonIcon } from "@radix-ui/react-icons";
 import Session from "./Session";
+import { Badge } from "../ui/badge";
 
-interface Props {
+export default function Content({
+  content,
+  related_content,
+  bookmarks,
+}: {
   content: ProcessedContentId;
+  related_content: ProcessedContentId[];
   bookmarks: number[];
-}
-
-export default function Content({ content, bookmarks }: Props) {
+}) {
   const handleShare = async () => {
-    try {
-      await navigator.share({
-        title: content.title,
-        url: `/content/?id=${content.id}`,
-      });
-    } catch (err) {
-      console.error("Share failed:", err);
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: content.title,
+          url: `/content?id=${content.id}`,
+        });
+      } catch {
+        console.error("Share failed");
+      }
     }
   };
 
+  const sessions = useMemo(
+    () =>
+      [...content.sessions].sort(
+        (a, b) =>
+          new Date(a.begin_tsz).getTime() - new Date(b.begin_tsz).getTime()
+      ),
+    [content.sessions]
+  );
+  const tags = useMemo(
+    () =>
+      [...content.tags].sort(
+        (a, b) => a.sort_order - b.sort_order || a.label.localeCompare(b.label)
+      ),
+    [content.tags]
+  );
+
   return (
-    <article className="relative my-5 mx-5">
-      {/* header with share */}
-      <div className="pt-4 pb-2 flex items-center justify-end">
-        {typeof navigator.share === "function" && (
+    <div className="max-w-screen-lg mx-auto px-4 py-10 space-y-10">
+      {/* Share + Title */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white">
+          {content.title}
+        </h1>
+        {typeof navigator !== "undefined" && "share" in navigator && (
           <button
             onClick={handleShare}
-            aria-label="Share this content"
-            className="text-gray-400 hover:text-gray-200 p-1"
+            aria-label="Share"
+            className="p-2 text-gray-400 hover:text-gray-200 transition"
           >
             <Share2Icon className="h-6 w-6" />
           </button>
         )}
       </div>
 
-      <header>
-        <h1 className="mt-4 text-4xl font-extrabold text-gray-100">
-          {content.title}
-        </h1>
-      </header>
-
-      {content.sessions.length > 0 && (
-        <section className="mt-8">
+      {/* Sessions */}
+      {sessions.length > 0 && (
+        <section>
           <h2 className="text-2xl font-semibold text-gray-200 mb-4">
             Sessions
           </h2>
           <ul className="space-y-4">
-            {content.sessions
-              .slice()
-              .sort(
-                (a, b) =>
-                  new Date(a.begin_tsz).getTime() -
-                  new Date(b.begin_tsz).getTime()
-              )
-              .map((s) => (
-                <Session
-                  key={s.session_id}
-                  session={s}
-                  content={content}
-                  isBookmarked={bookmarks.includes(s.session_id)}
-                />
-              ))}
+            {sessions.map((s) => (
+              <Session
+                key={s.session_id}
+                session={s}
+                content={content}
+                isBookmarked={bookmarks.includes(s.session_id)}
+              />
+            ))}
           </ul>
         </section>
       )}
 
-      <section className="mt-4">
+      {/* Tags */}
+      <section>
         <div className="flex flex-wrap gap-2">
-          {content.tags
-            .sort((a, b) =>
-              a.sort_order !== b.sort_order
-                ? a.sort_order - b.sort_order
-                : a.label.localeCompare(b.label)
-            )
-            .map((tag) => (
-              <Link
-                key={tag.id}
-                href={`/tag?id=${tag.id}`}
-                className="inline-flex items-center bg-gray-700/50 hover:bg-indigo-600/50 rounded-full px-3 py-1 space-x-2 transition"
-              >
-                <span
-                  className="rounded-full h-3 w-3 md:h-4 md:w-4 flex-none"
-                  style={{ backgroundColor: tag.color_background }}
-                />
-                <p className="text-xs md:text-sm text-gray-200">{tag.label}</p>
-              </Link>
-            ))}
+          {tags.map((tag) => (
+            <Link
+              key={tag.id}
+              href={`/tag?id=${tag.id}`}
+              className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
+            >
+              <span
+                className="block h-3 w-3 rounded-full"
+                style={{ backgroundColor: tag.color_background }}
+              />
+              <span>{tag.label}</span>
+            </Link>
+          ))}
         </div>
       </section>
 
+      {/* Description */}
       {content.description && (
-        <section className="mt-8 prose prose-invert max-w-none text-gray-100">
-          <Markdown content={content.description} />
+        <section>
+          <h2 className="text-2xl font-semibold text-gray-200 mb-4">
+            Description
+          </h2>
+          <div className="prose prose-invert max-w-none text-gray-300">
+            <Markdown content={content.description} />
+          </div>
         </section>
       )}
 
+      {/* Links */}
       {content.links.length > 0 && (
-        <section className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-200 mb-2">Links</h2>
-          <ul className="list-disc list-inside space-y-1 text-gray-300">
-            {content.links.map((link) => (
-              <li key={link.url}>
+        <section>
+          <h2 className="text-2xl font-semibold text-gray-200 mb-4">Links</h2>
+          <ul className="space-y-2">
+            {content.links.map((l) => (
+              <li key={l.url}>
                 <a
-                  href={link.url}
+                  href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-indigo-400 hover:underline"
+                  className="text-indigo-400 hover:underline transition"
                 >
-                  {link.label}
+                  {l.label}
                 </a>
               </li>
             ))}
@@ -118,23 +133,61 @@ export default function Content({ content, bookmarks }: Props) {
         </section>
       )}
 
+      {/* People */}
       {content.people.length > 0 && (
-        <section className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-200 mb-2">People</h2>
-          <ul className="list-disc list-inside space-y-1 text-gray-300">
+        <section>
+          <h2 className="text-2xl font-semibold text-gray-200 mb-4">People</h2>
+          <div className="flex flex-wrap gap-2">
             {content.people.map((p) => (
-              <li key={p.person_id}>
+              <Link
+                key={p.person_id}
+                href={`/person?id=${p.person_id}`}
+                className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
+              >
+                <PersonIcon className="h-4 w-4 text-indigo-300" />
+                <span>{p.name}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Related Content */}
+      {related_content.length > 0 && (
+        <section>
+          <h2 className="text-2xl font-semibold text-gray-200 mb-4">
+            Related Content
+          </h2>
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {related_content.map((rc) => (
+              <li key={rc.id}>
                 <Link
-                  href={`/person?id=${p.person_id}`}
-                  className="text-gray-100 hover:underline"
+                  href={`/content?id=${rc.id}`}
+                  className="group block rounded-2xl bg-gray-800 p-6 shadow-lg hover:scale-105 transition-transform"
                 >
-                  {p.name}
+                  <h3 className="text-xl font-bold text-gray-100 group-hover:text-white">
+                    {rc.title}
+                  </h3>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {rc.tags.map((tag) => (
+                      <Badge
+                        key={tag.id}
+                        className="px-2 py-1 text-xs font-medium"
+                        style={{
+                          backgroundColor: tag.color_background,
+                          color: tag.color_foreground,
+                        }}
+                      >
+                        {tag.label}
+                      </Badge>
+                    ))}
+                  </div>
                 </Link>
               </li>
             ))}
           </ul>
         </section>
       )}
-    </article>
+    </div>
   );
 }

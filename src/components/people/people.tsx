@@ -69,18 +69,15 @@ export default function PeopleDisplay({ people }: { people: People }) {
   }, [people, query]);
 
   return (
-    <div className="p-6 text-gray-100 min-h-screen my-10 mx-5">
+    <div className="my-10 mx-5">
       <h1 className="text-3xl font-bold mb-4 text-gray-100">People</h1>
 
       <Input
-        placeholder="Search by name…"
+        placeholder="Search People..."
         value={query}
         onChange={(e) => setQuery(e.currentTarget.value)}
         aria-label="Search people"
-        className="mb-6 max-w-sm
-                   bg-gray-800 text-gray-100 placeholder-gray-500
-                   border border-gray-700
-                   focus:border-indigo-500 focus:ring-indigo-500"
+        className="mb-6 max-w-sm"
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

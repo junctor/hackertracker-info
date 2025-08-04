@@ -36,11 +36,13 @@ export default function Contents({ content, tags }: Props) {
   );
 
   return (
-    <section className="px-4 md:px-8 lg:px-16 my-10 mx-5">
+    <section className="my-10 mx-5">
+      <h2 className="mb-4 text-2xl font-semibold text-gray-100">Content</h2>
+
       {/* Search Input */}
       <div className="mb-8 flex justify-center">
         <Input
-          placeholder="Search content..."
+          placeholder="Search Content..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full max-w-xl"

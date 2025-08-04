@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { SearchIcon } from "lucide-react";
 
 import { Organizations } from "@/types/info";
 
@@ -35,13 +34,12 @@ export default function Orgs({ orgs, title }: OrgsProps) {
 
       {/* Search */}
       <div className="mb-6 flex items-center space-x-3">
-        <SearchIcon className="w-5 h-5 text-gray-400" />
         <Input
           type="text"
           placeholder={`Search ${title}…`}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 bg-gray-700 placeholder-gray-400 text-gray-100 rounded-full focus:ring-indigo-500"
+          className="mb-6 max-w-sm"
         />
       </div>
 

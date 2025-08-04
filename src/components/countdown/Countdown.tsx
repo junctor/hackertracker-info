@@ -1,6 +1,4 @@
-// src/components/countdown/Countdown.tsx
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import { getCountdown, TARGET_DATE_MS } from "../../lib/timer";
 import localFont from "next/font/local";
@@ -19,40 +17,47 @@ const museoFont = localFont({
   variable: "--font-museo",
 });
 
-function padTime(num: number): string {
+function padTime(num: number) {
   return num.toString().padStart(2, "0");
 }
 
-function Countdown() {
+export default function Countdown() {
+  const [mounted, setMounted] = useState(false);
   const [expired, setExpired] = useState(false);
-  const [timer, setTimer] = useState(getCountdown());
+  const [timer, setTimer] = useState<Timer>(() => {
+    return typeof window !== "undefined"
+      ? getCountdown()
+      : { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  });
+
+  const daysRef = useRef<HTMLDivElement>(null);
+  const hoursRef = useRef<HTMLDivElement>(null);
+  const minutesRef = useRef<HTMLDivElement>(null);
+  const secondsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // one-time setup: check immediately, then every second
+    setMounted(true);
+
     const tick = () => {
       const now = Date.now();
       if (now >= TARGET_DATE_MS) {
         setExpired(true);
+        clearInterval(intervalId);
       } else {
         setTimer(getCountdown());
       }
     };
 
-    tick(); // do it immediately on mount
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+    const intervalId = setInterval(tick, 1000);
+    tick();
+    return () => clearInterval(intervalId);
   }, []);
 
-  if (expired) return null;
-
-  const animateCountdownFlip = (
-    el: HTMLElement | null,
-    flashColor: string = "#6CE"
-  ) => {
+  const flip = (el: HTMLElement | null, color: string) => {
     if (!el) return;
     gsap.fromTo(
       el,
-      { y: 10, opacity: 0, color: flashColor },
+      { y: 10, opacity: 0, color },
       {
         y: 0,
         opacity: 1,
@@ -60,32 +65,18 @@ function Countdown() {
         ease: "power2.out",
         overwrite: "auto",
         onComplete: () => {
-          gsap.to(el, {
-            color: "#ffffff",
-            duration: 0.2,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
+          gsap.to(el, { color: "#fff", duration: 0.2, ease: "power2.out" });
         },
       }
     );
   };
 
-  const daysRef = useRef<HTMLDivElement>(null);
-  const hoursRef = useRef<HTMLDivElement>(null);
-  const minutesRef = useRef<HTMLDivElement>(null);
-  const secondsRef = useRef<HTMLDivElement>(null);
+  useGSAP(() => flip(daysRef.current, "#47A"), [timer.days]);
+  useGSAP(() => flip(hoursRef.current, "#E67"), [timer.hours]);
+  useGSAP(() => flip(minutesRef.current, "#CB4"), [timer.minutes]);
+  useGSAP(() => flip(secondsRef.current, "#6CE"), [timer.seconds]);
 
-  useGSAP(() => animateCountdownFlip(daysRef.current, "#47A"), [timer.days]);
-  useGSAP(() => animateCountdownFlip(hoursRef.current, "#E67"), [timer.hours]);
-  useGSAP(
-    () => animateCountdownFlip(minutesRef.current, "#CB4"),
-    [timer.minutes]
-  );
-  useGSAP(
-    () => animateCountdownFlip(secondsRef.current, "#6CE"),
-    [timer.seconds]
-  );
+  if (!mounted || expired) return null;
 
   return (
     <div className="grid place-items-center mt-3 md:mt-10 text-center mx-5 grid-cols-2 sm:grid-cols-4 gap-4 px-20">
@@ -151,5 +142,3 @@ function Countdown() {
     </div>
   );
 }
-
-export default Countdown;

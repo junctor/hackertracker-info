@@ -70,26 +70,20 @@ export default function Orgs({ orgs, title }: OrgsProps) {
                 <CardContent className="flex flex-col items-center p-6 space-y-4">
                   {/* logo or initials fallback */}
                   {o.logo?.url ? (
-                    <div className="relative w-24 h-24">
+                    <div className="relative w-24 h-24 rounded-lg overflow-hidden">
                       <Image
+                        className="object-contain"
                         src={o.logo.url}
                         alt={`${o.name} logo`}
                         fill
-                        style={{ objectFit: "contain" }}
                       />
                     </div>
                   ) : (
-                    <div
-                      className="
-                        flex items-center justify-center
-                        w-24 h-24 rounded-full
-                        bg-indigo-600
-                        text-white text-2xl font-bold
-                      "
-                    >
+                    <div className="flex items-center justify-center w-24 h-24 rounded-lg bg-indigo-600 text-white text-2xl font-bold">
                       {getInitials(o.name)}
                     </div>
                   )}
+
                   <h3 className="text-lg font-medium text-gray-100 text-center">
                     {o.name}
                   </h3>

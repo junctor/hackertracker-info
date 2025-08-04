@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-
 import { Organizations } from "@/types/info";
 
 interface OrgsProps {
@@ -13,7 +12,6 @@ interface OrgsProps {
 
 export default function Orgs({ orgs, title }: OrgsProps) {
   const [search, setSearch] = useState("");
-
   const filtered = useMemo(
     () =>
       orgs.filter((o) => o.name.toLowerCase().includes(search.toLowerCase())),
@@ -29,17 +27,17 @@ export default function Orgs({ orgs, title }: OrgsProps) {
       .toUpperCase();
 
   return (
-    <section className="my-10 mx-5">
-      <h2 className="mb-4 text-2xl font-semibold text-gray-100">{title}</h2>
-
-      {/* Search */}
-      <div className="mb-6 flex items-center space-x-3">
+    <section className="my-10 mx-auto px-5 max-w-7xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-100">
+          {title}
+        </h1>
         <Input
           type="text"
           placeholder={`Search ${title}…`}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="mb-6 max-w-sm"
+          className="w-full md:w-auto max-w-sm"
         />
       </div>
 
@@ -53,22 +51,10 @@ export default function Orgs({ orgs, title }: OrgsProps) {
             <Link
               key={o.id}
               href={`/organization/?id=${o.id}`}
-              className="block transform hover:scale-[1.02] transition-transform duration-200"
+              className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
-              <Card
-                className="
-                  bg-gradient-to-br from-gray-800 to-gray-700
-                  border border-gray-700
-                  shadow-lg
-                  rounded-2xl
-                  hover:from-gray-700 hover:to-gray-600
-                  ring-offset-2 ring-indigo-500 hover:ring-2
-                  transition-all duration-200
-                  overflow-hidden
-                "
-              >
-                <CardContent className="flex flex-col items-center p-6 space-y-4">
-                  {/* logo or initials fallback */}
+              <Card className="bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600 ring-offset-2 ring-indigo-500 hover:ring-2 transition-all transform hover:scale-[1.02] overflow-hidden">
+                <CardContent className="flex flex-col items-center justify-center p-6 space-y-4">
                   {o.logo?.url ? (
                     <div className="relative w-24 h-24 rounded-lg overflow-hidden">
                       <Image
@@ -83,10 +69,9 @@ export default function Orgs({ orgs, title }: OrgsProps) {
                       {getInitials(o.name)}
                     </div>
                   )}
-
-                  <h3 className="text-lg font-medium text-gray-100 text-center">
+                  <h2 className="text-lg font-medium text-gray-100 text-center">
                     {o.name}
-                  </h3>
+                  </h2>
                 </CardContent>
               </Card>
             </Link>

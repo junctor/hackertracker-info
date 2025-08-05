@@ -158,27 +158,29 @@ export default function Content({
           <h2 className="text-2xl font-semibold text-gray-200 mb-4">
             Related Content
           </h2>
-          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
             {related_content.map((rc) => (
               <li key={rc.id}>
                 <Link
                   href={`/content?id=${rc.id}`}
                   className="group block rounded-2xl bg-gray-800 p-6 shadow-lg hover:scale-105 transition-transform"
                 >
-                  <h3 className="text-xl font-bold text-gray-100 group-hover:text-white">
+                  <h3 className="text-lg font-bold text-gray-100 group-hover:text-white">
                     {rc.title}
                   </h3>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {rc.tags.map((tag) => (
                       <Badge
                         key={tag.id}
-                        className="px-2 py-1 text-xs font-medium"
                         style={{
                           backgroundColor: tag.color_background,
                           color: tag.color_foreground,
                         }}
+                        className="px-2 py-1 text-xs font-medium"
                       >
-                        {tag.label}
+                        <span className="inline-block max-w-[10rem] md:max-w-[12rem] lg:max-w-[15rem] truncate">
+                          {tag.label}
+                        </span>
                       </Badge>
                     ))}
                   </div>

@@ -24,25 +24,32 @@ export default function OrgDetails({ org }: OrgDetailsProps) {
     .toUpperCase();
 
   return (
-    <article className="max-w-screen-lg mx-auto px-4 py-10 space-y-10">
-      {/* Hero */}
-      <Card className="bg-gray-800 p-6 md:flex items-center gap-6">
-        <div className="w-32 h-32 rounded-lg overflow-hidden bg-gradient-to-tr from-indigo-600 to-indigo-400 flex-shrink-0">
+    <article className="max-w-4xl mx-auto px-4 py-12 space-y-8">
+      {/* Hero Section */}
+      <Card className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6 transition-shadow hover:shadow-lg">
+        {/* Logo container */}
+        <div className="relative w-full max-w-xs h-32 sm:h-40 md:h-48 rounded-lg overflow-hidden flex-shrink-0">
           {org.logo?.url ? (
             <Image
-              src={new URL(org.logo.url).pathname}
-              alt={org.name}
+              src={org.logo.url}
+              alt={`${org.name} logo`}
               fill
-              style={{ objectFit: "contain" }}
+              className="object-contain"
+              priority
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-3xl text-white">
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-gray-700 text-3xl text-white"
+              aria-label={initials}
+            >
               {initials}
             </div>
           )}
         </div>
+
+        {/* Organization details */}
         <div className="flex-1 space-y-4">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white">
             {org.name}
           </h1>
           {org.tag_id_as_organizer && (
@@ -50,7 +57,7 @@ export default function OrgDetails({ org }: OrgDetailsProps) {
               <Button
                 variant="secondary"
                 size="default"
-                className="inline-flex items-center space-x-2 hover:scale-105 transition-transform"
+                className="inline-flex items-center space-x-2 transform hover:scale-105 transition"
               >
                 <CalendarIcon className="h-5 w-5 text-indigo-400" />
                 <span>See {org.name} Events</span>
@@ -60,40 +67,40 @@ export default function OrgDetails({ org }: OrgDetailsProps) {
         </div>
       </Card>
 
-      {/* Tabs */}
-      <Tabs defaultValue="about" className="space-y-6">
-        <TabsList className="inline-flex rounded-lg bg-gray-800 p-1">
+      {/* Tabbed content */}
+      <Tabs defaultValue="about" className="space-y-4">
+        <TabsList className="flex space-x-2 border-b border-gray-700">
           <TabsTrigger
             value="about"
-            className="px-4 py-1.5 text-sm font-medium text-gray-400 rounded-md data-[state=active]:bg-gray-900 data-[state=active]:text-white"
+            className="px-3 py-2 text-sm font-medium text-gray-800 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-indigo-400"
           >
             About
           </TabsTrigger>
           {org.links.length > 0 && (
             <TabsTrigger
               value="links"
-              className="px-4 py-1.5 text-sm font-medium text-gray-400 rounded-md data-[state=active]:bg-gray-900 data-[state=active]:text-white"
+              className="px-3 py-2 text-sm font-medium text-gray-800 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-indigo-400"
             >
               Links
             </TabsTrigger>
           )}
         </TabsList>
 
-        <TabsContent value="about">
+        <TabsContent value="about" className="py-4">
           <div className="prose prose-invert max-w-none text-gray-300">
             <Markdown content={org.description} />
           </div>
         </TabsContent>
 
         {org.links.length > 0 && (
-          <TabsContent value="links">
+          <TabsContent value="links" className="py-4">
             <ul className="space-y-3">
               {org.links.map((l) => (
                 <li key={l.url}>
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-full justify-between"
+                    className="w-full justify-between flex items-center transition-colors hover:bg-gray-700"
                   >
                     <a
                       href={l.url}
@@ -101,8 +108,8 @@ export default function OrgDetails({ org }: OrgDetailsProps) {
                       rel="noopener noreferrer"
                       className="flex items-center w-full"
                     >
-                      <span className="text-left">{l.label}</span>
-                      <ExternalLinkIcon className="w-4 h-4 ml-2" />
+                      <span className="text-left text-gray-200">{l.label}</span>
+                      <ExternalLinkIcon className="w-4 h-4 ml-2 text-gray-400" />
                     </a>
                   </Button>
                 </li>

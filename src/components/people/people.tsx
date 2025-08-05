@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { People } from "@/types/info";
+import { Badge } from "../ui/badge";
 
 export default function PeopleDisplay({ people }: { people: People }) {
   const [query, setQuery] = useState("");
@@ -36,15 +37,42 @@ export default function PeopleDisplay({ people }: { people: People }) {
               href={`/person?id=${person.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
-              <Card className="h-full bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600 ring-offset-2 ring-indigo-500 hover:ring-2 transition-all transform hover:scale-[1.02] overflow-hidden">
+              <Card
+                className="
+                  h-full
+                  bg-gradient-to-br from-gray-800 to-gray-700
+                  border border-gray-700
+                  shadow-xl rounded-2xl
+                  hover:from-gray-700 hover:to-gray-600
+                  ring-offset-2 ring-indigo-600 hover:ring-2
+                  transition-all transform hover:scale-[1.02]
+                  overflow-hidden
+                "
+              >
                 <CardContent className="flex flex-col items-center justify-center p-6 space-y-4">
-                  <h2 className="text-lg font-medium text-gray-100">
+                  {/* Avatar with initials */}
+
+                  {/* Name */}
+                  <h2 className="text-lg font-medium text-gray-100 text-center">
                     {person.name}
                   </h2>
-                  {person.affiliations[0] && (
-                    <p className="text-sm text-gray-400">
-                      {person.affiliations[0].organization}
-                    </p>
+
+                  {/* Affiliation badges */}
+                  {person.affiliations.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {person.affiliations.map(
+                        (a, i) =>
+                          a.organization && (
+                            <Badge
+                              key={i}
+                              variant="secondary"
+                              className="px-2 py-1 text-xs"
+                            >
+                              {a.organization}
+                            </Badge>
+                          )
+                      )}
+                    </div>
                   )}
                 </CardContent>
               </Card>

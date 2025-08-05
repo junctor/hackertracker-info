@@ -46,26 +46,26 @@ export default function Orgs({ orgs, title }: OrgsProps) {
           No {title.toLowerCase()} found.
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {filtered.map((o) => (
             <Link
               key={o.id}
               href={`/organization/?id=${o.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
-              <Card className="bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600 ring-offset-2 ring-indigo-500 hover:ring-2 transition-all transform hover:scale-[1.02] overflow-hidden">
+              <Card className="bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600  transition-all transform hover:scale-[1.02] overflow-hidden ring-offset-4 ring-indigo-600 hover:ring-4 ">
                 <CardContent className="flex flex-col items-center justify-center p-6 space-y-4">
                   {o.logo?.url ? (
-                    <div className="relative w-24 h-24 rounded-lg overflow-hidden">
+                    <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-lg overflow-hidden bg-gray-800 ring-2 ring-gray-600 flex items-center justify-center">
                       <Image
-                        className="object-contain"
+                        className="object-contain p-2 transition-transform hover:scale-105"
                         src={o.logo.url}
                         alt={`${o.name} logo`}
                         fill
                       />
                     </div>
                   ) : (
-                    <div className="flex items-center justify-center w-24 h-24 rounded-lg bg-indigo-600 text-white text-2xl font-bold">
+                    <div className="flex items-center justify-center w-24 h-24 md:w-32 md:h-32  bg-gray-800 ring-2 ring-gray-600 text-white text-2xl font-bold">
                       {getInitials(o.name)}
                     </div>
                   )}

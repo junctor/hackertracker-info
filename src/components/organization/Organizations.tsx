@@ -59,7 +59,7 @@ export default function Orgs({ orgs, title }: OrgsProps) {
                     <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-lg overflow-hidden bg-gray-800 ring-2 ring-gray-600 flex items-center justify-center">
                       <Image
                         className="object-contain p-2 transition-transform hover:scale-105"
-                        src={o.logo.url}
+                        src={new URL(o.logo.url).pathname}
                         alt={`${o.name} logo`}
                         fill
                       />

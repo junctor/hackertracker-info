@@ -31,7 +31,7 @@ export default function OrgDetails({ org }: OrgDetailsProps) {
         <div className="relative w-full max-w-xs h-32 sm:h-40 md:h-48 rounded-lg overflow-hidden flex-shrink-0">
           {org.logo?.url ? (
             <Image
-              src={org.logo.url}
+              src={new URL(org.logo.url).pathname}
               alt={`${org.name} logo`}
               fill
               className="object-contain"

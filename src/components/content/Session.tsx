@@ -27,7 +27,7 @@ export default function Session({
   return (
     <li
       key={session.session_id}
-      className="group flex flex-col md:flex-row md:items-center md:justify-between bg-gray-800/50 p-4 rounded-lg transition-shadow hover:shadow-lg"
+      className="group flex flex-col md:flex-row md:items-center md:justify-between bg-gray-800 p-4 rounded-lg transition-shadow hover:shadow-lg"
     >
       <div className="flex-1">
         <div className="text-base text-gray-200 font-medium">

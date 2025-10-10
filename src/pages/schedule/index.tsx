@@ -25,10 +25,10 @@ export default function SchedulePage() {
   return (
     <>
       <Head>
-        <title>Schedule | DEF CON</title>
+        <title>Schedule | DEF CON Bahrain 2025</title>
         <meta
           name="description"
-          content="Full DEF CON 33 schedule of sessions, talks, and events."
+          content="Full DEF CON Bahrain 2025 schedule of sessions, talks, and events."
         />
       </Head>
       <main>

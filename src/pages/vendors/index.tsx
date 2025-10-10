@@ -27,8 +27,11 @@ export default function VendorsPage() {
   return (
     <>
       <Head>
-        <title>Vendors | DEF CON</title>
-        <meta name="description" content="Explore all DEF CON Vendors" />
+        <title>Vendors | DEF CON Bahrain 2025</title>
+        <meta
+          name="description"
+          content="Explore all DEF CON Bahrain 2025 Vendors"
+        />
       </Head>
       <main>
         <Heading />

@@ -24,8 +24,8 @@ export default function MapsPage() {
   return (
     <>
       <Head>
-        <title>Maps | DEF CON</title>
-        <meta name="description" content="DEF CON 33 Maps" />
+        <title>Maps | DEF CON Bahrain 2025</title>
+        <meta name="description" content="DEF CON Bahrain 2025 Maps" />
       </Head>
       <main>
         <Heading />

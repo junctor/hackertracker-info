@@ -27,8 +27,11 @@ export default function ContestsPage() {
   return (
     <>
       <Head>
-        <title>Contests | DEF CON</title>
-        <meta name="description" content="Explore all DEF CON Contests" />
+        <title>Contests | DEF CON Bahrain 2025</title>
+        <meta
+          name="description"
+          content="Explore all DEF CON Bahrain 2025 Contests"
+        />
       </Head>
       <main>
         <Heading />

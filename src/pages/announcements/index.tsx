@@ -21,7 +21,7 @@ export default function AnnoucementsPage() {
   return (
     <>
       <Head>
-        <title>Announcements | DEF CON</title>
+        <title>Announcements | DEF CON Bahrain 2025</title>
         <meta
           name="description"
           content="Live updates and important news during the event."

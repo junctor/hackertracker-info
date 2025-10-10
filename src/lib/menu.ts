@@ -17,7 +17,7 @@ export const SITE_MENU = [
     sort_order: 1,
     title: "readme.nfo",
     href: "/readme.nfo",
-    description: "A collection of information related to DEF CON.",
+    description: "A collection of information related to DEF CON Bahrain 2025.",
     icon: InfoCircledIcon,
   },
   {
@@ -25,7 +25,7 @@ export const SITE_MENU = [
     title: "Content",
     href: "/contents",
     description:
-      "Browse all talks, workshops, and presentations at DEF CON 33.",
+      "Browse all talks, workshops, and presentations at DEF CON Bahrain 2025.",
     icon: ListBulletIcon,
   },
   {
@@ -39,7 +39,8 @@ export const SITE_MENU = [
     sort_order: 4,
     title: "Speakers",
     href: "/people",
-    description: "Meet DEF CON 33 speakers and explore their session details.",
+    description:
+      "Meet DEF CON Bahrain 2025 speakers and explore their session details.",
     icon: PersonIcon,
   },
   {
@@ -69,7 +70,8 @@ export const SITE_MENU = [
     sort_order: 14,
     title: "Communities",
     href: "/communities",
-    description: "Connect with special-interest groups and meetups at DEF CON.",
+    description:
+      "Connect with special-interest groups and meetups at DEF CON Bahrain 2025.",
     icon: GroupIcon,
   },
   {

@@ -7,7 +7,7 @@ export default function Home() {
     <>
       <Head>
         <title>info.defcon.org</title>
-        <meta name="description" content="DEF CON 33" />
+        <meta name="description" content="DEF CON Bahrain 2025" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="bg-black">

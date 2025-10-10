@@ -34,7 +34,7 @@ export default function Heading() {
               className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
             >
               <span className="block md:hidden">DC33</span>
-              <span className="hidden md:block">DEF CON 33</span>
+              <span className="hidden md:block">DEF CON Bahrain 2025</span>
             </h1>
           </Link>
 

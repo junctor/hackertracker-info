@@ -27,8 +27,11 @@ export default function ExhibitorsPage() {
   return (
     <>
       <Head>
-        <title>Exhibitors | DEF CON</title>
-        <meta name="description" content="Explore all DEF CON Exhibitors" />
+        <title>Exhibitors | DEF CON Bahrain 2025</title>
+        <meta
+          name="description"
+          content="Explore all DEF CON Bahrain 2025 Exhibitors"
+        />
       </Head>
       <main>
         <Heading />

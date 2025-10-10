@@ -27,8 +27,11 @@ export default function VillagesPage() {
   return (
     <>
       <Head>
-        <title>Villages | DEF CON</title>
-        <meta name="description" content="Explore all DEF CON Villages" />
+        <title>Villages | DEF CON Bahrain 2025</title>
+        <meta
+          name="description"
+          content="Explore all DEF CON Bahrain 2025 Villages"
+        />
       </Head>
       <main>
         <Heading />

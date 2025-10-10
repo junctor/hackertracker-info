@@ -2,7 +2,7 @@
 
 [![version](https://img.shields.io/badge/version-33.1.0-blue.svg)](https://www.npmjs.com/package/ht-info) [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE) [![Next.js](https://img.shields.io/badge/platform-Next.js-black.svg?logo=next.js)](https://nextjs.org)
 
-> **Official schedule and event guide for DEF CON 33.** Explore talks, villages, workshops, and more at your fingertips.
+> **Official schedule and event guide for DEF CON Bahrain 2025.** Explore talks, villages, workshops, and more at your fingertips.
 
 ## Table of Contents
 

@@ -1,11 +1,12 @@
 import React from "react";
 import Countdown from "@/components/countdown/Countdown";
 import Image from "next/image";
-import dc33Logo from "../../../public/images/33-calls-header-2.webp";
+import dcbLogo from "../../../public/images/dc-bahrain-logo.webp";
 import Link from "next/link";
 import { SITE_MENU } from "@/lib/menu";
 import { CalendarIcon } from "lucide-react";
 import { MobileIcon } from "@radix-ui/react-icons";
+import { TARGET_DATE_MS } from "@/lib/timer";
 
 const navMenu = [
   {
@@ -30,13 +31,11 @@ export default function Splash() {
     <main className="py-16 max-w-6xl mx-auto px-4">
       {/* Hero */}
       <div className="text-center space-y-4">
-        <Image
-          src={dc33Logo}
-          alt="DEF CON 33 | Aug 6–9 2025 in Las Vegas"
-          priority
-        />
+        <Image src={dcbLogo} alt="DEF CON Bahrain 2025" priority />
         <Countdown />
       </div>
+
+      {TARGET_DATE_MS < Date.now().valueOf() && <Countdown />}
 
       {/* Menu */}
       <section className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">

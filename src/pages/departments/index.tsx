@@ -8,7 +8,7 @@ import Heading from "@/components/heading/Heading";
 import { Organizations as OrgsType } from "@/types/info";
 import Orgs from "@/components/organization/Organizations";
 
-export default function ExhibitorsPage() {
+export default function DepartmentsPage() {
   const {
     data: organizations,
     error,
@@ -18,8 +18,8 @@ export default function ExhibitorsPage() {
   if (isLoading) return <Loading />;
   if (error || !organizations) return <Error />;
 
-  const villages = organizations
-    .filter((org) => org.tag_ids.includes(47615))
+  const departments = organizations
+    .filter((org) => org.tag_ids.includes(48795))
     .sort((a, b) => {
       return alphaSort(a.name, b.name);
     });
@@ -27,15 +27,15 @@ export default function ExhibitorsPage() {
   return (
     <>
       <Head>
-        <title>Exhibitors | DEF CON Bahrain 2025</title>
+        <title>Villages | DEF CON Bahrain 2025</title>
         <meta
           name="description"
-          content="Explore all DEF CON Bahrain 2025 Exhibitors"
+          content="Explore all DEF CON Bahrain 2025 Departments"
         />
       </Head>
       <main>
         <Heading />
-        <Orgs orgs={villages} title="Exhibitors" />
+        <Orgs orgs={departments} title="Departments" />
       </main>
     </>
   );

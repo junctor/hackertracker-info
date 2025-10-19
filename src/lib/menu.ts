@@ -1,13 +1,8 @@
 import {
   PersonIcon,
-  GlobeIcon,
-  SpeakerLoudIcon,
   BackpackIcon,
   GroupIcon,
   ListBulletIcon,
-  LightningBoltIcon,
-  CubeIcon,
-  MagicWandIcon,
   InfoCircledIcon,
   BookmarkIcon,
 } from "@radix-ui/react-icons";
@@ -44,21 +39,6 @@ export const SITE_MENU = [
     icon: PersonIcon,
   },
   {
-    sort_order: 6,
-    title: "Maps",
-    href: "/maps",
-    description: "View detailed venue layouts and floor plans.",
-    icon: GlobeIcon,
-  },
-  {
-    sort_order: 10,
-    title: "Announcements",
-    href: "/announcements",
-    description:
-      "Get real-time updates and important news during the conference.",
-    icon: SpeakerLoudIcon,
-  },
-  {
     sort_order: 12,
     title: "Villages",
     href: "/villages",
@@ -67,33 +47,10 @@ export const SITE_MENU = [
     icon: BackpackIcon,
   },
   {
-    sort_order: 14,
-    title: "Communities",
-    href: "/communities",
-    description:
-      "Connect with special-interest groups and meetups at DEF CON Bahrain 2025.",
+    sort_order: 13,
+    title: "Departments",
+    href: "/departments",
+    description: "Discover various departments at DEF CON Bahrain 2025.",
     icon: GroupIcon,
-  },
-  {
-    sort_order: 16,
-    title: "Contests",
-    href: "/contests",
-    description: "Test your skills in lockpicking, CTFs, and more challenges.",
-    icon: LightningBoltIcon,
-  },
-  {
-    sort_order: 18,
-    title: "Exhibitors",
-    href: "/exhibitors",
-    description:
-      "Discover exhibitors showcasing cutting-edge security solutions.",
-    icon: MagicWandIcon,
-  },
-  {
-    sort_order: 20,
-    title: "Vendors",
-    href: "/vendors",
-    description: "Browse official vendors offering gear, swag, and services.",
-    icon: CubeIcon,
   },
 ].sort((a, b) => a.sort_order - b.sort_order);

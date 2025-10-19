@@ -19,7 +19,7 @@ export default function VillagesPage() {
   if (error || !organizations) return <Error />;
 
   const villages = organizations
-    .filter((org) => org.tag_ids.includes(47614))
+    .filter((org) => org.tag_ids.includes(48796))
     .sort((a, b) => {
       return alphaSort(a.name, b.name);
     });

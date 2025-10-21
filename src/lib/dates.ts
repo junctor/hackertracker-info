@@ -25,7 +25,6 @@ export function eventDayTable(value: string | Date): string {
 
 export function tabDateTitle(day: string): string {
   const date = new Date(day);
-  date.setHours(8, 0, 0); // normalize so timezone shifts don’t move the date
   return date.toLocaleDateString(LOCALE, {
     timeZone: TZ,
     month: "short",

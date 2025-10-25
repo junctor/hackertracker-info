@@ -42,7 +42,9 @@ function EventCell({
               {eventTimeTable(event.begin)}
             </time>
           </p>
-          <p className="text-sm text-gray-400">{eventTimeTable(event.end)}</p>
+          <p className="text-sm text-gray-400">
+            {eventTimeTable(event.end, false)}
+          </p>
         </div>
       </TableCell>
       <TableCell className="px-2 py-2 whitespace-normal break-words min-w-0">

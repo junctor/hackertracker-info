@@ -1,5 +1,5 @@
-const LOCALE = "en-BH";
-const TZ = "Asia/Bahrain";
+const LOCALE = "en-SG";
+const TZ = "Asia/Singapore";
 
 export function eventTimeTable(value: string | Date, showTz = true): string {
   const date = typeof value === "string" ? new Date(value) : value;

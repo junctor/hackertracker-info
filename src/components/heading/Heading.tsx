@@ -26,15 +26,15 @@ const museoFont = localFont({
 export default function Heading() {
   return (
     <header className="sticky top-0 z-50 bg-background text-white px-5 py-3 border-b border-border">
-      <div className="max-w-screen-xl mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo + Primary Nav */}
         <div className="flex items-center space-x-6">
           <Link href="/">
             <h1
               className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
             >
-              <span className="block md:hidden">DCBH25</span>
-              <span className="hidden md:block">DEF CON Bahrain 2025</span>
+              <span className="block md:hidden">DCSG25</span>
+              <span className="hidden md:block">DEF CON Singapore 2025</span>
             </h1>
           </Link>
 
@@ -50,7 +50,7 @@ export default function Heading() {
               {/* Explore Dropdown */}
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="flex items-center gap-1">
-                  <RocketIcon className="w-4 h-4 flex-shrink-0" />
+                  <RocketIcon className="w-4 h-4 shrink-0" />
                   <span className="hidden md:block">Explore</span>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -64,7 +64,7 @@ export default function Heading() {
                               className="flex flex-col gap-1 px-2 py-1 hover:bg-accent rounded-md"
                             >
                               <div className="flex items-center gap-2">
-                                <Icon className="w-5 h-5 flex-shrink-0" />
+                                <Icon className="w-5 h-5 shrink-0" />
                                 <span className="font-medium">{title}</span>
                               </div>
                               <p className="text-sm text-muted-foreground hidden sm:block">

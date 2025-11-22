@@ -32,10 +32,10 @@ function EventCell({
     >
       <TableCell
         style={barStyle}
-        className="relative px-2 py-1 before:absolute before:top-1 before:bottom-1 before:left-1 before:rounded before:bg-[var(--event-color)] before:w-[clamp(0.25rem,2vw,1rem)] before:transition-all before:duration-200 group-hover:before:w-[clamp(0.4rem,3vw,1.2rem)]"
+        className="relative px-2 py-1 before:absolute before:top-1 before:bottom-1 before:left-1 before:rounded before:bg-(--event-color) before:w-[clamp(0.25rem,2vw,1rem)] before:transition-all before:duration-200 group-hover:before:w-[clamp(0.4rem,3vw,1.2rem)]"
       />
 
-      <TableCell className="px-2 py-1 whitespace-normal break-words min-w-0">
+      <TableCell className="px-2 py-1 whitespace-normal wrap-break-word min-w-0">
         <div className="space-y-0.5">
           <p className="text-base font-semibold text-gray-100">
             <time dateTime={new Date(event.begin).toISOString()}>
@@ -47,7 +47,7 @@ function EventCell({
           </p>
         </div>
       </TableCell>
-      <TableCell className="px-2 py-2 whitespace-normal break-words min-w-0">
+      <TableCell className="px-2 py-2 whitespace-normal wrap-break-word min-w-0">
         <h3 className="text-xl font-bold text-gray-100 line-clamp-2">
           {event.title}
         </h3>

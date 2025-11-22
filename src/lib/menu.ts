@@ -12,7 +12,8 @@ export const SITE_MENU = [
     sort_order: 1,
     title: "readme.nfo",
     href: "/readme.nfo",
-    description: "A collection of information related to DEF CON Bahrain 2025.",
+    description:
+      "A collection of information related to DEF CON Singapore 2025.",
     icon: InfoCircledIcon,
   },
   {
@@ -20,7 +21,7 @@ export const SITE_MENU = [
     title: "Content",
     href: "/contents",
     description:
-      "Browse all talks, workshops, and presentations at DEF CON Bahrain 2025.",
+      "Browse all talks, workshops, and presentations at DEF CON Singapore 2025.",
     icon: ListBulletIcon,
   },
   {
@@ -35,7 +36,7 @@ export const SITE_MENU = [
     title: "Speakers",
     href: "/people",
     description:
-      "Meet DEF CON Bahrain 2025 speakers and explore their session details.",
+      "Meet DEF CON Singapore 2025 speakers and explore their session details.",
     icon: PersonIcon,
   },
   {
@@ -50,7 +51,7 @@ export const SITE_MENU = [
     sort_order: 13,
     title: "Departments",
     href: "/departments",
-    description: "Discover various departments at DEF CON Bahrain 2025.",
+    description: "Discover various departments at DEF CON Singapore 2025.",
     icon: GroupIcon,
   },
 ].sort((a, b) => a.sort_order - b.sort_order);

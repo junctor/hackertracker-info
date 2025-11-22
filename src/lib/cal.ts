@@ -1,7 +1,7 @@
 import { ContentSessionLite, ProcessedContentId } from "@/types/info";
 
 const BASEURL = "https://info.defcon.org";
-const PRODID = "-//hackertracker//defcon-bahrain-2025 Calendar 1.0//EN";
+const PRODID = "-//hackertracker//defcon-singapore-2025 Calendar 1.0//EN";
 const MAX_LINE_LEN = 75;
 
 /** Escape special chars per RFC 5545 */
@@ -53,7 +53,7 @@ export const generateICal = (
   const dtstamp = formatICalDate(now);
   const dtstart = formatICalDate(new Date(session.begin_tsz));
   const dtend = formatICalDate(new Date(session.end_tsz));
-  const uid = `defcon-bahrain-2025-${content.id}@info.defcon.org`;
+  const uid = `defcon-singapore-2025-${content.id}@info.defcon.org`;
 
   const lines = [
     "BEGIN:VCALENDAR",

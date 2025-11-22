@@ -21,10 +21,10 @@ export default function DocumentsPage() {
   return (
     <>
       <Head>
-        <title>readme.nfo | DEF CON Bahrain 2025</title>
+        <title>readme.nfo | DEF CON Singapore 2025</title>
         <meta
           name="description"
-          content="A collection of information related to DEF CON Bahrain 2025."
+          content="A collection of information related to DEF CON Singapore 2025."
         />
       </Head>
       <main>

@@ -22,10 +22,10 @@ export default function TagsPage() {
   return (
     <>
       <Head>
-        <title>Tags | DEF CON Bahrain 2025</title>
+        <title>Tags | DEF CON Singapore 2025</title>
         <meta
           name="description"
-          content="Explore the various tags used in DEF CON Bahrain 2025."
+          content="Explore the various tags used in DEF CON Singapore 2025."
         />
       </Head>
       <main>

@@ -27,10 +27,10 @@ export default function CommunitiesPage() {
   return (
     <>
       <Head>
-        <title>Communities | DEF CON Bahrain 2025</title>
+        <title>Communities | DEF CON Singapore 2025</title>
         <meta
           name="description"
-          content="Explore all DEF CON Bahrain 2025 Communities"
+          content="Explore all DEF CON Singapore 2025 Communities"
         />
       </Head>
       <main>

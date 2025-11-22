@@ -55,7 +55,7 @@ export default function ContentPage() {
   return (
     <>
       <Head>
-        <title>{`${selectedContent.title} | DEF CON Bahrain 2025 Content`}</title>
+        <title>{`${selectedContent.title} | DEF CON Singapore 2025 Content`}</title>
         <meta name="description" content={selectedContent.description} />
       </Head>
       <main>

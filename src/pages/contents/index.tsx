@@ -29,8 +29,8 @@ export default function ContentsPage() {
   return (
     <>
       <Head>
-        <title>Content | DEF CON Bahrain 2025</title>
-        <meta name="description" content="All DEF CON Bahrain 2025 contents." />
+        <title>Content | DEF CON Singapore 2025</title>
+        <meta name="description" content="All DEF CON Singapore 2025 contents." />
       </Head>
       <main>
         <Heading />

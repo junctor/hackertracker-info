@@ -91,7 +91,7 @@ export default function Apps() {
       </h1>
 
       <p className="mt-4 max-w-2xl text-xl sm:text-2xl md:text-3xl">
-        Your official DEF CON Bahrain 2025 schedule companion. Choose your
+        Your official DEF CON Singapore 2025 schedule companion. Choose your
         platform below.
       </p>
 

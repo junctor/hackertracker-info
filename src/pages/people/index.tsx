@@ -21,10 +21,10 @@ export default function PeoplePage() {
   return (
     <>
       <Head>
-        <title>People | DEF CON Bahrain 2025</title>
+        <title>People | DEF CON Singapore 2025</title>
         <meta
           name="description"
-          content="Browse bios and sessions for all DEF CON Bahrain 2025 participants."
+          content="Browse bios and sessions for all DEF CON Singapore 2025 participants."
         />
       </Head>
       <main>

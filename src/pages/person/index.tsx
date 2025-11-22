@@ -32,10 +32,10 @@ export default function PersonPage() {
   return (
     <>
       <Head>
-        <title>{person.name} | Speaker at DEF CON Bahrain 2025</title>
+        <title>{person.name} | Speaker at DEF CON Singapore 2025</title>
         <meta
           name="description"
-          content={`Learn more about ${person.name}, a speaker at DEF CON Bahrain 2025. See their bio, sessions, and contributions.`}
+          content={`Learn more about ${person.name}, a speaker at DEF CON Singapore 2025. See their bio, sessions, and contributions.`}
         />
       </Head>
       <main>

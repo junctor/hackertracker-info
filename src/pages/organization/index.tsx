@@ -27,7 +27,7 @@ export default function OrganizationPage() {
   return (
     <>
       <Head>
-        <title>{org.name} | DEF CON Bahrain 2025</title>
+        <title>{org.name} | DEF CON Singapore 2025</title>
         <meta name="description" content={org.description.slice(0, 150)} />
       </Head>
 

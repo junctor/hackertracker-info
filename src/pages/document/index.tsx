@@ -36,10 +36,10 @@ export default function DocumentsPage() {
   return (
     <>
       <Head>
-        <title>{selectedDocument.title_text} | DEF CON Bahrain 2025</title>
+        <title>{selectedDocument.title_text} | DEF CON Singapore 2025</title>
         <meta
           name="description"
-          content="A collection of information related to DEF CON Bahrain 2025."
+          content="A collection of information related to DEF CON Singapore 2025."
         />
       </Head>
       <main>

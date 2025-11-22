@@ -7,7 +7,7 @@ export default function AppsPage() {
   return (
     <>
       <Head>
-        <title>Apps | DEF CON Bahrain 2025</title>
+        <title>Apps | DEF CON Singapore 2025</title>
         <meta
           name="description"
           content="Download the official Hacker Tracker apps for iOS and Android."

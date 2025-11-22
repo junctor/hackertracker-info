@@ -73,8 +73,8 @@ export default function Countdown() {
 
   useGSAP(() => flip(daysRef.current, "#47A"), [timer.days]);
   useGSAP(() => flip(hoursRef.current, "#E67"), [timer.hours]);
-  useGSAP(() => flip(minutesRef.current, "#CB4"), [timer.minutes]);
-  useGSAP(() => flip(secondsRef.current, "#6CE"), [timer.seconds]);
+  useGSAP(() => flip(minutesRef.current, "#5dc6cc"), [timer.minutes]);
+  useGSAP(() => flip(secondsRef.current, "#de700f"), [timer.seconds]);
 
   if (!mounted || expired) return null;
 

@@ -1,5 +1,5 @@
 // src/lib/timer.ts
-export const TARGET_DATE_MS = new Date("2025-11-05T06:00:00Z").valueOf();
+export const TARGET_DATE_MS = new Date("2026-04-28T01:00:00Z").valueOf();
 
 export function getCountdown(): Timer {
   const now = Date.now();

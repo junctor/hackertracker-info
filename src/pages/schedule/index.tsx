@@ -25,10 +25,10 @@ export default function SchedulePage() {
   return (
     <>
       <Head>
-        <title>Schedule | DEF CON Singapore 2025</title>
+        <title>Schedule | DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content="Full DEF CON Singapore 2025 schedule of sessions, talks, and events."
+          content="Full DEF CON Singapore 2026 schedule of sessions, talks, and events."
         />
       </Head>
       <main>

@@ -44,10 +44,10 @@ export default function TagPage() {
   return (
     <>
       <Head>
-        <title>{tag.label} | DEF CON Singapore 2025</title>
+        <title>{tag.label} | DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content={`DEF CON Singapore 2025 schedule for ${tag.label}`}
+          content={`DEF CON Singapore 2026 schedule for ${tag.label}`}
         />
       </Head>
       <main>

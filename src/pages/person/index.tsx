@@ -17,10 +17,7 @@ export default function PersonPage() {
     if (Array.isArray(value)) return value[0] ?? null;
     return value ?? null;
   }, [router.isReady, router.query.id]);
-  const personId = useMemo(
-    () => (idParam ? Number(idParam) : null),
-    [idParam]
-  );
+  const personId = useMemo(() => (idParam ? Number(idParam) : null), [idParam]);
 
   const {
     data: people,
@@ -41,10 +38,10 @@ export default function PersonPage() {
   return (
     <>
       <Head>
-        <title>{person.name} | Speaker at DEF CON Singapore 2025</title>
+        <title>{person.name} | Speaker at DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content={`Learn more about ${person.name}, a speaker at DEF CON Singapore 2025. See their bio, sessions, and contributions.`}
+          content={`Learn more about ${person.name}, a speaker at DEF CON Singapore 2026. See their bio, sessions, and contributions.`}
         />
       </Head>
       <main>

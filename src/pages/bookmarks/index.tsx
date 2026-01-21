@@ -34,10 +34,10 @@ export default function BookmarksPage() {
   return (
     <>
       <Head>
-        <title>Bookmarks | DEF CON Singapore 2025</title>
+        <title>Bookmarks | DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content="View and manage your bookmarked DEF CON Singapore 2025 events and sessions."
+          content="View and manage your bookmarked DEF CON Singapore 2026 events and sessions."
         />
       </Head>
       <main>

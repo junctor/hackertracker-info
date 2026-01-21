@@ -4,7 +4,13 @@ import Markdown from "../markdown/Markdown";
 import { Document } from "@/types/info";
 import { ChevronRight } from "lucide-react";
 
-export default function DocumentDetails({ doc }: { doc: Document }) {
+export default function DocumentDetails({
+  doc,
+  configSlug,
+}: {
+  doc: Document;
+  configSlug: string;
+}) {
   return (
     <article className="container mx-auto px-4 py-8 lg:py-12">
       {/* Breadcrumb with chevron separators and improved color contrast */}
@@ -12,7 +18,7 @@ export default function DocumentDetails({ doc }: { doc: Document }) {
         <ol className="inline-flex items-center space-x-2 text-sm">
           <li>
             <Link
-              href="/readme.nfo"
+              href={`/${configSlug}/readme.nfo`}
               className="flex items-center text-indigo-600 dark:text-indigo-400 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
             >
               readme.nfo

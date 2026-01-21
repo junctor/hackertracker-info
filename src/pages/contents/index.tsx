@@ -14,7 +14,7 @@ export default function ContentsPage() {
     data: items,
     error,
     isLoading,
-  } = useSWR<ProcessedContents>("/ht/processedContent.json", fetcher);
+  } = useSWR<ProcessedContents>("/ht//dcsg2026/processedContent.json", fetcher);
 
   const {
     data: tags,
@@ -29,8 +29,11 @@ export default function ContentsPage() {
   return (
     <>
       <Head>
-        <title>Content | DEF CON Singapore 2025</title>
-        <meta name="description" content="All DEF CON Singapore 2025 contents." />
+        <title>Content | DEF CON Singapore 2026</title>
+        <meta
+          name="description"
+          content="All DEF CON Singapore 2026 contents."
+        />
       </Head>
       <main>
         <Heading />

@@ -22,18 +22,18 @@ export default function ContentPage() {
 
   const contentId = useMemo<number | null>(
     () => (idParam ? Number(idParam) : null),
-    [idParam]
+    [idParam],
   );
 
   const { data: contentsById, error } = useSWR<ProcessedContentById>(
     "/ht/processedContentById.json",
-    fetcher
+    fetcher,
   );
 
   const selectedContent = useMemo<ProcessedContentId | undefined>(
     () =>
       contentId !== null && contentsById ? contentsById[contentId] : undefined,
-    [contentsById, contentId]
+    [contentsById, contentId],
   );
 
   const relatedContent = useMemo<ProcessedContentId[]>(() => {
@@ -60,7 +60,7 @@ export default function ContentPage() {
   return (
     <>
       <Head>
-        <title>{`${selectedContent.title} | DEF CON Singapore 2025 Content`}</title>
+        <title>{`${selectedContent.title} | DEF CON Singapore 2026 Content`}</title>
         <meta name="description" content={selectedContent.description} />
       </Head>
       <main>

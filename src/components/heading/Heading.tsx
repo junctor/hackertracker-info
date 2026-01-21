@@ -13,9 +13,10 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { MobileIcon, RocketIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import GlobalSearch from "./GlobalSearch";
 import localFont from "next/font/local";
-import { SITE_MENU } from "@/lib/menu";
+import { getSiteMenu } from "@/lib/menu";
 
 const museoFont = localFont({
   src: "../../../public/fonts/Museo700-Regular.woff2",
@@ -33,19 +34,19 @@ export default function Heading() {
             <h1
               className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
             >
-              <span className="block md:hidden">DCSG25</span>
-              <span className="hidden md:block">DEF CON Singapore 2025</span>
+              <span className="block md:hidden">DCSG26</span>
+              <span className="hidden md:block">DEF CON Singapore 2026</span>
             </h1>
           </Link>
 
           <NavigationMenu>
             <NavigationMenuList className="flex items-center space-x-4">
               {/* Schedule Link */}
-              <NavigationMenuItem>
+              {/* <NavigationMenuItem>
                 <NavigationMenuLink asChild>
                   <Link href="/schedule">Schedule</Link>
                 </NavigationMenuLink>
-              </NavigationMenuItem>
+              </NavigationMenuItem> */}
 
               {/* Explore Dropdown */}
               <NavigationMenuItem>
@@ -55,7 +56,7 @@ export default function Heading() {
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-56 md:w-80 gap-4 p-2 max-h-[calc(100vh-4rem)] overflow-y-auto">
-                    {SITE_MENU.map(
+                    {getSiteMenu("dcsg2026").map(
                       ({ title, href, description, icon: Icon }) => (
                         <li key={title}>
                           <NavigationMenuLink asChild>
@@ -73,7 +74,7 @@ export default function Heading() {
                             </Link>
                           </NavigationMenuLink>
                         </li>
-                      )
+                      ),
                     )}
                   </ul>
                 </NavigationMenuContent>
@@ -102,13 +103,13 @@ export default function Heading() {
               window.open(
                 "https://github.com/junctor/hackertracker-info",
                 "_blank",
-                "noopener,noreferrer"
+                "noopener,noreferrer",
               )
             }
           >
             <GitHubLogoIcon />
           </Button>
-          <GlobalSearch />
+          {/* <GlobalSearch /> */}
         </div>
       </div>
       <Separator className="absolute bottom-0 left-0 right-0" />

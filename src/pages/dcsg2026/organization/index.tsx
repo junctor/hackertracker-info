@@ -23,7 +23,7 @@ export default function OrganizationPage() {
     data: organizations,
     error,
     isLoading,
-  } = useSWR<Organizations>("/ht/organizations.json", fetcher);
+  } = useSWR<Organizations>("/ht/dcsg2026/organizations.json", fetcher);
 
   if (!router.isReady) return <Loading />;
   if (isLoading) return <Loading />;

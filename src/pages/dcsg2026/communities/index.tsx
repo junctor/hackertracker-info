@@ -35,7 +35,7 @@ export default function CommunitiesPage() {
       </Head>
       <main>
         <Heading />
-        <Orgs orgs={communities} title="Communities" />
+        <Orgs orgs={communities} title="Communities" confSlug="dcsg2026" />
       </main>
     </>
   );

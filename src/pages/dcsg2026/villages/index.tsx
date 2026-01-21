@@ -35,7 +35,7 @@ export default function VillagesPage() {
       </Head>
       <main>
         <Heading />
-        <Orgs orgs={villages} title="Villages" />
+        <Orgs orgs={villages} title="Villages" confSlug="dcsg2026" />
       </main>
     </>
   );

@@ -8,9 +8,10 @@ import { Organizations } from "@/types/info";
 interface OrgsProps {
   orgs: Organizations;
   title: string;
+  confSlug: string;
 }
 
-export default function Orgs({ orgs, title }: OrgsProps) {
+export default function Orgs({ orgs, title, confSlug }: OrgsProps) {
   const [search, setSearch] = useState("");
   const filtered = useMemo(
     () =>
@@ -50,7 +51,7 @@ export default function Orgs({ orgs, title }: OrgsProps) {
           {filtered.map((o) => (
             <Link
               key={o.id}
-              href={`/organization/?id=${o.id}`}
+              href={`/${confSlug}/organization/?id=${o.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
               <Card className="bg-linear-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600  transition-all transform hover:scale-[1.02] overflow-hidden ring-offset-4 ring-indigo-600 hover:ring-4 ">

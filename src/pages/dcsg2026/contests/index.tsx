@@ -35,7 +35,7 @@ export default function ContestsPage() {
       </Head>
       <main>
         <Heading />
-        <Orgs orgs={contests} title="Contests" />
+        <Orgs orgs={contests} title="Contests" confSlug="dcsg2026" />
       </main>
     </>
   );

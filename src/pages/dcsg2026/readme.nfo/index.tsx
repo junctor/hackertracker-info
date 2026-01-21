@@ -13,7 +13,7 @@ export default function DocumentsPage() {
     data: documents,
     error,
     isLoading,
-  } = useSWR<HTDocuments>("/ht/documents.json", fetcher);
+  } = useSWR<HTDocuments>("/ht/dcsg2026/documents.json", fetcher);
 
   if (isLoading) return <Loading />;
   if (error || !documents) return <Error />;
@@ -21,15 +21,15 @@ export default function DocumentsPage() {
   return (
     <>
       <Head>
-        <title>readme.nfo | DEF CON Singapore 2025</title>
+        <title>readme.nfo | DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content="A collection of information related to DEF CON Singapore 2025."
+          content="A collection of information related to DEF CON Singapore 2026."
         />
       </Head>
       <main>
         <Heading />
-        <Documents docs={documents} />
+        <Documents docs={documents} configSlug="dcsg2026" />
       </main>
     </>
   );

@@ -23,7 +23,7 @@ export default function DocumentsPage() {
     data: documents,
     error,
     isLoading,
-  } = useSWR<HTDocuments>("/ht/documents.json", fetcher);
+  } = useSWR<HTDocuments>("/ht/dcsg2026/documents.json", fetcher);
 
   const selectedDocument = useMemo<Document | null>(() => {
     if (docId === null) return null;
@@ -42,15 +42,15 @@ export default function DocumentsPage() {
   return (
     <>
       <Head>
-        <title>{selectedDocument.title_text} | DEF CON Singapore 2025</title>
+        <title>{selectedDocument.title_text} | DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content="A collection of information related to DEF CON Singapore 2025."
+          content="A collection of information related to DEF CON Singapore 2026."
         />
       </Head>
       <main>
         <Heading />
-        <DocumentDetails doc={selectedDocument} />
+        <DocumentDetails doc={selectedDocument} configSlug="dcsg2026" />
       </main>
     </>
   );

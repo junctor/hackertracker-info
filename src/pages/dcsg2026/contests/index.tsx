@@ -13,13 +13,13 @@ export default function ContestsPage() {
     data: organizations,
     error,
     isLoading,
-  } = useSWR<OrgsType>("/ht/organizations.json", fetcher);
+  } = useSWR<OrgsType>("/ht/dcsg2026/organizations.json", fetcher);
 
   if (isLoading) return <Loading />;
   if (error || !organizations) return <Error />;
 
   const contests = organizations
-    .filter((org) => org.tag_ids.includes(47622))
+    .filter((org) => org.tag_ids.includes(49234))
     .sort((a, b) => {
       return alphaSort(a.name, b.name);
     });
@@ -27,10 +27,10 @@ export default function ContestsPage() {
   return (
     <>
       <Head>
-        <title>Contests | DEF CON Singapore 2025</title>
+        <title>Contests | DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content="Explore all DEF CON Singapore 2025 Contests"
+          content="Explore all DEF CON Singapore 2026 Contests"
         />
       </Head>
       <main>

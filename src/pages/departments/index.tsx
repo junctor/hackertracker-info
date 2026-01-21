@@ -35,7 +35,7 @@ export default function DepartmentsPage() {
       </Head>
       <main>
         <Heading />
-        <Orgs orgs={departments} title="Departments" />
+        <Orgs orgs={departments} title="Departments" confSlug="" />
       </main>
     </>
   );

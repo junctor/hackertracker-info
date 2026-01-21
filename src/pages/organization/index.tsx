@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import useSWR from "swr";
 import Head from "next/head";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { fetcher } from "@/lib/misc";
 import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
@@ -10,15 +10,22 @@ import OrgDetails from "@/components/organization/OrganizationDetails";
 import { Organizations } from "@/types/info";
 
 export default function OrganizationPage() {
+  const router = useRouter();
+  const idParam = useMemo(() => {
+    if (!router.isReady) return null;
+    const value = router.query.id;
+    if (Array.isArray(value)) return value[0] ?? null;
+    return value ?? null;
+  }, [router.isReady, router.query.id]);
+  const orgId = idParam ? Number(idParam) : null;
+
   const {
     data: organizations,
     error,
     isLoading,
   } = useSWR<Organizations>("/ht/organizations.json", fetcher);
-  const params = useSearchParams();
-  const idParam = params.get("id");
-  const orgId = idParam ? Number(idParam) : null;
 
+  if (!router.isReady) return <Loading />;
   if (isLoading) return <Loading />;
   if (error || !organizations) return <Error />;
   const org = organizations.find((o) => o.id === orgId) ?? null;

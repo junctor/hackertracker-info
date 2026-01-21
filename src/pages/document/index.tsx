@@ -6,12 +6,17 @@ import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
 import { Document, Documents as HTDocuments } from "@/types/info";
 import Head from "next/head";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import DocumentDetails from "@/components/documents/DocumentDetails";
 
 export default function DocumentsPage() {
-  const params = useSearchParams();
-  const idParam = params.get("id");
+  const router = useRouter();
+  const idParam = useMemo(() => {
+    if (!router.isReady) return null;
+    const value = router.query.id;
+    if (Array.isArray(value)) return value[0] ?? null;
+    return value ?? null;
+  }, [router.isReady, router.query.id]);
   const docId = useMemo(() => (idParam ? Number(idParam) : null), [idParam]);
 
   const {
@@ -27,6 +32,7 @@ export default function DocumentsPage() {
       : null;
   }, [documents, docId]);
 
+  if (!router.isReady) return <Loading />;
   if (isLoading) return <Loading />;
   if (error || !documents) return <Error />;
   if (!selectedDocument) {

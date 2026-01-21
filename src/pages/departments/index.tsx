@@ -27,15 +27,15 @@ export default function DepartmentsPage() {
   return (
     <>
       <Head>
-        <title>Villages | DEF CON Singapore 2025</title>
+        <title>Villages | DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content="Explore all DEF CON Singapore 2025 Departments"
+          content="Explore all DEF CON Singapore 2026 Departments"
         />
       </Head>
       <main>
         <Heading />
-        <Orgs orgs={departments} title="Departments" />
+        <Orgs orgs={departments} title="Departments" confSlug="" />
       </main>
     </>
   );

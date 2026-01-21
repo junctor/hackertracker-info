@@ -6,19 +6,24 @@ import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
 import { Document, Documents as HTDocuments } from "@/types/info";
 import Head from "next/head";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import DocumentDetails from "@/components/documents/DocumentDetails";
 
 export default function DocumentsPage() {
-  const params = useSearchParams();
-  const idParam = params.get("id");
+  const router = useRouter();
+  const idParam = useMemo(() => {
+    if (!router.isReady) return null;
+    const value = router.query.id;
+    if (Array.isArray(value)) return value[0] ?? null;
+    return value ?? null;
+  }, [router.isReady, router.query.id]);
   const docId = useMemo(() => (idParam ? Number(idParam) : null), [idParam]);
 
   const {
     data: documents,
     error,
     isLoading,
-  } = useSWR<HTDocuments>("/ht/documents.json", fetcher);
+  } = useSWR<HTDocuments>("/ht/dcsg2026/documents.json", fetcher);
 
   const selectedDocument = useMemo<Document | null>(() => {
     if (docId === null) return null;
@@ -27,6 +32,7 @@ export default function DocumentsPage() {
       : null;
   }, [documents, docId]);
 
+  if (!router.isReady) return <Loading />;
   if (isLoading) return <Loading />;
   if (error || !documents) return <Error />;
   if (!selectedDocument) {
@@ -36,15 +42,15 @@ export default function DocumentsPage() {
   return (
     <>
       <Head>
-        <title>{selectedDocument.title_text} | DEF CON Singapore 2025</title>
+        <title>{selectedDocument.title_text} | DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content="A collection of information related to DEF CON Singapore 2025."
+          content="A collection of information related to DEF CON Singapore 2026."
         />
       </Head>
       <main>
         <Heading />
-        <DocumentDetails doc={selectedDocument} />
+        <DocumentDetails doc={selectedDocument} configSlug="dcsg2026" />
       </main>
     </>
   );

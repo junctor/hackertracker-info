@@ -7,28 +7,33 @@ import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
 import Content from "@/components/content/Content";
 import Head from "next/head";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import type { ProcessedContentById, ProcessedContentId } from "@/types/info";
 import { getBookmarks } from "@/lib/storage";
 
 export default function ContentPage() {
-  const params = useSearchParams();
-  const idParam = params.get("id");
+  const router = useRouter();
+  const idParam = useMemo(() => {
+    if (!router.isReady) return null;
+    const value = router.query.id;
+    if (Array.isArray(value)) return value[0] ?? null;
+    return value ?? null;
+  }, [router.isReady, router.query.id]);
 
   const contentId = useMemo<number | null>(
     () => (idParam ? Number(idParam) : null),
-    [idParam]
+    [idParam],
   );
 
   const { data: contentsById, error } = useSWR<ProcessedContentById>(
     "/ht/processedContentById.json",
-    fetcher
+    fetcher,
   );
 
   const selectedContent = useMemo<ProcessedContentId | undefined>(
     () =>
       contentId !== null && contentsById ? contentsById[contentId] : undefined,
-    [contentsById, contentId]
+    [contentsById, contentId],
   );
 
   const relatedContent = useMemo<ProcessedContentId[]>(() => {
@@ -44,7 +49,7 @@ export default function ContentPage() {
     return <Error msg="Failed to load content" />;
   }
 
-  if (!contentsById || contentId === null) {
+  if (!router.isReady || !contentsById || contentId === null) {
     return <Loading />;
   }
 
@@ -55,7 +60,7 @@ export default function ContentPage() {
   return (
     <>
       <Head>
-        <title>{`${selectedContent.title} | DEF CON Singapore 2025 Content`}</title>
+        <title>{`${selectedContent.title} | DEF CON Singapore 2026 Content`}</title>
         <meta name="description" content={selectedContent.description} />
       </Head>
       <main>

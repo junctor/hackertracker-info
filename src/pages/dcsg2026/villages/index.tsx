@@ -8,18 +8,18 @@ import Heading from "@/components/heading/Heading";
 import { Organizations as OrgsType } from "@/types/info";
 import Orgs from "@/components/organization/Organizations";
 
-export default function ContestsPage() {
+export default function VillagesPage() {
   const {
     data: organizations,
     error,
     isLoading,
-  } = useSWR<OrgsType>("/ht/organizations.json", fetcher);
+  } = useSWR<OrgsType>("/ht/dcsg2026/organizations.json", fetcher);
 
   if (isLoading) return <Loading />;
   if (error || !organizations) return <Error />;
 
-  const contests = organizations
-    .filter((org) => org.tag_ids.includes(47622))
+  const villages = organizations
+    .filter((org) => org.tag_ids.includes(48955))
     .sort((a, b) => {
       return alphaSort(a.name, b.name);
     });
@@ -27,15 +27,15 @@ export default function ContestsPage() {
   return (
     <>
       <Head>
-        <title>Contests | DEF CON Singapore 2025</title>
+        <title>Villages | DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content="Explore all DEF CON Singapore 2025 Contests"
+          content="Explore all DEF CON Singapore 2026 Villages"
         />
       </Head>
       <main>
         <Heading />
-        <Orgs orgs={contests} title="Contests" />
+        <Orgs orgs={villages} title="Villages" confSlug="dcsg2026" />
       </main>
     </>
   );

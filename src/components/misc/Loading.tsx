@@ -16,8 +16,8 @@ export default function Loading() {
               relative text-3xl font-extrabold tracking-tight
               text-transparent bg-clip-text
               bg-[linear-gradient(90deg,#22d3ee_0%,#e879f9_20%,#f59e0b_40%,#22c55e_60%,#60a5fa_80%,#22d3ee_100%)]
-              bg-[length:300%_100%]
-              [filter:drop-shadow(0_0_10px_rgba(232,121,249,0.45))]
+              bg-size-[300%_100%]
+              filter-[drop-shadow(0_0_10px_rgba(232,121,249,0.45))]
               motion-safe:animate-[slide_5s_linear_infinite]
             "
           >

@@ -5,13 +5,18 @@ import Loading from "@/components/misc/Loading";
 import Error from "@/components/misc/Error";
 import Heading from "@/components/heading/Heading";
 import PersonDisplay from "@/components/people/person";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { People, Person } from "@/types/info";
 import Head from "next/head";
 
 export default function PersonPage() {
-  const params = useSearchParams();
-  const idParam = params.get("id");
+  const router = useRouter();
+  const idParam = useMemo(() => {
+    if (!router.isReady) return null;
+    const value = router.query.id;
+    if (Array.isArray(value)) return value[0] ?? null;
+    return value ?? null;
+  }, [router.isReady, router.query.id]);
   const personId = useMemo(() => (idParam ? Number(idParam) : null), [idParam]);
 
   const {
@@ -25,6 +30,7 @@ export default function PersonPage() {
     return people.find((p) => p.id === personId) ?? null;
   }, [people, personId]);
 
+  if (!router.isReady) return <Loading />;
   if (isLoading) return <Loading />;
   if (error) return <Error />;
   if (personId === null || !person) return <Error msg="Person not found" />;
@@ -32,10 +38,10 @@ export default function PersonPage() {
   return (
     <>
       <Head>
-        <title>{person.name} | Speaker at DEF CON Singapore 2025</title>
+        <title>{person.name} | Speaker at DEF CON Singapore 2026</title>
         <meta
           name="description"
-          content={`Learn more about ${person.name}, a speaker at DEF CON Singapore 2025. See their bio, sessions, and contributions.`}
+          content={`Learn more about ${person.name}, a speaker at DEF CON Singapore 2026. See their bio, sessions, and contributions.`}
         />
       </Head>
       <main>

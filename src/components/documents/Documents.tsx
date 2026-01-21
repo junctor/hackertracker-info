@@ -4,7 +4,13 @@ import { Card } from "@/components/ui/card";
 import { Documents as HTDocuments } from "@/types/info";
 import { ChevronRight } from "lucide-react";
 
-export default function Documents({ docs }: { docs: HTDocuments }) {
+export default function Documents({
+  docs,
+  configSlug,
+}: {
+  docs: HTDocuments;
+  configSlug: string;
+}) {
   return (
     <div className="mx-5 my-6">
       <header className="mb-6">
@@ -18,7 +24,7 @@ export default function Documents({ docs }: { docs: HTDocuments }) {
           <li key={doc.id}>
             <Card className="bg-gray-900 border border-gray-700 hover:border-indigo-500 transition-colors">
               <Link
-                href={`/document/?id=${doc.id}`}
+                href={`/${configSlug}/document/?id=${doc.id}`}
                 className="flex items-center justify-between p-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 hover:bg-gray-800 transition-colors"
               >
                 <div>
@@ -30,7 +36,7 @@ export default function Documents({ docs }: { docs: HTDocuments }) {
                     {new Date(
                       "seconds" in doc.updated_at
                         ? doc.updated_at.seconds * 1000
-                        : doc.updated_at
+                        : doc.updated_at,
                     ).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",

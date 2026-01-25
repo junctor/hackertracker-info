@@ -8,23 +8,29 @@ import eslintConfigPrettier from "eslint-config-prettier/flat";
 
 export default defineConfig([
   {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    plugins: { js },
-    extends: ["js/recommended"],
+    ignores: [".next/**", "out/**", "node_modules/**"],
   },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  pluginReact.configs.flat.recommended,
+  pluginNext.configs["flat/core-web-vitals"],
   {
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     languageOptions: { globals: globals.browser },
-  },
-  tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
-  {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    plugins: { "@next/next": pluginNext, prettier: eslintConfigPrettier },
     settings: {
       react: {
         version: "detect",
       },
     },
   },
+  {
+    files: [
+      "eslint.config.mjs",
+      "next.config.ts",
+      "postcss.config.mjs",
+      "**/*.config.{js,mjs,cjs,ts}",
+    ],
+    languageOptions: { globals: globals.node },
+  },
+  eslintConfigPrettier,
 ]);

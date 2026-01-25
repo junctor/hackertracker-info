@@ -27,23 +27,48 @@ export default function ScheduleEvents({
     [dateGroup]
   );
 
-  const [activeDays, setActiveDays] = useState<string[]>([]);
+  const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
+
+  const [activeDay, setActiveDay] = useState<string | null>(null);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const intersectingRefs = useRef<
+    Record<string, { isIntersecting: boolean; top: number }>
+  >({});
 
   useEffect(() => {
+    intersectingRefs.current = {};
+    setActiveDay(null);
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const day = entry.target.getAttribute("data-day")!;
-          // When any part of the section is in view, mark it active
-          if (entry.isIntersecting) {
-            setActiveDays((prev) =>
-              prev.includes(day) ? prev : [...prev, day]
-            );
-          } else {
-            setActiveDays((prev) => prev.filter((d) => d !== day));
-          }
+          intersectingRefs.current[day] = {
+            isIntersecting: entry.isIntersecting,
+            top: entry.boundingClientRect.top,
+          };
         });
+
+        const candidates = Object.entries(intersectingRefs.current).filter(
+          ([, value]) => value.isIntersecting
+        );
+        if (candidates.length === 0) {
+          setActiveDay(null);
+          return;
+        }
+
+        let bestDay = candidates[0][0];
+        let bestDistance = Math.abs(
+          candidates[0][1].top - SCROLL_OFFSET
+        );
+        for (const [day, value] of candidates.slice(1)) {
+          const distance = Math.abs(value.top - SCROLL_OFFSET);
+          if (distance < bestDistance) {
+            bestDay = day;
+            bestDistance = distance;
+          }
+        }
+        setActiveDay(bestDay);
       },
       {
         rootMargin: `-${SCROLL_OFFSET}px 0px 0px 0px`,
@@ -95,12 +120,12 @@ export default function ScheduleEvents({
           <button
             key={day}
             className={`mx-1 rounded-full border px-3 py-1 text-sm transition ${
-              activeDays.includes(day)
+              activeDay === day
                 ? "border-indigo-400 bg-indigo-500/20 text-indigo-100"
                 : "border-gray-700 text-gray-200 hover:border-indigo-400 hover:text-white"
             }`}
             onClick={() => scrollToDay(day)}
-            aria-current={activeDays.includes(day) ? "date" : undefined}
+            aria-current={activeDay === day ? "date" : undefined}
           >
             {tabDateTitle(day)}
           </button>
@@ -146,7 +171,7 @@ export default function ScheduleEvents({
                   <ScheduleEventRow
                     key={evt.id}
                     event={evt}
-                    isBookmarked={bookmarks.includes(evt.id)}
+                    isBookmarked={bookmarkSet.has(evt.id)}
                   />
                 ))}
               </tbody>

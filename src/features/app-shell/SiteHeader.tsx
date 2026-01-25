@@ -11,6 +11,7 @@ import {
 import GlobalSearch from "./GlobalSearch";
 import localFont from "next/font/local";
 import { getSiteMenu } from "@/lib/menu";
+import { ConferenceManifest } from "@/lib/conferences";
 
 const museoFont = localFont({
   src: "../../../public/fonts/Museo700-Regular.woff2",
@@ -18,7 +19,11 @@ const museoFont = localFont({
   variable: "--font-museo",
 });
 
-export default function SiteHeader() {
+export default function SiteHeader({
+  conference,
+}: {
+  conference: ConferenceManifest;
+}) {
   return (
     <header className="sticky top-0 z-50 bg-black/90 text-white px-5 py-3 border-b border-gray-800 backdrop-blur">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -28,8 +33,8 @@ export default function SiteHeader() {
             <h1
               className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
             >
-              <span className="block md:hidden">DCSG26</span>
-              <span className="hidden md:block">DEF CON Singapore 2026</span>
+              <span className="block md:hidden">{conference.code}</span>
+              <span className="hidden md:block">{conference.name}</span>
             </h1>
           </Link>
 
@@ -42,7 +47,7 @@ export default function SiteHeader() {
               </summary>
               <div className="absolute left-0 top-full mt-2 w-64 rounded-lg border border-gray-800 bg-gray-950 p-2 shadow-lg">
                 <ul className="grid gap-2">
-                  {getSiteMenu("dcsg2026").map(
+                  {getSiteMenu(conference).map(
                     ({ title, href, description, icon: Icon }) => (
                       <li key={title}>
                         <Link

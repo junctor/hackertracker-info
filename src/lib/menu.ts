@@ -12,36 +12,36 @@ import {
   UserIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
+import { ConferenceManifest } from "./conferences";
 
-export function getSiteMenu(configSlug: string) {
+export function getSiteMenu(conference: ConferenceManifest) {
   return [
     {
       sort_order: 1,
       title: "readme.nfo",
-      href: `/${configSlug}/readme.nfo`,
-      description:
-        "A collection of information related to DEF CON Singapore 2026.",
+      href: `/${conference.slug}/readme.nfo`,
+      description: `A collection of information related to ${conference.name}.`,
       icon: InformationCircleIcon,
     },
     // {
     //   sort_order: 2,
     //   title: "Content",
-    //   href: `/${configSlug}/contents`,
+    //   href: `/${conference.slug}/contents`,
     //   description:
-    //     "Browse all talks, workshops, and presentations at DEF CON Singapore 2026.",
+    //     `Browse all talks, workshops, and presentations at ${conference.name}.`,
     //   icon: ListBulletIcon,
     // },
     // {
     //   sort_order: 3,
     //   title: "Bookmarks",
-    //   href: `/${configSlug}/bookmarks`,
+    //   href: `/${conference.slug}/bookmarks`,
     //   description: "Save your favorite talks, workshops, and presentations.",
     //   icon: BookmarkIcon,
     // },
     // {
     //   sort_order: 4,
     //   title: "Speakers",
-    //   href: `/${configSlug}/people`,
+    //   href: `/${conference.slug}/people`,
     //   description:
     //     "Meet DEF CON Singapore 2026 speakers and explore their session details.",
     //   icon: UserIcon,
@@ -56,7 +56,7 @@ export function getSiteMenu(configSlug: string) {
     {
       sort_order: 10,
       title: "Announcements",
-      href: `/${configSlug}/announcements`,
+      href: `/${conference.slug}/announcements`,
       description:
         "Get real-time updates and important news during the conference.",
       icon: MegaphoneIcon,
@@ -64,7 +64,7 @@ export function getSiteMenu(configSlug: string) {
     {
       sort_order: 12,
       title: "Villages",
-      href: `/${configSlug}/villages`,
+      href: `/${conference.slug}/villages`,
       description:
         "Explore hands-on villages for hacking, learning, and collaboration.",
       icon: ArchiveBoxIcon,
@@ -72,15 +72,14 @@ export function getSiteMenu(configSlug: string) {
     {
       sort_order: 14,
       title: "Communities",
-      href: `/${configSlug}/communities`,
-      description:
-        "Connect with special-interest groups and meetups at DEF CON Singapore 2026.",
+      href: `/${conference.slug}/communities`,
+      description: `Connect with special-interest groups and meetups at ${conference.name}.`,
       icon: UsersIcon,
     },
     {
       sort_order: 16,
       title: "Contests",
-      href: `/${configSlug}/contests`,
+      href: `/${conference.slug}/contests`,
       description:
         "Test your skills in lockpicking, CTFs, and more challenges.",
       icon: BoltIcon,
@@ -88,7 +87,7 @@ export function getSiteMenu(configSlug: string) {
     // {
     //   sort_order: 18,
     //   title: "Exhibitors",
-    //   href: `/${configSlug}/exhibitors`,
+    //   href: `/${conference.slug}/exhibitors`,
     //   description:
     //     "Discover exhibitors showcasing cutting-edge security solutions.",
     //   icon: SparklesIcon,
@@ -96,7 +95,7 @@ export function getSiteMenu(configSlug: string) {
     // {
     //   sort_order: 20,
     //   title: "Vendors",
-    //   href: `/${configSlug}/vendors`,
+    //   href: `/${conference.slug}/vendors`,
     //   description: "Browse official vendors offering gear, swag, and services.",
     //   icon: CubeIcon,
     // },

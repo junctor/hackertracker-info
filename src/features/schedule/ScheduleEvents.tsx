@@ -24,73 +24,92 @@ export default function ScheduleEvents({
 
   const days = useMemo(
     () => Object.entries(dateGroup).map(([day, events]) => ({ day, events })),
-    [dateGroup]
+    [dateGroup],
   );
 
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
 
-  const [activeDay, setActiveDay] = useState<string | null>(null);
-  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const intersectingRefs = useRef<
-    Record<string, { isIntersecting: boolean; top: number }>
-  >({});
-
-  useEffect(() => {
-    intersectingRefs.current = {};
-    setActiveDay(null);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const day = entry.target.getAttribute("data-day")!;
-          intersectingRefs.current[day] = {
-            isIntersecting: entry.isIntersecting,
-            top: entry.boundingClientRect.top,
-          };
-        });
-
-        const candidates = Object.entries(intersectingRefs.current).filter(
-          ([, value]) => value.isIntersecting
-        );
-        if (candidates.length === 0) {
-          setActiveDay(null);
-          return;
-        }
-
-        let bestDay = candidates[0][0];
-        let bestDistance = Math.abs(
-          candidates[0][1].top - SCROLL_OFFSET
-        );
-        for (const [day, value] of candidates.slice(1)) {
-          const distance = Math.abs(value.top - SCROLL_OFFSET);
-          if (distance < bestDistance) {
-            bestDay = day;
-            bestDistance = distance;
+  const initialDay = useMemo(() => {
+    if (days.length === 0) return null;
+    const now = Date.now();
+    for (const { day, events } of days) {
+      for (const event of events) {
+        const begin = Date.parse(event.begin);
+        const end = Date.parse(event.end);
+        if (!Number.isNaN(begin) && !Number.isNaN(end)) {
+          if (begin <= now && now <= end) {
+            return day;
           }
         }
-        setActiveDay(bestDay);
-      },
-      {
-        rootMargin: `-${SCROLL_OFFSET}px 0px 0px 0px`,
-        threshold: 0,
       }
-    );
+    }
+    return days[0].day;
+  }, [days]);
 
-    Object.values(sectionRefs.current).forEach(
-      (el) => el && observer.observe(el)
-    );
-    return () => observer.disconnect();
-  }, [days, SCROLL_OFFSET]);
+  const [selectedDay, setSelectedDay] = useState<string | null>(initialDay);
+  const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const panelRef = useRef<HTMLElement | null>(null);
 
-  const scrollToDay = useCallback(
-    (day: string) => {
-      const el = sectionRefs.current[day];
-      if (!el) return;
-      const top =
-        el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-      window.scrollTo({ top, behavior: "smooth" });
+  useEffect(() => {
+    if (!selectedDay || !days.some(({ day }) => day === selectedDay)) {
+      setSelectedDay(initialDay);
+    }
+  }, [days, initialDay, selectedDay]);
+
+  const resolvedDay = selectedDay ?? days[0]?.day ?? null;
+
+  useEffect(() => {
+    if (!resolvedDay || !panelRef.current) return;
+    const top =
+      panelRef.current.getBoundingClientRect().top +
+      window.scrollY -
+      SCROLL_OFFSET;
+    window.scrollTo({ top, behavior: "auto" });
+  }, [resolvedDay, SCROLL_OFFSET]);
+
+  const handleTabKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>, index: number, day: string) => {
+      if (days.length === 0) return;
+      const lastIndex = days.length - 1;
+      let nextIndex = index;
+
+      switch (e.key) {
+        case "ArrowLeft":
+          e.preventDefault();
+          nextIndex = index === 0 ? lastIndex : index - 1;
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          nextIndex = index === lastIndex ? 0 : index + 1;
+          break;
+        case "Home":
+          e.preventDefault();
+          nextIndex = 0;
+          break;
+        case "End":
+          e.preventDefault();
+          nextIndex = lastIndex;
+          break;
+        case "Enter":
+          if (selectedDay !== day) {
+            setSelectedDay(day);
+          }
+          return;
+        case " ":
+          e.preventDefault();
+          if (selectedDay !== day) {
+            setSelectedDay(day);
+          }
+          return;
+        default:
+          return;
+      }
+
+      const nextDay = days[nextIndex].day;
+      setSelectedDay(nextDay);
+      tabButtonRefs.current[nextDay]?.focus();
     },
-    [SCROLL_OFFSET]
+    [days, selectedDay],
   );
 
   return (
@@ -115,70 +134,94 @@ export default function ScheduleEvents({
 
       {/* Sticky day tabs */}
       {/* TODO: Design polish for day tabs and schedule table layout. */}
-      <div className="sticky top-[60px] z-30 flex flex-wrap justify-center gap-2 border-b border-gray-800 bg-black/80 py-2 backdrop-blur">
-        {days.map(({ day }) => (
+      <div
+        className="sticky top-15 z-30 flex items-center gap-2 overflow-x-auto border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur"
+        role="tablist"
+        aria-label="Schedule days"
+      >
+        {days.map(({ day, events }, index) => (
           <button
             key={day}
-            className={`mx-1 rounded-full border px-3 py-1 text-sm transition ${
-              activeDay === day
+            ref={(el) => {
+              tabButtonRefs.current[day] = el;
+            }}
+            id={`day-tab-${day}`}
+            role="tab"
+            aria-selected={resolvedDay === day}
+            aria-controls={`day-panel-${day}`}
+            className={`mx-1 flex shrink-0 items-center gap-1 rounded-full border px-3 py-1 text-sm transition ${
+              resolvedDay === day
                 ? "border-indigo-400 bg-indigo-500/20 text-indigo-100"
                 : "border-gray-700 text-gray-200 hover:border-indigo-400 hover:text-white"
             }`}
-            onClick={() => scrollToDay(day)}
-            aria-current={activeDay === day ? "date" : undefined}
+            onClick={() => setSelectedDay(day)}
+            onKeyDown={(e) => handleTabKeyDown(e, index, day)}
           >
-            {tabDateTitle(day)}
+            <span>{tabDateTitle(day)}</span>
+            <span className="text-xs text-gray-400">({events.length})</span>
           </button>
         ))}
       </div>
 
       {/* Day sections */}
-      {days.map(({ day, events }) => (
-        <section
-          key={day}
-          ref={(el: HTMLDivElement | null) => {
-            sectionRefs.current[day] = el;
-          }}
-          data-day={day}
-        >
-          <h2 className="scroll-mt-[116px] font-bold text-xl md:text-2xl ml-5 mt-6 mb-3 text-gray-100">
-            {eventDayTable(day)}
-          </h2>
-          <div className="overflow-x-auto px-5">
-            <table className="w-full mb-8 min-w-full table-fixed border-collapse">
-              <colgroup>
-                <col className="w-1/12 min-w-0" />
-                <col className="w-2/12 min-w-0" />
-                <col className="w-8/12 min-w-0" />
-                <col className="w-1/12 min-w-0" />
-              </colgroup>
+      {resolvedDay &&
+        days
+          .filter(({ day }) => day === resolvedDay)
+          .map(({ day, events }) => (
+            <section
+              key={day}
+              ref={(el) => {
+                panelRef.current = el;
+              }}
+              id={`day-panel-${day}`}
+              role="tabpanel"
+              aria-labelledby={`day-tab-${day}`}
+              tabIndex={0}
+            >
+              <h2 className="scroll-mt-29 font-bold text-xl md:text-2xl ml-5 mt-6 mb-3 text-gray-100">
+                {eventDayTable(day)}
+              </h2>
+              <div className="overflow-x-auto px-5">
+                <table className="w-full mb-8 min-w-full table-fixed border-collapse">
+                  <colgroup>
+                    <col className="w-1/12 min-w-0" />
+                    <col className="w-2/12 min-w-0" />
+                    <col className="w-8/12 min-w-0" />
+                    <col className="w-1/12 min-w-0" />
+                  </colgroup>
 
-              <thead className="bg-gray-800">
-                <tr>
-                  <th scope="col" className="px-2 py-2 text-left" />
-                  <th scope="col" className="px-2 py-2 text-left font-semibold">
-                    Time
-                  </th>
-                  <th scope="col" className="px-2 py-2 text-left font-semibold">
-                    Event
-                  </th>
-                  <th scope="col" className="px-2 py-2 text-right" />
-                </tr>
-              </thead>
+                  <thead className="bg-gray-800">
+                    <tr>
+                      <th scope="col" className="px-2 py-2 text-left" />
+                      <th
+                        scope="col"
+                        className="px-2 py-2 text-left font-semibold"
+                      >
+                        Time
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-2 text-left font-semibold"
+                      >
+                        Event
+                      </th>
+                      <th scope="col" className="px-2 py-2 text-right" />
+                    </tr>
+                  </thead>
 
-              <tbody>
-                {events.map((evt) => (
-                  <ScheduleEventRow
-                    key={evt.id}
-                    event={evt}
-                    isBookmarked={bookmarkSet.has(evt.id)}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      ))}
+                  <tbody>
+                    {events.map((evt) => (
+                      <ScheduleEventRow
+                        key={evt.id}
+                        event={evt}
+                        isBookmarked={bookmarkSet.has(evt.id)}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ))}
     </div>
   );
 }

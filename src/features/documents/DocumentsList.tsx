@@ -1,14 +1,15 @@
 import React from "react";
 import Link from "next/link";
-import { Documents as HTDocuments } from "@/lib/types/info";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { DocumentsStore } from "@/lib/types/ht-types";
+import { ConferenceManifest } from "@/lib/conferences";
 
 export default function DocumentsList({
-  docs,
-  configSlug,
+  documents,
+  conference,
 }: {
-  docs: HTDocuments;
-  configSlug: string;
+  documents: DocumentsStore;
+  conference: ConferenceManifest;
 }) {
   return (
     <div className="mx-5 my-6">
@@ -19,10 +20,10 @@ export default function DocumentsList({
       </header>
 
       <ul className="space-y-4">
-        {docs.map((doc) => (
+        {Object.values(documents.byId).map((doc) => (
           <li key={doc.id}>
             <Link
-              href={`/${configSlug}/document/?id=${doc.id}`}
+              href={`/${conference.slug}/document/?id=${doc.id}`}
               className="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-900 p-5 transition-colors hover:border-indigo-500 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <div>
@@ -31,11 +32,7 @@ export default function DocumentsList({
                 </h2>
                 <p className="mt-1 text-sm text-gray-400">
                   <span className="font-medium text-gray-200">Updated:</span>{" "}
-                  {new Date(
-                    "seconds" in doc.updated_at
-                      ? doc.updated_at.seconds * 1000
-                      : doc.updated_at,
-                  ).toLocaleDateString("en-US", {
+                  {new Date(doc.updated_at).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
                     day: "numeric",

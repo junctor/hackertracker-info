@@ -1,15 +1,16 @@
 import Link from "next/link";
 import React from "react";
 import Markdown from "@/components/markdown/Markdown";
-import { Document } from "@/lib/types/info";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { DocumentEntity } from "@/lib/types/ht-types";
+import { ConferenceManifest } from "@/lib/conferences";
 
 export default function DocumentDetails({
-  doc,
-  configSlug,
+  document,
+  conference,
 }: {
-  doc: Document;
-  configSlug: string;
+  document: DocumentEntity;
+  conference: ConferenceManifest;
 }) {
   return (
     <article className="container mx-auto px-4 py-8 lg:py-12">
@@ -18,7 +19,7 @@ export default function DocumentDetails({
         <ol className="inline-flex items-center space-x-2 text-sm">
           <li>
             <Link
-              href={`/${configSlug}/readme.nfo`}
+              href={`/${conference.slug}/readme.nfo`}
               className="flex items-center text-indigo-600 dark:text-indigo-400 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
             >
               readme.nfo
@@ -28,7 +29,7 @@ export default function DocumentDetails({
             <ChevronRightIcon className="w-4 h-4 text-gray-400 dark:text-gray-600" />
           </li>
           <li aria-current="page" className="sr-only">
-            {doc.title_text}
+            {document.title_text}
           </li>
         </ol>
       </nav>
@@ -38,11 +39,11 @@ export default function DocumentDetails({
           id="doc-title"
           className="text-4xl font-extrabold tracking-tight mb-2"
         >
-          {doc.title_text}
+          {document.title_text}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Last updated{" "}
-          {new Date(doc.updated_at.seconds * 1000).toLocaleDateString("en-US", {
+          {new Date(document.updated_at).toLocaleDateString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",
@@ -51,7 +52,7 @@ export default function DocumentDetails({
       </header>
 
       <section className="prose max-w-prose dark:prose-invert">
-        <Markdown content={doc.body_text} />
+        <Markdown content={document.body_text} />
       </section>
     </article>
   );

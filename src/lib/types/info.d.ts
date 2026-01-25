@@ -81,17 +81,6 @@ export interface ScheduleEvent {
   speakers: string | null;
 }
 
-export type Documents = Document[];
-
-interface Document {
-  conference_id: number;
-  conference: string;
-  updated_at: { seconds: number; nanoseconds: number };
-  body_text: string;
-  title_text: string;
-  id: number;
-}
-
 export type Organizations = Organization[];
 
 export interface OrganizationLink {

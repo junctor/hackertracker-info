@@ -27,7 +27,7 @@ export type DocumentEntity = {
   body_text: string;
   id: number;
   title_text: string;
-  updatedAtMs: number;
+  updated_at: number;
 };
 export type DocumentsStore = {
   allIds: Array<number>;

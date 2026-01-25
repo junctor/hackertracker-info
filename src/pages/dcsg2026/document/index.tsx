@@ -4,12 +4,15 @@ import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
-import { Document, Documents as HTDocuments } from "@/lib/types/info";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import DocumentDetails from "@/features/documents/DocumentDetails";
+import { DocumentEntity, DocumentsStore } from "@/lib/types/ht-types/entities";
+import { getConference } from "@/lib/conferences";
 
 export default function DocumentsPage() {
+  const conference = getConference("dcsg2026");
+
   const router = useRouter();
   const idParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -23,13 +26,14 @@ export default function DocumentsPage() {
     data: documents,
     error,
     isLoading,
-  } = useSWR<HTDocuments>("/ht/dcsg2026/documents.json", fetcher);
+  } = useSWR<DocumentsStore>(
+    `${conference.dataRoot}/entities/documents.json`,
+    fetcher,
+  );
 
-  const selectedDocument = useMemo<Document | null>(() => {
+  const selectedDocument = useMemo<DocumentEntity | null>(() => {
     if (docId === null) return null;
-    return documents
-      ? (documents.find((doc) => doc.id === docId) ?? null)
-      : null;
+    return documents ? (documents.byId[docId] ?? null) : null;
   }, [documents, docId]);
 
   if (!router.isReady) return <LoadingScreen />;
@@ -42,15 +46,17 @@ export default function DocumentsPage() {
   return (
     <>
       <Head>
-        <title>{selectedDocument.title_text} | DEF CON Singapore 2026</title>
+        <title>
+          {selectedDocument.title_text} | {conference.name}
+        </title>
         <meta
           name="description"
-          content="A collection of information related to DEF CON Singapore 2026."
+          content={`A collection of information related to ${conference.name}.`}
         />
       </Head>
       <main>
-        <SiteHeader />
-        <DocumentDetails doc={selectedDocument} configSlug="dcsg2026" />
+        <SiteHeader conference={conference} />
+        <DocumentDetails document={selectedDocument} conference={conference} />
       </main>
     </>
   );

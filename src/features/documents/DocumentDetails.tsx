@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import Markdown from "@/components/markdown/Markdown";
 import { Document } from "@/lib/types/info";
-import { ChevronRight } from "lucide-react";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export default function DocumentDetails({
   doc,
@@ -25,7 +25,7 @@ export default function DocumentDetails({
             </Link>
           </li>
           <li aria-hidden="true">
-            <ChevronRight className="w-4 h-4 text-gray-400 dark:text-gray-600" />
+            <ChevronRightIcon className="w-4 h-4 text-gray-400 dark:text-gray-600" />
           </li>
           <li aria-current="page" className="sr-only">
             {doc.title_text}

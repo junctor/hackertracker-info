@@ -1,9 +1,6 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Input } from "@/components/ui/Input";
-import { Card, CardContent } from "@/components/ui/Card";
 import type { People } from "@/lib/types/info";
-import { Badge } from "@/components/ui/Badge";
 
 type Props = {
   people: People;
@@ -22,13 +19,17 @@ export default function PeopleList({ people }: Props) {
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-100">
           People
         </h1>
-        <Input
-          placeholder="Search People..."
-          value={query}
-          onChange={(e) => setQuery(e.currentTarget.value)}
-          aria-label="Search people"
-          className="w-full md:w-auto max-w-sm"
-        />
+        <label className="w-full md:w-auto max-w-sm">
+          <span className="sr-only">Search people</span>
+          <input
+            type="search"
+            placeholder="Search People..."
+            value={query}
+            onChange={(e) => setQuery(e.currentTarget.value)}
+            aria-label="Search people"
+            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 placeholder:text-gray-500"
+          />
+        </label>
       </div>
 
       {filtered.length === 0 ? (
@@ -41,7 +42,7 @@ export default function PeopleList({ people }: Props) {
               href={`/person?id=${person.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
-              <Card
+              <div
                 className="
                   h-full
                   bg-gradient-to-br from-gray-800 to-gray-700
@@ -53,7 +54,7 @@ export default function PeopleList({ people }: Props) {
                   overflow-hidden
                 "
               >
-                <CardContent className="flex flex-col items-center justify-center p-6 space-y-4">
+                <div className="flex flex-col items-center justify-center p-6 space-y-4">
                   {/* Avatar with initials */}
 
                   {/* Name */}
@@ -67,19 +68,18 @@ export default function PeopleList({ people }: Props) {
                       {person.affiliations.map(
                         (a, i) =>
                           a.organization && (
-                            <Badge
+                            <span
                               key={i}
-                              variant="secondary"
-                              className="px-2 py-1 text-xs"
+                              className="inline-flex items-center rounded-full bg-gray-900 px-2 py-1 text-xs text-gray-200"
                             >
                               {a.organization}
-                            </Badge>
+                            </span>
                           )
                       )}
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </Link>
           ))}
         </div>

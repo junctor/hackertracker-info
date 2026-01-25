@@ -1,21 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/Button";
 import {
-  Command,
-  CommandInput,
-  CommandList,
-  CommandItem,
-  CommandEmpty,
-} from "@/components/ui/Command";
-import {
+  DocumentTextIcon,
+  GlobeAltIcon,
   MagnifyingGlassIcon,
-  PersonIcon,
-  FileTextIcon,
-  GlobeIcon,
-  Cross1Icon,
-} from "@radix-ui/react-icons";
+  UserIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import type { SearchIndex, SearchItem, SearchType } from "@/lib/types/info";
 import Link from "next/link";
 
@@ -23,6 +15,7 @@ export default function GlobalSearch() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchData, setSearchData] = useState<SearchIndex>([]);
   const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     if (isOpen && searchData.length === 0) {
@@ -35,21 +28,26 @@ export default function GlobalSearch() {
   }, [isOpen, searchData.length]);
 
   const icons: Record<SearchType, React.ElementType> = {
-    person: PersonIcon,
-    content: FileTextIcon,
-    organization: GlobeIcon,
+    person: UserIcon,
+    content: DocumentTextIcon,
+    organization: GlobeAltIcon,
   };
+
+  const filtered = searchData.filter((item) =>
+    query
+      ? item.text.toLowerCase().includes(query.trim().toLowerCase())
+      : true
+  );
 
   return (
     <>
-      <Button
-        variant="ghost"
-        size="icon"
+      <button
+        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white"
         onClick={() => setIsOpen(true)}
         aria-label="Open search"
       >
-        <MagnifyingGlassIcon />
-      </Button>
+        <MagnifyingGlassIcon className="h-5 w-5" />
+      </button>
 
       {isOpen && (
         <div
@@ -57,56 +55,59 @@ export default function GlobalSearch() {
           onClick={() => setIsOpen(false)}
         >
           <div
-            className="relative mx-4 w-full max-w-lg"
+            className="relative mx-4 w-full max-w-lg rounded-lg border border-gray-800 bg-gray-950 p-4 shadow-xl"
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Global search"
           >
             <button
               className="absolute top-3 right-3 text-gray-400 hover:text-white transition"
               onClick={() => setIsOpen(false)}
               aria-label="Close search"
             >
-              <Cross1Icon className="w-5 h-5" />
+              <XMarkIcon className="w-5 h-5" />
             </button>
 
-            <Command className="overflow-hidden rounded-lg border border-gray-700 bg-gray-900 shadow-lg text-white">
-              <div className="relative">
-                <CommandInput
-                  onValueChange={() => {}}
-                  className="w-full bg-gray-800 text-white placeholder-gray-500 pl-11 pr-4 py-3 focus:ring-0"
-                  placeholder={loading ? "Loading…" : "Search…"}
-                  autoFocus
-                />
-              </div>
+            {/* TODO: Design polish for this search modal and results list. */}
+            <div className="relative">
+              <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-3 h-5 w-5 text-gray-500" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full rounded-md border border-gray-800 bg-gray-900 py-2 pl-10 pr-4 text-white placeholder:text-gray-500"
+                placeholder={loading ? "Loading..." : "Search..."}
+                autoFocus
+              />
+            </div>
 
-              <CommandList className="max-h-60 overflow-auto bg-gray-900">
-                {loading ? (
-                  <CommandEmpty className="px-4 py-2 text-gray-400">
-                    Loading…
-                  </CommandEmpty>
-                ) : searchData.length === 0 ? (
-                  <CommandEmpty className="px-4 py-2 text-gray-400">
-                    No results found.
-                  </CommandEmpty>
-                ) : (
-                  searchData.map((item: SearchItem) => {
+            <div className="mt-3 max-h-60 overflow-auto rounded-md border border-gray-900 bg-gray-900">
+              {loading ? (
+                <p className="px-4 py-2 text-gray-400">Loading...</p>
+              ) : searchData.length === 0 ? (
+                <p className="px-4 py-2 text-gray-400">No results found.</p>
+              ) : filtered.length === 0 ? (
+                <p className="px-4 py-2 text-gray-400">No matching results.</p>
+              ) : (
+                <ul className="divide-y divide-gray-800">
+                  {filtered.map((item: SearchItem) => {
                     const Icon = icons[item.type] || (() => null);
                     return (
-                      <CommandItem
-                        asChild
-                        key={`${item.type}-${item.id}`}
-                        value={item.text}
-                        className="flex items-center space-x-3 px-4 py-2 rounded-sm data-[highlighted]:bg-gray-700 data-[highlighted]:text-white"
-                      >
-                        <Link href={`/${item.type}?id=${item.id}`}>
-                          <Icon className="w-5 h-5 flex-shrink-0" />
+                      <li key={`${item.type}-${item.id}`}>
+                        <Link
+                          href={`/${item.type}?id=${item.id}`}
+                          className="flex items-center gap-3 px-4 py-2 text-gray-200 hover:bg-gray-800"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <Icon className="h-5 w-5 flex-shrink-0 text-gray-400" />
                           <span className="flex-1">{item.text}</span>
                         </Link>
-                      </CommandItem>
+                      </li>
                     );
-                  })
-                )}
-              </CommandList>
-            </Command>
+                  })}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
       )}

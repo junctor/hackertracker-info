@@ -2,9 +2,8 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import Markdown from "@/components/markdown/Markdown";
 import type { ProcessedContentId } from "@/lib/types/info";
-import { Share2Icon, PersonIcon } from "@radix-ui/react-icons";
+import { ShareIcon, UserIcon } from "@heroicons/react/24/outline";
 import ContentSession from "./ContentSession";
-import { Badge } from "@/components/ui/Badge";
 
 export default function ContentDetails({
   content,
@@ -57,7 +56,7 @@ export default function ContentDetails({
             aria-label="Share"
             className="p-2 text-gray-400 hover:text-gray-200 transition"
           >
-            <Share2Icon className="h-6 w-6" />
+            <ShareIcon className="h-6 w-6" />
           </button>
         )}
       </div>
@@ -88,7 +87,7 @@ export default function ContentDetails({
             <Link
               key={tag.id}
               href={`/tag?id=${tag.id}`}
-              className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
+                className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
             >
               <span
                 className="block h-3 w-3 rounded-full"
@@ -144,7 +143,7 @@ export default function ContentDetails({
                 href={`/person?id=${p.person_id}`}
                 className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
               >
-                <PersonIcon className="h-4 w-4 text-indigo-300" />
+                <UserIcon className="h-4 w-4 text-indigo-300" />
                 <span>{p.name}</span>
               </Link>
             ))}
@@ -170,18 +169,18 @@ export default function ContentDetails({
                   </h3>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {rc.tags.map((tag) => (
-                      <Badge
+                      <span
                         key={tag.id}
                         style={{
                           backgroundColor: tag.color_background,
                           color: tag.color_foreground,
                         }}
-                        className="px-2 py-1 text-xs font-medium"
+                        className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium"
                       >
                         <span className="inline-block max-w-[10rem] md:max-w-[12rem] lg:max-w-[15rem] truncate">
                           {tag.label}
                         </span>
-                      </Badge>
+                      </span>
                     ))}
                   </div>
                 </Link>

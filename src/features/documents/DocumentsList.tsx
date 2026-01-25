@@ -1,8 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Card } from "@/components/ui/Card";
 import { Documents as HTDocuments } from "@/lib/types/info";
-import { ChevronRight } from "lucide-react";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export default function DocumentsList({
   docs,
@@ -22,34 +21,32 @@ export default function DocumentsList({
       <ul className="space-y-4">
         {docs.map((doc) => (
           <li key={doc.id}>
-            <Card className="bg-gray-900 border border-gray-700 hover:border-indigo-500 transition-colors">
-              <Link
-                href={`/${configSlug}/document/?id=${doc.id}`}
-                className="flex items-center justify-between p-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 hover:bg-gray-800 transition-colors"
-              >
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-100 leading-snug">
-                    {doc.title_text}
-                  </h2>
-                  <p className="mt-1 text-sm text-gray-400">
-                    <span className="font-medium text-gray-200">Updated:</span>{" "}
-                    {new Date(
-                      "seconds" in doc.updated_at
-                        ? doc.updated_at.seconds * 1000
-                        : doc.updated_at,
-                    ).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </p>
-                </div>
-                <ChevronRight
-                  className="h-6 w-6 text-gray-500"
-                  aria-hidden="true"
-                />
-              </Link>
-            </Card>
+            <Link
+              href={`/${configSlug}/document/?id=${doc.id}`}
+              className="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-900 p-5 transition-colors hover:border-indigo-500 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <div>
+                <h2 className="text-xl font-semibold text-gray-100 leading-snug">
+                  {doc.title_text}
+                </h2>
+                <p className="mt-1 text-sm text-gray-400">
+                  <span className="font-medium text-gray-200">Updated:</span>{" "}
+                  {new Date(
+                    "seconds" in doc.updated_at
+                      ? doc.updated_at.seconds * 1000
+                      : doc.updated_at,
+                  ).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+              </div>
+              <ChevronRightIcon
+                className="h-6 w-6 text-gray-500"
+                aria-hidden="true"
+              />
+            </Link>
           </li>
         ))}
       </ul>

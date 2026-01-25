@@ -2,8 +2,11 @@ import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import cal from "@/lib/cal";
 import { eventTime, formatSessionTime } from "@/lib/dates";
 import { ContentSessionLite, ProcessedContentId } from "@/lib/types/info";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { Bookmark } from "lucide-react";
+import {
+  BookmarkIcon as BookmarkIconOutline,
+  CalendarIcon,
+} from "@heroicons/react/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
 import React from "react";
 
 export default function ContentSession({
@@ -52,18 +55,20 @@ export default function ContentSession({
         >
           <CalendarIcon className="h-6 w-6" />
         </a>
-        <Bookmark
+        <button
           onClick={(e) => {
             e.stopPropagation();
             toggleBookmark();
           }}
           aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
-          className={`h-5 w-5 cursor-pointer ${
-            bookmark
-              ? "fill-current text-indigo-400"
-              : "stroke-current text-gray-500"
-          }`}
-        />
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300"
+        >
+          {bookmark ? (
+            <BookmarkIconSolid className="h-5 w-5 text-indigo-400" />
+          ) : (
+            <BookmarkIconOutline className="h-5 w-5" />
+          )}
+        </button>
       </div>
     </li>
   );

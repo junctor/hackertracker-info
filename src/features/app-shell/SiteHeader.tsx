@@ -2,17 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
-import { Separator } from "@/components/ui/Separator";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/NavigationMenu";
-import { MobileIcon, RocketIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
+  CodeBracketSquareIcon,
+  DevicePhoneMobileIcon,
+  RocketLaunchIcon,
+} from "@heroicons/react/24/outline";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import GlobalSearch from "./GlobalSearch";
 import localFont from "next/font/local";
@@ -26,7 +20,7 @@ const museoFont = localFont({
 
 export default function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 bg-background text-white px-5 py-3 border-b border-border">
+    <header className="sticky top-0 z-50 bg-black/90 text-white px-5 py-3 border-b border-gray-800 backdrop-blur">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo + Primary Nav */}
         <div className="flex items-center space-x-6">
@@ -39,65 +33,52 @@ export default function SiteHeader() {
             </h1>
           </Link>
 
-          <NavigationMenu>
-            <NavigationMenuList className="flex items-center space-x-4">
-              {/* Schedule Link */}
-              {/* <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link href="/schedule">Schedule</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem> */}
-
-              {/* Explore Dropdown */}
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="flex items-center gap-1">
-                  <RocketIcon className="w-4 h-4 shrink-0" />
-                  <span className="hidden md:block">Explore</span>
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-56 md:w-80 gap-4 p-2 max-h-[calc(100vh-4rem)] overflow-y-auto">
-                    {getSiteMenu("dcsg2026").map(
-                      ({ title, href, description, icon: Icon }) => (
-                        <li key={title}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              href={href}
-                              className="flex flex-col gap-1 px-2 py-1 hover:bg-accent rounded-md"
-                            >
-                              <div className="flex items-center gap-2">
-                                <Icon className="w-5 h-5 shrink-0" />
-                                <span className="font-medium">{title}</span>
-                              </div>
-                              <p className="text-sm text-muted-foreground hidden sm:block">
-                                {description}
-                              </p>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+          <nav aria-label="Primary" className="hidden md:block">
+            {/* TODO: Design polish for the Explore dropdown and mobile nav. */}
+            <details className="relative">
+              <summary className="flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-gray-200 hover:text-white">
+                <RocketLaunchIcon className="h-4 w-4 shrink-0" />
+                Explore
+              </summary>
+              <div className="absolute left-0 top-full mt-2 w-64 rounded-lg border border-gray-800 bg-gray-950 p-2 shadow-lg">
+                <ul className="grid gap-2">
+                  {getSiteMenu("dcsg2026").map(
+                    ({ title, href, description, icon: Icon }) => (
+                      <li key={title}>
+                        <Link
+                          href={href}
+                          className="flex flex-col gap-1 rounded-md px-3 py-2 text-sm text-gray-200 hover:bg-gray-900"
+                        >
+                          <span className="flex items-center gap-2">
+                            <Icon className="w-5 h-5 shrink-0" />
+                            <span className="font-medium">{title}</span>
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            {description}
+                          </span>
+                        </Link>
+                      </li>
+                    ),
+                  )}
+                </ul>
+              </div>
+            </details>
+          </nav>
         </div>
 
         {/* Action Icons */}
         <div className="flex items-center space-x-2">
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white"
             aria-label="Mobile Apps"
             onClick={() =>
               window.open("/apps", "_blank", "noopener,noreferrer")
             }
           >
-            <MobileIcon />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
+            <DevicePhoneMobileIcon className="h-5 w-5" />
+          </button>
+          <button
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white"
             aria-label="View on GitHub"
             onClick={() =>
               window.open(
@@ -107,12 +88,12 @@ export default function SiteHeader() {
               )
             }
           >
-            <GitHubLogoIcon />
-          </Button>
+            <CodeBracketSquareIcon className="h-5 w-5" />
+          </button>
           {/* <GlobalSearch /> */}
         </div>
       </div>
-      <Separator className="absolute bottom-0 left-0 right-0" />
+      <hr className="absolute bottom-0 left-0 right-0 border-gray-800" />
     </header>
   );
 }

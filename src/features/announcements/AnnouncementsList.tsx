@@ -1,10 +1,4 @@
 import React, { useMemo } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/Accordion";
 import { newsTime } from "@/lib/dates";
 import Markdown from "@/components/markdown/Markdown";
 import { Articles } from "@/lib/types/info";
@@ -34,20 +28,19 @@ export default function AnnouncementsList({
         Announcements
       </h1>
 
-      <Accordion
-        type="single"
-        collapsible
-        defaultValue={sorted[0].name}
-        aria-label="Site announcements"
-      >
-        {sorted.map((item) => {
+      <div className="space-y-3">
+        {sorted.map((item, index) => {
           const dateMs = item.updated_at.seconds * 1000;
           const date = new Date(dateMs);
           return (
-            <AccordionItem key={item.id} value={item.name}>
-              <AccordionTrigger className="py-4 px-3 unded-lg transition">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-medium mr-10">{item.name}</h2>
+            <details
+              key={item.id}
+              open={index === 0}
+              className="rounded-lg border border-gray-800 bg-gray-950/40"
+            >
+              <summary className="cursor-pointer list-none px-4 py-3">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h2 className="text-lg font-medium">{item.name}</h2>
                   <time
                     dateTime={date.toISOString()}
                     title={date.toLocaleString()}
@@ -56,15 +49,14 @@ export default function AnnouncementsList({
                     {newsTime(date)}
                   </time>
                 </div>
-              </AccordionTrigger>
-
-              <AccordionContent className="prose max-w-none py-4">
+              </summary>
+              <div className="prose max-w-none px-4 pb-4 pt-2">
                 <Markdown content={item.text} />
-              </AccordionContent>
-            </AccordionItem>
+              </div>
+            </details>
           );
         })}
-      </Accordion>
+      </div>
     </section>
   );
 }

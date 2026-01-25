@@ -1,8 +1,6 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
 import { Organizations } from "@/lib/types/info";
 
 interface OrganizationsListProps {
@@ -37,13 +35,16 @@ export default function OrganizationsList({
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-100">
           {title}
         </h1>
-        <Input
-          type="text"
-          placeholder={`Search ${title}…`}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full md:w-auto max-w-sm"
-        />
+        <label className="w-full md:w-auto max-w-sm">
+          <span className="sr-only">Search {title}</span>
+          <input
+            type="search"
+            placeholder={`Search ${title}…`}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 placeholder:text-gray-500"
+          />
+        </label>
       </div>
 
       {filtered.length === 0 ? (
@@ -58,8 +59,8 @@ export default function OrganizationsList({
               href={`/${confSlug}/organization/?id=${o.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
-              <Card className="bg-linear-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600  transition-all transform hover:scale-[1.02] overflow-hidden ring-offset-4 ring-indigo-600 hover:ring-4 ">
-                <CardContent className="flex flex-col items-center justify-center p-6 space-y-4">
+              <div className="bg-linear-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600 transition-all transform hover:scale-[1.02] overflow-hidden ring-offset-4 ring-indigo-600 hover:ring-4">
+                <div className="flex flex-col items-center justify-center p-6 space-y-4">
                   {o.logo?.url ? (
                     <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-lg overflow-hidden bg-gray-800 ring-2 ring-gray-600 flex items-center justify-center">
                       <Image
@@ -70,15 +71,15 @@ export default function OrganizationsList({
                       />
                     </div>
                   ) : (
-                    <div className="flex items-center justify-center w-24 h-24 md:w-32 md:h-32  bg-gray-800 ring-2 ring-gray-600 text-white text-2xl font-bold">
+                    <div className="flex items-center justify-center w-24 h-24 md:w-32 md:h-32 bg-gray-800 ring-2 ring-gray-600 text-white text-2xl font-bold">
                       {getInitials(o.name)}
                     </div>
                   )}
                   <h2 className="text-lg font-medium text-gray-100 text-center">
                     {o.name}
                   </h2>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </Link>
           ))}
         </div>

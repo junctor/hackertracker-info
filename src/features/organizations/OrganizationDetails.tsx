@@ -5,11 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import Markdown from "@/components/markdown/Markdown";
 import { Organization } from "@/lib/types/info";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { ExternalLinkIcon } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
-import { Card } from "@/components/ui/Card";
+import { Tab } from "@headlessui/react";
+import {
+  ArrowTopRightOnSquareIcon,
+  CalendarIcon,
+} from "@heroicons/react/24/outline";
 
 interface OrganizationDetailsProps {
   org: Organization;
@@ -28,7 +28,7 @@ export default function OrganizationDetails({
   return (
     <article className="max-w-4xl mx-auto px-4 py-12 space-y-8">
       {/* Hero Section */}
-      <Card className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6 transition-shadow hover:shadow-lg">
+      <section className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6 transition-shadow hover:shadow-lg rounded-lg">
         {/* Logo container */}
         <div className="relative w-full max-w-xs h-32 sm:h-40 md:h-48 rounded-lg overflow-hidden flex-shrink-0">
           {org.logo?.url ? (
@@ -55,71 +55,74 @@ export default function OrganizationDetails({
             {org.name}
           </h1>
           {org.tag_id_as_organizer && (
-            <Link href={`/tag?id=${org.tag_id_as_organizer}`}>
-              <Button
-                variant="secondary"
-                size="default"
-                className="inline-flex items-center space-x-2 transform hover:scale-105 transition"
-              >
-                <CalendarIcon className="h-5 w-5 text-indigo-400" />
-                <span>See {org.name} Events</span>
-              </Button>
+            <Link
+              href={`/tag?id=${org.tag_id_as_organizer}`}
+              className="inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-4 py-2 text-sm text-indigo-100 transition hover:scale-105"
+            >
+              <CalendarIcon className="h-5 w-5 text-indigo-400" />
+              <span>See {org.name} Events</span>
             </Link>
           )}
         </div>
-      </Card>
+      </section>
 
       {/* Tabbed content */}
-      <Tabs defaultValue="about" className="space-y-4">
-        <TabsList className="flex space-x-2 border-b border-gray-700">
-          <TabsTrigger
-            value="about"
-            className="px-3 py-2 text-sm font-medium text-gray-800 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-indigo-400"
+      <Tab.Group defaultIndex={0}>
+        <Tab.List className="flex gap-2 border-b border-gray-700">
+          <Tab
+            className={({ selected }) =>
+              `px-3 py-2 text-sm font-medium transition ${
+                selected
+                  ? "border-b-2 border-indigo-400 text-white"
+                  : "text-gray-400 hover:text-white"
+              }`
+            }
           >
             About
-          </TabsTrigger>
+          </Tab>
           {org.links.length > 0 && (
-            <TabsTrigger
-              value="links"
-              className="px-3 py-2 text-sm font-medium text-gray-800 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-indigo-400"
+            <Tab
+              className={({ selected }) =>
+                `px-3 py-2 text-sm font-medium transition ${
+                  selected
+                    ? "border-b-2 border-indigo-400 text-white"
+                    : "text-gray-400 hover:text-white"
+                }`
+              }
             >
               Links
-            </TabsTrigger>
+            </Tab>
           )}
-        </TabsList>
+        </Tab.List>
 
-        <TabsContent value="about" className="py-4">
-          <div className="prose prose-invert max-w-none text-gray-300">
-            <Markdown content={org.description} />
-          </div>
-        </TabsContent>
+        <Tab.Panels className="py-4">
+          <Tab.Panel>
+            <div className="prose prose-invert max-w-none text-gray-300">
+              <Markdown content={org.description} />
+            </div>
+          </Tab.Panel>
 
-        {org.links.length > 0 && (
-          <TabsContent value="links" className="py-4">
-            <ul className="space-y-3">
-              {org.links.map((l) => (
-                <li key={l.url}>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-between flex items-center transition-colors hover:bg-gray-700"
-                  >
+          {org.links.length > 0 && (
+            <Tab.Panel>
+              <ul className="space-y-3">
+                {org.links.map((l) => (
+                  <li key={l.url}>
                     <a
                       href={l.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center w-full"
+                      className="flex w-full items-center justify-between rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-200 transition hover:bg-gray-800"
                     >
-                      <span className="text-left text-gray-200">{l.label}</span>
-                      <ExternalLinkIcon className="w-4 h-4 ml-2 text-gray-400" />
+                      <span>{l.label}</span>
+                      <ArrowTopRightOnSquareIcon className="h-4 w-4 text-gray-400" />
                     </a>
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </TabsContent>
-        )}
-      </Tabs>
+                  </li>
+                ))}
+              </ul>
+            </Tab.Panel>
+          )}
+        </Tab.Panels>
+      </Tab.Group>
     </article>
   );
 }

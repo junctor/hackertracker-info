@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
-import { TableCell, TableRow } from "@/components/ui/Table";
-import { Badge } from "@/components/ui/Badge";
-import { Bookmark } from "lucide-react";
+import {
+  BookmarkIcon as BookmarkIconOutline,
+} from "@heroicons/react/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
 import { ScheduleEvent } from "@/lib/types/info";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { eventTimeTable } from "@/lib/dates";
@@ -24,18 +25,18 @@ function ScheduleEventRow({
   );
 
   return (
-    <TableRow
-      role="button"
+    <tr
+      role="link"
       tabIndex={0}
       onClick={() => router.push(`../content?id=${event.content_id}`)}
-      className="group cursor-pointer hover:bg-gray-900 focus-visible:bg-gray-900 focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2 transition-colors"
+      className="group cursor-pointer transition-colors hover:bg-gray-900 focus-visible:bg-gray-900 focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2"
     >
-      <TableCell
+      <td
         style={barStyle}
         className="relative px-2 py-1 before:absolute before:top-1 before:bottom-1 before:left-1 before:rounded before:bg-(--event-color) before:w-[clamp(0.25rem,2vw,1rem)] before:transition-all before:duration-200 group-hover:before:w-[clamp(0.4rem,3vw,1.2rem)]"
       />
 
-      <TableCell className="px-2 py-1 whitespace-normal wrap-break-word min-w-0">
+      <td className="px-2 py-1 whitespace-normal wrap-break-word min-w-0">
         <div className="space-y-0.5">
           <p className="text-base font-semibold text-gray-100">
             <time dateTime={new Date(event.begin).toISOString()}>
@@ -46,8 +47,8 @@ function ScheduleEventRow({
             {eventTimeTable(event.end, false)}
           </p>
         </div>
-      </TableCell>
-      <TableCell className="px-2 py-2 whitespace-normal wrap-break-word min-w-0">
+      </td>
+      <td className="px-2 py-2 whitespace-normal wrap-break-word min-w-0">
         <h3 className="text-xl font-bold text-gray-100 line-clamp-2">
           {event.title}
         </h3>
@@ -57,21 +58,21 @@ function ScheduleEventRow({
         <p className="mt-1 text-gray-300">{event.location}</p>
         <div className="flex flex-wrap gap-1 uppercase text-sm mt-2">
           {event.tags.map((tag) => (
-            <Badge
+            <span
               key={tag.id}
-              className="font-medium"
+              className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
               style={{
                 backgroundColor: tag.color_background,
                 color: tag.color_foreground ?? "#fff",
               }}
             >
               {tag.label}
-            </Badge>
+            </span>
           ))}
         </div>
-      </TableCell>
+      </td>
 
-      <TableCell className="px-2 py-1 text-right">
+      <td className="px-2 py-1 text-right">
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -79,14 +80,16 @@ function ScheduleEventRow({
           }}
           aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
           aria-pressed={bookmark}
-          className="focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300 focus-visible:ring-2 focus-visible:ring-indigo-500"
         >
-          <Bookmark
-            className={`h-5 w-5 ${bookmark ? "fill-current text-indigo-400" : "stroke-current text-gray-500"}`}
-          />
+          {bookmark ? (
+            <BookmarkIconSolid className="h-5 w-5 text-indigo-400" />
+          ) : (
+            <BookmarkIconOutline className="h-5 w-5" />
+          )}
         </button>
-      </TableCell>
-    </TableRow>
+      </td>
+    </tr>
   );
 }
 

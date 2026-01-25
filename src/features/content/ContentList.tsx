@@ -1,17 +1,6 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Input } from "@/components/ui/Input";
 import type { ProcessedContents, TagTypes } from "@/lib/types/info";
-import { Badge } from "@/components/ui/Badge";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/Select";
 
 interface Props {
   content: ProcessedContents;
@@ -40,47 +29,49 @@ export default function ContentList({ content, tags }: Props) {
       <h2 className="mb-4 text-2xl font-semibold text-gray-100">Content</h2>
 
       {/* Search Input */}
-      <div className="mb-8 flex justify-center">
-        <Input
-          placeholder="Search Content..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-xl"
-        />
+      <div className="mb-8 flex flex-wrap items-end justify-center gap-4">
+        <label className="w-full max-w-xl">
+          <span className="sr-only">Search content</span>
+          <input
+            type="search"
+            placeholder="Search Content..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 placeholder:text-gray-500"
+          />
+        </label>
         {/* Tag Filter */}
-        <div className="ml-4">
-          <Select
-            onValueChange={(value) => {
-              setSelectedTag(Number(value));
-            }}
+        <label className="w-full max-w-[220px]">
+          <span className="sr-only">Filter by tag</span>
+          <select
+            value={selectedTag ?? ""}
+            onChange={(e) =>
+              setSelectedTag(e.target.value ? Number(e.target.value) : null)
+            }
+            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100"
           >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Tags" />
-            </SelectTrigger>
-            <SelectContent>
-              {tags
-                .filter(
-                  (tag) =>
-                    tag.is_browsable &&
-                    tag.tags.length > 0 &&
-                    tag.category == "content"
-                )
-                .sort((a, b) => a.sort_order - b.sort_order)
-                .map((tag) => (
-                  <SelectGroup key={tag.id}>
-                    <SelectLabel>{tag.label}</SelectLabel>
-                    {tag.tags
-                      .sort((a, b) => a.sort_order - b.sort_order)
-                      .map((item) => (
-                        <SelectItem key={item.id} value={item.id.toString()}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                ))}
-            </SelectContent>
-          </Select>
-        </div>
+            <option value="">All tags</option>
+            {tags
+              .filter(
+                (tag) =>
+                  tag.is_browsable &&
+                  tag.tags.length > 0 &&
+                  tag.category === "content"
+              )
+              .sort((a, b) => a.sort_order - b.sort_order)
+              .map((tag) => (
+                <optgroup key={tag.id} label={tag.label}>
+                  {tag.tags
+                    .sort((a, b) => a.sort_order - b.sort_order)
+                    .map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.label}
+                      </option>
+                    ))}
+                </optgroup>
+              ))}
+          </select>
+        </label>
       </div>
 
       <ul className="divide-y divide-gray-700 leading-relaxed">
@@ -108,16 +99,16 @@ export default function ContentList({ content, tags }: Props) {
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 {item.tags.map((tag) => (
-                  <Badge
+                  <span
                     key={tag.id}
-                    className="font-medium"
+                    className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium"
                     style={{
                       backgroundColor: tag.color_background,
                       color: tag.color_foreground ?? "#fff",
                     }}
                   >
                     {tag.label}
-                  </Badge>
+                  </span>
                 ))}
               </div>
             </Link>

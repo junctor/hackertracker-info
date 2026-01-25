@@ -6,17 +6,9 @@ import React, {
   useCallback,
 } from "react";
 import { eventDayTable, tabDateTitle } from "@/lib/dates";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableRow,
-  TableHead as HeadCell,
-} from "@/components/ui/Table";
 import ScheduleEventRow from "./ScheduleEventRow";
-import { Button } from "@/components/ui/Button";
 import { GroupedSchedule } from "@/lib/types/info";
-import { Bookmark, Tag } from "lucide-react";
+import { BookmarkIcon, TagIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export default function ScheduleEvents({
@@ -79,37 +71,39 @@ export default function ScheduleEvents({
   return (
     <div className="min-h-screen text-gray-100">
       {/* Top toolbar */}
-      <div className="sticky top-0 bg-background z-40 p-2 border-b border-gray-700 flex gap-2 justify-end">
-        <div className="flex gap-2">
-          <Link href="/bookmarks">
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="Filter by bookmarks"
-            >
-              <Bookmark />
-            </Button>
-          </Link>
-          <Link href="/tags">
-            <Button variant="ghost" size="icon" aria-label="Filter by tags">
-              <Tag />
-            </Button>
-          </Link>
-        </div>
+      <div className="sticky top-0 z-40 flex justify-end gap-2 border-b border-gray-800 bg-black/80 p-2 backdrop-blur">
+        <Link
+          href="/bookmarks"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white"
+          aria-label="Filter by bookmarks"
+        >
+          <BookmarkIcon className="h-5 w-5" />
+        </Link>
+        <Link
+          href="/tags"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white"
+          aria-label="Filter by tags"
+        >
+          <TagIcon className="h-5 w-5" />
+        </Link>
       </div>
 
       {/* Sticky day tabs */}
-      <div className="sticky top-[60px] bg-background z-30 flex flex-wrap justify-center gap-2 py-2 border-b border-gray-700">
+      {/* TODO: Design polish for day tabs and schedule table layout. */}
+      <div className="sticky top-[60px] z-30 flex flex-wrap justify-center gap-2 border-b border-gray-800 bg-black/80 py-2 backdrop-blur">
         {days.map(({ day }) => (
-          <Button
+          <button
             key={day}
-            className="mx-1"
-            variant={activeDays.includes(day) ? "secondary" : "outline"}
+            className={`mx-1 rounded-full border px-3 py-1 text-sm transition ${
+              activeDays.includes(day)
+                ? "border-indigo-400 bg-indigo-500/20 text-indigo-100"
+                : "border-gray-700 text-gray-200 hover:border-indigo-400 hover:text-white"
+            }`}
             onClick={() => scrollToDay(day)}
             aria-current={activeDays.includes(day) ? "date" : undefined}
           >
             {tabDateTitle(day)}
-          </Button>
+          </button>
         ))}
       </div>
 
@@ -126,7 +120,7 @@ export default function ScheduleEvents({
             {eventDayTable(day)}
           </h2>
           <div className="overflow-x-auto px-5">
-            <Table className="w-full mb-8 table-fixed min-w-full">
+            <table className="w-full mb-8 min-w-full table-fixed border-collapse">
               <colgroup>
                 <col className="w-1/12 min-w-0" />
                 <col className="w-2/12 min-w-0" />
@@ -134,20 +128,20 @@ export default function ScheduleEvents({
                 <col className="w-1/12 min-w-0" />
               </colgroup>
 
-              <TableHeader className="bg-gray-800">
-                <TableRow>
-                  <HeadCell />
-                  <HeadCell className="font-extrabold text-gray-100">
+              <thead className="bg-gray-800">
+                <tr>
+                  <th scope="col" className="px-2 py-2 text-left" />
+                  <th scope="col" className="px-2 py-2 text-left font-semibold">
                     Time
-                  </HeadCell>
-                  <HeadCell className="font-extrabold text-gray-100">
+                  </th>
+                  <th scope="col" className="px-2 py-2 text-left font-semibold">
                     Event
-                  </HeadCell>
-                  <HeadCell />
-                </TableRow>
-              </TableHeader>
+                  </th>
+                  <th scope="col" className="px-2 py-2 text-right" />
+                </tr>
+              </thead>
 
-              <TableBody>
+              <tbody>
                 {events.map((evt) => (
                   <ScheduleEventRow
                     key={evt.id}
@@ -155,8 +149,8 @@ export default function ScheduleEvents({
                     isBookmarked={bookmarks.includes(evt.id)}
                   />
                 ))}
-              </TableBody>
-            </Table>
+              </tbody>
+            </table>
           </div>
         </section>
       ))}

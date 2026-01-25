@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { eventTime } from "@/lib/dates";
-import { Card, CardContent } from "@/components/ui/Card";
 import Markdown from "@/components/markdown/Markdown";
 import type { Person } from "@/lib/types/info";
 
@@ -14,7 +13,7 @@ export default function PersonDetails({ person }: Props) {
   return (
     <div className="max-w-screen-lg mx-auto px-4 py-10 space-y-10">
       {/* Hero */}
-      <Card className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6">
+      <section className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6 rounded-lg">
         {avatar ? (
           <div className="w-32 h-32 rounded-full overflow-hidden shadow-lg bg-gray-700">
             <Image
@@ -63,7 +62,7 @@ export default function PersonDetails({ person }: Props) {
             </div>
           )}
         </div>
-      </Card>
+      </section>
 
       {/* About */}
       {person.description && (
@@ -87,7 +86,7 @@ export default function PersonDetails({ person }: Props) {
                     href={`/content?id=${e.content_id}`}
                     className="block w-full group"
                   >
-                    <Card
+                    <div
                       className="
                         bg-gray-700 border-l-4 border-indigo-400 pl-5 h-full
                         transition-shadow duration-200 ease-out
@@ -96,7 +95,7 @@ export default function PersonDetails({ person }: Props) {
                         group-hover:border-indigo-300
                       "
                     >
-                      <CardContent className="p-4">
+                      <div className="p-4">
                         <h3 className="text-lg font-semibold text-gray-100">
                           {e.title}
                         </h3>
@@ -106,8 +105,8 @@ export default function PersonDetails({ person }: Props) {
                         <p className="text-sm text-gray-400">
                           {e.location.name}
                         </p>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </div>
                   </Link>
                 </li>
               ))}

@@ -2,11 +2,11 @@ import React from "react";
 import useSWR from "swr";
 import Head from "next/head";
 import { alphaSort, fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import { Organizations as OrgsType } from "@/types/info";
-import Orgs from "@/components/organization/Organizations";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import { Organizations as OrgsType } from "@/lib/types/info";
+import OrganizationsList from "@/features/organizations/OrganizationsList";
 
 export default function VillagesPage() {
   const {
@@ -15,8 +15,8 @@ export default function VillagesPage() {
     isLoading,
   } = useSWR<OrgsType>("/ht/dcsg2026/organizations.json", fetcher);
 
-  if (isLoading) return <Loading />;
-  if (error || !organizations) return <Error />;
+  if (isLoading) return <LoadingScreen />;
+  if (error || !organizations) return <ErrorScreen />;
 
   const villages = organizations
     .filter((org) => org.tag_ids.includes(48955))
@@ -34,8 +34,8 @@ export default function VillagesPage() {
         />
       </Head>
       <main>
-        <Heading />
-        <Orgs orgs={villages} title="Villages" confSlug="dcsg2026" />
+        <SiteHeader />
+        <OrganizationsList orgs={villages} title="Villages" confSlug="dcsg2026" />
       </main>
     </>
   );

@@ -1,13 +1,13 @@
 import React, { useMemo } from "react";
-import { TableCell, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { TableCell, TableRow } from "@/components/ui/Table";
+import { Badge } from "@/components/ui/Badge";
 import { Bookmark } from "lucide-react";
-import { ScheduleEvent } from "@/types/info";
-import { useBookmarks } from "@/hooks/useBookmarks";
+import { ScheduleEvent } from "@/lib/types/info";
+import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { eventTimeTable } from "@/lib/dates";
 import { useRouter } from "next/router";
 
-function EventCell({
+function ScheduleEventRow({
   event,
   isBookmarked,
 }: {
@@ -90,4 +90,4 @@ function EventCell({
   );
 }
 
-export default React.memo(EventCell);
+export default React.memo(ScheduleEventRow);

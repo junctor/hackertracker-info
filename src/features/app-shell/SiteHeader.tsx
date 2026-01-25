@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
+import { Button } from "@/components/ui/Button";
+import { Separator } from "@/components/ui/Separator";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,7 +11,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+} from "@/components/ui/NavigationMenu";
 import { MobileIcon, RocketIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import GlobalSearch from "./GlobalSearch";
@@ -24,7 +24,7 @@ const museoFont = localFont({
   variable: "--font-museo",
 });
 
-export default function Heading() {
+export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 bg-background text-white px-5 py-3 border-b border-border">
       <div className="max-w-7xl mx-auto flex items-center justify-between">

@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import type { ProcessedContents, TagTypes } from "@/types/info";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/Input";
+import type { ProcessedContents, TagTypes } from "@/lib/types/info";
+import { Badge } from "@/components/ui/Badge";
 import {
   Select,
   SelectContent,
@@ -11,14 +11,14 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/Select";
 
 interface Props {
   content: ProcessedContents;
   tags: TagTypes;
 }
 
-export default function Contents({ content, tags }: Props) {
+export default function ContentList({ content, tags }: Props) {
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<number | null>(null);
 

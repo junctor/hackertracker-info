@@ -2,12 +2,12 @@
 import React from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import { TagTypes } from "@/types/info";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import { TagTypes } from "@/lib/types/info";
 import Head from "next/head";
-import Tags from "@/components/tags/Tags";
+import TagsList from "@/features/tags/TagsList";
 
 export default function TagsPage() {
   const {
@@ -16,8 +16,8 @@ export default function TagsPage() {
     isLoading,
   } = useSWR<TagTypes>("/ht/tagtypes.json", fetcher);
 
-  if (isLoading) return <Loading />;
-  if (error || !tags) return <Error />;
+  if (isLoading) return <LoadingScreen />;
+  if (error || !tags) return <ErrorScreen />;
 
   return (
     <>
@@ -29,8 +29,8 @@ export default function TagsPage() {
         />
       </Head>
       <main>
-        <Heading />
-        <Tags tagTypes={tags} />
+        <SiteHeader />
+        <TagsList tagTypes={tags} />
       </main>
     </>
   );

@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import PersonDisplay from "@/components/people/person";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import PersonDetails from "@/features/people/PersonDetails";
 import { useRouter } from "next/router";
-import { People, Person } from "@/types/info";
+import { People, Person } from "@/lib/types/info";
 import Head from "next/head";
 
 export default function PersonPage() {
@@ -30,10 +30,10 @@ export default function PersonPage() {
     return people.find((p) => p.id === personId) ?? null;
   }, [people, personId]);
 
-  if (!router.isReady) return <Loading />;
-  if (isLoading) return <Loading />;
-  if (error) return <Error />;
-  if (personId === null || !person) return <Error msg="Person not found" />;
+  if (!router.isReady) return <LoadingScreen />;
+  if (isLoading) return <LoadingScreen />;
+  if (error) return <ErrorScreen />;
+  if (personId === null || !person) return <ErrorScreen msg="Person not found" />;
 
   return (
     <>
@@ -45,8 +45,8 @@ export default function PersonPage() {
         />
       </Head>
       <main>
-        <Heading />
-        <PersonDisplay person={person} />
+        <SiteHeader />
+        <PersonDetails person={person} />
       </main>
     </>
   );

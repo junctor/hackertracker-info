@@ -2,13 +2,13 @@
 import React, { useMemo } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import Content from "@/components/content/Content";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import ContentDetails from "@/features/content/ContentDetails";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import type { ProcessedContentById, ProcessedContentId } from "@/types/info";
+import type { ProcessedContentById, ProcessedContentId } from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
 
 export default function ContentPage() {
@@ -46,15 +46,15 @@ export default function ContentPage() {
   const bookmarks = useMemo(() => getBookmarks(), []);
 
   if (error) {
-    return <Error msg="Failed to load content" />;
+    return <ErrorScreen msg="Failed to load content" />;
   }
 
   if (!router.isReady || !contentsById || contentId === null) {
-    return <Loading />;
+    return <LoadingScreen />;
   }
 
   if (!selectedContent) {
-    return <Error msg="Content not found" />;
+    return <ErrorScreen msg="Content not found" />;
   }
 
   return (
@@ -64,8 +64,8 @@ export default function ContentPage() {
         <meta name="description" content={selectedContent.description} />
       </Head>
       <main>
-        <Heading />
-        <Content
+        <SiteHeader />
+        <ContentDetails
           content={selectedContent}
           related_content={relatedContent}
           bookmarks={bookmarks}

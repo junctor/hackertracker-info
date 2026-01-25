@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { People } from "@/types/info";
-import { Badge } from "../ui/badge";
+import { Input } from "@/components/ui/Input";
+import { Card, CardContent } from "@/components/ui/Card";
+import { People } from "@/lib/types/info";
+import { Badge } from "@/components/ui/Badge";
 
-export default function PeopleDisplay({ people }: { people: People }) {
+export default function PeopleList({ people }: { people: People }) {
   const [query, setQuery] = useState("");
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();

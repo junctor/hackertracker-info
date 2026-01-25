@@ -12,14 +12,14 @@ import {
   TableHeader,
   TableRow,
   TableHead as HeadCell,
-} from "@/components/ui/table";
-import EventCell from "./EventCell";
-import { Button } from "@/components/ui/button";
-import { GroupedSchedule } from "@/types/info";
+} from "@/components/ui/Table";
+import ScheduleEventRow from "./ScheduleEventRow";
+import { Button } from "@/components/ui/Button";
+import { GroupedSchedule } from "@/lib/types/info";
 import { Bookmark, Tag } from "lucide-react";
 import Link from "next/link";
 
-export default function Events({
+export default function ScheduleEvents({
   dateGroup,
   bookmarks,
 }: {
@@ -149,7 +149,7 @@ export default function Events({
 
               <TableBody>
                 {events.map((evt) => (
-                  <EventCell
+                  <ScheduleEventRow
                     key={evt.id}
                     event={evt}
                     isBookmarked={bookmarks.includes(evt.id)}

@@ -3,11 +3,11 @@ import useSWR from "swr";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import OrgDetails from "@/components/organization/OrganizationDetails";
-import { Organizations } from "@/types/info";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import OrganizationDetails from "@/features/organizations/OrganizationDetails";
+import { Organizations } from "@/lib/types/info";
 
 export default function OrganizationPage() {
   const router = useRouter();
@@ -25,11 +25,11 @@ export default function OrganizationPage() {
     isLoading,
   } = useSWR<Organizations>("/ht/dcsg2026/organizations.json", fetcher);
 
-  if (!router.isReady) return <Loading />;
-  if (isLoading) return <Loading />;
-  if (error || !organizations) return <Error />;
+  if (!router.isReady) return <LoadingScreen />;
+  if (isLoading) return <LoadingScreen />;
+  if (error || !organizations) return <ErrorScreen />;
   const org = organizations.find((o) => o.id === orgId) ?? null;
-  if (!org) return <Error msg="Organization not found" />;
+  if (!org) return <ErrorScreen msg="Organization not found" />;
 
   return (
     <>
@@ -39,8 +39,8 @@ export default function OrganizationPage() {
       </Head>
 
       <main>
-        <Heading />
-        <OrgDetails org={org} />
+        <SiteHeader />
+        <OrganizationDetails org={org} />
       </main>
     </>
   );

@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/Button";
 import {
   Command,
   CommandInput,
   CommandList,
   CommandItem,
   CommandEmpty,
-} from "@/components/ui/command";
+} from "@/components/ui/Command";
 import {
   MagnifyingGlassIcon,
   PersonIcon,
@@ -16,7 +16,7 @@ import {
   GlobeIcon,
   Cross1Icon,
 } from "@radix-ui/react-icons";
-import type { SearchIndex, SearchItem, SearchType } from "@/types/info";
+import type { SearchIndex, SearchItem, SearchType } from "@/lib/types/info";
 import Link from "next/link";
 
 export default function GlobalSearch() {

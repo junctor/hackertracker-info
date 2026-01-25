@@ -4,12 +4,12 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/components/ui/Accordion";
 import { newsTime } from "@/lib/dates";
-import Markdown from "../markdown/Markdown";
-import { Articles } from "@/types/info";
+import Markdown from "@/components/markdown/Markdown";
+import { Articles } from "@/lib/types/info";
 
-export default function Announcements({
+export default function AnnouncementsList({
   announcements,
 }: {
   announcements: Articles;

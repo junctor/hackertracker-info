@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { TagType, Tag } from "@/types/info";
+import { TagType, Tag } from "@/lib/types/info";
 
 const formatCategory = (s: string) =>
   s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -21,7 +21,7 @@ function TagPill({ tag }: { tag: Tag }) {
   );
 }
 
-export default function Tags({ tagTypes }: { tagTypes: TagType[] }) {
+export default function TagsList({ tagTypes }: { tagTypes: TagType[] }) {
   const grouped = useMemo(() => {
     return tagTypes
       .filter(

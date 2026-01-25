@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import { Documents as HTDocuments } from "@/types/info";
+import { Card } from "@/components/ui/Card";
+import { Documents as HTDocuments } from "@/lib/types/info";
 import { ChevronRight } from "lucide-react";
 
-export default function Documents({
+export default function DocumentsList({
   docs,
   configSlug,
 }: {

@@ -2,12 +2,12 @@
 import React from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import Contents from "@/components/content/Contents";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import ContentList from "@/features/content/ContentList";
 import Head from "next/head";
-import type { ProcessedContents, TagTypes } from "@/types/info";
+import type { ProcessedContents, TagTypes } from "@/lib/types/info";
 
 export default function ContentsPage() {
   const {
@@ -22,9 +22,9 @@ export default function ContentsPage() {
     isLoading: tagIsLoading,
   } = useSWR<TagTypes>("/ht/tagtypes.json", fetcher);
 
-  if (isLoading || tagIsLoading) return <Loading />;
-  if (error) return <Error msg="Failed to load content" />;
-  if (tagError) return <Error msg="Failed to load tags" />;
+  if (isLoading || tagIsLoading) return <LoadingScreen />;
+  if (error) return <ErrorScreen msg="Failed to load content" />;
+  if (tagError) return <ErrorScreen msg="Failed to load tags" />;
 
   return (
     <>
@@ -36,8 +36,8 @@ export default function ContentsPage() {
         />
       </Head>
       <main>
-        <Heading />
-        <Contents content={items!} tags={tags ?? []} />
+        <SiteHeader />
+        <ContentList content={items!} tags={tags ?? []} />
       </main>
     </>
   );

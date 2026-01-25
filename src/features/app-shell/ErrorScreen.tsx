@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-export default function Error({ msg }: { msg?: string }) {
+export default function ErrorScreen({ msg }: { msg?: string }) {
   return (
     <main className="relative grid min-h-screen place-items-center">
       {/* overlays */}

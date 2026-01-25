@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
-import Markdown from "../markdown/Markdown";
-import type { ProcessedContentId } from "@/types/info";
+import Markdown from "@/components/markdown/Markdown";
+import type { ProcessedContentId } from "@/lib/types/info";
 import { Share2Icon, PersonIcon } from "@radix-ui/react-icons";
-import Session from "./Session";
-import { Badge } from "../ui/badge";
+import ContentSession from "./ContentSession";
+import { Badge } from "@/components/ui/Badge";
 
-export default function Content({
+export default function ContentDetails({
   content,
   related_content,
   bookmarks,
@@ -70,7 +70,7 @@ export default function Content({
           </h2>
           <ul className="space-y-4">
             {sessions.map((s) => (
-              <Session
+              <ContentSession
                 key={s.session_id}
                 session={s}
                 content={content}

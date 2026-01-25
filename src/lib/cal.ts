@@ -1,4 +1,4 @@
-import { ContentSessionLite, ProcessedContentId } from "@/types/info";
+import { ContentSessionLite, ProcessedContentId } from "@/lib/types/info";
 
 const BASEURL = "https://info.defcon.org";
 const PRODID = "-//hackertracker//defcon-singapore-2025 Calendar 1.0//EN";

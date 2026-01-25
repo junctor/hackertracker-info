@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import Link from "next/link";
 
-export default function Apps() {
+export default function AppsLanding() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
 

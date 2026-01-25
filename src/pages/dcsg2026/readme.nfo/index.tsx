@@ -1,12 +1,12 @@
 import React from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import { Documents as HTDocuments } from "@/types/info";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import { Documents as HTDocuments } from "@/lib/types/info";
 import Head from "next/head";
-import Documents from "@/components/documents/Documents";
+import DocumentsList from "@/features/documents/DocumentsList";
 
 export default function DocumentsPage() {
   const {
@@ -15,8 +15,8 @@ export default function DocumentsPage() {
     isLoading,
   } = useSWR<HTDocuments>("/ht/dcsg2026/documents.json", fetcher);
 
-  if (isLoading) return <Loading />;
-  if (error || !documents) return <Error />;
+  if (isLoading) return <LoadingScreen />;
+  if (error || !documents) return <ErrorScreen />;
 
   return (
     <>
@@ -28,8 +28,8 @@ export default function DocumentsPage() {
         />
       </Head>
       <main>
-        <Heading />
-        <Documents docs={documents} configSlug="dcsg2026" />
+        <SiteHeader />
+        <DocumentsList docs={documents} configSlug="dcsg2026" />
       </main>
     </>
   );

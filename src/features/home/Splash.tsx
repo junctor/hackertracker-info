@@ -1,5 +1,5 @@
 import React from "react";
-import Countdown from "@/components/countdown/Countdown";
+import Countdown from "@/features/home/Countdown";
 import Image from "next/image";
 import dcsLogo from "../../../public/images/dcsingapore.webp";
 import localFont from "next/font/local";

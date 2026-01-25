@@ -2,11 +2,11 @@
 import React, { useMemo } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import Events from "@/components/schedule/Events";
-import { GroupedSchedule } from "@/types/info";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import ScheduleEvents from "@/features/schedule/ScheduleEvents";
+import { GroupedSchedule } from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
 import Head from "next/head";
 
@@ -28,8 +28,8 @@ export default function BookmarksPage() {
     }, {} as GroupedSchedule);
   }, [allEvents, bookmarks]);
 
-  if (isLoading) return <Loading />;
-  if (error || !allEvents) return <Error />;
+  if (isLoading) return <LoadingScreen />;
+  if (error || !allEvents) return <ErrorScreen />;
 
   return (
     <>
@@ -41,13 +41,13 @@ export default function BookmarksPage() {
         />
       </Head>
       <main>
-        <Heading />
+        <SiteHeader />
         {bookmarks.length === 0 ? (
           <p className="mt-8 text-center text-gray-500">
             You haven’t bookmarked any events yet.
           </p>
         ) : (
-          <Events dateGroup={dateGroup} bookmarks={bookmarks} />
+          <ScheduleEvents dateGroup={dateGroup} bookmarks={bookmarks} />
         )}
       </main>
     </>

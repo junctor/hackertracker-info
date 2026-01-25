@@ -1,12 +1,12 @@
-import { useBookmarks } from "@/hooks/useBookmarks";
+import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import cal from "@/lib/cal";
 import { eventTime, formatSessionTime } from "@/lib/dates";
-import { ContentSessionLite, ProcessedContentId } from "@/types/info";
+import { ContentSessionLite, ProcessedContentId } from "@/lib/types/info";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Bookmark } from "lucide-react";
 import React from "react";
 
-export default function Session({
+export default function ContentSession({
   session,
   content,
   isBookmarked,

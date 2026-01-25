@@ -3,19 +3,21 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Markdown from "../markdown/Markdown";
-import { Organization } from "@/types/info";
+import Markdown from "@/components/markdown/Markdown";
+import { Organization } from "@/lib/types/info";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { ExternalLinkIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card } from "../ui/card";
+import { Button } from "@/components/ui/Button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
+import { Card } from "@/components/ui/Card";
 
-interface OrgDetailsProps {
+interface OrganizationDetailsProps {
   org: Organization;
 }
 
-export default function OrgDetails({ org }: OrgDetailsProps) {
+export default function OrganizationDetails({
+  org,
+}: OrganizationDetailsProps) {
   const initials = org.name
     .split(" ")
     .map((w) => w[0])

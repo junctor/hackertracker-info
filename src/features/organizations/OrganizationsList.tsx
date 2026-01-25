@@ -1,17 +1,21 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Organizations } from "@/types/info";
+import { Card, CardContent } from "@/components/ui/Card";
+import { Input } from "@/components/ui/Input";
+import { Organizations } from "@/lib/types/info";
 
-interface OrgsProps {
+interface OrganizationsListProps {
   orgs: Organizations;
   title: string;
   confSlug: string;
 }
 
-export default function Orgs({ orgs, title, confSlug }: OrgsProps) {
+export default function OrganizationsList({
+  orgs,
+  title,
+  confSlug,
+}: OrganizationsListProps) {
   const [search, setSearch] = useState("");
   const filtered = useMemo(
     () =>

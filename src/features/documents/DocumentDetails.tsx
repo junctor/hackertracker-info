@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import Markdown from "../markdown/Markdown";
-import { Document } from "@/types/info";
+import Markdown from "@/components/markdown/Markdown";
+import { Document } from "@/lib/types/info";
 import { ChevronRight } from "lucide-react";
 
 export default function DocumentDetails({

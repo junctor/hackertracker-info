@@ -1,13 +1,13 @@
 import React, { useMemo } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import { Document, Documents as HTDocuments } from "@/types/info";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import { Document, Documents as HTDocuments } from "@/lib/types/info";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import DocumentDetails from "@/components/documents/DocumentDetails";
+import DocumentDetails from "@/features/documents/DocumentDetails";
 
 export default function DocumentsPage() {
   const router = useRouter();
@@ -32,11 +32,11 @@ export default function DocumentsPage() {
       : null;
   }, [documents, docId]);
 
-  if (!router.isReady) return <Loading />;
-  if (isLoading) return <Loading />;
-  if (error || !documents) return <Error />;
+  if (!router.isReady) return <LoadingScreen />;
+  if (isLoading) return <LoadingScreen />;
+  if (error || !documents) return <ErrorScreen />;
   if (!selectedDocument) {
-    return <Error msg="Document not found." />;
+    return <ErrorScreen msg="Document not found." />;
   }
 
   return (
@@ -49,7 +49,7 @@ export default function DocumentsPage() {
         />
       </Head>
       <main>
-        <Heading />
+        <SiteHeader />
         <DocumentDetails doc={selectedDocument} configSlug="dcsg2026" />
       </main>
     </>

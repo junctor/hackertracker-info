@@ -2,11 +2,11 @@
 import React, { useMemo } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import Events from "@/components/schedule/Events";
-import { GroupedTag, GroupedTags } from "@/types/info";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import ScheduleEvents from "@/features/schedule/ScheduleEvents";
+import { GroupedTag, GroupedTags } from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -36,10 +36,10 @@ export default function TagPage() {
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
-  if (!router.isReady) return <Loading />;
-  if (isLoading) return <Loading />;
-  if (error) return <Error />;
-  if (tagId === null || !tag) return <Error msg="Tag not found" />;
+  if (!router.isReady) return <LoadingScreen />;
+  if (isLoading) return <LoadingScreen />;
+  if (error) return <ErrorScreen />;
+  if (tagId === null || !tag) return <ErrorScreen msg="Tag not found" />;
 
   return (
     <>
@@ -51,11 +51,11 @@ export default function TagPage() {
         />
       </Head>
       <main>
-        <Heading />
+        <SiteHeader />
         <h1 className="text-3xl font-bold text-center mb-6 my-10">
           {tag.label} Schedule
         </h1>
-        <Events dateGroup={tag.schedule} bookmarks={bookmarks} />
+        <ScheduleEvents dateGroup={tag.schedule} bookmarks={bookmarks} />
       </main>
     </>
   );

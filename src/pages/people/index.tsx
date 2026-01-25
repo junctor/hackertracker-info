@@ -1,11 +1,11 @@
 import React from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
-import Loading from "@/components/misc/Loading";
-import Error from "@/components/misc/Error";
-import Heading from "@/components/heading/Heading";
-import PeopleDisplay from "@/components/people/people";
-import { People } from "@/types/info";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import PeopleList from "@/features/people/PeopleList";
+import { People } from "@/lib/types/info";
 import Head from "next/head";
 
 export default function PeoplePage() {
@@ -15,8 +15,8 @@ export default function PeoplePage() {
     isLoading,
   } = useSWR<People>("/ht/people.json", fetcher);
 
-  if (isLoading) return <Loading />;
-  if (error || !people) return <Error />;
+  if (isLoading) return <LoadingScreen />;
+  if (error || !people) return <ErrorScreen />;
 
   return (
     <>
@@ -28,8 +28,8 @@ export default function PeoplePage() {
         />
       </Head>
       <main>
-        <Heading />
-        <PeopleDisplay people={people} />
+        <SiteHeader />
+        <PeopleList people={people} />
       </main>
     </>
   );

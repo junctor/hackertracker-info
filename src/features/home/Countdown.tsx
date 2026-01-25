@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { getCountdown, TARGET_DATE_MS } from "../../lib/timer";
+import { getCountdown, TARGET_DATE_MS } from "@/lib/timer";
 import localFont from "next/font/local";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";

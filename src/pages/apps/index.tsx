@@ -1,7 +1,7 @@
 import React from "react";
-import Apps from "@/components/apps/Apps";
+import AppsLanding from "@/features/apps/AppsLanding";
 import Head from "next/head";
-import Heading from "@/components/heading/Heading";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 
 export default function AppsPage() {
   return (
@@ -14,8 +14,8 @@ export default function AppsPage() {
         />
       </Head>
       <main>
-        <Heading />
-        <Apps />
+        <SiteHeader />
+        <AppsLanding />
       </main>
     </>
   );

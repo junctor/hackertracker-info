@@ -2,6 +2,7 @@ export type ArticleEntity = {
   id: number;
   name: string;
   text: string;
+  updated_at: number; // epoch ms
 };
 export type ArticlesStore = {
   allIds: Array<number>;

@@ -1,18 +1,20 @@
 import React, { useMemo } from "react";
-import { newsTime } from "@/lib/dates";
+import { newsAgo, newsTime } from "@/lib/dates";
 import Markdown from "@/components/markdown/Markdown";
-import { Articles } from "@/lib/types/info";
+import { ArticleEntity, ArticlesStore } from "@/lib/types/ht-types";
+import { ConferenceManifest } from "@/lib/conferences";
 
 export default function AnnouncementsList({
   announcements,
+  conference,
 }: {
-  announcements: Articles;
+  announcements: ArticlesStore;
+  conference: ConferenceManifest;
 }) {
   const sorted = useMemo(() => {
-    return announcements
-      .slice()
-      .sort((a, b) => b.updated_at.seconds - a.updated_at.seconds);
-  }, [announcements]);
+    const items = Object.values(announcements.byId);
+    return items.slice().sort((a, b) => b.updated_at - a.updated_at);
+  }, [announcements.byId]);
 
   if (!sorted.length) {
     return (
@@ -30,8 +32,7 @@ export default function AnnouncementsList({
 
       <div className="space-y-3">
         {sorted.map((item, index) => {
-          const dateMs = item.updated_at.seconds * 1000;
-          const date = new Date(dateMs);
+          const date = new Date(item.updated_at);
           return (
             <details
               key={item.id}
@@ -44,15 +45,17 @@ export default function AnnouncementsList({
                   <time
                     dateTime={date.toISOString()}
                     title={date.toLocaleString()}
-                    className="text-sm text-gray-500"
                   >
-                    {newsTime(date)}
+                    {newsAgo(date)} ·{" "}
+                    {newsTime(date, conference.timezone, { showTz: true })}
                   </time>
                 </div>
               </summary>
-              <div className="prose max-w-none px-4 pb-4 pt-2">
-                <Markdown content={item.text} />
-              </div>
+              {item.text && (
+                <div className="prose max-w-none px-4 pb-4 pt-2">
+                  <Markdown content={item.text} />
+                </div>
+              )}
             </details>
           );
         })}

@@ -81,16 +81,6 @@ export interface ScheduleEvent {
   speakers: string | null;
 }
 
-export type Articles = Article[];
-
-export interface Article {
-  id: string;
-  name: string;
-  text: string;
-  updated_tsz: string;
-  updated_at: { seconds: number; nanoseconds: number };
-}
-
 export type Documents = Document[];
 
 interface Document {

@@ -1,7 +1,10 @@
 import Link from "next/link";
-import React from "react";
 
-export default function ErrorScreen({ msg }: { msg?: string }) {
+type Props = {
+  msg?: string;
+};
+
+export default function ErrorScreen({ msg }: Props) {
   return (
     <main className="relative grid min-h-screen place-items-center">
       {/* overlays */}

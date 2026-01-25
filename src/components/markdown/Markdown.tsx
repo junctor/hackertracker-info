@@ -1,15 +1,19 @@
-import React from "react";
+import type { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "../../styles/markdown.module.css";
 
+type Props = {
+  content: string;
+};
+
 type CodeProps = {
   inline?: boolean;
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 };
 
-export default function Markdown({ content }: { content: string }) {
+export default function Markdown({ content }: Props) {
   return (
     <div className="prose dark:prose-invert antialiased prose-sm sm:prose-base md:prose-lg break-words prose-headings:text-gray-100 prose-p:text-gray-200 prose-li:text-gray-200 prose-strong:text-gray-100 prose-a:text-indigo-300 hover:prose-a:text-indigo-200 prose-code:text-gray-100 prose-hr:border-gray-700 md:max-w-none">
       <ReactMarkdown

@@ -1,11 +1,19 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
-import { TagType, Tag } from "@/lib/types/info";
+import type { TagType, Tag } from "@/lib/types/info";
 
 const formatCategory = (s: string) =>
   s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
-function TagPill({ tag }: { tag: Tag }) {
+type TagPillProps = {
+  tag: Tag;
+};
+
+type TagsListProps = {
+  tagTypes: TagType[];
+};
+
+function TagPill({ tag }: TagPillProps) {
   return (
     <Link
       href={`/tag?id=${tag.id}`}
@@ -21,7 +29,7 @@ function TagPill({ tag }: { tag: Tag }) {
   );
 }
 
-export default function TagsList({ tagTypes }: { tagTypes: TagType[] }) {
+export default function TagsList({ tagTypes }: TagsListProps) {
   const grouped = useMemo(() => {
     return tagTypes
       .filter(

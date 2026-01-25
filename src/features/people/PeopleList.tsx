@@ -1,11 +1,15 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent } from "@/components/ui/Card";
-import { People } from "@/lib/types/info";
+import type { People } from "@/lib/types/info";
 import { Badge } from "@/components/ui/Badge";
 
-export default function PeopleList({ people }: { people: People }) {
+type Props = {
+  people: People;
+};
+
+export default function PeopleList({ people }: Props) {
   const [query, setQuery] = useState("");
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();

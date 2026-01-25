@@ -1,12 +1,15 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { eventTime } from "@/lib/dates";
 import { Card, CardContent } from "@/components/ui/Card";
 import Markdown from "@/components/markdown/Markdown";
-import { Person } from "@/lib/types/info";
+import type { Person } from "@/lib/types/info";
 
-export default function PersonDetails({ person }: { person: Person }) {
+type Props = {
+  person: Person;
+};
+
+export default function PersonDetails({ person }: Props) {
   const avatar = person.media.find((m) => m.sort_order === 1)?.url;
   return (
     <div className="max-w-screen-lg mx-auto px-4 py-10 space-y-10">

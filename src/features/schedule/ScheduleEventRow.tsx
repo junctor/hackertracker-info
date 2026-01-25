@@ -19,6 +19,10 @@ function ScheduleEventRow({
 
   const router = useRouter();
 
+  const goToEvent = () => {
+    router.push(`../content?id=${event.content_id}`);
+  };
+
   const barStyle = useMemo(
     () => ({ "--event-color": event.color ?? "#fff" }) as React.CSSProperties,
     [event.color]
@@ -28,7 +32,15 @@ function ScheduleEventRow({
     <tr
       role="link"
       tabIndex={0}
-      onClick={() => router.push(`../content?id=${event.content_id}`)}
+      onClick={goToEvent}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          goToEvent();
+        } else if (e.key === " ") {
+          e.preventDefault();
+          goToEvent();
+        }
+      }}
       className="group cursor-pointer transition-colors hover:bg-gray-900 focus-visible:bg-gray-900 focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2"
     >
       <td

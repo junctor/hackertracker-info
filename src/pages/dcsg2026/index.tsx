@@ -1,8 +1,11 @@
 import Splash from "@/features/home/Splash";
+import { getConference } from "@/lib/conferences";
 import Head from "next/head";
 import React from "react";
 
 export default function Home() {
+  const conference = getConference("dcsg2026");
+
   return (
     <>
       <Head>
@@ -11,7 +14,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="bg-black">
-        <Splash />
+        <Splash conference={conference} />
       </main>
     </>
   );

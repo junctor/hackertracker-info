@@ -5,6 +5,7 @@ import dcsLogo from "../../../public/images/dcsingapore.webp";
 import localFont from "next/font/local";
 import { getSiteMenu } from "@/lib/menu";
 import Link from "next/link";
+import { ConferenceManifest } from "@/lib/conferences";
 
 const museoFont = localFont({
   src: "../../../public/fonts/Museo700-Regular.woff2",
@@ -12,9 +13,13 @@ const museoFont = localFont({
   variable: "--font-museo",
 });
 
-const navMenu = getSiteMenu("dcsg2026");
+export default function Splash({
+  conference,
+}: {
+  conference: ConferenceManifest;
+}) {
+  const navMenu = getSiteMenu(conference);
 
-export default function Splash() {
   return (
     <main className="py-16 max-w-6xl mx-auto px-4">
       {/* Hero */}

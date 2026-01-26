@@ -16,7 +16,7 @@ export default function Home() {
         <meta name="description" content="DEF CON" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="bg-black" />
+      <main />
     </>
   );
 }

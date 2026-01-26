@@ -13,7 +13,7 @@ export default function Home() {
         <meta name="description" content="DEF CON Singapore 2026" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="bg-black">
+      <main>
         <Splash conference={conference} />
       </main>
     </>

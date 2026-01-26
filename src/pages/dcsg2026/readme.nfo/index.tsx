@@ -7,17 +7,17 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import Head from "next/head";
 import DocumentsList from "@/features/documents/DocumentsList";
 import { getConference } from "@/lib/conferences";
-import { DocumentsStore } from "@/lib/types/ht-types";
-
-const conference = getConference("dcsg2026");
+import { DocumentsListView } from "@/lib/types/ht-types";
 
 export default function DocumentsPage() {
+  const conference = getConference("dcsg2026");
+
   const {
     data: documents,
     error,
     isLoading,
-  } = useSWR<DocumentsStore>(
-    `${conference.dataRoot}/entities/documents.json`,
+  } = useSWR<DocumentsListView>(
+    `${conference.dataRoot}/views/documentsList.json`,
     fetcher,
   );
 

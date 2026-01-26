@@ -1,14 +1,14 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { DocumentsStore } from "@/lib/types/ht-types";
+import { DocumentsListView } from "@/lib/types/ht-types";
 import { ConferenceManifest } from "@/lib/conferences";
 
 export default function DocumentsList({
   documents,
   conference,
 }: {
-  documents: DocumentsStore;
+  documents: DocumentsListView;
   conference: ConferenceManifest;
 }) {
   return (
@@ -20,7 +20,7 @@ export default function DocumentsList({
       </header>
 
       <ul className="space-y-4">
-        {Object.values(documents.byId).map((doc) => (
+        {documents.map((doc) => (
           <li key={doc.id}>
             <Link
               href={`/${conference.slug}/document/?id=${doc.id}`}

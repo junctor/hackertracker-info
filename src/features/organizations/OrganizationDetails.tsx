@@ -4,20 +4,18 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Markdown from "@/components/markdown/Markdown";
-import { Organization } from "@/lib/types/info";
 import { Tab } from "@headlessui/react";
 import {
   ArrowTopRightOnSquareIcon,
   CalendarIcon,
 } from "@heroicons/react/24/outline";
+import { OrganizationEntity } from "@/lib/types/ht-types";
 
 interface OrganizationDetailsProps {
-  org: Organization;
+  org: OrganizationEntity;
 }
 
-export default function OrganizationDetails({
-  org,
-}: OrganizationDetailsProps) {
+export default function OrganizationDetails({ org }: OrganizationDetailsProps) {
   const initials = org.name
     .split(" ")
     .map((w) => w[0])
@@ -30,10 +28,10 @@ export default function OrganizationDetails({
       {/* Hero Section */}
       <section className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6 transition-shadow hover:shadow-lg rounded-lg">
         {/* Logo container */}
-        <div className="relative w-full max-w-xs h-32 sm:h-40 md:h-48 rounded-lg overflow-hidden flex-shrink-0">
-          {org.logo?.url ? (
+        <div className="relative w-full max-w-xs h-32 sm:h-40 md:h-48 rounded-lg overflow-hidden shrink-0">
+          {org.logo_url ? (
             <Image
-              src={new URL(org.logo.url).pathname}
+              src={org.logo_url}
               alt={`${org.name} logo`}
               fill
               className="object-contain"

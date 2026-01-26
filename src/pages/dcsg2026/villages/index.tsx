@@ -1,28 +1,30 @@
 import React from "react";
 import useSWR from "swr";
 import Head from "next/head";
-import { alphaSort, fetcher } from "@/lib/misc";
+import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
-import { Organizations as OrgsType } from "@/lib/types/info";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
+import { OrganizationsCardsView } from "@/lib/types/ht-types";
+import { getConference } from "@/lib/conferences";
 
 export default function VillagesPage() {
+  const conference = getConference("dcsg2026");
+
   const {
     data: organizations,
     error,
     isLoading,
-  } = useSWR<OrgsType>("/ht/dcsg2026/organizations.json", fetcher);
+  } = useSWR<OrganizationsCardsView>(
+    `${conference.dataRoot}/views/organizationsCards.json`,
+    fetcher,
+  );
 
   if (isLoading) return <LoadingScreen />;
   if (error || !organizations) return <ErrorScreen />;
 
-  const villages = organizations
-    .filter((org) => org.tag_ids.includes(48955))
-    .sort((a, b) => {
-      return alphaSort(a.name, b.name);
-    });
+  const villages = organizations["48955"];
 
   return (
     <>
@@ -34,8 +36,12 @@ export default function VillagesPage() {
         />
       </Head>
       <main>
-        <SiteHeader />
-        <OrganizationsList orgs={villages} title="Villages" confSlug="dcsg2026" />
+        <SiteHeader conference={conference} />
+        <OrganizationsList
+          organizations={villages}
+          title="Villages"
+          conference={conference}
+        />
       </main>
     </>
   );

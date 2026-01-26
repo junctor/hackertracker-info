@@ -1,24 +1,27 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Organizations } from "@/lib/types/info";
+import { OrganizationCard } from "@/lib/types/ht-types";
+import { ConferenceManifest } from "@/lib/conferences";
 
 interface OrganizationsListProps {
-  orgs: Organizations;
+  organizations: Array<OrganizationCard>;
   title: string;
-  confSlug: string;
+  conference: ConferenceManifest;
 }
 
 export default function OrganizationsList({
-  orgs,
+  organizations,
   title,
-  confSlug,
+  conference,
 }: OrganizationsListProps) {
   const [search, setSearch] = useState("");
   const filtered = useMemo(
     () =>
-      orgs.filter((o) => o.name.toLowerCase().includes(search.toLowerCase())),
-    [orgs, search],
+      organizations.filter((o) =>
+        o.name.toLowerCase().includes(search.toLowerCase()),
+      ),
+    [organizations, search],
   );
 
   const getInitials = (name: string) =>
@@ -56,19 +59,21 @@ export default function OrganizationsList({
           {filtered.map((o) => (
             <Link
               key={o.id}
-              href={`/${confSlug}/organization/?id=${o.id}`}
+              href={`/${conference.slug}/organization/?id=${o.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
               <div className="bg-linear-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600 transition-all transform hover:scale-[1.02] overflow-hidden ring-offset-4 ring-indigo-600 hover:ring-4">
                 <div className="flex flex-col items-center justify-center p-6 space-y-4">
-                  {o.logo?.url ? (
+                  {o.logoUrl ? (
                     <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-lg overflow-hidden bg-gray-800 ring-2 ring-gray-600 flex items-center justify-center">
-                      <Image
-                        className="object-contain p-2 transition-transform hover:scale-105"
-                        src={new URL(o.logo.url).pathname}
-                        alt={`${o.name} logo`}
-                        fill
-                      />
+                      {o.logoUrl && (
+                        <Image
+                          className="object-contain p-2 transition-transform hover:scale-105"
+                          src={o.logoUrl}
+                          alt={`${o.name} logo`}
+                          fill
+                        />
+                      )}
                     </div>
                   ) : (
                     <div className="flex items-center justify-center w-24 h-24 md:w-32 md:h-32 bg-gray-800 ring-2 ring-gray-600 text-white text-2xl font-bold">

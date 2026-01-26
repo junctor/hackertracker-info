@@ -5,24 +5,26 @@ import { alphaSort, fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
-import { Organizations as OrgsType } from "@/lib/types/info";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
+import { OrganizationsCardsView } from "@/lib/types/ht-types";
+import { getConference } from "@/lib/conferences";
 
 export default function ContestsPage() {
+  const conference = getConference("dcsg2026");
+
   const {
     data: organizations,
     error,
     isLoading,
-  } = useSWR<OrgsType>("/ht/dcsg2026/organizations.json", fetcher);
+  } = useSWR<OrganizationsCardsView>(
+    `${conference.dataRoot}/views/organizationsCards.json`,
+    fetcher,
+  );
 
   if (isLoading) return <LoadingScreen />;
   if (error || !organizations) return <ErrorScreen />;
 
-  const contests = organizations
-    .filter((org) => org.tag_ids.includes(49234))
-    .sort((a, b) => {
-      return alphaSort(a.name, b.name);
-    });
+  const contests = organizations["49234"];
 
   return (
     <>
@@ -34,8 +36,12 @@ export default function ContestsPage() {
         />
       </Head>
       <main>
-        <SiteHeader />
-        <OrganizationsList orgs={contests} title="Contests" confSlug="dcsg2026" />
+        <SiteHeader conference={conference} />
+        <OrganizationsList
+          organizations={contests}
+          title="Contests"
+          conference={conference}
+        />
       </main>
     </>
   );

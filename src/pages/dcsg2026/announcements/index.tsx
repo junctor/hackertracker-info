@@ -8,9 +8,9 @@ import AnnouncementsList from "@/features/announcements/AnnouncementsList";
 import { getConference } from "@/lib/conferences";
 import { ArticlesStore } from "@/lib/types/ht-types";
 
-const conference = getConference("dcsg2026");
-
 export default function AnnouncementsPage() {
+  const conference = getConference("dcsg2026");
+
   const {
     data: articles,
     error,

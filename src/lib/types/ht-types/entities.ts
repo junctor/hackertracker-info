@@ -87,8 +87,15 @@ export type MenusStore = {
 
 export type OrganizationEntity = {
   id: number;
-  logo_url?: string;
   name: string;
+  description: string;
+  logo_url?: string;
+  tag_id_as_organizer?: number;
+  links: Array<{
+    label: string;
+    type: string;
+    url: string;
+  }>;
 };
 export type OrganizationsStore = {
   allIds: Array<number>;

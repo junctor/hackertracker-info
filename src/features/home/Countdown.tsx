@@ -22,7 +22,6 @@ function padTime(num: number) {
 }
 
 export default function Countdown() {
-  const [mounted, setMounted] = useState(false);
   const [expired, setExpired] = useState(false);
   const [timer, setTimer] = useState<Timer>(() => {
     return typeof window !== "undefined"
@@ -36,8 +35,6 @@ export default function Countdown() {
   const secondsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setMounted(true);
-
     const tick = () => {
       const now = Date.now();
       if (now >= TARGET_DATE_MS) {
@@ -76,7 +73,7 @@ export default function Countdown() {
   useGSAP(() => flip(minutesRef.current, "#5dc6cc"), [timer.minutes]);
   useGSAP(() => flip(secondsRef.current, "#de700f"), [timer.seconds]);
 
-  if (!mounted || expired) return null;
+  if (expired) return null;
 
   return (
     <div className="grid place-items-center mt-3 md:mt-10 text-center mx-5 grid-cols-2 sm:grid-cols-4 gap-4 px-20">

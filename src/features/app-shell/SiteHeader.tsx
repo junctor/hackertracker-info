@@ -21,9 +21,7 @@ const museoFont = localFont({
 
 export default function SiteHeader({
   conference,
-}: {
-  conference: ConferenceManifest;
-}) {
+}: Props) {
   return (
     <header className="sticky top-0 z-50 bg-black/90 text-white px-5 py-3 border-b border-gray-800 backdrop-blur">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -102,3 +100,7 @@ export default function SiteHeader({
     </header>
   );
 }
+
+type Props = {
+  conference: ConferenceManifest;
+};

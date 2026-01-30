@@ -6,18 +6,25 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
-import { getConference } from "@/lib/conferences";
+import { ConferenceManifest } from "@/lib/conferences";
 import { OrganizationsCardsView } from "@/lib/types/ht-types";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
 
-export default function CommunitiesPage() {
-  const conference = getConference("dcsg2026");
+type CommunitiesPageProps = {
+  conf: ConferenceManifest;
+};
 
+export default function CommunitiesPage({ conf }: CommunitiesPageProps) {
   const {
     data: organizations,
     error,
     isLoading,
   } = useSWR<OrganizationsCardsView>(
-    `${conference.dataRoot}/views/organizationsCards.json`,
+    `${conf.dataRoot}/views/organizationsCards.json`,
     fetcher,
     { revalidateOnFocus: false },
   );
@@ -30,20 +37,30 @@ export default function CommunitiesPage() {
   return (
     <>
       <Head>
-        <title>Communities | {conference.name}</title>
+        <title>Communities | {conf.name}</title>
         <meta
           name="description"
-          content={`Explore all ${conference.name} communities`}
+          content={`Explore all ${conf.name} communities`}
         />
       </Head>
       <main>
-        <SiteHeader conference={conference} />
+        <SiteHeader conference={conf} />
         <OrganizationsList
           organizations={communities}
           title="Communities"
-          conference={conference}
+          conference={conf}
         />
       </main>
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<CommunitiesPageProps> = async (
+  ctx,
+) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf } };
+};

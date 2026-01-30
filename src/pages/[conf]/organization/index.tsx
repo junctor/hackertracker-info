@@ -7,12 +7,19 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
-import { getConference } from "@/lib/conferences";
+import { ConferenceManifest } from "@/lib/conferences";
 import { OrganizationEntity, OrganizationsStore } from "@/lib/types/ht-types";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
 
-export default function OrganizationPage() {
-  const conference = getConference("dcsg2026");
+type OrganizationPageProps = {
+  conf: ConferenceManifest;
+};
 
+export default function OrganizationPage({ conf }: OrganizationPageProps) {
   const router = useRouter();
   const idParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -32,7 +39,7 @@ export default function OrganizationPage() {
     error,
     isLoading,
   } = useSWR<OrganizationsStore>(
-    `${conference.dataRoot}/entities/organizations.json`,
+    `${conf.dataRoot}/entities/organizations.json`,
     fetcher,
     { revalidateOnFocus: false },
   );
@@ -55,7 +62,7 @@ export default function OrganizationPage() {
     <>
       <Head>
         <title>
-          {selectedOrganization.name} | {conference.name}
+          {selectedOrganization.name} | {conf.name}
         </title>
         <meta
           name="description"
@@ -64,9 +71,19 @@ export default function OrganizationPage() {
       </Head>
 
       <main>
-        <SiteHeader conference={conference} />
+        <SiteHeader conference={conf} />
         <OrganizationDetails org={selectedOrganization} />
       </main>
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<OrganizationPageProps> = async (
+  ctx,
+) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf } };
+};

@@ -8,14 +8,18 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { DocumentEntity, DocumentsStore } from "@/lib/types/ht-types/entities";
-import { getConference } from "@/lib/conferences";
+import { ConferenceManifest } from "@/lib/conferences";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
 
-export default function DocumentsPage() {
-  const conference = getConference("dcsg2026");
-  if (!conference) {
-    return <ErrorScreen msg="Conference not found." />;
-  }
+type DocumentsPageProps = {
+  conf: ConferenceManifest;
+};
 
+export default function DocumentsPage({ conf }: DocumentsPageProps) {
   const router = useRouter();
   const idParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -29,7 +33,7 @@ export default function DocumentsPage() {
     return Number.isFinite(parsed) ? parsed : null;
   }, [idParam]);
 
-  const documentsUrl = `${conference.dataRoot}/entities/documents.json`;
+  const documentsUrl = `${conf.dataRoot}/entities/documents.json`;
   const {
     data: documents,
     error,
@@ -63,17 +67,27 @@ export default function DocumentsPage() {
     <>
       <Head>
         <title>
-          {selectedDocument.title_text} | {conference.name}
+          {selectedDocument.title_text} | {conf.name}
         </title>
         <meta
           name="description"
-          content={`A collection of information related to ${conference.name}.`}
+          content={`A collection of information related to ${conf.name}.`}
         />
       </Head>
       <main>
-        <SiteHeader conference={conference} />
-        <DocumentDetails document={selectedDocument} conference={conference} />
+        <SiteHeader conference={conf} />
+        <DocumentDetails document={selectedDocument} conference={conf} />
       </main>
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<DocumentsPageProps> = async (
+  ctx,
+) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf } };
+};

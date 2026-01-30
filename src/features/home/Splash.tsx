@@ -13,18 +13,24 @@ const museoFont = localFont({
   variable: "--font-museo",
 });
 
-export default function Splash({
-  conference,
-}: {
+type Props = {
   conference: ConferenceManifest;
-}) {
+};
+
+export default function Splash({ conference }: Props) {
   const navMenu = getSiteMenu(conference);
 
   return (
-    <main className="py-16 max-w-6xl mx-auto px-4">
+    <section className="py-16 max-w-6xl mx-auto px-4">
       {/* Hero */}
       <div className="text-center space-y-4 align-middle items-center justify-center flex flex-col">
-        <Image src={dcsLogo} alt="DEF CON Singapore 2026" priority />
+        <h1 className="sr-only">DEF CON Singapore 2026</h1>
+        <Image
+          src={dcsLogo}
+          alt="DEF CON Singapore 2026"
+          priority
+          sizes="(min-width: 768px) 480px, 60vw"
+        />
 
         {/* Date */}
         <time
@@ -38,7 +44,10 @@ export default function Splash({
         <Countdown />
       </div>
       {/* Menu */}
-      <section className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+      <nav
+        aria-label="Primary"
+        className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6"
+      >
         {navMenu.map((item) => {
           const Icon = item.icon;
           const isExternal = item.href.startsWith("http");
@@ -50,7 +59,7 @@ export default function Splash({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={item.title}
-              className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition"
+              className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
             >
               <Icon className="h-6 w-6 mb-2 text-gray-200" />
               <span className="text-sm font-semibold text-gray-100">
@@ -62,7 +71,7 @@ export default function Splash({
               key={item.sort_order}
               href={item.href}
               aria-label={item.title}
-              className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition"
+              className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
             >
               <Icon className="h-6 w-6 mb-2 text-gray-200" />
               <span className="text-sm font-semibold text-gray-100">
@@ -71,7 +80,7 @@ export default function Splash({
             </Link>
           );
         })}
-      </section>
-    </main>
+      </nav>
+    </section>
   );
 }

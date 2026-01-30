@@ -11,17 +11,19 @@ import {
 } from "@heroicons/react/24/outline";
 import { OrganizationEntity } from "@/lib/types/ht-types";
 
-interface OrganizationDetailsProps {
+type Props = {
   org: OrganizationEntity;
-}
+};
 
-export default function OrganizationDetails({ org }: OrganizationDetailsProps) {
+export default function OrganizationDetails({ org }: Props) {
   const initials = org.name
     .split(" ")
     .map((w) => w[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
+  const description = org.description?.trim();
+  const hasLinks = org.links.length > 0;
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-12 space-y-8">
@@ -36,11 +38,13 @@ export default function OrganizationDetails({ org }: OrganizationDetailsProps) {
               fill
               className="object-contain"
               priority
+              sizes="(min-width: 768px) 12rem, 100vw"
             />
           ) : (
             <div
               className="absolute inset-0 flex items-center justify-center bg-gray-700 text-3xl text-white"
-              aria-label={initials}
+              role="img"
+              aria-label={`${org.name} logo`}
             >
               {initials}
             </div>
@@ -78,7 +82,7 @@ export default function OrganizationDetails({ org }: OrganizationDetailsProps) {
           >
             About
           </Tab>
-          {org.links.length > 0 && (
+          {hasLinks && (
             <Tab
               className={({ selected }) =>
                 `px-3 py-2 text-sm font-medium transition ${
@@ -96,11 +100,15 @@ export default function OrganizationDetails({ org }: OrganizationDetailsProps) {
         <Tab.Panels className="py-4">
           <Tab.Panel>
             <div className="prose prose-invert max-w-none text-gray-300">
-              <Markdown content={org.description} />
+              {description ? (
+                <Markdown content={description} />
+              ) : (
+                <p className="text-gray-400">No description available.</p>
+              )}
             </div>
           </Tab.Panel>
 
-          {org.links.length > 0 && (
+          {hasLinks && (
             <Tab.Panel>
               <ul className="space-y-3">
                 {org.links.map((l) => (

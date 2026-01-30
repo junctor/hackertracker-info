@@ -1,27 +1,35 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { alphaSort } from "@/lib/misc";
 import { OrganizationCard } from "@/lib/types/ht-types";
 import { ConferenceManifest } from "@/lib/conferences";
 
-interface OrganizationsListProps {
+type Props = {
   organizations: Array<OrganizationCard>;
   title: string;
   conference: ConferenceManifest;
-}
+};
 
 export default function OrganizationsList({
   organizations,
   title,
   conference,
-}: OrganizationsListProps) {
+}: Props) {
   const [search, setSearch] = useState("");
+  const normalizedSearch = search.trim().toLowerCase();
+  const sortedOrganizations = useMemo(
+    () => [...organizations].sort((a, b) => alphaSort(a.name, b.name)),
+    [organizations],
+  );
   const filtered = useMemo(
     () =>
-      organizations.filter((o) =>
-        o.name.toLowerCase().includes(search.toLowerCase()),
-      ),
-    [organizations, search],
+      normalizedSearch.length > 0
+        ? sortedOrganizations.filter((o) =>
+            o.name.toLowerCase().includes(normalizedSearch),
+          )
+        : sortedOrganizations,
+    [sortedOrganizations, normalizedSearch],
   );
 
   const getInitials = (name: string) =>
@@ -45,13 +53,13 @@ export default function OrganizationsList({
             placeholder={`Search ${title}…`}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 placeholder:text-gray-500"
+            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900"
           />
         </label>
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-center text-gray-400">
+        <p role="status" className="text-center text-gray-400">
           No {title.toLowerCase()} found.
         </p>
       ) : (
@@ -72,6 +80,7 @@ export default function OrganizationsList({
                           src={o.logoUrl}
                           alt={`${o.name} logo`}
                           fill
+                          sizes="(min-width: 768px) 8rem, 6rem"
                         />
                       )}
                     </div>

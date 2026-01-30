@@ -20,7 +20,12 @@ export default function OrganizationPage() {
     if (Array.isArray(value)) return value[0] ?? null;
     return value ?? null;
   }, [router.isReady, router.query.id]);
-  const docId = useMemo(() => (idParam ? Number(idParam) : null), [idParam]);
+  const docId = useMemo(() => {
+    if (!idParam) return null;
+    const parsed = Number(idParam);
+    return Number.isFinite(parsed) ? parsed : null;
+  }, [idParam]);
+  const hasInvalidId = router.isReady && idParam !== null && docId === null;
 
   const {
     data: organizations,
@@ -29,6 +34,7 @@ export default function OrganizationPage() {
   } = useSWR<OrganizationsStore>(
     `${conference.dataRoot}/entities/organizations.json`,
     fetcher,
+    { revalidateOnFocus: false },
   );
 
   const selectedOrganization = useMemo<OrganizationEntity | null>(() => {
@@ -37,6 +43,8 @@ export default function OrganizationPage() {
   }, [organizations, docId]);
 
   if (!router.isReady) return <LoadingScreen />;
+  if (idParam === null) return <ErrorScreen msg="Missing organization id." />;
+  if (hasInvalidId) return <ErrorScreen msg="Invalid organization id." />;
   if (isLoading) return <LoadingScreen />;
   if (error || !organizations) return <ErrorScreen />;
 

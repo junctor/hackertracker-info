@@ -1,5 +1,6 @@
 import React from "react";
 import useSWR from "swr";
+import Head from "next/head";
 import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
@@ -10,6 +11,9 @@ import { ArticlesStore } from "@/lib/types/ht-types";
 
 export default function AnnouncementsPage() {
   const conference = getConference("dcsg2026");
+  if (!conference) {
+    return <ErrorScreen msg="Conference not found." />;
+  }
 
   const {
     data: articles,
@@ -24,9 +28,18 @@ export default function AnnouncementsPage() {
   if (error || !articles) return <ErrorScreen />;
 
   return (
-    <main>
-      <SiteHeader conference={conference} />
-      <AnnouncementsList announcements={articles} conference={conference} />
-    </main>
+    <>
+      <Head>
+        <title>Announcements | {conference.name}</title>
+        <meta
+          name="description"
+          content={`Latest announcements and updates for ${conference.name}.`}
+        />
+      </Head>
+      <main>
+        <SiteHeader conference={conference} />
+        <AnnouncementsList announcements={articles} conference={conference} />
+      </main>
+    </>
   );
 }

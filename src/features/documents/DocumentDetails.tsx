@@ -5,13 +5,21 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { DocumentEntity } from "@/lib/types/ht-types";
 import { ConferenceManifest } from "@/lib/conferences";
 
-export default function DocumentDetails({
-  document,
-  conference,
-}: {
+type Props = {
   document: DocumentEntity;
   conference: ConferenceManifest;
-}) {
+};
+
+export default function DocumentDetails({ document, conference }: Props) {
+  const updatedAt = new Date(document.updated_at);
+  const updatedLabel = Number.isNaN(updatedAt.getTime())
+    ? "Unknown"
+    : updatedAt.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+
   return (
     <article className="container mx-auto px-4 py-8 lg:py-12">
       {/* Breadcrumb with chevron separators and improved color contrast */}
@@ -28,7 +36,7 @@ export default function DocumentDetails({
           <li aria-hidden="true">
             <ChevronRightIcon className="w-4 h-4 text-gray-400 dark:text-gray-600" />
           </li>
-          <li aria-current="page" className="sr-only">
+          <li aria-current="page" className="text-gray-300">
             {document.title_text}
           </li>
         </ol>
@@ -42,12 +50,7 @@ export default function DocumentDetails({
           {document.title_text}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Last updated{" "}
-          {new Date(document.updated_at).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })}
+          Last updated {updatedLabel}
         </p>
       </header>
 

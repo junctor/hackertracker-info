@@ -1,11 +1,29 @@
 export type ConferenceSlug = "dcsg2026" | "defcon33";
 
+export type SiteMenuKey =
+  | "readme"
+  | "announcements"
+  | "schedule"
+  | "bookmarks"
+  | "content"
+  | "people"
+  | "maps"
+  | "locations"
+  | "merch"
+  | "search"
+  | "villages"
+  | "communities"
+  | "contests"
+  | "exhibitors"
+  | "vendors";
+
 export type ConferenceManifest = {
   slug: ConferenceSlug;
   code: string;
   name: string;
   timezone: string;
   dataRoot: string;
+  siteMenu: SiteMenuKey[];
 };
 
 export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
@@ -15,6 +33,13 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     name: "DEF CON Singapore 2026",
     timezone: "Asia/Singapore",
     dataRoot: "/ht/dcsg2026",
+    siteMenu: [
+      "readme",
+      "announcements",
+      "villages",
+      "communities",
+      "contests",
+    ],
   },
   defcon33: {
     slug: "defcon33",
@@ -22,6 +47,18 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     name: "DEF CON 33",
     timezone: "America/Los_Angeles",
     dataRoot: "/ht/defcon33",
+    siteMenu: [
+      "readme",
+      "announcements",
+      "bookmarks",
+      "content",
+      "schedule",
+      "people",
+      "maps",
+      "locations",
+      "merch",
+      "search",
+    ],
   },
 } as const;
 

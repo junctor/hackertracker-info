@@ -19,20 +19,21 @@ export default function VillagesPage() {
   } = useSWR<OrganizationsCardsView>(
     `${conference.dataRoot}/views/organizationsCards.json`,
     fetcher,
+    { revalidateOnFocus: false },
   );
 
   if (isLoading) return <LoadingScreen />;
   if (error || !organizations) return <ErrorScreen />;
 
-  const villages = organizations["48955"];
+  const villages = organizations["48955"] ?? [];
 
   return (
     <>
       <Head>
-        <title>Villages | DEF CON Singapore 2026</title>
+        <title>Villages | {conference.name}</title>
         <meta
           name="description"
-          content="Explore all DEF CON Singapore 2026 Villages"
+          content={`Explore all ${conference.name} villages`}
         />
       </Head>
       <main>

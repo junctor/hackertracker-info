@@ -19,12 +19,13 @@ export default function CommunitiesPage() {
   } = useSWR<OrganizationsCardsView>(
     `${conference.dataRoot}/views/organizationsCards.json`,
     fetcher,
+    { revalidateOnFocus: false },
   );
 
   if (isLoading) return <LoadingScreen />;
   if (error || !organizations) return <ErrorScreen />;
 
-  const communities = organizations["48953"];
+  const communities = organizations["48953"] ?? [];
 
   return (
     <>
@@ -32,7 +33,7 @@ export default function CommunitiesPage() {
         <title>Communities | {conference.name}</title>
         <meta
           name="description"
-          content={`Explore all ${conference.name} Communities`}
+          content={`Explore all ${conference.name} communities`}
         />
       </Head>
       <main>

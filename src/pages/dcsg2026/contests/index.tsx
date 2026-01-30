@@ -1,7 +1,7 @@
 import React from "react";
 import useSWR from "swr";
 import Head from "next/head";
-import { alphaSort, fetcher } from "@/lib/misc";
+import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
@@ -19,20 +19,21 @@ export default function ContestsPage() {
   } = useSWR<OrganizationsCardsView>(
     `${conference.dataRoot}/views/organizationsCards.json`,
     fetcher,
+    { revalidateOnFocus: false },
   );
 
   if (isLoading) return <LoadingScreen />;
   if (error || !organizations) return <ErrorScreen />;
 
-  const contests = organizations["49234"];
+  const contests = organizations["49234"] ?? [];
 
   return (
     <>
       <Head>
-        <title>Contests | DEF CON Singapore 2026</title>
+        <title>Contests | {conference.name}</title>
         <meta
           name="description"
-          content="Explore all DEF CON Singapore 2026 Contests"
+          content={`Explore all ${conference.name} contests`}
         />
       </Head>
       <main>

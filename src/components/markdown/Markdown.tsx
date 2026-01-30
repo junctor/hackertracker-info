@@ -15,16 +15,20 @@ type CodeProps = {
 
 export default function Markdown({ content }: Props) {
   return (
-    <div className="prose dark:prose-invert antialiased prose-sm sm:prose-base md:prose-lg break-words prose-headings:text-gray-100 prose-p:text-gray-200 prose-li:text-gray-200 prose-strong:text-gray-100 prose-a:text-indigo-300 hover:prose-a:text-indigo-200 prose-code:text-gray-100 prose-hr:border-gray-700 md:max-w-none">
+    <div className="prose dark:prose-invert antialiased prose-sm sm:prose-base md:prose-lg wrap-break-word prose-headings:text-gray-100 prose-p:text-gray-200 prose-li:text-gray-200 prose-strong:text-gray-100 prose-a:text-indigo-300 hover:prose-a:text-indigo-200 prose-code:text-gray-100 prose-hr:border-gray-700 md:max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          a: (props) => (
-            <a
-              {...props}
-              className="text-indigo-300 underline-offset-2 decoration-indigo-500/40 hover:text-indigo-200 hover:decoration-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
-            />
-          ),
+          a: (props) => {
+            const className = [
+              props.className,
+              "text-indigo-300 underline-offset-2 decoration-indigo-500/40 hover:text-indigo-200 hover:decoration-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400",
+            ]
+              .filter(Boolean)
+              .join(" ");
+
+            return <a {...props} className={className} />;
+          },
 
           code: ({ inline, className, children, ...other }: CodeProps) =>
             inline ? (
@@ -55,7 +59,13 @@ export default function Markdown({ content }: Props) {
             <img {...props} className="mx-auto my-5 rounded-md shadow-sm" />
           ),
 
-          div: (props) => <div {...props} className={styles.markdown} />,
+          div: (props) => {
+            const className = [styles.markdown, props.className]
+              .filter(Boolean)
+              .join(" ");
+
+            return <div {...props} className={className} />;
+          },
         }}
       >
         {content}

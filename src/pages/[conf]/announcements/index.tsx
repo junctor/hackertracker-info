@@ -23,10 +23,7 @@ export default function AnnouncementsPage({ conf }: AnnouncementsPageProps) {
     data: articles,
     error,
     isLoading,
-  } = useSWR<ArticlesStore>(
-    `${conf.dataRoot}/entities/articles.json`,
-    fetcher,
-  );
+  } = useSWR<ArticlesStore>(`${conf.dataRoot}/entities/articles.json`, fetcher);
 
   if (isLoading) return <LoadingScreen />;
   if (error || !articles) return <ErrorScreen />;

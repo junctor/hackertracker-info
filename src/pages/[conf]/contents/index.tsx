@@ -21,7 +21,10 @@ type ContentsPageProps = {
   activePageId: PageId;
 };
 
-export default function ContentsPage({ conf, activePageId }: ContentsPageProps) {
+export default function ContentsPage({
+  conf,
+  activePageId,
+}: ContentsPageProps) {
   const {
     data: items,
     error,

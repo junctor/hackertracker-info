@@ -47,7 +47,7 @@ const buildDescription = (content: ProcessedContentId) => {
 /** Generate a full iCal string for an event */
 export const generateICal = (
   content: ProcessedContentId,
-  session: ContentSessionLite
+  session: ContentSessionLite,
 ): string => {
   const now = new Date();
   const dtstamp = formatICalDate(now);

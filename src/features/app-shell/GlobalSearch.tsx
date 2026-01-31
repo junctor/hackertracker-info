@@ -34,9 +34,7 @@ export default function GlobalSearch() {
   };
 
   const filtered = searchData.filter((item) =>
-    query
-      ? item.text.toLowerCase().includes(query.trim().toLowerCase())
-      : true
+    query ? item.text.toLowerCase().includes(query.trim().toLowerCase()) : true,
   );
 
   return (

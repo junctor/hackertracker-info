@@ -34,7 +34,7 @@ export default function TagsList({ tagTypes }: TagsListProps) {
     return tagTypes
       .filter(
         (tt) =>
-          tt.is_browsable && tt.tags.length > 0 && tt.category == "content"
+          tt.is_browsable && tt.tags.length > 0 && tt.category == "content",
       )
       .reduce<Record<string, TagType[]>>((acc, tt) => {
         acc[tt.category] = acc[tt.category] || [];

@@ -24,7 +24,7 @@ export default function ContentSession({
 
   const [bookmark, toggleBookmark] = useBookmarks(
     session.session_id,
-    isBookmarked
+    isBookmarked,
   );
 
   return (
@@ -45,7 +45,7 @@ export default function ContentSession({
       <div className="mt-3 md:mt-0 md:ml-4 flex items-center md:gap-5 gap-3">
         <a
           href={`data:text/calendar;charset=utf8,${encodeURIComponent(
-            cal(content, session)
+            cal(content, session),
           )}`}
           download={`DEF_CON_33-${session.session_id}.ics`}
           role="button"

@@ -45,7 +45,8 @@ export default function PersonPage({ conf, activePageId }: PersonPageProps) {
   if (!router.isReady) return <LoadingScreen />;
   if (isLoading) return <LoadingScreen />;
   if (error) return <ErrorScreen />;
-  if (personId === null || !person) return <ErrorScreen msg="Person not found" />;
+  if (personId === null || !person)
+    return <ErrorScreen msg="Person not found" />;
 
   return (
     <>

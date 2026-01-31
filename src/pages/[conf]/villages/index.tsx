@@ -13,7 +13,10 @@ type VillagesPageProps = {
   activePageId: PageId;
 };
 
-export default function VillagesPage({ conf, activePageId }: VillagesPageProps) {
+export default function VillagesPage({
+  conf,
+  activePageId,
+}: VillagesPageProps) {
   return (
     <DirectoryPage
       conf={conf}

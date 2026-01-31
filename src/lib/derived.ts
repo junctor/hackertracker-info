@@ -2,10 +2,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 
 import { ConferenceManifest } from "./conferences";
-import {
-  DerivedSiteMenu,
-  DerivedTagIdsByLabel,
-} from "./types/ht-types";
+import { DerivedSiteMenu, DerivedTagIdsByLabel } from "./types/ht-types";
 
 const jsonCache = new Map<string, Promise<unknown | null>>();
 

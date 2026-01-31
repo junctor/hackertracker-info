@@ -31,16 +31,16 @@ export default function ContentDetails({
     () =>
       [...content.sessions].sort(
         (a, b) =>
-          new Date(a.begin_tsz).getTime() - new Date(b.begin_tsz).getTime()
+          new Date(a.begin_tsz).getTime() - new Date(b.begin_tsz).getTime(),
       ),
-    [content.sessions]
+    [content.sessions],
   );
   const tags = useMemo(
     () =>
       [...content.tags].sort(
-        (a, b) => a.sort_order - b.sort_order || a.label.localeCompare(b.label)
+        (a, b) => a.sort_order - b.sort_order || a.label.localeCompare(b.label),
       ),
-    [content.tags]
+    [content.tags],
   );
 
   return (
@@ -87,7 +87,7 @@ export default function ContentDetails({
             <Link
               key={tag.id}
               href={`/tag?id=${tag.id}`}
-                className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
+              className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
             >
               <span
                 className="block h-3 w-3 rounded-full"

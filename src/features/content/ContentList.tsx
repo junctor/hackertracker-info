@@ -15,13 +15,13 @@ export default function ContentList({ content, tags }: Props) {
     () =>
       content
         .filter((c) =>
-          search ? c.title.toLowerCase().includes(search.toLowerCase()) : true
+          search ? c.title.toLowerCase().includes(search.toLowerCase()) : true,
         )
         .filter((c) => {
           if (!selectedTag) return true;
           return c.tags.some((tag) => tag.id === selectedTag);
         }),
-    [content, search, selectedTag]
+    [content, search, selectedTag],
   );
 
   return (
@@ -56,7 +56,7 @@ export default function ContentList({ content, tags }: Props) {
                 (tag) =>
                   tag.is_browsable &&
                   tag.tags.length > 0 &&
-                  tag.category === "content"
+                  tag.category === "content",
               )
               .sort((a, b) => a.sort_order - b.sort_order)
               .map((tag) => (

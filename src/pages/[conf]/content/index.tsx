@@ -8,7 +8,10 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import ContentDetails from "@/features/content/ContentDetails";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import type { ProcessedContentById, ProcessedContentId } from "@/lib/types/info";
+import type {
+  ProcessedContentById,
+  ProcessedContentId,
+} from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
 import { ConferenceManifest } from "@/lib/conferences";
 import {

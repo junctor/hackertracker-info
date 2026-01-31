@@ -13,7 +13,10 @@ type ContestsPageProps = {
   activePageId: PageId;
 };
 
-export default function ContestsPage({ conf, activePageId }: ContestsPageProps) {
+export default function ContestsPage({
+  conf,
+  activePageId,
+}: ContestsPageProps) {
   return (
     <DirectoryPage
       conf={conf}

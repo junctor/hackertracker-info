@@ -74,7 +74,7 @@ export default function PeopleList({ people }: Props) {
                             >
                               {a.organization}
                             </span>
-                          )
+                          ),
                       )}
                     </div>
                   )}

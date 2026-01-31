@@ -64,7 +64,7 @@ export default function Countdown() {
         onComplete: () => {
           gsap.to(el, { color: "#fff", duration: 0.2, ease: "power2.out" });
         },
-      }
+      },
     );
   };
 

@@ -56,7 +56,9 @@ export default function SchedulePage({
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<SchedulePageProps> = async (ctx) => {
+export const getStaticProps: GetStaticProps<SchedulePageProps> = async (
+  ctx,
+) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
   return { props: { conf: result.conf, activePageId: "schedule" } };

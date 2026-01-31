@@ -52,8 +52,8 @@ export default function Countdown({
       }
     };
 
-    tick();
     const intervalId = setInterval(tick, 1000);
+    tick();
     return () => clearInterval(intervalId);
   }, [conference.kickoff]);
 

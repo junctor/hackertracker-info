@@ -24,24 +24,34 @@ export default function Splash({ conference }: Props) {
     <section className="py-16 max-w-6xl mx-auto px-4">
       {/* Hero */}
       <div className="text-center space-y-4 align-middle items-center justify-center flex flex-col">
-        <h1 className="sr-only">DEF CON Singapore 2026</h1>
-        <Image
-          src={dcsLogo}
-          alt="DEF CON Singapore 2026"
-          priority
-          sizes="(min-width: 768px) 480px, 60vw"
-        />
+        <h1 className="sr-only">{conference.name}</h1>
+        <div
+          style={{
+            position: "relative",
+            width: "min(480px, 60vw)",
+            height: 120,
+          }}
+        >
+          <Image
+            src={`/images/${conference.logoFile}`}
+            alt={conference.name}
+            fill
+            priority
+            sizes="(min-width: 768px) 480px, 60vw"
+            style={{ objectFit: "contain" }}
+          />
+        </div>
 
         {/* Date */}
         <time
-          dateTime="2026-04-28"
+          dateTime={conference.begin}
           className={`text-xs sm:text-sm md:text-base text-gray-300/90 uppercase tracking-[0.16em] sm:tracking-[0.22em] ${museoFont.className}`}
         >
-          April 28–30, 2026
+          {conference.dateLabel}
         </time>
 
         {/* Countdown */}
-        <Countdown />
+        <Countdown conference={conference} />
       </div>
       {/* Menu */}
       <nav

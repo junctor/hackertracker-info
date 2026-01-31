@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { getCountdown, TARGET_DATE_MS } from "@/lib/timer";
+import { getCountdown } from "@/lib/timer";
 import localFont from "next/font/local";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import React from "react";
+import { ConferenceManifest } from "@/lib/conferences";
 
 const atkinsonFont = localFont({
   src: "../../../public/fonts/atkinson-hl.woff2",
@@ -21,7 +22,11 @@ function padTime(num: number) {
   return num.toString().padStart(2, "0");
 }
 
-export default function Countdown() {
+export default function Countdown({
+  conference,
+}: {
+  conference: ConferenceManifest;
+}) {
   const [expired, setExpired] = useState(false);
   const [timer, setTimer] = useState<Timer>({
     days: 0,
@@ -36,20 +41,21 @@ export default function Countdown() {
   const secondsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const kickoffDateMs = new Date(conference.kickoff).valueOf();
     const tick = () => {
       const now = Date.now();
-      if (now >= TARGET_DATE_MS) {
+      if (now >= kickoffDateMs) {
         setExpired(true);
         clearInterval(intervalId);
       } else {
-        setTimer(getCountdown());
+        setTimer(getCountdown(kickoffDateMs));
       }
     };
 
     tick();
     const intervalId = setInterval(tick, 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [conference.kickoff]);
 
   const flip = (el: HTMLElement | null, color: string) => {
     if (!el) return;

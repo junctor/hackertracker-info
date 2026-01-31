@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default function DocumentDetails({ document, conference }: Props) {
-  const updatedAt = new Date(document.updated_at);
+  const updatedAt = new Date(document.updatedAtMs);
   const updatedLabel = Number.isNaN(updatedAt.getTime())
     ? "Unknown"
     : updatedAt.toLocaleDateString("en-US", {

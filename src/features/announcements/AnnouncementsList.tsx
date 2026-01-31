@@ -15,7 +15,7 @@ export default function AnnouncementsList({
 }: Props) {
   const sorted = useMemo(() => {
     const items = Object.values(announcements.byId);
-    items.sort((a, b) => b.updated_at - a.updated_at);
+    items.sort((a, b) => b.updatedAtMs - a.updatedAtMs);
     return items;
   }, [announcements.byId]);
 
@@ -35,7 +35,7 @@ export default function AnnouncementsList({
 
       <ul className="space-y-3 list-none" role="list">
         {sorted.map((item, index) => {
-          const date = new Date(item.updated_at);
+          const date = new Date(item.updatedAtMs);
           return (
             <li key={item.id}>
               <details

@@ -13,7 +13,7 @@ export type ContentCardsView = Array<ContentCard>;
 export type DocumentList = {
   id: number;
   title_text: string;
-  updated_at: number;
+  updatedAtMs: number;
 };
 export type DocumentsListView = Array<DocumentList>;
 

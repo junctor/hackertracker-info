@@ -30,9 +30,11 @@ export default function DocumentsList({
                 <h2 className="text-xl font-semibold text-gray-100 leading-snug">
                   {doc.title_text}
                 </h2>
+                {console.log(doc)}
+                {console.log(doc.updatedAtMs)}
                 <p className="mt-1 text-sm text-gray-400">
                   <span className="font-medium text-gray-200">Updated:</span>{" "}
-                  {new Date(doc.updated_at).toLocaleDateString("en-US", {
+                  {new Date(doc.updatedAtMs).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
                     day: "numeric",

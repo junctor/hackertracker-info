@@ -97,7 +97,7 @@ export default function GlobalSearch() {
                           className="flex items-center gap-3 px-4 py-2 text-gray-200 hover:bg-gray-800"
                           onClick={() => setIsOpen(false)}
                         >
-                          <Icon className="h-5 w-5 flex-shrink-0 text-gray-400" />
+                          <Icon className="h-5 w-5 shrink-0 text-gray-400" />
                           <span className="flex-1">{item.text}</span>
                         </Link>
                       </li>

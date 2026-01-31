@@ -10,8 +10,20 @@ import { GroupedTag, GroupedTags } from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { ConferenceManifest } from "@/lib/conferences";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
+import { PageId } from "@/lib/types/page-meta";
 
-export default function TagPage() {
+type TagPageProps = {
+  conf: ConferenceManifest;
+  activePageId: PageId;
+};
+
+export default function TagPage({ conf, activePageId }: TagPageProps) {
   const router = useRouter();
   const idParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -51,7 +63,7 @@ export default function TagPage() {
         />
       </Head>
       <main>
-        <SiteHeader />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <h1 className="text-3xl font-bold text-center mb-6 my-10">
           {tag.label} Schedule
         </h1>
@@ -60,3 +72,11 @@ export default function TagPage() {
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<TagPageProps> = async (ctx) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf, activePageId: "tag" } };
+};

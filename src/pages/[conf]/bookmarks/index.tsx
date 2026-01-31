@@ -9,8 +9,23 @@ import ScheduleEvents from "@/features/schedule/ScheduleEvents";
 import { GroupedSchedule } from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
 import Head from "next/head";
+import { ConferenceManifest } from "@/lib/conferences";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
+import { PageId } from "@/lib/types/page-meta";
 
-export default function BookmarksPage() {
+type BookmarksPageProps = {
+  conf: ConferenceManifest;
+  activePageId: PageId;
+};
+
+export default function BookmarksPage({
+  conf,
+  activePageId,
+}: BookmarksPageProps) {
   const {
     data: allEvents,
     error,
@@ -41,7 +56,7 @@ export default function BookmarksPage() {
         />
       </Head>
       <main>
-        <SiteHeader />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         {bookmarks.length === 0 ? (
           <p className="mt-8 text-center text-gray-500">
             You haven’t bookmarked any events yet.
@@ -53,3 +68,13 @@ export default function BookmarksPage() {
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<BookmarksPageProps> = async (
+  ctx,
+) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf, activePageId: "bookmarks" } };
+};

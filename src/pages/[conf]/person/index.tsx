@@ -8,8 +8,20 @@ import PersonDetails from "@/features/people/PersonDetails";
 import { useRouter } from "next/router";
 import { People, Person } from "@/lib/types/info";
 import Head from "next/head";
+import { ConferenceManifest } from "@/lib/conferences";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
+import { PageId } from "@/lib/types/page-meta";
 
-export default function PersonPage() {
+type PersonPageProps = {
+  conf: ConferenceManifest;
+  activePageId: PageId;
+};
+
+export default function PersonPage({ conf, activePageId }: PersonPageProps) {
   const router = useRouter();
   const idParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -45,9 +57,17 @@ export default function PersonPage() {
         />
       </Head>
       <main>
-        <SiteHeader />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <PersonDetails person={person} />
       </main>
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<PersonPageProps> = async (ctx) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf, activePageId: "person" } };
+};

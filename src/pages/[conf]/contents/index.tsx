@@ -8,8 +8,20 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import ContentList from "@/features/content/ContentList";
 import Head from "next/head";
 import type { ProcessedContents, TagTypes } from "@/lib/types/info";
+import { ConferenceManifest } from "@/lib/conferences";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
+import { PageId } from "@/lib/types/page-meta";
 
-export default function ContentsPage() {
+type ContentsPageProps = {
+  conf: ConferenceManifest;
+  activePageId: PageId;
+};
+
+export default function ContentsPage({ conf, activePageId }: ContentsPageProps) {
   const {
     data: items,
     error,
@@ -36,9 +48,19 @@ export default function ContentsPage() {
         />
       </Head>
       <main>
-        <SiteHeader />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <ContentList content={items!} tags={tags ?? []} />
       </main>
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<ContentsPageProps> = async (
+  ctx,
+) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf, activePageId: "contents" } };
+};

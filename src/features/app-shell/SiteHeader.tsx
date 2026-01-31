@@ -12,6 +12,7 @@ import GlobalSearch from "./GlobalSearch";
 import localFont from "next/font/local";
 import { getSiteMenu } from "@/lib/menu";
 import { ConferenceManifest } from "@/lib/conferences";
+import { getPageTitle, PageId } from "@/lib/types/page-meta";
 
 const museoFont = localFont({
   src: "../../../public/fonts/Museo700-Regular.woff2",
@@ -19,20 +20,27 @@ const museoFont = localFont({
   variable: "--font-museo",
 });
 
-export default function SiteHeader({ conference }: Props) {
+export default function SiteHeader({ conference, activePageId }: Props) {
+  const pageTitle = getPageTitle(activePageId);
+
   return (
     <header className="sticky top-0 z-50 bg-black/90 text-white px-5 py-3 border-b border-gray-800 backdrop-blur">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo + Primary Nav */}
         <div className="flex items-center space-x-6">
-          <Link href="/">
-            <h1
-              className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
-            >
-              <span className="block md:hidden">{conference.code}</span>
-              <span className="hidden md:block">{conference.name}</span>
-            </h1>
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/">
+              <h1
+                className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
+              >
+                <span className="block md:hidden">{conference.code}</span>
+                <span className="hidden md:block">{conference.name}</span>
+              </h1>
+            </Link>
+            <span className="hidden sm:inline text-sm text-gray-400">
+              {pageTitle}
+            </span>
+          </div>
 
           {/* Primary Nav */}
           <nav aria-label="Primary">
@@ -99,4 +107,5 @@ export default function SiteHeader({ conference }: Props) {
 
 type Props = {
   conference: ConferenceManifest;
+  activePageId: PageId;
 };

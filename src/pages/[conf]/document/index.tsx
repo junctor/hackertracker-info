@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { DocumentEntity, DocumentsStore } from "@/lib/types/ht-types/entities";
 import { ConferenceManifest } from "@/lib/conferences";
+import { PageId } from "@/lib/types/page-meta";
 import {
   buildConferenceStaticPaths,
   getConferenceFromParams,
@@ -17,9 +18,13 @@ import type { GetStaticProps } from "next";
 
 type DocumentsPageProps = {
   conf: ConferenceManifest;
+  activePageId: PageId;
 };
 
-export default function DocumentsPage({ conf }: DocumentsPageProps) {
+export default function DocumentsPage({
+  conf,
+  activePageId,
+}: DocumentsPageProps) {
   const router = useRouter();
   const idParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -75,7 +80,7 @@ export default function DocumentsPage({ conf }: DocumentsPageProps) {
         />
       </Head>
       <main>
-        <SiteHeader conference={conf} />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <DocumentDetails document={selectedDocument} conference={conf} />
       </main>
     </>
@@ -89,5 +94,5 @@ export const getStaticProps: GetStaticProps<DocumentsPageProps> = async (
 ) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
-  return { props: { conf: result.conf } };
+  return { props: { conf: result.conf, activePageId: "document" } };
 };

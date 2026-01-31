@@ -10,8 +10,20 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import type { ProcessedContentById, ProcessedContentId } from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
+import { ConferenceManifest } from "@/lib/conferences";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
+import { PageId } from "@/lib/types/page-meta";
 
-export default function ContentPage() {
+type ContentPageProps = {
+  conf: ConferenceManifest;
+  activePageId: PageId;
+};
+
+export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   const router = useRouter();
   const idParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -64,7 +76,7 @@ export default function ContentPage() {
         <meta name="description" content={selectedContent.description} />
       </Head>
       <main>
-        <SiteHeader />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <ContentDetails
           content={selectedContent}
           related_content={relatedContent}
@@ -74,3 +86,11 @@ export default function ContentPage() {
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<ContentPageProps> = async (ctx) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf, activePageId: "content" } };
+};

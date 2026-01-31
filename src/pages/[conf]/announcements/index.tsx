@@ -8,6 +8,7 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import AnnouncementsList from "@/features/announcements/AnnouncementsList";
 import { ConferenceManifest } from "@/lib/conferences";
 import { ArticlesStore } from "@/lib/types/ht-types";
+import { PageId } from "@/lib/types/page-meta";
 import {
   buildConferenceStaticPaths,
   getConferenceFromParams,
@@ -16,9 +17,13 @@ import type { GetStaticProps } from "next";
 
 type AnnouncementsPageProps = {
   conf: ConferenceManifest;
+  activePageId: PageId;
 };
 
-export default function AnnouncementsPage({ conf }: AnnouncementsPageProps) {
+export default function AnnouncementsPage({
+  conf,
+  activePageId,
+}: AnnouncementsPageProps) {
   const {
     data: articles,
     error,
@@ -38,7 +43,7 @@ export default function AnnouncementsPage({ conf }: AnnouncementsPageProps) {
         />
       </Head>
       <main>
-        <SiteHeader conference={conf} />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <AnnouncementsList announcements={articles} conference={conf} />
       </main>
     </>
@@ -52,5 +57,5 @@ export const getStaticProps: GetStaticProps<AnnouncementsPageProps> = async (
 ) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
-  return { props: { conf: result.conf } };
+  return { props: { conf: result.conf, activePageId: "announcements" } };
 };

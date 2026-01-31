@@ -3,6 +3,7 @@ import AppsLanding from "@/features/apps/AppsLanding";
 import Head from "next/head";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import { ConferenceManifest } from "@/lib/conferences";
+import { PageId } from "@/lib/types/page-meta";
 import {
   buildConferenceStaticPaths,
   getConferenceFromParams,
@@ -11,9 +12,10 @@ import type { GetStaticProps } from "next";
 
 type AppsPageProps = {
   conf: ConferenceManifest;
+  activePageId: PageId;
 };
 
-export default function AppsPage({ conf }: AppsPageProps) {
+export default function AppsPage({ conf, activePageId }: AppsPageProps) {
   return (
     <>
       <Head>
@@ -24,7 +26,7 @@ export default function AppsPage({ conf }: AppsPageProps) {
         />
       </Head>
       <main>
-        <SiteHeader conference={conf} />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <AppsLanding />
       </main>
     </>
@@ -36,5 +38,5 @@ export const getStaticPaths = buildConferenceStaticPaths;
 export const getStaticProps: GetStaticProps<AppsPageProps> = async (ctx) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
-  return { props: { conf: result.conf } };
+  return { props: { conf: result.conf, activePageId: "apps" } };
 };

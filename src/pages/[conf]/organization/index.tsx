@@ -9,6 +9,7 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { OrganizationEntity, OrganizationsStore } from "@/lib/types/ht-types";
+import { PageId } from "@/lib/types/page-meta";
 import {
   buildConferenceStaticPaths,
   getConferenceFromParams,
@@ -17,9 +18,13 @@ import type { GetStaticProps } from "next";
 
 type OrganizationPageProps = {
   conf: ConferenceManifest;
+  activePageId: PageId;
 };
 
-export default function OrganizationPage({ conf }: OrganizationPageProps) {
+export default function OrganizationPage({
+  conf,
+  activePageId,
+}: OrganizationPageProps) {
   const router = useRouter();
   const idParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -71,7 +76,7 @@ export default function OrganizationPage({ conf }: OrganizationPageProps) {
       </Head>
 
       <main>
-        <SiteHeader conference={conf} />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <OrganizationDetails org={selectedOrganization} />
       </main>
     </>
@@ -85,5 +90,5 @@ export const getStaticProps: GetStaticProps<OrganizationPageProps> = async (
 ) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
-  return { props: { conf: result.conf } };
+  return { props: { conf: result.conf, activePageId: "organization" } };
 };

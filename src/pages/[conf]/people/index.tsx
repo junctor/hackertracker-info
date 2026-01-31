@@ -7,8 +7,20 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import PeopleList from "@/features/people/PeopleList";
 import { People } from "@/lib/types/info";
 import Head from "next/head";
+import { ConferenceManifest } from "@/lib/conferences";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
+import { PageId } from "@/lib/types/page-meta";
 
-export default function PeoplePage() {
+type PeoplePageProps = {
+  conf: ConferenceManifest;
+  activePageId: PageId;
+};
+
+export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   const {
     data: people,
     error,
@@ -28,9 +40,17 @@ export default function PeoplePage() {
         />
       </Head>
       <main>
-        <SiteHeader />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <PeopleList people={people} />
       </main>
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<PeoplePageProps> = async (ctx) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf, activePageId: "people" } };
+};

@@ -8,6 +8,7 @@ import Head from "next/head";
 import DocumentsList from "@/features/documents/DocumentsList";
 import { ConferenceManifest } from "@/lib/conferences";
 import { DocumentsListView } from "@/lib/types/ht-types";
+import { PageId } from "@/lib/types/page-meta";
 import {
   buildConferenceStaticPaths,
   getConferenceFromParams,
@@ -16,9 +17,13 @@ import type { GetStaticProps } from "next";
 
 type DocumentsPageProps = {
   conf: ConferenceManifest;
+  activePageId: PageId;
 };
 
-export default function DocumentsPage({ conf }: DocumentsPageProps) {
+export default function DocumentsPage({
+  conf,
+  activePageId,
+}: DocumentsPageProps) {
   const {
     data: documents,
     error,
@@ -41,7 +46,7 @@ export default function DocumentsPage({ conf }: DocumentsPageProps) {
         />
       </Head>
       <main>
-        <SiteHeader conference={conf} />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <DocumentsList documents={documents} conference={conf} />
       </main>
     </>
@@ -55,5 +60,5 @@ export const getStaticProps: GetStaticProps<DocumentsPageProps> = async (
 ) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
-  return { props: { conf: result.conf } };
+  return { props: { conf: result.conf, activePageId: "readme" } };
 };

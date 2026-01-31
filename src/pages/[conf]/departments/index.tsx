@@ -7,8 +7,23 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import { Organizations as OrgsType } from "@/lib/types/info";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
+import { ConferenceManifest } from "@/lib/conferences";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
+import { PageId } from "@/lib/types/page-meta";
 
-export default function DepartmentsPage() {
+type DepartmentsPageProps = {
+  conf: ConferenceManifest;
+  activePageId: PageId;
+};
+
+export default function DepartmentsPage({
+  conf,
+  activePageId,
+}: DepartmentsPageProps) {
   const {
     data: organizations,
     error,
@@ -34,9 +49,19 @@ export default function DepartmentsPage() {
         />
       </Head>
       <main>
-        <SiteHeader />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <OrganizationsList orgs={departments} title="Departments" confSlug="" />
       </main>
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<DepartmentsPageProps> = async (
+  ctx,
+) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf, activePageId: "departments" } };
+};

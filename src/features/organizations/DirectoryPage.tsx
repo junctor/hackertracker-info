@@ -11,9 +11,11 @@ import {
   OrganizationsCardsView,
 } from "@/lib/types/ht-types";
 import { ConferenceManifest } from "@/lib/conferences";
+import { PageId } from "@/lib/types/page-meta";
 
 type Props = {
   conf: ConferenceManifest;
+  activePageId: PageId;
   title: string;
   tagLabel: string;
   description?: string;
@@ -21,6 +23,7 @@ type Props = {
 
 export default function DirectoryPage({
   conf,
+  activePageId,
   title,
   tagLabel,
   description,
@@ -71,7 +74,7 @@ export default function DirectoryPage({
         <meta name="description" content={metaDescription} />
       </Head>
       <main>
-        <SiteHeader conference={conf} />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <OrganizationsList
           organizations={matchingOrganizations}
           title={title}

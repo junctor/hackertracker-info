@@ -8,8 +8,20 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import { TagTypes } from "@/lib/types/info";
 import Head from "next/head";
 import TagsList from "@/features/tags/TagsList";
+import { ConferenceManifest } from "@/lib/conferences";
+import {
+  buildConferenceStaticPaths,
+  getConferenceFromParams,
+} from "@/lib/next-static";
+import type { GetStaticProps } from "next";
+import { PageId } from "@/lib/types/page-meta";
 
-export default function TagsPage() {
+type TagsPageProps = {
+  conf: ConferenceManifest;
+  activePageId: PageId;
+};
+
+export default function TagsPage({ conf, activePageId }: TagsPageProps) {
   const {
     data: tags,
     error,
@@ -29,9 +41,17 @@ export default function TagsPage() {
         />
       </Head>
       <main>
-        <SiteHeader />
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <TagsList tagTypes={tags} />
       </main>
     </>
   );
 }
+
+export const getStaticPaths = buildConferenceStaticPaths;
+
+export const getStaticProps: GetStaticProps<TagsPageProps> = async (ctx) => {
+  const result = getConferenceFromParams(ctx.params);
+  if (!result) return { notFound: true };
+  return { props: { conf: result.conf, activePageId: "tags" } };
+};

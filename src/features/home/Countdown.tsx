@@ -23,10 +23,11 @@ function padTime(num: number) {
 
 export default function Countdown() {
   const [expired, setExpired] = useState(false);
-  const [timer, setTimer] = useState<Timer>(() => {
-    return typeof window !== "undefined"
-      ? getCountdown()
-      : { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  const [timer, setTimer] = useState<Timer>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
   const daysRef = useRef<HTMLDivElement>(null);
@@ -45,8 +46,8 @@ export default function Countdown() {
       }
     };
 
-    const intervalId = setInterval(tick, 1000);
     tick();
+    const intervalId = setInterval(tick, 1000);
     return () => clearInterval(intervalId);
   }, []);
 

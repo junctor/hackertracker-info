@@ -1,5 +1,4 @@
 const LOCALE = "en-US";
-const DEFAULT_TZ = "America/Los_Angeles";
 
 type Dateish = string | Date;
 
@@ -10,7 +9,7 @@ function toDate(value: Dateish): Date {
 export function eventTimeTable(
   value: Dateish,
   showTz = true,
-  tz: string = DEFAULT_TZ,
+  tz: string,
 ): string {
   const date = toDate(value);
   return date.toLocaleTimeString(LOCALE, {
@@ -22,9 +21,11 @@ export function eventTimeTable(
   });
 }
 
-export function eventDayTable(value: Dateish, tz: string = DEFAULT_TZ): string {
-  const date = toDate(value);
-  return date.toLocaleDateString(LOCALE, {
+export function eventDayTable(day: string, tz: string): string {
+  const [y, m, d] = day.split("-").map(Number);
+  const safe = new Date(Date.UTC(y, m - 1, d, 12, 0, 0)); // noon UTC
+
+  return safe.toLocaleDateString(LOCALE, {
     timeZone: tz,
     weekday: "long",
     month: "long",
@@ -33,20 +34,18 @@ export function eventDayTable(value: Dateish, tz: string = DEFAULT_TZ): string {
   });
 }
 
-export function tabDateTitle(day: string, tz: string = DEFAULT_TZ): string {
-  const date = new Date(day);
-  return date.toLocaleDateString(LOCALE, {
+export function tabDateTitle(day: string, tz: string): string {
+  const [y, m, d] = day.split("-").map(Number);
+  const safe = new Date(Date.UTC(y, m - 1, d, 12, 0, 0)); // noon UTC
+
+  return safe.toLocaleDateString(LOCALE, {
     timeZone: tz,
     month: "short",
     day: "numeric",
   });
 }
 
-export function eventTime(
-  value: Dateish,
-  showTz = true,
-  tz: string = DEFAULT_TZ,
-): string {
+export function eventTime(value: Dateish, showTz = true, tz: string): string {
   const date = toDate(value);
   return date.toLocaleTimeString(LOCALE, {
     timeZone: tz,
@@ -62,7 +61,7 @@ export function eventTime(
 
 export function newsTime(
   time: Date,
-  tz: string = DEFAULT_TZ,
+  tz: string,
   opts?: { showYear?: "auto" | boolean; showTz?: boolean },
 ): string {
   const { showYear = "auto", showTz = false } = opts ?? {};
@@ -113,11 +112,7 @@ export function newsAgo(time: Date, now: Date = new Date()): string {
   return diffMs < 0 ? `${yr}y ago` : `in ${yr}y`;
 }
 
-export function formatSessionTime(
-  begin: Date,
-  end: Date,
-  tz: string = DEFAULT_TZ,
-): string {
+export function formatSessionTime(begin: Date, end: Date, tz: string): string {
   // Compare the *local date in tz*, not the host machine timezone.
   const dayKey = (d: Date) =>
     new Intl.DateTimeFormat("en-CA", {

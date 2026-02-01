@@ -1,71 +1,62 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
-import { eventDayTable, tabDateTitle } from "@/lib/dates";
-import ScheduleEventRow from "./ScheduleEventRow";
-import { GroupedSchedule } from "@/lib/types/info";
+import React, { useEffect, useMemo, useRef, useCallback } from "react";
 import { BookmarkIcon, TagIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { eventDayTable, tabDateTitle } from "@/lib/dates";
+import ScheduleEventItem from "./ScheduleEventItem";
+import { ConferenceManifest } from "@/lib/conferences";
+
+export type ScheduleEventViewModel = {
+  id: number;
+  title: string;
+  begin: string;
+  end: string;
+  beginTimestampSeconds: number;
+  endTimestampSeconds: number;
+  color: string;
+  contentId: number;
+  locationName: string;
+  tags: Array<{
+    id: number;
+    label: string;
+    colorBackground: string;
+    colorForeground?: string;
+  }>;
+  speakers: string | null;
+};
+
+type ScheduleDay = {
+  day: string;
+  events: ScheduleEventViewModel[];
+};
 
 export default function ScheduleEvents({
-  dateGroup,
+  conf,
+  days,
+  selectedDay,
+  onSelectDay,
   bookmarks,
 }: {
-  dateGroup: GroupedSchedule;
+  conf: ConferenceManifest;
+  days: ScheduleDay[];
+  selectedDay: string;
+  onSelectDay: (day: string) => void;
   bookmarks: number[];
 }) {
-  const TAB_TOP = 60;
-  const TAB_HEIGHT = 56;
-  const SCROLL_OFFSET = TAB_TOP + TAB_HEIGHT;
-
-  const days = useMemo(
-    () => Object.entries(dateGroup).map(([day, events]) => ({ day, events })),
-    [dateGroup],
-  );
-
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
-
-  const initialDay = useMemo(() => {
-    if (days.length === 0) return null;
-    const now = Date.now();
-    for (const { day, events } of days) {
-      for (const event of events) {
-        const begin = Date.parse(event.begin);
-        const end = Date.parse(event.end);
-        if (!Number.isNaN(begin) && !Number.isNaN(end)) {
-          if (begin <= now && now <= end) {
-            return day;
-          }
-        }
-      }
-    }
-    return days[0].day;
-  }, [days]);
-
-  const [selectedDay, setSelectedDay] = useState<string | null>(initialDay);
   const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const panelRef = useRef<HTMLElement | null>(null);
+  const headingRef = useRef<HTMLHeadingElement | null>(null);
 
-  useEffect(() => {
-    if (!selectedDay || !days.some(({ day }) => day === selectedDay)) {
-      setSelectedDay(initialDay);
+  const resolvedDay = useMemo(() => {
+    if (selectedDay && days.some(({ day }) => day === selectedDay)) {
+      return selectedDay;
     }
-  }, [days, initialDay, selectedDay]);
-
-  const resolvedDay = selectedDay ?? days[0]?.day ?? null;
+    return days[0]?.day ?? "";
+  }, [days, selectedDay]);
 
   useEffect(() => {
-    if (!resolvedDay || !panelRef.current) return;
-    const top =
-      panelRef.current.getBoundingClientRect().top +
-      window.scrollY -
-      SCROLL_OFFSET;
-    window.scrollTo({ top, behavior: "auto" });
-  }, [resolvedDay, SCROLL_OFFSET]);
+    if (!resolvedDay) return;
+    headingRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
+  }, [resolvedDay]);
 
   const handleTabKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLButtonElement>, index: number, day: string) => {
@@ -91,30 +82,32 @@ export default function ScheduleEvents({
           nextIndex = lastIndex;
           break;
         case "Enter":
-          if (selectedDay !== day) {
-            setSelectedDay(day);
+          if (resolvedDay !== day) {
+            onSelectDay(day);
           }
           return;
         case " ":
           e.preventDefault();
-          if (selectedDay !== day) {
-            setSelectedDay(day);
+          if (resolvedDay !== day) {
+            onSelectDay(day);
           }
           return;
         default:
           return;
       }
 
-      const nextDay = days[nextIndex].day;
-      setSelectedDay(nextDay);
+      const nextDay = days[nextIndex]?.day;
+      if (!nextDay) return;
+      onSelectDay(nextDay);
       tabButtonRefs.current[nextDay]?.focus();
     },
-    [days, selectedDay],
+    [days, onSelectDay, resolvedDay],
   );
+
+  const activeDay = days.find(({ day }) => day === resolvedDay) ?? null;
 
   return (
     <div className="min-h-screen text-gray-100">
-      {/* Top toolbar */}
       <div className="sticky top-0 z-40 flex justify-end gap-2 border-b border-gray-800 bg-black/80 p-2 backdrop-blur">
         <Link
           href="/bookmarks"
@@ -132,8 +125,6 @@ export default function ScheduleEvents({
         </Link>
       </div>
 
-      {/* Sticky day tabs */}
-      {/* TODO: Design polish for day tabs and schedule table layout. */}
       <div
         className="sticky top-15 z-30 flex items-center gap-2 overflow-x-auto border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur"
         role="tablist"
@@ -154,74 +145,42 @@ export default function ScheduleEvents({
                 ? "border-indigo-400 bg-indigo-500/20 text-indigo-100"
                 : "border-gray-700 text-gray-200 hover:border-indigo-400 hover:text-white"
             }`}
-            onClick={() => setSelectedDay(day)}
+            onClick={() => onSelectDay(day)}
             onKeyDown={(e) => handleTabKeyDown(e, index, day)}
           >
-            <span>{tabDateTitle(day)}</span>
+            <span>{tabDateTitle(day, conf.timezone)}</span>
             <span className="text-xs text-gray-400">({events.length})</span>
           </button>
         ))}
       </div>
 
-      {/* Day sections */}
-      {resolvedDay &&
-        days
-          .filter(({ day }) => day === resolvedDay)
-          .map(({ day, events }) => (
-            <section
-              key={day}
-              ref={(el) => {
-                panelRef.current = el;
-              }}
-              id={`day-panel-${day}`}
-              role="tabpanel"
-              aria-labelledby={`day-tab-${day}`}
-              tabIndex={0}
-            >
-              <h2 className="scroll-mt-29 font-bold text-xl md:text-2xl ml-5 mt-6 mb-3 text-gray-100">
-                {eventDayTable(day)}
-              </h2>
-              <div className="overflow-x-auto px-5">
-                <table className="w-full mb-8 min-w-full table-fixed border-collapse">
-                  <colgroup>
-                    <col className="w-1/12 min-w-0" />
-                    <col className="w-2/12 min-w-0" />
-                    <col className="w-8/12 min-w-0" />
-                    <col className="w-1/12 min-w-0" />
-                  </colgroup>
-
-                  <thead className="bg-gray-800">
-                    <tr>
-                      <th scope="col" className="px-2 py-2 text-left" />
-                      <th
-                        scope="col"
-                        className="px-2 py-2 text-left font-semibold"
-                      >
-                        Time
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-2 py-2 text-left font-semibold"
-                      >
-                        Event
-                      </th>
-                      <th scope="col" className="px-2 py-2 text-right" />
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {events.map((evt) => (
-                      <ScheduleEventRow
-                        key={evt.id}
-                        event={evt}
-                        isBookmarked={bookmarkSet.has(evt.id)}
-                      />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ))}
+      {activeDay && (
+        <section
+          id={`day-panel-${activeDay.day}`}
+          role="tabpanel"
+          aria-labelledby={`day-tab-${activeDay.day}`}
+          tabIndex={0}
+        >
+          <h2
+            ref={headingRef}
+            className="scroll-mt-29 ml-5 mt-6 mb-3 text-xl font-bold text-gray-100 md:text-2xl"
+          >
+            {eventDayTable(activeDay.day, conf.timezone)}
+          </h2>
+          <div className="px-5">
+            <ul className="mb-8 space-y-3">
+              {activeDay.events.map((evt) => (
+                <ScheduleEventItem
+                  conf={conf}
+                  key={evt.id}
+                  event={evt}
+                  isBookmarked={bookmarkSet.has(evt.id)}
+                />
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

@@ -1,25 +1,74 @@
 // src/pages/bookmarks/index.tsx
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import useSWR from "swr";
+import Head from "next/head";
+import type { GetStaticProps } from "next";
 import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
-import ScheduleEvents from "@/features/schedule/ScheduleEvents";
-import { GroupedSchedule } from "@/lib/types/info";
+import ScheduleEvents, {
+  ScheduleEventViewModel,
+} from "@/features/schedule/ScheduleEvents";
+import { GroupedSchedule, ScheduleEvent } from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
-import Head from "next/head";
 import { ConferenceManifest } from "@/lib/conferences";
 import {
   buildConferenceStaticPaths,
   getConferenceFromParams,
 } from "@/lib/next-static";
-import type { GetStaticProps } from "next";
 import { PageId } from "@/lib/types/page-meta";
 
 type BookmarksPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
+};
+
+type ScheduleDay = {
+  day: string;
+  events: ScheduleEventViewModel[];
+};
+
+const buildDaysFromGrouped = (dateGroup: GroupedSchedule): ScheduleDay[] => {
+  return Object.entries(dateGroup)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([day, events]) => {
+      const mapped = (events as ScheduleEvent[])
+        .map((event) => {
+          const beginTimestampSeconds = Math.floor(
+            Date.parse(event.begin) / 1000,
+          );
+          const endTimestampSeconds = Math.floor(Date.parse(event.end) / 1000);
+          const speakers = event.speakers?.trim();
+
+          return {
+            id: event.id,
+            title: event.title,
+            begin: event.begin,
+            end: event.end,
+            beginTimestampSeconds,
+            endTimestampSeconds,
+            color: event.color ?? "#fff",
+            contentId: event.content_id,
+            locationName: event.location ?? "Unknown location",
+            tags: event.tags.map((tag) => ({
+              id: tag.id,
+              label: tag.label,
+              colorBackground: tag.color_background,
+              colorForeground: tag.color_foreground,
+            })),
+            speakers: speakers && speakers.length > 0 ? speakers : null,
+          } satisfies ScheduleEventViewModel;
+        })
+        .sort((a, b) => {
+          if (a.beginTimestampSeconds !== b.beginTimestampSeconds) {
+            return a.beginTimestampSeconds - b.beginTimestampSeconds;
+          }
+          return a.title.localeCompare(b.title);
+        });
+
+      return { day, events: mapped };
+    });
 };
 
 export default function BookmarksPage({
@@ -43,6 +92,37 @@ export default function BookmarksPage({
     }, {} as GroupedSchedule);
   }, [allEvents, bookmarks]);
 
+  const days = useMemo(() => buildDaysFromGrouped(dateGroup), [dateGroup]);
+
+  const defaultDay = useMemo(() => {
+    if (days.length === 0) return null;
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    for (const { day, events } of days) {
+      for (const event of events) {
+        if (
+          event.beginTimestampSeconds <= nowSeconds &&
+          nowSeconds <= event.endTimestampSeconds
+        ) {
+          return day;
+        }
+      }
+    }
+    return days[0].day;
+  }, [days]);
+
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!defaultDay) return;
+    if (!selectedDay || !days.some(({ day }) => day === selectedDay)) {
+      setSelectedDay(defaultDay);
+    }
+  }, [defaultDay, days, selectedDay]);
+
+  const handleSelectDay = useCallback((day: string) => {
+    setSelectedDay(day);
+  }, []);
+
   if (isLoading) return <LoadingScreen />;
   if (error || !allEvents) return <ErrorScreen />;
 
@@ -61,8 +141,17 @@ export default function BookmarksPage({
           <p className="mt-8 text-center text-gray-500">
             You haven’t bookmarked any events yet.
           </p>
+        ) : days.length > 0 && selectedDay ? (
+          <ScheduleEvents
+            days={days}
+            selectedDay={selectedDay}
+            onSelectDay={handleSelectDay}
+            bookmarks={bookmarks}
+          />
         ) : (
-          <ScheduleEvents dateGroup={dateGroup} bookmarks={bookmarks} />
+          <p className="mt-8 text-center text-gray-500">
+            No bookmarked events found.
+          </p>
         )}
       </main>
     </>

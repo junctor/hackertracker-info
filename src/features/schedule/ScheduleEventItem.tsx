@@ -41,7 +41,7 @@ export default function ScheduleEventItem({
               </time>
             </p>
             <p className="text-sm text-gray-400">
-              {eventTimeTable(event.end, false, conf.timezone)}
+              <time dateTime={event.endIso}>{event.endDisplay}</time>
             </p>
           </div>
 

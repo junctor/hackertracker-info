@@ -23,6 +23,10 @@ export type ScheduleEventViewModel = {
     colorForeground?: string;
   }>;
   speakers: string | null;
+  beginDisplay: string;
+  beginIso: string;
+  endDisplay: string;
+  endIso: string;
 };
 
 export type ScheduleDay = {
@@ -60,6 +64,10 @@ export function buildScheduleDaysFromGrouped(
             colorForeground: tag.color_foreground,
           })),
           speakers: speakers && speakers.length > 0 ? speakers : null,
+          beginDisplay: event.beginDisplay,
+          beginIso: event.beginIso,
+          endDisplay: event.endDisplay,
+          endIso: event.endIso,
         } satisfies ScheduleEventViewModel;
       });
 
@@ -164,7 +172,7 @@ export default function ScheduleEvents({
       </div>
 
       <div
-        className="sticky top-[3.75rem] z-30 flex items-center gap-2 overflow-x-auto border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur"
+        className="sticky top-15 z-30 flex items-center gap-2 overflow-x-auto border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur"
         role="tablist"
         aria-label="Schedule days"
       >
@@ -201,7 +209,7 @@ export default function ScheduleEvents({
         >
           <h2
             ref={headingRef}
-            className="scroll-mt-[7.25rem] ml-5 mt-6 mb-3 text-xl font-bold text-gray-100 md:text-2xl"
+            className="scroll-mt-29 ml-5 mt-6 mb-3 text-xl font-bold text-gray-100 md:text-2xl"
           >
             {eventDayTable(activeDay.day, conf.timezone)}
           </h2>

@@ -44,11 +44,13 @@ export type DocumentsStore = {
 
 export type EventEntity = {
   begin: string;
-  beginTimestampSeconds: number;
+  beginDisplay: string;
+  beginIso: string;
   color: string;
   contentId: number;
   end: string;
-  endTimestampSeconds: number;
+  endDisplay: string;
+  endIso: string;
   id: number;
   locationId: number;
   personIds?: Array<number>;

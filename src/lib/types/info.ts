@@ -15,6 +15,10 @@ export type ScheduleEvent = {
   location?: string | null;
   tags: Array<ScheduleTag>;
   speakers?: string | null;
+  beginDisplay: string;
+  beginIso: string;
+  endDisplay: string;
+  endIso: string;
 };
 
 export type GroupedSchedule = Record<string, Array<ScheduleEvent>>;

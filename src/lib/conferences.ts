@@ -6,6 +6,7 @@ export type SiteMenuKey =
   | "communities"
   | "content"
   | "contests"
+  | "departments"
   | "exhibitors"
   | "locations"
   | "maps"
@@ -55,11 +56,11 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
 
     dataRoot: "/ht/dcsg2026",
     siteMenu: [
-      "readme",
       "announcements",
-      "villages",
       "communities",
       "contests",
+      "readme",
+      "villages",
     ],
   },
 
@@ -79,16 +80,22 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
 
     dataRoot: "/ht/defcon33",
     siteMenu: [
-      "readme",
       "announcements",
       "bookmarks",
+      "communities",
       "content",
-      "schedule",
-      "people",
-      "maps",
+      "contests",
+      "departments",
+      "exhibitors",
       "locations",
+      "maps",
       "merch",
+      "people",
+      "readme",
+      "schedule",
       "search",
+      "vendors",
+      "villages",
     ],
   },
 } as const;

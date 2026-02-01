@@ -29,7 +29,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
         {/* Logo + Primary Nav */}
         <div className="flex items-center space-x-6">
           <div className="flex items-center gap-3">
-            <Link href="/">
+            <Link href={`/${conference.slug}`}>
               <h1
                 className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
               >

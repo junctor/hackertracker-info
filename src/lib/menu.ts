@@ -16,6 +16,65 @@ import {
 } from "@heroicons/react/24/outline";
 
 import type { ConferenceManifest, SiteMenuKey } from "./conferences";
+import type { PageId } from "./types/page-meta";
+
+export type OrganizationDirectoryConfig = {
+  title: string;
+  tagLabel: string;
+  slug: string;
+  description?: string;
+};
+
+export const ORGANIZATION_DIRECTORY_CONFIG: Readonly<
+  Partial<Record<PageId, OrganizationDirectoryConfig>>
+> = Object.freeze({
+  communities: {
+    title: "Communities",
+    tagLabel: "community",
+    slug: "communities",
+    description: "Connect with special-interest groups and meetups.",
+  },
+  departments: {
+    title: "Departments",
+    tagLabel: "def_con_department",
+    slug: "departments",
+    description: "Explore the various departments and their functions.",
+  },
+  villages: {
+    title: "Villages",
+    tagLabel: "village",
+    slug: "villages",
+    description: "Explore hands-on villages for hacking and collaboration.",
+  },
+  contests: {
+    title: "Contests",
+    tagLabel: "contest",
+    slug: "contests",
+    description: "Test your skills in CTFs, challenges, and competitions.",
+  },
+  contents: {
+    title: "Contents",
+    tagLabel: "content",
+    slug: "contents",
+    description: "Browse content-focused organizations and initiatives.",
+  },
+  exhibitors: {
+    title: "Exhibitors",
+    tagLabel: "exhibitor",
+    slug: "exhibitors",
+    description: "Discover exhibitors showcasing tools and solutions.",
+  },
+  vendors: {
+    title: "Vendors",
+    tagLabel: "vendor",
+    slug: "vendors",
+    description: "Browse vendors offering gear, swag, and services.",
+  },
+});
+
+export function getOrganizationDirectoryConfig(pageId: PageId) {
+  return ORGANIZATION_DIRECTORY_CONFIG[pageId];
+}
 
 export type SiteMenuItem = {
   sort_order: number;
@@ -64,10 +123,23 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
   content: (c) => ({
     sort_order: 50,
     title: "Content",
-    href: `/${c.slug}/contents`,
+    href: `/${c.slug}/content`,
     description: `Browse talks, workshops, and presentations at ${c.name}.`,
     icon: ListBulletIcon,
   }),
+
+  departments: (c) => {
+    const directory = getOrganizationDirectoryConfig("departments");
+    return {
+      sort_order: 55,
+      title: directory?.title ?? "Departments",
+      href: `/${c.slug}/${directory?.slug ?? "departments"}`,
+      description:
+        directory?.description ??
+        `Explore the various departments and their functions at ${c.name}.`,
+      icon: CubeIcon,
+    };
+  },
 
   people: (c) => ({
     sort_order: 60,
@@ -109,46 +181,70 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
     icon: MagnifyingGlassIcon,
   }),
 
-  villages: (c) => ({
-    sort_order: 110,
-    title: "Villages",
-    href: `/${c.slug}/villages`,
-    description:
-      "Explore hands-on villages for hacking, learning, and collaboration.",
-    icon: ArchiveBoxIcon,
-  }),
+  villages: (c) => {
+    const directory = getOrganizationDirectoryConfig("villages");
+    return {
+      sort_order: 110,
+      title: directory?.title ?? "Villages",
+      href: `/${c.slug}/${directory?.slug ?? "villages"}`,
+      description:
+        directory?.description ??
+        "Explore hands-on villages for hacking, learning, and collaboration.",
+      icon: ArchiveBoxIcon,
+    };
+  },
 
-  communities: (c) => ({
-    sort_order: 120,
-    title: "Communities",
-    href: `/${c.slug}/communities`,
-    description: `Connect with special-interest groups and meetups at ${c.name}.`,
-    icon: UsersIcon,
-  }),
+  communities: (c) => {
+    const directory = getOrganizationDirectoryConfig("communities");
+    return {
+      sort_order: 120,
+      title: directory?.title ?? "Communities",
+      href: `/${c.slug}/${directory?.slug ?? "communities"}`,
+      description:
+        directory?.description ??
+        `Connect with special-interest groups and meetups at ${c.name}.`,
+      icon: UsersIcon,
+    };
+  },
 
-  contests: (c) => ({
-    sort_order: 130,
-    title: "Contests",
-    href: `/${c.slug}/contests`,
-    description: "Test your skills in CTFs, challenges, and competitions.",
-    icon: BoltIcon,
-  }),
+  contests: (c) => {
+    const directory = getOrganizationDirectoryConfig("contests");
+    return {
+      sort_order: 130,
+      title: directory?.title ?? "Contests",
+      href: `/${c.slug}/${directory?.slug ?? "contests"}`,
+      description:
+        directory?.description ??
+        "Test your skills in CTFs, challenges, and competitions.",
+      icon: BoltIcon,
+    };
+  },
 
-  exhibitors: (c) => ({
-    sort_order: 140,
-    title: "Exhibitors",
-    href: `/${c.slug}/exhibitors`,
-    description: "Discover exhibitors showcasing tools and solutions.",
-    icon: CubeIcon,
-  }),
+  exhibitors: (c) => {
+    const directory = getOrganizationDirectoryConfig("exhibitors");
+    return {
+      sort_order: 140,
+      title: directory?.title ?? "Exhibitors",
+      href: `/${c.slug}/${directory?.slug ?? "exhibitors"}`,
+      description:
+        directory?.description ??
+        "Discover exhibitors showcasing tools and solutions.",
+      icon: CubeIcon,
+    };
+  },
 
-  vendors: (c) => ({
-    sort_order: 150,
-    title: "Vendors",
-    href: `/${c.slug}/vendors`,
-    description: "Browse vendors offering gear, swag, and services.",
-    icon: CubeIcon,
-  }),
+  vendors: (c) => {
+    const directory = getOrganizationDirectoryConfig("vendors");
+    return {
+      sort_order: 150,
+      title: directory?.title ?? "Vendors",
+      href: `/${c.slug}/${directory?.slug ?? "vendors"}`,
+      description:
+        directory?.description ??
+        "Browse vendors offering gear, swag, and services.",
+      icon: CubeIcon,
+    };
+  },
 };
 
 export function getSiteMenu(conference: ConferenceManifest): SiteMenuItem[] {

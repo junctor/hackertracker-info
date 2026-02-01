@@ -1,35 +1,34 @@
 import React from "react";
 import DirectoryPage from "@/features/organizations/DirectoryPage";
-import { ConferenceManifest } from "@/lib/conferences";
-import { PageId } from "@/lib/types/page-meta";
+import { OrganizationDirectoryPageProps } from "@/features/organizations/types";
+import { getOrganizationDirectoryConfig } from "@/lib/menu";
 import {
   buildConferenceStaticPaths,
   getConferenceFromParams,
 } from "@/lib/next-static";
 import type { GetStaticProps } from "next";
 
-type VillagesPageProps = {
-  conf: ConferenceManifest;
-  activePageId: PageId;
-};
+const DIRECTORY_CONFIG = getOrganizationDirectoryConfig("villages")!;
 
 export default function VillagesPage({
   conf,
   activePageId,
-}: VillagesPageProps) {
+}: OrganizationDirectoryPageProps) {
   return (
     <DirectoryPage
       conf={conf}
       activePageId={activePageId}
-      title="Villages"
-      tagLabel="village"
+      title={DIRECTORY_CONFIG.title}
+      tagLabel={DIRECTORY_CONFIG.tagLabel}
+      description={DIRECTORY_CONFIG.description}
+      routeSlug={DIRECTORY_CONFIG.slug}
     />
   );
 }
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<VillagesPageProps> = async (
+export const getStaticProps: GetStaticProps<OrganizationDirectoryPageProps> = async (
   ctx,
 ) => {
   const result = getConferenceFromParams(ctx.params);

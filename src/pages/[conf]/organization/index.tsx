@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import useSWR from "swr";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -6,78 +6,108 @@ import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
-import OrganizationDetails from "@/features/organizations/OrganizationDetails";
-import { ConferenceManifest } from "@/lib/conferences";
-import { OrganizationEntity, OrganizationsStore } from "@/lib/types/ht-types";
-import { PageId } from "@/lib/types/page-meta";
+import { OrganizationDirectoryPageProps } from "@/features/organizations/types";
+import {
+  getOrganizationDirectoryConfig,
+  OrganizationDirectoryConfig,
+} from "@/lib/menu";
+import {
+  DerivedTagIdsByLabel,
+  OrganizationsCardsView,
+} from "@/lib/types/ht-types";
 import {
   buildConferenceStaticPaths,
   getConferenceFromParams,
 } from "@/lib/next-static";
 import type { GetStaticProps } from "next";
-
-type OrganizationPageProps = {
-  conf: ConferenceManifest;
-  activePageId: PageId;
-};
+import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
 export default function OrganizationPage({
   conf,
   activePageId,
-}: OrganizationPageProps) {
+}: OrganizationDirectoryPageProps) {
   const router = useRouter();
-  const idParam = useMemo(() => {
-    if (!router.isReady) return null;
-    const value = router.query.id;
-    if (Array.isArray(value)) return value[0] ?? null;
-    return value ?? null;
-  }, [router.isReady, router.query.id]);
-  const docId = useMemo(() => {
-    if (!idParam) return null;
-    const parsed = Number(idParam);
-    return Number.isFinite(parsed) ? parsed : null;
-  }, [idParam]);
-  const hasInvalidId = router.isReady && idParam !== null && docId === null;
+  const {
+    value: docId,
+    isMissing: isIdMissing,
+    isInvalid: isIdInvalid,
+  } = useNumericQueryParam("id");
 
   const {
     data: organizations,
-    error,
-    isLoading,
-  } = useSWR<OrganizationsStore>(
-    `${conf.dataRoot}/entities/organizations.json`,
+    error: organizationsError,
+    isLoading: organizationsIsLoading,
+  } = useSWR<OrganizationsCardsView>(
+    docId !== null ? `${conf.dataRoot}/views/organizationsCards.json` : null,
     fetcher,
     { revalidateOnFocus: false },
   );
 
-  const selectedOrganization = useMemo<OrganizationEntity | null>(() => {
-    if (docId === null) return null;
-    return organizations ? (organizations.byId[docId] ?? null) : null;
-  }, [organizations, docId]);
+  const {
+    data: derivedTagIdsByLabel,
+    error: tagError,
+    isLoading: tagIsLoading,
+  } = useSWR<DerivedTagIdsByLabel>(
+    docId !== null ? `${conf.dataRoot}/derived/TagIdsByLabel.json` : null,
+    fetcher,
+    { revalidateOnFocus: false },
+  );
+
+  const redirectTarget = useMemo(() => {
+    if (!docId || !organizations || !derivedTagIdsByLabel) return null;
+
+    const configs = [
+      getOrganizationDirectoryConfig("communities"),
+      getOrganizationDirectoryConfig("departments"),
+      getOrganizationDirectoryConfig("villages"),
+      getOrganizationDirectoryConfig("contests"),
+      getOrganizationDirectoryConfig("contents"),
+      getOrganizationDirectoryConfig("exhibitors"),
+      getOrganizationDirectoryConfig("vendors"),
+    ].filter((config): config is OrganizationDirectoryConfig => Boolean(config));
+
+    for (const config of configs) {
+      const tagId = derivedTagIdsByLabel.byLabel[config.tagLabel];
+      const cards = tagId ? organizations[tagId] : null;
+      if (cards?.some((org) => org.id === docId)) {
+        return `/${conf.slug}/${config.slug}/?id=${docId}`;
+      }
+    }
+
+    return null;
+  }, [conf.slug, derivedTagIdsByLabel, docId, organizations]);
+
+  useEffect(() => {
+    if (redirectTarget) {
+      void router.replace(redirectTarget);
+    }
+  }, [redirectTarget, router]);
 
   if (!router.isReady) return <LoadingScreen />;
-  if (idParam === null) return <ErrorScreen msg="Missing organization id." />;
-  if (hasInvalidId) return <ErrorScreen msg="Invalid organization id." />;
-  if (isLoading) return <LoadingScreen />;
-  if (error || !organizations) return <ErrorScreen />;
+  if (isIdMissing)
+    return (
+      <ErrorScreen msg="Missing organization id. Use the category URL instead." />
+    );
+  if (isIdInvalid) return <ErrorScreen msg="Invalid organization id." />;
 
-  if (!selectedOrganization)
-    return <ErrorScreen msg="Organization not found" />;
+  if (organizationsIsLoading || tagIsLoading) return <LoadingScreen />;
+  if (organizationsError || tagError || !organizations || !derivedTagIdsByLabel)
+    return <ErrorScreen />;
+
+  if (redirectTarget) return <LoadingScreen />;
 
   return (
     <>
       <Head>
-        <title>
-          {selectedOrganization.name} | {conf.name}
-        </title>
+        <title>Organization | {conf.name}</title>
         <meta
           name="description"
-          content={selectedOrganization.description?.slice(0, 150) ?? ""}
+          content="Organization pages now live under their category routes."
         />
       </Head>
-
       <main>
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <OrganizationDetails org={selectedOrganization} />
+        <ErrorScreen msg="Organization pages now live under their category URLs (for example, /[conf]/communities/?id=####)." />
       </main>
     </>
   );
@@ -85,7 +115,7 @@ export default function OrganizationPage({
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<OrganizationPageProps> = async (
+export const getStaticProps: GetStaticProps<OrganizationDirectoryPageProps> = async (
   ctx,
 ) => {
   const result = getConferenceFromParams(ctx.params);

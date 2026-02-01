@@ -3,18 +3,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { alphaSort } from "@/lib/misc";
 import { OrganizationCard } from "@/lib/types/ht-types";
-import { ConferenceManifest } from "@/lib/conferences";
 
 type Props = {
   organizations: Array<OrganizationCard>;
   title: string;
-  conference: ConferenceManifest;
+  detailsBasePath: string;
 };
 
 export default function OrganizationsList({
   organizations,
   title,
-  conference,
+  detailsBasePath,
 }: Props) {
   const [search, setSearch] = useState("");
   const normalizedSearch = search.trim().toLowerCase();
@@ -67,7 +66,7 @@ export default function OrganizationsList({
           {filtered.map((o) => (
             <Link
               key={o.id}
-              href={`/${conference.slug}/organization/?id=${o.id}`}
+              href={`${detailsBasePath}/?id=${o.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
               <div className="bg-linear-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600 transition-all transform hover:scale-[1.02] overflow-hidden ring-offset-4 ring-indigo-600 hover:ring-4">

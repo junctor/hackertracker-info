@@ -17,7 +17,14 @@ export type ContentEntity = {
   }>;
   tagIds: Array<number>;
   title: string;
+  description?: string;
   sessions: {};
+  links: Array<{
+    label: string;
+    type: string;
+    url: string;
+  }>;
+  relatedContentIds: Array<number>;
 };
 export type ContentStore = {
   allIds: Array<number>;

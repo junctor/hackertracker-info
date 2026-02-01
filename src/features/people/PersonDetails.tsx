@@ -1,9 +1,11 @@
 import Image from "next/image";
+import { useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { getConference } from "@/lib/conferences";
 import { eventTime } from "@/lib/dates";
 import Markdown from "@/components/markdown/Markdown";
 import {
-  ContentEntity,
   EventEntity,
   LocationEntity,
   PersonEntity,
@@ -16,6 +18,15 @@ type Props = {
 };
 
 export default function PersonDetails({ person, events, locations }: Props) {
+  const router = useRouter();
+  const conference = useMemo(() => {
+    const confParam = router.query.conf;
+    const confValue = Array.isArray(confParam) ? confParam[0] : confParam;
+    return typeof confValue === "string" ? getConference(confValue) : null;
+  }, [router.query.conf]);
+  const contentsBasePath = conference
+    ? `/${conference.slug}/content`
+    : "/content";
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
       {/* Hero */}
@@ -89,7 +100,7 @@ export default function PersonDetails({ person, events, locations }: Props) {
               {events.map((e) => (
                 <li key={e.id}>
                   <Link
-                    href={`/content?id=${e.id}`}
+                    href={`${contentsBasePath}?id=${e.contentId}`}
                     className="block w-full group"
                   >
                     <div

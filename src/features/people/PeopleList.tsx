@@ -41,7 +41,7 @@ export default function PeopleList({ people, conference }: Props) {
           {filtered.map((person) => (
             <Link
               key={person.id}
-              href={`/${conference.code}/people/?id=${person.id}`}
+              href={`/${conference.slug}/people/?id=${person.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
               <div

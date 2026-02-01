@@ -36,7 +36,7 @@ export default function PeopleList({ people, conference }: Props) {
               href={`/${conference.slug}/people/?id=${person.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
-              <div className="h-full bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-xl rounded-2xl hover:from-gray-700 hover:to-gray-600 ring-offset-2 ring-indigo-600 hover:ring-2 transition-all transform hover:scale-[1.02] overflow-hidden">
+              <div className="h-full bg-linear-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-xl rounded-2xl hover:from-gray-700 hover:to-gray-600 ring-offset-2 ring-indigo-600 hover:ring-2 transition-all transform hover:scale-[1.02] overflow-hidden">
                 <div className="flex flex-col items-center justify-center p-6 space-y-4">
                   {/* Avatar with initials */}
 

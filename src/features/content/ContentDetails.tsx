@@ -1,25 +1,54 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import Markdown from "@/components/markdown/Markdown";
-import type { ProcessedContentId } from "@/lib/types/info";
 import { ShareIcon, UserIcon } from "@heroicons/react/24/outline";
 import ContentSession from "./ContentSession";
+import { useRouter } from "next/router";
+import { getConference } from "@/lib/conferences";
+import {
+  ContentEntity,
+  EventEntity,
+  LocationEntity,
+  PersonEntity,
+  TagEntity,
+} from "@/lib/types/ht-types";
 
 export default function ContentDetails({
   content,
+  sessions,
+  locations,
+  people,
   related_content,
+  tags,
   bookmarks,
 }: {
-  content: ProcessedContentId;
-  related_content: ProcessedContentId[];
+  content: ContentEntity;
+  sessions: EventEntity[];
+  locations: LocationEntity[];
+  people: PersonEntity[];
+  related_content: ContentEntity[];
+  tags: TagEntity[];
   bookmarks: number[];
 }) {
+  const router = useRouter();
+  const conference = useMemo(() => {
+    const confParam = router.query.conf;
+    const confValue = Array.isArray(confParam) ? confParam[0] : confParam;
+    return typeof confValue === "string" ? getConference(confValue) : null;
+  }, [router.query.conf]);
+  const peopleBasePath = conference
+    ? `/${conference.slug}/people/`
+    : "/people/";
+  const contentsBasePath = conference
+    ? `/${conference.slug}/content/`
+    : "/content/";
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
           title: content.title,
-          url: `/content?id=${content.id}`,
+          url: `${contentsBasePath}?id=${content.id}`,
         });
       } catch {
         console.error("Share failed");
@@ -27,24 +56,8 @@ export default function ContentDetails({
     }
   };
 
-  const sessions = useMemo(
-    () =>
-      [...content.sessions].sort(
-        (a, b) =>
-          new Date(a.begin_tsz).getTime() - new Date(b.begin_tsz).getTime(),
-      ),
-    [content.sessions],
-  );
-  const tags = useMemo(
-    () =>
-      [...content.tags].sort(
-        (a, b) => a.sort_order - b.sort_order || a.label.localeCompare(b.label),
-      ),
-    [content.tags],
-  );
-
   return (
-    <div className="max-w-screen-lg mx-auto px-4 py-10 space-y-10">
+    <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
       {/* Share + Title */}
       <div className="flex items-center justify-between">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white">
@@ -70,10 +83,14 @@ export default function ContentDetails({
           <ul className="space-y-4">
             {sessions.map((s) => (
               <ContentSession
-                key={s.session_id}
+                key={s.id}
                 session={s}
                 content={content}
-                isBookmarked={bookmarks.includes(s.session_id)}
+                isBookmarked={bookmarks.includes(s.id)}
+                locationName={
+                  locations.find((location) => location.id === s.locationId)
+                    ?.name
+                }
               />
             ))}
           </ul>
@@ -91,7 +108,7 @@ export default function ContentDetails({
             >
               <span
                 className="block h-3 w-3 rounded-full"
-                style={{ backgroundColor: tag.color_background }}
+                style={{ backgroundColor: tag.colorBackground }}
               />
               <span>{tag.label}</span>
             </Link>
@@ -112,7 +129,7 @@ export default function ContentDetails({
       )}
 
       {/* Links */}
-      {content.links.length > 0 && (
+      {content.links && content.links.length > 0 && (
         <section>
           <h2 className="text-2xl font-semibold text-gray-200 mb-4">Links</h2>
           <ul className="space-y-2">
@@ -133,14 +150,14 @@ export default function ContentDetails({
       )}
 
       {/* People */}
-      {content.people.length > 0 && (
+      {people.length > 0 && (
         <section>
           <h2 className="text-2xl font-semibold text-gray-200 mb-4">People</h2>
           <div className="flex flex-wrap gap-2">
-            {content.people.map((p) => (
+            {people.map((p) => (
               <Link
-                key={p.person_id}
-                href={`/person?id=${p.person_id}`}
+                key={p.id}
+                href={`${peopleBasePath}?id=${p.id}`}
                 className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
               >
                 <UserIcon className="h-4 w-4 text-indigo-300" />
@@ -152,7 +169,7 @@ export default function ContentDetails({
       )}
 
       {/* Related Content */}
-      {related_content.length > 0 && (
+      {/* {related_content.length > 0 && (
         <section>
           <h2 className="text-2xl font-semibold text-gray-200 mb-4">
             Related Content
@@ -161,7 +178,7 @@ export default function ContentDetails({
             {related_content.map((rc) => (
               <li key={rc.id}>
                 <Link
-                  href={`/content?id=${rc.id}`}
+                  href={`${contentsBasePath}?id=${rc.id}`}
                   className="group block rounded-2xl bg-gray-800 p-6 shadow-lg hover:scale-105 transition-transform"
                 >
                   <h3 className="text-lg font-bold text-gray-100 group-hover:text-white">
@@ -188,7 +205,7 @@ export default function ContentDetails({
             ))}
           </ul>
         </section>
-      )}
+      )} */}
     </div>
   );
 }

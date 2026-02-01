@@ -1,4 +1,4 @@
-import { ContentSessionLite, ProcessedContentId } from "@/lib/types/info";
+import { ContentEntity, EventEntity } from "@/lib/types/ht-types";
 
 const BASEURL = "https://info.defcon.org";
 const PRODID = "-//hackertracker//defcon-singapore-2025 Calendar 1.0//EN";
@@ -39,21 +39,21 @@ const foldLine = (line: string) => {
 };
 
 /** Build a plain-text description including speakers */
-const buildDescription = (content: ProcessedContentId) => {
-  const speakers = content.people.map((s) => s.name).join(", ");
-  return [content.description, speakers].filter(Boolean).join("\\n");
+const buildDescription = (content: ContentEntity) => {
+  return content.description ?? "";
 };
 
 /** Generate a full iCal string for an event */
 export const generateICal = (
-  content: ProcessedContentId,
-  session: ContentSessionLite,
+  content: ContentEntity,
+  session: EventEntity,
+  locationName?: string,
 ): string => {
   const now = new Date();
   const dtstamp = formatICalDate(now);
-  const dtstart = formatICalDate(new Date(session.begin_tsz));
-  const dtend = formatICalDate(new Date(session.end_tsz));
-  const uid = `defcon-singapore-2025-${content.id}@info.defcon.org`;
+  const dtstart = formatICalDate(new Date(session.begin));
+  const dtend = formatICalDate(new Date(session.end));
+  const uid = `defcon-${content.id}-${session.id}@info.defcon.org`;
 
   const lines = [
     "BEGIN:VCALENDAR",
@@ -70,7 +70,7 @@ export const generateICal = (
     "CATEGORIES:CONFERENCE",
     `SUMMARY:${escapeICalText(content.title)}`,
     `URL:${BASEURL}/content?id=${content.id}`,
-    `LOCATION:${escapeICalText(session.location_name ?? "")}`,
+    `LOCATION:${escapeICalText(locationName ?? "")}`,
     `DESCRIPTION:${escapeICalText(buildDescription(content))}`,
     "END:VEVENT",
     "END:VCALENDAR",

@@ -10,21 +10,21 @@ export type ArticlesStore = {
 };
 
 export type ContentEntity = {
-  id: number;
-  people?: Array<{
-    personId: number;
-    sortOrder: number;
-  }>;
-  tagIds: Array<number>;
-  title: string;
   description?: string;
-  sessions: {};
-  links: Array<{
+  id: number;
+  links?: Array<{
     label: string;
     type: string;
     url: string;
   }>;
-  relatedContentIds: Array<number>;
+  people?: Array<{
+    personId: number;
+    sortOrder: number;
+  }>;
+  relatedContentIds?: Array<number>;
+  sessions?: Array<number>;
+  tagIds: Array<number>;
+  title: string;
 };
 export type ContentStore = {
   allIds: Array<number>;

@@ -1,13 +1,18 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import type { ProcessedContents, TagTypes } from "@/lib/types/info";
+import type {
+  ContentCardsView,
+  TagTypesBrowseView,
+} from "@/lib/types/ht-types/views";
+import { ConferenceManifest } from "@/lib/conferences";
 
 interface Props {
-  content: ProcessedContents;
-  tags: TagTypes;
+  conference: ConferenceManifest;
+  content: ContentCardsView;
+  tags: TagTypesBrowseView;
 }
 
-export default function ContentList({ content, tags }: Props) {
+export default function ContentList({ content, tags, conference }: Props) {
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<number | null>(null);
 
@@ -53,16 +58,13 @@ export default function ContentList({ content, tags }: Props) {
             <option value="">All tags</option>
             {tags
               .filter(
-                (tag) =>
-                  tag.is_browsable &&
-                  tag.tags.length > 0 &&
-                  tag.category === "content",
+                (tag) => tag.tags.length > 0 && tag.category === "content",
               )
-              .sort((a, b) => a.sort_order - b.sort_order)
+              .sort((a, b) => a.sortOrder - b.sortOrder)
               .map((tag) => (
                 <optgroup key={tag.id} label={tag.label}>
                   {tag.tags
-                    .sort((a, b) => a.sort_order - b.sort_order)
+                    .sort((a, b) => a.sortOrder - b.sortOrder)
                     .map((item) => (
                       <option key={item.id} value={item.id}>
                         {item.label}
@@ -81,7 +83,7 @@ export default function ContentList({ content, tags }: Props) {
             className="odd:bg-gray-950 even:bg-gray-1000 transition-colors"
           >
             <Link
-              href={`/content?id=${item.id}`}
+              href={`/${conference.slug}/content/?id=${item.id}`}
               className="block group px-4 py-6 hover:bg-gray-700 transition-colors"
             >
               <div className="flex items-center justify-between">
@@ -91,7 +93,7 @@ export default function ContentList({ content, tags }: Props) {
                 <span
                   className={`text-xl group-hover:text-gray-300 transition-colors`}
                   style={{
-                    color: item.tags[0].color_background ?? "#fff",
+                    color: item.tags[0]?.colorBackground ?? "#fff",
                   }}
                 >
                   &rarr;
@@ -103,8 +105,8 @@ export default function ContentList({ content, tags }: Props) {
                     key={tag.id}
                     className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium"
                     style={{
-                      backgroundColor: tag.color_background,
-                      color: tag.color_foreground ?? "#fff",
+                      backgroundColor: tag.colorBackground,
+                      color: tag.colorForeground ?? "#fff",
                     }}
                   >
                     {tag.label}

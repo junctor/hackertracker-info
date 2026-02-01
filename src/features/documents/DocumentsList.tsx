@@ -28,7 +28,7 @@ export default function DocumentsList({
             >
               <div>
                 <h2 className="text-xl font-semibold text-gray-100 leading-snug">
-                  {doc.title_text}
+                  {doc.titleText}
                 </h2>
                 <p className="mt-1 text-sm text-gray-400">
                   <span className="font-medium text-gray-200">Updated:</span>{" "}

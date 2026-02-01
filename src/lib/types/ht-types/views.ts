@@ -1,8 +1,8 @@
 export type ContentCard = {
   id: number;
   tags: Array<{
-    color_background: string;
-    color_foreground: string;
+    colorBackground: string;
+    colorForeground: string;
     id: number;
     label: string;
   }>;
@@ -12,7 +12,7 @@ export type ContentCardsView = Array<ContentCard>;
 
 export type DocumentList = {
   id: number;
-  title_text: string;
+  titleText: string;
   updatedAtMs: number;
 };
 export type DocumentsListView = Array<DocumentList>;
@@ -20,14 +20,14 @@ export type DocumentsListView = Array<DocumentList>;
 export type EventCard = {
   begin: string;
   color: string;
-  content_id: number;
+  contentId: number;
   end: string;
   id: number;
   location: string;
   speakers: null | string;
   tags: Array<{
-    color_background: string;
-    color_foreground: string;
+    colorBackground: string;
+    colorForeground: string;
     id: number;
     label: string;
   }>;
@@ -44,9 +44,10 @@ export type OrganizationCard = {
 export type OrganizationsCardsView = Record<string, Array<OrganizationCard>>;
 
 export type PersonCard = {
-  affiliations: Array<string>;
   id: number;
   name: string;
+  title?: string;
+  avatarUrl?: string;
 };
 export type PeopleCardsView = Array<PersonCard>;
 
@@ -54,13 +55,13 @@ export type TagTypeBrowse = {
   category: string;
   id: number;
   label: string;
-  sort_order: number;
+  sortOrder: number;
   tags: Array<{
-    color_background: string;
-    color_foreground: string;
+    colorBackground: string;
+    colorForeground: string;
     id: number;
     label: string;
-    sort_order: number;
+    sortOrder: number;
   }>;
 };
 export type TagTypesBrowseView = Array<TagTypeBrowse>;

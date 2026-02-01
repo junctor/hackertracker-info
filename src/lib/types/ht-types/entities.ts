@@ -12,11 +12,12 @@ export type ArticlesStore = {
 export type ContentEntity = {
   id: number;
   people?: Array<{
-    person_id: number;
-    sort_order: number;
+    personId: number;
+    sortOrder: number;
   }>;
-  tag_ids: Array<number>;
+  tagIds: Array<number>;
   title: string;
+  sessions: {};
 };
 export type ContentStore = {
   allIds: Array<number>;
@@ -24,9 +25,9 @@ export type ContentStore = {
 };
 
 export type DocumentEntity = {
-  body_text: string;
+  bodyText: string;
   id: number;
-  title_text: string;
+  titleText: string;
   updatedAtMs: number;
 };
 export type DocumentsStore = {
@@ -38,14 +39,14 @@ export type EventEntity = {
   begin: string;
   beginTimestampSeconds: number;
   color: string;
-  content_id: number;
+  contentId: number;
   end: string;
   endTimestampSeconds: number;
   id: number;
-  location_id: number;
+  locationId: number;
   personIds?: Array<number>;
   speakerIds?: Array<number>;
-  tag_ids: Array<number>;
+  tagIds: Array<number>;
   title: string;
 };
 export type EventsStore = {
@@ -56,7 +57,7 @@ export type EventsStore = {
 export type LocationEntity = {
   id: number;
   name: string;
-  parent_id: number;
+  parentId: number;
   short_name: string;
 };
 export type LocationsStore = {
@@ -68,17 +69,17 @@ export type MenuEntity = {
   id: number;
   items: Array<{
     apple_sfsymbol: string;
-    applied_tag_ids: Array<number>;
-    document_id: null | number;
+    appliedTagIds: Array<number>;
+    documentId: null | number;
     function: string;
     google_materialsymbol: string;
     id: number;
-    menu_id: null | number;
-    prohibit_tag_filter: string;
-    sort_order: number;
-    title_text: string;
+    menuId: null | number;
+    prohibitTagFilter: string;
+    sortOrder: number;
+    titleText: string;
   }>;
-  title_text: string;
+  titleText: string;
 };
 export type MenusStore = {
   allIds: Array<number>;
@@ -89,8 +90,8 @@ export type OrganizationEntity = {
   id: number;
   name: string;
   description: string;
-  logo_url?: string;
-  tag_id_as_organizer?: number;
+  logoUrl?: string;
+  tagIdAsOrganizer?: number;
   links: Array<{
     label: string;
     type: string;
@@ -103,9 +104,22 @@ export type OrganizationsStore = {
 };
 
 export type PersonEntity = {
-  affiliations?: Array<string>;
+  affiliations?: {
+    organization: string;
+    title: string;
+  }[];
+  links: {
+    sortOrder: number;
+    title: string;
+    description: string | null;
+    url: string;
+  }[];
+  description?: string;
   id: number;
   name: string;
+  pronouns?: string;
+  contentIds: number[];
+  avatarUrl?: string;
 };
 export type PeopleStore = {
   allIds: Array<number>;
@@ -115,9 +129,9 @@ export type PeopleStore = {
 export type TagTypeEntity = {
   category: string;
   id: number;
-  is_browsable: boolean;
+  isBrowsable: boolean;
   label: string;
-  sort_order: number;
+  sortOrder: number;
 };
 export type TagTypesStore = {
   allIds: Array<number>;
@@ -125,12 +139,12 @@ export type TagTypesStore = {
 };
 
 export type TagEntity = {
-  color_background: string;
-  color_foreground: string;
+  colorBackground: string;
+  colorForeground: string;
   id: number;
   label: string;
-  sort_order: number;
-  tagtype_id: number;
+  sortOrder: number;
+  tagTypeId: number;
 };
 export type TagsStore = {
   allIds: Array<number>;

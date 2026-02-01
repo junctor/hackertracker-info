@@ -7,6 +7,13 @@ import { useGSAP } from "@gsap/react";
 import React from "react";
 import { ConferenceManifest } from "@/lib/conferences";
 
+interface Timer {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
 const atkinsonFont = localFont({
   src: "../../../public/fonts/atkinson-hl.woff2",
   display: "swap",

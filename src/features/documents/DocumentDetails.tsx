@@ -37,7 +37,7 @@ export default function DocumentDetails({ document, conference }: Props) {
             <ChevronRightIcon className="w-4 h-4 text-gray-400 dark:text-gray-600" />
           </li>
           <li aria-current="page" className="text-gray-300">
-            {document.title_text}
+            {document.titleText}
           </li>
         </ol>
       </nav>
@@ -47,7 +47,7 @@ export default function DocumentDetails({ document, conference }: Props) {
           id="doc-title"
           className="text-4xl font-extrabold tracking-tight mb-2"
         >
-          {document.title_text}
+          {document.titleText}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Last updated {updatedLabel}
@@ -55,7 +55,7 @@ export default function DocumentDetails({ document, conference }: Props) {
       </header>
 
       <section className="prose max-w-prose dark:prose-invert">
-        <Markdown content={document.body_text} />
+        <Markdown content={document.bodyText} />
       </section>
     </article>
   );

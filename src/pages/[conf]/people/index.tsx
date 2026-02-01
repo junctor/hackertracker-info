@@ -5,7 +5,6 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import PeopleList from "@/features/people/PeopleList";
-import { People } from "@/lib/types/info";
 import Head from "next/head";
 import { ConferenceManifest } from "@/lib/conferences";
 import {
@@ -14,6 +13,7 @@ import {
 } from "@/lib/next-static";
 import type { GetStaticProps } from "next";
 import { PageId } from "@/lib/types/page-meta";
+import { PeopleCardsView } from "@/lib/types/ht-types/views";
 
 type PeoplePageProps = {
   conf: ConferenceManifest;
@@ -25,7 +25,10 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
     data: people,
     error,
     isLoading,
-  } = useSWR<People>("/ht/people.json", fetcher);
+  } = useSWR<PeopleCardsView>(
+    `${conf.dataRoot}/views/peopleCards.json`,
+    fetcher,
+  );
 
   if (isLoading) return <LoadingScreen />;
   if (error || !people) return <ErrorScreen />;
@@ -33,15 +36,15 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   return (
     <>
       <Head>
-        <title>People | DEF CON Singapore 2026</title>
+        <title>People | {conf.name}</title>
         <meta
           name="description"
-          content="Browse bios and sessions for all DEF CON Singapore 2026 participants."
+          content={`Browse bios and sessions for all ${conf.name} participants.`}
         />
       </Head>
       <main>
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <PeopleList people={people} />
+        <PeopleList people={people} conference={conf} />
       </main>
     </>
   );

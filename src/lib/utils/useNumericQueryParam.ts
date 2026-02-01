@@ -22,7 +22,7 @@ export default function useNumericQueryParam(
       return { value: null, isMissing: true, isInvalid: false };
     }
 
-    const value = Array.isArray(rawValue) ? rawValue[0] ?? "" : rawValue;
+    const value = Array.isArray(rawValue) ? (rawValue[0] ?? "") : rawValue;
     if (typeof value !== "string" || value.trim() === "") {
       return { value: null, isMissing: true, isInvalid: false };
     }

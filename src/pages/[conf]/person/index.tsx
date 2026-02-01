@@ -6,7 +6,6 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import PersonDetails from "@/features/people/PersonDetails";
 import { useRouter } from "next/router";
-import { People, Person } from "@/lib/types/info";
 import Head from "next/head";
 import { ConferenceManifest } from "@/lib/conferences";
 import {
@@ -15,6 +14,7 @@ import {
 } from "@/lib/next-static";
 import type { GetStaticProps } from "next";
 import { PageId } from "@/lib/types/page-meta";
+import { PeopleStore, PersonEntity } from "@/lib/types/ht-types";
 
 type PersonPageProps = {
   conf: ConferenceManifest;
@@ -35,11 +35,11 @@ export default function PersonPage({ conf, activePageId }: PersonPageProps) {
     data: people,
     error,
     isLoading,
-  } = useSWR<People>("/ht/people.json", fetcher);
+  } = useSWR<PeopleStore>(`${conf.dataRoot}/entities/people.json`, fetcher);
 
-  const person: Person | null = useMemo(() => {
+  const person: PersonEntity | null = useMemo(() => {
     if (!people || personId === null) return null;
-    return people.find((p) => p.id === personId) ?? null;
+    return people.byId[personId] || null;
   }, [people, personId]);
 
   if (!router.isReady) return <LoadingScreen />;
@@ -51,10 +51,12 @@ export default function PersonPage({ conf, activePageId }: PersonPageProps) {
   return (
     <>
       <Head>
-        <title>{person.name} | Speaker at DEF CON Singapore 2026</title>
+        <title>
+          {person.name} | Speaker at {conf.name}
+        </title>
         <meta
           name="description"
-          content={`Learn more about ${person.name}, a speaker at DEF CON Singapore 2026. See their bio, sessions, and contributions.`}
+          content={`Learn more about ${person.name}, a speaker at ${conf.name}. See their bio, sessions, and contributions.`}
         />
       </Head>
       <main>

@@ -1,6 +1,6 @@
 import React from "react";
 import DirectoryPage from "@/features/organizations/DirectoryPage";
-import { OrganizationDirectoryPageProps } from "@/features/organizations/types";
+import { OrganizationDirectoryPageProps } from "@/lib/types/orgs";
 import { getOrganizationDirectoryConfig } from "@/lib/menu";
 import {
   buildConferenceStaticPaths,
@@ -28,9 +28,9 @@ export default function DepartmentsPage({
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<OrganizationDirectoryPageProps> = async (
-  ctx,
-) => {
+export const getStaticProps: GetStaticProps<
+  OrganizationDirectoryPageProps
+> = async (ctx) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
   return { props: { conf: result.conf, activePageId: "departments" } };

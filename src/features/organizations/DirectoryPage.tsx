@@ -67,9 +67,7 @@ export default function DirectoryPage({
     error: organizationsStoreError,
     isLoading: organizationsStoreLoading,
   } = useSWR<OrganizationsStore>(
-    isDetailsRoute
-      ? `${conf.dataRoot}/entities/organizations.json`
-      : null,
+    isDetailsRoute ? `${conf.dataRoot}/entities/organizations.json` : null,
     fetcher,
     { revalidateOnFocus: false },
   );
@@ -151,7 +149,5 @@ export default function DirectoryPage({
     );
   }
 
-  return (
-    <ErrorScreen msg="Missing organization id." />
-  );
+  return <ErrorScreen msg="Missing organization id." />;
 }

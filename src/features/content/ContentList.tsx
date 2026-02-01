@@ -46,7 +46,7 @@ export default function ContentList({ content, tags, conference }: Props) {
           />
         </label>
         {/* Tag Filter */}
-        <label className="w-full max-w-[220px]">
+        <label className="w-full max-w-55">
           <span className="sr-only">Filter by tag</span>
           <select
             value={selectedTag ?? ""}

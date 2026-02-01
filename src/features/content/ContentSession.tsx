@@ -24,10 +24,7 @@ export default function ContentSession({
   const end = new Date(session.end);
   const sameTime = session.end === session.begin;
 
-  const [bookmark, toggleBookmark] = useBookmarks(
-    session.id,
-    isBookmarked,
-  );
+  const [bookmark, toggleBookmark] = useBookmarks(session.id, isBookmarked);
 
   return (
     <li

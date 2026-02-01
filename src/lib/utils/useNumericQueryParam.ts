@@ -14,7 +14,12 @@ export default function useNumericQueryParam(
 ): NumericQueryParamState {
   return useMemo(() => {
     if (!router.isReady) {
-      return { value: null, isReady: false, isMissing: false, isInvalid: false };
+      return {
+        value: null,
+        isReady: false,
+        isMissing: false,
+        isInvalid: false,
+      };
     }
 
     const rawValue = router.query[key];

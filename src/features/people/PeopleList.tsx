@@ -1,12 +1,14 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import type { People } from "@/lib/types/info";
+import { PeopleCardsView } from "@/lib/types/ht-types";
+import { ConferenceManifest } from "@/lib/conferences";
 
 type Props = {
-  people: People;
+  people: PeopleCardsView;
+  conference: ConferenceManifest;
 };
 
-export default function PeopleList({ people }: Props) {
+export default function PeopleList({ people, conference }: Props) {
   const [query, setQuery] = useState("");
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
@@ -39,13 +41,13 @@ export default function PeopleList({ people }: Props) {
           {filtered.map((person) => (
             <Link
               key={person.id}
-              href={`/person?id=${person.id}`}
+              href={`/${conference.code}/people/?id=${person.id}`}
               className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-2xl"
             >
               <div
                 className="
                   h-full
-                  bg-gradient-to-br from-gray-800 to-gray-700
+                  bg-linear-to-br from-gray-800 to-gray-700
                   border border-gray-700
                   shadow-xl rounded-2xl
                   hover:from-gray-700 hover:to-gray-600
@@ -63,20 +65,10 @@ export default function PeopleList({ people }: Props) {
                   </h2>
 
                   {/* Affiliation badges */}
-                  {person.affiliations.length > 0 && (
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {person.affiliations.map(
-                        (a, i) =>
-                          a.organization && (
-                            <span
-                              key={i}
-                              className="inline-flex items-center rounded-full bg-gray-900 px-2 py-1 text-xs text-gray-200"
-                            >
-                              {a.organization}
-                            </span>
-                          ),
-                      )}
-                    </div>
+                  {person.title && (
+                    <span className="inline-flex items-center rounded-full bg-gray-900 px-2 py-1 text-xs text-gray-200">
+                      {person.title}
+                    </span>
                   )}
                 </div>
               </div>

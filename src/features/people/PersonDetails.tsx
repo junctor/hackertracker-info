@@ -2,22 +2,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { eventTime } from "@/lib/dates";
 import Markdown from "@/components/markdown/Markdown";
-import type { Person } from "@/lib/types/info";
+import {
+  ContentEntity,
+  EventEntity,
+  LocationEntity,
+  PersonEntity,
+} from "@/lib/types/ht-types";
 
 type Props = {
-  person: Person;
+  person: PersonEntity;
+  events: EventEntity[];
+  locations: LocationEntity[];
 };
 
-export default function PersonDetails({ person }: Props) {
-  const avatar = person.media.find((m) => m.sort_order === 1)?.url;
+export default function PersonDetails({ person, events, locations }: Props) {
   return (
-    <div className="max-w-screen-lg mx-auto px-4 py-10 space-y-10">
+    <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
       {/* Hero */}
       <section className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6 rounded-lg">
-        {avatar ? (
+        {person.avatarUrl ? (
           <div className="w-32 h-32 rounded-full overflow-hidden shadow-lg bg-gray-700">
             <Image
-              src={new URL(avatar).pathname}
+              src={person.avatarUrl}
               alt={person.name}
               width={128}
               height={128}
@@ -38,7 +44,7 @@ export default function PersonDetails({ person }: Props) {
             {person.name}
           </h1>
           <div className="space-y-1 text-gray-300">
-            {person.affiliations.map((a) => (
+            {person.affiliations?.map((a) => (
               <p key={a.organization} className="text-sm">
                 {a.title} @ {a.organization}
               </p>
@@ -47,7 +53,7 @@ export default function PersonDetails({ person }: Props) {
           {person.links.length > 0 && (
             <div className="flex flex-wrap gap-3">
               {person.links
-                .sort((a, b) => a.sort_order - b.sort_order)
+                .sort((a, b) => a.sortOrder - b.sortOrder)
                 .map((l) => (
                   <a
                     key={l.url}
@@ -75,15 +81,15 @@ export default function PersonDetails({ person }: Props) {
       )}
 
       {/* Events */}
-      {person.events.length > 0 && (
+      {events.length > 0 && (
         <section>
           <h2 className="text-2xl font-semibold text-gray-200 mb-4">Events</h2>
           <div className="relative">
             <ul className="space-y-8">
-              {person.events.map((e) => (
+              {events.map((e) => (
                 <li key={e.id}>
                   <Link
-                    href={`/content?id=${e.content_id}`}
+                    href={`/content?id=${e.id}`}
                     className="block w-full group"
                   >
                     <div
@@ -103,7 +109,7 @@ export default function PersonDetails({ person }: Props) {
                           {`${eventTime(new Date(e.begin), false)} – ${eventTime(new Date(e.end))}`}
                         </p>
                         <p className="text-sm text-gray-400">
-                          {e.location.name}
+                          {locations.find((l) => l.id === e.locationId)?.name}
                         </p>
                       </div>
                     </div>

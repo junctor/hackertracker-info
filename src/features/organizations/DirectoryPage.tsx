@@ -37,9 +37,10 @@ export default function DirectoryPage({
   const router = useRouter();
   const {
     value: orgId,
+    isReady,
     isMissing: isIdMissing,
     isInvalid: isIdInvalid,
-  } = useNumericQueryParam("id");
+  } = useNumericQueryParam(router, "id");
 
   const {
     data: organizations,
@@ -80,7 +81,7 @@ export default function DirectoryPage({
   const isLoading = organizationsIsLoading || tagIsLoading;
   const error = organizationsError || tagError;
 
-  if (!router.isReady) return <LoadingScreen />;
+  if (!isReady) return <LoadingScreen />;
   if (isIdInvalid) return <ErrorScreen msg="Invalid organization id." />;
 
   const listDescription = description?.trim();

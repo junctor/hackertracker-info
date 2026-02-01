@@ -31,9 +31,9 @@ export default function OrganizationDetails({ org }: Props) {
       <section className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6 transition-shadow hover:shadow-lg rounded-lg">
         {/* Logo container */}
         <div className="relative w-full max-w-xs h-32 sm:h-40 md:h-48 rounded-lg overflow-hidden shrink-0">
-          {org.logo_url ? (
+          {org.logoUrl ? (
             <Image
-              src={org.logo_url}
+              src={org.logoUrl}
               alt={`${org.name} logo`}
               fill
               className="object-contain"
@@ -56,9 +56,9 @@ export default function OrganizationDetails({ org }: Props) {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white">
             {org.name}
           </h1>
-          {org.tag_id_as_organizer && (
+          {org.tagIdAsOrganizer && (
             <Link
-              href={`/tag?id=${org.tag_id_as_organizer}`}
+              href={`/tag?id=${org.tagIdAsOrganizer}`}
               className="inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-4 py-2 text-sm text-indigo-100 transition hover:scale-105"
             >
               <CalendarIcon className="h-5 w-5 text-indigo-400" />

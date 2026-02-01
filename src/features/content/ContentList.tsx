@@ -5,6 +5,7 @@ import type {
   TagTypesBrowseView,
 } from "@/lib/types/ht-types/views";
 import { ConferenceManifest } from "@/lib/conferences";
+import SearchHeader from "@/components/ui/SearchHeader";
 
 interface Props {
   conference: ConferenceManifest;
@@ -15,72 +16,74 @@ interface Props {
 export default function ContentList({ content, tags, conference }: Props) {
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<number | null>(null);
+  const normalizedSearch = useMemo(() => search.trim().toLowerCase(), [search]);
 
   const filtered = useMemo(
     () =>
       content
         .filter((c) =>
-          search ? c.title.toLowerCase().includes(search.toLowerCase()) : true,
+          normalizedSearch
+            ? c.title.toLowerCase().includes(normalizedSearch)
+            : true,
         )
         .filter((c) => {
           if (!selectedTag) return true;
           return c.tags.some((tag) => tag.id === selectedTag);
         }),
-    [content, search, selectedTag],
+    [content, normalizedSearch, selectedTag],
+  );
+
+  const tagOptions = useMemo(
+    () =>
+      tags
+        .filter((tag) => tag.tags.length > 0 && tag.category === "content")
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .map((tag) => ({
+          id: tag.id,
+          label: tag.label,
+          tags: [...tag.tags].sort((a, b) => a.sortOrder - b.sortOrder),
+        })),
+    [tags],
   );
 
   return (
     <section className="my-10 mx-5">
-      <h2 className="mb-4 text-2xl font-semibold text-gray-100">Content</h2>
-
-      {/* Search Input */}
-      <div className="mb-8 flex flex-wrap items-end justify-center gap-4">
-        <label className="w-full max-w-xl">
-          <span className="sr-only">Search content</span>
-          <input
-            type="search"
-            placeholder="Search Content..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 placeholder:text-gray-500"
-          />
-        </label>
-        {/* Tag Filter */}
-        <label className="w-full max-w-55">
+      <SearchHeader
+        title="Content"
+        searchLabel="Search content"
+        searchPlaceholder="Search content..."
+        searchValue={search}
+        onSearchChange={setSearch}
+      >
+        <label className="w-full max-w-xs">
           <span className="sr-only">Filter by tag</span>
           <select
             value={selectedTag ?? ""}
-            onChange={(e) =>
-              setSelectedTag(e.target.value ? Number(e.target.value) : null)
-            }
+            onChange={(e) => {
+              const nextValue = e.target.value;
+              setSelectedTag(nextValue ? Number(nextValue) : null);
+            }}
             className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100"
           >
             <option value="">All tags</option>
-            {tags
-              .filter(
-                (tag) => tag.tags.length > 0 && tag.category === "content",
-              )
-              .sort((a, b) => a.sortOrder - b.sortOrder)
-              .map((tag) => (
-                <optgroup key={tag.id} label={tag.label}>
-                  {tag.tags
-                    .sort((a, b) => a.sortOrder - b.sortOrder)
-                    .map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.label}
-                      </option>
-                    ))}
-                </optgroup>
-              ))}
+            {tagOptions.map((tag) => (
+              <optgroup key={tag.id} label={tag.label}>
+                {tag.tags.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
           </select>
         </label>
-      </div>
+      </SearchHeader>
 
       <ul className="divide-y divide-gray-700 leading-relaxed">
         {filtered.map((item) => (
           <li
             key={item.id}
-            className="odd:bg-gray-950 even:bg-gray-1000 transition-colors"
+            className="odd:bg-gray-950 even:bg-gray-900 transition-colors"
           >
             <Link
               href={`/${conference.slug}/content/?id=${item.id}`}

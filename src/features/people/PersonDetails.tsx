@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { useMemo } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { getConference } from "@/lib/conferences";
+import { ConferenceManifest } from "@/lib/conferences";
 import { eventTime } from "@/lib/dates";
 import Markdown from "@/components/markdown/Markdown";
 import {
@@ -15,18 +14,21 @@ type Props = {
   person: PersonEntity;
   events: EventEntity[];
   locations: LocationEntity[];
+  conference: ConferenceManifest;
 };
 
-export default function PersonDetails({ person, events, locations }: Props) {
-  const router = useRouter();
-  const conference = useMemo(() => {
-    const confParam = router.query.conf;
-    const confValue = Array.isArray(confParam) ? confParam[0] : confParam;
-    return typeof confValue === "string" ? getConference(confValue) : null;
-  }, [router.query.conf]);
-  const contentsBasePath = conference
-    ? `/${conference.slug}/content`
-    : "/content";
+export default function PersonDetails({
+  person,
+  events,
+  locations,
+  conference,
+}: Props) {
+  const contentsBasePath = `/${conference.slug}/content`;
+  const locationNameById = useMemo(() => {
+    const entries = locations.map((location) => [location.id, location.name]);
+    return new Map<number, string>(entries);
+  }, [locations]);
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
       {/* Hero */}
@@ -117,10 +119,10 @@ export default function PersonDetails({ person, events, locations }: Props) {
                           {e.title}
                         </h3>
                         <p className="mt-1 text-sm text-gray-400">
-                          {`${eventTime(new Date(e.begin), false)} – ${eventTime(new Date(e.end))}`}
+                          {`${eventTime(new Date(e.begin), false, conference.timezone)} – ${eventTime(new Date(e.end), true, conference.timezone)}`}
                         </p>
                         <p className="text-sm text-gray-400">
-                          {locations.find((l) => l.id === e.locationId)?.name}
+                          {locationNameById.get(e.locationId)}
                         </p>
                       </div>
                     </div>

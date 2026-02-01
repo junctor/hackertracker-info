@@ -25,9 +25,9 @@ export default function AppsPage({ conf, activePageId }: AppsPageProps) {
           content="Download the official Hacker Tracker apps for iOS and Android."
         />
       </Head>
+      <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <AppsLanding />
+        <AppsLanding conference={conf} />
       </main>
     </>
   );

@@ -1,9 +1,13 @@
 // src/pages/Apps.tsx
 import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
-import Link from "next/link";
+import { ConferenceManifest } from "@/lib/conferences";
 
-export default function AppsLanding() {
+type Props = {
+  conference: ConferenceManifest;
+};
+
+export default function AppsLanding({ conference }: Props) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
@@ -91,13 +95,13 @@ export default function AppsLanding() {
       </h1>
 
       <p className="mt-4 max-w-2xl text-xl sm:text-2xl md:text-3xl">
-        Your official DEF CON Singapore 2026 schedule companion. Choose your
-        platform below.
+        Your official {conference.name} schedule companion. Choose your platform
+        below.
       </p>
 
       <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
         {platforms.map((p) => (
-          <Link
+          <a
             key={p.name}
             href={p.url}
             target="_blank"
@@ -105,7 +109,7 @@ export default function AppsLanding() {
             className={`${btnBase} ${p.color}`}
           >
             {p.text}
-          </Link>
+          </a>
         ))}
       </div>
     </div>

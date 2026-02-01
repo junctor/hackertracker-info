@@ -45,8 +45,8 @@ export default function DocumentsPage({
           content={`A collection of information related to ${conf.name}.`}
         />
       </Head>
+      <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
-        <SiteHeader conference={conf} activePageId={activePageId} />
         <DocumentsList documents={documents} conference={conf} />
       </main>
     </>

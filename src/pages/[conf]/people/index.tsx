@@ -144,12 +144,13 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
           </title>
           <meta name="description" content={metaDescription} />
         </Head>
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <main>
-          <SiteHeader conference={conf} activePageId={activePageId} />
           <PersonDetails
             person={person}
             events={eventForContentIds}
             locations={locationsForEventIds}
+            conference={conf}
           />
         </main>
       </>
@@ -168,8 +169,8 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
           content={`Browse bios and sessions for all ${conf.name} participants.`}
         />
       </Head>
+      <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
-        <SiteHeader conference={conf} activePageId={activePageId} />
         <PeopleList people={people} conference={conf} />
       </main>
     </>

@@ -3,8 +3,7 @@ import Link from "next/link";
 import Markdown from "@/components/markdown/Markdown";
 import { ShareIcon, UserIcon } from "@heroicons/react/24/outline";
 import ContentSession from "./ContentSession";
-import { useRouter } from "next/router";
-import { getConference } from "@/lib/conferences";
+import { ConferenceManifest } from "@/lib/conferences";
 import {
   ContentEntity,
   EventEntity,
@@ -18,9 +17,10 @@ export default function ContentDetails({
   sessions,
   locations,
   people,
-  related_content,
+  related_content: _relatedContent,
   tags,
   bookmarks,
+  conference,
 }: {
   content: ContentEntity;
   sessions: EventEntity[];
@@ -29,19 +29,15 @@ export default function ContentDetails({
   related_content: ContentEntity[];
   tags: TagEntity[];
   bookmarks: number[];
+  conference: ConferenceManifest;
 }) {
-  const router = useRouter();
-  const conference = useMemo(() => {
-    const confParam = router.query.conf;
-    const confValue = Array.isArray(confParam) ? confParam[0] : confParam;
-    return typeof confValue === "string" ? getConference(confValue) : null;
-  }, [router.query.conf]);
-  const peopleBasePath = conference
-    ? `/${conference.slug}/people/`
-    : "/people/";
-  const contentsBasePath = conference
-    ? `/${conference.slug}/content/`
-    : "/content/";
+  const peopleBasePath = `/${conference.slug}/people`;
+  const contentsBasePath = `/${conference.slug}/content`;
+
+  const locationNameById = useMemo(() => {
+    const entries = locations.map((location) => [location.id, location.name]);
+    return new Map<number, string>(entries);
+  }, [locations]);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -87,10 +83,8 @@ export default function ContentDetails({
                 session={s}
                 content={content}
                 isBookmarked={bookmarks.includes(s.id)}
-                locationName={
-                  locations.find((location) => location.id === s.locationId)
-                    ?.name
-                }
+                locationName={locationNameById.get(s.locationId)}
+                timezone={conference.timezone}
               />
             ))}
           </ul>
@@ -103,7 +97,7 @@ export default function ContentDetails({
           {tags.map((tag) => (
             <Link
               key={tag.id}
-              href={`/tag?id=${tag.id}`}
+              href={`/${conference.slug}/tag?id=${tag.id}`}
               className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
             >
               <span
@@ -157,7 +151,7 @@ export default function ContentDetails({
             {people.map((p) => (
               <Link
                 key={p.id}
-                href={`${peopleBasePath}?id=${p.id}`}
+                href={`${peopleBasePath}/?id=${p.id}`}
                 className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
               >
                 <UserIcon className="h-4 w-4 text-indigo-300" />

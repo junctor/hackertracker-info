@@ -26,7 +26,7 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
     error,
     isLoading,
   } = useSWR<TagTypesBrowseView>(
-    `/ht/${conf.slug}/views/tagTypesBrowse.json`,
+    `${conf.dataRoot}/views/tagTypesBrowse.json`,
     fetcher,
   );
 
@@ -36,15 +36,15 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
   return (
     <>
       <Head>
-        <title>Tags | {conf.name} 2026</title>
+        <title>Tags | {conf.name}</title>
         <meta
           name="description"
-          content={`Explore the various tags used in ${conf.name} 2026.`}
+          content={`Explore the various tags used in ${conf.name}.`}
         />
       </Head>
+      <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <TagsList tagTypes={tags} />
+        <TagsList tagTypes={tags} conference={conf} />
       </main>
     </>
   );

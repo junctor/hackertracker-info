@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
-import { TagTypeBrowse, TagTypesBrowseView } from "@/lib/types/ht-types";
+import { TagTypesBrowseView } from "@/lib/types/ht-types";
+import { ConferenceManifest } from "@/lib/conferences";
 
 const formatCategory = (s: string) =>
   s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -17,12 +18,16 @@ type TagPillProps = {
 
 type TagsListProps = {
   tagTypes: TagTypesBrowseView;
+  conference: ConferenceManifest;
 };
 
-function TagPill({ tag }: TagPillProps) {
+function TagPill({
+  tag,
+  conference,
+}: TagPillProps & { conference: ConferenceManifest }) {
   return (
     <Link
-      href={`/tag?id=${tag.id}`}
+      href={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
       className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-2"
       style={{
@@ -35,37 +40,41 @@ function TagPill({ tag }: TagPillProps) {
   );
 }
 
-export default function TagsList({ tagTypes }: TagsListProps) {
-  return (
-    <main className="p-6 min-h-screen text-gray-100">
-      <h1 className="text-3xl font-bold mb-6">Tags</h1>
+export default function TagsList({ tagTypes, conference }: TagsListProps) {
+  const sortedTagTypes = useMemo(
+    () => [...tagTypes].sort((a, b) => a.sortOrder - b.sortOrder),
+    [tagTypes],
+  );
 
-      {tagTypes.length === 0 ? (
+  return (
+    <section className="p-6 min-h-screen text-gray-100">
+      <header className="mb-6">
+        <h1 className="text-3xl font-bold">Tags</h1>
+      </header>
+
+      {sortedTagTypes.length === 0 ? (
         <p>No tags available.</p>
       ) : (
-        tagTypes.map((tagType) => (
-          <section key={tagType.id} className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">
-              {formatCategory(tagType.category)}
-            </h2>
+        sortedTagTypes.map((tagType) => {
+          const sortedTags = [...tagType.tags].sort(
+            (a, b) => a.sortOrder - b.sortOrder,
+          );
 
-            {tagType.tags
-              .sort((a, b) => a.sortOrder - b.sortOrder)
-              .map((group) => (
-                <div key={group.id} className="mb-6">
-                  <h3 className="text-xl font-medium mb-2">{group.label}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {tagType.tags
-                      .sort((a, b) => a.sortOrder - b.sortOrder)
-                      .map((tag) => (
-                        <TagPill key={tag.id} tag={tag} />
-                      ))}
-                  </div>
-                </div>
-              ))}
-          </section>
-        ))
+          return (
+            <section key={tagType.id} className="mb-10">
+              <h2 className="text-2xl font-semibold mb-4">
+                {formatCategory(tagType.category)}
+              </h2>
+
+              <div className="flex flex-wrap gap-2">
+                {sortedTags.map((tag) => (
+                  <TagPill key={tag.id} tag={tag} conference={conference} />
+                ))}
+              </div>
+            </section>
+          );
+        })
       )}
-    </main>
+    </section>
   );
 }

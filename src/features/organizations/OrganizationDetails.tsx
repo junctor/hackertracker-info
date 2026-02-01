@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,12 +8,14 @@ import {
   CalendarIcon,
 } from "@heroicons/react/24/outline";
 import { OrganizationEntity } from "@/lib/types/ht-types";
+import { ConferenceManifest } from "@/lib/conferences";
 
 type Props = {
   org: OrganizationEntity;
+  conference: ConferenceManifest;
 };
 
-export default function OrganizationDetails({ org }: Props) {
+export default function OrganizationDetails({ org, conference }: Props) {
   const initials = org.name
     .split(" ")
     .map((w) => w[0])
@@ -58,7 +58,7 @@ export default function OrganizationDetails({ org }: Props) {
           </h1>
           {org.tagIdAsOrganizer && (
             <Link
-              href={`/tag?id=${org.tagIdAsOrganizer}`}
+              href={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
               className="inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-4 py-2 text-sm text-indigo-100 transition hover:scale-105"
             >
               <CalendarIcon className="h-5 w-5 text-indigo-400" />

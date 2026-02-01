@@ -14,11 +14,13 @@ export default function ContentSession({
   content,
   isBookmarked,
   locationName,
+  timezone,
 }: {
   session: EventEntity;
   content: ContentEntity;
   isBookmarked: boolean;
   locationName?: string;
+  timezone: string;
 }) {
   const begin = new Date(session.begin);
   const end = new Date(session.end);
@@ -33,7 +35,9 @@ export default function ContentSession({
     >
       <div className="flex-1">
         <div className="text-base text-gray-200 font-medium">
-          {sameTime ? eventTime(begin, true) : formatSessionTime(begin, end)}
+          {sameTime
+            ? eventTime(begin, true, timezone)
+            : formatSessionTime(begin, end, timezone)}
         </div>
         {locationName && (
           <div className="text-sm text-gray-400 mt-1">{locationName}</div>

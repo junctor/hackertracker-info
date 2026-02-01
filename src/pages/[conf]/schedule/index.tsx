@@ -1,9 +1,9 @@
-// src/pages/schedule/index.tsx
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import useSWR from "swr";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import type { GetStaticProps } from "next";
+
 import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
@@ -107,73 +107,86 @@ export default function SchedulePage({
       return [];
     }
 
-    return Object.keys(eventsByDay)
-      .sort()
-      .map((day) => {
-        const events = (eventsByDay[day] ?? [])
-          .map((eventId) => eventsStore.byId[eventId])
-          .filter((event): event is NonNullable<typeof event> => Boolean(event))
-          .map((event) => {
-            const locationName =
-              locationsStore.byId[event.locationId]?.name ?? "Unknown location";
-            const tagModels = event.tagIds
-              .map((tagId) => tagsStore.byId[tagId])
-              .filter((tag): tag is NonNullable<typeof tag> => Boolean(tag))
-              .map((tag) => ({
-                id: tag.id,
-                label: tag.label,
-                colorBackground: tag.colorBackground,
-                colorForeground: tag.colorForeground,
-              }));
+    const dayKeys = Object.keys(eventsByDay).sort();
+    const result: ScheduleDay[] = [];
 
-            const speakerIds =
-              event.speakerIds && event.speakerIds.length > 0
-                ? event.speakerIds
-                : (event.personIds ?? []);
-            const speakers = speakerIds
-              .map((id) => peopleStore.byId[id]?.name)
-              .filter((name): name is string => Boolean(name))
-              .join(", ");
+    for (const day of dayKeys) {
+      const ids = eventsByDay[day] ?? [];
+      const events: ScheduleEventViewModel[] = [];
 
-            return {
-              id: event.id,
-              title: event.title,
-              begin: event.begin,
-              end: event.end,
-              beginTimestampSeconds: event.beginTimestampSeconds,
-              endTimestampSeconds: event.endTimestampSeconds,
-              color: event.color,
-              contentId: event.contentId,
-              locationName,
-              tags: tagModels,
-              speakers: speakers.length > 0 ? speakers : null,
-            } satisfies ScheduleEventViewModel;
-          })
-          .sort((a, b) => {
-            if (a.beginTimestampSeconds !== b.beginTimestampSeconds) {
-              return a.beginTimestampSeconds - b.beginTimestampSeconds;
-            }
-            return a.title.localeCompare(b.title);
+      for (const eventId of ids) {
+        const event = eventsStore.byId[eventId];
+        if (!event) continue;
+
+        const locationName =
+          locationsStore.byId[event.locationId]?.name ?? "Unknown location";
+
+        const tags: ScheduleEventViewModel["tags"] = [];
+        for (const tagId of event.tagIds ?? []) {
+          const tag = tagsStore.byId[tagId];
+          if (!tag) continue;
+          tags.push({
+            id: tag.id,
+            label: tag.label,
+            colorBackground: tag.colorBackground,
+            colorForeground: tag.colorForeground,
           });
+        }
 
-        return { day, events };
-      });
+        const speakerIds =
+          event.speakerIds && event.speakerIds.length > 0
+            ? event.speakerIds
+            : (event.personIds ?? []);
+
+        const speakers = speakerIds
+          .map((id) => peopleStore.byId[id]?.name)
+          .filter((name): name is string => Boolean(name))
+          .join(", ");
+
+        events.push({
+          id: event.id,
+          title: event.title,
+          begin: event.begin,
+          end: event.end,
+          beginTimestampSeconds: event.beginTimestampSeconds,
+          endTimestampSeconds: event.endTimestampSeconds,
+          color: event.color,
+          contentId: event.contentId,
+          locationName,
+          tags,
+          speakers: speakers.length > 0 ? speakers : null,
+        });
+      }
+
+      result.push({ day, events });
+    }
+
+    return result;
   }, [eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore]);
 
+  const daySet = useMemo(() => new Set(days.map((d) => d.day)), [days]);
+
   const defaultDay = useMemo(() => {
-    // Pick in-progress day first, then fall back to the earliest day.
+    // Pick in-progress day first, then fall back to earliest day.
     if (days.length === 0) return null;
+
     const nowSeconds = Math.floor(Date.now() / 1000);
+
     for (const { day, events } of days) {
       for (const event of events) {
+        const begin = event.beginTimestampSeconds;
+        const end = event.endTimestampSeconds;
         if (
-          event.beginTimestampSeconds <= nowSeconds &&
-          nowSeconds <= event.endTimestampSeconds
+          Number.isFinite(begin) &&
+          Number.isFinite(end) &&
+          begin <= nowSeconds &&
+          nowSeconds <= end
         ) {
           return day;
         }
       }
     }
+
     return days[0].day;
   }, [days]);
 
@@ -188,27 +201,26 @@ export default function SchedulePage({
 
   useEffect(() => {
     if (!router.isReady || days.length === 0) return;
-    const daySet = new Set(days.map(({ day }) => day));
-    const isValidParam = dayParam ? daySet.has(dayParam) : false;
-    const nextDay = isValidParam ? dayParam : defaultDay;
-    if (nextDay && nextDay !== selectedDay) {
-      // Use query param when valid, otherwise fall back to a computed default.
-      setSelectedDay(nextDay);
-    }
-  }, [days, dayParam, defaultDay, router.isReady, selectedDay]);
+
+    const nextDay = dayParam && daySet.has(dayParam) ? dayParam : defaultDay;
+
+    if (!nextDay) return;
+
+    setSelectedDay((prev) => (prev === nextDay ? prev : nextDay));
+  }, [router.isReady, days.length, dayParam, daySet, defaultDay]);
 
   const handleSelectDay = useCallback(
     (day: string) => {
-      if (day === selectedDay) return;
-      setSelectedDay(day);
+      setSelectedDay((prev) => (prev === day ? prev : day));
       if (!router.isReady) return;
+
       router.push(
         { pathname: router.pathname, query: { ...router.query, day } },
         undefined,
         { shallow: true },
       );
     },
-    [router, selectedDay],
+    [router],
   );
 
   const isLoading =
@@ -217,6 +229,7 @@ export default function SchedulePage({
     locationsLoading ||
     tagsLoading ||
     peopleLoading;
+
   const error =
     eventsByDayError ||
     eventsError ||
@@ -245,8 +258,8 @@ export default function SchedulePage({
           content={`Full ${conf.name} schedule of sessions, talks, and events.`}
         />
       </Head>
+      <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
-        <SiteHeader conference={conf} activePageId={activePageId} />
         <ScheduleEvents
           conf={conf}
           days={days}

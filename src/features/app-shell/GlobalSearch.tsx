@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   DocumentTextIcon,
   GlobeAltIcon,
@@ -33,9 +31,13 @@ export default function GlobalSearch() {
     organization: GlobeAltIcon,
   };
 
-  const filtered = searchData.filter((item) =>
-    query ? item.text.toLowerCase().includes(query.trim().toLowerCase()) : true,
-  );
+  const filtered = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) return searchData;
+    return searchData.filter((item) =>
+      item.text.toLowerCase().includes(normalizedQuery),
+    );
+  }, [query, searchData]);
 
   return (
     <>

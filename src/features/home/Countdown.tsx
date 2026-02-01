@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useRef, useState } from "react";
 import { getCountdown } from "@/lib/timer";
 import localFont from "next/font/local";

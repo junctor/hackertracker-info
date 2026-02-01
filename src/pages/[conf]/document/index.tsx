@@ -72,15 +72,15 @@ export default function DocumentsPage({
     <>
       <Head>
         <title>
-          {selectedDocument.title_text} | {conf.name}
+          {selectedDocument.titleText} | {conf.name}
         </title>
         <meta
           name="description"
           content={`A collection of information related to ${conf.name}.`}
         />
       </Head>
+      <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
-        <SiteHeader conference={conf} activePageId={activePageId} />
         <DocumentDetails document={selectedDocument} conference={conf} />
       </main>
     </>

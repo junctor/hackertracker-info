@@ -8,9 +8,9 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import ScheduleEvents, {
-  ScheduleEventViewModel,
+  buildScheduleDaysFromGrouped,
 } from "@/features/schedule/ScheduleEvents";
-import { GroupedSchedule, ScheduleEvent } from "@/lib/types/info";
+import { GroupedSchedule } from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
 import { ConferenceManifest } from "@/lib/conferences";
 import {
@@ -24,53 +24,6 @@ type BookmarksPageProps = {
   activePageId: PageId;
 };
 
-type ScheduleDay = {
-  day: string;
-  events: ScheduleEventViewModel[];
-};
-
-const buildDaysFromGrouped = (dateGroup: GroupedSchedule): ScheduleDay[] => {
-  return Object.entries(dateGroup)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([day, events]) => {
-      const mapped = (events as ScheduleEvent[])
-        .map((event) => {
-          const beginTimestampSeconds = Math.floor(
-            Date.parse(event.begin) / 1000,
-          );
-          const endTimestampSeconds = Math.floor(Date.parse(event.end) / 1000);
-          const speakers = event.speakers?.trim();
-
-          return {
-            id: event.id,
-            title: event.title,
-            begin: event.begin,
-            end: event.end,
-            beginTimestampSeconds,
-            endTimestampSeconds,
-            color: event.color ?? "#fff",
-            contentId: event.content_id,
-            locationName: event.location ?? "Unknown location",
-            tags: event.tags.map((tag) => ({
-              id: tag.id,
-              label: tag.label,
-              colorBackground: tag.color_background,
-              colorForeground: tag.color_foreground,
-            })),
-            speakers: speakers && speakers.length > 0 ? speakers : null,
-          } satisfies ScheduleEventViewModel;
-        })
-        .sort((a, b) => {
-          if (a.beginTimestampSeconds !== b.beginTimestampSeconds) {
-            return a.beginTimestampSeconds - b.beginTimestampSeconds;
-          }
-          return a.title.localeCompare(b.title);
-        });
-
-      return { day, events: mapped };
-    });
-};
-
 export default function BookmarksPage({
   conf,
   activePageId,
@@ -79,7 +32,7 @@ export default function BookmarksPage({
     data: allEvents,
     error,
     isLoading,
-  } = useSWR<GroupedSchedule>("/ht/schedule.json", fetcher);
+  } = useSWR<GroupedSchedule>(`${conf.dataRoot}/schedule.json`, fetcher);
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
@@ -92,7 +45,10 @@ export default function BookmarksPage({
     }, {} as GroupedSchedule);
   }, [allEvents, bookmarks]);
 
-  const days = useMemo(() => buildDaysFromGrouped(dateGroup), [dateGroup]);
+  const days = useMemo(
+    () => buildScheduleDaysFromGrouped(dateGroup),
+    [dateGroup],
+  );
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
@@ -129,20 +85,21 @@ export default function BookmarksPage({
   return (
     <>
       <Head>
-        <title>Bookmarks | DEF CON Singapore 2026</title>
+        <title>Bookmarks | {conf.name}</title>
         <meta
           name="description"
-          content="View and manage your bookmarked DEF CON Singapore 2026 events and sessions."
+          content={`View and manage your bookmarked ${conf.name} events and sessions.`}
         />
       </Head>
+      <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
-        <SiteHeader conference={conf} activePageId={activePageId} />
         {bookmarks.length === 0 ? (
           <p className="mt-8 text-center text-gray-500">
             You haven’t bookmarked any events yet.
           </p>
         ) : days.length > 0 && selectedDay ? (
           <ScheduleEvents
+            conf={conf}
             days={days}
             selectedDay={selectedDay}
             onSelectDay={handleSelectDay}

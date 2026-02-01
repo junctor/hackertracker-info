@@ -42,8 +42,8 @@ export default function AnnouncementsPage({
           content={`Latest announcements and updates for ${conf.name}.`}
         />
       </Head>
+      <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
-        <SiteHeader conference={conf} activePageId={activePageId} />
         <AnnouncementsList announcements={articles} conference={conf} />
       </main>
     </>

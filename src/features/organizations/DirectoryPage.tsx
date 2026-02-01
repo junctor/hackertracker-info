@@ -110,9 +110,9 @@ export default function DirectoryPage({
           <title>{pageTitle}</title>
           <meta name="description" content={metaDescription} />
         </Head>
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <main>
-          <SiteHeader conference={conf} activePageId={activePageId} />
-          <OrganizationDetails org={selectedOrganization} />
+          <OrganizationDetails org={selectedOrganization} conference={conf} />
         </main>
       </>
     );
@@ -138,8 +138,8 @@ export default function DirectoryPage({
           <title>{pageTitle}</title>
           <meta name="description" content={metaDescription} />
         </Head>
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <main>
-          <SiteHeader conference={conf} activePageId={activePageId} />
           <OrganizationsList
             organizations={matchingOrganizations}
             title={title}

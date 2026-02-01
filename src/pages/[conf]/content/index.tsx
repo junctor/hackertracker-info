@@ -194,8 +194,8 @@ export default function ContentsPage({
           </title>
           <meta name="description" content={metaDescription} />
         </Head>
+        <SiteHeader conference={conf} activePageId={activePageId} />
         <main>
-          <SiteHeader conference={conf} activePageId={activePageId} />
           <ContentDetails
             content={content}
             sessions={sessions}
@@ -204,6 +204,7 @@ export default function ContentsPage({
             related_content={relatedContent}
             tags={tags}
             bookmarks={bookmarks}
+            conference={conf}
           />
         </main>
       </>
@@ -224,8 +225,8 @@ export default function ContentsPage({
           content={`Browse talks, workshops, and presentations at ${conf.name}.`}
         />
       </Head>
+      <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
-        <SiteHeader conference={conf} activePageId={activePageId} />
         <ContentList content={contentCards} tags={tagTypes} conference={conf} />
       </main>
     </>

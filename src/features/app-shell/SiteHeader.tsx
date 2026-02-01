@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import {
@@ -7,8 +5,6 @@ import {
   DevicePhoneMobileIcon,
   RocketLaunchIcon,
 } from "@heroicons/react/24/outline";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import GlobalSearch from "./GlobalSearch";
 import localFont from "next/font/local";
 import { getSiteMenu } from "@/lib/menu";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -30,12 +26,12 @@ export default function SiteHeader({ conference, activePageId }: Props) {
         <div className="flex items-center space-x-6">
           <div className="flex items-center gap-3">
             <Link href={`/${conference.slug}`}>
-              <h1
+              <span
                 className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
               >
                 <span className="block md:hidden">{conference.code}</span>
                 <span className="hidden md:block">{conference.name}</span>
-              </h1>
+              </span>
             </Link>
             <span className="hidden sm:inline text-sm text-gray-400">
               {pageTitle}
@@ -77,27 +73,22 @@ export default function SiteHeader({ conference, activePageId }: Props) {
 
         {/* Action Icons */}
         <div className="flex items-center space-x-2">
-          <Link href={`/${conference.slug}/apps`}>
-            <button
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white cursor-pointer"
-              aria-label="Mobile Apps"
-            >
-              <DevicePhoneMobileIcon className="h-5 w-5" />
-            </button>
+          <Link
+            href={`/${conference.slug}/apps`}
+            aria-label="Mobile Apps"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white"
+          >
+            <DevicePhoneMobileIcon className="h-5 w-5" />
           </Link>
           <a
             href="https://github.com/junctor/hackertracker-info"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="View on GitHub"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white"
           >
-            <button
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white cursor-pointer"
-              aria-label="View on GitHub"
-            >
-              <CodeBracketSquareIcon className="h-5 w-5" />
-            </button>
+            <CodeBracketSquareIcon className="h-5 w-5" />
           </a>
-          {/* <GlobalSearch /> */}
         </div>
       </div>
       <hr className="absolute bottom-0 left-0 right-0 border-gray-800" />

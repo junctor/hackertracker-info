@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { BookmarkIcon as BookmarkIconOutline } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
@@ -18,17 +17,7 @@ export default function ScheduleEventItem({
   isBookmarked: boolean;
 }) {
   const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
-
-  const router = useRouter();
-  const confCode = useMemo(() => {
-    const confParam = router.query.conf;
-    const confValue = Array.isArray(confParam) ? confParam[0] : confParam;
-    return typeof confValue === "string" ? confValue : null;
-  }, [router.query.conf]);
-
-  const href = confCode
-    ? `/${confCode}/content/?id=${event.contentId}`
-    : `/content/?id=${event.contentId}`;
+  const href = `/${conf.slug}/content/?id=${event.contentId}`;
 
   const barStyle = useMemo(
     () => ({ "--event-color": event.color ?? "#fff" }) as React.CSSProperties,
@@ -37,12 +26,14 @@ export default function ScheduleEventItem({
 
   return (
     <li>
-      <Link
-        href={href}
+      <article
         style={barStyle}
-        className="group relative flex w-full flex-col gap-4 rounded-lg border border-gray-800 bg-gray-900/40 px-4 py-3 transition hover:border-gray-700 hover:bg-gray-900 focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2 before:absolute before:top-3 before:bottom-3 before:left-3 before:w-[clamp(0.25rem,2vw,1rem)] before:rounded before:bg-(--event-color) before:transition-all before:duration-200 group-hover:before:w-[clamp(0.4rem,3vw,1.2rem)]"
+        className="group relative flex w-full flex-col gap-4 rounded-lg border border-gray-800 bg-gray-900/40 px-4 py-3 transition hover:border-gray-700 hover:bg-gray-900 focus-within:outline-2 focus-within:outline-indigo-500 focus-within:outline-offset-2 before:absolute before:top-3 before:bottom-3 before:left-3 before:w-[clamp(0.25rem,2vw,1rem)] before:rounded before:bg-(--event-color) before:transition-all before:duration-200 group-hover:before:w-[clamp(0.4rem,3vw,1.2rem)]"
       >
-        <article className="flex w-full flex-col gap-3 md:flex-row md:items-start md:justify-between">
+        <Link
+          href={href}
+          className="flex w-full flex-col gap-3 md:flex-row md:items-start md:justify-between pr-10"
+        >
           <div className="min-w-0 md:w-48">
             <p className="text-base font-semibold text-gray-100">
               <time dateTime={new Date(event.begin).toISOString()}>
@@ -77,27 +68,25 @@ export default function ScheduleEventItem({
               ))}
             </div>
           </div>
+        </Link>
 
-          <div className="flex items-start justify-end md:w-12">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleBookmark();
-              }}
-              aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
-              aria-pressed={bookmark}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300 focus-visible:ring-2 focus-visible:ring-indigo-500"
-            >
-              {bookmark ? (
-                <BookmarkIconSolid className="h-5 w-5 text-indigo-400" />
-              ) : (
-                <BookmarkIconOutline className="h-5 w-5" />
-              )}
-            </button>
-          </div>
-        </article>
-      </Link>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleBookmark();
+          }}
+          aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
+          aria-pressed={bookmark}
+          className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300 focus-visible:ring-2 focus-visible:ring-indigo-500"
+        >
+          {bookmark ? (
+            <BookmarkIconSolid className="h-5 w-5 text-indigo-400" />
+          ) : (
+            <BookmarkIconOutline className="h-5 w-5" />
+          )}
+        </button>
+      </article>
     </li>
   );
 }

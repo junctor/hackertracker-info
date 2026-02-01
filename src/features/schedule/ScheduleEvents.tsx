@@ -4,6 +4,7 @@ import Link from "next/link";
 import { eventDayTable, tabDateTitle } from "@/lib/dates";
 import ScheduleEventItem from "./ScheduleEventItem";
 import { ConferenceManifest } from "@/lib/conferences";
+import type { GroupedSchedule, ScheduleEvent } from "@/lib/types/info";
 
 export type ScheduleEventViewModel = {
   id: number;
@@ -24,10 +25,47 @@ export type ScheduleEventViewModel = {
   speakers: string | null;
 };
 
-type ScheduleDay = {
+export type ScheduleDay = {
   day: string;
   events: ScheduleEventViewModel[];
 };
+
+export function buildScheduleDaysFromGrouped(
+  dateGroup: GroupedSchedule,
+): ScheduleDay[] {
+  return Object.entries(dateGroup)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([day, events]) => {
+      const mapped = (events as ScheduleEvent[]).map((event) => {
+        const beginTimestampSeconds = Math.floor(
+          Date.parse(event.begin) / 1000,
+        );
+        const endTimestampSeconds = Math.floor(Date.parse(event.end) / 1000);
+        const speakers = event.speakers?.trim();
+
+        return {
+          id: event.id,
+          title: event.title,
+          begin: event.begin,
+          end: event.end,
+          beginTimestampSeconds,
+          endTimestampSeconds,
+          color: event.color ?? "#fff",
+          contentId: event.content_id,
+          locationName: event.location ?? "Unknown location",
+          tags: event.tags.map((tag) => ({
+            id: tag.id,
+            label: tag.label,
+            colorBackground: tag.color_background,
+            colorForeground: tag.color_foreground,
+          })),
+          speakers: speakers && speakers.length > 0 ? speakers : null,
+        } satisfies ScheduleEventViewModel;
+      });
+
+      return { day, events: mapped };
+    });
+}
 
 export default function ScheduleEvents({
   conf,
@@ -110,14 +148,14 @@ export default function ScheduleEvents({
     <div className="min-h-screen text-gray-100">
       <div className="sticky top-0 z-40 flex justify-end gap-2 border-b border-gray-800 bg-black/80 p-2 backdrop-blur">
         <Link
-          href="/bookmarks"
+          href={`/${conf.slug}/bookmarks`}
           className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white"
           aria-label="Filter by bookmarks"
         >
           <BookmarkIcon className="h-5 w-5" />
         </Link>
         <Link
-          href="/tags"
+          href={`/${conf.slug}/tags`}
           className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white"
           aria-label="Filter by tags"
         >
@@ -126,7 +164,7 @@ export default function ScheduleEvents({
       </div>
 
       <div
-        className="sticky top-15 z-30 flex items-center gap-2 overflow-x-auto border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur"
+        className="sticky top-[3.75rem] z-30 flex items-center gap-2 overflow-x-auto border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur"
         role="tablist"
         aria-label="Schedule days"
       >
@@ -163,7 +201,7 @@ export default function ScheduleEvents({
         >
           <h2
             ref={headingRef}
-            className="scroll-mt-29 ml-5 mt-6 mb-3 text-xl font-bold text-gray-100 md:text-2xl"
+            className="scroll-mt-[7.25rem] ml-5 mt-6 mb-3 text-xl font-bold text-gray-100 md:text-2xl"
           >
             {eventDayTable(activeDay.day, conf.timezone)}
           </h2>

@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getCountdown } from "@/lib/timer";
 import localFont from "next/font/local";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import React from "react";
 import { ConferenceManifest } from "@/lib/conferences";
 
 interface Timer {
@@ -46,6 +45,11 @@ export default function Countdown({
   const minutesRef = useRef<HTMLDivElement>(null);
   const secondsRef = useRef<HTMLDivElement>(null);
 
+  const prefersReducedMotion = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
   useEffect(() => {
     const kickoffDateMs = new Date(conference.kickoff).valueOf();
     const tick = () => {
@@ -81,10 +85,22 @@ export default function Countdown({
     );
   };
 
-  useGSAP(() => flip(daysRef.current, "#47A"), [timer.days]);
-  useGSAP(() => flip(hoursRef.current, "#E67"), [timer.hours]);
-  useGSAP(() => flip(minutesRef.current, "#5dc6cc"), [timer.minutes]);
-  useGSAP(() => flip(secondsRef.current, "#de700f"), [timer.seconds]);
+  useGSAP(() => {
+    if (prefersReducedMotion) return;
+    flip(daysRef.current, "#47A");
+  }, [prefersReducedMotion, timer.days]);
+  useGSAP(() => {
+    if (prefersReducedMotion) return;
+    flip(hoursRef.current, "#E67");
+  }, [prefersReducedMotion, timer.hours]);
+  useGSAP(() => {
+    if (prefersReducedMotion) return;
+    flip(minutesRef.current, "#5dc6cc");
+  }, [prefersReducedMotion, timer.minutes]);
+  useGSAP(() => {
+    if (prefersReducedMotion) return;
+    flip(secondsRef.current, "#de700f");
+  }, [prefersReducedMotion, timer.seconds]);
 
   if (expired) return null;
 

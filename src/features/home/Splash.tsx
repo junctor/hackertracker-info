@@ -1,7 +1,5 @@
-import React from "react";
 import Countdown from "@/features/home/Countdown";
 import Image from "next/image";
-import dcsLogo from "../../../public/images/dcsingapore.webp";
 import localFont from "next/font/local";
 import { getSiteMenu } from "@/lib/menu";
 import Link from "next/link";
@@ -54,42 +52,43 @@ export default function Splash({ conference }: Props) {
         <Countdown conference={conference} />
       </div>
       {/* Menu */}
-      <nav
-        aria-label="Primary"
-        className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6"
-      >
-        {navMenu.map((item) => {
-          const Icon = item.icon;
-          const isExternal = item.href.startsWith("http");
+      <nav aria-label="Primary" className="mt-12">
+        <ul className="grid grid-cols-2 list-none gap-6 p-0 m-0 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          {navMenu.map((item) => {
+            const Icon = item.icon;
+            const isExternal = item.href.startsWith("http");
 
-          return isExternal ? (
-            <a
-              key={item.sort_order}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={item.title}
-              className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
-            >
-              <Icon className="h-6 w-6 mb-2 text-gray-200" />
-              <span className="text-sm font-semibold text-gray-100">
-                {item.title}
-              </span>
-            </a>
-          ) : (
-            <Link
-              key={item.sort_order}
-              href={item.href}
-              aria-label={item.title}
-              className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
-            >
-              <Icon className="h-6 w-6 mb-2 text-gray-200" />
-              <span className="text-sm font-semibold text-gray-100">
-                {item.title}
-              </span>
-            </Link>
-          );
-        })}
+            return (
+              <li key={item.sort_order}>
+                {isExternal ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.title}
+                    className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+                  >
+                    <Icon className="h-6 w-6 mb-2 text-gray-200" aria-hidden />
+                    <span className="text-sm font-semibold text-gray-100">
+                      {item.title}
+                    </span>
+                  </a>
+                ) : (
+                  <Link
+                    href={item.href}
+                    aria-label={item.title}
+                    className="flex flex-col items-center justify-center p-5 bg-gray-800 rounded-2xl shadow-md hover:scale-105 hover:shadow-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+                  >
+                    <Icon className="h-6 w-6 mb-2 text-gray-200" aria-hidden />
+                    <span className="text-sm font-semibold text-gray-100">
+                      {item.title}
+                    </span>
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </nav>
     </section>
   );

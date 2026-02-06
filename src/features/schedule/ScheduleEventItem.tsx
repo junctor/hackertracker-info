@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { BookmarkIcon as BookmarkIconOutline } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import { useBookmarks } from "@/lib/hooks/useBookmarks";
+import { addBookmark, getBookmarks, removeBookmark } from "@/lib/storage";
 import type { ScheduleEventViewModel } from "./ScheduleEvents";
 import { ConferenceManifest } from "@/lib/conferences";
 
@@ -15,7 +15,17 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   event: ScheduleEventViewModel;
   isBookmarked: boolean;
 }) {
-  const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
+  const [bookmark, setBookmark] = useState(() => {
+    if (typeof window === "undefined") return isBookmarked;
+    return getBookmarks().includes(event.id);
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = getBookmarks().includes(event.id);
+    setBookmark((prev) => (prev === stored ? prev : stored));
+  }, [event.id, isBookmarked]);
+
   const href = useMemo(
     () => `/${conf.slug}/content/?id=${event.contentId}`,
     [conf.slug, event.contentId],
@@ -25,6 +35,31 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
     () => ({ "--event-color": event.color ?? "#fff" }) as React.CSSProperties,
     [event.color],
   );
+
+  const tagPills = useMemo(
+    () =>
+      event.tags.map((tag) => ({
+        id: tag.id,
+        label: tag.label,
+        style: {
+          backgroundColor: tag.colorBackground,
+          color: tag.colorForeground ?? "#fff",
+        } as React.CSSProperties,
+      })),
+    [event.tags],
+  );
+
+  const toggleBookmark = useCallback(() => {
+    setBookmark((prev) => {
+      const next = !prev;
+      if (next) {
+        addBookmark(event.id);
+      } else {
+        removeBookmark(event.id);
+      }
+      return next;
+    });
+  }, [event.id]);
 
   const handleBookmarkClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,7 +81,6 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
       >
         <div className="min-w-0 md:w-48">
           <p className="text-base font-semibold text-gray-100">
-            {/* Use precomputed display/ISO values to avoid per-render date conversion. */}
             <time dateTime={event.beginIso}>{event.beginDisplay}</time>
           </p>
           <p className="text-sm text-gray-400">
@@ -63,14 +97,11 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
           )}
           <p className="mt-1 text-gray-300">{event.locationName}</p>
           <div className="mt-2 flex flex-wrap gap-1 uppercase text-sm">
-            {event.tags.map((tag) => (
+            {tagPills.map((tag) => (
               <span
                 key={tag.id}
                 className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
-                style={{
-                  backgroundColor: tag.colorBackground,
-                  color: tag.colorForeground ?? "#fff",
-                }}
+                style={tag.style}
               >
                 {tag.label}
               </span>

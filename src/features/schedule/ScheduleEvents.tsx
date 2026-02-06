@@ -250,17 +250,17 @@ export default function ScheduleEvents({
           <div className="flex justify-end gap-2 border-b border-gray-800 bg-black/80 p-2 backdrop-blur">
             <Link
               href={`/${conf.slug}/bookmarks`}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               aria-label="Filter by bookmarks"
             >
-              <BookmarkIcon className="h-5 w-5" />
+              <BookmarkIcon className="h-5 w-5" aria-hidden="true" />
             </Link>
             <Link
               href={`/${conf.slug}/tags`}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               aria-label="Filter by tags"
             >
-              <TagIcon className="h-5 w-5" />
+              <TagIcon className="h-5 w-5" aria-hidden="true" />
             </Link>
           </div>
 
@@ -282,7 +282,7 @@ export default function ScheduleEvents({
                 aria-selected={resolvedDay === day}
                 aria-controls={`day-panel-${day}`}
                 tabIndex={resolvedDay === day ? 0 : -1}
-                className={`mx-1 flex shrink-0 items-center gap-1 rounded-full border px-3 py-1 text-sm transition ${
+                className={`mx-1 flex shrink-0 items-center gap-1 rounded-full border px-3 py-1 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
                   resolvedDay === day
                     ? "border-indigo-400 bg-indigo-500/20 text-indigo-100"
                     : "border-gray-700 text-gray-200 hover:border-indigo-400 hover:text-white"

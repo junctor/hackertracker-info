@@ -77,7 +77,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
     >
       <Link
         href={href}
-        className="flex w-full flex-col gap-3 md:flex-row md:items-start md:justify-between pr-10"
+        className="flex w-full flex-col gap-3 rounded-md pr-10 md:flex-row md:items-start md:justify-between focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
       >
         <div className="min-w-0 md:w-48">
           <p className="text-base font-semibold text-gray-100">
@@ -96,30 +96,34 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
             <p className="italic mt-1 text-gray-300">{event.speakers}</p>
           )}
           <p className="mt-1 text-gray-300">{event.locationName}</p>
-          <div className="mt-2 flex flex-wrap gap-1 uppercase text-sm">
+          <ul className="mt-2 flex flex-wrap gap-1 uppercase text-sm list-none p-0 m-0">
             {tagPills.map((tag) => (
-              <span
+              <li
                 key={tag.id}
                 className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
                 style={tag.style}
               >
                 {tag.label}
-              </span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </Link>
 
       <button
+        type="button"
         onClick={handleBookmarkClick}
         aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
         aria-pressed={bookmark}
-        className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300 focus-visible:ring-2 focus-visible:ring-indigo-500"
+        className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
       >
         {bookmark ? (
-          <BookmarkIconSolid className="h-5 w-5 text-indigo-400" />
+          <BookmarkIconSolid
+            className="h-5 w-5 text-indigo-400"
+            aria-hidden="true"
+          />
         ) : (
-          <BookmarkIconOutline className="h-5 w-5" />
+          <BookmarkIconOutline className="h-5 w-5" aria-hidden="true" />
         )}
       </button>
     </article>

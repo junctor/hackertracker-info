@@ -25,7 +25,9 @@ export default function PersonDetails({
 }: Props) {
   const contentsBasePath = `/${conference.slug}/content`;
   const locationNameById = useMemo(() => {
-    const entries = locations.map((location) => [location.id, location.name]);
+    const entries = locations.map(
+      (location) => [location.id, location.name] as const,
+    );
     return new Map<number, string>(entries);
   }, [locations]);
 
@@ -56,13 +58,13 @@ export default function PersonDetails({
           <h1 className="text-4xl md:text-5xl font-extrabold text-white">
             {person.name}
           </h1>
-          <div className="space-y-1 text-gray-300">
+          <ul className="space-y-1 text-gray-300 list-none p-0 m-0">
             {person.affiliations?.map((a) => (
-              <p key={a.organization} className="text-sm">
+              <li key={a.organization} className="text-sm">
                 {a.title} @ {a.organization}
-              </p>
+              </li>
             ))}
-          </div>
+          </ul>
           {person.links.length > 0 && (
             <div className="flex flex-wrap gap-3">
               {person.links
@@ -73,7 +75,7 @@ export default function PersonDetails({
                     href={l.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-indigo-400 hover:underline text-sm transition"
+                    className="text-indigo-400 text-sm transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
                   >
                     {l.title}
                   </a>
@@ -103,7 +105,7 @@ export default function PersonDetails({
                 <li key={e.id}>
                   <Link
                     href={`${contentsBasePath}?id=${e.contentId}`}
-                    className="block w-full group"
+                    className="block w-full group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
                   >
                     <div
                       className="

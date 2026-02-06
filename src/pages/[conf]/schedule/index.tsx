@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useCallback } from "react";
 import useSWR from "swr";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -37,6 +37,7 @@ type ScheduleDay = {
 };
 
 const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
+const INITIAL_NOW_SECONDS = Math.floor(Date.now() / 1000);
 
 export default function SchedulePage({
   conf,
@@ -183,7 +184,7 @@ export default function SchedulePage({
     // Pick in-progress day first, then fall back to earliest day.
     if (days.length === 0) return null;
 
-    const nowSeconds = Math.floor(Date.now() / 1000);
+    const nowSeconds = INITIAL_NOW_SECONDS;
 
     for (const { day, events } of days) {
       for (const event of events) {
@@ -210,21 +211,15 @@ export default function SchedulePage({
     return typeof value === "string" ? value : null;
   }, [router.isReady, router.query.day]);
 
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!router.isReady || days.length === 0) return;
-
-    const nextDay = dayParam && daySet.has(dayParam) ? dayParam : defaultDay;
-
-    if (!nextDay) return;
-
-    setSelectedDay((prev) => (prev === nextDay ? prev : nextDay));
-  }, [router.isReady, days.length, dayParam, daySet, defaultDay]);
+  const resolvedDay = useMemo(() => {
+    if (dayParam && daySet.has(dayParam)) {
+      return dayParam;
+    }
+    return defaultDay ?? "";
+  }, [dayParam, daySet, defaultDay]);
 
   const handleSelectDay = useCallback(
     (day: string) => {
-      setSelectedDay((prev) => (prev === day ? prev : day));
       if (!router.isReady) return;
 
       router.push(
@@ -277,7 +272,7 @@ export default function SchedulePage({
         <ScheduleEvents
           conf={conf}
           days={days}
-          selectedDay={selectedDay ?? defaultDay ?? ""}
+          selectedDay={resolvedDay}
           onSelectDay={handleSelectDay}
           bookmarks={bookmarks}
         />

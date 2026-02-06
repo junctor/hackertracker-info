@@ -1,5 +1,5 @@
 // src/pages/schedule/index.tsx
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
@@ -26,6 +26,8 @@ type TagPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
+
+const INITIAL_NOW_SECONDS = Math.floor(Date.now() / 1000);
 
 export default function TagPage({ conf, activePageId }: TagPageProps) {
   const router = useRouter();
@@ -58,7 +60,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
-    const nowSeconds = Math.floor(Date.now() / 1000);
+    const nowSeconds = INITIAL_NOW_SECONDS;
     for (const { day, events } of days) {
       for (const event of events) {
         if (
@@ -74,11 +76,11 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!defaultDay) return;
-    if (!selectedDay || !days.some(({ day }) => day === selectedDay)) {
-      setSelectedDay(defaultDay);
+  const resolvedDay = useMemo(() => {
+    if (selectedDay && days.some(({ day }) => day === selectedDay)) {
+      return selectedDay;
     }
+    return defaultDay;
   }, [defaultDay, days, selectedDay]);
 
   const handleSelectDay = useCallback((day: string) => {
@@ -108,11 +110,11 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
         <h1 className="text-3xl font-bold text-center mb-6 my-10">
           {tag.label} Schedule
         </h1>
-        {days.length > 0 && selectedDay ? (
+        {days.length > 0 && resolvedDay ? (
           <ScheduleEvents
             conf={conf}
             days={days}
-            selectedDay={selectedDay}
+            selectedDay={resolvedDay}
             onSelectDay={handleSelectDay}
             bookmarks={bookmarks}
           />

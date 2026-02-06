@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   DocumentTextIcon,
   GlobeAltIcon,
@@ -15,15 +15,14 @@ export default function GlobalSearch() {
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    if (isOpen && searchData.length === 0) {
-      setLoading(true);
-      fetch("/ht/search.json")
-        .then((res) => res.json())
-        .then((data) => setSearchData(data))
-        .finally(() => setLoading(false));
-    }
-  }, [isOpen, searchData.length]);
+  const loadSearchData = useCallback(() => {
+    if (loading || searchData.length > 0) return;
+    setLoading(true);
+    fetch("/ht/search.json")
+      .then((res) => res.json())
+      .then((data) => setSearchData(data))
+      .finally(() => setLoading(false));
+  }, [loading, searchData.length]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -55,7 +54,10 @@ export default function GlobalSearch() {
       <button
         type="button"
         className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          loadSearchData();
+        }}
         aria-label="Open search"
       >
         <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import { BookmarkIcon as BookmarkIconOutline } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
@@ -19,12 +19,6 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
     if (typeof window === "undefined") return isBookmarked;
     return getBookmarks().includes(event.id);
   });
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = getBookmarks().includes(event.id);
-    setBookmark((prev) => (prev === stored ? prev : stored));
-  }, [event.id, isBookmarked]);
 
   const href = useMemo(
     () => `/${conf.slug}/content/?id=${event.contentId}`,

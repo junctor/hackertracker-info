@@ -53,10 +53,7 @@ type VirtuosoItemProps = ItemProps<ScheduleEventViewModel> & {
 };
 
 const VirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(
-  function VirtuosoList(
-    { children, style, context: _context, "data-testid": dataTestId },
-    ref,
-  ) {
+  function VirtuosoList({ children, style, "data-testid": dataTestId }, ref) {
     return (
       <ul
         ref={ref as unknown as React.Ref<HTMLUListElement>}
@@ -74,10 +71,12 @@ VirtuosoList.displayName = "VirtuosoList";
 function VirtuosoItem({
   children,
   style,
-  context: _context,
-  item: _item,
+  context,
+  item,
   ...itemProps
 }: VirtuosoItemProps) {
+  void context;
+  void item;
   return (
     <li {...itemProps} style={style} className="mb-3 last:mb-0">
       {children}
@@ -143,6 +142,7 @@ export default function ScheduleEvents({
   conf: ConferenceManifest;
   days: ScheduleDay[];
   selectedDay: string;
+  // eslint-disable-next-line no-unused-vars
   onSelectDay: (day: string) => void;
   bookmarks: number[];
 }) {

@@ -1,11 +1,11 @@
-import type { ReactNode } from "react";
+import type { ReactNode, Dispatch, SetStateAction } from "react";
 
 type Props = {
   title: string;
   searchLabel: string;
   searchPlaceholder: string;
   searchValue: string;
-  onSearchChange: (value: string) => void;
+  onSearchChange: Dispatch<SetStateAction<string>>;
   children?: ReactNode;
 };
 

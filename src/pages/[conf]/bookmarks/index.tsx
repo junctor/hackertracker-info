@@ -1,5 +1,5 @@
 // src/pages/bookmarks/index.tsx
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import useSWR from "swr";
 import Head from "next/head";
 import type { GetStaticProps } from "next";
@@ -23,6 +23,8 @@ type BookmarksPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
+
+const INITIAL_NOW_SECONDS = Math.floor(Date.now() / 1000);
 
 export default function BookmarksPage({
   conf,
@@ -52,7 +54,7 @@ export default function BookmarksPage({
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
-    const nowSeconds = Math.floor(Date.now() / 1000);
+    const nowSeconds = INITIAL_NOW_SECONDS;
     for (const { day, events } of days) {
       for (const event of events) {
         if (
@@ -68,11 +70,11 @@ export default function BookmarksPage({
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!defaultDay) return;
-    if (!selectedDay || !days.some(({ day }) => day === selectedDay)) {
-      setSelectedDay(defaultDay);
+  const resolvedDay = useMemo(() => {
+    if (selectedDay && days.some(({ day }) => day === selectedDay)) {
+      return selectedDay;
     }
+    return defaultDay;
   }, [defaultDay, days, selectedDay]);
 
   const handleSelectDay = useCallback((day: string) => {
@@ -98,11 +100,11 @@ export default function BookmarksPage({
           <p className="mt-8 text-center text-gray-500">
             You haven’t bookmarked any events yet.
           </p>
-        ) : days.length > 0 && selectedDay ? (
+        ) : days.length > 0 && resolvedDay ? (
           <ScheduleEvents
             conf={conf}
             days={days}
-            selectedDay={selectedDay}
+            selectedDay={resolvedDay}
             onSelectDay={handleSelectDay}
             bookmarks={bookmarks}
           />

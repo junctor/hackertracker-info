@@ -12,16 +12,7 @@ import {
   TagEntity,
 } from "@/lib/types/ht-types";
 
-export default function ContentDetails({
-  content,
-  sessions,
-  locations,
-  people,
-  related_content: _relatedContent,
-  tags,
-  bookmarks,
-  conference,
-}: {
+export default function ContentDetails(props: {
   content: ContentEntity;
   sessions: EventEntity[];
   locations: LocationEntity[];
@@ -31,6 +22,8 @@ export default function ContentDetails({
   bookmarks: number[];
   conference: ConferenceManifest;
 }) {
+  const { content, sessions, locations, people, tags, bookmarks, conference } =
+    props;
   const peopleBasePath = `/${conference.slug}/people`;
   const contentsBasePath = `/${conference.slug}/content`;
 

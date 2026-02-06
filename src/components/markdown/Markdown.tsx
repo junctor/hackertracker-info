@@ -56,6 +56,8 @@ export default function Markdown({ content }: Props) {
           ),
 
           img: (props) => (
+            // Markdown images have unknown sizes; keep native img for now.
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               {...props}
               alt={props.alt ?? ""}

@@ -5,6 +5,7 @@ import { eventDayTable, tabDateTitle } from "@/lib/dates";
 import ScheduleEventItem from "./ScheduleEventItem";
 import { ConferenceManifest } from "@/lib/conferences";
 import type { GroupedSchedule, ScheduleEvent } from "@/lib/types/info";
+import { Virtuoso } from "react-virtuoso";
 
 export type ScheduleEventViewModel = {
   id: number;
@@ -32,6 +33,40 @@ export type ScheduleEventViewModel = {
 export type ScheduleDay = {
   day: string;
   events: ScheduleEventViewModel[];
+};
+
+type VirtuosoListProps = React.ComponentPropsWithoutRef<"div">;
+type VirtuosoItemProps = React.ComponentPropsWithoutRef<"li">;
+
+const VirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(
+  function VirtuosoList({ className, ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        {...props}
+        className={["mb-8", className].filter(Boolean).join(" ")}
+      />
+    );
+  },
+);
+VirtuosoList.displayName = "VirtuosoList";
+
+const VirtuosoItem = React.forwardRef<HTMLLIElement, VirtuosoItemProps>(
+  function VirtuosoItem({ className, ...props }, ref) {
+    return (
+      <li
+        ref={ref}
+        {...props}
+        className={["mb-3 last:mb-0", className].filter(Boolean).join(" ")}
+      />
+    );
+  },
+);
+VirtuosoItem.displayName = "VirtuosoItem";
+
+const VIRTUOSO_COMPONENTS = {
+  List: VirtuosoList,
+  Item: VirtuosoItem,
 };
 
 export function buildScheduleDaysFromGrouped(
@@ -101,7 +136,12 @@ export default function ScheduleEvents({
 
   useEffect(() => {
     if (!resolvedDay) return;
-    headingRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
+    const heading = headingRef.current;
+    if (!heading) return;
+    const rect = heading.getBoundingClientRect();
+    if (rect.top < 0 || rect.top > window.innerHeight) {
+      heading.scrollIntoView({ behavior: "auto", block: "start" });
+    }
   }, [resolvedDay]);
 
   const handleTabKeyDown = useCallback(
@@ -151,6 +191,16 @@ export default function ScheduleEvents({
   );
 
   const activeDay = days.find(({ day }) => day === resolvedDay) ?? null;
+  const itemContent = useCallback(
+    (_: number, evt: ScheduleEventViewModel) => (
+      <ScheduleEventItem
+        conf={conf}
+        event={evt}
+        isBookmarked={bookmarkSet.has(evt.id)}
+      />
+    ),
+    [bookmarkSet, conf],
+  );
 
   return (
     <div className="min-h-screen text-gray-100">
@@ -214,16 +264,15 @@ export default function ScheduleEvents({
             {eventDayTable(activeDay.day, conf.timezone)}
           </h2>
           <div className="px-5">
-            <ul className="mb-8 space-y-3">
-              {activeDay.events.map((evt) => (
-                <ScheduleEventItem
-                  conf={conf}
-                  key={evt.id}
-                  event={evt}
-                  isBookmarked={bookmarkSet.has(evt.id)}
-                />
-              ))}
-            </ul>
+            <Virtuoso
+              useWindowScroll
+              data={activeDay.events}
+              computeItemKey={(_: number, evt: ScheduleEventViewModel) =>
+                evt.id
+              }
+              components={VIRTUOSO_COMPONENTS}
+              itemContent={itemContent}
+            />
           </div>
         </section>
       )}

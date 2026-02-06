@@ -25,6 +25,17 @@ export default function GlobalSearch() {
     }
   }, [isOpen, searchData.length]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
   const icons: Record<SearchType, React.ElementType> = {
     person: UserIcon,
     content: DocumentTextIcon,
@@ -42,11 +53,12 @@ export default function GlobalSearch() {
   return (
     <>
       <button
-        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white"
+        type="button"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         onClick={() => setIsOpen(true)}
         aria-label="Open search"
       >
-        <MagnifyingGlassIcon className="h-5 w-5" />
+        <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
       </button>
 
       {isOpen && (
@@ -59,23 +71,35 @@ export default function GlobalSearch() {
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
-            aria-label="Global search"
+            aria-labelledby="global-search-title"
           >
+            <h2 id="global-search-title" className="sr-only">
+              Global search
+            </h2>
             <button
-              className="absolute top-3 right-3 text-gray-400 hover:text-white transition"
+              type="button"
+              className="absolute top-3 right-3 rounded-md text-gray-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
               onClick={() => setIsOpen(false)}
               aria-label="Close search"
             >
-              <XMarkIcon className="w-5 h-5" />
+              <XMarkIcon className="w-5 h-5" aria-hidden="true" />
             </button>
 
             {/* TODO: Design polish for this search modal and results list. */}
             <div className="relative">
-              <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-3 h-5 w-5 text-gray-500" />
+              <label htmlFor="global-search-input" className="sr-only">
+                Search
+              </label>
+              <MagnifyingGlassIcon
+                className="pointer-events-none absolute left-3 top-3 h-5 w-5 text-gray-500"
+                aria-hidden="true"
+              />
               <input
+                id="global-search-input"
+                type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full rounded-md border border-gray-800 bg-gray-900 py-2 pl-10 pr-4 text-white placeholder:text-gray-500"
+                className="w-full rounded-md border border-gray-800 bg-gray-900 py-2 pl-10 pr-4 text-white placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
                 placeholder={loading ? "Loading..." : "Search..."}
                 autoFocus
               />
@@ -96,10 +120,13 @@ export default function GlobalSearch() {
                       <li key={`${item.type}-${item.id}`}>
                         <Link
                           href={`/${item.type}?id=${item.id}`}
-                          className="flex items-center gap-3 px-4 py-2 text-gray-200 hover:bg-gray-800"
+                          className="flex items-center gap-3 px-4 py-2 text-gray-200 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
                           onClick={() => setIsOpen(false)}
                         >
-                          <Icon className="h-5 w-5 shrink-0 text-gray-400" />
+                          <Icon
+                            className="h-5 w-5 shrink-0 text-gray-400"
+                            aria-hidden="true"
+                          />
                           <span className="flex-1">{item.text}</span>
                         </Link>
                       </li>

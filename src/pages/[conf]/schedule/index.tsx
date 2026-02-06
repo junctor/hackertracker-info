@@ -143,13 +143,26 @@ export default function SchedulePage({
           .filter((name): name is string => Boolean(name))
           .join(", ");
 
+        const beginDate = new Date(event.begin);
+        const endDate = new Date(event.end);
+
         events.push({
           id: event.id,
           title: event.title,
           begin: event.begin,
           end: event.end,
-          beginTimestampSeconds: event.beginTimestampSeconds,
-          endTimestampSeconds: event.endTimestampSeconds,
+          beginDisplay: beginDate.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          beginIso: beginDate.toISOString(),
+          beginTimestampSeconds: Math.floor(beginDate.getTime() / 1000),
+          endDisplay: endDate.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          endIso: endDate.toISOString(),
+          endTimestampSeconds: Math.floor(endDate.getTime() / 1000),
           color: event.color,
           contentId: event.contentId,
           locationName,
@@ -260,6 +273,7 @@ export default function SchedulePage({
       </Head>
       <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
+        <h1 className="sr-only">Schedule</h1>
         <ScheduleEvents
           conf={conf}
           days={days}

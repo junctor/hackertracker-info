@@ -1,4 +1,4 @@
-export function getCountdown(kickoffDateMs: number): Timer {
+export function getCountdown(kickoffDateMs: number) {
   const now = Date.now();
   const diff = kickoffDateMs - now;
   const d = diff / (24 * 60 * 60 * 1e3);

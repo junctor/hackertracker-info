@@ -8,6 +8,7 @@ export type PageId =
   | "contests"
   | "departments"
   | "document"
+  | "exhibitors"
   | "organization"
   | "people"
   | "person"
@@ -15,6 +16,7 @@ export type PageId =
   | "schedule"
   | "tag"
   | "tags"
+  | "vendors"
   | "villages"
   | "home";
 
@@ -28,6 +30,7 @@ export const PAGE_META: Record<PageId, { title: string }> = {
   contests: { title: "Contests" },
   departments: { title: "Departments" },
   document: { title: "Document" },
+  exhibitors: { title: "Exhibitors" },
   organization: { title: "Organizations" },
   people: { title: "Speakers" },
   person: { title: "Speaker" },
@@ -35,6 +38,7 @@ export const PAGE_META: Record<PageId, { title: string }> = {
   schedule: { title: "Schedule" },
   tag: { title: "Tag" },
   tags: { title: "Tags" },
+  vendors: { title: "Vendors" },
   villages: { title: "Villages" },
   home: { title: "Home" },
 };

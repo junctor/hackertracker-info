@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function LoadingScreen() {
   return (
     <main className="relative grid min-h-screen place-items-center">

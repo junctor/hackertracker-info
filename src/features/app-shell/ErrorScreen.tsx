@@ -73,7 +73,7 @@ export default function ErrorScreen({ msg }: Props) {
             rounded-md border border-gray-600/70 px-4 py-2
             text-sm font-semibold text-gray-100
             hover:bg-gray-800/70 hover:border-gray-500
-            focus:outline-none focus:ring-2 focus:ring-indigo-400
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400
             transition-colors
           "
         >

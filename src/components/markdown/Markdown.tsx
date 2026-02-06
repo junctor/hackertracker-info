@@ -22,7 +22,7 @@ export default function Markdown({ content }: Props) {
           a: (props) => {
             const className = [
               props.className,
-              "text-indigo-300 underline-offset-2 decoration-indigo-500/40 hover:text-indigo-200 hover:decoration-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400",
+              "text-indigo-300 underline-offset-2 decoration-indigo-500/40 hover:text-indigo-200 hover:decoration-indigo-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-400",
             ]
               .filter(Boolean)
               .join(" ");
@@ -56,7 +56,13 @@ export default function Markdown({ content }: Props) {
           ),
 
           img: (props) => (
-            <img {...props} className="mx-auto my-5 rounded-md shadow-sm" />
+            <img
+              {...props}
+              alt={props.alt ?? ""}
+              loading="lazy"
+              decoding="async"
+              className="mx-auto my-5 rounded-md shadow-sm"
+            />
           ),
 
           div: (props) => {

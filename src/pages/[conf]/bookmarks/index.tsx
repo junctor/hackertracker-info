@@ -93,6 +93,7 @@ export default function BookmarksPage({
       </Head>
       <SiteHeader conference={conf} activePageId={activePageId} />
       <main>
+        <h1 className="sr-only">Bookmarks</h1>
         {bookmarks.length === 0 ? (
           <p className="mt-8 text-center text-gray-500">
             You haven’t bookmarked any events yet.

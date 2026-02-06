@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import type {
   ContentCardsView,
@@ -63,7 +63,7 @@ export default function ContentList({ content, tags, conference }: Props) {
               const nextValue = e.target.value;
               setSelectedTag(nextValue ? Number(nextValue) : null);
             }}
-            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100"
+            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
           >
             <option value="">All tags</option>
             {tagOptions.map((tag) => (
@@ -87,7 +87,7 @@ export default function ContentList({ content, tags, conference }: Props) {
           >
             <Link
               href={`/${conference.slug}/content/?id=${item.id}`}
-              className="block group px-4 py-6 hover:bg-gray-700 transition-colors"
+              className="block group px-4 py-6 transition-colors hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold text-gray-100 group-hover:text-gray-200 transition-colors">
@@ -102,9 +102,9 @@ export default function ContentList({ content, tags, conference }: Props) {
                   &rarr;
                 </span>
               </div>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <ul className="mt-3 flex flex-wrap gap-2 list-none p-0 m-0">
                 {item.tags.map((tag) => (
-                  <span
+                  <li
                     key={tag.id}
                     className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium"
                     style={{
@@ -113,9 +113,9 @@ export default function ContentList({ content, tags, conference }: Props) {
                     }}
                   >
                     {tag.label}
-                  </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </Link>
           </li>
         ))}

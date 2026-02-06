@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 import Markdown from "@/components/markdown/Markdown";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { DocumentEntity } from "@/lib/types/ht-types";
@@ -28,7 +27,7 @@ export default function DocumentDetails({ document, conference }: Props) {
           <li>
             <Link
               href={`/${conference.slug}/readme.nfo`}
-              className="flex items-center text-indigo-600 dark:text-indigo-400 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+              className="flex items-center rounded text-indigo-600 dark:text-indigo-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
             >
               readme.nfo
             </Link>

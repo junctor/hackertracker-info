@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import Markdown from "@/components/markdown/Markdown";
 import { ShareIcon, UserIcon } from "@heroicons/react/24/outline";
@@ -35,7 +35,9 @@ export default function ContentDetails({
   const contentsBasePath = `/${conference.slug}/content`;
 
   const locationNameById = useMemo(() => {
-    const entries = locations.map((location) => [location.id, location.name]);
+    const entries = locations.map(
+      (location) => [location.id, location.name] as [number, string],
+    );
     return new Map<number, string>(entries);
   }, [locations]);
 
@@ -61,11 +63,12 @@ export default function ContentDetails({
         </h1>
         {typeof navigator !== "undefined" && "share" in navigator && (
           <button
+            type="button"
             onClick={handleShare}
             aria-label="Share"
-            className="p-2 text-gray-400 hover:text-gray-200 transition"
+            className="rounded-md p-2 text-gray-400 transition hover:text-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
           >
-            <ShareIcon className="h-6 w-6" />
+            <ShareIcon className="h-6 w-6" aria-hidden="true" />
           </button>
         )}
       </div>
@@ -93,21 +96,22 @@ export default function ContentDetails({
 
       {/* Tags */}
       <section>
-        <div className="flex flex-wrap gap-2">
+        <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
           {tags.map((tag) => (
-            <Link
-              key={tag.id}
-              href={`/${conference.slug}/tag?id=${tag.id}`}
-              className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
-            >
-              <span
-                className="block h-3 w-3 rounded-full"
-                style={{ backgroundColor: tag.colorBackground }}
-              />
-              <span>{tag.label}</span>
-            </Link>
+            <li key={tag.id}>
+              <Link
+                href={`/${conference.slug}/tag?id=${tag.id}`}
+                className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition hover:bg-indigo-600/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
+              >
+                <span
+                  className="block h-3 w-3 rounded-full"
+                  style={{ backgroundColor: tag.colorBackground }}
+                />
+                <span>{tag.label}</span>
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       {/* Description */}
@@ -133,7 +137,7 @@ export default function ContentDetails({
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-indigo-400 hover:underline transition"
+                  className="text-indigo-400 transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
                 >
                   {l.label}
                 </a>
@@ -147,18 +151,19 @@ export default function ContentDetails({
       {people.length > 0 && (
         <section>
           <h2 className="text-2xl font-semibold text-gray-200 mb-4">People</h2>
-          <div className="flex flex-wrap gap-2">
+          <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
             {people.map((p) => (
-              <Link
-                key={p.id}
-                href={`${peopleBasePath}/?id=${p.id}`}
-                className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 hover:bg-indigo-600/50 transition"
-              >
-                <UserIcon className="h-4 w-4 text-indigo-300" />
-                <span>{p.name}</span>
-              </Link>
+              <li key={p.id}>
+                <Link
+                  href={`${peopleBasePath}/?id=${p.id}`}
+                  className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition hover:bg-indigo-600/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
+                >
+                  <UserIcon className="h-4 w-4 text-indigo-300" aria-hidden />
+                  <span>{p.name}</span>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )}
 

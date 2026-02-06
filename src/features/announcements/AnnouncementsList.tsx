@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { newsAgo, newsTime } from "@/lib/dates";
 import Markdown from "@/components/markdown/Markdown";
 import { ArticlesStore } from "@/lib/types/ht-types";

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import Head from "next/head";
 import useSWR from "swr";
 import { useRouter } from "next/router";

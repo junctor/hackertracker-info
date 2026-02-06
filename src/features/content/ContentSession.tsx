@@ -7,7 +7,6 @@ import {
   CalendarIcon,
 } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import React from "react";
 
 export default function ContentSession({
   session,
@@ -29,10 +28,7 @@ export default function ContentSession({
   const [bookmark, toggleBookmark] = useBookmarks(session.id, isBookmarked);
 
   return (
-    <li
-      key={session.id}
-      className="group flex flex-col md:flex-row md:items-center md:justify-between bg-gray-800 p-4 rounded-lg transition-shadow hover:shadow-lg"
-    >
+    <li className="group flex flex-col md:flex-row md:items-center md:justify-between bg-gray-800 p-4 rounded-lg transition-shadow hover:shadow-lg">
       <div className="flex-1">
         <div className="text-base text-gray-200 font-medium">
           {sameTime
@@ -49,25 +45,29 @@ export default function ContentSession({
             cal(content, session, locationName),
           )}`}
           download={`DEF_CON_${content.id}-${session.id}.ics`}
-          role="button"
           title={`Download calendar invite for session: ${content.title}`}
           aria-label={`Download calendar invite for session: ${content.title}`}
-          className="text-gray-400 hover:text-white"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
         >
-          <CalendarIcon className="h-6 w-6" />
+          <CalendarIcon className="h-6 w-6" aria-hidden="true" />
         </a>
         <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             toggleBookmark();
           }}
           aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300"
+          aria-pressed={bookmark}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
         >
           {bookmark ? (
-            <BookmarkIconSolid className="h-5 w-5 text-indigo-400" />
+            <BookmarkIconSolid
+              className="h-5 w-5 text-indigo-400"
+              aria-hidden="true"
+            />
           ) : (
-            <BookmarkIconOutline className="h-5 w-5" />
+            <BookmarkIconOutline className="h-5 w-5" aria-hidden="true" />
           )}
         </button>
       </div>

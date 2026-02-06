@@ -1,5 +1,5 @@
 // src/pages/Apps.tsx
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ConferenceManifest } from "@/lib/conferences";
 
@@ -12,45 +12,56 @@ export default function AppsLanding({ conference }: Props) {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    if (wrapperRef.current) {
-      gsap.to(wrapperRef.current, {
-        backgroundPosition: "100% 100%",
-        duration: 20,
-        ease: "none",
-        repeat: -1,
-        yoyo: true,
-      });
-    }
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduceMotion) return;
 
-    const glitchTl = gsap.timeline({ repeat: -1, repeatDelay: 3 });
-    glitchTl
-      .to(titleRef.current, {
-        x: 5,
-        skewX: 5,
-        filter: "drop-shadow(5px 0px #CB4) drop-shadow(-5px 0px #E67)",
-        duration: 0.05,
-      })
-      .to(titleRef.current, {
-        x: -5,
-        skewX: -5,
-        filter: "drop-shadow(-5px 0px #A37) drop-shadow(5px 0px #6CE)",
-        duration: 0.05,
-      })
-      .to(titleRef.current, {
-        x: 3,
-        skewX: 3,
-        filter: "drop-shadow(3px 0px #47A) drop-shadow(-3px 0px #BBB)",
-        duration: 0.05,
-      })
-      .to(titleRef.current, {
-        x: 0,
-        skewX: 0,
-        filter: "none",
-        duration: 0.05,
-      });
+    const wrapper = wrapperRef.current;
+    const title = titleRef.current;
+
+    const backgroundTween = wrapper
+      ? gsap.to(wrapper, {
+          backgroundPosition: "100% 100%",
+          duration: 20,
+          ease: "none",
+          repeat: -1,
+          yoyo: true,
+        })
+      : null;
+
+    const glitchTl = title
+      ? gsap
+          .timeline({ repeat: -1, repeatDelay: 3 })
+          .to(title, {
+            x: 5,
+            skewX: 5,
+            filter: "drop-shadow(5px 0px #CB4) drop-shadow(-5px 0px #E67)",
+            duration: 0.05,
+          })
+          .to(title, {
+            x: -5,
+            skewX: -5,
+            filter: "drop-shadow(-5px 0px #A37) drop-shadow(5px 0px #6CE)",
+            duration: 0.05,
+          })
+          .to(title, {
+            x: 3,
+            skewX: 3,
+            filter: "drop-shadow(3px 0px #47A) drop-shadow(-3px 0px #BBB)",
+            duration: 0.05,
+          })
+          .to(title, {
+            x: 0,
+            skewX: 0,
+            filter: "none",
+            duration: 0.05,
+          })
+      : null;
 
     return () => {
-      glitchTl.kill();
+      backgroundTween?.kill();
+      glitchTl?.kill();
     };
   }, []);
 
@@ -76,7 +87,7 @@ export default function AppsLanding({ conference }: Props) {
   ];
 
   const btnBase =
-    "rounded-full px-8 py-3 font-semibold text-lg shadow-lg transition transform hover:-translate-y-1";
+    "rounded-full px-8 py-3 font-semibold text-lg shadow-lg transition transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
 
   return (
     <div

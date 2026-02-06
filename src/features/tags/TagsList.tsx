@@ -29,7 +29,7 @@ function TagPill({
     <Link
       href={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-2"
+      className="inline-flex px-3 py-1 rounded-full text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
       style={{
         backgroundColor: tag.colorBackground,
         color: tag.colorForeground,
@@ -66,11 +66,13 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
                 {formatCategory(tagType.category)}
               </h2>
 
-              <div className="flex flex-wrap gap-2">
+              <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
                 {sortedTags.map((tag) => (
-                  <TagPill key={tag.id} tag={tag} conference={conference} />
+                  <li key={tag.id}>
+                    <TagPill tag={tag} conference={conference} />
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
           );
         })

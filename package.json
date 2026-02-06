@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" \"*.{js,cjs,mjs,ts}\"",
+    "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" \"*.{js,cjs,mjs,ts}\" --fix",
     "format": "prettier --write src"
   },
   "dependencies": {
@@ -26,7 +27,6 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9.26.0",
-    "@next/eslint-plugin-next": "^16.1.4",
     "@tailwindcss/postcss": "^4.1.6",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^25.0.9",
@@ -35,11 +35,9 @@
     "eslint": "^9.26.0",
     "eslint-config-next": "^16.1.4",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-react": "^7.37.5",
     "globals": "^17.0.0",
     "prettier": "^3.5.3",
     "tailwindcss": "^4.1.6",
-    "typescript": "^5",
-    "typescript-eslint": "^8.32.0"
+    "typescript": "^5"
   }
 }

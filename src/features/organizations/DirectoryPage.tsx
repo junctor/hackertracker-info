@@ -6,6 +6,7 @@ import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import {
@@ -110,10 +111,13 @@ export default function DirectoryPage({
           <title>{pageTitle}</title>
           <meta name="description" content={metaDescription} />
         </Head>
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main>
-          <OrganizationDetails org={selectedOrganization} conference={conf} />
-        </main>
+        <div className="min-h-screen flex flex-col">
+          <SiteHeader conference={conf} activePageId={activePageId} />
+          <main className="flex-1">
+            <OrganizationDetails org={selectedOrganization} conference={conf} />
+          </main>
+          <SiteFooter />
+        </div>
       </>
     );
   }
@@ -138,14 +142,17 @@ export default function DirectoryPage({
           <title>{pageTitle}</title>
           <meta name="description" content={metaDescription} />
         </Head>
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main>
-          <OrganizationsList
-            organizations={matchingOrganizations}
-            title={title}
-            detailsBasePath={detailsBasePath}
-          />
-        </main>
+        <div className="min-h-screen flex flex-col">
+          <SiteHeader conference={conf} activePageId={activePageId} />
+          <main className="flex-1">
+            <OrganizationsList
+              organizations={matchingOrganizations}
+              title={title}
+              detailsBasePath={detailsBasePath}
+            />
+          </main>
+          <SiteFooter />
+        </div>
       </>
     );
   }

@@ -5,6 +5,7 @@ import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 import ScheduleEvents, {
   buildScheduleDaysFromGrouped,
   ScheduleDay,
@@ -105,25 +106,28 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
           content={`${conf.name} schedule for ${tag.label}`}
         />
       </Head>
-      <SiteHeader conference={conf} activePageId={activePageId} />
-      <main>
-        <h1 className="text-3xl font-bold text-center mb-6 my-10">
-          {tag.label} Schedule
-        </h1>
-        {days.length > 0 && resolvedDay ? (
-          <ScheduleEvents
-            conf={conf}
-            days={days}
-            selectedDay={resolvedDay}
-            onSelectDay={handleSelectDay}
-            bookmarks={bookmarks}
-          />
-        ) : (
-          <p className="mt-8 text-center text-gray-500">
-            No events found for this tag.
-          </p>
-        )}
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <h1 className="text-3xl font-bold text-center mb-6 my-10">
+            {tag.label} Schedule
+          </h1>
+          {days.length > 0 && resolvedDay ? (
+            <ScheduleEvents
+              conf={conf}
+              days={days}
+              selectedDay={resolvedDay}
+              onSelectDay={handleSelectDay}
+              bookmarks={bookmarks}
+            />
+          ) : (
+            <p className="mt-8 text-center text-gray-500">
+              No events found for this tag.
+            </p>
+          )}
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

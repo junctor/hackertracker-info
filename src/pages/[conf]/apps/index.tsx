@@ -2,6 +2,7 @@ import React from "react";
 import AppsLanding from "@/features/apps/AppsLanding";
 import Head from "next/head";
 import SiteHeader from "@/features/app-shell/SiteHeader";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 import { ConferenceManifest } from "@/lib/conferences";
 import { PageId } from "@/lib/types/page-meta";
 import {
@@ -25,10 +26,13 @@ export default function AppsPage({ conf, activePageId }: AppsPageProps) {
           content="Download the official Hacker Tracker apps for iOS and Android."
         />
       </Head>
-      <SiteHeader conference={conf} activePageId={activePageId} />
-      <main>
-        <AppsLanding conference={conf} />
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <AppsLanding conference={conf} />
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

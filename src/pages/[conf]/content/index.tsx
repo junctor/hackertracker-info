@@ -8,6 +8,7 @@ import { getBookmarks } from "@/lib/storage";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 import ContentList from "@/features/content/ContentList";
 import ContentDetails from "@/features/content/ContentDetails";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -196,19 +197,22 @@ export default function ContentsPage({
           </title>
           <meta name="description" content={metaDescription} />
         </Head>
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main>
-          <ContentDetails
-            content={content}
-            sessions={sessions}
-            locations={locations}
-            people={people}
-            related_content={relatedContent}
-            tags={tags}
-            bookmarks={bookmarks}
-            conference={conf}
-          />
-        </main>
+        <div className="min-h-screen flex flex-col">
+          <SiteHeader conference={conf} activePageId={activePageId} />
+          <main className="flex-1">
+            <ContentDetails
+              content={content}
+              sessions={sessions}
+              locations={locations}
+              people={people}
+              related_content={relatedContent}
+              tags={tags}
+              bookmarks={bookmarks}
+              conference={conf}
+            />
+          </main>
+          <SiteFooter />
+        </div>
       </>
     );
   }
@@ -227,10 +231,17 @@ export default function ContentsPage({
           content={`Browse talks, workshops, and presentations at ${conf.name}.`}
         />
       </Head>
-      <SiteHeader conference={conf} activePageId={activePageId} />
-      <main>
-        <ContentList content={contentCards} tags={tagTypes} conference={conf} />
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <ContentList
+            content={contentCards}
+            tags={tagTypes}
+            conference={conf}
+          />
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

@@ -7,6 +7,7 @@ import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 import ScheduleEvents, {
   buildScheduleDaysFromGrouped,
 } from "@/features/schedule/ScheduleEvents";
@@ -93,27 +94,30 @@ export default function BookmarksPage({
           content={`View and manage your bookmarked ${conf.name} events and sessions.`}
         />
       </Head>
-      <SiteHeader conference={conf} activePageId={activePageId} />
-      <main>
-        <h1 className="sr-only">Bookmarks</h1>
-        {bookmarks.length === 0 ? (
-          <p className="mt-8 text-center text-gray-500">
-            You haven’t bookmarked any events yet.
-          </p>
-        ) : days.length > 0 && resolvedDay ? (
-          <ScheduleEvents
-            conf={conf}
-            days={days}
-            selectedDay={resolvedDay}
-            onSelectDay={handleSelectDay}
-            bookmarks={bookmarks}
-          />
-        ) : (
-          <p className="mt-8 text-center text-gray-500">
-            No bookmarked events found.
-          </p>
-        )}
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <h1 className="sr-only">Bookmarks</h1>
+          {bookmarks.length === 0 ? (
+            <p className="mt-8 text-center text-gray-500">
+              You haven’t bookmarked any events yet.
+            </p>
+          ) : days.length > 0 && resolvedDay ? (
+            <ScheduleEvents
+              conf={conf}
+              days={days}
+              selectedDay={resolvedDay}
+              onSelectDay={handleSelectDay}
+              bookmarks={bookmarks}
+            />
+          ) : (
+            <p className="mt-8 text-center text-gray-500">
+              No bookmarked events found.
+            </p>
+          )}
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

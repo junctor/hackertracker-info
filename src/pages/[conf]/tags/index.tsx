@@ -4,6 +4,7 @@ import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 import Head from "next/head";
 import TagsList from "@/features/tags/TagsList";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -42,10 +43,13 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
           content={`Explore the various tags used in ${conf.name}.`}
         />
       </Head>
-      <SiteHeader conference={conf} activePageId={activePageId} />
-      <main>
-        <TagsList tagTypes={tags} conference={conf} />
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <TagsList tagTypes={tags} conference={conf} />
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

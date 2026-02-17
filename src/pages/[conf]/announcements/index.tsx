@@ -14,6 +14,7 @@ import {
   getConferenceFromParams,
 } from "@/lib/next-static";
 import type { GetStaticProps } from "next";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 
 type AnnouncementsPageProps = {
   conf: ConferenceManifest;
@@ -42,10 +43,13 @@ export default function AnnouncementsPage({
           content={`Latest announcements and updates for ${conf.name}.`}
         />
       </Head>
-      <SiteHeader conference={conf} activePageId={activePageId} />
-      <main>
-        <AnnouncementsList announcements={articles} conference={conf} />
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <AnnouncementsList announcements={articles} conference={conf} />
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

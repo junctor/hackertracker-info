@@ -4,6 +4,7 @@ import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import DocumentDetails from "@/features/documents/DocumentDetails";
@@ -79,10 +80,13 @@ export default function DocumentsPage({
           content={`A collection of information related to ${conf.name}.`}
         />
       </Head>
-      <SiteHeader conference={conf} activePageId={activePageId} />
-      <main>
-        <DocumentDetails document={selectedDocument} conference={conf} />
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <DocumentDetails document={selectedDocument} conference={conf} />
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

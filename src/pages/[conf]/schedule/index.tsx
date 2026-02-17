@@ -8,6 +8,7 @@ import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 import ScheduleEvents, {
   ScheduleEventViewModel,
 } from "@/features/schedule/ScheduleEvents";
@@ -264,17 +265,20 @@ export default function SchedulePage({
           content={`Full ${conf.name} schedule of sessions, talks, and events.`}
         />
       </Head>
-      <SiteHeader conference={conf} activePageId={activePageId} />
-      <main>
-        <h1 className="sr-only">Schedule</h1>
-        <ScheduleEvents
-          conf={conf}
-          days={days}
-          selectedDay={resolvedDay}
-          onSelectDay={handleSelectDay}
-          bookmarks={bookmarks}
-        />
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <h1 className="sr-only">Schedule</h1>
+          <ScheduleEvents
+            conf={conf}
+            days={days}
+            selectedDay={resolvedDay}
+            onSelectDay={handleSelectDay}
+            bookmarks={bookmarks}
+          />
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

@@ -4,6 +4,7 @@ import { fetcher } from "@/lib/misc";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
+import SiteFooter from "@/features/app-shell/SiteFooter";
 import PeopleList from "@/features/people/PeopleList";
 import PersonDetails from "@/features/people/PersonDetails";
 import Head from "next/head";
@@ -144,15 +145,18 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
           </title>
           <meta name="description" content={metaDescription} />
         </Head>
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main>
-          <PersonDetails
-            person={person}
-            events={eventForContentIds}
-            locations={locationsForEventIds}
-            conference={conf}
-          />
-        </main>
+        <div className="min-h-screen flex flex-col">
+          <SiteHeader conference={conf} activePageId={activePageId} />
+          <main className="flex-1">
+            <PersonDetails
+              person={person}
+              events={eventForContentIds}
+              locations={locationsForEventIds}
+              conference={conf}
+            />
+          </main>
+          <SiteFooter />
+        </div>
       </>
     );
   }
@@ -169,10 +173,13 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
           content={`Browse bios and sessions for all ${conf.name} participants.`}
         />
       </Head>
-      <SiteHeader conference={conf} activePageId={activePageId} />
-      <main>
-        <PeopleList people={people} conference={conf} />
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <PeopleList people={people} conference={conf} />
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

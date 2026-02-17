@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, type CSSProperties } from "react";
 import Link from "next/link";
 import type {
   ContentCardsView,
@@ -16,22 +16,24 @@ interface Props {
 export default function ContentList({ content, tags, conference }: Props) {
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<number | null>(null);
-  const normalizedSearch = useMemo(() => search.trim().toLowerCase(), [search]);
+  const normalizedSearch = search.trim().toLowerCase();
 
-  const filtered = useMemo(
-    () =>
-      content
-        .filter((c) =>
-          normalizedSearch
-            ? c.title.toLowerCase().includes(normalizedSearch)
-            : true,
-        )
-        .filter((c) => {
-          if (!selectedTag) return true;
-          return c.tags.some((tag) => tag.id === selectedTag);
-        }),
-    [content, normalizedSearch, selectedTag],
-  );
+  const filtered = useMemo(() => {
+    const result: ContentCardsView = [];
+    for (const item of content) {
+      if (
+        normalizedSearch &&
+        !item.title.toLowerCase().includes(normalizedSearch)
+      ) {
+        continue;
+      }
+      if (selectedTag && !item.tags.some((tag) => tag.id === selectedTag)) {
+        continue;
+      }
+      result.push(item);
+    }
+    return result;
+  }, [content, normalizedSearch, selectedTag]);
 
   const tagOptions = useMemo(
     () =>
@@ -79,22 +81,59 @@ export default function ContentList({ content, tags, conference }: Props) {
         </label>
       </SearchHeader>
 
-      <ul className="divide-y divide-gray-700 leading-relaxed">
+      <ul className="space-y-3 leading-relaxed">
         {filtered.map((item) => (
           <li
             key={item.id}
-            className="odd:bg-gray-950 even:bg-gray-900 transition-colors"
+            style={
+              {
+                "--event-color": item.tags[0]?.colorBackground ?? "#9ca3af",
+              } as CSSProperties
+            }
+            className="
+              group relative overflow-hidden
+              rounded-lg border border-gray-800 bg-gray-900/40
+              transition-colors
+              hover:border-gray-700 hover:bg-gray-900
+              focus-within:border-indigo-500/70
+            "
           >
+            <span
+              aria-hidden="true"
+              className="
+                pointer-events-none absolute left-0 top-0 bottom-0
+                w-[clamp(0.3rem,2vw,0.9rem)]
+                bg-(--event-color)
+                transition-[width] duration-200
+                group-hover:w-[clamp(0.4rem,3vw,1.1rem)]
+              "
+            />
+            <span
+              aria-hidden="true"
+              className="
+                pointer-events-none absolute left-0 top-0 bottom-0
+                w-[clamp(0.3rem,2vw,0.9rem)]
+                bg-linear-to-b from-white/0 to-indigo-600/20
+                mix-blend-multiply opacity-60
+                transition-[width] duration-200
+                group-hover:w-[clamp(0.4rem,3vw,1.1rem)]
+              "
+            />
             <Link
               href={`/${conference.slug}/content/?id=${item.id}`}
-              className="block group px-4 py-6 transition-colors hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+              className="
+                relative z-10 block rounded-md px-4 py-5 pl-5
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
+                focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900
+              "
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-gray-100 group-hover:text-gray-200 transition-colors">
+                <h3 className="text-lg font-bold text-gray-100 transition-colors group-hover:text-gray-200">
                   {item.title}
                 </h3>
                 <span
-                  className={`text-xl group-hover:text-gray-300 transition-colors`}
+                  aria-hidden="true"
+                  className="text-xl transition-colors group-hover:text-gray-300"
                   style={{
                     color: item.tags[0]?.colorBackground ?? "#fff",
                   }}

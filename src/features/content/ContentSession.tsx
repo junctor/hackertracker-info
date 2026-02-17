@@ -51,9 +51,9 @@ export default function ContentSession({
         group relative overflow-hidden
         rounded-lg border border-gray-800 bg-gray-900/40
         px-4 py-3
-        transition
+        transition-colors
         hover:border-gray-700 hover:bg-gray-900
-        focus-within:outline-2 focus-within:outline-indigo-500 focus-within:outline-offset-2
+        focus-within:border-indigo-500/70
       "
       style={
         {

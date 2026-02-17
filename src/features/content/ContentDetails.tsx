@@ -43,22 +43,27 @@ export default function ContentDetails(props: Props) {
     () => new Map<number, string>(locations.map((l) => [l.id, l.name])),
     [locations],
   );
+  const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
 
-  // Deterministic accent color: earliest session.
+  // Deterministic accent color from the earliest session without sorting.
   const primarySession = useMemo(() => {
     if (sessions.length === 0) return undefined;
-    return [...sessions].sort(
-      (a, b) => safeParseMs(a.beginIso) - safeParseMs(b.beginIso),
-    )[0];
+    let earliest = sessions[0];
+    let earliestMs = safeParseMs(earliest.beginIso);
+    for (let i = 1; i < sessions.length; i += 1) {
+      const session = sessions[i];
+      const ms = safeParseMs(session.beginIso);
+      if (ms < earliestMs) {
+        earliest = session;
+        earliestMs = ms;
+      }
+    }
+    return earliest;
   }, [sessions]);
 
-  const barStyle = useMemo(
-    () =>
-      ({
-        "--event-color": primarySession?.color ?? "#9ca3af",
-      }) as React.CSSProperties,
-    [primarySession?.color],
-  );
+  const barStyle = {
+    "--event-color": primarySession?.color ?? "#9ca3af",
+  } as React.CSSProperties;
 
   const canShare =
     typeof navigator !== "undefined" && typeof navigator.share === "function";
@@ -121,7 +126,7 @@ export default function ContentDetails(props: Props) {
           <button
             type="button"
             onClick={handleShare}
-            aria-label="Share"
+            aria-label="Share content link"
             className="
               rounded-md p-2 text-gray-400 transition
               hover:text-gray-200
@@ -151,7 +156,7 @@ export default function ContentDetails(props: Props) {
                 conferenceSlug={conference.slug}
                 session={s}
                 content={content}
-                isBookmarked={bookmarks.includes(s.id)}
+                isBookmarked={bookmarkSet.has(s.id)}
                 locationName={locationNameById.get(s.locationId)}
                 timezone={conference.timezone}
               />

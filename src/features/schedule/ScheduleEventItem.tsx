@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { BookmarkIcon as BookmarkIconOutline } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
@@ -22,68 +22,47 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
     return getBookmarks().includes(event.id);
   });
 
-  const href = useMemo(
-    () => `/${conf.slug}/content/?id=${event.contentId}`,
-    [conf.slug, event.contentId],
-  );
+  const href = `/${conf.slug}/content/?id=${event.contentId}`;
+  const barStyle = {
+    "--event-color": event.color ?? "#fff",
+  } as React.CSSProperties;
 
-  const barStyle = useMemo(
-    () => ({ "--event-color": event.color ?? "#fff" }) as React.CSSProperties,
-    [event.color],
-  );
-
-  const tagPills = useMemo(
-    () =>
-      event.tags.map((tag) => ({
-        id: tag.id,
-        label: tag.label,
-        style: {
-          backgroundColor: tag.colorBackground,
-          color: tag.colorForeground ?? "#fff",
-        } as React.CSSProperties,
-      })),
-    [event.tags],
-  );
-
-  const toggleBookmark = useCallback(() => {
+  const toggleBookmark = () => {
     setBookmark((prev) => {
       const next = !prev;
       if (next) addBookmark(event.id);
       else removeBookmark(event.id);
       return next;
     });
-  }, [event.id]);
+  };
 
-  const handleBookmarkClick = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleBookmark();
-    },
-    [toggleBookmark],
-  );
+  const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleBookmark();
+  };
 
   return (
     <article
       style={barStyle}
       className="
-        group relative [@container] overflow-hidden
+        group relative overflow-hidden
         flex w-full flex-col gap-4
         rounded-lg border border-gray-800 bg-gray-900/40
         pl-4 pr-4 py-3
-        transition
+        transition-colors
         hover:border-gray-700 hover:bg-gray-900
-        focus-within:outline-2 focus-within:outline-indigo-500 focus-within:outline-offset-2
+        focus-within:border-indigo-500/70
       "
     >
       <span
         aria-hidden="true"
         className="
           pointer-events-none absolute left-0 top-0 bottom-0
-          w-[clamp(0.25rem,2.5cqw,0.75rem)]
+          w-[clamp(0.3rem,2vw,0.9rem)]
           bg-(--event-color)
           transition-[width] duration-200
-          group-hover:w-[clamp(0.35rem,3.5cqw,1rem)]
+          group-hover:w-[clamp(0.4rem,3vw,1.1rem)]
         "
       />
 
@@ -91,11 +70,11 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
         aria-hidden="true"
         className="
           pointer-events-none absolute left-0 top-0 bottom-0
-          w-[clamp(0.25rem,2.5cqw,0.75rem)]
+          w-[clamp(0.3rem,2vw,0.9rem)]
           bg-linear-to-b from-white/0 to-indigo-600/20
           mix-blend-multiply opacity-60
           transition-[width] duration-200
-          group-hover:w-[clamp(0.35rem,3.5cqw,1rem)]
+          group-hover:w-[clamp(0.4rem,3vw,1.1rem)]
         "
       />
 
@@ -131,11 +110,14 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
           <p className="mt-1 text-gray-300">{event.locationName}</p>
 
           <ul className="mt-2 flex flex-wrap gap-1 list-none p-0 m-0 uppercase text-sm">
-            {tagPills.map((tag) => (
+            {event.tags.map((tag) => (
               <li
                 key={tag.id}
                 className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
-                style={tag.style}
+                style={{
+                  backgroundColor: tag.colorBackground,
+                  color: tag.colorForeground ?? "#fff",
+                }}
               >
                 {tag.label}
               </li>

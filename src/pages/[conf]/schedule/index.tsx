@@ -110,6 +110,10 @@ export default function SchedulePage({
 
     const dayKeys = Object.keys(eventsByDay).sort();
     const result: ScheduleDay[] = [];
+    const timeFormatter = new Intl.DateTimeFormat(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
     for (const day of dayKeys) {
       const ids = eventsByDay[day] ?? [];
@@ -152,16 +156,10 @@ export default function SchedulePage({
           title: event.title,
           begin: event.begin,
           end: event.end,
-          beginDisplay: beginDate.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
+          beginDisplay: timeFormatter.format(beginDate),
           beginIso: beginDate.toISOString(),
           beginTimestampSeconds: Math.floor(beginDate.getTime() / 1000),
-          endDisplay: endDate.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
+          endDisplay: timeFormatter.format(endDate),
           endIso: endDate.toISOString(),
           endTimestampSeconds: Math.floor(endDate.getTime() / 1000),
           color: event.color,

@@ -34,6 +34,8 @@ type ContentsPageProps = {
   activePageId: PageId;
 };
 
+const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
+
 export default function ContentsPage({
   conf,
   activePageId,
@@ -57,7 +59,7 @@ export default function ContentsPage({
   } = useSWR<ContentCardsView>(
     shouldLoadList ? `${conf.dataRoot}/views/contentCards.json` : null,
     fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
+    swrOptions,
   );
 
   const {
@@ -67,7 +69,7 @@ export default function ContentsPage({
   } = useSWR<TagTypesBrowseView>(
     shouldLoadList ? `${conf.dataRoot}/views/tagTypesBrowse.json` : null,
     fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
+    swrOptions,
   );
 
   const {
@@ -77,7 +79,7 @@ export default function ContentsPage({
   } = useSWR<ContentStore>(
     shouldLoadDetails ? `${conf.dataRoot}/entities/content.json` : null,
     fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
+    swrOptions,
   );
 
   const {
@@ -87,7 +89,7 @@ export default function ContentsPage({
   } = useSWR<PeopleStore>(
     shouldLoadDetails ? `${conf.dataRoot}/entities/people.json` : null,
     fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
+    swrOptions,
   );
 
   const {
@@ -97,7 +99,7 @@ export default function ContentsPage({
   } = useSWR<EventsStore>(
     shouldLoadDetails ? `${conf.dataRoot}/entities/events.json` : null,
     fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
+    swrOptions,
   );
 
   const {
@@ -107,7 +109,7 @@ export default function ContentsPage({
   } = useSWR<LocationsStore>(
     shouldLoadDetails ? `${conf.dataRoot}/entities/locations.json` : null,
     fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
+    swrOptions,
   );
 
   const {
@@ -117,7 +119,7 @@ export default function ContentsPage({
   } = useSWR<TagsStore>(
     shouldLoadDetails ? `${conf.dataRoot}/entities/tags.json` : null,
     fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
+    swrOptions,
   );
 
   const bookmarks = useMemo(() => getBookmarks(), []);

@@ -6,16 +6,18 @@ import { addBookmark, getBookmarks, removeBookmark } from "@/lib/storage";
 import type { ScheduleEventViewModel } from "./ScheduleEvents";
 import { ConferenceManifest } from "@/lib/conferences";
 
+type Props = {
+  conf: ConferenceManifest;
+  event: ScheduleEventViewModel;
+  isBookmarked: boolean;
+};
+
 const ScheduleEventItem = React.memo(function ScheduleEventItem({
   conf,
   event,
   isBookmarked,
-}: {
-  conf: ConferenceManifest;
-  event: ScheduleEventViewModel;
-  isBookmarked: boolean;
-}) {
-  const [bookmark, setBookmark] = useState(() => {
+}: Props) {
+  const [bookmark, setBookmark] = useState<boolean>(() => {
     if (typeof window === "undefined") return isBookmarked;
     return getBookmarks().includes(event.id);
   });
@@ -46,11 +48,8 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   const toggleBookmark = useCallback(() => {
     setBookmark((prev) => {
       const next = !prev;
-      if (next) {
-        addBookmark(event.id);
-      } else {
-        removeBookmark(event.id);
-      }
+      if (next) addBookmark(event.id);
+      else removeBookmark(event.id);
       return next;
     });
   }, [event.id]);
@@ -67,11 +66,49 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   return (
     <article
       style={barStyle}
-      className="group relative flex w-full flex-col gap-4 rounded-lg border border-gray-800 bg-gray-900/40 px-4 py-3 transition hover:border-gray-700 hover:bg-gray-900 focus-within:outline-2 focus-within:outline-indigo-500 focus-within:outline-offset-2 before:absolute before:top-3 before:bottom-3 before:left-3 before:w-[clamp(0.25rem,2vw,1rem)] before:rounded before:bg-(--event-color) before:transition-all before:duration-200 group-hover:before:w-[clamp(0.4rem,3vw,1.2rem)]"
+      className="
+        group relative [@container] overflow-hidden
+        flex w-full flex-col gap-4
+        rounded-lg border border-gray-800 bg-gray-900/40
+        pl-4 pr-4 py-3
+        transition
+        hover:border-gray-700 hover:bg-gray-900
+        focus-within:outline-2 focus-within:outline-indigo-500 focus-within:outline-offset-2
+      "
     >
+      <span
+        aria-hidden="true"
+        className="
+          pointer-events-none absolute left-0 top-0 bottom-0
+          w-[clamp(0.25rem,2.5cqw,0.75rem)]
+          bg-(--event-color)
+          transition-[width] duration-200
+          group-hover:w-[clamp(0.35rem,3.5cqw,1rem)]
+        "
+      />
+
+      <span
+        aria-hidden="true"
+        className="
+          pointer-events-none absolute left-0 top-0 bottom-0
+          w-[clamp(0.25rem,2.5cqw,0.75rem)]
+          bg-linear-to-b from-white/0 to-indigo-600/20
+          mix-blend-multiply opacity-60
+          transition-[width] duration-200
+          group-hover:w-[clamp(0.35rem,3.5cqw,1rem)]
+        "
+      />
+
       <Link
         href={href}
-        className="flex w-full flex-col gap-3 rounded-md pr-10 md:flex-row md:items-start md:justify-between focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+        className="
+        relative z-10
+        flex w-full flex-col gap-3 rounded-md pr-10
+        pl-5
+        md:flex-row md:items-start md:justify-between
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
+        focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900
+      "
       >
         <div className="min-w-0 md:w-48">
           <p className="text-base font-semibold text-gray-100">
@@ -86,11 +123,14 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
           <h3 className="text-xl font-bold text-gray-100 line-clamp-2">
             {event.title}
           </h3>
+
           {event.speakers && (
-            <p className="italic mt-1 text-gray-300">{event.speakers}</p>
+            <p className="mt-1 italic text-gray-300">{event.speakers}</p>
           )}
+
           <p className="mt-1 text-gray-300">{event.locationName}</p>
-          <ul className="mt-2 flex flex-wrap gap-1 uppercase text-sm list-none p-0 m-0">
+
+          <ul className="mt-2 flex flex-wrap gap-1 list-none p-0 m-0 uppercase text-sm">
             {tagPills.map((tag) => (
               <li
                 key={tag.id}
@@ -109,7 +149,14 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
         onClick={handleBookmarkClick}
         aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
         aria-pressed={bookmark}
-        className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+        className="
+          absolute right-3 top-3 z-10
+          inline-flex h-8 w-8 items-center justify-center
+          rounded-md text-gray-500 transition
+          hover:text-indigo-300
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
+          focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900
+        "
       >
         {bookmark ? (
           <BookmarkIconSolid

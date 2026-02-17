@@ -1,6 +1,8 @@
 import { ContentEntity, EventEntity } from "@/lib/types/ht-types";
 
 const MAX_LINE_LEN = 75;
+const CRLF = "\r\n";
+const pad2 = (n: number) => String(n).padStart(2, "0");
 
 /** Escape special chars per RFC 5545 */
 const escapeICalText = (text = "") =>
@@ -12,15 +14,14 @@ const escapeICalText = (text = "") =>
 
 /** Format a UTC Date to iCal “YYYYMMDDTHHMMSSZ” */
 const formatICalDate = (d: Date) => {
-  const pad = (n: number) => String(n).padStart(2, "0");
   return (
     d.getUTCFullYear() +
-    pad(d.getUTCMonth() + 1) +
-    pad(d.getUTCDate()) +
+    pad2(d.getUTCMonth() + 1) +
+    pad2(d.getUTCDate()) +
     "T" +
-    pad(d.getUTCHours()) +
-    pad(d.getUTCMinutes()) +
-    pad(d.getUTCSeconds()) +
+    pad2(d.getUTCHours()) +
+    pad2(d.getUTCMinutes()) +
+    pad2(d.getUTCSeconds()) +
     "Z"
   );
 };
@@ -33,12 +34,7 @@ const foldLine = (line: string) => {
     const chunk = line.slice(pos, pos + MAX_LINE_LEN);
     pieces.push(pos === 0 ? chunk : " " + chunk);
   }
-  return pieces.join("\r\n");
-};
-
-/** Build a plain-text description including speakers */
-const buildDescription = (content: ContentEntity) => {
-  return content.description ?? "";
+  return pieces.join(CRLF);
 };
 
 /** Generate a full iCal string for an event */
@@ -48,13 +44,16 @@ export const generateICal = (
   session: EventEntity,
   locationName?: string,
 ): string => {
-  const now = new Date();
-  const dtstamp = formatICalDate(now);
+  const dtstamp = formatICalDate(new Date());
   const dtstart = formatICalDate(new Date(session.begin));
   const dtend = formatICalDate(new Date(session.end));
   const uid = `defcon-${content.id}-${session.id}@info.defcon.org`;
+  const summary = escapeICalText(content.title);
+  const description = escapeICalText(content.description ?? "");
+  const location = escapeICalText(locationName ?? "");
+  const url = `https://info.defcon.org/${conferenceSlug}/content?id=${content.id}`;
 
-  const lines = [
+  const lines: string[] = [
     "BEGIN:VCALENDAR",
     "METHOD:PUBLISH",
     "VERSION:2.0",
@@ -67,16 +66,20 @@ export const generateICal = (
     `DTEND:${dtend}`,
     "STATUS:CONFIRMED",
     "CATEGORIES:CONFERENCE",
-    `SUMMARY:${escapeICalText(content.title)}`,
-    `URL:https://info.defcon.org/${conferenceSlug}/content?id=${content.id}`,
-    `LOCATION:${escapeICalText(locationName ?? "")}`,
-    `DESCRIPTION:${escapeICalText(buildDescription(content))}`,
+    `SUMMARY:${summary}`,
+    `URL:${url}`,
+    `LOCATION:${location}`,
+    `DESCRIPTION:${description}`,
     "END:VEVENT",
     "END:VCALENDAR",
   ];
 
-  // fold and join
-  return lines.map(foldLine).join("\r\n");
+  if (lines.length === 0) return "";
+  let out = foldLine(lines[0]);
+  for (let i = 1; i < lines.length; i += 1) {
+    out += CRLF + foldLine(lines[i]);
+  }
+  return out;
 };
 
 export default generateICal;

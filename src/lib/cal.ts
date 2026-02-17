@@ -1,7 +1,5 @@
 import { ContentEntity, EventEntity } from "@/lib/types/ht-types";
 
-const BASEURL = "https://info.defcon.org";
-const PRODID = "-//hackertracker//defcon-singapore-2025 Calendar 1.0//EN";
 const MAX_LINE_LEN = 75;
 
 /** Escape special chars per RFC 5545 */
@@ -45,6 +43,7 @@ const buildDescription = (content: ContentEntity) => {
 
 /** Generate a full iCal string for an event */
 export const generateICal = (
+  conferenceSlug: string,
   content: ContentEntity,
   session: EventEntity,
   locationName?: string,
@@ -59,7 +58,7 @@ export const generateICal = (
     "BEGIN:VCALENDAR",
     "METHOD:PUBLISH",
     "VERSION:2.0",
-    `PRODID:${PRODID}`,
+    `PRODID:-//hackertracker//${conferenceSlug} Calendar 1.0//EN`,
     "BEGIN:VEVENT",
     `UID:${uid}`,
     `SEQUENCE:0`,
@@ -69,7 +68,7 @@ export const generateICal = (
     "STATUS:CONFIRMED",
     "CATEGORIES:CONFERENCE",
     `SUMMARY:${escapeICalText(content.title)}`,
-    `URL:${BASEURL}/content?id=${content.id}`,
+    `URL:https://info.defcon.org/${conferenceSlug}/content?id=${content.id}`,
     `LOCATION:${escapeICalText(locationName ?? "")}`,
     `DESCRIPTION:${escapeICalText(buildDescription(content))}`,
     "END:VEVENT",

@@ -1,10 +1,14 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import Markdown from "@/components/markdown/Markdown";
-import { ShareIcon, UserIcon } from "@heroicons/react/24/outline";
-import ContentSession from "./ContentSession";
-import { ConferenceManifest } from "@/lib/conferences";
 import {
+  ShareIcon,
+  UserIcon,
+  ArrowTopRightOnSquareIcon,
+} from "@heroicons/react/24/outline";
+import ContentSession from "./ContentSession";
+import type { ConferenceManifest } from "@/lib/conferences";
+import type {
   ContentEntity,
   EventEntity,
   LocationEntity,
@@ -12,7 +16,7 @@ import {
   TagEntity,
 } from "@/lib/types/ht-types";
 
-export default function ContentDetails(props: {
+type Props = {
   content: ContentEntity;
   sessions: EventEntity[];
   locations: LocationEntity[];
@@ -21,61 +25,130 @@ export default function ContentDetails(props: {
   tags: TagEntity[];
   bookmarks: number[];
   conference: ConferenceManifest;
-}) {
+};
+
+function safeParseMs(iso: string): number {
+  const ms = Date.parse(iso);
+  return Number.isFinite(ms) ? ms : Number.MAX_SAFE_INTEGER;
+}
+
+export default function ContentDetails(props: Props) {
   const { content, sessions, locations, people, tags, bookmarks, conference } =
     props;
+
   const peopleBasePath = `/${conference.slug}/people`;
   const contentsBasePath = `/${conference.slug}/content`;
 
-  const locationNameById = useMemo(() => {
-    const entries = locations.map(
-      (location) => [location.id, location.name] as [number, string],
-    );
-    return new Map<number, string>(entries);
-  }, [locations]);
+  const locationNameById = useMemo(
+    () => new Map<number, string>(locations.map((l) => [l.id, l.name])),
+    [locations],
+  );
+
+  // Deterministic accent color: earliest session.
+  const primarySession = useMemo(() => {
+    if (sessions.length === 0) return undefined;
+    return [...sessions].sort(
+      (a, b) => safeParseMs(a.beginIso) - safeParseMs(b.beginIso),
+    )[0];
+  }, [sessions]);
+
+  const barStyle = useMemo(
+    () =>
+      ({
+        "--event-color": primarySession?.color ?? "#9ca3af",
+      }) as React.CSSProperties,
+    [primarySession?.color],
+  );
+
+  const canShare =
+    typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: content.title,
-          url: `${contentsBasePath}?id=${content.id}`,
-        });
-      } catch {
-        console.error("Share failed");
+    const url = `${contentsBasePath}?id=${content.id}`;
+
+    try {
+      if (canShare) {
+        await navigator.share({ title: content.title, url });
+        return;
       }
+    } catch {
+      // fall through
+    }
+
+    try {
+      await navigator.clipboard.writeText(
+        new URL(url, window.location.origin).toString(),
+      );
+    } catch {
+      console.error("Copy link failed");
     }
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
-      {/* Share + Title */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white">
-          {content.title}
-        </h1>
-        {typeof navigator !== "undefined" && "share" in navigator && (
+    <div className="mx-auto max-w-5xl px-4 py-10 space-y-10">
+      {/* Title block (bar only here) */}
+      <header
+        style={barStyle}
+        className="flex items-start justify-between gap-4"
+      >
+        <div className="relative min-w-0 pl-5">
+          <span
+            aria-hidden="true"
+            className="
+              pointer-events-none absolute left-0 top-1 bottom-1
+              w-[clamp(0.3rem,2vw,0.9rem)]
+              rounded-r-md
+              bg-(--event-color)
+            "
+          />
+          <span
+            aria-hidden="true"
+            className="
+              pointer-events-none absolute left-0 top-1 bottom-1
+              w-[clamp(0.3rem,2vw,0.9rem)]
+              rounded-r-md
+              bg-linear-to-b from-white/0 to-indigo-600/20
+              mix-blend-multiply opacity-60
+            "
+          />
+
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
+            {content.title}
+          </h1>
+        </div>
+
+        <div className="shrink-0">
           <button
             type="button"
             onClick={handleShare}
             aria-label="Share"
-            className="rounded-md p-2 text-gray-400 transition hover:text-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
+            className="
+              rounded-md p-2 text-gray-400 transition
+              hover:text-gray-200
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
+              focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
+            "
           >
             <ShareIcon className="h-6 w-6" aria-hidden="true" />
           </button>
-        )}
-      </div>
+        </div>
+      </header>
 
       {/* Sessions */}
       {sessions.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-semibold text-gray-200 mb-4">
+        <section aria-labelledby="sessions-title">
+          <h2
+            id="sessions-title"
+            className="text-2xl font-semibold text-gray-200 mb-4"
+          >
             Sessions
           </h2>
+
           <ul className="space-y-4">
             {sessions.map((s) => (
               <ContentSession
                 key={s.id}
+                conferenceSlug={conference.slug}
                 session={s}
                 content={content}
                 isBookmarked={bookmarks.includes(s.id)}
@@ -88,29 +161,45 @@ export default function ContentDetails(props: {
       )}
 
       {/* Tags */}
-      <section>
-        <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
-          {tags.map((tag) => (
-            <li key={tag.id}>
-              <Link
-                href={`/${conference.slug}/tag?id=${tag.id}`}
-                className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition hover:bg-indigo-600/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
-              >
-                <span
-                  className="block h-3 w-3 rounded-full"
-                  style={{ backgroundColor: tag.colorBackground }}
-                />
-                <span>{tag.label}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {tags.length > 0 && (
+        <section aria-labelledby="tags-title">
+          <h2 id="tags-title" className="sr-only">
+            Tags
+          </h2>
+
+          <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+            {tags.map((tag) => (
+              <li key={tag.id}>
+                <Link
+                  href={`/${conference.slug}/tag?id=${tag.id}`}
+                  className="
+                    inline-flex items-center gap-2 rounded-full
+                    bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition
+                    hover:bg-indigo-600/50
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
+                    focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
+                  "
+                >
+                  <span
+                    className="h-3 w-3 rounded-full"
+                    style={{ backgroundColor: tag.colorBackground }}
+                    aria-hidden="true"
+                  />
+                  <span className="max-w-[16rem] truncate">{tag.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Description */}
       {content.description && (
-        <section>
-          <h2 className="text-2xl font-semibold text-gray-200 mb-4">
+        <section aria-labelledby="description-title">
+          <h2
+            id="description-title"
+            className="text-2xl font-semibold text-gray-200 mb-4"
+          >
             Description
           </h2>
           <div className="prose prose-invert max-w-none text-gray-300">
@@ -121,18 +210,34 @@ export default function ContentDetails(props: {
 
       {/* Links */}
       {content.links && content.links.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-semibold text-gray-200 mb-4">Links</h2>
+        <section aria-labelledby="links-title">
+          <h2
+            id="links-title"
+            className="text-2xl font-semibold text-gray-200 mb-4"
+          >
+            Links
+          </h2>
           <ul className="space-y-2">
             {content.links.map((l) => (
-              <li key={l.url}>
+              <li key={l.url} className="group">
                 <a
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-indigo-400 transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
+                  className="
+                    inline-flex items-center gap-2
+                    text-indigo-300 underline-offset-2 decoration-indigo-500/40
+                    transition-colors
+                    hover:text-indigo-200 hover:decoration-indigo-400 hover:underline
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
+                    focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
+                  "
                 >
-                  {l.label}
+                  <ArrowTopRightOnSquareIcon
+                    className="h-4 w-4 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="truncate">{l.label}</span>
                 </a>
               </li>
             ))}
@@ -142,62 +247,38 @@ export default function ContentDetails(props: {
 
       {/* People */}
       {people.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-semibold text-gray-200 mb-4">People</h2>
+        <section aria-labelledby="people-title">
+          <h2
+            id="people-title"
+            className="text-2xl font-semibold text-gray-200 mb-4"
+          >
+            People
+          </h2>
           <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
             {people.map((p) => (
               <li key={p.id}>
                 <Link
                   href={`${peopleBasePath}/?id=${p.id}`}
-                  className="inline-flex items-center space-x-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition hover:bg-indigo-600/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
+                  className="
+                    inline-flex items-center gap-2 rounded-full
+                    bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition
+                    hover:bg-indigo-600/50
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
+                    focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
+                  "
+                  title={p.name}
                 >
-                  <UserIcon className="h-4 w-4 text-indigo-300" aria-hidden />
-                  <span>{p.name}</span>
+                  <UserIcon
+                    className="h-4 w-4 text-indigo-300"
+                    aria-hidden="true"
+                  />
+                  <span className="truncate max-w-56">{p.name}</span>
                 </Link>
               </li>
             ))}
           </ul>
         </section>
       )}
-
-      {/* Related Content */}
-      {/* {related_content.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-semibold text-gray-200 mb-4">
-            Related Content
-          </h2>
-          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-            {related_content.map((rc) => (
-              <li key={rc.id}>
-                <Link
-                  href={`${contentsBasePath}?id=${rc.id}`}
-                  className="group block rounded-2xl bg-gray-800 p-6 shadow-lg hover:scale-105 transition-transform"
-                >
-                  <h3 className="text-lg font-bold text-gray-100 group-hover:text-white">
-                    {rc.title}
-                  </h3>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {rc.tags.map((tag) => (
-                      <span
-                        key={tag.id}
-                        style={{
-                          backgroundColor: tag.color_background,
-                          color: tag.color_foreground,
-                        }}
-                        className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium"
-                      >
-                        <span className="inline-block max-w-[10rem] md:max-w-[12rem] lg:max-w-[15rem] truncate">
-                          {tag.label}
-                        </span>
-                      </span>
-                    ))}
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )} */}
     </div>
   );
 }

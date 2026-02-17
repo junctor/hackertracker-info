@@ -1,4 +1,3 @@
-// src/pages/schedule/index.tsx
 import React, { useMemo, useState, useCallback } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/misc";
@@ -7,10 +6,9 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import SiteFooter from "@/features/app-shell/SiteFooter";
 import ScheduleEvents, {
-  buildScheduleDaysFromGrouped,
   ScheduleDay,
+  ScheduleEventViewModel,
 } from "@/features/schedule/ScheduleEvents";
-import { GroupedTag, GroupedTags } from "@/lib/types/info";
 import { getBookmarks } from "@/lib/storage";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -22,6 +20,14 @@ import {
 import type { GetStaticProps } from "next";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
+import {
+  EventsByDayIndex,
+  EventsByTagIndex,
+  EventsStore,
+  LocationsStore,
+  PeopleStore,
+  TagsStore,
+} from "@/lib/types/ht-types";
 
 type TagPageProps = {
   conf: ConferenceManifest;
@@ -29,6 +35,35 @@ type TagPageProps = {
 };
 
 const INITIAL_NOW_SECONDS = Math.floor(Date.now() / 1000);
+const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
+
+function getTagEventIds(tagIndex: unknown): string[] {
+  if (Array.isArray(tagIndex)) {
+    return tagIndex.map((id) => String(id));
+  }
+
+  if (!tagIndex || typeof tagIndex !== "object") {
+    return [];
+  }
+
+  const candidate = tagIndex as {
+    eventIds?: unknown;
+    ids?: unknown;
+    events?: unknown;
+  };
+
+  if (Array.isArray(candidate.eventIds)) {
+    return candidate.eventIds.map((id) => String(id));
+  }
+  if (Array.isArray(candidate.ids)) {
+    return candidate.ids.map((id) => String(id));
+  }
+  if (Array.isArray(candidate.events)) {
+    return candidate.events.map((id) => String(id));
+  }
+
+  return [];
+}
 
 export default function TagPage({ conf, activePageId }: TagPageProps) {
   const router = useRouter();
@@ -40,24 +75,192 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
   } = useNumericQueryParam(router, "id");
 
   const {
-    data: tags,
-    error,
-    isLoading,
-  } = useSWR<GroupedTags>(`${conf.dataRoot}/tags.json`, fetcher);
+    data: eventsByTag,
+    error: eventsByTagError,
+    isLoading: eventsByTagLoading,
+  } = useSWR<EventsByTagIndex>(
+    `${conf.dataRoot}/indexes/eventsByTag.json`,
+    fetcher,
+    swrOptions,
+  );
 
-  const tag: GroupedTag | null = useMemo(() => {
-    if (!tags || tagId === null) return null;
-    const tag = tags[tagId];
-    if (!tag) return null;
-    return tag;
-  }, [tags, tagId]);
+  const {
+    data: eventsByDay,
+    error: eventsByDayError,
+    isLoading: eventsByDayLoading,
+  } = useSWR<EventsByDayIndex>(
+    `${conf.dataRoot}/indexes/eventsByDay.json`,
+    fetcher,
+    swrOptions,
+  );
+
+  const {
+    data: eventsStore,
+    error: eventsError,
+    isLoading: eventsLoading,
+  } = useSWR<EventsStore>(
+    `${conf.dataRoot}/entities/events.json`,
+    fetcher,
+    swrOptions,
+  );
+
+  const {
+    data: locationsStore,
+    error: locationsError,
+    isLoading: locationsLoading,
+  } = useSWR<LocationsStore>(
+    `${conf.dataRoot}/entities/locations.json`,
+    fetcher,
+    swrOptions,
+  );
+
+  const {
+    data: tagsStore,
+    error: tagsError,
+    isLoading: tagsLoading,
+  } = useSWR<TagsStore>(
+    `${conf.dataRoot}/entities/tags.json`,
+    fetcher,
+    swrOptions,
+  );
+
+  const {
+    data: peopleStore,
+    error: peopleError,
+    isLoading: peopleLoading,
+  } = useSWR<PeopleStore>(
+    `${conf.dataRoot}/entities/people.json`,
+    fetcher,
+    swrOptions,
+  );
+
+  const loading =
+    eventsByTagLoading ||
+    eventsByDayLoading ||
+    eventsLoading ||
+    locationsLoading ||
+    tagsLoading ||
+    peopleLoading;
+  const isError =
+    eventsByTagError ||
+    eventsByDayError ||
+    eventsError ||
+    locationsError ||
+    tagsError ||
+    peopleError;
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
+  const tag = useMemo(
+    () =>
+      tagId != null
+        ? tagsStore?.byId?.[String(tagId)] ?? tagsStore?.byId?.[tagId]
+        : null,
+    [tagsStore, tagId],
+  );
+
+  const tagEventIds = useMemo(() => {
+    if (!eventsByTag || tagId === null) return new Set<string>();
+    const raw =
+      eventsByTag[String(tagId)] ??
+      (eventsByTag as Record<number, unknown>)[tagId];
+    return new Set<string>(getTagEventIds(raw));
+  }, [eventsByTag, tagId]);
+
   const days: ScheduleDay[] = useMemo(() => {
-    if (!tag) return [];
-    return buildScheduleDaysFromGrouped(tag.schedule);
-  }, [tag]);
+    if (
+      !eventsByDay ||
+      !eventsStore ||
+      !locationsStore ||
+      !tagsStore ||
+      !peopleStore ||
+      tagEventIds.size === 0
+    ) {
+      return [];
+    }
+
+    const dayKeys = Object.keys(eventsByDay).sort();
+    const result: ScheduleDay[] = [];
+    const timeFormatter = new Intl.DateTimeFormat(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    for (const day of dayKeys) {
+      const ids = eventsByDay[day] ?? [];
+      const events: ScheduleEventViewModel[] = [];
+
+      for (const eventId of ids) {
+        const eventIdKey = String(eventId);
+        if (!tagEventIds.has(eventIdKey)) continue;
+
+        const event = eventsStore.byId[eventIdKey];
+        if (!event) continue;
+
+        const locationName =
+          locationsStore.byId[String(event.locationId)]?.name ??
+          "Unknown location";
+
+        const tags: ScheduleEventViewModel["tags"] = [];
+        for (const eventTagId of event.tagIds ?? []) {
+          const eventTag = tagsStore.byId[String(eventTagId)];
+          if (!eventTag) continue;
+          tags.push({
+            id: eventTag.id,
+            label: eventTag.label,
+            colorBackground: eventTag.colorBackground,
+            colorForeground: eventTag.colorForeground,
+          });
+        }
+
+        const speakerIds =
+          event.speakerIds && event.speakerIds.length > 0
+            ? event.speakerIds
+            : (event.personIds ?? []);
+        const speakers = speakerIds
+          .map((id) => peopleStore.byId[String(id)]?.name)
+          .filter((name): name is string => Boolean(name))
+          .join(", ");
+
+        const beginDate = new Date(event.begin);
+        const endDate = new Date(event.end);
+
+        events.push({
+          id: event.id,
+          title: event.title,
+          begin: event.begin,
+          end: event.end,
+          beginDisplay: timeFormatter.format(beginDate),
+          beginIso: beginDate.toISOString(),
+          beginTimestampSeconds: Math.floor(beginDate.getTime() / 1000),
+          endDisplay: timeFormatter.format(endDate),
+          endIso: endDate.toISOString(),
+          endTimestampSeconds: Math.floor(endDate.getTime() / 1000),
+          color: event.color,
+          contentId: event.contentId,
+          locationName,
+          tags,
+          speakers: speakers.length > 0 ? speakers : null,
+        });
+      }
+
+      events.sort(
+        (a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds,
+      );
+      if (events.length > 0) {
+        result.push({ day, events });
+      }
+    }
+
+    return result;
+  }, [
+    eventsByDay,
+    eventsStore,
+    locationsStore,
+    tagsStore,
+    peopleStore,
+    tagEventIds,
+  ]);
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
@@ -90,9 +293,19 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
 
   if (!isReady) return <LoadingScreen />;
   if (isIdInvalid) return <ErrorScreen msg="Invalid tag id." />;
-  if (isLoading) return <LoadingScreen />;
-  if (error) return <ErrorScreen />;
   if (isIdMissing) return <ErrorScreen msg="Missing tag id." />;
+  if (loading) return <LoadingScreen />;
+  if (
+    isError ||
+    !eventsByTag ||
+    !eventsByDay ||
+    !eventsStore ||
+    !locationsStore ||
+    !tagsStore ||
+    !peopleStore
+  ) {
+    return <ErrorScreen />;
+  }
   if (!tag) return <ErrorScreen msg="Tag not found" />;
 
   return (

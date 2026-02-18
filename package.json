@@ -1,6 +1,6 @@
 {
   "name": "ht-info",
-  "version": "33.1.0",
+  "version": "34.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

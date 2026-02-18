@@ -30,7 +30,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-800 bg-black/90 px-4 py-3 text-white backdrop-blur sm:px-5">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+      <div className="flex w-full items-center justify-between gap-3">
         {/* Logo + Primary Nav */}
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
           <div className="flex min-w-0 items-center gap-3">
@@ -42,7 +42,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                 className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
               >
                 <span className="block md:hidden">{conference.code}</span>
-                <span className="hidden max-w-[18rem] truncate md:block">
+                <span className="hidden max-w-96 truncate md:block">
                   {conference.name}
                 </span>
               </span>

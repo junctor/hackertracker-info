@@ -97,9 +97,9 @@ export default function Home() {
               alt="DEF CON Singapore"
             />
             <ConferenceCard
-              href="/defcon33"
+              href="/dc34"
               src="/images/dc-lv.webp"
-              alt="DEF CON 33"
+              alt="DEF CON 34"
             />
           </div>
         </div>

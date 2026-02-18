@@ -1,4 +1,4 @@
-export type ConferenceSlug = "dcsg2026" | "defcon33";
+export type ConferenceSlug = "dcsg2026" | "dc34";
 
 export type SiteMenuKey =
   | "announcements"
@@ -64,36 +64,26 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     ],
   },
 
-  defcon33: {
-    slug: "defcon33",
-    code: "DEFCON33",
-    name: "DEF CON 33",
+  dc34: {
+    slug: "dc34",
+    code: "DC34",
+    name: "DEF CON 34",
 
-    dateLabel: "August 8–10, 2025",
+    dateLabel: "August 6–9, 2026",
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
     timezone: "America/Los_Angeles",
-    logoFile: "dcsingapore.webp",
+    logoFile: "dc-lv.webp",
 
-    kickoff: "2025-08-08T17:00:00Z",
-    begin: "2025-08-07T07:00:00Z",
-    end: "2025-08-11T06:59:59Z",
+    kickoff: "2026-08-07T17:00:00Z",
+    begin: "2026-08-06T07:00:00Z",
+    end: "2026-08-10T06:59:59Z",
 
-    dataRoot: "/ht/defcon33",
+    dataRoot: "/ht/dc34",
     siteMenu: [
-      "announcements",
-      "bookmarks",
       "communities",
-      "content",
       "contests",
-      "departments",
       "exhibitors",
-      "locations",
-      "maps",
-      "merch",
-      "people",
       "readme",
-      "schedule",
-      "search",
       "vendors",
       "villages",
     ],

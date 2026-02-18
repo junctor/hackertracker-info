@@ -1,3 +1,5 @@
+import { CodeBracketSquareIcon } from "@heroicons/react/16/solid";
+
 function SiteFooter() {
   return (
     <footer className="border-t border-gray-800/80 bg-gray-950/40">
@@ -6,19 +8,17 @@ function SiteFooter() {
           <span className="truncate font-medium text-gray-300">
             info.defcon.org
           </span>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="text-gray-500">DEF CON - Hacker Tracker</span>
             <a
               href="https://github.com/junctor/hackertracker-info"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded px-1 py-0.5 text-gray-400 transition hover:text-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
+              aria-label="View on GitHub"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-md"
             >
-              GitHub
+              <CodeBracketSquareIcon className="h-5 w-5" aria-hidden />
             </a>
-            <span className="text-gray-600" aria-hidden="true">
-              •
-            </span>
-            <span className="text-gray-500">DEF CON - Hacker Tracker</span>
           </div>
         </div>
       </div>

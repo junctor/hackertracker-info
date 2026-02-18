@@ -1,7 +1,6 @@
 import Countdown from "@/features/home/Countdown";
 import Image from "next/image";
 import localFont from "next/font/local";
-import { getSiteMenu } from "@/lib/menu";
 import Link from "next/link";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useRouter } from "next/router";

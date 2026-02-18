@@ -1,9 +1,4 @@
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-  useCallback,
-} from "react";
+import React, { useEffect, useMemo, useRef, useCallback } from "react";
 import { BookmarkIcon, TagIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { eventDayTable, tabDateTitle } from "@/lib/dates";
@@ -139,6 +134,7 @@ export default function ScheduleEvents({
   selectedDay,
   onSelectDay,
   bookmarks,
+  nowSeconds = Math.floor(Date.now() / 1000),
 }: {
   conf: ConferenceManifest;
   days: ScheduleDay[];
@@ -146,6 +142,7 @@ export default function ScheduleEvents({
   // eslint-disable-next-line no-unused-vars
   onSelectDay: (day: string) => void;
   bookmarks: number[];
+  nowSeconds?: number;
 }) {
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
   const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -163,10 +160,7 @@ export default function ScheduleEvents({
     const heading = headingRef.current;
     if (!heading || typeof window === "undefined") return;
     const rect = heading.getBoundingClientRect();
-    if (
-      rect.top < SITE_HEADER_OFFSET_PX ||
-      rect.bottom > window.innerHeight
-    ) {
+    if (rect.top < SITE_HEADER_OFFSET_PX || rect.bottom > window.innerHeight) {
       heading.scrollIntoView({ behavior: "auto", block: "start" });
     }
   }, [resolvedDay]);
@@ -232,9 +226,10 @@ export default function ScheduleEvents({
         conf={conf}
         event={evt}
         isBookmarked={bookmarkSet.has(evt.id)}
+        nowSeconds={nowSeconds}
       />
     ),
-    [bookmarkSet, conf],
+    [bookmarkSet, conf, nowSeconds],
   );
 
   return (
@@ -242,21 +237,21 @@ export default function ScheduleEvents({
       <div className="flex justify-end gap-2 border-b border-gray-800 bg-black/80 p-2 backdrop-blur">
         <Link
           href={`/${conf.slug}/bookmarks`}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          className="ui-focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-[#017FA4]/65 hover:text-[#017FA4] focus-visible:outline-none"
           aria-label="Filter by bookmarks"
         >
           <BookmarkIcon className="h-5 w-5" aria-hidden="true" />
         </Link>
         <Link
           href={`/${conf.slug}/tags`}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          className="ui-focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-[#017FA4]/65 hover:text-[#017FA4] focus-visible:outline-none"
           aria-label="Filter by tags"
         >
           <TagIcon className="h-5 w-5" aria-hidden="true" />
         </Link>
       </div>
 
-      <div className="sticky top-16 z-40 border-t border-gray-900/60">
+      <div className="sticky top-16 z-40 border-t border-[#0D294A]/60">
         <div
           className="flex flex-wrap items-center justify-center gap-2 border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur sm:flex-nowrap sm:justify-start sm:overflow-x-auto"
           role="tablist"
@@ -275,16 +270,22 @@ export default function ScheduleEvents({
               aria-selected={resolvedDay === day}
               aria-controls={`day-panel-${day}`}
               tabIndex={resolvedDay === day ? 0 : -1}
-              className={`flex items-center gap-1 whitespace-nowrap rounded-full border px-3 py-1 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+              className={`ui-focus-ring flex items-center gap-1 whitespace-nowrap rounded-full border px-3 py-1 text-sm transition focus-visible:outline-none ${
                 resolvedDay === day
-                  ? "border-indigo-400 bg-indigo-500/20 text-indigo-100"
-                  : "border-gray-700 text-gray-200 hover:border-indigo-400 hover:text-white"
+                  ? "border-[#017FA4]/75 bg-[#0D294A]/45 text-white"
+                  : "border-gray-700 text-gray-200 hover:border-[#017FA4]/70 hover:text-[#6CCDBB]"
               }`}
               onClick={() => onSelectDay(day)}
               onKeyDown={(e) => handleTabKeyDown(e, index, day)}
             >
               <span>{tabDateTitle(day, conf.timezone)}</span>
-              <span className="text-xs text-gray-400">({events.length})</span>
+              <span
+                className={`text-xs ${
+                  resolvedDay === day ? "text-[#6CCDBB]" : "text-gray-400"
+                }`}
+              >
+                ({events.length})
+              </span>
             </button>
           ))}
         </div>

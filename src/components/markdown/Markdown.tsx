@@ -15,14 +15,14 @@ type CodeProps = {
 
 export default function Markdown({ content }: Props) {
   return (
-    <div className="prose dark:prose-invert antialiased prose-sm sm:prose-base md:prose-lg wrap-break-word prose-headings:text-gray-100 prose-p:text-gray-200 prose-li:text-gray-200 prose-strong:text-gray-100 prose-a:text-indigo-300 hover:prose-a:text-indigo-200 prose-code:text-gray-100 prose-hr:border-gray-700 md:max-w-none">
+    <div className="prose dark:prose-invert antialiased prose-sm sm:prose-base md:prose-lg wrap-break-word prose-headings:text-gray-100 prose-p:text-gray-200 prose-li:text-gray-200 prose-strong:text-gray-100 prose-a:text-(--accent-primary) hover:prose-a:text-(--accent-success) prose-code:text-gray-100 prose-hr:border-gray-700 md:max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           a: (props) => {
             const className = [
               props.className,
-              "text-indigo-300 underline-offset-2 decoration-indigo-500/40 hover:text-indigo-200 hover:decoration-indigo-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-400",
+              "ui-link ui-focus-ring focus-visible:outline-none",
             ]
               .filter(Boolean)
               .join(" ");
@@ -47,7 +47,7 @@ export default function Markdown({ content }: Props) {
           blockquote: (props) => (
             <blockquote
               {...props}
-              className="border-l-4 border-indigo-500 pl-4 italic text-gray-200"
+              className="border-l-4 border-[#105F66] pl-4 italic text-gray-200"
             />
           ),
 

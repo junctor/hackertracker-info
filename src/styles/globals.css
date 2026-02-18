@@ -8,7 +8,17 @@
   --color-fg: #f3f4f6;
   --color-muted: #9ca3af;
   --color-border: #262626;
-  --color-accent: #6366f1;
+  --accent-danger: #e0004e;
+  --accent-warning: #f1b435;
+  --accent-deep: #0d294a;
+  --accent-teal: #105f66;
+  --accent-success: #6ccdbb;
+  --accent-primary: #017fa4;
+  --accent-on-danger: #ffffff;
+  --accent-on-warning: #0b0b0c;
+  --accent-on-success: #0b0b0c;
+  --accent-on-primary: #ffffff;
+  --color-accent: var(--accent-primary);
   --radius-1: 0.25rem;
   --radius-2: 0.5rem;
   --radius-3: 0.75rem;
@@ -50,6 +60,139 @@ button {
 
 ::selection {
   background: color-mix(in oklab, var(--color-accent), transparent 70%);
+}
+
+.ui-focus-ring:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+.ui-focus-ring-danger:focus-visible {
+  outline-color: var(--accent-danger);
+}
+
+.ui-link {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(
+    in oklab,
+    var(--accent-primary),
+    transparent 52%
+  );
+  text-underline-offset: 0.16em;
+  transition:
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+
+.ui-link:visited {
+  color: color-mix(
+    in oklab,
+    var(--accent-primary),
+    var(--accent-success) 42%
+  );
+  text-decoration-color: color-mix(
+    in oklab,
+    var(--accent-teal),
+    transparent 58%
+  );
+}
+
+.ui-link:hover {
+  color: color-mix(in oklab, var(--accent-primary), white 14%);
+  text-decoration-color: color-mix(
+    in oklab,
+    var(--accent-primary),
+    transparent 26%
+  );
+}
+
+.ui-link:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+.ui-btn-base {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-2);
+  border: 1px solid transparent;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.ui-btn-primary {
+  border-color: color-mix(in oklab, var(--accent-primary), white 18%);
+  background: var(--accent-primary);
+  color: var(--accent-on-primary);
+}
+
+.ui-btn-primary:hover {
+  background: color-mix(in oklab, var(--accent-primary), black 12%);
+}
+
+.ui-btn-secondary {
+  border-color: color-mix(in oklab, var(--accent-teal), var(--color-border) 46%);
+  background: color-mix(in oklab, var(--accent-deep), black 24%);
+  color: var(--color-fg);
+}
+
+.ui-btn-secondary:hover {
+  border-color: var(--accent-primary);
+}
+
+.ui-btn-ghost {
+  border-color: color-mix(in oklab, var(--accent-teal), var(--color-border) 58%);
+  background: transparent;
+  color: color-mix(in oklab, var(--accent-success), white 18%);
+}
+
+.ui-btn-ghost:hover {
+  border-color: var(--accent-success);
+  background: color-mix(in oklab, var(--accent-success), transparent 88%);
+  color: white;
+}
+
+.ui-btn-destructive {
+  border-color: var(--accent-danger);
+  background: color-mix(in oklab, var(--accent-danger), black 14%);
+  color: var(--accent-on-danger);
+}
+
+.ui-btn-destructive:hover {
+  background: var(--accent-danger);
+}
+
+.ui-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, var(--accent-teal), var(--color-border) 52%);
+  background: color-mix(in oklab, var(--accent-deep), black 30%);
+  color: var(--color-fg);
+}
+
+.ui-chip-attention {
+  border-color: color-mix(in oklab, var(--accent-warning), black 20%);
+  background: color-mix(in oklab, var(--accent-warning), transparent 86%);
+  color: color-mix(in oklab, var(--accent-warning), black 58%);
+}
+
+.ui-chip-live {
+  border-color: var(--accent-danger);
+  background: color-mix(in oklab, var(--accent-danger), transparent 84%);
+  color: color-mix(in oklab, var(--accent-danger), white 14%);
+}
+
+.ui-input-focus:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
 }
 
 @theme {

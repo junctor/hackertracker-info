@@ -1,4 +1,4 @@
-export type ConferenceSlug = "dcsg2026" | "dc34";
+export type ConferenceSlug = "dcsg2026" | "defcon34";
 
 export type SiteMenuKey =
   | "announcements"
@@ -64,9 +64,9 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     ],
   },
 
-  dc34: {
-    slug: "dc34",
-    code: "DC34",
+  defcon34: {
+    slug: "defcon34",
+    code: "DEFCON34",
     name: "DEF CON 34",
 
     dateLabel: "August 6–9, 2026",
@@ -78,15 +78,8 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     begin: "2026-08-06T07:00:00Z",
     end: "2026-08-10T06:59:59Z",
 
-    dataRoot: "/ht/dc34",
-    siteMenu: [
-      "communities",
-      "contests",
-      "exhibitors",
-      "readme",
-      "vendors",
-      "villages",
-    ],
+    dataRoot: "/ht/defcon34",
+    siteMenu: ["communities", "contests", "readme", "villages"],
   },
 } as const;
 

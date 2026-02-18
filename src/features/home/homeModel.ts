@@ -35,11 +35,11 @@ export const HOME_SECTION_CLASS_NAME =
 export const HOME_HERO_STACK_CLASS_NAME =
   "mx-auto flex max-w-3xl flex-col items-center justify-center text-center";
 export const HOME_HERO_LOGO_WRAP_CLASS_NAME =
-  "relative h-[124px] w-[min(520px,90vw)] sm:h-[134px] md:h-[146px] lg:h-[158px]";
+  "relative mx-auto h-40 w-11/12 max-w-2xl sm:h-44 md:h-52 lg:h-56";
 export const HOME_ACTION_LINK_CLASS_NAME =
-  "mt-5 inline-flex min-h-[44px] items-center justify-center rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+  "ui-btn-base ui-btn-primary ui-focus-ring mt-5 h-11 rounded-lg px-6 text-sm focus-visible:outline-none";
 export const HOME_MENU_TILE_CLASS_NAME =
-  "flex min-h-[120px] flex-col items-center justify-center gap-2 rounded-2xl bg-gray-800 px-4 py-5 text-center shadow-md transition motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-lg motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/85 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900";
+  "flex w-full min-w-0 min-h-32 flex-col items-center justify-center gap-2 rounded-2xl bg-gray-800 px-4 py-5 text-center shadow-md transition motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-lg motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/85 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900";
 
 export const atkinsonFont = localFont({
   src: "../../../public/fonts/atkinson-hl.woff2",
@@ -53,9 +53,20 @@ export const museoFont = localFont({
   variable: "--font-museo",
 });
 
+export function parseKickoffDateMs(kickoff: string): number {
+  const kickoffDateMs = Date.parse(kickoff);
+  if (Number.isNaN(kickoffDateMs)) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(`Invalid conference kickoff date: ${kickoff}`);
+    }
+    return 0;
+  }
+  return kickoffDateMs;
+}
+
 export function useHomeModel(conference: ConferenceManifest) {
   return useMemo(() => {
-    const kickoffDateMs = Date.parse(conference.kickoff);
+    const kickoffDateMs = parseKickoffDateMs(conference.kickoff);
     const menuHref = `/${conference.slug}/menu`;
 
     return {
@@ -81,5 +92,14 @@ export function formatCountdownValue(value: number) {
 }
 
 export function formatCountdownLiveLabel(timer: CountdownTimer) {
-  return `${timer.days} days, ${timer.hours} hours, ${timer.minutes} minutes remaining`;
+  if (
+    timer.days === 0 &&
+    timer.hours === 0 &&
+    timer.minutes === 0 &&
+    timer.seconds === 0
+  ) {
+    return "Starting now";
+  }
+
+  return `${timer.days} days, ${timer.hours} hours, ${timer.minutes} minutes, ${timer.seconds} seconds remaining`;
 }

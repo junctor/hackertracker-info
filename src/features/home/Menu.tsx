@@ -18,6 +18,13 @@ type Props = {
 export default function Menu({ conference }: Props) {
   const home = useHomeModel(conference);
   const navMenu = useMemo(() => getSiteMenu(conference), [conference]);
+  const hrefCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const item of navMenu) {
+      counts.set(item.href, (counts.get(item.href) ?? 0) + 1);
+    }
+    return counts;
+  }, [navMenu]);
 
   return (
     <section className={HOME_SECTION_CLASS_NAME}>
@@ -29,27 +36,22 @@ export default function Menu({ conference }: Props) {
             alt={home.logoAlt}
             fill
             priority
-            sizes="(min-width: 1024px) 520px, (min-width: 640px) 58vw, 90vw"
+            sizes="(min-width: 1024px) 672px, (min-width: 640px) 66vw, 92vw"
             className="object-contain"
           />
         </div>
       </div>
-      <nav aria-label={`${conference.name} sections`} className="mt-10 sm:mt-12">
-        <ul className="m-0 grid list-none grid-cols-2 gap-4 p-0 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+      <nav
+        aria-label={`${conference.name} sections`}
+        className="mt-10 sm:mt-12 grid place-items-center"
+      >
+        <ul className="m-0 grid list-none p-0 grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {navMenu.map((item) => {
             const Icon = item.icon;
             const isExternal = item.href.startsWith("http");
-            const tileContent = (
-              <>
-                <Icon className="h-6 w-6 text-gray-200" aria-hidden />
-                <span className="text-sm font-semibold text-gray-100">
-                  {item.title}
-                </span>
-              </>
-            );
 
             return (
-              <li key={item.sort_order}>
+              <li key={item.href}>
                 {isExternal ? (
                   <a
                     href={item.href}
@@ -57,11 +59,17 @@ export default function Menu({ conference }: Props) {
                     rel="noopener noreferrer"
                     className={HOME_MENU_TILE_CLASS_NAME}
                   >
-                    {tileContent}
+                    <Icon className="h-6 w-6 text-gray-200" aria-hidden />
+                    <span className="text-sm font-semibold text-gray-100 text-center leading-tight">
+                      {item.title}
+                    </span>
                   </a>
                 ) : (
                   <Link href={item.href} className={HOME_MENU_TILE_CLASS_NAME}>
-                    {tileContent}
+                    <Icon className="h-6 w-6 text-gray-200" aria-hidden />
+                    <span className="text-sm font-semibold text-gray-100 text-center leading-tight">
+                      {item.title}
+                    </span>
                   </Link>
                 )}
               </li>

@@ -42,7 +42,7 @@ export default function Splash({ conference }: Props) {
         <div className={HOME_HERO_LOGO_WRAP_CLASS_NAME}>
           <Link
             href={home.menuHref}
-            className="block h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            className="ui-focus-ring block h-full w-full rounded-md focus-visible:outline-none"
           >
             <Image
               src={home.logoSrc}
@@ -61,10 +61,7 @@ export default function Splash({ conference }: Props) {
           {conference.dateLabel}
         </time>
 
-        <Link
-          href={home.menuHref}
-          className={HOME_ACTION_LINK_CLASS_NAME}
-        >
+        <Link href={home.menuHref} className={HOME_ACTION_LINK_CLASS_NAME}>
           View Menu
         </Link>
 

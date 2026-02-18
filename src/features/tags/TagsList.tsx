@@ -29,7 +29,7 @@ function TagPill({
     <Link
       href={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className="inline-flex px-3 py-1 rounded-full text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+      className="ui-focus-ring inline-flex rounded-full border border-transparent px-3 py-1 text-sm font-medium transition hover:border-[#017FA4]/70 focus-visible:outline-none"
       style={{
         backgroundColor: tag.colorBackground,
         color: tag.colorForeground,
@@ -62,7 +62,7 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
 
           return (
             <section key={tagType.id} className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4">
+              <h2 className="mb-4 text-2xl font-semibold text-[#6CCDBB]">
                 {formatCategory(tagType.category)}
               </h2>
 

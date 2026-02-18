@@ -275,6 +275,7 @@ export default function SchedulePage({
             selectedDay={resolvedDay}
             onSelectDay={handleSelectDay}
             bookmarks={bookmarks}
+            nowSeconds={INITIAL_NOW_SECONDS}
           />
         </main>
         <SiteFooter />

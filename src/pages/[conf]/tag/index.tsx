@@ -320,7 +320,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
       <div className="min-h-screen flex flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
         <main className="flex-1 min-h-0">
-          <h1 className="text-3xl font-bold text-center mb-6 my-10">
+          <h1 className="text-3xl font-bold text-center mb-6 my-10 text-[#6CCDBB]">
             {tag.label} Schedule
           </h1>
           {days.length > 0 && resolvedDay ? (
@@ -330,6 +330,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
               selectedDay={resolvedDay}
               onSelectDay={handleSelectDay}
               bookmarks={bookmarks}
+              nowSeconds={INITIAL_NOW_SECONDS}
             />
           ) : (
             <p className="mt-8 text-center text-gray-500">

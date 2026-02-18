@@ -16,8 +16,7 @@ const museoFont = localFont({
   variable: "--font-museo",
 });
 
-const focusRingClass =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+const focusRingClass = "ui-focus-ring focus-visible:outline-none";
 
 export default function SiteHeader({ conference, activePageId }: Props) {
   const menuItems = useMemo(() => getSiteMenu(conference), [conference]);
@@ -56,7 +55,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
           <nav aria-label="Primary">
             <details className="relative">
               <summary
-                className={`flex cursor-pointer items-center gap-1 rounded-md px-3 py-2 text-sm text-gray-200 hover:text-white ${focusRingClass}`}
+                className={`flex cursor-pointer items-center gap-1 rounded-md px-3 py-2 text-sm text-gray-200 transition-colors hover:text-(--accent-primary) ${focusRingClass}`}
               >
                 <RocketLaunchIcon className="h-4 w-4 shrink-0" aria-hidden />
                 <span>Explore</span>
@@ -72,15 +71,15 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                           aria-current={isActive ? "page" : undefined}
                           className={`flex flex-col gap-1 rounded-md px-3 py-2 text-sm hover:bg-gray-900 ${focusRingClass} ${
                             isActive
-                              ? "bg-gray-900 font-semibold text-white ring-1 ring-gray-700"
-                              : "text-gray-200"
+                              ? "bg-[#0D294A]/45 font-semibold text-white ring-1 ring-[#017FA4]/60"
+                              : "text-gray-200 hover:text-(--accent-success)"
                           }`}
                         >
                           <span className="flex items-center gap-2">
                             <Icon className="h-5 w-5 shrink-0" aria-hidden />
                             <span>{title}</span>
                             {isActive ? (
-                              <span className="rounded border border-gray-600 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-gray-300">
+                              <span className="rounded border border-[#017FA4]/70 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-[#6CCDBB]">
                                 Current
                               </span>
                             ) : null}
@@ -103,7 +102,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
           <Link
             href={`/${conference.slug}/apps`}
             aria-label="Mobile Apps"
-            className={`inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-300 transition hover:bg-gray-900 hover:text-white ${focusRingClass}`}
+            className={`inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-300 transition hover:bg-[#017FA4]/15 hover:text-[#017FA4] ${focusRingClass}`}
           >
             <DevicePhoneMobileIcon className="h-5 w-5" aria-hidden />
           </Link>
@@ -112,7 +111,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View on GitHub"
-            className={`inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-300 transition hover:bg-gray-900 hover:text-white ${focusRingClass}`}
+            className={`inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-300 transition hover:bg-[#017FA4]/15 hover:text-[#017FA4] ${focusRingClass}`}
           >
             <CodeBracketSquareIcon className="h-5 w-5" aria-hidden />
           </a>

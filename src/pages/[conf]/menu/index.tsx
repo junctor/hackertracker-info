@@ -7,7 +7,6 @@ import {
 } from "@/lib/next-static";
 import type { GetStaticProps } from "next";
 import Head from "next/head";
-import React from "react";
 
 type MenuPageProps = {
   conf: ConferenceManifest;
@@ -17,7 +16,7 @@ export default function MenuPage({ conf }: MenuPageProps) {
   return (
     <>
       <Head>
-        <title>info.defcon.org</title>
+        <title>{`${conf.name} | info.defcon.org`}</title>
         <meta name="description" content={conf.name} />
         <link rel="icon" href="/favicon.ico" />
       </Head>

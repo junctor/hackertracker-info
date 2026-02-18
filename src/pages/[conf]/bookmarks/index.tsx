@@ -10,6 +10,7 @@ import ScheduleEvents, {
   ScheduleEventViewModel,
 } from "@/features/schedule/ScheduleEvents";
 import { getBookmarks } from "@/lib/storage";
+import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import Head from "next/head";
 import { ConferenceManifest } from "@/lib/conferences";
 import {
@@ -31,7 +32,6 @@ type BookmarksPageProps = {
   activePageId: PageId;
 };
 
-const INITIAL_NOW_SECONDS = Math.floor(Date.now() / 1000);
 const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
 
 type EventViewModelContext = {
@@ -152,6 +152,7 @@ export default function BookmarksPage({
   conf,
   activePageId,
 }: BookmarksPageProps) {
+  const nowSeconds = useNowSeconds();
   const {
     data: eventsByDay,
     error: eventsByDayError,
@@ -319,7 +320,6 @@ export default function BookmarksPage({
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
-    const nowSeconds = INITIAL_NOW_SECONDS;
     for (const { day, events } of days) {
       for (const event of events) {
         if (
@@ -331,7 +331,7 @@ export default function BookmarksPage({
       }
     }
     return days[0].day;
-  }, [days]);
+  }, [days, nowSeconds]);
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
 
@@ -384,6 +384,7 @@ export default function BookmarksPage({
               selectedDay={resolvedDay}
               onSelectDay={handleSelectDay}
               bookmarks={scheduleBookmarks}
+              nowSeconds={nowSeconds}
             />
           ) : (
             <p className="mt-8 text-center text-gray-500">

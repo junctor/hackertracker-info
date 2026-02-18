@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { BookmarkIcon as BookmarkIconOutline } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import { addBookmark, getBookmarks, removeBookmark } from "@/lib/storage";
+import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import type { ScheduleEventViewModel } from "./ScheduleEvents";
 import { ConferenceManifest } from "@/lib/conferences";
 
@@ -19,24 +19,12 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   isBookmarked,
   nowSeconds,
 }: Props) {
-  const [bookmark, setBookmark] = useState<boolean>(() => {
-    if (typeof window === "undefined") return isBookmarked;
-    return getBookmarks().includes(event.id);
-  });
+  const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
 
   const href = `/${conf.slug}/content/?id=${event.contentId}`;
   const barStyle = {
     "--event-color": event.color ?? "#fff",
   } as React.CSSProperties;
-
-  const toggleBookmark = () => {
-    setBookmark((prev) => {
-      const next = !prev;
-      if (next) addBookmark(event.id);
-      else removeBookmark(event.id);
-      return next;
-    });
-  };
 
   const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

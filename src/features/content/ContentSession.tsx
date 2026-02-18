@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, type CSSProperties, type MouseEvent } from "react";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import cal from "@/lib/cal";
 import { eventTime, formatSessionTime } from "@/lib/dates";
@@ -40,7 +40,7 @@ export default function ContentSession({
     return `data:text/calendar;charset=utf8,${encodeURIComponent(ics)}`;
   }, [conferenceSlug, content, session, locationName]);
 
-  const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleBookmarkClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     toggleBookmark();
   };
@@ -58,7 +58,7 @@ export default function ContentSession({
       style={
         {
           "--event-color": session.color ?? "#9ca3af",
-        } as React.CSSProperties
+        } as CSSProperties
       }
     >
       {/* Accent bar: matches list row style, full height of the card */}

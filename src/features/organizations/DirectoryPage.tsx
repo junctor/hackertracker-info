@@ -58,7 +58,7 @@ export default function DirectoryPage({
     error: tagError,
     isLoading: tagIsLoading,
   } = useSWR<DerivedTagIdsByLabel>(
-    `${conf.dataRoot}/derived/TagIdsByLabel.json`,
+    `${conf.dataRoot}/derived/tagIdsByLabel.json`,
     fetcher,
     { revalidateOnFocus: false },
   );

@@ -87,11 +87,7 @@ button {
 }
 
 .ui-link:visited {
-  color: color-mix(
-    in oklab,
-    var(--accent-primary),
-    var(--accent-success) 42%
-  );
+  color: color-mix(in oklab, var(--accent-primary), var(--accent-success) 42%);
   text-decoration-color: color-mix(
     in oklab,
     var(--accent-teal),
@@ -138,7 +134,11 @@ button {
 }
 
 .ui-btn-secondary {
-  border-color: color-mix(in oklab, var(--accent-teal), var(--color-border) 46%);
+  border-color: color-mix(
+    in oklab,
+    var(--accent-teal),
+    var(--color-border) 46%
+  );
   background: color-mix(in oklab, var(--accent-deep), black 24%);
   color: var(--color-fg);
 }
@@ -148,7 +148,11 @@ button {
 }
 
 .ui-btn-ghost {
-  border-color: color-mix(in oklab, var(--accent-teal), var(--color-border) 58%);
+  border-color: color-mix(
+    in oklab,
+    var(--accent-teal),
+    var(--color-border) 58%
+  );
   background: transparent;
   color: color-mix(in oklab, var(--accent-success), white 18%);
 }
@@ -173,7 +177,8 @@ button {
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  border: 1px solid color-mix(in oklab, var(--accent-teal), var(--color-border) 52%);
+  border: 1px solid
+    color-mix(in oklab, var(--accent-teal), var(--color-border) 52%);
   background: color-mix(in oklab, var(--accent-deep), black 30%);
   color: var(--color-fg);
 }

@@ -72,7 +72,9 @@ export default function Countdown({
     hasKickoffPassed(home.kickoffDateMs),
   );
   const [timer, setTimer] = useState<CountdownTimer>(() =>
-    expired ? EMPTY_COUNTDOWN_TIMER : getCountdown(home.kickoffDateMs),
+    hasKickoffPassed(home.kickoffDateMs)
+      ? EMPTY_COUNTDOWN_TIMER
+      : getCountdown(home.kickoffDateMs),
   );
 
   const daysRef = useRef<HTMLSpanElement | null>(null);
@@ -82,14 +84,6 @@ export default function Countdown({
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    const nowMs = Date.now();
-    const isExpired = hasKickoffPassed(home.kickoffDateMs, nowMs);
-    setExpired(isExpired);
-    setTimer(isExpired ? EMPTY_COUNTDOWN_TIMER : getCountdown(home.kickoffDateMs));
-  }, [home.kickoffDateMs]);
-
-  useEffect(() => {
-    if (expired) return;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     const tick = () => {
@@ -104,22 +98,24 @@ export default function Countdown({
       timeoutId = setTimeout(tick, 1000 - (nowMs % 1000));
     };
 
-    tick();
+    timeoutId = setTimeout(tick, 0);
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [expired, home.kickoffDateMs]);
+  }, [home.kickoffDateMs]);
 
-  const valueRefs: Record<TimerUnitKey, RefObject<HTMLSpanElement | null>> =
-    useMemo(
-      () => ({
-        days: daysRef,
-        hours: hoursRef,
-        minutes: minutesRef,
-        seconds: secondsRef,
-      }),
-      [],
-    );
+  const valueRefs: Record<
+    TimerUnitKey,
+    RefObject<HTMLSpanElement | null>
+  > = useMemo(
+    () => ({
+      days: daysRef,
+      hours: hoursRef,
+      minutes: minutesRef,
+      seconds: secondsRef,
+    }),
+    [],
+  );
 
   useFlipAnimation(
     daysRef,
@@ -146,10 +142,7 @@ export default function Countdown({
     prefersReducedMotion,
   );
 
-  const liveLabel = useMemo(
-    () => formatCountdownLiveLabel(timer),
-    [timer.days, timer.hours, timer.minutes],
-  );
+  const liveLabel = useMemo(() => formatCountdownLiveLabel(timer), [timer]);
 
   if (expired) return null;
 

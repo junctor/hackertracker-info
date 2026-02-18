@@ -134,7 +134,7 @@ export default function ScheduleEvents({
   selectedDay,
   onSelectDay,
   bookmarks,
-  nowSeconds = Math.floor(Date.now() / 1000),
+  nowSeconds = 0,
 }: {
   conf: ConferenceManifest;
   days: ScheduleDay[];

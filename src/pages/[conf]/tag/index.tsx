@@ -10,6 +10,7 @@ import ScheduleEvents, {
   ScheduleEventViewModel,
 } from "@/features/schedule/ScheduleEvents";
 import { getBookmarks } from "@/lib/storage";
+import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -34,7 +35,6 @@ type TagPageProps = {
   activePageId: PageId;
 };
 
-const INITIAL_NOW_SECONDS = Math.floor(Date.now() / 1000);
 const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
 
 function getTagEventIds(tagIndex: unknown): string[] {
@@ -67,6 +67,7 @@ function getTagEventIds(tagIndex: unknown): string[] {
 
 export default function TagPage({ conf, activePageId }: TagPageProps) {
   const router = useRouter();
+  const nowSeconds = useNowSeconds();
   const {
     value: tagId,
     isReady,
@@ -184,6 +185,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     const timeFormatter = new Intl.DateTimeFormat(undefined, {
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: conf.timezone,
     });
 
     for (const day of dayKeys) {
@@ -258,11 +260,11 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     tagsStore,
     peopleStore,
     tagEventIds,
+    conf.timezone,
   ]);
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
-    const nowSeconds = INITIAL_NOW_SECONDS;
     for (const { day, events } of days) {
       for (const event of events) {
         if (
@@ -274,7 +276,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
       }
     }
     return days[0].day;
-  }, [days]);
+  }, [days, nowSeconds]);
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
 
@@ -330,7 +332,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
               selectedDay={resolvedDay}
               onSelectDay={handleSelectDay}
               bookmarks={bookmarks}
-              nowSeconds={INITIAL_NOW_SECONDS}
+              nowSeconds={nowSeconds}
             />
           ) : (
             <p className="mt-8 text-center text-gray-500">

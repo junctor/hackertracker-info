@@ -18,13 +18,6 @@ type Props = {
 export default function Menu({ conference }: Props) {
   const home = useHomeModel(conference);
   const navMenu = useMemo(() => getSiteMenu(conference), [conference]);
-  const hrefCounts = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const item of navMenu) {
-      counts.set(item.href, (counts.get(item.href) ?? 0) + 1);
-    }
-    return counts;
-  }, [navMenu]);
 
   return (
     <section className={HOME_SECTION_CLASS_NAME}>

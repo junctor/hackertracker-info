@@ -13,6 +13,7 @@ import ScheduleEvents, {
   ScheduleEventViewModel,
 } from "@/features/schedule/ScheduleEvents";
 import { getBookmarks } from "@/lib/storage";
+import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { ConferenceManifest } from "@/lib/conferences";
 import {
   buildConferenceStaticPaths,
@@ -38,13 +39,13 @@ type ScheduleDay = {
 };
 
 const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
-const INITIAL_NOW_SECONDS = Math.floor(Date.now() / 1000);
 
 export default function SchedulePage({
   conf,
   activePageId,
 }: SchedulePageProps) {
   const router = useRouter();
+  const nowSeconds = useNowSeconds();
 
   const {
     data: eventsByDay,
@@ -114,6 +115,7 @@ export default function SchedulePage({
     const timeFormatter = new Intl.DateTimeFormat(undefined, {
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: conf.timezone,
     });
 
     for (const day of dayKeys) {
@@ -175,15 +177,20 @@ export default function SchedulePage({
     }
 
     return result;
-  }, [eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore]);
+  }, [
+    conf.timezone,
+    eventsByDay,
+    eventsStore,
+    locationsStore,
+    tagsStore,
+    peopleStore,
+  ]);
 
   const daySet = useMemo(() => new Set(days.map((d) => d.day)), [days]);
 
   const defaultDay = useMemo(() => {
     // Pick in-progress day first, then fall back to earliest day.
     if (days.length === 0) return null;
-
-    const nowSeconds = INITIAL_NOW_SECONDS;
 
     for (const { day, events } of days) {
       for (const event of events) {
@@ -201,7 +208,7 @@ export default function SchedulePage({
     }
 
     return days[0].day;
-  }, [days]);
+  }, [days, nowSeconds]);
 
   const dayParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -275,7 +282,7 @@ export default function SchedulePage({
             selectedDay={resolvedDay}
             onSelectDay={handleSelectDay}
             bookmarks={bookmarks}
-            nowSeconds={INITIAL_NOW_SECONDS}
+            nowSeconds={nowSeconds}
           />
         </main>
         <SiteFooter />

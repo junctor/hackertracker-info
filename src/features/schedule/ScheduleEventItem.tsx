@@ -46,7 +46,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
     <article
       style={barStyle}
       className="
-        group relative overflow-hidden
+        group relative min-w-0 overflow-hidden
         flex w-full flex-col gap-4
         rounded-lg border border-gray-800 bg-gray-900/40
         pl-4 pr-4 py-3

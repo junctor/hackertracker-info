@@ -3,7 +3,6 @@ import React, {
   useMemo,
   useRef,
   useCallback,
-  useState,
 } from "react";
 import { BookmarkIcon, TagIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -91,6 +90,8 @@ const VIRTUOSO_COMPONENTS: Components<ScheduleEventViewModel, VirtuosoContext> =
     Item: VirtuosoItem,
   };
 
+const SITE_HEADER_OFFSET_PX = 64;
+
 export function buildScheduleDaysFromGrouped(
   dateGroup: GroupedSchedule,
 ): ScheduleDay[] {
@@ -149,12 +150,6 @@ export default function ScheduleEvents({
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
   const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const [scrollParent, setScrollParent] = useState<HTMLDivElement | null>(null);
-  const setScrollParentRef = useCallback((node: HTMLDivElement | null) => {
-    if (node) {
-      setScrollParent(node);
-    }
-  }, []);
 
   const resolvedDay = useMemo(() => {
     if (selectedDay && days.some(({ day }) => day === selectedDay)) {
@@ -166,13 +161,15 @@ export default function ScheduleEvents({
   useEffect(() => {
     if (!resolvedDay) return;
     const heading = headingRef.current;
-    if (!heading || !scrollParent) return;
+    if (!heading || typeof window === "undefined") return;
     const rect = heading.getBoundingClientRect();
-    const parentRect = scrollParent.getBoundingClientRect();
-    if (rect.top < parentRect.top || rect.bottom > parentRect.bottom) {
+    if (
+      rect.top < SITE_HEADER_OFFSET_PX ||
+      rect.bottom > window.innerHeight
+    ) {
       heading.scrollIntoView({ behavior: "auto", block: "start" });
     }
-  }, [resolvedDay, scrollParent]);
+  }, [resolvedDay]);
 
   const handleTabKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLButtonElement>, index: number, day: string) => {
@@ -242,87 +239,82 @@ export default function ScheduleEvents({
 
   return (
     <div className="text-gray-100">
-      <div
-        ref={setScrollParentRef}
-        className="max-h-[calc(100dvh-4rem)] overflow-y-auto"
-      >
-        <div className="sticky top-0 z-40">
-          <div className="flex justify-end gap-2 border-b border-gray-800 bg-black/80 p-2 backdrop-blur">
-            <Link
-              href={`/${conf.slug}/bookmarks`}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-              aria-label="Filter by bookmarks"
-            >
-              <BookmarkIcon className="h-5 w-5" aria-hidden="true" />
-            </Link>
-            <Link
-              href={`/${conf.slug}/tags`}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-              aria-label="Filter by tags"
-            >
-              <TagIcon className="h-5 w-5" aria-hidden="true" />
-            </Link>
-          </div>
-
-          <div
-            className="flex items-center gap-2 overflow-x-auto border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur"
-            role="tablist"
-            aria-label="Schedule days"
-            aria-orientation="horizontal"
-          >
-            {days.map(({ day, events }, index) => (
-              <button
-                key={day}
-                ref={(el) => {
-                  tabButtonRefs.current[day] = el;
-                }}
-                id={`day-tab-${day}`}
-                type="button"
-                role="tab"
-                aria-selected={resolvedDay === day}
-                aria-controls={`day-panel-${day}`}
-                tabIndex={resolvedDay === day ? 0 : -1}
-                className={`mx-1 flex shrink-0 items-center gap-1 rounded-full border px-3 py-1 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
-                  resolvedDay === day
-                    ? "border-indigo-400 bg-indigo-500/20 text-indigo-100"
-                    : "border-gray-700 text-gray-200 hover:border-indigo-400 hover:text-white"
-                }`}
-                onClick={() => onSelectDay(day)}
-                onKeyDown={(e) => handleTabKeyDown(e, index, day)}
-              >
-                <span>{tabDateTitle(day, conf.timezone)}</span>
-                <span className="text-xs text-gray-400">({events.length})</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {activeDay && (
-          <section
-            id={`day-panel-${activeDay.day}`}
-            role="tabpanel"
-            aria-labelledby={`day-tab-${activeDay.day}`}
-            tabIndex={0}
-          >
-            <h2
-              ref={headingRef}
-              className="scroll-mt-28 ml-5 mt-6 mb-3 text-xl font-bold text-gray-100 md:text-2xl"
-            >
-              {eventDayTable(activeDay.day, conf.timezone)}
-            </h2>
-            <div className="px-5">
-              <Virtuoso
-                customScrollParent={scrollParent ?? undefined}
-                data={activeDay.events}
-                computeItemKey={computeItemKey}
-                components={VIRTUOSO_COMPONENTS}
-                itemContent={itemContent}
-                increaseViewportBy={{ top: 200, bottom: 400 }}
-              />
-            </div>
-          </section>
-        )}
+      <div className="flex justify-end gap-2 border-b border-gray-800 bg-black/80 p-2 backdrop-blur">
+        <Link
+          href={`/${conf.slug}/bookmarks`}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          aria-label="Filter by bookmarks"
+        >
+          <BookmarkIcon className="h-5 w-5" aria-hidden="true" />
+        </Link>
+        <Link
+          href={`/${conf.slug}/tags`}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-gray-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          aria-label="Filter by tags"
+        >
+          <TagIcon className="h-5 w-5" aria-hidden="true" />
+        </Link>
       </div>
+
+      <div className="sticky top-16 z-40 border-t border-gray-900/60">
+        <div
+          className="flex flex-wrap items-center justify-center gap-2 border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur sm:flex-nowrap sm:justify-start sm:overflow-x-auto"
+          role="tablist"
+          aria-label="Schedule days"
+          aria-orientation="horizontal"
+        >
+          {days.map(({ day, events }, index) => (
+            <button
+              key={day}
+              ref={(el) => {
+                tabButtonRefs.current[day] = el;
+              }}
+              id={`day-tab-${day}`}
+              type="button"
+              role="tab"
+              aria-selected={resolvedDay === day}
+              aria-controls={`day-panel-${day}`}
+              tabIndex={resolvedDay === day ? 0 : -1}
+              className={`flex items-center gap-1 whitespace-nowrap rounded-full border px-3 py-1 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+                resolvedDay === day
+                  ? "border-indigo-400 bg-indigo-500/20 text-indigo-100"
+                  : "border-gray-700 text-gray-200 hover:border-indigo-400 hover:text-white"
+              }`}
+              onClick={() => onSelectDay(day)}
+              onKeyDown={(e) => handleTabKeyDown(e, index, day)}
+            >
+              <span>{tabDateTitle(day, conf.timezone)}</span>
+              <span className="text-xs text-gray-400">({events.length})</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {activeDay && (
+        <section
+          id={`day-panel-${activeDay.day}`}
+          role="tabpanel"
+          aria-labelledby={`day-tab-${activeDay.day}`}
+          tabIndex={0}
+        >
+          <h2
+            ref={headingRef}
+            className="scroll-mt-28 ml-5 mt-6 mb-3 text-xl font-bold text-gray-100 md:text-2xl"
+          >
+            {eventDayTable(activeDay.day, conf.timezone)}
+          </h2>
+          <div className="px-5">
+            <Virtuoso
+              useWindowScroll
+              data={activeDay.events}
+              computeItemKey={computeItemKey}
+              components={VIRTUOSO_COMPONENTS}
+              itemContent={itemContent}
+              increaseViewportBy={{ top: 200, bottom: 400 }}
+            />
+          </div>
+        </section>
+      )}
     </div>
   );
 }

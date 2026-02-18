@@ -267,7 +267,7 @@ export default function SchedulePage({
       </Head>
       <div className="min-h-screen flex flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main className="flex-1 min-h-0">
           <h1 className="sr-only">Schedule</h1>
           <ScheduleEvents
             conf={conf}

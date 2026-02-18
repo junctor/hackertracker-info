@@ -154,7 +154,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
   const tag = useMemo(
     () =>
       tagId != null
-        ? tagsStore?.byId?.[String(tagId)] ?? tagsStore?.byId?.[tagId]
+        ? (tagsStore?.byId?.[String(tagId)] ?? tagsStore?.byId?.[tagId])
         : null,
     [tagsStore, tagId],
   );
@@ -244,9 +244,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
         });
       }
 
-      events.sort(
-        (a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds,
-      );
+      events.sort((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds);
       if (events.length > 0) {
         result.push({ day, events });
       }
@@ -321,7 +319,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
       </Head>
       <div className="min-h-screen flex flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main className="flex-1 min-h-0">
           <h1 className="text-3xl font-bold text-center mb-6 my-10">
             {tag.label} Schedule
           </h1>

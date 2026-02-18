@@ -47,7 +47,7 @@ export default function Splash({ conference }: Props) {
               alt={conference.name}
               fill
               priority
-              sizes="(min-width: 768px) 480px, 60vw"
+              sizes="(min-width: 1024px) 480px, (min-width: 640px) 46vw, 92vw"
               style={{ objectFit: "contain" }}
             />
           </Link>
@@ -59,6 +59,15 @@ export default function Splash({ conference }: Props) {
         >
           {conference.dateLabel}
         </time>
+
+        {/* Menu Link */}
+        <Link
+          href={`/${conference.slug}/menu`}
+          className="mt-4 inline-block rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+        >
+          View Menu
+        </Link>
+
         {/* Countdown */}
         {!hasKickoffPassed && <Countdown conference={conference} />}
       </div>

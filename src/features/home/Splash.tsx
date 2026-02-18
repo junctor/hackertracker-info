@@ -1,16 +1,18 @@
 import Countdown from "@/features/home/Countdown";
 import Image from "next/image";
-import localFont from "next/font/local";
 import Link from "next/link";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-
-const museoFont = localFont({
-  src: "../../../public/fonts/Museo700-Regular.woff2",
-  display: "swap",
-  variable: "--font-museo",
-});
+import {
+  hasKickoffPassed,
+  HOME_ACTION_LINK_CLASS_NAME,
+  HOME_HERO_LOGO_WRAP_CLASS_NAME,
+  HOME_HERO_STACK_CLASS_NAME,
+  HOME_SECTION_CLASS_NAME,
+  museoFont,
+  useHomeModel,
+} from "@/features/home/homeModel";
 
 type Props = {
   conference: ConferenceManifest;
@@ -18,58 +20,55 @@ type Props = {
 
 export default function Splash({ conference }: Props) {
   const router = useRouter();
-
-  const kickoffDateMs = new Date(conference.kickoff).valueOf();
-  const now = Date.now();
-  const hasKickoffPassed = now >= kickoffDateMs;
+  const home = useHomeModel(conference);
+  const hasKickoffStarted = hasKickoffPassed(home.kickoffDateMs);
 
   useEffect(() => {
-    if (hasKickoffPassed) {
-      router.replace(`/${conference.slug}/menu`);
-    }
-  }, [hasKickoffPassed, conference.slug, router]);
+    const redirectIfLive = () => {
+      if (hasKickoffPassed(home.kickoffDateMs)) {
+        router.replace(home.menuHref);
+      }
+    };
+
+    redirectIfLive();
+    const intervalId = setInterval(redirectIfLive, 60_000);
+    return () => clearInterval(intervalId);
+  }, [home.kickoffDateMs, home.menuHref, router]);
 
   return (
-    <section className="py-16 max-w-6xl mx-auto px-4">
-      {/* Hero */}
-      <div className="text-center space-y-4 align-middle items-center justify-center flex flex-col">
+    <section className={HOME_SECTION_CLASS_NAME}>
+      <div className={`${HOME_HERO_STACK_CLASS_NAME} space-y-4`}>
         <h1 className="sr-only">{conference.name}</h1>
-        <div
-          style={{
-            position: "relative",
-            width: "min(480px, 60vw)",
-            height: 120,
-          }}
-        >
-          <Link href={`/${conference.slug}/menu`}>
+        <div className={HOME_HERO_LOGO_WRAP_CLASS_NAME}>
+          <Link
+            href={home.menuHref}
+            className="block h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          >
             <Image
-              src={`/images/${conference.logoFile}`}
-              alt={conference.name}
+              src={home.logoSrc}
+              alt={home.logoAlt}
               fill
               priority
-              sizes="(min-width: 1024px) 480px, (min-width: 640px) 46vw, 92vw"
-              style={{ objectFit: "contain" }}
+              sizes="(min-width: 1024px) 520px, (min-width: 640px) 52vw, 90vw"
+              className="object-contain"
             />
           </Link>
         </div>
-        {/* Date */}
         <time
           dateTime={conference.begin}
-          className={`text-xs sm:text-sm md:text-base text-gray-300/90 uppercase tracking-[0.16em] sm:tracking-[0.22em] ${museoFont.className}`}
+          className={`text-xs uppercase tracking-[0.16em] text-gray-300/90 sm:text-sm sm:tracking-[0.22em] md:text-base ${museoFont.className}`}
         >
           {conference.dateLabel}
         </time>
 
-        {/* Menu Link */}
         <Link
-          href={`/${conference.slug}/menu`}
-          className="mt-4 inline-block rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          href={home.menuHref}
+          className={HOME_ACTION_LINK_CLASS_NAME}
         >
           View Menu
         </Link>
 
-        {/* Countdown */}
-        {!hasKickoffPassed && <Countdown conference={conference} />}
+        {!hasKickoffStarted && <Countdown conference={conference} />}
       </div>
     </section>
   );

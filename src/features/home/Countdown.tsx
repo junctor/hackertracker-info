@@ -1,30 +1,65 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { getCountdown } from "@/lib/timer";
-import localFont from "next/font/local";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ConferenceManifest } from "@/lib/conferences";
+import {
+  atkinsonFont,
+  COUNTDOWN_UNITS,
+  COUNTDOWN_UNIT_COLORS,
+  EMPTY_COUNTDOWN_TIMER,
+  formatCountdownLiveLabel,
+  formatCountdownValue,
+  hasKickoffPassed,
+  museoFont,
+  TimerUnitKey,
+  useHomeModel,
+  type CountdownTimer,
+} from "@/features/home/homeModel";
 
-interface Timer {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
+function usePrefersReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setPrefersReducedMotion(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
+  return prefersReducedMotion;
 }
 
-const atkinsonFont = localFont({
-  src: "../../../public/fonts/atkinson-hl.woff2",
-  display: "swap",
-  variable: "--font-atkinson",
-});
-const museoFont = localFont({
-  src: "../../../public/fonts/Museo700-Regular.woff2",
-  display: "swap",
-  variable: "--font-museo",
-});
+function flip(el: HTMLElement | null, color: string) {
+  if (!el) return;
+  gsap.fromTo(
+    el,
+    { y: 10, opacity: 0, color },
+    {
+      y: 0,
+      opacity: 1,
+      duration: 0.3,
+      ease: "power2.out",
+      overwrite: "auto",
+      onComplete: () => {
+        gsap.to(el, { color: "#fff", duration: 0.2, ease: "power2.out" });
+      },
+    },
+  );
+}
 
-function padTime(num: number) {
-  return num.toString().padStart(2, "0");
+function useFlipAnimation(
+  ref: RefObject<HTMLElement | null>,
+  value: number,
+  color: string,
+  prefersReducedMotion: boolean,
+) {
+  useGSAP(() => {
+    if (prefersReducedMotion) return;
+    flip(ref.current, color);
+  }, [color, prefersReducedMotion, value]);
 }
 
 export default function Countdown({
@@ -32,139 +67,121 @@ export default function Countdown({
 }: {
   conference: ConferenceManifest;
 }) {
-  const [expired, setExpired] = useState(false);
-  const [timer, setTimer] = useState<Timer>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  const home = useHomeModel(conference);
+  const [expired, setExpired] = useState(() =>
+    hasKickoffPassed(home.kickoffDateMs),
+  );
+  const [timer, setTimer] = useState<CountdownTimer>(() =>
+    expired ? EMPTY_COUNTDOWN_TIMER : getCountdown(home.kickoffDateMs),
+  );
 
-  const daysRef = useRef<HTMLDivElement>(null);
-  const hoursRef = useRef<HTMLDivElement>(null);
-  const minutesRef = useRef<HTMLDivElement>(null);
-  const secondsRef = useRef<HTMLDivElement>(null);
-
-  const prefersReducedMotion = useMemo(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }, []);
+  const daysRef = useRef<HTMLSpanElement | null>(null);
+  const hoursRef = useRef<HTMLSpanElement | null>(null);
+  const minutesRef = useRef<HTMLSpanElement | null>(null);
+  const secondsRef = useRef<HTMLSpanElement | null>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    const kickoffDateMs = new Date(conference.kickoff).valueOf();
+    const nowMs = Date.now();
+    const isExpired = hasKickoffPassed(home.kickoffDateMs, nowMs);
+    setExpired(isExpired);
+    setTimer(isExpired ? EMPTY_COUNTDOWN_TIMER : getCountdown(home.kickoffDateMs));
+  }, [home.kickoffDateMs]);
+
+  useEffect(() => {
+    if (expired) return;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
     const tick = () => {
-      const now = Date.now();
-      if (now >= kickoffDateMs) {
+      const nowMs = Date.now();
+      if (hasKickoffPassed(home.kickoffDateMs, nowMs)) {
         setExpired(true);
-        clearInterval(intervalId);
-      } else {
-        setTimer(getCountdown(kickoffDateMs));
+        setTimer(EMPTY_COUNTDOWN_TIMER);
+        return;
       }
+
+      setTimer(getCountdown(home.kickoffDateMs));
+      timeoutId = setTimeout(tick, 1000 - (nowMs % 1000));
     };
 
-    const intervalId = setInterval(tick, 1000);
     tick();
-    return () => clearInterval(intervalId);
-  }, [conference.kickoff]);
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [expired, home.kickoffDateMs]);
 
-  const flip = (el: HTMLElement | null, color: string) => {
-    if (!el) return;
-    gsap.fromTo(
-      el,
-      { y: 10, opacity: 0, color },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.3,
-        ease: "power2.out",
-        overwrite: "auto",
-        onComplete: () => {
-          gsap.to(el, { color: "#fff", duration: 0.2, ease: "power2.out" });
-        },
-      },
+  const valueRefs: Record<TimerUnitKey, RefObject<HTMLSpanElement | null>> =
+    useMemo(
+      () => ({
+        days: daysRef,
+        hours: hoursRef,
+        minutes: minutesRef,
+        seconds: secondsRef,
+      }),
+      [],
     );
-  };
 
-  useGSAP(() => {
-    if (prefersReducedMotion) return;
-    flip(daysRef.current, "#47A");
-  }, [prefersReducedMotion, timer.days]);
-  useGSAP(() => {
-    if (prefersReducedMotion) return;
-    flip(hoursRef.current, "#E67");
-  }, [prefersReducedMotion, timer.hours]);
-  useGSAP(() => {
-    if (prefersReducedMotion) return;
-    flip(minutesRef.current, "#5dc6cc");
-  }, [prefersReducedMotion, timer.minutes]);
-  useGSAP(() => {
-    if (prefersReducedMotion) return;
-    flip(secondsRef.current, "#de700f");
-  }, [prefersReducedMotion, timer.seconds]);
+  useFlipAnimation(
+    daysRef,
+    timer.days,
+    COUNTDOWN_UNIT_COLORS.days,
+    prefersReducedMotion,
+  );
+  useFlipAnimation(
+    hoursRef,
+    timer.hours,
+    COUNTDOWN_UNIT_COLORS.hours,
+    prefersReducedMotion,
+  );
+  useFlipAnimation(
+    minutesRef,
+    timer.minutes,
+    COUNTDOWN_UNIT_COLORS.minutes,
+    prefersReducedMotion,
+  );
+  useFlipAnimation(
+    secondsRef,
+    timer.seconds,
+    COUNTDOWN_UNIT_COLORS.seconds,
+    prefersReducedMotion,
+  );
+
+  const liveLabel = useMemo(
+    () => formatCountdownLiveLabel(timer),
+    [timer.days, timer.hours, timer.minutes],
+  );
 
   if (expired) return null;
 
   return (
-    <div className="grid place-items-center mt-3 md:mt-10 text-center mx-5 grid-cols-2 sm:grid-cols-4 gap-4 px-20">
-      {/** Days **/}
-      <div>
-        <span
-          ref={daysRef}
-          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block dc-purple ${atkinsonFont.className}`}
-        >
-          {padTime(timer.days)}
-        </span>
-        <span
-          className={`text-xs sm:text-sm md:text-base lg:text-lg ${museoFont.className}`}
-        >
-          days
-        </span>
+    <section
+      aria-label="Countdown to conference kickoff"
+      className="mt-4 w-full max-w-4xl px-2 sm:mt-8 md:mt-10"
+    >
+      <p className="sr-only" aria-live="polite" aria-atomic="true">
+        {liveLabel}
+      </p>
+      <div
+        role="timer"
+        aria-live="off"
+        className="grid grid-cols-2 gap-x-4 gap-y-5 text-center sm:grid-cols-4 sm:gap-x-6"
+      >
+        {COUNTDOWN_UNITS.map((unit) => (
+          <div key={unit.key} className="min-w-0">
+            <span
+              ref={valueRefs[unit.key]}
+              className={`block text-3xl font-bold tabular-nums sm:text-4xl md:text-5xl lg:text-7xl ${atkinsonFont.className}`}
+            >
+              {formatCountdownValue(timer[unit.key])}
+            </span>
+            <span
+              className={`text-[11px] uppercase tracking-[0.14em] text-gray-200 sm:text-xs md:text-sm lg:text-base ${museoFont.className}`}
+            >
+              {unit.label}
+            </span>
+          </div>
+        ))}
       </div>
-
-      {/** Hours **/}
-      <div>
-        <span
-          ref={hoursRef}
-          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block ${atkinsonFont.className}`}
-        >
-          {padTime(timer.hours)}
-        </span>
-        <span
-          className={`text-xs sm:text-sm md:text-base lg:text-lg ${museoFont.className}`}
-        >
-          hours
-        </span>
-      </div>
-
-      {/** Minutes **/}
-      <div>
-        <span
-          ref={minutesRef}
-          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block ${atkinsonFont.className}`}
-        >
-          {padTime(timer.minutes)}
-        </span>
-        <span
-          className={`text-xs sm:text-sm md:text-base lg:text-lg ${museoFont.className}`}
-        >
-          minutes
-        </span>
-      </div>
-
-      {/** Seconds **/}
-      <div>
-        <span
-          ref={secondsRef}
-          className={`font-bold text-xl sm:text-2xl md:text-4xl lg:text-7xl block ${atkinsonFont.className}`}
-        >
-          {padTime(timer.seconds)}
-        </span>
-        <span
-          className={`text-xs sm:text-sm md:text-base lg:text-lg ${museoFont.className}`}
-        >
-          seconds
-        </span>
-      </div>
-    </div>
+    </section>
   );
 }

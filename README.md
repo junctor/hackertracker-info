@@ -1,36 +1,35 @@
 # info.defcon.org
 
-[![version](https://img.shields.io/badge/version-33.1.0-blue.svg)](https://www.npmjs.com/package/ht-info) [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE) [![Next.js](https://img.shields.io/badge/platform-Next.js-black.svg?logo=next.js)](https://nextjs.org)
+[![version](https://img.shields.io/badge/version-34.x-blue.svg)](https://github.com/junctor/hackertracker-info) [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE) [![Next.js](https://img.shields.io/badge/platform-Next.js-black.svg?logo=next.js)](https://nextjs.org)
 
-> **Official schedule and event guide for DEF CON Singapore 2026.** Explore talks, villages, workshops, and more at your fingertips.
+> **Official schedule and event guide for DEF CON.** Explore talks, villages, workshops, and more.
 
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [Static Data Export](#static-data-export)
-- [Team](#team)
+- [Project Structure](#project-structure)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Tech Stack
 
-- **Framework:** Next.js 15.3.2
+- **Framework:** Next.js (Pages Router, static export)
 - **Language:** React 19 & TypeScript 5
-- **Styling:** Tailwind CSS 4 & shadcn/ui
-- **UI Components:** Radix UI & Lucide icons
+- **Styling:** Tailwind CSS 4
+- **Icons:** Heroicons
 - **Data Fetching:** SWR
-- **Search:** cmdk
+- **Virtualization:** react-virtuoso
 - **Markdown Rendering:** react-markdown & remark-gfm
 - **Animations:** GSAP
-- **Utilities:** tailwind-merge, clsx
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Node.js** ≥ v18
-- **npm** ≥ v8
+- **Node.js** ≥ 20.9.0
+- **npm**
 
 ### Installation
 
@@ -52,7 +51,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Production Build
 
-Generate a production-ready static site:
+Generate a static site:
 
 ```bash
 npm run build
@@ -62,47 +61,83 @@ The output will be in the `out` directory.
 
 ### Linting & Formatting
 
-Check code quality and style:
-
 ```bash
 npm run lint
+npm run lint:fix
+npm run format
 ```
 
 ## Static Data Export
 
-This project relies on pre-generated JSON from the [info-export](https://github.com/junctor/info-export) tool, which pulls schedule data from Firebase.
+This project relies on pre-generated JSON from the companion exporter:
 
-1. Clone and install `info-export`:
+[https://github.com/junctor/info-export](https://github.com/junctor/info-export)
 
-   ```bash
-   git clone https://github.com/junctor/info-export.git
-   cd info-export
-   npm install
-   ```
+### Export workflow
 
-2. Export the Firebase data:
+1. Clone and install:
 
-   ```bash
-   npm run export
-   ```
+```bash
+git clone https://github.com/junctor/info-export.git
+cd info-export
+npm install
+```
 
-3. Copy the generated JSON into this project’s public assets:
+2. Run export:
 
-   ```bash
-   cp -r out/ht ../hackertracker-info/public
-   ```
+```bash
+npm run export -- DEFCON33
+```
 
-## Team
+3. Copy output into this project:
 
-- [Advice-Dog](https://github.com/Advice-Dog)
-- [aNullValue](https://github.com/aNullValue)
-- [cak](https://github.com/cak)
-- [sethlaw](https://github.com/sethlaw)
+```bash
+cp -r out/ht ../hackertracker-info/public
+```
+
+### Data expectations
+
+Each conference is served from:
+
+```
+/public/ht/<conference-slug>/
+```
+
+Typical structure:
+
+```
+entities/
+indexes/
+views/
+derived/
+manifest.json
+```
+
+This app depends on precomputed indexes such as:
+
+- `indexes/eventsByDay.json`
+- `indexes/eventsByTag.json`
+- `derived/tagIdsByLabel.json`
+
+Exports must match the expected schema used by the app.
+
+## Project Structure
+
+```
+src/
+  pages/        # Next.js routes
+  features/     # Domain modules (home, schedule, app-shell, etc)
+  components/   # Shared UI components
+  lib/          # Utilities, types, config
+  styles/       # Global styles
+public/
+  ht/           # Exported conference data
+```
 
 ## Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to open an issue or submit a pull request.
+Contributions, issues, and feature requests are welcome. Open an issue or submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License.
+MIT

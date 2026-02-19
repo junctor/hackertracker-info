@@ -1,0 +1,96 @@
+import { useState, useMemo } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { alphaSort } from "@/lib/misc";
+import { OrganizationCard } from "@/lib/types/ht-types";
+import SearchHeader from "@/components/ui/SearchHeader";
+
+type Props = {
+  organizations: Array<OrganizationCard>;
+  title: string;
+  detailsBasePath: string;
+};
+
+export default function OrganizationsList({
+  organizations,
+  title,
+  detailsBasePath,
+}: Props) {
+  const [search, setSearch] = useState("");
+  const normalizedSearch = search.trim().toLowerCase();
+  const sortedOrganizations = useMemo(
+    () => [...organizations].sort((a, b) => alphaSort(a.name, b.name)),
+    [organizations],
+  );
+  const filtered = useMemo(
+    () =>
+      normalizedSearch.length > 0
+        ? sortedOrganizations.filter((o) =>
+            o.name.toLowerCase().includes(normalizedSearch),
+          )
+        : sortedOrganizations,
+    [sortedOrganizations, normalizedSearch],
+  );
+
+  const getInitials = (name: string) =>
+    name
+      .split(" ")
+      .map((w) => w[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+
+  return (
+    <section className="my-10 mx-auto px-5 max-w-7xl">
+      <SearchHeader
+        title={title}
+        searchLabel={`Search ${title}`}
+        searchPlaceholder={`Search ${title}...`}
+        searchValue={search}
+        onSearchChange={setSearch}
+      />
+
+      {filtered.length === 0 ? (
+        <p role="status" className="text-center text-gray-400">
+          No {title.toLowerCase()} found.
+        </p>
+      ) : (
+        <ul className="grid grid-cols-1 list-none gap-6 p-0 m-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {filtered.map((o) => (
+            <li key={o.id} className="h-full">
+              <Link
+                href={`${detailsBasePath}/?id=${o.id}`}
+                className="block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+              >
+                <div className="bg-linear-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-lg rounded-2xl hover:from-gray-700 hover:to-gray-600 transition-all transform hover:scale-[1.02] overflow-hidden ring-offset-4 ring-indigo-600 hover:ring-4">
+                  <div className="flex flex-col items-center justify-center p-6 space-y-4">
+                    {o.logoUrl ? (
+                      <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-lg overflow-hidden bg-gray-800 ring-2 ring-gray-600 flex items-center justify-center">
+                        {o.logoUrl && (
+                          <Image
+                            className="object-contain p-2 transition-transform hover:scale-105"
+                            src={o.logoUrl}
+                            alt={`${o.name} logo`}
+                            fill
+                            sizes="(min-width: 768px) 8rem, 6rem"
+                          />
+                        )}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center w-24 h-24 md:w-32 md:h-32 bg-gray-800 ring-2 ring-gray-600 text-white text-2xl font-bold">
+                        {getInitials(o.name)}
+                      </div>
+                    )}
+                    <h2 className="text-lg font-medium text-gray-100 text-center">
+                      {o.name}
+                    </h2>
+                  </div>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}

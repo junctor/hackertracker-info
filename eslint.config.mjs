@@ -1,30 +1,35 @@
 import js from "@eslint/js";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import globals from "globals";
-import tseslint from "typescript-eslint";
-import pluginReact from "eslint-plugin-react";
-import { defineConfig } from "eslint/config";
-import pluginNext from "@next/eslint-plugin-next";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 
-export default defineConfig([
+const config = [
   {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    plugins: { js },
-    extends: ["js/recommended"],
+    ignores: [
+      ".next/**",
+      "out/**",
+      "node_modules/**",
+      "coverage/**",
+      "dist/**",
+    ],
   },
+  js.configs.recommended,
+  ...nextCoreWebVitals,
   {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    files: ["src/**/*.{js,jsx,ts,tsx}"],
     languageOptions: { globals: globals.browser },
   },
-  tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
   {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    plugins: { "@next/next": pluginNext, prettier: eslintConfigPrettier },
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
+    files: [
+      "*.{js,cjs,mjs,ts}",
+      "eslint.config.mjs",
+      "next.config.ts",
+      "postcss.config.mjs",
+      "*.config.{js,mjs,cjs,ts}",
+    ],
+    languageOptions: { globals: globals.node },
   },
-]);
+  eslintConfigPrettier,
+];
+
+export default config;

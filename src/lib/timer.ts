@@ -1,9 +1,6 @@
-// src/lib/timer.ts
-export const TARGET_DATE_MS = new Date("2026-04-28T01:00:00Z").valueOf();
-
-export function getCountdown(): Timer {
+export function getCountdown(kickoffDateMs: number) {
   const now = Date.now();
-  const diff = TARGET_DATE_MS - now;
+  const diff = kickoffDateMs - now;
   const d = diff / (24 * 60 * 60 * 1e3);
   const h = (d % 1) * 24;
   const m = (h % 1) * 60;

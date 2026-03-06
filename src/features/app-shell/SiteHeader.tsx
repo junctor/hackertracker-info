@@ -1,8 +1,4 @@
-import {
-  CodeBracketSquareIcon,
-  DevicePhoneMobileIcon,
-  RocketLaunchIcon,
-} from "@heroicons/react/24/outline";
+import { DevicePhoneMobileIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 import localFont from "next/font/local";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -29,9 +25,8 @@ export default function SiteHeader({ conference, activePageId }: Props) {
   }, [activePageId, conference.slug]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-800 bg-black/90 px-4 py-3 text-white backdrop-blur sm:px-5">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 px-4 py-3 text-white shadow-[inset_0_-1px_0_rgba(255,255,255,0.04)] backdrop-blur-md sm:px-5">
       <div className="flex w-full items-center justify-between gap-3">
-        {/* Logo + Primary Nav */}
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
           <div className="flex min-w-0 items-center gap-3">
             <Link href={`/${conference.slug}`} className={`rounded-md px-1 py-1 ${focusRingClass}`}>
@@ -40,31 +35,33 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                 <span className="hidden max-w-96 truncate md:block">{conference.name}</span>
               </span>
             </Link>
-            <span className="hidden truncate text-sm text-gray-400 sm:inline">{pageTitle}</span>
+
+            <span className="hidden truncate text-sm text-slate-400 sm:inline">{pageTitle}</span>
           </div>
 
-          {/* Primary Nav */}
           <nav aria-label="Primary">
             <details className="relative">
               <summary
-                className={`flex cursor-pointer items-center gap-1 rounded-md px-3 py-2 text-sm text-gray-200 transition-colors hover:text-(--accent-primary) ${focusRingClass}`}
+                className={`flex cursor-pointer items-center gap-1.5 rounded-lg border border-white/10 bg-white/3 px-3 py-2 text-sm text-slate-200 transition-colors hover:bg-white/6 hover:text-(--accent-primary) ${focusRingClass}`}
               >
                 <RocketLaunchIcon className="h-4 w-4 shrink-0" aria-hidden />
                 <span>Explore</span>
               </summary>
-              <div className="absolute top-full left-0 mt-2 max-h-[min(26rem,calc(100dvh-5.5rem))] w-[min(20rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain rounded-lg border border-gray-800 bg-gray-950 p-2 shadow-lg">
+
+              <div className="absolute top-full left-0 mt-2 max-h-[min(26rem,calc(100dvh-5.5rem))] w-[min(20rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain rounded-xl border border-white/10 bg-slate-950/95 p-2 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
                 <ul className="grid gap-2">
                   {menuItems.map(({ title, href, description, icon: Icon }) => {
                     const isActive = href === activeHref;
+
                     return (
                       <li key={title}>
                         <Link
                           href={href}
                           aria-current={isActive ? "page" : undefined}
-                          className={`flex flex-col gap-1 rounded-md px-3 py-2 text-sm hover:bg-gray-900 ${focusRingClass} ${
+                          className={`flex flex-col gap-1 rounded-lg px-3 py-2 text-sm transition-colors ${focusRingClass} ${
                             isActive
                               ? "bg-[#0D294A]/45 font-semibold text-white ring-1 ring-[#017FA4]/60"
-                              : "text-gray-200 hover:text-(--accent-success)"
+                              : "text-slate-200 hover:bg-white/5 hover:text-[#6CCDBB]"
                           }`}
                         >
                           <span className="flex items-center gap-2">
@@ -76,7 +73,8 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                               </span>
                             ) : null}
                           </span>
-                          <span className="hidden text-xs text-gray-400 lg:block">
+
+                          <span className="hidden text-xs text-slate-400 lg:block">
                             {description}
                           </span>
                         </Link>
@@ -89,24 +87,14 @@ export default function SiteHeader({ conference, activePageId }: Props) {
           </nav>
         </div>
 
-        {/* Action Icons */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           <Link
             href={`/${conference.slug}/apps`}
             aria-label="Mobile Apps"
-            className={`inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-300 transition hover:bg-[#017FA4]/15 hover:text-[#017FA4] ${focusRingClass}`}
+            className={`inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/3 text-slate-300 transition hover:bg-[#017FA4]/15 hover:text-[#6CCDBB] ${focusRingClass}`}
           >
             <DevicePhoneMobileIcon className="h-5 w-5" aria-hidden />
           </Link>
-          <a
-            href="https://github.com/junctor/hackertracker-info"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="View on GitHub"
-            className={`inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-300 transition hover:bg-[#017FA4]/15 hover:text-[#017FA4] ${focusRingClass}`}
-          >
-            <CodeBracketSquareIcon className="h-5 w-5" aria-hidden />
-          </a>
         </div>
       </div>
     </header>

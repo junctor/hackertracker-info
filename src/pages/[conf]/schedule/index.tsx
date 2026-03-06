@@ -1,25 +1,20 @@
-import React, { useMemo, useCallback } from "react";
-import useSWR from "swr";
-import Head from "next/head";
-import { useRouter } from "next/router";
 import type { GetStaticProps } from "next";
 
-import { fetcher } from "@/lib/misc";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useMemo, useCallback } from "react";
+import useSWR from "swr";
+
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import SiteHeader from "@/features/app-shell/SiteHeader";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
-import ScheduleEvents, {
-  ScheduleEventViewModel,
-} from "@/features/schedule/ScheduleEvents";
-import { getBookmarks } from "@/lib/storage";
-import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import ScheduleEvents, { ScheduleEventViewModel } from "@/features/schedule/ScheduleEvents";
 import { ConferenceManifest } from "@/lib/conferences";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
-import { PageId } from "@/lib/types/page-meta";
+import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
+import { fetcher } from "@/lib/misc";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
+import { getBookmarks } from "@/lib/storage";
 import {
   EventsByDayIndex,
   EventsStore,
@@ -27,6 +22,7 @@ import {
   PeopleStore,
   TagsStore,
 } from "@/lib/types/ht-types";
+import { PageId } from "@/lib/types/page-meta";
 
 type SchedulePageProps = {
   conf: ConferenceManifest;
@@ -40,10 +36,7 @@ type ScheduleDay = {
 
 const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
 
-export default function SchedulePage({
-  conf,
-  activePageId,
-}: SchedulePageProps) {
+export default function SchedulePage({ conf, activePageId }: SchedulePageProps) {
   const router = useRouter();
   const nowSeconds = useNowSeconds();
 
@@ -51,62 +44,36 @@ export default function SchedulePage({
     data: eventsByDay,
     error: eventsByDayError,
     isLoading: eventsByDayLoading,
-  } = useSWR<EventsByDayIndex>(
-    `${conf.dataRoot}/indexes/eventsByDay.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<EventsByDayIndex>(`${conf.dataRoot}/indexes/eventsByDay.json`, fetcher, swrOptions);
 
   const {
     data: eventsStore,
     error: eventsError,
     isLoading: eventsLoading,
-  } = useSWR<EventsStore>(
-    `${conf.dataRoot}/entities/events.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<EventsStore>(`${conf.dataRoot}/entities/events.json`, fetcher, swrOptions);
 
   const {
     data: locationsStore,
     error: locationsError,
     isLoading: locationsLoading,
-  } = useSWR<LocationsStore>(
-    `${conf.dataRoot}/entities/locations.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<LocationsStore>(`${conf.dataRoot}/entities/locations.json`, fetcher, swrOptions);
 
   const {
     data: tagsStore,
     error: tagsError,
     isLoading: tagsLoading,
-  } = useSWR<TagsStore>(
-    `${conf.dataRoot}/entities/tags.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<TagsStore>(`${conf.dataRoot}/entities/tags.json`, fetcher, swrOptions);
 
   const {
     data: peopleStore,
     error: peopleError,
     isLoading: peopleLoading,
-  } = useSWR<PeopleStore>(
-    `${conf.dataRoot}/entities/people.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<PeopleStore>(`${conf.dataRoot}/entities/people.json`, fetcher, swrOptions);
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
   const days: ScheduleDay[] = useMemo(() => {
-    if (
-      !eventsByDay ||
-      !eventsStore ||
-      !locationsStore ||
-      !tagsStore ||
-      !peopleStore
-    ) {
+    if (!eventsByDay || !eventsStore || !locationsStore || !tagsStore || !peopleStore) {
       return [];
     }
 
@@ -126,8 +93,7 @@ export default function SchedulePage({
         const event = eventsStore.byId[eventId];
         if (!event) continue;
 
-        const locationName =
-          locationsStore.byId[event.locationId]?.name ?? "Unknown location";
+        const locationName = locationsStore.byId[event.locationId]?.name ?? "Unknown location";
 
         const tags: ScheduleEventViewModel["tags"] = [];
         for (const tagId of event.tagIds ?? []) {
@@ -177,14 +143,7 @@ export default function SchedulePage({
     }
 
     return result;
-  }, [
-    conf.timezone,
-    eventsByDay,
-    eventsStore,
-    locationsStore,
-    tagsStore,
-    peopleStore,
-  ]);
+  }, [conf.timezone, eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore]);
 
   const daySet = useMemo(() => new Set(days.map((d) => d.day)), [days]);
 
@@ -228,38 +187,20 @@ export default function SchedulePage({
     (day: string) => {
       if (!router.isReady) return;
 
-      router.push(
-        { pathname: router.pathname, query: { ...router.query, day } },
-        undefined,
-        { shallow: true },
-      );
+      router.push({ pathname: router.pathname, query: { ...router.query, day } }, undefined, {
+        shallow: true,
+      });
     },
     [router],
   );
 
   const isLoading =
-    eventsByDayLoading ||
-    eventsLoading ||
-    locationsLoading ||
-    tagsLoading ||
-    peopleLoading;
+    eventsByDayLoading || eventsLoading || locationsLoading || tagsLoading || peopleLoading;
 
-  const error =
-    eventsByDayError ||
-    eventsError ||
-    locationsError ||
-    tagsError ||
-    peopleError;
+  const error = eventsByDayError || eventsError || locationsError || tagsError || peopleError;
 
   if (isLoading) return <LoadingScreen />;
-  if (
-    error ||
-    !eventsByDay ||
-    !eventsStore ||
-    !locationsStore ||
-    !tagsStore ||
-    !peopleStore
-  ) {
+  if (error || !eventsByDay || !eventsStore || !locationsStore || !tagsStore || !peopleStore) {
     return <ErrorScreen />;
   }
 
@@ -272,9 +213,9 @@ export default function SchedulePage({
           content={`Full ${conf.name} schedule of sessions, talks, and events.`}
         />
       </Head>
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1 min-h-0">
+        <main className="min-h-0 flex-1">
           <h1 className="sr-only">Schedule</h1>
           <ScheduleEvents
             conf={conf}
@@ -293,9 +234,7 @@ export default function SchedulePage({
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<SchedulePageProps> = async (
-  ctx,
-) => {
+export const getStaticProps: GetStaticProps<SchedulePageProps> = async (ctx) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
   return { props: { conf: result.conf, activePageId: "schedule" } };

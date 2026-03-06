@@ -1,13 +1,14 @@
-import { useMemo } from "react";
-import Link from "next/link";
 import {
   CodeBracketSquareIcon,
   DevicePhoneMobileIcon,
   RocketLaunchIcon,
 } from "@heroicons/react/24/outline";
 import localFont from "next/font/local";
-import { getSiteMenu } from "@/lib/menu";
+import Link from "next/link";
+import { useMemo } from "react";
+
 import { ConferenceManifest } from "@/lib/conferences";
+import { getSiteMenu } from "@/lib/menu";
 import { getPageTitle, PageId } from "@/lib/types/page-meta";
 
 const museoFont = localFont({
@@ -33,22 +34,13 @@ export default function SiteHeader({ conference, activePageId }: Props) {
         {/* Logo + Primary Nav */}
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
           <div className="flex min-w-0 items-center gap-3">
-            <Link
-              href={`/${conference.slug}`}
-              className={`rounded-md px-1 py-1 ${focusRingClass}`}
-            >
-              <span
-                className={`${museoFont.className} text-2xl md:text-3xl font-bold logo`}
-              >
+            <Link href={`/${conference.slug}`} className={`rounded-md px-1 py-1 ${focusRingClass}`}>
+              <span className={`${museoFont.className} logo text-2xl font-bold md:text-3xl`}>
                 <span className="block md:hidden">{conference.code}</span>
-                <span className="hidden max-w-96 truncate md:block">
-                  {conference.name}
-                </span>
+                <span className="hidden max-w-96 truncate md:block">{conference.name}</span>
               </span>
             </Link>
-            <span className="hidden truncate text-sm text-gray-400 sm:inline">
-              {pageTitle}
-            </span>
+            <span className="hidden truncate text-sm text-gray-400 sm:inline">{pageTitle}</span>
           </div>
 
           {/* Primary Nav */}
@@ -60,7 +52,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                 <RocketLaunchIcon className="h-4 w-4 shrink-0" aria-hidden />
                 <span>Explore</span>
               </summary>
-              <div className="absolute left-0 top-full mt-2 w-[min(20rem,calc(100vw-2rem))] max-h-[min(26rem,calc(100dvh-5.5rem))] overflow-y-auto overscroll-contain rounded-lg border border-gray-800 bg-gray-950 p-2 shadow-lg">
+              <div className="absolute top-full left-0 mt-2 max-h-[min(26rem,calc(100dvh-5.5rem))] w-[min(20rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain rounded-lg border border-gray-800 bg-gray-950 p-2 shadow-lg">
                 <ul className="grid gap-2">
                   {menuItems.map(({ title, href, description, icon: Icon }) => {
                     const isActive = href === activeHref;
@@ -79,7 +71,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                             <Icon className="h-5 w-5 shrink-0" aria-hidden />
                             <span>{title}</span>
                             {isActive ? (
-                              <span className="rounded border border-[#017FA4]/70 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-[#6CCDBB]">
+                              <span className="rounded border border-[#017FA4]/70 px-1.5 py-0.5 text-[10px] tracking-wide text-[#6CCDBB] uppercase">
                                 Current
                               </span>
                             ) : null}

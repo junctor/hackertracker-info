@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
-import { getCountdown } from "@/lib/timer";
-import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ConferenceManifest } from "@/lib/conferences";
+import gsap from "gsap";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+
 import {
   atkinsonFont,
   COUNTDOWN_UNITS,
@@ -16,6 +15,8 @@ import {
   useHomeModel,
   type CountdownTimer,
 } from "@/features/home/homeModel";
+import { ConferenceManifest } from "@/lib/conferences";
+import { getCountdown } from "@/lib/timer";
 
 function usePrefersReducedMotion() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -62,19 +63,11 @@ function useFlipAnimation(
   }, [color, prefersReducedMotion, value]);
 }
 
-export default function Countdown({
-  conference,
-}: {
-  conference: ConferenceManifest;
-}) {
+export default function Countdown({ conference }: { conference: ConferenceManifest }) {
   const home = useHomeModel(conference);
-  const [expired, setExpired] = useState(() =>
-    hasKickoffPassed(home.kickoffDateMs),
-  );
+  const [expired, setExpired] = useState(() => hasKickoffPassed(home.kickoffDateMs));
   const [timer, setTimer] = useState<CountdownTimer>(() =>
-    hasKickoffPassed(home.kickoffDateMs)
-      ? EMPTY_COUNTDOWN_TIMER
-      : getCountdown(home.kickoffDateMs),
+    hasKickoffPassed(home.kickoffDateMs) ? EMPTY_COUNTDOWN_TIMER : getCountdown(home.kickoffDateMs),
   );
 
   const daysRef = useRef<HTMLSpanElement | null>(null);
@@ -104,10 +97,7 @@ export default function Countdown({
     };
   }, [home.kickoffDateMs]);
 
-  const valueRefs: Record<
-    TimerUnitKey,
-    RefObject<HTMLSpanElement | null>
-  > = useMemo(
+  const valueRefs: Record<TimerUnitKey, RefObject<HTMLSpanElement | null>> = useMemo(
     () => ({
       days: daysRef,
       hours: hoursRef,
@@ -117,30 +107,10 @@ export default function Countdown({
     [],
   );
 
-  useFlipAnimation(
-    daysRef,
-    timer.days,
-    COUNTDOWN_UNIT_COLORS.days,
-    prefersReducedMotion,
-  );
-  useFlipAnimation(
-    hoursRef,
-    timer.hours,
-    COUNTDOWN_UNIT_COLORS.hours,
-    prefersReducedMotion,
-  );
-  useFlipAnimation(
-    minutesRef,
-    timer.minutes,
-    COUNTDOWN_UNIT_COLORS.minutes,
-    prefersReducedMotion,
-  );
-  useFlipAnimation(
-    secondsRef,
-    timer.seconds,
-    COUNTDOWN_UNIT_COLORS.seconds,
-    prefersReducedMotion,
-  );
+  useFlipAnimation(daysRef, timer.days, COUNTDOWN_UNIT_COLORS.days, prefersReducedMotion);
+  useFlipAnimation(hoursRef, timer.hours, COUNTDOWN_UNIT_COLORS.hours, prefersReducedMotion);
+  useFlipAnimation(minutesRef, timer.minutes, COUNTDOWN_UNIT_COLORS.minutes, prefersReducedMotion);
+  useFlipAnimation(secondsRef, timer.seconds, COUNTDOWN_UNIT_COLORS.seconds, prefersReducedMotion);
 
   const liveLabel = useMemo(() => formatCountdownLiveLabel(timer), [timer]);
 
@@ -168,7 +138,7 @@ export default function Countdown({
               {formatCountdownValue(timer[unit.key])}
             </span>
             <span
-              className={`text-[11px] uppercase tracking-[0.14em] text-gray-200 sm:text-xs md:text-sm lg:text-base ${museoFont.className}`}
+              className={`text-[11px] tracking-[0.14em] text-gray-200 uppercase sm:text-xs md:text-sm lg:text-base ${museoFont.className}`}
             >
               {unit.label}
             </span>

@@ -18,10 +18,8 @@ export default function SearchHeader({
   children,
 }: Props) {
   return (
-    <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
-      <h1 className="text-3xl md:text-4xl font-extrabold text-gray-100">
-        {title}
-      </h1>
+    <header className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <h1 className="text-3xl font-extrabold text-gray-100 md:text-4xl">{title}</h1>
       <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center">
         <label className="w-full max-w-sm">
           <span className="sr-only">{searchLabel}</span>

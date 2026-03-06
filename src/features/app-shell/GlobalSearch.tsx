@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   DocumentTextIcon,
   GlobeAltIcon,
@@ -6,8 +5,10 @@ import {
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import type { SearchIndex, SearchItem, SearchType } from "@/lib/types/info";
 import Link from "next/link";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+
+import type { SearchIndex, SearchItem, SearchType } from "@/lib/types/info";
 
 export default function GlobalSearch() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,16 +45,14 @@ export default function GlobalSearch() {
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     if (!normalizedQuery) return searchData;
-    return searchData.filter((item) =>
-      item.text.toLowerCase().includes(normalizedQuery),
-    );
+    return searchData.filter((item) => item.text.toLowerCase().includes(normalizedQuery));
   }, [query, searchData]);
 
   return (
     <>
       <button
         type="button"
-        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none"
         onClick={() => {
           setIsOpen(true);
           loadSearchData();
@@ -80,11 +79,11 @@ export default function GlobalSearch() {
             </h2>
             <button
               type="button"
-              className="absolute top-3 right-3 rounded-md text-gray-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
+              className="absolute top-3 right-3 rounded-md text-gray-400 transition hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 focus-visible:outline-none"
               onClick={() => setIsOpen(false)}
               aria-label="Close search"
             >
-              <XMarkIcon className="w-5 h-5" aria-hidden="true" />
+              <XMarkIcon className="h-5 w-5" aria-hidden="true" />
             </button>
 
             {/* TODO: Design polish for this search modal and results list. */}
@@ -93,7 +92,7 @@ export default function GlobalSearch() {
                 Search
               </label>
               <MagnifyingGlassIcon
-                className="pointer-events-none absolute left-3 top-3 h-5 w-5 text-gray-500"
+                className="pointer-events-none absolute top-3 left-3 h-5 w-5 text-gray-500"
                 aria-hidden="true"
               />
               <input
@@ -101,7 +100,7 @@ export default function GlobalSearch() {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full rounded-md border border-gray-800 bg-gray-900 py-2 pl-10 pr-4 text-white placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
+                className="w-full rounded-md border border-gray-800 bg-gray-900 py-2 pr-4 pl-10 text-white placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 focus-visible:outline-none"
                 placeholder={loading ? "Loading..." : "Search..."}
                 autoFocus
               />
@@ -122,13 +121,10 @@ export default function GlobalSearch() {
                       <li key={`${item.type}-${item.id}`}>
                         <Link
                           href={`/${item.type}?id=${item.id}`}
-                          className="flex items-center gap-3 px-4 py-2 text-gray-200 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+                          className="flex items-center gap-3 px-4 py-2 text-gray-200 hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
                           onClick={() => setIsOpen(false)}
                         >
-                          <Icon
-                            className="h-5 w-5 shrink-0 text-gray-400"
-                            aria-hidden="true"
-                          />
+                          <Icon className="h-5 w-5 shrink-0 text-gray-400" aria-hidden="true" />
                           <span className="flex-1">{item.text}</span>
                         </Link>
                       </li>

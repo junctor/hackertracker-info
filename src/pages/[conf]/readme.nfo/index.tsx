@@ -1,38 +1,31 @@
+import type { GetStaticProps } from "next";
+
+import Head from "next/head";
 import React from "react";
 import useSWR from "swr";
-import { fetcher } from "@/lib/misc";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
+
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import SiteHeader from "@/features/app-shell/SiteHeader";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
-import Head from "next/head";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 import DocumentsList from "@/features/documents/DocumentsList";
 import { ConferenceManifest } from "@/lib/conferences";
+import { fetcher } from "@/lib/misc";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { DocumentsListView } from "@/lib/types/ht-types";
 import { PageId } from "@/lib/types/page-meta";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
-import type { GetStaticProps } from "next";
 
 type DocumentsPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
 
-export default function DocumentsPage({
-  conf,
-  activePageId,
-}: DocumentsPageProps) {
+export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps) {
   const {
     data: documents,
     error,
     isLoading,
-  } = useSWR<DocumentsListView>(
-    `${conf.dataRoot}/views/documentsList.json`,
-    fetcher,
-  );
+  } = useSWR<DocumentsListView>(`${conf.dataRoot}/views/documentsList.json`, fetcher);
 
   if (isLoading) return <LoadingScreen />;
   if (error || !documents) return <ErrorScreen />;
@@ -41,12 +34,9 @@ export default function DocumentsPage({
     <>
       <Head>
         <title>readme.nfo | {conf.name}</title>
-        <meta
-          name="description"
-          content={`A collection of information related to ${conf.name}.`}
-        />
+        <meta name="description" content={`A collection of information related to ${conf.name}.`} />
       </Head>
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
         <main className="flex-1">
           <DocumentsList documents={documents} conference={conf} />
@@ -59,9 +49,7 @@ export default function DocumentsPage({
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<DocumentsPageProps> = async (
-  ctx,
-) => {
+export const getStaticProps: GetStaticProps<DocumentsPageProps> = async (ctx) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
   return { props: { conf: result.conf, activePageId: "readme" } };

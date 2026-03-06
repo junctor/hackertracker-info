@@ -1,26 +1,23 @@
+import type { GetStaticProps } from "next";
+
+import Head from "next/head";
+import { useRouter } from "next/router";
 import React, { useMemo, useState, useCallback } from "react";
 import useSWR from "swr";
-import { fetcher } from "@/lib/misc";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
+
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import SiteHeader from "@/features/app-shell/SiteHeader";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 import ScheduleEvents, {
   ScheduleDay,
   ScheduleEventViewModel,
 } from "@/features/schedule/ScheduleEvents";
-import { getBookmarks } from "@/lib/storage";
-import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
-import Head from "next/head";
-import { useRouter } from "next/router";
 import { ConferenceManifest } from "@/lib/conferences";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
-import type { GetStaticProps } from "next";
-import { PageId } from "@/lib/types/page-meta";
-import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
+import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
+import { fetcher } from "@/lib/misc";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
+import { getBookmarks } from "@/lib/storage";
 import {
   EventsByDayIndex,
   EventsByTagIndex,
@@ -29,6 +26,8 @@ import {
   PeopleStore,
   TagsStore,
 } from "@/lib/types/ht-types";
+import { PageId } from "@/lib/types/page-meta";
+import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
 type TagPageProps = {
   conf: ConferenceManifest;
@@ -79,61 +78,37 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     data: eventsByTag,
     error: eventsByTagError,
     isLoading: eventsByTagLoading,
-  } = useSWR<EventsByTagIndex>(
-    `${conf.dataRoot}/indexes/eventsByTag.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<EventsByTagIndex>(`${conf.dataRoot}/indexes/eventsByTag.json`, fetcher, swrOptions);
 
   const {
     data: eventsByDay,
     error: eventsByDayError,
     isLoading: eventsByDayLoading,
-  } = useSWR<EventsByDayIndex>(
-    `${conf.dataRoot}/indexes/eventsByDay.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<EventsByDayIndex>(`${conf.dataRoot}/indexes/eventsByDay.json`, fetcher, swrOptions);
 
   const {
     data: eventsStore,
     error: eventsError,
     isLoading: eventsLoading,
-  } = useSWR<EventsStore>(
-    `${conf.dataRoot}/entities/events.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<EventsStore>(`${conf.dataRoot}/entities/events.json`, fetcher, swrOptions);
 
   const {
     data: locationsStore,
     error: locationsError,
     isLoading: locationsLoading,
-  } = useSWR<LocationsStore>(
-    `${conf.dataRoot}/entities/locations.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<LocationsStore>(`${conf.dataRoot}/entities/locations.json`, fetcher, swrOptions);
 
   const {
     data: tagsStore,
     error: tagsError,
     isLoading: tagsLoading,
-  } = useSWR<TagsStore>(
-    `${conf.dataRoot}/entities/tags.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<TagsStore>(`${conf.dataRoot}/entities/tags.json`, fetcher, swrOptions);
 
   const {
     data: peopleStore,
     error: peopleError,
     isLoading: peopleLoading,
-  } = useSWR<PeopleStore>(
-    `${conf.dataRoot}/entities/people.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<PeopleStore>(`${conf.dataRoot}/entities/people.json`, fetcher, swrOptions);
 
   const loading =
     eventsByTagLoading ||
@@ -153,18 +128,13 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
   const bookmarks = useMemo(() => getBookmarks(), []);
 
   const tag = useMemo(
-    () =>
-      tagId != null
-        ? (tagsStore?.byId?.[String(tagId)] ?? tagsStore?.byId?.[tagId])
-        : null,
+    () => (tagId != null ? (tagsStore?.byId?.[String(tagId)] ?? tagsStore?.byId?.[tagId]) : null),
     [tagsStore, tagId],
   );
 
   const tagEventIds = useMemo(() => {
     if (!eventsByTag || tagId === null) return new Set<string>();
-    const raw =
-      eventsByTag[String(tagId)] ??
-      (eventsByTag as Record<number, unknown>)[tagId];
+    const raw = eventsByTag[String(tagId)] ?? (eventsByTag as Record<number, unknown>)[tagId];
     return new Set<string>(getTagEventIds(raw));
   }, [eventsByTag, tagId]);
 
@@ -200,8 +170,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
         if (!event) continue;
 
         const locationName =
-          locationsStore.byId[String(event.locationId)]?.name ??
-          "Unknown location";
+          locationsStore.byId[String(event.locationId)]?.name ?? "Unknown location";
 
         const tags: ScheduleEventViewModel["tags"] = [];
         for (const eventTagId of event.tagIds ?? []) {
@@ -267,10 +236,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     if (days.length === 0) return null;
     for (const { day, events } of days) {
       for (const event of events) {
-        if (
-          event.beginTimestampSeconds <= nowSeconds &&
-          nowSeconds <= event.endTimestampSeconds
-        ) {
+        if (event.beginTimestampSeconds <= nowSeconds && nowSeconds <= event.endTimestampSeconds) {
           return day;
         }
       }
@@ -314,15 +280,12 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
         <title>
           {tag.label} | {conf.name}
         </title>
-        <meta
-          name="description"
-          content={`${conf.name} schedule for ${tag.label}`}
-        />
+        <meta name="description" content={`${conf.name} schedule for ${tag.label}`} />
       </Head>
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1 min-h-0">
-          <h1 className="text-3xl font-bold text-center mb-6 my-10 text-[#6CCDBB]">
+        <main className="min-h-0 flex-1">
+          <h1 className="my-10 mb-6 text-center text-3xl font-bold text-[#6CCDBB]">
             {tag.label} Schedule
           </h1>
           {days.length > 0 && resolvedDay ? (
@@ -335,9 +298,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
               nowSeconds={nowSeconds}
             />
           ) : (
-            <p className="mt-8 text-center text-gray-500">
-              No events found for this tag.
-            </p>
+            <p className="mt-8 text-center text-gray-500">No events found for this tag.</p>
           )}
         </main>
         <SiteFooter />

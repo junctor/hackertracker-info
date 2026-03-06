@@ -1,9 +1,9 @@
-import Countdown from "@/features/home/Countdown";
 import Image from "next/image";
 import Link from "next/link";
-import { ConferenceManifest } from "@/lib/conferences";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
+import Countdown from "@/features/home/Countdown";
 import {
   hasKickoffPassed,
   HOME_ACTION_LINK_CLASS_NAME,
@@ -13,6 +13,7 @@ import {
   museoFont,
   useHomeModel,
 } from "@/features/home/homeModel";
+import { ConferenceManifest } from "@/lib/conferences";
 
 type Props = {
   conference: ConferenceManifest;
@@ -56,7 +57,7 @@ export default function Splash({ conference }: Props) {
         </div>
         <time
           dateTime={conference.begin}
-          className={`text-xs uppercase tracking-[0.16em] text-gray-300/90 sm:text-sm sm:tracking-[0.22em] md:text-base ${museoFont.className}`}
+          className={`text-xs tracking-[0.16em] text-gray-300/90 uppercase sm:text-sm sm:tracking-[0.22em] md:text-base ${museoFont.className}`}
         >
           {conference.dateLabel}
         </time>

@@ -1,4 +1,5 @@
 import type { GetStaticPaths, GetStaticPropsContext } from "next";
+
 import { CONFERENCES, getConference } from "@/lib/conferences";
 
 export const buildConferenceStaticPaths: GetStaticPaths = async () => ({
@@ -8,9 +9,7 @@ export const buildConferenceStaticPaths: GetStaticPaths = async () => ({
   fallback: false,
 });
 
-export function getConferenceFromParams(
-  params: GetStaticPropsContext["params"],
-) {
+export function getConferenceFromParams(params: GetStaticPropsContext["params"]) {
   if (!params || typeof params.conf !== "string") return null;
   const conference = getConference(params.conf);
   return conference ? { conf: conference } : null;

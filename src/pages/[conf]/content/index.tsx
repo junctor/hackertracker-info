@@ -1,22 +1,20 @@
-import React, { useMemo } from "react";
-import useSWR from "swr";
+import type { GetStaticProps } from "next";
+
 import Head from "next/head";
 import { useRouter } from "next/router";
-import type { GetStaticProps } from "next";
-import { fetcher } from "@/lib/misc";
-import { getBookmarks } from "@/lib/storage";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import React, { useMemo } from "react";
+import useSWR from "swr";
+
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import SiteHeader from "@/features/app-shell/SiteHeader";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
-import ContentList from "@/features/content/ContentList";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 import ContentDetails from "@/features/content/ContentDetails";
+import ContentList from "@/features/content/ContentList";
 import { ConferenceManifest } from "@/lib/conferences";
-import { PageId } from "@/lib/types/page-meta";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
+import { fetcher } from "@/lib/misc";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
+import { getBookmarks } from "@/lib/storage";
 import {
   ContentStore,
   EventsStore,
@@ -24,10 +22,8 @@ import {
   PeopleStore,
   TagsStore,
 } from "@/lib/types/ht-types";
-import {
-  ContentCardsView,
-  TagTypesBrowseView,
-} from "@/lib/types/ht-types/views";
+import { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
+import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
 type ContentsPageProps = {
@@ -37,10 +33,7 @@ type ContentsPageProps = {
 
 const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
 
-export default function ContentsPage({
-  conf,
-  activePageId,
-}: ContentsPageProps) {
+export default function ContentsPage({ conf, activePageId }: ContentsPageProps) {
   const router = useRouter();
   const {
     value: contentId,
@@ -49,8 +42,7 @@ export default function ContentsPage({
     isInvalid: isIdInvalid,
   } = useNumericQueryParam(router, "id");
 
-  const shouldLoadDetails =
-    isReady && !isIdMissing && !isIdInvalid && contentId !== null;
+  const shouldLoadDetails = isReady && !isIdMissing && !isIdInvalid && contentId !== null;
   const shouldLoadList = isReady && isIdMissing;
 
   const {
@@ -128,10 +120,7 @@ export default function ContentsPage({
   const metaDescription = useMemo(() => {
     const fallback = `Learn more about ${conf.name} content.`;
     const rawDescription = contentStore?.byId[contentId ?? -1]?.description;
-    const base =
-      rawDescription && rawDescription.trim().length > 0
-        ? rawDescription
-        : fallback;
+    const base = rawDescription && rawDescription.trim().length > 0 ? rawDescription : fallback;
     const normalized = base.replace(/\s+/g, " ").trim();
     if (normalized.length === 0) return fallback;
     if (normalized.length <= 150) return normalized;
@@ -143,17 +132,9 @@ export default function ContentsPage({
 
   if (shouldLoadDetails) {
     const isDetailLoading =
-      contentStoreLoading ||
-      peopleLoading ||
-      eventsLoading ||
-      locationsLoading ||
-      tagsLoading;
+      contentStoreLoading || peopleLoading || eventsLoading || locationsLoading || tagsLoading;
     const detailError =
-      contentStoreError ||
-      peopleError ||
-      eventsError ||
-      locationsError ||
-      tagsError;
+      contentStoreError || peopleError || eventsError || locationsError || tagsError;
 
     if (isDetailLoading) return <LoadingScreen />;
     if (
@@ -197,7 +178,7 @@ export default function ContentsPage({
           </title>
           <meta name="description" content={metaDescription} />
         </Head>
-        <div className="min-h-screen flex flex-col">
+        <div className="flex min-h-screen flex-col">
           <SiteHeader conference={conf} activePageId={activePageId} />
           <main className="flex-1">
             <ContentDetails
@@ -231,14 +212,10 @@ export default function ContentsPage({
           content={`Browse talks, workshops, and presentations at ${conf.name}.`}
         />
       </Head>
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
         <main className="flex-1">
-          <ContentList
-            content={contentCards}
-            tags={tagTypes}
-            conference={conf}
-          />
+          <ContentList content={contentCards} tags={tagTypes} conference={conf} />
         </main>
         <SiteFooter />
       </div>
@@ -248,9 +225,7 @@ export default function ContentsPage({
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<ContentsPageProps> = async (
-  ctx,
-) => {
+export const getStaticProps: GetStaticProps<ContentsPageProps> = async (ctx) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
   return { props: { conf: result.conf, activePageId: "content" } };

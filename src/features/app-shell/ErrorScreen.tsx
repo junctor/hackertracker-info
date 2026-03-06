@@ -13,33 +13,22 @@ export default function ErrorScreen({ msg }: Props) {
 
       <div className="text-center">
         {/* Glitchy RGB title */}
-        <div className="relative inline-block select-none isolation-isolate">
+        <div className="isolation-isolate relative inline-block select-none">
           <h1
-            className="
-              relative text-3xl md:text-5xl font-extrabold tracking-tight
-              text-gray-100
-              motion-safe:animate-[glitch_1.8s_steps(12,end)_infinite]
-            "
+            className="relative text-3xl font-extrabold tracking-tight text-gray-100 motion-safe:animate-[glitch_1.8s_steps(12,end)_infinite] md:text-5xl"
           >
             ERROR
             {/* cyan layer */}
             <span
               aria-hidden
-              className="
-                absolute inset-0 text-cyan-300 mix-blend-screen opacity-95
-                motion-safe:animate-[rgb_2.4s_ease-in-out_infinite]
-              "
+              className="absolute inset-0 text-cyan-300 opacity-95 mix-blend-screen motion-safe:animate-[rgb_2.4s_ease-in-out_infinite]"
             >
               ERROR
             </span>
             {/* magenta layer */}
             <span
               aria-hidden
-              className="
-                absolute inset-0 text-fuchsia-400 mix-blend-screen opacity-95
-                -translate-x-[1.5px] translate-y-[0.8px]
-                motion-safe:animate-[rgb_2.4s_ease-in-out_infinite]
-              "
+              className="absolute inset-0 -translate-x-[1.5px] translate-y-[0.8px] text-fuchsia-400 opacity-95 mix-blend-screen motion-safe:animate-[rgb_2.4s_ease-in-out_infinite]"
               style={{ animationDelay: "0.15s" }}
             >
               ERROR
@@ -51,31 +40,18 @@ export default function ErrorScreen({ msg }: Props) {
         {msg ? (
           <pre
             role="alert"
-            className="
-              mx-auto mt-5 mb-6 max-w-xl overflow-x-auto rounded-lg
-              border border-red-700/70 bg-red-950/30 p-4 text-left
-              font-mono text-xs md:text-sm text-red-200
-            "
+            className="mx-auto mt-5 mb-6 max-w-xl overflow-x-auto rounded-lg border border-red-700/70 bg-red-950/30 p-4 text-left font-mono text-xs text-red-200 md:text-sm"
           >
             {msg}
           </pre>
         ) : (
-          <p className="mt-5 mb-6 text-sm md:text-base text-gray-300">
-            Something went sideways.
-          </p>
+          <p className="mt-5 mb-6 text-sm text-gray-300 md:text-base">Something went sideways.</p>
         )}
 
         {/* Action */}
         <Link
           href="/"
-          className="
-            inline-flex items-center justify-center gap-2
-            rounded-md border border-gray-600/70 px-4 py-2
-            text-sm font-semibold text-gray-100
-            hover:bg-gray-800/70 hover:border-gray-500
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400
-            transition-colors
-          "
+          className="inline-flex items-center justify-center gap-2 rounded-md border border-gray-600/70 px-4 py-2 text-sm font-semibold text-gray-100 transition-colors hover:border-gray-500 hover:bg-gray-800/70 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
         >
           Return Home
         </Link>

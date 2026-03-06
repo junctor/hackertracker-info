@@ -1,12 +1,11 @@
-import Splash from "@/features/home/Splash";
-import { ConferenceManifest } from "@/lib/conferences";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
 import type { GetStaticProps } from "next";
+
 import Head from "next/head";
 import React from "react";
+
+import Splash from "@/features/home/Splash";
+import { ConferenceManifest } from "@/lib/conferences";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 
 type HomePageProps = {
   conf: ConferenceManifest;

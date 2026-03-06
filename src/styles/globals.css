@@ -75,11 +75,7 @@ button {
   color: var(--accent-primary);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-decoration-color: color-mix(
-    in oklab,
-    var(--accent-primary),
-    transparent 52%
-  );
+  text-decoration-color: color-mix(in oklab, var(--accent-primary), transparent 52%);
   text-underline-offset: 0.16em;
   transition:
     color 0.2s ease,
@@ -88,20 +84,12 @@ button {
 
 .ui-link:visited {
   color: color-mix(in oklab, var(--accent-primary), var(--accent-success) 42%);
-  text-decoration-color: color-mix(
-    in oklab,
-    var(--accent-teal),
-    transparent 58%
-  );
+  text-decoration-color: color-mix(in oklab, var(--accent-teal), transparent 58%);
 }
 
 .ui-link:hover {
   color: color-mix(in oklab, var(--accent-primary), white 14%);
-  text-decoration-color: color-mix(
-    in oklab,
-    var(--accent-primary),
-    transparent 26%
-  );
+  text-decoration-color: color-mix(in oklab, var(--accent-primary), transparent 26%);
 }
 
 .ui-link:focus-visible {
@@ -134,11 +122,7 @@ button {
 }
 
 .ui-btn-secondary {
-  border-color: color-mix(
-    in oklab,
-    var(--accent-teal),
-    var(--color-border) 46%
-  );
+  border-color: color-mix(in oklab, var(--accent-teal), var(--color-border) 46%);
   background: color-mix(in oklab, var(--accent-deep), black 24%);
   color: var(--color-fg);
 }
@@ -148,11 +132,7 @@ button {
 }
 
 .ui-btn-ghost {
-  border-color: color-mix(
-    in oklab,
-    var(--accent-teal),
-    var(--color-border) 58%
-  );
+  border-color: color-mix(in oklab, var(--accent-teal), var(--color-border) 58%);
   background: transparent;
   color: color-mix(in oklab, var(--accent-success), white 18%);
 }
@@ -177,8 +157,7 @@ button {
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  border: 1px solid
-    color-mix(in oklab, var(--accent-teal), var(--color-border) 52%);
+  border: 1px solid color-mix(in oklab, var(--accent-teal), var(--color-border) 52%);
   background: color-mix(in oklab, var(--accent-deep), black 30%);
   color: var(--color-fg);
 }

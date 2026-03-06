@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+
 import {
   ArchiveBoxIcon,
   BoltIcon,
@@ -100,8 +101,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
     sort_order: 20,
     title: "Announcements",
     href: `/${c.slug}/announcements`,
-    description:
-      "Get real-time updates and important news during the conference.",
+    description: "Get real-time updates and important news during the conference.",
     icon: MegaphoneIcon,
   }),
 
@@ -202,8 +202,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       title: directory?.title ?? "Communities",
       href: `/${c.slug}/${directory?.slug ?? "communities"}`,
       description:
-        directory?.description ??
-        `Connect with special-interest groups and meetups at ${c.name}.`,
+        directory?.description ?? `Connect with special-interest groups and meetups at ${c.name}.`,
       icon: UsersIcon,
     };
   },
@@ -215,8 +214,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       title: directory?.title ?? "Contests",
       href: `/${c.slug}/${directory?.slug ?? "contests"}`,
       description:
-        directory?.description ??
-        "Test your skills in CTFs, challenges, and competitions.",
+        directory?.description ?? "Test your skills in CTFs, challenges, and competitions.",
       icon: BoltIcon,
     };
   },
@@ -227,9 +225,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       sort_order: 140,
       title: directory?.title ?? "Exhibitors",
       href: `/${c.slug}/${directory?.slug ?? "exhibitors"}`,
-      description:
-        directory?.description ??
-        "Discover exhibitors showcasing tools and solutions.",
+      description: directory?.description ?? "Discover exhibitors showcasing tools and solutions.",
       icon: CubeIcon,
     };
   },
@@ -240,9 +236,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       sort_order: 150,
       title: directory?.title ?? "Vendors",
       href: `/${c.slug}/${directory?.slug ?? "vendors"}`,
-      description:
-        directory?.description ??
-        "Browse vendors offering gear, swag, and services.",
+      description: directory?.description ?? "Browse vendors offering gear, swag, and services.",
       icon: CubeIcon,
     };
   },

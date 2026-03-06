@@ -1,5 +1,5 @@
-import { useMemo } from "react";
 import { NextRouter } from "next/router";
+import { useMemo } from "react";
 
 export type NumericQueryParamState = {
   value: number | null;

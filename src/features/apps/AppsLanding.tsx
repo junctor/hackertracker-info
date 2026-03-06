@@ -1,6 +1,7 @@
+import { gsap } from "gsap";
 // src/pages/Apps.tsx
 import { useRef, useEffect } from "react";
-import { gsap } from "gsap";
+
 import { ConferenceManifest } from "@/lib/conferences";
 
 type Props = {
@@ -12,9 +13,7 @@ export default function AppsLanding({ conference }: Props) {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) return;
 
     const wrapper = wrapperRef.current;
@@ -96,21 +95,20 @@ export default function AppsLanding({ conference }: Props) {
         backgroundSize: "200% 200%",
         backgroundPosition: "0% 0%",
       }}
-      className="min-h-screen text-white flex flex-col items-center px-4 text-center my-10"
+      className="my-10 flex min-h-screen flex-col items-center px-4 text-center text-white"
     >
       <h1
         ref={titleRef}
-        className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold leading-tight"
+        className="text-6xl leading-tight font-extrabold sm:text-7xl md:text-8xl lg:text-9xl"
       >
         Hacker Tracker
       </h1>
 
       <p className="mt-4 max-w-2xl text-xl sm:text-2xl md:text-3xl">
-        Your official {conference.name} schedule companion. Choose your platform
-        below.
+        Your official {conference.name} schedule companion. Choose your platform below.
       </p>
 
-      <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
+      <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">
         {platforms.map((p) => (
           <a
             key={p.name}

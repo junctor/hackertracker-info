@@ -1,24 +1,22 @@
+import type { GetStaticProps } from "next";
+
+import Head from "next/head";
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import useSWR from "swr";
-import { fetcher } from "@/lib/misc";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
+
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import SiteHeader from "@/features/app-shell/SiteHeader";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 import ScheduleEvents, {
   ScheduleDay,
   ScheduleEventViewModel,
 } from "@/features/schedule/ScheduleEvents";
-import { getBookmarks } from "@/lib/storage";
-import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
-import Head from "next/head";
 import { ConferenceManifest } from "@/lib/conferences";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
-import type { GetStaticProps } from "next";
-import { PageId } from "@/lib/types/page-meta";
+import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
+import { fetcher } from "@/lib/misc";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
+import { getBookmarks } from "@/lib/storage";
 import {
   EventsByDayIndex,
   EventsStore,
@@ -26,6 +24,7 @@ import {
   PeopleStore,
   TagsStore,
 } from "@/lib/types/ht-types";
+import { PageId } from "@/lib/types/page-meta";
 
 type BookmarksPageProps = {
   conf: ConferenceManifest;
@@ -78,8 +77,7 @@ function buildEventViewModel(
   eventId: string,
   context: EventViewModelContext,
 ): ScheduleEventViewModel | null {
-  const { eventsStore, locationsStore, tagsStore, peopleStore, timeFormatter } =
-    context;
+  const { eventsStore, locationsStore, tagsStore, peopleStore, timeFormatter } = context;
 
   const event = eventsStore.byId[eventId];
   if (!event) return null;
@@ -105,8 +103,7 @@ function buildEventViewModel(
   const beginDate = new Date(beginTimestampSeconds * 1000);
   const endDate = new Date(endTimestampSeconds * 1000);
   const locationName =
-    locationsStore.byId[normalizeId(event.locationId)]?.name ??
-    "Unknown location";
+    locationsStore.byId[normalizeId(event.locationId)]?.name ?? "Unknown location";
 
   const tags: ScheduleEventViewModel["tags"] = [];
   for (const eventTagId of event.tagIds ?? []) {
@@ -121,9 +118,7 @@ function buildEventViewModel(
   }
 
   const speakerIds =
-    event.speakerIds && event.speakerIds.length > 0
-      ? event.speakerIds
-      : (event.personIds ?? []);
+    event.speakerIds && event.speakerIds.length > 0 ? event.speakerIds : (event.personIds ?? []);
   const speakers = speakerIds
     .map((id) => peopleStore.byId[normalizeId(id)]?.name)
     .filter((name): name is string => Boolean(name))
@@ -148,77 +143,43 @@ function buildEventViewModel(
   };
 }
 
-export default function BookmarksPage({
-  conf,
-  activePageId,
-}: BookmarksPageProps) {
+export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps) {
   const nowSeconds = useNowSeconds();
   const {
     data: eventsByDay,
     error: eventsByDayError,
     isLoading: eventsByDayLoading,
-  } = useSWR<EventsByDayIndex>(
-    `${conf.dataRoot}/indexes/eventsByDay.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<EventsByDayIndex>(`${conf.dataRoot}/indexes/eventsByDay.json`, fetcher, swrOptions);
 
   const {
     data: eventsStore,
     error: eventsError,
     isLoading: eventsLoading,
-  } = useSWR<EventsStore>(
-    `${conf.dataRoot}/entities/events.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<EventsStore>(`${conf.dataRoot}/entities/events.json`, fetcher, swrOptions);
 
   const {
     data: locationsStore,
     error: locationsError,
     isLoading: locationsLoading,
-  } = useSWR<LocationsStore>(
-    `${conf.dataRoot}/entities/locations.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<LocationsStore>(`${conf.dataRoot}/entities/locations.json`, fetcher, swrOptions);
 
   const {
     data: tagsStore,
     error: tagsError,
     isLoading: tagsLoading,
-  } = useSWR<TagsStore>(
-    `${conf.dataRoot}/entities/tags.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<TagsStore>(`${conf.dataRoot}/entities/tags.json`, fetcher, swrOptions);
 
   const {
     data: peopleStore,
     error: peopleError,
     isLoading: peopleLoading,
-  } = useSWR<PeopleStore>(
-    `${conf.dataRoot}/entities/people.json`,
-    fetcher,
-    swrOptions,
-  );
+  } = useSWR<PeopleStore>(`${conf.dataRoot}/entities/people.json`, fetcher, swrOptions);
 
   const loading =
-    eventsByDayLoading ||
-    eventsLoading ||
-    locationsLoading ||
-    tagsLoading ||
-    peopleLoading;
-  const isError =
-    eventsByDayError ||
-    eventsError ||
-    locationsError ||
-    tagsError ||
-    peopleError;
+    eventsByDayLoading || eventsLoading || locationsLoading || tagsLoading || peopleLoading;
+  const isError = eventsByDayError || eventsError || locationsError || tagsError || peopleError;
 
-  const [bookmarks, setBookmarks] = useState<string[]>(() =>
-    getBookmarks().map(normalizeId),
-  );
+  const [bookmarks, setBookmarks] = useState<string[]>(() => getBookmarks().map(normalizeId));
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
@@ -236,10 +197,7 @@ export default function BookmarksPage({
     };
   }, []);
 
-  const bookmarkSet = useMemo(
-    () => new Set(bookmarks.map(normalizeId)),
-    [bookmarks],
-  );
+  const bookmarkSet = useMemo(() => new Set(bookmarks.map(normalizeId)), [bookmarks]);
 
   const scheduleBookmarks = useMemo(() => {
     return bookmarks
@@ -287,10 +245,7 @@ export default function BookmarksPage({
         const normalizedEventId = normalizeId(eventId);
         if (!bookmarkSet.has(normalizedEventId)) continue;
 
-        const eventViewModel = buildEventViewModel(
-          normalizedEventId,
-          eventViewModelContext,
-        );
+        const eventViewModel = buildEventViewModel(normalizedEventId, eventViewModelContext);
         if (eventViewModel) {
           events.push(eventViewModel);
         }
@@ -322,10 +277,7 @@ export default function BookmarksPage({
     if (days.length === 0) return null;
     for (const { day, events } of days) {
       for (const event of events) {
-        if (
-          event.beginTimestampSeconds <= nowSeconds &&
-          nowSeconds <= event.endTimestampSeconds
-        ) {
+        if (event.beginTimestampSeconds <= nowSeconds && nowSeconds <= event.endTimestampSeconds) {
           return day;
         }
       }
@@ -347,14 +299,7 @@ export default function BookmarksPage({
   }, []);
 
   if (loading) return <LoadingScreen />;
-  if (
-    isError ||
-    !eventsByDay ||
-    !eventsStore ||
-    !locationsStore ||
-    !tagsStore ||
-    !peopleStore
-  ) {
+  if (isError || !eventsByDay || !eventsStore || !locationsStore || !tagsStore || !peopleStore) {
     return <ErrorScreen />;
   }
 
@@ -362,21 +307,14 @@ export default function BookmarksPage({
     <>
       <Head>
         <title>Bookmarks | {conf.name}</title>
-        <meta
-          name="description"
-          content={`${conf.name} schedule for bookmarks`}
-        />
+        <meta name="description" content={`${conf.name} schedule for bookmarks`} />
       </Head>
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1 min-h-0">
-          <h1 className="text-3xl font-bold text-center mb-6 my-10">
-            Bookmarks
-          </h1>
+        <main className="min-h-0 flex-1">
+          <h1 className="my-10 mb-6 text-center text-3xl font-bold">Bookmarks</h1>
           {bookmarks.length === 0 ? (
-            <p className="mt-8 text-center text-gray-500">
-              No bookmarks found.
-            </p>
+            <p className="mt-8 text-center text-gray-500">No bookmarks found.</p>
           ) : days.length > 0 && resolvedDay ? (
             <ScheduleEvents
               conf={conf}
@@ -387,9 +325,7 @@ export default function BookmarksPage({
               nowSeconds={nowSeconds}
             />
           ) : (
-            <p className="mt-8 text-center text-gray-500">
-              No bookmarked events found.
-            </p>
+            <p className="mt-8 text-center text-gray-500">No bookmarked events found.</p>
           )}
         </main>
         <SiteFooter />
@@ -400,9 +336,7 @@ export default function BookmarksPage({
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<BookmarksPageProps> = async (
-  ctx,
-) => {
+export const getStaticProps: GetStaticProps<BookmarksPageProps> = async (ctx) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
   return { props: { conf: result.conf, activePageId: "bookmarks" } };

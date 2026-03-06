@@ -1,11 +1,10 @@
-import { useState, useMemo, type CSSProperties } from "react";
 import Link from "next/link";
-import type {
-  ContentCardsView,
-  TagTypesBrowseView,
-} from "@/lib/types/ht-types/views";
-import { ConferenceManifest } from "@/lib/conferences";
+import { useState, useMemo, type CSSProperties } from "react";
+
+import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
+
 import SearchHeader from "@/components/ui/SearchHeader";
+import { ConferenceManifest } from "@/lib/conferences";
 
 interface Props {
   conference: ConferenceManifest;
@@ -21,10 +20,7 @@ export default function ContentList({ content, tags, conference }: Props) {
   const filtered = useMemo(() => {
     const result: ContentCardsView = [];
     for (const item of content) {
-      if (
-        normalizedSearch &&
-        !item.title.toLowerCase().includes(normalizedSearch)
-      ) {
+      if (normalizedSearch && !item.title.toLowerCase().includes(normalizedSearch)) {
         continue;
       }
       if (selectedTag && !item.tags.some((tag) => tag.id === selectedTag)) {
@@ -49,7 +45,7 @@ export default function ContentList({ content, tags, conference }: Props) {
   );
 
   return (
-    <section className="my-10 mx-5">
+    <section className="mx-5 my-10">
       <SearchHeader
         title="Content"
         searchLabel="Search content"
@@ -65,7 +61,7 @@ export default function ContentList({ content, tags, conference }: Props) {
               const nextValue = e.target.value;
               setSelectedTag(nextValue ? Number(nextValue) : null);
             }}
-            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
           >
             <option value="">All tags</option>
             {tagOptions.map((tag) => (
@@ -90,42 +86,19 @@ export default function ContentList({ content, tags, conference }: Props) {
                 "--event-color": item.tags[0]?.colorBackground ?? "#9ca3af",
               } as CSSProperties
             }
-            className="
-              group relative overflow-hidden
-              rounded-lg border border-gray-800 bg-gray-900/40
-              transition-colors
-              hover:border-gray-700 hover:bg-gray-900
-              focus-within:border-indigo-500/70
-            "
+            className="group relative overflow-hidden rounded-lg border border-gray-800 bg-gray-900/40 transition-colors focus-within:border-indigo-500/70 hover:border-gray-700 hover:bg-gray-900"
           >
             <span
               aria-hidden="true"
-              className="
-                pointer-events-none absolute left-0 top-0 bottom-0
-                w-[clamp(0.3rem,2vw,0.9rem)]
-                bg-(--event-color)
-                transition-[width] duration-200
-                group-hover:w-[clamp(0.4rem,3vw,1.1rem)]
-              "
+              className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-(--event-color) transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
             />
             <span
               aria-hidden="true"
-              className="
-                pointer-events-none absolute left-0 top-0 bottom-0
-                w-[clamp(0.3rem,2vw,0.9rem)]
-                bg-linear-to-b from-white/0 to-indigo-600/20
-                mix-blend-multiply opacity-60
-                transition-[width] duration-200
-                group-hover:w-[clamp(0.4rem,3vw,1.1rem)]
-              "
+              className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-indigo-600/20 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
             />
             <Link
               href={`/${conference.slug}/content/?id=${item.id}`}
-              className="
-                relative z-10 block rounded-md px-4 py-5 pl-5
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
-                focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900
-              "
+              className="relative z-10 block rounded-md px-4 py-5 pl-5 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold text-gray-100 transition-colors group-hover:text-gray-200">
@@ -141,7 +114,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                   &rarr;
                 </span>
               </div>
-              <ul className="mt-3 flex flex-wrap gap-2 list-none p-0 m-0">
+              <ul className="m-0 mt-3 flex list-none flex-wrap gap-2 p-0">
                 {item.tags.map((tag) => (
                   <li
                     key={tag.id}

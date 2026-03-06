@@ -1,16 +1,14 @@
-import React, { useEffect, useMemo, useRef, useCallback } from "react";
 import { BookmarkIcon, TagIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { eventDayTable, tabDateTitle } from "@/lib/dates";
-import ScheduleEventItem from "./ScheduleEventItem";
-import { ConferenceManifest } from "@/lib/conferences";
+import React, { useEffect, useMemo, useRef, useCallback } from "react";
+import { Virtuoso, type Components, type ItemProps, type ListProps } from "react-virtuoso";
+
 import type { GroupedSchedule, ScheduleEvent } from "@/lib/types/info";
-import {
-  Virtuoso,
-  type Components,
-  type ItemProps,
-  type ListProps,
-} from "react-virtuoso";
+
+import { ConferenceManifest } from "@/lib/conferences";
+import { eventDayTable, tabDateTitle } from "@/lib/dates";
+
+import ScheduleEventItem from "./ScheduleEventItem";
 
 export type ScheduleEventViewModel = {
   id: number;
@@ -46,29 +44,24 @@ type VirtuosoItemProps = ItemProps<ScheduleEventViewModel> & {
   context: VirtuosoContext;
 };
 
-const VirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(
-  function VirtuosoList({ children, style, "data-testid": dataTestId }, ref) {
-    return (
-      <ul
-        ref={ref as unknown as React.Ref<HTMLUListElement>}
-        style={style}
-        data-testid={dataTestId}
-        className="mb-8 list-none p-0"
-      >
-        {children}
-      </ul>
-    );
-  },
-);
+const VirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(function VirtuosoList(
+  { children, style, "data-testid": dataTestId },
+  ref,
+) {
+  return (
+    <ul
+      ref={ref as unknown as React.Ref<HTMLUListElement>}
+      style={style}
+      data-testid={dataTestId}
+      className="mb-8 list-none p-0"
+    >
+      {children}
+    </ul>
+  );
+});
 VirtuosoList.displayName = "VirtuosoList";
 
-function VirtuosoItem({
-  children,
-  style,
-  context,
-  item,
-  ...itemProps
-}: VirtuosoItemProps) {
+function VirtuosoItem({ children, style, context, item, ...itemProps }: VirtuosoItemProps) {
   void context;
   void item;
   return (
@@ -79,24 +72,19 @@ function VirtuosoItem({
 }
 VirtuosoItem.displayName = "VirtuosoItem";
 
-const VIRTUOSO_COMPONENTS: Components<ScheduleEventViewModel, VirtuosoContext> =
-  {
-    List: VirtuosoList,
-    Item: VirtuosoItem,
-  };
+const VIRTUOSO_COMPONENTS: Components<ScheduleEventViewModel, VirtuosoContext> = {
+  List: VirtuosoList,
+  Item: VirtuosoItem,
+};
 
 const SITE_HEADER_OFFSET_PX = 64;
 
-export function buildScheduleDaysFromGrouped(
-  dateGroup: GroupedSchedule,
-): ScheduleDay[] {
+export function buildScheduleDaysFromGrouped(dateGroup: GroupedSchedule): ScheduleDay[] {
   return Object.entries(dateGroup)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([day, events]) => {
       const mapped = (events as ScheduleEvent[]).map((event) => {
-        const beginTimestampSeconds = Math.floor(
-          Date.parse(event.begin) / 1000,
-        );
+        const beginTimestampSeconds = Math.floor(Date.parse(event.begin) / 1000);
         const endTimestampSeconds = Math.floor(Date.parse(event.end) / 1000);
         const speakers = event.speakers?.trim();
 
@@ -216,10 +204,7 @@ export default function ScheduleEvents({
   );
 
   const activeDay = days.find(({ day }) => day === resolvedDay) ?? null;
-  const computeItemKey = useCallback(
-    (_: number, evt: ScheduleEventViewModel) => evt.id,
-    [],
-  );
+  const computeItemKey = useCallback((_: number, evt: ScheduleEventViewModel) => evt.id, []);
   const itemContent = useCallback(
     (_: number, evt: ScheduleEventViewModel) => (
       <ScheduleEventItem
@@ -270,7 +255,7 @@ export default function ScheduleEvents({
               aria-selected={resolvedDay === day}
               aria-controls={`day-panel-${day}`}
               tabIndex={resolvedDay === day ? 0 : -1}
-              className={`ui-focus-ring flex items-center gap-1 whitespace-nowrap rounded-full border px-3 py-1 text-sm transition focus-visible:outline-none ${
+              className={`ui-focus-ring flex items-center gap-1 rounded-full border px-3 py-1 text-sm whitespace-nowrap transition focus-visible:outline-none ${
                 resolvedDay === day
                   ? "border-[#017FA4]/75 bg-[#0D294A]/45 text-white"
                   : "border-gray-700 text-gray-200 hover:border-[#017FA4]/70 hover:text-[#6CCDBB]"
@@ -280,9 +265,7 @@ export default function ScheduleEvents({
             >
               <span>{tabDateTitle(day, conf.timezone)}</span>
               <span
-                className={`text-xs ${
-                  resolvedDay === day ? "text-[#6CCDBB]" : "text-gray-400"
-                }`}
+                className={`text-xs ${resolvedDay === day ? "text-[#6CCDBB]" : "text-gray-400"}`}
               >
                 ({events.length})
               </span>
@@ -300,7 +283,7 @@ export default function ScheduleEvents({
         >
           <h2
             ref={headingRef}
-            className="scroll-mt-28 ml-5 mt-6 mb-3 text-xl font-bold text-gray-100 md:text-2xl"
+            className="mt-6 mb-3 ml-5 scroll-mt-28 text-xl font-bold text-gray-100 md:text-2xl"
           >
             {eventDayTable(activeDay.day, conf.timezone)}
           </h2>

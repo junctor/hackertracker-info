@@ -1,20 +1,21 @@
-import { useMemo } from "react";
 import Head from "next/head";
-import useSWR from "swr";
 import { useRouter } from "next/router";
-import { fetcher } from "@/lib/misc";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import { useMemo } from "react";
+import useSWR from "swr";
+
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import SiteHeader from "@/features/app-shell/SiteHeader";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
-import OrganizationsList from "@/features/organizations/OrganizationsList";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
+import OrganizationsList from "@/features/organizations/OrganizationsList";
+import { ConferenceManifest } from "@/lib/conferences";
+import { fetcher } from "@/lib/misc";
 import {
   DerivedTagIdsByLabel,
   OrganizationsCardsView,
   OrganizationsStore,
 } from "@/lib/types/ht-types";
-import { ConferenceManifest } from "@/lib/conferences";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
@@ -47,21 +48,17 @@ export default function DirectoryPage({
     data: organizations,
     error: organizationsError,
     isLoading: organizationsIsLoading,
-  } = useSWR<OrganizationsCardsView>(
-    `${conf.dataRoot}/views/organizationsCards.json`,
-    fetcher,
-    { revalidateOnFocus: false },
-  );
+  } = useSWR<OrganizationsCardsView>(`${conf.dataRoot}/views/organizationsCards.json`, fetcher, {
+    revalidateOnFocus: false,
+  });
 
   const {
     data: derivedTagIdsByLabel,
     error: tagError,
     isLoading: tagIsLoading,
-  } = useSWR<DerivedTagIdsByLabel>(
-    `${conf.dataRoot}/derived/tagIdsByLabel.json`,
-    fetcher,
-    { revalidateOnFocus: false },
-  );
+  } = useSWR<DerivedTagIdsByLabel>(`${conf.dataRoot}/derived/tagIdsByLabel.json`, fetcher, {
+    revalidateOnFocus: false,
+  });
 
   const isDetailsRoute = orgId !== null;
   const {
@@ -102,8 +99,7 @@ export default function DirectoryPage({
   if (isDetailsRoute) {
     if (organizationsStoreLoading) return <LoadingScreen />;
     if (organizationsStoreError || !organizationsStore) return <ErrorScreen />;
-    if (!selectedOrganization)
-      return <ErrorScreen msg="Organization not found" />;
+    if (!selectedOrganization) return <ErrorScreen msg="Organization not found" />;
 
     return (
       <>
@@ -111,7 +107,7 @@ export default function DirectoryPage({
           <title>{pageTitle}</title>
           <meta name="description" content={metaDescription} />
         </Head>
-        <div className="min-h-screen flex flex-col">
+        <div className="flex min-h-screen flex-col">
           <SiteHeader conference={conf} activePageId={activePageId} />
           <main className="flex-1">
             <OrganizationDetails org={selectedOrganization} conference={conf} />
@@ -128,9 +124,7 @@ export default function DirectoryPage({
 
     const tagId = derivedTagIdsByLabel?.byLabel[tagLabel];
     if (!tagId) {
-      return (
-        <ErrorScreen msg={`No '${tagLabel}' tag found for this conference.`} />
-      );
+      return <ErrorScreen msg={`No '${tagLabel}' tag found for this conference.`} />;
     }
 
     const matchingOrganizations = organizations[tagId] ?? [];
@@ -142,7 +136,7 @@ export default function DirectoryPage({
           <title>{pageTitle}</title>
           <meta name="description" content={metaDescription} />
         </Head>
-        <div className="min-h-screen flex flex-col">
+        <div className="flex min-h-screen flex-col">
           <SiteHeader conference={conf} activePageId={activePageId} />
           <main className="flex-1">
             <OrganizationsList

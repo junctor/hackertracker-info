@@ -9,8 +9,7 @@ function readBookmarks(): number[] {
     const normalized: number[] = [];
 
     for (const value of raw) {
-      const parsed =
-        typeof value === "number" ? value : Number.parseInt(String(value), 10);
+      const parsed = typeof value === "number" ? value : Number.parseInt(String(value), 10);
       if (!Number.isInteger(parsed) || seen.has(parsed)) continue;
       seen.add(parsed);
       normalized.push(parsed);

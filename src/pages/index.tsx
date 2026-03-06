@@ -1,11 +1,10 @@
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import Head from "next/head";
-import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import React, { useRef } from "react";
 
 gsap.registerPlugin(useGSAP, ScrambleTextPlugin);
 
@@ -17,9 +16,7 @@ export default function Home() {
     const el = titleRef.current;
     if (!el) return;
 
-    const prefersReduced = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    )?.matches;
+    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     el.textContent = title;
     if (prefersReduced) return;
@@ -67,19 +64,7 @@ export default function Home() {
                 tabIndex={0}
                 role="button"
                 aria-label="DEF CON title animation"
-                className="
-                select-none font-mono font-semibold text-slate-100 outline-none
-                focus-visible:ring-2 focus-visible:ring-slate-600
-                leading-none
-                text-7xl
-                sm:text-8xl
-                md:text-9xl
-                lg:text-[10rem]
-                tracking-wider
-                sm:tracking-wide
-                md:tracking-normal
-                lg:tracking-tighter
-              "
+                className="font-mono text-7xl leading-none font-semibold tracking-wider text-slate-100 outline-none select-none focus-visible:ring-2 focus-visible:ring-slate-600 sm:text-8xl sm:tracking-wide md:text-9xl md:tracking-normal lg:text-[10rem] lg:tracking-tighter"
               >
                 {title}
               </span>
@@ -96,11 +81,7 @@ export default function Home() {
               src="/images/dcsingapore.webp"
               alt="DEF CON Singapore"
             />
-            <ConferenceCard
-              href="/defcon34"
-              src="/images/dc-lv.webp"
-              alt="DEF CON 34"
-            />
+            <ConferenceCard href="/defcon34" src="/images/dc-lv.webp" alt="DEF CON 34" />
           </div>
         </div>
       </main>
@@ -108,15 +89,7 @@ export default function Home() {
   );
 }
 
-function ConferenceCard({
-  href,
-  src,
-  alt,
-}: {
-  href: string;
-  src: string;
-  alt: string;
-}) {
+function ConferenceCard({ href, src, alt }: { href: string; src: string; alt: string }) {
   return (
     <Link
       href={href}
@@ -131,9 +104,7 @@ function ConferenceCard({
           className="object-contain p-4 transition-transform duration-200 group-hover:scale-[1.01]"
         />
       </div>
-      <div className="mt-3 text-center text-sm font-medium text-slate-700">
-        {alt}
-      </div>
+      <div className="mt-3 text-center text-sm font-medium text-slate-700">{alt}</div>
     </Link>
   );
 }

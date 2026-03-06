@@ -1,6 +1,7 @@
-import type { ConferenceManifest } from "@/lib/conferences";
 import localFont from "next/font/local";
 import { useMemo } from "react";
+
+import type { ConferenceManifest } from "@/lib/conferences";
 
 export type TimerUnitKey = "days" | "hours" | "minutes" | "seconds";
 
@@ -30,8 +31,7 @@ export const COUNTDOWN_UNIT_COLORS: Record<TimerUnitKey, string> = {
   seconds: "#105F66",
 };
 
-export const HOME_SECTION_CLASS_NAME =
-  "mx-auto w-full max-w-6xl px-4 py-12 sm:py-14 md:py-16";
+export const HOME_SECTION_CLASS_NAME = "mx-auto w-full max-w-6xl px-4 py-12 sm:py-14 md:py-16";
 export const HOME_HERO_STACK_CLASS_NAME =
   "mx-auto flex max-w-3xl flex-col items-center justify-center text-center";
 export const HOME_HERO_LOGO_WRAP_CLASS_NAME =
@@ -75,12 +75,7 @@ export function useHomeModel(conference: ConferenceManifest) {
       logoAlt: `${conference.name} logo`,
       kickoffDateMs,
     };
-  }, [
-    conference.kickoff,
-    conference.logoFile,
-    conference.name,
-    conference.slug,
-  ]);
+  }, [conference.kickoff, conference.logoFile, conference.name, conference.slug]);
 }
 
 export function hasKickoffPassed(kickoffDateMs: number, nowMs = Date.now()) {
@@ -92,12 +87,7 @@ export function formatCountdownValue(value: number) {
 }
 
 export function formatCountdownLiveLabel(timer: CountdownTimer) {
-  if (
-    timer.days === 0 &&
-    timer.hours === 0 &&
-    timer.minutes === 0 &&
-    timer.seconds === 0
-  ) {
+  if (timer.days === 0 && timer.hours === 0 && timer.minutes === 0 && timer.seconds === 0) {
     return "Starting now";
   }
 

@@ -39,7 +39,7 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
 
 export default function TagsList({ tagTypes, conference }: TagsListProps) {
   const sortedTagTypes = useMemo(
-    () => [...tagTypes].sort((a, b) => a.sortOrder - b.sortOrder),
+    () => tagTypes.toSorted((a, b) => a.sortOrder - b.sortOrder),
     [tagTypes],
   );
 
@@ -53,7 +53,7 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
         <p>No tags available.</p>
       ) : (
         sortedTagTypes.map((tagType) => {
-          const sortedTags = [...tagType.tags].sort((a, b) => a.sortOrder - b.sortOrder);
+          const sortedTags = tagType.tags.toSorted((a, b) => a.sortOrder - b.sortOrder);
 
           return (
             <section key={tagType.id} className="mb-10">

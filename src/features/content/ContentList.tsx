@@ -35,11 +35,11 @@ export default function ContentList({ content, tags, conference }: Props) {
     () =>
       tags
         .filter((tag) => tag.tags.length > 0 && tag.category === "content")
-        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .toSorted((a, b) => a.sortOrder - b.sortOrder)
         .map((tag) => ({
           id: tag.id,
           label: tag.label,
-          tags: [...tag.tags].sort((a, b) => a.sortOrder - b.sortOrder),
+          tags: tag.tags.toSorted((a, b) => a.sortOrder - b.sortOrder),
         })),
     [tags],
   );

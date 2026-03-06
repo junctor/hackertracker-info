@@ -114,6 +114,10 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   if (!isReady) return <LoadingScreen />;
   if (isIdInvalid) return <ErrorScreen msg="Invalid person id." />;
 
+  let pageTitle = `People | ${conf.name}`;
+  let pageDescription = `Browse bios and sessions for all ${conf.name} participants.`;
+  let pageContent: JSX.Element;
+
   if (shouldLoadDetails) {
     const isDetailLoading = peopleLoading || eventsLoading || locationsLoading;
     const detailError = peopleError || eventsError || locationsError;
@@ -124,47 +128,31 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
     }
     if (!person) return <ErrorScreen msg="Person not found." />;
 
-    return (
-      <>
-        <Head>
-          <title>
-            {person.name} | {conf.name}
-          </title>
-          <meta name="description" content={metaDescription} />
-        </Head>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader conference={conf} activePageId={activePageId} />
-          <main className="flex-1">
-            <PersonDetails
-              person={person}
-              events={eventForContentIds}
-              locations={locationsForEventIds}
-              conference={conf}
-            />
-          </main>
-          <SiteFooter />
-        </div>
-      </>
+    pageTitle = `${person.name} | ${conf.name}`;
+    pageDescription = metaDescription;
+    pageContent = (
+      <PersonDetails
+        person={person}
+        events={eventForContentIds}
+        locations={locationsForEventIds}
+        conference={conf}
+      />
     );
+  } else {
+    if (isLoading) return <LoadingScreen />;
+    if (error || !people) return <ErrorScreen />;
+    pageContent = <PeopleList people={people} conference={conf} />;
   }
-
-  if (isLoading) return <LoadingScreen />;
-  if (error || !people) return <ErrorScreen />;
 
   return (
     <>
       <Head>
-        <title>People | {conf.name}</title>
-        <meta
-          name="description"
-          content={`Browse bios and sessions for all ${conf.name} participants.`}
-        />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
       </Head>
       <div className="flex min-h-screen flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
-          <PeopleList people={people} conference={conf} />
-        </main>
+        <main className="flex-1">{pageContent}</main>
         <SiteFooter />
       </div>
     </>

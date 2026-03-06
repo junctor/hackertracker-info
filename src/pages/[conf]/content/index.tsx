@@ -130,6 +130,10 @@ export default function ContentsPage({ conf, activePageId }: ContentsPageProps) 
   if (!isReady) return <LoadingScreen />;
   if (isIdInvalid) return <ErrorScreen msg="Invalid content id." />;
 
+  let pageTitle = `Content | ${conf.name}`;
+  let pageDescription = `Browse talks, workshops, and presentations at ${conf.name}.`;
+  let pageContent: JSX.Element;
+
   if (shouldLoadDetails) {
     const isDetailLoading =
       contentStoreLoading || peopleLoading || eventsLoading || locationsLoading || tagsLoading;
@@ -159,8 +163,7 @@ export default function ContentsPage({ conf, activePageId }: ContentsPageProps) 
       locationIds.has(location.id),
     );
     const people = (content.people ?? [])
-      .slice()
-      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .toSorted((a, b) => a.sortOrder - b.sortOrder)
       .map((p) => peopleStore.byId[p.personId])
       .filter((p): p is NonNullable<typeof p> => Boolean(p));
     const tags = content.tagIds
@@ -170,53 +173,37 @@ export default function ContentsPage({ conf, activePageId }: ContentsPageProps) 
       .map((id) => contentStore.byId[id])
       .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
-    return (
-      <>
-        <Head>
-          <title>
-            {content.title} | {conf.name}
-          </title>
-          <meta name="description" content={metaDescription} />
-        </Head>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader conference={conf} activePageId={activePageId} />
-          <main className="flex-1">
-            <ContentDetails
-              content={content}
-              sessions={sessions}
-              locations={locations}
-              people={people}
-              related_content={relatedContent}
-              tags={tags}
-              bookmarks={bookmarks}
-              conference={conf}
-            />
-          </main>
-          <SiteFooter />
-        </div>
-      </>
+    pageTitle = `${content.title} | ${conf.name}`;
+    pageDescription = metaDescription;
+    pageContent = (
+      <ContentDetails
+        content={content}
+        sessions={sessions}
+        locations={locations}
+        people={people}
+        related_content={relatedContent}
+        tags={tags}
+        bookmarks={bookmarks}
+        conference={conf}
+      />
     );
-  }
-
-  if (contentCardsLoading || tagTypesLoading) return <LoadingScreen />;
-  if (contentCardsError || tagTypesError || !contentCards || !tagTypes) {
-    return <ErrorScreen msg="Failed to load content." />;
+  } else {
+    if (contentCardsLoading || tagTypesLoading) return <LoadingScreen />;
+    if (contentCardsError || tagTypesError || !contentCards || !tagTypes) {
+      return <ErrorScreen msg="Failed to load content." />;
+    }
+    pageContent = <ContentList content={contentCards} tags={tagTypes} conference={conf} />;
   }
 
   return (
     <>
       <Head>
-        <title>Content | {conf.name}</title>
-        <meta
-          name="description"
-          content={`Browse talks, workshops, and presentations at ${conf.name}.`}
-        />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
       </Head>
       <div className="flex min-h-screen flex-col">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
-          <ContentList content={contentCards} tags={tagTypes} conference={conf} />
-        </main>
+        <main className="flex-1">{pageContent}</main>
         <SiteFooter />
       </div>
     </>

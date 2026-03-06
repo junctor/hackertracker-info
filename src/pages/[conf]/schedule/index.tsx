@@ -77,7 +77,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
       return [];
     }
 
-    const dayKeys = Object.keys(eventsByDay).sort();
+    const dayKeys = Object.keys(eventsByDay).toSorted();
     const result: ScheduleDay[] = [];
     const timeFormatter = new Intl.DateTimeFormat(undefined, {
       hour: "2-digit",

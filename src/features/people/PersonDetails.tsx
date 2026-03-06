@@ -56,7 +56,7 @@ export default function PersonDetails({ person, events, locations, conference }:
           {person.links.length > 0 && (
             <div className="flex flex-wrap gap-3">
               {person.links
-                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .toSorted((a, b) => a.sortOrder - b.sortOrder)
                 .map((l) => (
                   <a
                     key={l.url}

@@ -81,7 +81,7 @@ const SITE_HEADER_OFFSET_PX = 64;
 
 export function buildScheduleDaysFromGrouped(dateGroup: GroupedSchedule): ScheduleDay[] {
   return Object.entries(dateGroup)
-    .sort(([a], [b]) => a.localeCompare(b))
+    .toSorted(([a], [b]) => a.localeCompare(b))
     .map(([day, events]) => {
       const mapped = (events as ScheduleEvent[]).map((event) => {
         const beginTimestampSeconds = Math.floor(Date.parse(event.begin) / 1000);

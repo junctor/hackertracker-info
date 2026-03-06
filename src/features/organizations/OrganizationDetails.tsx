@@ -15,6 +15,14 @@ type Props = {
 
 type TabKey = "about" | "links";
 
+const tabClass = (selected: boolean) =>
+  [
+    "px-3 py-2 text-sm font-medium transition",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70",
+    "focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900",
+    selected ? "border-b-2 border-indigo-400 text-white" : "text-gray-400 hover:text-white",
+  ].join(" ");
+
 export default function OrganizationDetails({ org, conference }: Props) {
   const [activeTab, setActiveTab] = useState<TabKey>("about");
 
@@ -41,14 +49,6 @@ export default function OrganizationDetails({ org, conference }: Props) {
   const linksTabId = `${baseId}-tab-links`;
   const aboutPanelId = `${baseId}-panel-about`;
   const linksPanelId = `${baseId}-panel-links`;
-
-  const tabClass = (selected: boolean) =>
-    [
-      "px-3 py-2 text-sm font-medium transition",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70",
-      "focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900",
-      selected ? "border-b-2 border-indigo-400 text-white" : "text-gray-400 hover:text-white",
-    ].join(" ");
 
   const selectTab = (key: TabKey) => () => setActiveTab(key);
 

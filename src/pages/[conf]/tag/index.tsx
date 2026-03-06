@@ -150,7 +150,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
       return [];
     }
 
-    const dayKeys = Object.keys(eventsByDay).sort();
+    const dayKeys = Object.keys(eventsByDay).toSorted();
     const result: ScheduleDay[] = [];
     const timeFormatter = new Intl.DateTimeFormat(undefined, {
       hour: "2-digit",
@@ -215,9 +215,9 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
         });
       }
 
-      events.sort((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds);
-      if (events.length > 0) {
-        result.push({ day, events });
+      const sortedEvents = events.toSorted((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds);
+      if (sortedEvents.length > 0) {
+        result.push({ day, events: sortedEvents });
       }
     }
 

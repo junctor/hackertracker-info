@@ -12,9 +12,7 @@ type Props = {
 
 export default function AnnouncementsList({ announcements, conference }: Props) {
   const sorted = useMemo(() => {
-    const items = Object.values(announcements.byId);
-    items.sort((a, b) => b.updatedAtMs - a.updatedAtMs);
-    return items;
+    return Object.values(announcements.byId).toSorted((a, b) => b.updatedAtMs - a.updatedAtMs);
   }, [announcements.byId]);
 
   if (!sorted.length) {

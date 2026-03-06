@@ -247,5 +247,5 @@ export function getSiteMenu(conference: ConferenceManifest): SiteMenuItem[] {
   const items = conference.siteMenu.map((key) => MENU[key](conference));
 
   // Sort just in case keys are rearranged or you want stable ordering.
-  return items.sort((a, b) => a.sort_order - b.sort_order);
+  return items.toSorted((a, b) => a.sort_order - b.sort_order);
 }

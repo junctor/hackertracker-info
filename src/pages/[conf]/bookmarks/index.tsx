@@ -227,7 +227,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
       return [];
     }
 
-    const dayKeys = Object.keys(eventsByDay).sort((a, b) => a.localeCompare(b));
+    const dayKeys = Object.keys(eventsByDay).toSorted((a, b) => a.localeCompare(b));
     const result: ScheduleDay[] = [];
     const eventViewModelContext: EventViewModelContext = {
       eventsStore,
@@ -251,14 +251,14 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
         }
       }
 
-      events.sort((a, b) => {
+      const sortedEvents = events.toSorted((a, b) => {
         if (a.beginTimestampSeconds !== b.beginTimestampSeconds) {
           return a.beginTimestampSeconds - b.beginTimestampSeconds;
         }
         return a.id - b.id;
       });
-      if (events.length > 0) {
-        result.push({ day, events });
+      if (sortedEvents.length > 0) {
+        result.push({ day, events: sortedEvents });
       }
     }
 

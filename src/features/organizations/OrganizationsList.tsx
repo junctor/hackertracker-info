@@ -12,11 +12,19 @@ type Props = {
   detailsBasePath: string;
 };
 
+const getInitials = (name: string) =>
+  name
+    .split(" ")
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
 export default function OrganizationsList({ organizations, title, detailsBasePath }: Props) {
   const [search, setSearch] = useState("");
   const normalizedSearch = search.trim().toLowerCase();
   const sortedOrganizations = useMemo(
-    () => [...organizations].sort((a, b) => alphaSort(a.name, b.name)),
+    () => organizations.toSorted((a, b) => alphaSort(a.name, b.name)),
     [organizations],
   );
   const filtered = useMemo(
@@ -26,14 +34,6 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
         : sortedOrganizations,
     [sortedOrganizations, normalizedSearch],
   );
-
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((w) => w[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase();
 
   return (
     <section className="mx-auto my-10 max-w-7xl px-5">

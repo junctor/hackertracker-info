@@ -96,29 +96,22 @@ export default function DirectoryPage({
     ? `${selectedOrganization.name} | ${conf.name}`
     : `${title} | ${conf.name}`;
 
+  let pageContent: JSX.Element;
   if (isDetailsRoute) {
     if (organizationsStoreLoading) return <LoadingScreen />;
     if (organizationsStoreError || !organizationsStore) return <ErrorScreen />;
     if (!selectedOrganization) return <ErrorScreen msg="Organization not found" />;
 
-    return (
-      <>
-        <Head>
-          <title>{pageTitle}</title>
-          <meta name="description" content={metaDescription} />
-        </Head>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader conference={conf} activePageId={activePageId} />
-          <main className="flex-1">
-            <OrganizationDetails org={selectedOrganization} conference={conf} />
-          </main>
-          <SiteFooter />
-        </div>
-      </>
+    pageContent = (
+      <div className="flex min-h-screen flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <OrganizationDetails org={selectedOrganization} conference={conf} />
+        </main>
+        <SiteFooter />
+      </div>
     );
-  }
-
-  if (isIdMissing) {
+  } else if (isIdMissing) {
     if (isLoading) return <LoadingScreen />;
     if (error || !organizations) return <ErrorScreen />;
 
@@ -130,26 +123,30 @@ export default function DirectoryPage({
     const matchingOrganizations = organizations[tagId] ?? [];
     const detailsBasePath = `/${conf.slug}/${routeSlug}`;
 
-    return (
-      <>
-        <Head>
-          <title>{pageTitle}</title>
-          <meta name="description" content={metaDescription} />
-        </Head>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader conference={conf} activePageId={activePageId} />
-          <main className="flex-1">
-            <OrganizationsList
-              organizations={matchingOrganizations}
-              title={title}
-              detailsBasePath={detailsBasePath}
-            />
-          </main>
-          <SiteFooter />
-        </div>
-      </>
+    pageContent = (
+      <div className="flex min-h-screen flex-col">
+        <SiteHeader conference={conf} activePageId={activePageId} />
+        <main className="flex-1">
+          <OrganizationsList
+            organizations={matchingOrganizations}
+            title={title}
+            detailsBasePath={detailsBasePath}
+          />
+        </main>
+        <SiteFooter />
+      </div>
     );
+  } else {
+    return <ErrorScreen msg="Missing organization id." />;
   }
 
-  return <ErrorScreen msg="Missing organization id." />;
+  return (
+    <>
+      <Head>
+        <title>{pageTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
+      {pageContent}
+    </>
+  );
 }

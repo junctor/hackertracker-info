@@ -4,7 +4,7 @@ import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 
 import Countdown from "@/features/home/Countdown";
 import { CONFERENCES, type ConferenceManifest } from "@/lib/conferences";
@@ -20,20 +20,34 @@ const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = [
   { conference: CONFERENCES.defcon34 },
 ];
 
+const TITLE_CYCLE = [
+  "DEF CON",
+  "D3F CON",
+  "DEF C0N",
+  "D3F C0N",
+  "D3F-C0N",
+  "D3F_C0N",
+  "STAHP IT",
+] as const;
+
 export default function Home() {
   const titleRef = useRef<HTMLSpanElement | null>(null);
-  const title = "DEF CON";
+  const [mouseOverCount, setMouseOverCount] = useState(0);
 
-  useGSAP(() => {
-    const el = titleRef.current;
-    if (!el) return;
+  const title = useMemo(() => TITLE_CYCLE[mouseOverCount % TITLE_CYCLE.length], [mouseOverCount]);
 
-    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  useGSAP(
+    () => {
+      const el = titleRef.current;
+      if (!el) return;
 
-    el.textContent = title;
-    if (prefersReduced) return;
+      const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
-    const play = () => {
+      el.textContent = title;
+      if (prefersReduced) return;
+
+      gsap.killTweensOf(el);
+
       gsap.fromTo(
         el,
         { opacity: 1 },
@@ -47,15 +61,13 @@ export default function Home() {
           },
         },
       );
-    };
+    },
+    { dependencies: [title] },
+  );
 
-    play();
-    el.addEventListener("pointerenter", play);
-
-    return () => {
-      el.removeEventListener("pointerenter", play);
-    };
-  }, []);
+  const handleTitlePointerEnter = () => {
+    setMouseOverCount((prev) => prev + 1);
+  };
 
   return (
     <>
@@ -89,7 +101,8 @@ export default function Home() {
               <span
                 ref={titleRef}
                 aria-label="DEF CON"
-                className="inline-block font-mono text-7xl leading-none font-semibold tracking-[0.14em] text-slate-50 select-none sm:text-8xl md:text-9xl lg:text-[10rem]"
+                onPointerEnter={handleTitlePointerEnter}
+                className="inline-block cursor-pointer font-mono text-7xl leading-none font-semibold tracking-[0.14em] text-slate-50 select-none sm:text-8xl md:text-9xl lg:text-[10rem]"
               >
                 {title}
               </span>

@@ -13,20 +13,42 @@ gsap.registerPlugin(useGSAP, ScrambleTextPlugin);
 
 type ConferenceCardConfig = {
   conference: ConferenceManifest;
+  subtitle: string;
+  statusLabel: string;
 };
 
+const conferenceDateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+  weekday: "long",
+});
+
+const formatConferenceDate = (date: string) => conferenceDateFormatter.format(new Date(date));
+
 const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = [
-  { conference: CONFERENCES.dcsg2026 },
-  { conference: CONFERENCES.defcon34 },
+  {
+    conference: CONFERENCES.dcsg2026,
+    subtitle: formatConferenceDate(CONFERENCES.dcsg2026.kickoff),
+    statusLabel: "Conference starts in",
+  },
+  {
+    conference: CONFERENCES.defcon34,
+    subtitle: formatConferenceDate(CONFERENCES.defcon34.kickoff),
+    statusLabel: "Conference starts in",
+  },
 ];
 
 const TITLE_CYCLE = ["DEF CON", "D3F CON", "DEF C0N", "D3F C0N", "D3F_C0N", "STAHP IT"] as const;
 
 export default function Home() {
   const titleRef = useRef<HTMLSpanElement | null>(null);
-  const [mouseOverCount, setMouseOverCount] = useState(0);
+  const [interactionCount, setInteractionCount] = useState(0);
 
-  const title = useMemo(() => TITLE_CYCLE[mouseOverCount % TITLE_CYCLE.length], [mouseOverCount]);
+  const title = useMemo(
+    () => TITLE_CYCLE[interactionCount % TITLE_CYCLE.length],
+    [interactionCount],
+  );
 
   useGSAP(
     () => {
@@ -57,15 +79,29 @@ export default function Home() {
     { dependencies: [title] },
   );
 
-  const handleTitlePointerEnter = () => {
-    setMouseOverCount((prev) => prev + 1);
+  const cycleTitle = () => {
+    setInteractionCount((prev) => prev + 1);
   };
 
   return (
     <>
       <Head>
-        <title>info.defcon.org</title>
-        <meta name="description" content="DEF CON conference schedules and information" />
+        <title>info.defcon.org | DEF CON schedules and conference information</title>
+        <meta
+          name="description"
+          content="Official DEF CON schedules and conference information for current and upcoming events."
+        />
+        <meta
+          property="og:title"
+          content="info.defcon.org | DEF CON schedules and conference information"
+        />
+        <meta
+          property="og:description"
+          content="Official DEF CON schedules and conference information for current and upcoming events."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://info.defcon.org" />
+        <meta name="theme-color" content="#020617" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -80,10 +116,6 @@ export default function Home() {
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,transparent,rgba(255,255,255,0.2),transparent)] bg-size-[100%_6px] opacity-[0.06]"
-        />
-        <div
-          aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b from-white/5 to-transparent"
         />
 
@@ -93,22 +125,41 @@ export default function Home() {
               <span
                 ref={titleRef}
                 aria-label="DEF CON"
-                onPointerEnter={handleTitlePointerEnter}
-                className="inline-block cursor-pointer font-mono text-7xl leading-none font-semibold tracking-[0.08em] whitespace-nowrap text-slate-50 select-none sm:text-8xl sm:tracking-[0.12em] md:text-9xl md:tracking-[0.14em] lg:text-[10rem]"
+                role="button"
+                tabIndex={0}
+                onPointerEnter={cycleTitle}
+                onFocus={cycleTitle}
+                onClick={cycleTitle}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    cycleTitle();
+                  }
+                }}
+                className="inline-block cursor-pointer font-mono text-7xl leading-none font-semibold tracking-[0.07em] whitespace-nowrap text-slate-50 transition outline-none select-none focus-visible:rounded-xl focus-visible:ring-2 focus-visible:ring-sky-300/70 focus-visible:ring-offset-4 focus-visible:ring-offset-slate-950 sm:text-8xl sm:tracking-[0.1em] md:text-9xl md:tracking-[0.12em] lg:text-[10rem]"
               >
                 {title}
               </span>
             </h1>
 
             <div className="mx-auto mt-6 h-px w-28 bg-linear-to-r from-transparent via-slate-600 to-transparent sm:mt-7 sm:w-32" />
+
+            <p className="mx-auto mt-6 max-w-2xl text-sm leading-6 text-slate-300 sm:mt-7 sm:text-base sm:leading-7">
+              Official DEF CON schedules and conference information for current and upcoming events.
+            </p>
           </header>
 
           <section
             aria-label="Available conferences"
             className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:gap-7"
           >
-            {HOME_CONFERENCE_CARDS.map(({ conference }) => (
-              <ConferenceCard key={conference.slug} conference={conference} />
+            {HOME_CONFERENCE_CARDS.map(({ conference, subtitle, statusLabel }) => (
+              <ConferenceCard
+                key={conference.slug}
+                conference={conference}
+                subtitle={subtitle}
+                statusLabel={statusLabel}
+              />
             ))}
           </section>
         </div>
@@ -117,7 +168,15 @@ export default function Home() {
   );
 }
 
-function ConferenceCard({ conference }: { conference: ConferenceManifest }) {
+function ConferenceCard({
+  conference,
+  subtitle,
+  statusLabel,
+}: {
+  conference: ConferenceManifest;
+  subtitle: string;
+  statusLabel: string;
+}) {
   const href = `/${conference.slug}`;
   const src = `/images/${conference.logoFile}`;
 
@@ -139,7 +198,8 @@ function ConferenceCard({ conference }: { conference: ConferenceManifest }) {
   return (
     <Link
       href={href}
-      className="group relative block overflow-hidden rounded-3xl p-px shadow-[0_10px_30px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.38)] focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+      aria-label={`View ${conference.name}`}
+      className="group relative block overflow-hidden rounded-3xl p-px shadow-[0_10px_30px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.38)] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
     >
       <span
         aria-hidden="true"
@@ -173,9 +233,10 @@ function ConferenceCard({ conference }: { conference: ConferenceManifest }) {
               <div className="text-sm font-semibold tracking-[0.14em] text-slate-200 uppercase sm:text-base">
                 {conference.name}
               </div>
+              <p className="mt-2 text-sm leading-6 text-slate-400">{subtitle}</p>
             </div>
 
-            <div className="relative mt-3 aspect-16/6 w-full sm:mt-4">
+            <div className="relative mt-4 aspect-16/6 w-full sm:mt-5">
               <Image
                 src={src}
                 alt={`${conference.name} logo`}
@@ -189,7 +250,7 @@ function ConferenceCard({ conference }: { conference: ConferenceManifest }) {
 
         <div className="mt-3 rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:mt-4 sm:py-3">
           <div className="mb-1.5 text-center text-[10px] tracking-[0.22em] text-slate-500 uppercase sm:mb-2">
-            Countdown to kickoff
+            {statusLabel}
           </div>
           <Countdown conference={conference} size="tiny" />
         </div>

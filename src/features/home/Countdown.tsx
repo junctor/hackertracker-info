@@ -103,10 +103,8 @@ type Props = {
 
 export default function Countdown({ conference, size = "large" }: Props) {
   const home = useHomeModel(conference);
-  const [expired, setExpired] = useState(() => hasKickoffPassed(home.kickoffDateMs));
-  const [timer, setTimer] = useState<CountdownTimer>(() =>
-    hasKickoffPassed(home.kickoffDateMs) ? EMPTY_COUNTDOWN_TIMER : getCountdown(home.kickoffDateMs),
-  );
+  const [expired, setExpired] = useState(false);
+  const [timer, setTimer] = useState<CountdownTimer>(EMPTY_COUNTDOWN_TIMER);
   const variant = COUNTDOWN_VARIANTS[size];
 
   const daysRef = useRef<HTMLSpanElement | null>(null);
@@ -126,11 +124,12 @@ export default function Countdown({ conference, size = "large" }: Props) {
         return;
       }
 
+      setExpired(false);
       setTimer(getCountdown(home.kickoffDateMs));
       timeoutId = setTimeout(tick, 1000 - (nowMs % 1000));
     };
 
-    timeoutId = setTimeout(tick, 0);
+    tick();
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };

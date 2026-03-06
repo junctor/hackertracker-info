@@ -51,11 +51,9 @@ export default function Home() {
 
     play();
     el.addEventListener("pointerenter", play);
-    el.addEventListener("focus", play);
 
     return () => {
       el.removeEventListener("pointerenter", play);
-      el.removeEventListener("focus", play);
     };
   }, []);
 
@@ -63,35 +61,51 @@ export default function Home() {
     <>
       <Head>
         <title>info.defcon.org</title>
-        <meta name="description" content="DEF CON" />
+        <meta name="description" content="DEF CON conference schedules and information" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="min-h-dvh px-4">
-        <div className="mx-auto max-w-5xl pt-20 sm:pt-24">
-          <div className="text-center">
-            <h1 className="mx-auto inline-flex items-center justify-center">
+      <main className="relative min-h-dvh overflow-hidden bg-slate-950 text-slate-100">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.14),transparent_30%),radial-gradient(circle_at_20%_30%,rgba(251,191,36,0.10),transparent_22%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_20%)]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-size-[40px_40px] opacity-[0.14]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,transparent,rgba(255,255,255,0.2),transparent)] bg-size-[100%_6px] opacity-[0.06]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b from-white/5 to-transparent"
+        />
+
+        <div className="relative mx-auto max-w-6xl px-4 pt-16 pb-14 sm:px-6 sm:pt-20 sm:pb-20 lg:px-8 lg:pt-24">
+          <header className="mx-auto max-w-3xl text-center">
+            <h1>
               <span
                 ref={titleRef}
-                tabIndex={0}
-                role="button"
-                aria-label="DEF CON title animation"
-                className="font-mono text-7xl leading-none font-semibold tracking-wider text-slate-100 outline-none select-none focus-visible:ring-2 focus-visible:ring-slate-600 sm:text-8xl sm:tracking-wide md:text-9xl md:tracking-normal lg:text-[10rem] lg:tracking-tighter"
+                aria-label="DEF CON"
+                className="inline-block font-mono text-7xl leading-none font-semibold tracking-[0.14em] text-slate-50 select-none sm:text-8xl md:text-9xl lg:text-[10rem]"
               >
                 {title}
               </span>
             </h1>
 
-            <p className="mx-auto max-w-2xl text-base text-slate-500 sm:text-lg">
-              Please select a conference from the menu to get started.
-            </p>
-          </div>
+            <div className="mx-auto mt-6 h-px w-28 bg-linear-to-r from-transparent via-slate-600 to-transparent sm:mt-7 sm:w-32" />
+          </header>
 
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:mt-14 sm:grid-cols-2">
+          <section
+            aria-label="Available conferences"
+            className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:gap-7"
+          >
             {HOME_CONFERENCE_CARDS.map(({ conference }) => (
               <ConferenceCard key={conference.slug} conference={conference} />
             ))}
-          </div>
+          </section>
         </div>
       </main>
     </>
@@ -102,23 +116,78 @@ function ConferenceCard({ conference }: { conference: ConferenceManifest }) {
   const href = `/${conference.slug}`;
   const src = `/images/${conference.logoFile}`;
 
+  const accentClasses =
+    conference.slug === "dcsg2026"
+      ? {
+          border:
+            "bg-[linear-gradient(135deg,rgba(34,197,94,0.38),rgba(59,130,246,0.34),rgba(168,85,247,0.30))]",
+          glow: "bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.20),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.18),transparent_36%)]",
+          ring: "group-hover:border-emerald-300/20",
+        }
+      : {
+          border:
+            "bg-[linear-gradient(135deg,rgba(251,191,36,0.40),rgba(244,114,182,0.28),rgba(96,165,250,0.32))]",
+          glow: "bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.20),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(96,165,250,0.18),transparent_36%)]",
+          ring: "group-hover:border-amber-300/20",
+        };
+
   return (
     <Link
       href={href}
-      className="group rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-sm transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+      className="group relative block overflow-hidden rounded-3xl p-px shadow-[0_10px_30px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.38)] focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
     >
-      <div className="relative aspect-16/6 w-full overflow-hidden rounded-xl bg-slate-50">
-        <Image
-          src={src}
-          alt={`${conference.name} logo`}
-          fill
-          sizes="(min-width: 1024px) 480px, (min-width: 640px) 46vw, 92vw"
-          className="object-contain p-4 transition-transform duration-200 group-hover:scale-[1.01]"
-        />
-      </div>
-      <div className="mt-3 text-center text-sm font-medium text-slate-700">{conference.name}</div>
-      <div className="mt-2">
-        <Countdown conference={conference} size="tiny" />
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-0 rounded-3xl opacity-80 transition duration-300 group-hover:opacity-100 ${accentClasses.border}`}
+      />
+
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
+      >
+        <span className={`absolute inset-0 rounded-3xl ${accentClasses.glow}`} />
+        <span className="absolute top-0 -left-1/3 h-full w-1/2 -skew-x-12 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent)] opacity-0 transition duration-700 group-hover:translate-x-[240%] group-hover:opacity-100" />
+      </span>
+
+      <div className="relative rounded-[calc(var(--radius-3xl)-1px)] border border-white/10 bg-slate-900/90 p-3.5 backdrop-blur-md sm:p-4">
+        <div
+          className={`relative overflow-hidden rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),rgba(15,23,42,0.92))] px-5 pt-4 pb-4 transition duration-300 sm:px-6 sm:pt-5 sm:pb-5 ${accentClasses.ring}`}
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[28px_28px] opacity-40"
+          />
+
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 h-14 bg-linear-to-b from-white/6 to-transparent sm:h-16"
+          />
+
+          <div className="relative z-10">
+            <div className="text-center">
+              <div className="text-sm font-semibold tracking-[0.14em] text-slate-200 uppercase sm:text-base">
+                {conference.name}
+              </div>
+            </div>
+
+            <div className="relative mt-3 aspect-16/6 w-full sm:mt-4">
+              <Image
+                src={src}
+                alt={`${conference.name} logo`}
+                fill
+                sizes="(min-width: 1024px) 480px, (min-width: 640px) 46vw, 92vw"
+                className="object-contain transition duration-300 group-hover:-translate-y-0.5 group-hover:scale-[1.035]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-3 rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:mt-4 sm:py-3">
+          <div className="mb-1.5 text-center text-[10px] tracking-[0.22em] text-slate-500 uppercase sm:mb-2">
+            Countdown to kickoff
+          </div>
+          <Countdown conference={conference} size="tiny" />
+        </div>
       </div>
     </Link>
   );

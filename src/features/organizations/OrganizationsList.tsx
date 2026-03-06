@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import SearchHeader from "@/components/ui/SearchHeader";
 import { alphaSort } from "@/lib/misc";
@@ -15,7 +15,8 @@ type Props = {
 const getInitials = (name: string) =>
   name
     .split(" ")
-    .map((w) => w[0])
+    .map((word) => word[0])
+    .filter(Boolean)
     .slice(0, 2)
     .join("")
     .toUpperCase();
@@ -23,17 +24,24 @@ const getInitials = (name: string) =>
 export default function OrganizationsList({ organizations, title, detailsBasePath }: Props) {
   const [search, setSearch] = useState("");
   const normalizedSearch = search.trim().toLowerCase();
+
   const sortedOrganizations = useMemo(
     () => organizations.toSorted((a, b) => alphaSort(a.name, b.name)),
     [organizations],
   );
-  const filtered = useMemo(
-    () =>
-      normalizedSearch.length > 0
-        ? sortedOrganizations.filter((o) => o.name.toLowerCase().includes(normalizedSearch))
-        : sortedOrganizations,
-    [sortedOrganizations, normalizedSearch],
-  );
+
+  const filteredOrganizations = useMemo(() => {
+    if (!normalizedSearch) return sortedOrganizations;
+
+    return sortedOrganizations.filter((organization) =>
+      organization.name.toLowerCase().includes(normalizedSearch),
+    );
+  }, [sortedOrganizations, normalizedSearch]);
+
+  const resultLabel =
+    normalizedSearch.length > 0
+      ? `${filteredOrganizations.length} found`
+      : `${sortedOrganizations.length} total`;
 
   return (
     <section className="mx-auto my-10 max-w-7xl px-5">
@@ -45,40 +53,45 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
         onSearchChange={setSearch}
       />
 
-      {filtered.length === 0 ? (
-        <p role="status" className="text-center text-slate-400">
-          No {title.toLowerCase()} found.
+      <div className="mt-3 text-sm text-slate-400">{resultLabel}</div>
+
+      {filteredOrganizations.length === 0 ? (
+        <p role="status" className="mt-10 text-center text-slate-400">
+          {normalizedSearch
+            ? `No ${title.toLowerCase()} match “${search.trim()}”.`
+            : `No ${title.toLowerCase()} found.`}
         </p>
       ) : (
-        <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {filtered.map((o) => (
-            <li key={o.id} className="h-full">
+        <ul className="mt-6 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {filteredOrganizations.map((organization) => (
+            <li key={organization.id} className="h-full">
               <Link
-                href={`${detailsBasePath}/?id=${o.id}`}
-                className="block rounded-2xl focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                href={`${detailsBasePath}?id=${organization.id}`}
+                className="group block h-full rounded-2xl focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
               >
-                <div className="transform overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-slate-900 to-slate-800 shadow-lg ring-indigo-600 ring-offset-4 transition-all hover:scale-[1.02] hover:from-slate-800 hover:to-slate-700 hover:ring-4">
-                  <div className="flex flex-col items-center justify-center space-y-4 p-6">
-                    {o.logoUrl ? (
-                      <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-lg bg-slate-800 ring-2 ring-slate-600 md:h-32 md:w-32">
-                        {o.logoUrl && (
-                          <Image
-                            className="object-contain p-2 transition-transform hover:scale-105"
-                            src={o.logoUrl}
-                            alt={`${o.name} logo`}
-                            fill
-                            sizes="(min-width: 768px) 8rem, 6rem"
-                          />
-                        )}
-                      </div>
+                <article className="flex h-full items-center gap-4 rounded-2xl border border-white/10 bg-slate-900/60 p-4 transition group-hover:border-white/20 group-hover:bg-slate-800/70">
+                  <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-slate-800 sm:h-20 sm:w-20">
+                    {organization.logoUrl ? (
+                      <Image
+                        src={organization.logoUrl}
+                        alt={`${organization.name} logo`}
+                        fill
+                        className="object-contain p-2"
+                        sizes="(min-width: 640px) 5rem, 4rem"
+                      />
                     ) : (
-                      <div className="flex h-24 w-24 items-center justify-center bg-slate-800 text-2xl font-bold text-white ring-2 ring-slate-600 md:h-32 md:w-32">
-                        {getInitials(o.name)}
+                      <div className="flex h-full w-full items-center justify-center font-mono text-sm font-semibold tracking-[0.12em] text-white">
+                        {getInitials(organization.name)}
                       </div>
                     )}
-                    <h2 className="text-center text-lg font-medium text-slate-100">{o.name}</h2>
                   </div>
-                </div>
+
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-base leading-6 font-medium text-slate-100 transition group-hover:text-white">
+                      {organization.name}
+                    </h2>
+                  </div>
+                </article>
               </Link>
             </li>
           ))}

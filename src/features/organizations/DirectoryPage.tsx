@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { JSX, useMemo } from "react";
 import useSWR from "swr";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";

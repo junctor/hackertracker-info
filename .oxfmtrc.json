@@ -1,0 +1,5 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [".next/**", "out/**", "node_modules/**", "coverage/**", "dist/**"],
+  "printWidth": 100
+}

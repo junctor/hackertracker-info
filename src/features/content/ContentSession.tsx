@@ -49,7 +49,7 @@ export default function ContentSession({
 
   return (
     <li
-      className="group relative overflow-hidden rounded-lg border border-gray-800 bg-gray-900/40 px-4 py-3 transition-colors focus-within:border-indigo-500/70 hover:border-gray-700 hover:bg-gray-900"
+      className="group relative overflow-hidden rounded-lg border border-white/10 bg-slate-900/45 px-4 py-3 transition-colors focus-within:border-indigo-500/70 hover:border-slate-700/80 hover:bg-slate-900"
       style={
         {
           "--event-color": session.color ?? "#9ca3af",
@@ -69,9 +69,9 @@ export default function ContentSession({
       <div className="relative z-10 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         {/* Left: time + location */}
         <div className="min-w-0 pl-5">
-          <div className="text-base font-medium text-gray-100">{timeLabel}</div>
+          <div className="text-base font-medium text-slate-100">{timeLabel}</div>
           {locationName && (
-            <div className="mt-1 flex min-w-0 items-center gap-2 text-sm text-gray-400">
+            <div className="mt-1 flex min-w-0 items-center gap-2 text-sm text-slate-400">
               <MapPinIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
               <span className="truncate">{locationName}</span>
             </div>
@@ -85,7 +85,7 @@ export default function ContentSession({
             download={`DEF_CON_${content.id}-${session.id}.ics`}
             title={`Download calendar invite for session: ${content.title}`}
             aria-label={`Download calendar invite for session: ${content.title}`}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-400 transition hover:text-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-400 transition hover:text-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
           >
             <CalendarIcon className="h-6 w-6" aria-hidden="true" />
           </a>
@@ -95,7 +95,7 @@ export default function ContentSession({
             onClick={handleBookmarkClick}
             aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
             aria-pressed={bookmark}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-500 transition hover:text-indigo-300 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:text-indigo-300 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
           >
             {bookmark ? (
               <BookmarkIconSolid className="h-5 w-5 text-indigo-400" aria-hidden="true" />

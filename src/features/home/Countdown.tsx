@@ -36,7 +36,7 @@ const COUNTDOWN_VARIANTS: Record<
     gridClassName: "grid grid-cols-2 gap-x-4 gap-y-5 text-center sm:grid-cols-4 sm:gap-x-6",
     valueClassName: "block text-3xl font-bold tabular-nums sm:text-4xl md:text-5xl lg:text-7xl",
     labelClassName:
-      "text-[11px] tracking-[0.14em] text-gray-200 uppercase sm:text-xs md:text-sm lg:text-base",
+      "text-[11px] tracking-[0.14em] text-slate-200 uppercase sm:text-xs md:text-sm lg:text-base",
     settledValueColor: "#fff",
     liveAnnouncements: true,
   },
@@ -200,9 +200,7 @@ export default function Countdown({ conference, size = "large" }: Props) {
             >
               {formatCountdownValue(timer[unit.key])}
             </span>
-            <span className={`${variant.labelClassName} ${museoFont.className}`}>
-              {unit.label}
-            </span>
+            <span className={`${variant.labelClassName} ${museoFont.className}`}>{unit.label}</span>
           </div>
         ))}
       </div>

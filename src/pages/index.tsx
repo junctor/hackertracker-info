@@ -20,15 +20,7 @@ const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = [
   { conference: CONFERENCES.defcon34 },
 ];
 
-const TITLE_CYCLE = [
-  "DEF CON",
-  "D3F CON",
-  "DEF C0N",
-  "D3F C0N",
-  "D3F-C0N",
-  "D3F_C0N",
-  "STAHP IT",
-] as const;
+const TITLE_CYCLE = ["DEF CON", "D3F CON", "DEF C0N", "D3F C0N", "D3F_C0N", "STAHP IT"] as const;
 
 export default function Home() {
   const titleRef = useRef<HTMLSpanElement | null>(null);
@@ -102,7 +94,7 @@ export default function Home() {
                 ref={titleRef}
                 aria-label="DEF CON"
                 onPointerEnter={handleTitlePointerEnter}
-                className="inline-block cursor-pointer font-mono text-7xl leading-none font-semibold tracking-[0.14em] text-slate-50 select-none sm:text-8xl md:text-9xl lg:text-[10rem]"
+                className="inline-block cursor-pointer font-mono text-7xl leading-none font-semibold tracking-[0.08em] whitespace-nowrap text-slate-50 select-none sm:text-8xl sm:tracking-[0.12em] md:text-9xl md:tracking-[0.14em] lg:text-[10rem]"
               >
                 {title}
               </span>

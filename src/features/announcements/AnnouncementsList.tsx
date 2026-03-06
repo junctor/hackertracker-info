@@ -17,7 +17,7 @@ export default function AnnouncementsList({ announcements, conference }: Props) 
 
   if (!sorted.length) {
     return (
-      <div className="mx-5 py-10 text-center text-gray-500">No announcements at this time.</div>
+      <div className="mx-5 py-10 text-center text-slate-500">No announcements at this time.</div>
     );
   }
 
@@ -32,15 +32,15 @@ export default function AnnouncementsList({ announcements, conference }: Props) 
             <li key={item.id}>
               <details
                 open={index === 0}
-                className="rounded-lg border border-gray-800 bg-gray-950/40"
+                className="rounded-lg border border-white/10 bg-slate-950/60"
               >
-                <summary className="cursor-pointer list-none rounded-lg px-4 py-3 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950/40 focus-visible:outline-none">
+                <summary className="cursor-pointer list-none rounded-lg px-4 py-3 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <h2 className="text-lg font-medium">{item.name}</h2>
                     <time
                       dateTime={date.toISOString()}
                       title={date.toLocaleString()}
-                      className="text-sm text-gray-300"
+                      className="text-sm text-slate-300"
                     >
                       {newsAgo(date)} · {newsTime(date, conference.timezone, { showTz: true })}
                     </time>

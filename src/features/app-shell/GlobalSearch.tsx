@@ -52,7 +52,7 @@ export default function GlobalSearch() {
     <>
       <button
         type="button"
-        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-300 transition hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-slate-300 transition hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
         onClick={() => {
           setIsOpen(true);
           loadSearchData();
@@ -64,11 +64,11 @@ export default function GlobalSearch() {
 
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75"
           onClick={() => setIsOpen(false)}
         >
           <div
-            className="relative mx-4 w-full max-w-lg rounded-lg border border-gray-800 bg-gray-950 p-4 shadow-xl"
+            className="relative mx-4 w-full max-w-lg rounded-lg border border-white/10 bg-slate-950/95 p-4 shadow-xl"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -79,7 +79,7 @@ export default function GlobalSearch() {
             </h2>
             <button
               type="button"
-              className="absolute top-3 right-3 rounded-md text-gray-400 transition hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 focus-visible:outline-none"
+              className="absolute top-3 right-3 rounded-md text-slate-400 transition hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
               onClick={() => setIsOpen(false)}
               aria-label="Close search"
             >
@@ -92,7 +92,7 @@ export default function GlobalSearch() {
                 Search
               </label>
               <MagnifyingGlassIcon
-                className="pointer-events-none absolute top-3 left-3 h-5 w-5 text-gray-500"
+                className="pointer-events-none absolute top-3 left-3 h-5 w-5 text-slate-500"
                 aria-hidden="true"
               />
               <input
@@ -100,31 +100,31 @@ export default function GlobalSearch() {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full rounded-md border border-gray-800 bg-gray-900 py-2 pr-4 pl-10 text-white placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 focus-visible:outline-none"
+                className="w-full rounded-md border border-slate-800/80 bg-slate-900 py-2 pr-4 pl-10 text-white placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
                 placeholder={loading ? "Loading..." : "Search..."}
                 autoFocus
               />
             </div>
 
-            <div className="mt-3 max-h-60 overflow-auto rounded-md border border-gray-900 bg-gray-900">
+            <div className="mt-3 max-h-60 overflow-auto rounded-md border border-slate-800/80 bg-slate-900/95">
               {loading ? (
-                <p className="px-4 py-2 text-gray-400">Loading...</p>
+                <p className="px-4 py-2 text-slate-400">Loading...</p>
               ) : searchData.length === 0 ? (
-                <p className="px-4 py-2 text-gray-400">No results found.</p>
+                <p className="px-4 py-2 text-slate-400">No results found.</p>
               ) : filtered.length === 0 ? (
-                <p className="px-4 py-2 text-gray-400">No matching results.</p>
+                <p className="px-4 py-2 text-slate-400">No matching results.</p>
               ) : (
-                <ul className="divide-y divide-gray-800">
+                <ul className="divide-y divide-slate-800/80">
                   {filtered.map((item: SearchItem) => {
                     const Icon = icons[item.type] || (() => null);
                     return (
                       <li key={`${item.type}-${item.id}`}>
                         <Link
                           href={`/${item.type}?id=${item.id}`}
-                          className="flex items-center gap-3 px-4 py-2 text-gray-200 hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+                          className="flex items-center gap-3 px-4 py-2 text-slate-200 hover:bg-slate-800/80 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
                           onClick={() => setIsOpen(false)}
                         >
-                          <Icon className="h-5 w-5 shrink-0 text-gray-400" aria-hidden="true" />
+                          <Icon className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
                           <span className="flex-1">{item.text}</span>
                         </Link>
                       </li>

@@ -44,7 +44,7 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
   );
 
   return (
-    <section className="min-h-screen p-6 text-gray-100">
+    <section className="min-h-screen p-6 text-slate-100">
       <header className="mb-6">
         <h1 className="text-3xl font-bold">Tags</h1>
       </header>

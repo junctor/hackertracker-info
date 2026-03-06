@@ -53,15 +53,15 @@ export default function Menu({ conference }: Props) {
                     rel="noopener noreferrer"
                     className={HOME_MENU_TILE_CLASS_NAME}
                   >
-                    <Icon className="h-6 w-6 text-gray-200" aria-hidden />
-                    <span className="text-center text-sm leading-tight font-semibold text-gray-100">
+                    <Icon className="h-6 w-6 text-slate-200" aria-hidden />
+                    <span className="text-center text-sm leading-tight font-semibold text-slate-100">
                       {item.title}
                     </span>
                   </a>
                 ) : (
                   <Link href={item.href} className={HOME_MENU_TILE_CLASS_NAME}>
-                    <Icon className="h-6 w-6 text-gray-200" aria-hidden />
-                    <span className="text-center text-sm leading-tight font-semibold text-gray-100">
+                    <Icon className="h-6 w-6 text-slate-200" aria-hidden />
+                    <span className="text-center text-sm leading-tight font-semibold text-slate-100">
                       {item.title}
                     </span>
                   </Link>

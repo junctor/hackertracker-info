@@ -108,7 +108,7 @@ export default function ContentDetails(props: Props) {
             type="button"
             onClick={handleShare}
             aria-label="Share content link"
-            className="rounded-md p-2 text-gray-400 transition hover:text-gray-200 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 focus-visible:outline-none"
+            className="rounded-md p-2 text-slate-400 transition hover:text-slate-200 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
           >
             <ShareIcon className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -118,7 +118,7 @@ export default function ContentDetails(props: Props) {
       {/* Sessions */}
       {sessions.length > 0 && (
         <section aria-labelledby="sessions-title">
-          <h2 id="sessions-title" className="mb-4 text-2xl font-semibold text-gray-200">
+          <h2 id="sessions-title" className="mb-4 text-2xl font-semibold text-slate-200">
             Sessions
           </h2>
 
@@ -150,7 +150,7 @@ export default function ContentDetails(props: Props) {
               <li key={tag.id}>
                 <Link
                   href={`/${conference.slug}/tag?id=${tag.id}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition hover:bg-indigo-600/50 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 focus-visible:outline-none"
+                  className="inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:bg-indigo-600/50 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
                 >
                   <span
                     className="h-3 w-3 rounded-full"
@@ -168,10 +168,10 @@ export default function ContentDetails(props: Props) {
       {/* Description */}
       {content.description && (
         <section aria-labelledby="description-title">
-          <h2 id="description-title" className="mb-4 text-2xl font-semibold text-gray-200">
+          <h2 id="description-title" className="mb-4 text-2xl font-semibold text-slate-200">
             Description
           </h2>
-          <div className="prose prose-invert max-w-none text-gray-300">
+          <div className="prose prose-invert max-w-none text-slate-300">
             <Markdown content={content.description} />
           </div>
         </section>
@@ -180,7 +180,7 @@ export default function ContentDetails(props: Props) {
       {/* Links */}
       {content.links && content.links.length > 0 && (
         <section aria-labelledby="links-title">
-          <h2 id="links-title" className="mb-4 text-2xl font-semibold text-gray-200">
+          <h2 id="links-title" className="mb-4 text-2xl font-semibold text-slate-200">
             Links
           </h2>
           <ul className="space-y-2">
@@ -190,7 +190,7 @@ export default function ContentDetails(props: Props) {
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-indigo-300 decoration-indigo-500/40 underline-offset-2 transition-colors hover:text-indigo-200 hover:underline hover:decoration-indigo-400 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 focus-visible:outline-none"
+                  className="inline-flex items-center gap-2 text-indigo-300 decoration-indigo-500/40 underline-offset-2 transition-colors hover:text-indigo-200 hover:underline hover:decoration-indigo-400 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
                 >
                   <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                   <span className="truncate">{l.label}</span>
@@ -204,7 +204,7 @@ export default function ContentDetails(props: Props) {
       {/* People */}
       {people.length > 0 && (
         <section aria-labelledby="people-title">
-          <h2 id="people-title" className="mb-4 text-2xl font-semibold text-gray-200">
+          <h2 id="people-title" className="mb-4 text-2xl font-semibold text-slate-200">
             People
           </h2>
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
@@ -212,7 +212,7 @@ export default function ContentDetails(props: Props) {
               <li key={p.id}>
                 <Link
                   href={`${peopleBasePath}/?id=${p.id}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition hover:bg-indigo-600/50 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 focus-visible:outline-none"
+                  className="inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:bg-indigo-600/50 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
                   title={p.name}
                 >
                   <UserIcon className="h-4 w-4 text-indigo-300" aria-hidden="true" />

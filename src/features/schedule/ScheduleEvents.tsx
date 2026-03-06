@@ -218,18 +218,18 @@ export default function ScheduleEvents({
   );
 
   return (
-    <div className="text-gray-100">
-      <div className="flex justify-end gap-2 border-b border-gray-800 bg-black/80 p-2 backdrop-blur">
+    <div className="text-slate-100">
+      <div className="flex justify-end gap-2 border-b border-white/10 bg-slate-950/85 p-2 backdrop-blur">
         <Link
           href={`/${conf.slug}/bookmarks`}
-          className="ui-focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-[#017FA4]/65 hover:text-[#017FA4] focus-visible:outline-none"
+          className="ui-focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-slate-300 transition hover:border-[#017FA4]/65 hover:text-[#017FA4] focus-visible:outline-none"
           aria-label="Filter by bookmarks"
         >
           <BookmarkIcon className="h-5 w-5" aria-hidden="true" />
         </Link>
         <Link
           href={`/${conf.slug}/tags`}
-          className="ui-focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-gray-300 transition hover:border-[#017FA4]/65 hover:text-[#017FA4] focus-visible:outline-none"
+          className="ui-focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-slate-300 transition hover:border-[#017FA4]/65 hover:text-[#017FA4] focus-visible:outline-none"
           aria-label="Filter by tags"
         >
           <TagIcon className="h-5 w-5" aria-hidden="true" />
@@ -238,7 +238,7 @@ export default function ScheduleEvents({
 
       <div className="sticky top-16 z-40 border-t border-[#0D294A]/60">
         <div
-          className="flex flex-wrap items-center justify-center gap-2 border-b border-gray-800 bg-black/80 px-2 py-2 backdrop-blur sm:flex-nowrap sm:justify-start sm:overflow-x-auto"
+          className="flex flex-wrap items-center justify-center gap-2 border-b border-white/10 bg-slate-950/85 px-2 py-2 backdrop-blur sm:flex-nowrap sm:justify-start sm:overflow-x-auto"
           role="tablist"
           aria-label="Schedule days"
           aria-orientation="horizontal"
@@ -258,14 +258,14 @@ export default function ScheduleEvents({
               className={`ui-focus-ring flex items-center gap-1 rounded-full border px-3 py-1 text-sm whitespace-nowrap transition focus-visible:outline-none ${
                 resolvedDay === day
                   ? "border-[#017FA4]/75 bg-[#0D294A]/45 text-white"
-                  : "border-gray-700 text-gray-200 hover:border-[#017FA4]/70 hover:text-[#6CCDBB]"
+                  : "border-slate-700/80 text-slate-200 hover:border-[#017FA4]/70 hover:text-[#6CCDBB]"
               }`}
               onClick={() => onSelectDay(day)}
               onKeyDown={(e) => handleTabKeyDown(e, index, day)}
             >
               <span>{tabDateTitle(day, conf.timezone)}</span>
               <span
-                className={`text-xs ${resolvedDay === day ? "text-[#6CCDBB]" : "text-gray-400"}`}
+                className={`text-xs ${resolvedDay === day ? "text-[#6CCDBB]" : "text-slate-400"}`}
               >
                 ({events.length})
               </span>
@@ -283,7 +283,7 @@ export default function ScheduleEvents({
         >
           <h2
             ref={headingRef}
-            className="mt-6 mb-3 ml-5 scroll-mt-28 text-xl font-bold text-gray-100 md:text-2xl"
+            className="mt-6 mb-3 ml-5 scroll-mt-28 text-xl font-bold text-slate-100 md:text-2xl"
           >
             {eventDayTable(activeDay.day, conf.timezone)}
           </h2>

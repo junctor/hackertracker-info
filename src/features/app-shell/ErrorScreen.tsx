@@ -14,9 +14,7 @@ export default function ErrorScreen({ msg }: Props) {
       <div className="text-center">
         {/* Glitchy RGB title */}
         <div className="isolation-isolate relative inline-block select-none">
-          <h1
-            className="relative text-3xl font-extrabold tracking-tight text-gray-100 motion-safe:animate-[glitch_1.8s_steps(12,end)_infinite] md:text-5xl"
-          >
+          <h1 className="relative text-3xl font-extrabold tracking-tight text-slate-100 motion-safe:animate-[glitch_1.8s_steps(12,end)_infinite] md:text-5xl">
             ERROR
             {/* cyan layer */}
             <span
@@ -45,13 +43,13 @@ export default function ErrorScreen({ msg }: Props) {
             {msg}
           </pre>
         ) : (
-          <p className="mt-5 mb-6 text-sm text-gray-300 md:text-base">Something went sideways.</p>
+          <p className="mt-5 mb-6 text-sm text-slate-300 md:text-base">Something went sideways.</p>
         )}
 
         {/* Action */}
         <Link
           href="/"
-          className="inline-flex items-center justify-center gap-2 rounded-md border border-gray-600/70 px-4 py-2 text-sm font-semibold text-gray-100 transition-colors hover:border-gray-500 hover:bg-gray-800/70 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
+          className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-600/70 px-4 py-2 text-sm font-semibold text-slate-100 transition-colors hover:border-slate-500 hover:bg-slate-800/70 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
         >
           Return Home
         </Link>

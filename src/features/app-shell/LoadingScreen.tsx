@@ -8,9 +8,7 @@ export default function LoadingScreen() {
       <div className="text-center">
         <div className="isolation-isolate relative inline-block select-none">
           {/* Base: rainbow gradient text */}
-          <h1
-            className="relative bg-[linear-gradient(90deg,#22d3ee_0%,#e879f9_20%,#f59e0b_40%,#22c55e_60%,#60a5fa_80%,#22d3ee_100%)] bg-size-[300%_100%] bg-clip-text text-3xl font-extrabold tracking-tight text-transparent filter-[drop-shadow(0_0_10px_rgba(232,121,249,0.45))] motion-safe:animate-[slide_5s_linear_infinite]"
-          >
+          <h1 className="relative bg-[linear-gradient(90deg,#22d3ee_0%,#e879f9_20%,#f59e0b_40%,#22c55e_60%,#60a5fa_80%,#22d3ee_100%)] bg-size-[300%_100%] bg-clip-text text-3xl font-extrabold tracking-tight text-transparent filter-[drop-shadow(0_0_10px_rgba(232,121,249,0.45))] motion-safe:animate-[slide_5s_linear_infinite]">
             HT
             {/* shimmer sweep (utility-only) */}
             <span
@@ -34,7 +32,7 @@ export default function LoadingScreen() {
           </span>
         </div>
 
-        <p className="mt-2 font-mono text-xs text-gray-300/70">loading…</p>
+        <p className="mt-2 font-mono text-xs text-slate-300/70">loading…</p>
       </div>
     </main>
   );

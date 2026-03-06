@@ -61,7 +61,7 @@ export default function ContentList({ content, tags, conference }: Props) {
               const nextValue = e.target.value;
               setSelectedTag(nextValue ? Number(nextValue) : null);
             }}
-            className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+            className="w-full rounded-md border border-slate-700/80 bg-slate-900 px-3 py-2 text-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
           >
             <option value="">All tags</option>
             {tagOptions.map((tag) => (
@@ -86,7 +86,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                 "--event-color": item.tags[0]?.colorBackground ?? "#9ca3af",
               } as CSSProperties
             }
-            className="group relative overflow-hidden rounded-lg border border-gray-800 bg-gray-900/40 transition-colors focus-within:border-indigo-500/70 hover:border-gray-700 hover:bg-gray-900"
+            className="group relative overflow-hidden rounded-lg border border-white/10 bg-slate-900/45 transition-colors focus-within:border-indigo-500/70 hover:border-slate-700/80 hover:bg-slate-900"
           >
             <span
               aria-hidden="true"
@@ -98,15 +98,15 @@ export default function ContentList({ content, tags, conference }: Props) {
             />
             <Link
               href={`/${conference.slug}/content/?id=${item.id}`}
-              className="relative z-10 block rounded-md px-4 py-5 pl-5 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+              className="relative z-10 block rounded-md px-4 py-5 pl-5 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-gray-100 transition-colors group-hover:text-gray-200">
+                <h3 className="text-lg font-bold text-slate-100 transition-colors group-hover:text-slate-200">
                   {item.title}
                 </h3>
                 <span
                   aria-hidden="true"
-                  className="text-xl transition-colors group-hover:text-gray-300"
+                  className="text-xl transition-colors group-hover:text-slate-300"
                   style={{
                     color: item.tags[0]?.colorBackground ?? "#fff",
                   }}

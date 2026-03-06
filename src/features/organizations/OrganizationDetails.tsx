@@ -19,8 +19,8 @@ const tabClass = (selected: boolean) =>
   [
     "px-3 py-2 text-sm font-medium transition",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70",
-    "focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900",
-    selected ? "border-b-2 border-indigo-400 text-white" : "text-gray-400 hover:text-white",
+    "focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900",
+    selected ? "border-b-2 border-indigo-400 text-white" : "text-slate-400 hover:text-white",
   ].join(" ");
 
 export default function OrganizationDetails({ org, conference }: Props) {
@@ -79,7 +79,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
   return (
     <article className="mx-auto max-w-4xl space-y-8 px-4 py-12">
       {/* Hero Section */}
-      <section className="flex flex-col items-center gap-6 rounded-lg bg-gray-800 p-6 transition-shadow hover:shadow-lg md:flex-row">
+      <section className="flex flex-col items-center gap-6 rounded-lg border border-white/10 bg-slate-900/80 p-6 transition-shadow hover:shadow-lg md:flex-row">
         {/* Logo container */}
         <div className="relative h-32 w-full max-w-xs shrink-0 overflow-hidden rounded-lg sm:h-40 md:h-48">
           {org.logoUrl ? (
@@ -93,7 +93,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
             />
           ) : (
             <div
-              className="absolute inset-0 flex items-center justify-center bg-gray-700 text-3xl text-white"
+              className="absolute inset-0 flex items-center justify-center bg-slate-800 text-3xl text-white"
               role="img"
               aria-label={`${org.name} logo`}
             >
@@ -108,7 +108,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
           {org.tagIdAsOrganizer && (
             <Link
               href={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
-              className="inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-4 py-2 text-sm text-indigo-100 transition hover:scale-105 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+              className="inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-4 py-2 text-sm text-indigo-100 transition hover:scale-105 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
             >
               <CalendarIcon className="h-5 w-5 text-indigo-400" aria-hidden />
               <span>See {org.name} Events</span>
@@ -123,7 +123,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
           id={tablistId}
           role="tablist"
           aria-label="Organization details"
-          className="flex gap-2 border-b border-gray-700"
+          className="flex gap-2 border-b border-white/10"
         >
           <button
             id={aboutTabId}
@@ -164,11 +164,11 @@ export default function OrganizationDetails({ org, conference }: Props) {
             hidden={effectiveTab !== "about"}
             className={effectiveTab === "about" ? "block" : "hidden"}
           >
-            <div className="prose prose-invert max-w-none text-gray-300">
+            <div className="prose prose-invert max-w-none text-slate-300">
               {description ? (
                 <Markdown content={description} />
               ) : (
-                <p className="text-gray-400">No description available.</p>
+                <p className="text-slate-400">No description available.</p>
               )}
             </div>
           </section>
@@ -188,10 +188,10 @@ export default function OrganizationDetails({ org, conference }: Props) {
                       href={l.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex w-full items-center justify-between rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-200 transition hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+                      className="flex w-full items-center justify-between rounded-md border border-white/10 bg-slate-900 px-3 py-2 text-slate-200 transition hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
                     >
                       <span>{l.label}</span>
-                      <ArrowTopRightOnSquareIcon className="h-4 w-4 text-gray-400" aria-hidden />
+                      <ArrowTopRightOnSquareIcon className="h-4 w-4 text-slate-400" aria-hidden />
                     </a>
                   </li>
                 ))}

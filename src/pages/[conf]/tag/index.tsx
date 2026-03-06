@@ -215,7 +215,9 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
         });
       }
 
-      const sortedEvents = events.toSorted((a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds);
+      const sortedEvents = events.toSorted(
+        (a, b) => a.beginTimestampSeconds - b.beginTimestampSeconds,
+      );
       if (sortedEvents.length > 0) {
         result.push({ day, events: sortedEvents });
       }
@@ -298,7 +300,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
               nowSeconds={nowSeconds}
             />
           ) : (
-            <p className="mt-8 text-center text-gray-500">No events found for this tag.</p>
+            <p className="mt-8 text-center text-slate-500">No events found for this tag.</p>
           )}
         </main>
         <SiteFooter />

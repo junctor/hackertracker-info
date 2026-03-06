@@ -17,7 +17,7 @@ type CodeProps = {
 
 export default function Markdown({ content }: Props) {
   return (
-    <div className="prose dark:prose-invert prose-sm sm:prose-base md:prose-lg prose-headings:text-gray-100 prose-p:text-gray-200 prose-li:text-gray-200 prose-strong:text-gray-100 prose-a:text-(--accent-primary) hover:prose-a:text-(--accent-success) prose-code:text-gray-100 prose-hr:border-gray-700 wrap-break-word antialiased md:max-w-none">
+    <div className="prose dark:prose-invert prose-sm sm:prose-base md:prose-lg prose-headings:text-slate-100 prose-p:text-slate-200 prose-li:text-slate-200 prose-strong:text-slate-100 prose-a:text-(--accent-primary) hover:prose-a:text-(--accent-success) prose-code:text-slate-100 prose-hr:border-slate-700/80 wrap-break-word antialiased md:max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -31,11 +31,14 @@ export default function Markdown({ content }: Props) {
 
           code: ({ inline, className, children, ...other }: CodeProps) =>
             inline ? (
-              <code {...other} className="rounded bg-gray-700 px-1 font-mono text-sm text-gray-100">
+              <code
+                {...other}
+                className="rounded bg-slate-700/80 px-1 font-mono text-sm text-slate-100"
+              >
                 {children}
               </code>
             ) : (
-              <pre className="my-5 overflow-x-auto rounded-lg bg-gray-900 p-4 text-gray-100">
+              <pre className="my-5 overflow-x-auto rounded-lg bg-slate-900 p-4 text-slate-100">
                 <code className={className}>{children}</code>
               </pre>
             ),
@@ -43,11 +46,11 @@ export default function Markdown({ content }: Props) {
           blockquote: (props) => (
             <blockquote
               {...props}
-              className="border-l-4 border-[#105F66] pl-4 text-gray-200 italic"
+              className="border-l-4 border-[#105F66] pl-4 text-slate-200 italic"
             />
           ),
 
-          hr: (props) => <hr {...props} className="my-8 border-t border-gray-700" />,
+          hr: (props) => <hr {...props} className="my-8 border-t border-slate-700/80" />,
 
           img: (props) => (
             // Markdown images have unknown sizes; keep native img for now.

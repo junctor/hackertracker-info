@@ -314,7 +314,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
         <main className="min-h-0 flex-1">
           <h1 className="my-10 mb-6 text-center text-3xl font-bold">Bookmarks</h1>
           {bookmarks.length === 0 ? (
-            <p className="mt-8 text-center text-gray-500">No bookmarks found.</p>
+            <p className="mt-8 text-center text-slate-500">No bookmarks found.</p>
           ) : days.length > 0 && resolvedDay ? (
             <ScheduleEvents
               conf={conf}
@@ -325,7 +325,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
               nowSeconds={nowSeconds}
             />
           ) : (
-            <p className="mt-8 text-center text-gray-500">No bookmarked events found.</p>
+            <p className="mt-8 text-center text-slate-500">No bookmarked events found.</p>
           )}
         </main>
         <SiteFooter />

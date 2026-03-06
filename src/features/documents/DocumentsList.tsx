@@ -14,7 +14,7 @@ export default function DocumentsList({
   return (
     <div className="mx-5 my-6">
       <header className="mb-6">
-        <h1 className="text-5xl font-extrabold tracking-tight text-gray-100">readme.nfo</h1>
+        <h1 className="text-5xl font-extrabold tracking-tight text-slate-100">readme.nfo</h1>
       </header>
 
       <ul className="space-y-4">
@@ -22,14 +22,14 @@ export default function DocumentsList({
           <li key={doc.id}>
             <Link
               href={`/${conference.slug}/document/?id=${doc.id}`}
-              className="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-900 p-5 transition-colors hover:border-indigo-500 hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+              className="flex items-center justify-between rounded-lg border border-white/10 bg-slate-900/70 p-5 transition-colors hover:border-indigo-500 hover:bg-slate-800/90 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
             >
               <div>
-                <h2 className="text-xl leading-snug font-semibold text-gray-100">
+                <h2 className="text-xl leading-snug font-semibold text-slate-100">
                   {doc.titleText}
                 </h2>
-                <p className="mt-1 text-sm text-gray-400">
-                  <span className="font-medium text-gray-200">Updated:</span>{" "}
+                <p className="mt-1 text-sm text-slate-400">
+                  <span className="font-medium text-slate-200">Updated:</span>{" "}
                   {new Date(doc.updatedAtMs).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
@@ -37,7 +37,7 @@ export default function DocumentsList({
                   })}
                 </p>
               </div>
-              <ChevronRightIcon className="h-6 w-6 text-gray-500" aria-hidden="true" />
+              <ChevronRightIcon className="h-6 w-6 text-slate-500" aria-hidden="true" />
             </Link>
           </li>
         ))}

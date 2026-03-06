@@ -57,7 +57,7 @@ export default function Splash({ conference }: Props) {
         </div>
         <time
           dateTime={conference.begin}
-          className={`text-xs tracking-[0.16em] text-gray-300/90 uppercase sm:text-sm sm:tracking-[0.22em] md:text-base ${museoFont.className}`}
+          className={`text-xs tracking-[0.16em] text-slate-300/90 uppercase sm:text-sm sm:tracking-[0.22em] md:text-base ${museoFont.className}`}
         >
           {conference.dateLabel}
         </time>

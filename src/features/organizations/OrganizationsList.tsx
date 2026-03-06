@@ -46,7 +46,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
       />
 
       {filtered.length === 0 ? (
-        <p role="status" className="text-center text-gray-400">
+        <p role="status" className="text-center text-slate-400">
           No {title.toLowerCase()} found.
         </p>
       ) : (
@@ -55,12 +55,12 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
             <li key={o.id} className="h-full">
               <Link
                 href={`${detailsBasePath}/?id=${o.id}`}
-                className="block rounded-2xl focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+                className="block rounded-2xl focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
               >
-                <div className="transform overflow-hidden rounded-2xl border border-gray-700 bg-linear-to-br from-gray-800 to-gray-700 shadow-lg ring-indigo-600 ring-offset-4 transition-all hover:scale-[1.02] hover:from-gray-700 hover:to-gray-600 hover:ring-4">
+                <div className="transform overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-slate-900 to-slate-800 shadow-lg ring-indigo-600 ring-offset-4 transition-all hover:scale-[1.02] hover:from-slate-800 hover:to-slate-700 hover:ring-4">
                   <div className="flex flex-col items-center justify-center space-y-4 p-6">
                     {o.logoUrl ? (
-                      <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-lg bg-gray-800 ring-2 ring-gray-600 md:h-32 md:w-32">
+                      <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-lg bg-slate-800 ring-2 ring-slate-600 md:h-32 md:w-32">
                         {o.logoUrl && (
                           <Image
                             className="object-contain p-2 transition-transform hover:scale-105"
@@ -72,11 +72,11 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
                         )}
                       </div>
                     ) : (
-                      <div className="flex h-24 w-24 items-center justify-center bg-gray-800 text-2xl font-bold text-white ring-2 ring-gray-600 md:h-32 md:w-32">
+                      <div className="flex h-24 w-24 items-center justify-center bg-slate-800 text-2xl font-bold text-white ring-2 ring-slate-600 md:h-32 md:w-32">
                         {getInitials(o.name)}
                       </div>
                     )}
-                    <h2 className="text-center text-lg font-medium text-gray-100">{o.name}</h2>
+                    <h2 className="text-center text-lg font-medium text-slate-100">{o.name}</h2>
                   </div>
                 </div>
               </Link>

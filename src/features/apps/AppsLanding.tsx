@@ -86,7 +86,7 @@ export default function AppsLanding({ conference }: Props) {
   ];
 
   const btnBase =
-    "rounded-full px-8 py-3 font-semibold text-lg shadow-lg transition transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+    "rounded-full px-8 py-3 font-semibold text-lg shadow-lg transition transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
 
   return (
     <div

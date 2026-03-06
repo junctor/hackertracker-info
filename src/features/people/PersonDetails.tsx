@@ -24,9 +24,9 @@ export default function PersonDetails({ person, events, locations, conference }:
   return (
     <div className="mx-auto max-w-5xl space-y-10 px-4 py-10">
       {/* Hero */}
-      <section className="flex flex-col items-center gap-6 rounded-lg bg-gray-800 p-6 md:flex-row">
+      <section className="flex flex-col items-center gap-6 rounded-lg border border-white/10 bg-slate-900/80 p-6 md:flex-row">
         {person.avatarUrl ? (
-          <div className="h-32 w-32 overflow-hidden rounded-full bg-gray-700 shadow-lg">
+          <div className="h-32 w-32 overflow-hidden rounded-full bg-slate-800 shadow-lg">
             <Image
               src={person.avatarUrl}
               alt={person.name}
@@ -36,7 +36,7 @@ export default function PersonDetails({ person, events, locations, conference }:
             />
           </div>
         ) : (
-          <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gray-700 text-3xl text-white">
+          <div className="flex h-32 w-32 items-center justify-center rounded-full bg-slate-800 text-3xl text-white">
             {person.name
               .split(" ")
               .map((w) => w[0])
@@ -46,7 +46,7 @@ export default function PersonDetails({ person, events, locations, conference }:
         )}
         <div className="flex-1 space-y-3">
           <h1 className="text-4xl font-extrabold text-white md:text-5xl">{person.name}</h1>
-          <ul className="m-0 list-none space-y-1 p-0 text-gray-300">
+          <ul className="m-0 list-none space-y-1 p-0 text-slate-300">
             {person.affiliations?.map((a) => (
               <li key={a.organization} className="text-sm">
                 {a.title} @ {a.organization}
@@ -63,7 +63,7 @@ export default function PersonDetails({ person, events, locations, conference }:
                     href={l.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-indigo-400 transition hover:underline focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+                    className="text-sm text-indigo-400 transition hover:underline focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
                   >
                     {l.title}
                   </a>
@@ -76,8 +76,8 @@ export default function PersonDetails({ person, events, locations, conference }:
       {/* About */}
       {person.description && (
         <section>
-          <h2 className="mb-4 text-2xl font-semibold text-gray-200">About</h2>
-          <div className="prose prose-invert max-w-none text-gray-300">
+          <h2 className="mb-4 text-2xl font-semibold text-slate-200">About</h2>
+          <div className="prose prose-invert max-w-none text-slate-300">
             <Markdown content={person.description} />
           </div>
         </section>
@@ -86,24 +86,22 @@ export default function PersonDetails({ person, events, locations, conference }:
       {/* Events */}
       {events.length > 0 && (
         <section>
-          <h2 className="mb-4 text-2xl font-semibold text-gray-200">Events</h2>
+          <h2 className="mb-4 text-2xl font-semibold text-slate-200">Events</h2>
           <div className="relative">
             <ul className="space-y-8">
               {events.map((e) => (
                 <li key={e.id}>
                   <Link
                     href={`${contentsBasePath}?id=${e.contentId}`}
-                    className="group block w-full rounded-md focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+                    className="group block w-full rounded-md focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
                   >
-                    <div
-                      className="h-full border-l-4 border-indigo-400 bg-gray-700 pl-5 transition-shadow duration-200 ease-out group-hover:border-indigo-300 group-hover:bg-gray-600 group-hover:shadow-md"
-                    >
+                    <div className="h-full border-l-4 border-indigo-400 bg-slate-800 pl-5 transition-shadow duration-200 ease-out group-hover:border-indigo-300 group-hover:bg-slate-700 group-hover:shadow-md">
                       <div className="p-4">
-                        <h3 className="text-lg font-semibold text-gray-100">{e.title}</h3>
-                        <p className="mt-1 text-sm text-gray-400">
+                        <h3 className="text-lg font-semibold text-slate-100">{e.title}</h3>
+                        <p className="mt-1 text-sm text-slate-400">
                           {`${eventTime(new Date(e.begin), false, conference.timezone)} – ${eventTime(new Date(e.end), true, conference.timezone)}`}
                         </p>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-sm text-slate-400">
                           {locationNameById.get(e.locationId)}
                         </p>
                       </div>

@@ -44,7 +44,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   return (
     <article
       style={barStyle}
-      className="group relative flex w-full min-w-0 flex-col gap-4 overflow-hidden rounded-lg border border-gray-800 bg-gray-900/40 py-3 pr-4 pl-4 transition-colors focus-within:border-[#017FA4]/70 hover:border-gray-700 hover:bg-gray-900"
+      className="group relative flex w-full min-w-0 flex-col gap-4 overflow-hidden rounded-lg border border-white/10 bg-slate-900/45 py-3 pr-4 pl-4 transition-colors focus-within:border-[#017FA4]/70 hover:border-slate-700/80 hover:bg-slate-900"
     >
       <span
         aria-hidden="true"
@@ -72,26 +72,26 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
               {isLive ? "Live" : "Next"}
             </span>
           )}
-          <p className="text-base font-semibold text-gray-100">
+          <p className="text-base font-semibold text-slate-100">
             <time dateTime={event.beginIso}>{event.beginDisplay}</time>
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-slate-400">
             <time dateTime={event.endIso}>{event.endDisplay}</time>
           </p>
         </div>
 
         <div className="min-w-0 flex-1">
-          <h3 className="line-clamp-2 text-xl font-bold text-gray-100">{event.title}</h3>
+          <h3 className="line-clamp-2 text-xl font-bold text-slate-100">{event.title}</h3>
 
-          {event.speakers && <p className="mt-1 text-gray-300 italic">{event.speakers}</p>}
+          {event.speakers && <p className="mt-1 text-slate-300 italic">{event.speakers}</p>}
 
-          <p className="mt-1 text-gray-300">{event.locationName}</p>
+          <p className="mt-1 text-slate-300">{event.locationName}</p>
 
           <ul className="m-0 mt-2 flex list-none flex-wrap gap-1 p-0 text-sm uppercase">
             {event.tags.map((tag) => (
               <li
                 key={tag.id}
-                className="inline-flex items-center rounded-full border border-black/20 px-2 py-0.5 text-xs font-medium"
+                className="inline-flex items-center rounded-full border border-white/15 px-2 py-0.5 text-xs font-medium"
                 style={{
                   backgroundColor: tag.colorBackground,
                   color: tag.colorForeground ?? "#fff",
@@ -109,7 +109,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
         onClick={handleBookmarkClick}
         aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
         aria-pressed={bookmark}
-        className="ui-focus-ring absolute top-3 right-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition hover:text-[#017FA4] focus-visible:outline-none"
+        className="ui-focus-ring absolute top-3 right-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-500 transition hover:text-[#017FA4] focus-visible:outline-none"
       >
         {bookmark ? (
           <BookmarkIconSolid className="h-5 w-5 text-[#6CCDBB]" aria-hidden="true" />

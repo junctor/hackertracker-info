@@ -18,6 +18,38 @@ import {
 import { ConferenceManifest } from "@/lib/conferences";
 import { getCountdown } from "@/lib/timer";
 
+type CountdownSize = "large" | "tiny";
+
+const COUNTDOWN_VARIANTS: Record<
+  CountdownSize,
+  {
+    sectionClassName: string;
+    gridClassName: string;
+    valueClassName: string;
+    labelClassName: string;
+    settledValueColor: string;
+    liveAnnouncements: boolean;
+  }
+> = {
+  large: {
+    sectionClassName: "mt-4 w-full max-w-4xl px-2 sm:mt-8 md:mt-10",
+    gridClassName: "grid grid-cols-2 gap-x-4 gap-y-5 text-center sm:grid-cols-4 sm:gap-x-6",
+    valueClassName: "block text-3xl font-bold tabular-nums sm:text-4xl md:text-5xl lg:text-7xl",
+    labelClassName:
+      "text-[11px] tracking-[0.14em] text-gray-200 uppercase sm:text-xs md:text-sm lg:text-base",
+    settledValueColor: "#fff",
+    liveAnnouncements: true,
+  },
+  tiny: {
+    sectionClassName: "mt-2 w-full",
+    gridClassName: "grid grid-cols-4 gap-x-2 text-center",
+    valueClassName: "block text-xs font-semibold tabular-nums text-slate-700 sm:text-sm",
+    labelClassName: "text-[9px] tracking-[0.1em] text-slate-500 uppercase",
+    settledValueColor: "#334155",
+    liveAnnouncements: false,
+  },
+};
+
 function usePrefersReducedMotion() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -33,7 +65,7 @@ function usePrefersReducedMotion() {
   return prefersReducedMotion;
 }
 
-function flip(el: HTMLElement | null, color: string) {
+function flip(el: HTMLElement | null, color: string, settledColor: string) {
   if (!el) return;
   gsap.fromTo(
     el,
@@ -45,7 +77,7 @@ function flip(el: HTMLElement | null, color: string) {
       ease: "power2.out",
       overwrite: "auto",
       onComplete: () => {
-        gsap.to(el, { color: "#fff", duration: 0.2, ease: "power2.out" });
+        gsap.to(el, { color: settledColor, duration: 0.2, ease: "power2.out" });
       },
     },
   );
@@ -55,20 +87,27 @@ function useFlipAnimation(
   ref: RefObject<HTMLElement | null>,
   value: number,
   color: string,
+  settledColor: string,
   prefersReducedMotion: boolean,
 ) {
   useGSAP(() => {
     if (prefersReducedMotion) return;
-    flip(ref.current, color);
-  }, [color, prefersReducedMotion, value]);
+    flip(ref.current, color, settledColor);
+  }, [color, prefersReducedMotion, settledColor, value]);
 }
 
-export default function Countdown({ conference }: { conference: ConferenceManifest }) {
+type Props = {
+  conference: ConferenceManifest;
+  size?: CountdownSize;
+};
+
+export default function Countdown({ conference, size = "large" }: Props) {
   const home = useHomeModel(conference);
   const [expired, setExpired] = useState(() => hasKickoffPassed(home.kickoffDateMs));
   const [timer, setTimer] = useState<CountdownTimer>(() =>
     hasKickoffPassed(home.kickoffDateMs) ? EMPTY_COUNTDOWN_TIMER : getCountdown(home.kickoffDateMs),
   );
+  const variant = COUNTDOWN_VARIANTS[size];
 
   const daysRef = useRef<HTMLSpanElement | null>(null);
   const hoursRef = useRef<HTMLSpanElement | null>(null);
@@ -107,39 +146,61 @@ export default function Countdown({ conference }: { conference: ConferenceManife
     [],
   );
 
-  useFlipAnimation(daysRef, timer.days, COUNTDOWN_UNIT_COLORS.days, prefersReducedMotion);
-  useFlipAnimation(hoursRef, timer.hours, COUNTDOWN_UNIT_COLORS.hours, prefersReducedMotion);
-  useFlipAnimation(minutesRef, timer.minutes, COUNTDOWN_UNIT_COLORS.minutes, prefersReducedMotion);
-  useFlipAnimation(secondsRef, timer.seconds, COUNTDOWN_UNIT_COLORS.seconds, prefersReducedMotion);
+  useFlipAnimation(
+    daysRef,
+    timer.days,
+    COUNTDOWN_UNIT_COLORS.days,
+    variant.settledValueColor,
+    prefersReducedMotion,
+  );
+  useFlipAnimation(
+    hoursRef,
+    timer.hours,
+    COUNTDOWN_UNIT_COLORS.hours,
+    variant.settledValueColor,
+    prefersReducedMotion,
+  );
+  useFlipAnimation(
+    minutesRef,
+    timer.minutes,
+    COUNTDOWN_UNIT_COLORS.minutes,
+    variant.settledValueColor,
+    prefersReducedMotion,
+  );
+  useFlipAnimation(
+    secondsRef,
+    timer.seconds,
+    COUNTDOWN_UNIT_COLORS.seconds,
+    variant.settledValueColor,
+    prefersReducedMotion,
+  );
 
   const liveLabel = useMemo(() => formatCountdownLiveLabel(timer), [timer]);
 
   if (expired) return null;
 
   return (
-    <section
-      aria-label="Countdown to conference kickoff"
-      className="mt-4 w-full max-w-4xl px-2 sm:mt-8 md:mt-10"
-    >
-      <p className="sr-only" aria-live="polite" aria-atomic="true">
-        {liveLabel}
-      </p>
+    <section aria-label="Countdown to conference kickoff" className={variant.sectionClassName}>
+      {variant.liveAnnouncements && (
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          {liveLabel}
+        </p>
+      )}
       <div
         role="timer"
+        aria-label={`${conference.name}: ${liveLabel}`}
         aria-live="off"
-        className="grid grid-cols-2 gap-x-4 gap-y-5 text-center sm:grid-cols-4 sm:gap-x-6"
+        className={variant.gridClassName}
       >
         {COUNTDOWN_UNITS.map((unit) => (
           <div key={unit.key} className="min-w-0">
             <span
               ref={valueRefs[unit.key]}
-              className={`block text-3xl font-bold tabular-nums sm:text-4xl md:text-5xl lg:text-7xl ${atkinsonFont.className}`}
+              className={`${variant.valueClassName} ${atkinsonFont.className}`}
             >
               {formatCountdownValue(timer[unit.key])}
             </span>
-            <span
-              className={`text-[11px] tracking-[0.14em] text-gray-200 uppercase sm:text-xs md:text-sm lg:text-base ${museoFont.className}`}
-            >
+            <span className={`${variant.labelClassName} ${museoFont.className}`}>
               {unit.label}
             </span>
           </div>

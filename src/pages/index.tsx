@@ -6,7 +6,19 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useRef } from "react";
 
+import Countdown from "@/features/home/Countdown";
+import { CONFERENCES, type ConferenceManifest } from "@/lib/conferences";
+
 gsap.registerPlugin(useGSAP, ScrambleTextPlugin);
+
+type ConferenceCardConfig = {
+  conference: ConferenceManifest;
+};
+
+const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = [
+  { conference: CONFERENCES.dcsg2026 },
+  { conference: CONFERENCES.defcon34 },
+];
 
 export default function Home() {
   const titleRef = useRef<HTMLSpanElement | null>(null);
@@ -76,12 +88,9 @@ export default function Home() {
           </div>
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:mt-14 sm:grid-cols-2">
-            <ConferenceCard
-              href="/dcsg2026"
-              src="/images/dcsingapore.webp"
-              alt="DEF CON Singapore"
-            />
-            <ConferenceCard href="/defcon34" src="/images/dc-lv.webp" alt="DEF CON 34" />
+            {HOME_CONFERENCE_CARDS.map(({ conference }) => (
+              <ConferenceCard key={conference.slug} conference={conference} />
+            ))}
           </div>
         </div>
       </main>
@@ -89,7 +98,10 @@ export default function Home() {
   );
 }
 
-function ConferenceCard({ href, src, alt }: { href: string; src: string; alt: string }) {
+function ConferenceCard({ conference }: { conference: ConferenceManifest }) {
+  const href = `/${conference.slug}`;
+  const src = `/images/${conference.logoFile}`;
+
   return (
     <Link
       href={href}
@@ -98,13 +110,16 @@ function ConferenceCard({ href, src, alt }: { href: string; src: string; alt: st
       <div className="relative aspect-16/6 w-full overflow-hidden rounded-xl bg-slate-50">
         <Image
           src={src}
-          alt={alt}
+          alt={`${conference.name} logo`}
           fill
           sizes="(min-width: 1024px) 480px, (min-width: 640px) 46vw, 92vw"
           className="object-contain p-4 transition-transform duration-200 group-hover:scale-[1.01]"
         />
       </div>
-      <div className="mt-3 text-center text-sm font-medium text-slate-700">{alt}</div>
+      <div className="mt-3 text-center text-sm font-medium text-slate-700">{conference.name}</div>
+      <div className="mt-2">
+        <Countdown conference={conference} size="tiny" />
+      </div>
     </Link>
   );
 }

@@ -10,7 +10,7 @@ export default function ErrorScreen({ msg }: Props) {
       <section className="ui-page-main grid place-items-center px-4 py-10">
         <div className="ui-card w-full max-w-xl p-6 text-center sm:p-8">
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-100 sm:text-4xl">
-            Error
+            We Hit A Problem
           </h1>
 
           {msg ? (
@@ -22,7 +22,7 @@ export default function ErrorScreen({ msg }: Props) {
             </pre>
           ) : (
             <p className="mt-5 mb-6 text-sm text-slate-300 sm:text-base">
-              Something went sideways.
+              We could not load this page. Try again or go to the homepage.
             </p>
           )}
 
@@ -30,7 +30,7 @@ export default function ErrorScreen({ msg }: Props) {
             href="/"
             className="ui-btn-base ui-btn-secondary ui-focus-ring focus-visible:outline-none"
           >
-            Return Home
+            Go To Home
           </Link>
         </div>
       </section>

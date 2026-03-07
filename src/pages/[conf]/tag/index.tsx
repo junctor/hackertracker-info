@@ -284,10 +284,10 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
         </title>
         <meta name="description" content={`${conf.name} schedule for ${tag.label}`} />
       </Head>
-      <div className="flex min-h-screen flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="min-h-0 flex-1">
-          <h1 className="my-10 mb-6 text-center text-3xl font-bold text-[#6CCDBB]">
+        <main className="ui-page-main">
+          <h1 className="ui-heading-1 ui-container mt-10 mb-6 text-center text-[#6CCDBB]">
             {tag.label} Schedule
           </h1>
           {days.length > 0 && resolvedDay ? (

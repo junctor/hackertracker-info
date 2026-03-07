@@ -22,9 +22,9 @@ export default function PersonDetails({ person, events, locations, conference }:
   }, [locations]);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-10 px-4 py-10">
+    <div className="ui-container ui-page-content space-y-10">
       {/* Hero */}
-      <section className="flex flex-col items-center gap-6 rounded-lg border border-white/10 bg-slate-900/80 p-6 md:flex-row">
+      <section className="ui-card flex flex-col items-center gap-6 p-6 md:flex-row">
         {person.avatarUrl ? (
           <div className="h-32 w-32 overflow-hidden rounded-full bg-slate-800 shadow-lg">
             <Image
@@ -45,7 +45,7 @@ export default function PersonDetails({ person, events, locations, conference }:
           </div>
         )}
         <div className="flex-1 space-y-3">
-          <h1 className="text-4xl font-extrabold text-white md:text-5xl">{person.name}</h1>
+          <h1 className="ui-heading-1">{person.name}</h1>
           <ul className="m-0 list-none space-y-1 p-0 text-slate-300">
             {person.affiliations?.map((a) => (
               <li key={a.organization} className="text-sm">
@@ -76,7 +76,7 @@ export default function PersonDetails({ person, events, locations, conference }:
       {/* About */}
       {person.description && (
         <section>
-          <h2 className="mb-4 text-2xl font-semibold text-slate-200">About</h2>
+          <h2 className="ui-heading-2 mb-4">About</h2>
           <div className="prose prose-invert max-w-none text-slate-300">
             <Markdown content={person.description} />
           </div>
@@ -86,16 +86,16 @@ export default function PersonDetails({ person, events, locations, conference }:
       {/* Events */}
       {events.length > 0 && (
         <section>
-          <h2 className="mb-4 text-2xl font-semibold text-slate-200">Events</h2>
+          <h2 className="ui-heading-2 mb-4">Events</h2>
           <div className="relative">
-            <ul className="space-y-8">
+            <ul className="space-y-4">
               {events.map((e) => (
                 <li key={e.id}>
                   <Link
                     href={`${contentsBasePath}?id=${e.contentId}`}
-                    className="ui-focus-ring group block w-full rounded-md focus-visible:outline-none"
+                    className="ui-focus-ring group block w-full rounded-lg focus-visible:outline-none"
                   >
-                    <div className="h-full border-l-4 border-[#017FA4] bg-slate-800 pl-5 transition-shadow duration-200 ease-out group-hover:border-[#6CCDBB] group-hover:bg-slate-700 group-hover:shadow-md">
+                    <div className="ui-card ui-card-interactive h-full border-l-4 border-[#017FA4] pl-5 transition-shadow duration-200 ease-out group-hover:border-[#6CCDBB]">
                       <div className="p-4">
                         <h3 className="text-lg font-semibold text-slate-100">{e.title}</h3>
                         <p className="mt-1 text-sm text-slate-400">

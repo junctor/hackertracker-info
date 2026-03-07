@@ -309,10 +309,10 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
         <title>Bookmarks | {conf.name}</title>
         <meta name="description" content={`${conf.name} schedule for bookmarks`} />
       </Head>
-      <div className="flex min-h-screen flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="min-h-0 flex-1">
-          <h1 className="my-10 mb-6 text-center text-3xl font-bold">Bookmarks</h1>
+        <main className="ui-page-main">
+          <h1 className="ui-heading-1 ui-container mt-10 mb-6 text-center">Bookmarks</h1>
           {bookmarks.length === 0 ? (
             <p className="mt-8 text-center text-slate-500">No bookmarks found.</p>
           ) : days.length > 0 && resolvedDay ? (

@@ -77,7 +77,7 @@ export default function ContentList({ content, tags, conference }: Props) {
         </label>
       </SearchHeader>
 
-      <ul className="space-y-3 leading-relaxed">
+      <ul className="space-y-4 leading-relaxed">
         {filtered.map((item) => (
           <li
             key={item.id}
@@ -86,7 +86,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                 "--event-color": item.tags[0]?.colorBackground ?? "#9ca3af",
               } as CSSProperties
             }
-            className="ui-card ui-card-interactive group relative overflow-hidden focus-within:border-[#017FA4]/70"
+            className="ui-card ui-card-interactive group relative overflow-hidden"
           >
             <span
               aria-hidden="true"
@@ -94,14 +94,14 @@ export default function ContentList({ content, tags, conference }: Props) {
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/18 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+              className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/16 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
             />
             <Link
               href={`/${conference.slug}/content/?id=${item.id}`}
-              className="ui-focus-ring relative z-10 block rounded-md px-4 py-5 pl-5 focus-visible:outline-none"
+              className="ui-focus-ring relative z-10 block rounded-lg px-4 py-4 pl-5 focus-visible:outline-none"
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-100 transition-colors group-hover:text-slate-200">
+                <h3 className="text-lg font-semibold text-slate-100 transition-colors group-hover:text-white">
                   {item.title}
                 </h3>
                 <span
@@ -118,7 +118,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                 {item.tags.map((tag) => (
                   <li
                     key={tag.id}
-                    className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium"
+                    className="inline-flex items-center rounded-full border border-white/10 px-2 py-1 text-xs font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                     style={{
                       backgroundColor: tag.colorBackground,
                       color: tag.colorForeground ?? "#fff",

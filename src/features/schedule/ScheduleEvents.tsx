@@ -219,7 +219,7 @@ export default function ScheduleEvents({
 
   return (
     <div className="text-slate-100">
-      <div className="border-b border-white/10 bg-slate-950/88 backdrop-blur">
+      <div className="ui-topbar">
         <div className="ui-container flex justify-end gap-2 py-2">
           <Link
             href={`/${conf.slug}/bookmarks`}
@@ -238,9 +238,9 @@ export default function ScheduleEvents({
         </div>
       </div>
 
-      <div className="sticky top-16 z-40 border-t border-[#0D294A]/60">
+      <div className="sticky top-16 z-40 border-t border-white/10">
         <div
-          className="border-b border-white/10 bg-slate-950/88 backdrop-blur"
+          className="ui-topbar border-b border-white/10"
           role="tablist"
           aria-label="Schedule days"
           aria-orientation="horizontal"
@@ -259,10 +259,10 @@ export default function ScheduleEvents({
                   aria-selected={resolvedDay === day}
                   aria-controls={`day-panel-${day}`}
                   tabIndex={resolvedDay === day ? 0 : -1}
-                  className={`ui-focus-ring flex h-10 items-center gap-1 rounded-full border px-3 text-sm whitespace-nowrap transition focus-visible:outline-none ${
+                  className={`ui-focus-ring flex h-10 items-center gap-1 rounded-full border px-3 text-sm whitespace-nowrap transition-colors focus-visible:outline-none ${
                     resolvedDay === day
-                      ? "border-[#017FA4]/75 bg-[#0D294A]/45 text-white"
-                      : "border-slate-700/85 text-slate-200 hover:border-[#017FA4]/70 hover:text-[#6CCDBB]"
+                      ? "border-[#017FA4]/80 bg-[#0D294A]/55 text-white"
+                      : "border-slate-700/85 bg-slate-900/55 text-slate-200 hover:border-[#017FA4]/70 hover:text-slate-100"
                   }`}
                   onClick={() => onSelectDay(day)}
                   onKeyDown={(e) => handleTabKeyDown(e, index, day)}

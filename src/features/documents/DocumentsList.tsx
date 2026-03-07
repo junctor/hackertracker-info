@@ -12,9 +12,9 @@ export default function DocumentsList({
   conference: ConferenceManifest;
 }) {
   return (
-    <div className="mx-5 my-6">
+    <div className="ui-container ui-page-content">
       <header className="mb-6">
-        <h1 className="text-5xl font-extrabold tracking-tight text-slate-100">readme.nfo</h1>
+        <h1 className="ui-heading-1">readme.nfo</h1>
       </header>
 
       <ul className="space-y-4">
@@ -22,7 +22,7 @@ export default function DocumentsList({
           <li key={doc.id}>
             <Link
               href={`/${conference.slug}/document/?id=${doc.id}`}
-              className="flex items-center justify-between rounded-lg border border-white/10 bg-slate-900/70 p-5 transition-colors hover:border-indigo-500 hover:bg-slate-800/90 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+              className="ui-focus-ring ui-card ui-card-interactive flex items-center justify-between p-5 focus-visible:outline-none"
             >
               <div>
                 <h2 className="text-xl leading-snug font-semibold text-slate-100">

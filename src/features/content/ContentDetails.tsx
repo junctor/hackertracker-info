@@ -85,7 +85,7 @@ export default function ContentDetails(props: Props) {
   };
 
   return (
-    <div className="mx-auto max-w-5xl space-y-10 px-4 py-10">
+    <div className="ui-container ui-page-content space-y-10">
       {/* Title block (bar only here) */}
       <header style={barStyle} className="flex items-start justify-between gap-4">
         <div className="relative min-w-0 pl-5">
@@ -98,9 +98,7 @@ export default function ContentDetails(props: Props) {
             className="pointer-events-none absolute top-1 bottom-1 left-0 w-[clamp(0.3rem,2vw,0.9rem)] rounded-r-md bg-linear-to-b from-white/0 to-indigo-600/20 opacity-60 mix-blend-multiply"
           />
 
-          <h1 className="text-4xl leading-tight font-extrabold tracking-tight text-white md:text-5xl">
-            {content.title}
-          </h1>
+          <h1 className="ui-heading-1">{content.title}</h1>
         </div>
 
         <div className="shrink-0">
@@ -118,7 +116,7 @@ export default function ContentDetails(props: Props) {
       {/* Sessions */}
       {sessions.length > 0 && (
         <section aria-labelledby="sessions-title">
-          <h2 id="sessions-title" className="mb-4 text-2xl font-semibold text-slate-200">
+          <h2 id="sessions-title" className="ui-heading-2 mb-4">
             Sessions
           </h2>
 
@@ -150,7 +148,7 @@ export default function ContentDetails(props: Props) {
               <li key={tag.id}>
                 <Link
                   href={`/${conference.slug}/tag?id=${tag.id}`}
-                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:bg-[#017FA4]/35 focus-visible:outline-none"
+                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:border-[#017FA4]/65 hover:bg-[#017FA4]/28 focus-visible:outline-none"
                 >
                   <span
                     className="h-3 w-3 rounded-full"
@@ -168,7 +166,7 @@ export default function ContentDetails(props: Props) {
       {/* Description */}
       {content.description && (
         <section aria-labelledby="description-title">
-          <h2 id="description-title" className="mb-4 text-2xl font-semibold text-slate-200">
+          <h2 id="description-title" className="ui-heading-2 mb-4">
             Description
           </h2>
           <div className="prose prose-invert max-w-none text-slate-300">
@@ -180,7 +178,7 @@ export default function ContentDetails(props: Props) {
       {/* Links */}
       {content.links && content.links.length > 0 && (
         <section aria-labelledby="links-title">
-          <h2 id="links-title" className="mb-4 text-2xl font-semibold text-slate-200">
+          <h2 id="links-title" className="ui-heading-2 mb-4">
             Links
           </h2>
           <ul className="space-y-2">
@@ -190,7 +188,7 @@ export default function ContentDetails(props: Props) {
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ui-focus-ring inline-flex items-center gap-2 text-[#6CCDBB] decoration-[#017FA4]/45 underline-offset-2 transition-colors hover:text-slate-100 hover:underline hover:decoration-[#6CCDBB] focus-visible:outline-none"
+                  className="ui-focus-ring inline-flex items-center gap-2 text-[#6CCDBB] decoration-[#017FA4]/45 underline-offset-2 transition-colors hover:text-white hover:underline hover:decoration-[#6CCDBB] focus-visible:outline-none"
                 >
                   <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                   <span className="truncate">{l.label}</span>
@@ -204,7 +202,7 @@ export default function ContentDetails(props: Props) {
       {/* People */}
       {people.length > 0 && (
         <section aria-labelledby="people-title">
-          <h2 id="people-title" className="mb-4 text-2xl font-semibold text-slate-200">
+          <h2 id="people-title" className="ui-heading-2 mb-4">
             People
           </h2>
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
@@ -212,7 +210,7 @@ export default function ContentDetails(props: Props) {
               <li key={p.id}>
                 <Link
                   href={`${peopleBasePath}/?id=${p.id}`}
-                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:bg-[#017FA4]/35 focus-visible:outline-none"
+                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:border-[#017FA4]/65 hover:bg-[#017FA4]/28 focus-visible:outline-none"
                   title={p.name}
                 >
                   <UserIcon className="h-4 w-4 text-[#6CCDBB]" aria-hidden="true" />

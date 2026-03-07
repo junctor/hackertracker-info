@@ -52,7 +52,7 @@ export default function GlobalSearch() {
     <>
       <button
         type="button"
-        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-slate-300 transition hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
+        className="ui-focus-ring ui-icon-btn h-10 w-10 border-transparent bg-transparent text-slate-300 hover:text-white focus-visible:outline-none"
         onClick={() => {
           setIsOpen(true);
           loadSearchData();
@@ -64,11 +64,11 @@ export default function GlobalSearch() {
 
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-overlay)"
           onClick={() => setIsOpen(false)}
         >
           <div
-            className="relative mx-4 w-full max-w-lg rounded-lg border border-white/10 bg-slate-950/95 p-4 shadow-xl"
+            className="ui-card relative mx-4 w-full max-w-lg p-4 shadow-xl"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -79,14 +79,13 @@ export default function GlobalSearch() {
             </h2>
             <button
               type="button"
-              className="absolute top-3 right-3 rounded-md text-slate-400 transition hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
+              className="ui-focus-ring absolute top-3 right-3 rounded-md text-slate-400 transition hover:text-white focus-visible:outline-none"
               onClick={() => setIsOpen(false)}
               aria-label="Close search"
             >
               <XMarkIcon className="h-5 w-5" aria-hidden="true" />
             </button>
 
-            {/* TODO: Design polish for this search modal and results list. */}
             <div className="relative">
               <label htmlFor="global-search-input" className="sr-only">
                 Search
@@ -100,13 +99,13 @@ export default function GlobalSearch() {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full rounded-md border border-slate-800/80 bg-slate-900 py-2 pr-4 pl-10 text-white placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
+                className="ui-input-base ui-input-focus pr-4 pl-10 text-white placeholder:text-slate-500 focus-visible:outline-none"
                 placeholder={loading ? "Loading..." : "Search..."}
                 autoFocus
               />
             </div>
 
-            <div className="mt-3 max-h-60 overflow-auto rounded-md border border-slate-800/80 bg-slate-900/95">
+            <div className="mt-3 max-h-60 overflow-auto rounded-md border border-white/10 bg-slate-900/90">
               {loading ? (
                 <p className="px-4 py-2 text-slate-400">Loading...</p>
               ) : searchData.length === 0 ? (
@@ -121,7 +120,7 @@ export default function GlobalSearch() {
                       <li key={`${item.type}-${item.id}`}>
                         <Link
                           href={`/${item.type}?id=${item.id}`}
-                          className="flex items-center gap-3 px-4 py-2 text-slate-200 hover:bg-slate-800/80 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                          className="ui-focus-ring flex items-center gap-3 px-4 py-2 text-slate-200 transition-colors hover:bg-slate-800/80 focus-visible:outline-none"
                           onClick={() => setIsOpen(false)}
                         >
                           <Icon className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />

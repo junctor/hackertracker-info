@@ -36,9 +36,9 @@ export default function AnnouncementsPage({ conf, activePageId }: AnnouncementsP
         <title>Announcements | {conf.name}</title>
         <meta name="description" content={`Latest announcements and updates for ${conf.name}.`} />
       </Head>
-      <div className="flex min-h-screen flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main className="ui-page-main">
           <AnnouncementsList announcements={articles} conference={conf} />
         </main>
         <SiteFooter />

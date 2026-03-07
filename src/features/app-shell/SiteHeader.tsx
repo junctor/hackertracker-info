@@ -25,12 +25,14 @@ export default function SiteHeader({ conference, activePageId }: Props) {
   }, [activePageId, conference.slug]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/92 text-white backdrop-blur">
+    <header className="ui-topbar sticky top-0 z-50 text-white">
       <div className="ui-container flex min-h-16 items-center justify-between gap-3 py-2.5">
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
           <div className="flex min-w-0 items-center gap-3">
             <Link href={`/${conference.slug}`} className={`rounded-md px-1 py-1 ${focusRingClass}`}>
-              <span className={`${museoFont.className} logo text-2xl font-bold tracking-tight md:text-3xl`}>
+              <span
+                className={`${museoFont.className} logo text-2xl font-bold tracking-tight md:text-3xl`}
+              >
                 <span className="block md:hidden">{conference.code}</span>
                 <span className="hidden max-w-96 truncate md:block">{conference.name}</span>
               </span>
@@ -42,13 +44,13 @@ export default function SiteHeader({ conference, activePageId }: Props) {
           <nav aria-label="Primary">
             <details className="group relative">
               <summary
-                className={`flex cursor-pointer items-center gap-1.5 rounded-lg border border-white/10 bg-white/4 px-3 py-2 text-sm text-slate-200 transition-colors hover:bg-white/7 hover:text-[#6CCDBB] [&::-webkit-details-marker]:hidden ${focusRingClass}`}
+                className={`ui-btn-base ui-btn-secondary flex cursor-pointer items-center gap-1.5 px-3 py-2 text-sm text-slate-200 [&::-webkit-details-marker]:hidden ${focusRingClass}`}
               >
                 <RocketLaunchIcon className="h-4 w-4 shrink-0" aria-hidden />
                 <span>Explore</span>
               </summary>
 
-              <div className="absolute top-full left-0 mt-2 max-h-[min(30rem,calc(100dvh-5rem))] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain rounded-xl border border-white/10 bg-slate-950/96 p-2 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
+              <div className="ui-card absolute top-full left-0 mt-2 max-h-[min(30rem,calc(100dvh-5rem))] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain p-2 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
                 <ul className="grid gap-2">
                   {menuItems.map(({ title, href, description, icon: Icon }) => {
                     const isActive = href === activeHref;
@@ -61,14 +63,14 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                           className={`flex flex-col gap-1 rounded-lg px-3 py-2 text-sm transition-colors ${focusRingClass} ${
                             isActive
                               ? "bg-[#0D294A]/55 font-semibold text-white ring-1 ring-[#017FA4]/65"
-                              : "text-slate-200 hover:bg-white/6 hover:text-[#6CCDBB]"
+                              : "text-slate-200 hover:bg-white/6 hover:text-slate-50"
                           }`}
                         >
                           <span className="flex items-center gap-2">
                             <Icon className="h-5 w-5 shrink-0" aria-hidden />
                             <span>{title}</span>
                             {isActive ? (
-                              <span className="rounded border border-[#017FA4]/75 px-1.5 py-0.5 text-[10px] tracking-wide text-[#6CCDBB] uppercase">
+                              <span className="rounded border border-[#017FA4]/75 px-1.5 py-0.5 text-[10px] tracking-[0.12em] text-[#6CCDBB] uppercase">
                                 Current
                               </span>
                             ) : null}

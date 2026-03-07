@@ -36,9 +36,9 @@ export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps
         <title>readme.nfo | {conf.name}</title>
         <meta name="description" content={`A collection of information related to ${conf.name}.`} />
       </Head>
-      <div className="flex min-h-screen flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main className="ui-page-main">
           <DocumentsList documents={documents} conference={conf} />
         </main>
         <SiteFooter />

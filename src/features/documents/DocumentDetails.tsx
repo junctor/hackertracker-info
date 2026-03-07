@@ -21,8 +21,7 @@ export default function DocumentDetails({ document, conference }: Props) {
       });
 
   return (
-    <article className="container mx-auto px-4 py-8 lg:py-12">
-      {/* Breadcrumb with chevron separators and improved color contrast */}
+    <article className="ui-container ui-page-content">
       <nav aria-label="Breadcrumb" className="mb-6" role="navigation">
         <ol className="inline-flex items-center space-x-2 text-sm">
           <li>
@@ -34,7 +33,7 @@ export default function DocumentDetails({ document, conference }: Props) {
             </Link>
           </li>
           <li aria-hidden="true">
-            <ChevronRightIcon className="h-4 w-4 text-slate-400 dark:text-slate-600" />
+            <ChevronRightIcon className="h-4 w-4 text-slate-500" />
           </li>
           <li aria-current="page" className="text-slate-300">
             {document.titleText}
@@ -43,7 +42,7 @@ export default function DocumentDetails({ document, conference }: Props) {
       </nav>
 
       <header className="mb-6">
-        <h1 id="doc-title" className="mb-2 text-4xl font-extrabold tracking-tight text-slate-100">
+        <h1 id="doc-title" className="ui-heading-1 mb-2">
           {document.titleText}
         </h1>
         <p className="text-sm text-slate-400">Last updated {updatedLabel}</p>

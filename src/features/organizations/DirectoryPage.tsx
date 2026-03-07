@@ -103,9 +103,9 @@ export default function DirectoryPage({
     if (!selectedOrganization) return <ErrorScreen msg="Organization not found" />;
 
     pageContent = (
-      <div className="flex min-h-screen flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main className="ui-page-main">
           <OrganizationDetails org={selectedOrganization} conference={conf} />
         </main>
         <SiteFooter />
@@ -124,9 +124,9 @@ export default function DirectoryPage({
     const detailsBasePath = `/${conf.slug}/${routeSlug}`;
 
     pageContent = (
-      <div className="flex min-h-screen flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main className="ui-page-main">
           <OrganizationsList
             organizations={matchingOrganizations}
             title={title}

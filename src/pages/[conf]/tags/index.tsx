@@ -36,9 +36,9 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
         <title>Tags | {conf.name}</title>
         <meta name="description" content={`Explore the various tags used in ${conf.name}.`} />
       </Head>
-      <div className="flex min-h-screen flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main className="ui-page-main">
           <TagsList tagTypes={tags} conference={conf} />
         </main>
         <SiteFooter />

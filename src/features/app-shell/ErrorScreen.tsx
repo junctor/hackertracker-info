@@ -9,7 +9,9 @@ export default function ErrorScreen({ msg }: Props) {
     <main className="ui-page-shell">
       <section className="ui-page-main grid place-items-center px-4 py-10">
         <div className="ui-card w-full max-w-xl p-6 text-center sm:p-8">
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-100 sm:text-4xl">Error</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-100 sm:text-4xl">
+            Error
+          </h1>
 
           {msg ? (
             <pre
@@ -19,12 +21,14 @@ export default function ErrorScreen({ msg }: Props) {
               {msg}
             </pre>
           ) : (
-            <p className="mt-5 mb-6 text-sm text-slate-300 sm:text-base">Something went sideways.</p>
+            <p className="mt-5 mb-6 text-sm text-slate-300 sm:text-base">
+              Something went sideways.
+            </p>
           )}
 
           <Link
             href="/"
-            className="ui-btn-base ui-focus-ring rounded-md border border-slate-600/70 px-4 text-sm text-slate-100 hover:border-slate-500 hover:bg-slate-800/70 focus-visible:outline-none"
+            className="ui-btn-base ui-btn-secondary ui-focus-ring focus-visible:outline-none"
           >
             Return Home
           </Link>

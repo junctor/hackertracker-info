@@ -49,7 +49,7 @@ export default function ContentSession({
 
   return (
     <li
-      className="ui-card ui-card-interactive group relative overflow-hidden px-4 py-3 focus-within:border-[#017FA4]/70"
+      className="ui-card ui-card-interactive group relative overflow-hidden px-4 py-3"
       style={
         {
           "--event-color": session.color ?? "#9ca3af",
@@ -63,7 +63,7 @@ export default function ContentSession({
       />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-indigo-600/20 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+        className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/16 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
       />
 
       <div className="relative z-10 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -85,7 +85,7 @@ export default function ContentSession({
             download={`DEF_CON_${content.id}-${session.id}.ics`}
             title={`Download calendar invite for session: ${content.title}`}
             aria-label={`Download calendar invite for session: ${content.title}`}
-            className="ui-icon-btn ui-focus-ring h-11 w-11 border-transparent bg-transparent text-slate-400 hover:text-slate-100 focus-visible:outline-none"
+            className="ui-icon-btn ui-focus-ring h-11 w-11 border-transparent bg-transparent text-slate-400 hover:text-white focus-visible:outline-none"
           >
             <CalendarIcon className="h-6 w-6" aria-hidden="true" />
           </a>

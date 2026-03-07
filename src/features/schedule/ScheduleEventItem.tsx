@@ -44,7 +44,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   return (
     <article
       style={barStyle}
-      className="ui-card ui-card-interactive group relative flex w-full min-w-0 flex-col gap-4 overflow-hidden py-3 pr-4 pl-4 focus-within:border-[#017FA4]/70"
+      className="ui-card ui-card-interactive group relative flex w-full min-w-0 flex-col gap-4 overflow-hidden py-3 pr-4 pl-4"
     >
       <span
         aria-hidden="true"
@@ -53,12 +53,12 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
 
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/22 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+        className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/18 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
       />
 
       <Link
         href={href}
-        className="ui-focus-ring relative z-10 flex w-full flex-col gap-3 rounded-md pr-12 pl-5 focus-visible:outline-none md:flex-row md:items-start md:justify-between"
+        className="ui-focus-ring relative z-10 flex w-full flex-col gap-3 rounded-lg pr-12 pl-5 focus-visible:outline-none md:flex-row md:items-start md:justify-between"
       >
         <div className="min-w-0 md:w-48">
           {(isLive || isNext) && (
@@ -91,7 +91,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
             {event.tags.map((tag) => (
               <li
                 key={tag.id}
-                className="inline-flex items-center rounded-full border border-white/15 px-2 py-0.5 text-xs font-medium"
+                className="inline-flex items-center rounded-full border border-white/15 px-2 py-0.5 text-xs font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                 style={{
                   backgroundColor: tag.colorBackground,
                   color: tag.colorForeground ?? "#fff",
@@ -109,7 +109,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
         onClick={handleBookmarkClick}
         aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
         aria-pressed={bookmark}
-        className="ui-focus-ring ui-icon-btn absolute top-2 right-2 z-10 h-11 w-11 border-transparent bg-transparent text-slate-500 focus-visible:outline-none"
+        className="ui-focus-ring ui-icon-btn absolute top-2 right-2 z-10 h-11 w-11 border-transparent bg-transparent text-slate-500 hover:text-[#6CCDBB] focus-visible:outline-none"
       >
         {bookmark ? (
           <BookmarkIconSolid className="h-5 w-5 text-[#6CCDBB]" aria-hidden="true" />

@@ -81,12 +81,12 @@ export default function AppsLanding({ conference }: Props) {
       name: "Web",
       url: "https://info.defcon.org",
       text: "View the Schedule",
-      color: "bg-purple-600 text-white hover:bg-purple-500",
+      color: "bg-[#017FA4] text-white hover:bg-[#016887]",
     },
   ];
 
   const btnBase =
-    "rounded-full px-8 py-3 font-semibold text-lg shadow-lg transition transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
+    "ui-btn-base ui-focus-ring rounded-full px-8 py-3 text-lg shadow-lg transition hover:-translate-y-1 focus-visible:outline-none";
 
   return (
     <div
@@ -95,12 +95,9 @@ export default function AppsLanding({ conference }: Props) {
         backgroundSize: "200% 200%",
         backgroundPosition: "0% 0%",
       }}
-      className="my-10 flex min-h-screen flex-col items-center px-4 text-center text-white"
+      className="ui-container ui-page-content my-8 flex flex-col items-center text-center text-white"
     >
-      <h1
-        ref={titleRef}
-        className="text-6xl leading-tight font-extrabold sm:text-7xl md:text-8xl lg:text-9xl"
-      >
+      <h1 ref={titleRef} className="ui-heading-1 text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
         Hacker Tracker
       </h1>
 

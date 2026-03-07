@@ -44,7 +44,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   return (
     <article
       style={barStyle}
-      className="ui-card ui-card-interactive group relative flex w-full min-w-0 flex-col gap-4 overflow-hidden py-3 pr-4 pl-4"
+      className="ui-card ui-card-interactive group relative flex w-full min-w-0 flex-col gap-3 overflow-hidden p-3 sm:p-4"
     >
       <span
         aria-hidden="true"
@@ -58,9 +58,9 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
 
       <Link
         href={href}
-        className="ui-focus-ring relative z-10 flex w-full flex-col gap-3 rounded-lg pr-12 pl-5 focus-visible:outline-none md:flex-row md:items-start md:justify-between"
+        className="ui-focus-ring relative z-10 flex w-full flex-col gap-3 rounded-lg pl-4 focus-visible:outline-none md:flex-row md:items-start md:gap-5"
       >
-        <div className="min-w-0 md:w-48">
+        <div className="min-w-0 md:w-44">
           {(isLive || isNext) && (
             <span
               className={`mb-1 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] uppercase ${
@@ -72,7 +72,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
               {isLive ? "Live" : "Next"}
             </span>
           )}
-          <p className="text-base font-semibold text-slate-100">
+          <p className="text-sm font-semibold text-slate-100 sm:text-base">
             <time dateTime={event.beginIso}>{event.beginDisplay}</time>
           </p>
           <p className="text-sm text-slate-300/85">
@@ -81,17 +81,21 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
         </div>
 
         <div className="min-w-0 flex-1">
-          <h3 className="line-clamp-2 text-xl font-bold text-slate-100">{event.title}</h3>
+          <h3 className="line-clamp-2 text-lg font-semibold text-slate-100 sm:text-xl">
+            {event.title}
+          </h3>
 
-          {event.speakers && <p className="mt-1 text-slate-300 italic">{event.speakers}</p>}
+          {event.speakers && (
+            <p className="mt-1 line-clamp-2 text-sm text-slate-300 italic">{event.speakers}</p>
+          )}
 
-          <p className="mt-1 text-slate-300">{event.locationName}</p>
+          <p className="mt-1 text-sm text-slate-300">{event.locationName}</p>
 
-          <ul className="m-0 mt-2 flex list-none flex-wrap gap-1 p-0 text-sm uppercase">
+          <ul className="m-0 mt-2 flex list-none flex-wrap gap-1.5 p-0 text-sm uppercase">
             {event.tags.map((tag) => (
               <li
                 key={tag.id}
-                className="inline-flex items-center rounded-full border border-white/15 px-2 py-0.5 text-xs font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                className="inline-flex items-center rounded-full border border-white/15 px-2 py-1 text-[11px] font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                 style={{
                   backgroundColor: tag.colorBackground,
                   color: tag.colorForeground ?? "#fff",
@@ -104,19 +108,21 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
         </div>
       </Link>
 
-      <button
-        type="button"
-        onClick={handleBookmarkClick}
-        aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
-        aria-pressed={bookmark}
-        className="ui-focus-ring ui-icon-btn absolute top-2 right-2 z-10 h-11 w-11 border-transparent bg-transparent text-slate-500 hover:text-[#6CCDBB] focus-visible:outline-none"
-      >
-        {bookmark ? (
-          <BookmarkIconSolid className="h-5 w-5 text-[#6CCDBB]" aria-hidden="true" />
-        ) : (
-          <BookmarkIconOutline className="h-5 w-5" aria-hidden="true" />
-        )}
-      </button>
+      <div className="relative z-10 flex justify-end pl-4">
+        <button
+          type="button"
+          onClick={handleBookmarkClick}
+          aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
+          aria-pressed={bookmark}
+          className="ui-focus-ring ui-icon-btn h-11 w-11 border-transparent bg-transparent text-slate-500 hover:text-[#6CCDBB] focus-visible:outline-none"
+        >
+          {bookmark ? (
+            <BookmarkIconSolid className="h-5 w-5 text-[#6CCDBB]" aria-hidden="true" />
+          ) : (
+            <BookmarkIconOutline className="h-5 w-5" aria-hidden="true" />
+          )}
+        </button>
+      </div>
     </article>
   );
 });

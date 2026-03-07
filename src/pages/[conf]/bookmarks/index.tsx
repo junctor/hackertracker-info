@@ -312,7 +312,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
         <main className="ui-page-main">
-          <h1 className="ui-heading-1 ui-container mt-10 mb-6 text-center">Bookmarks</h1>
+          <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center">Bookmarks</h1>
           {bookmarks.length === 0 ? (
             <p className="mt-8 text-center text-slate-500">No bookmarks found.</p>
           ) : days.length > 0 && resolvedDay ? (

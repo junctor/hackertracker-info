@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode, TableHTMLAttributes } from "react";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -13,9 +13,11 @@ type CodeProps = {
   children?: ReactNode;
 };
 
+type TableProps = TableHTMLAttributes<HTMLTableElement>;
+
 export default function Markdown({ content }: Props) {
   return (
-    <div className="prose prose-invert prose-sm sm:prose-base md:prose-lg max-w-none break-words text-slate-200 antialiased prose-headings:text-slate-100 prose-p:text-slate-200 prose-li:text-slate-200 prose-strong:text-slate-100 prose-a:text-(--accent-primary) hover:prose-a:text-(--accent-success) prose-code:text-slate-100 prose-hr:border-slate-700/80 prose-table:w-full prose-table:border-collapse prose-th:border prose-th:border-slate-700 prose-th:bg-slate-800 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-th:text-slate-100 prose-td:border prose-td:border-slate-700 prose-td:px-3 prose-td:py-2">
+    <div className="prose prose-invert prose-sm sm:prose-base md:prose-lg prose-headings:text-slate-100 prose-p:text-slate-200 prose-li:text-slate-200 prose-strong:text-slate-100 prose-a:text-(--accent-primary) hover:prose-a:text-(--accent-success) prose-code:text-slate-100 prose-hr:border-slate-700/80 prose-table:w-full prose-table:border-collapse prose-th:border prose-th:border-slate-700 prose-th:bg-slate-800 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-th:text-slate-100 prose-td:border prose-td:border-slate-700 prose-td:px-3 prose-td:py-2 max-w-none wrap-break-word text-slate-200 antialiased">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -60,6 +62,12 @@ export default function Markdown({ content }: Props) {
               decoding="async"
               className="mx-auto my-5 rounded-md shadow-sm"
             />
+          ),
+
+          table: ({ className, ...props }: TableProps) => (
+            <div className="my-5 overflow-x-auto">
+              <table {...props} className={[className, "min-w-max"].filter(Boolean).join(" ")} />
+            </div>
           ),
         }}
       >

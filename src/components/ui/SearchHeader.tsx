@@ -17,11 +17,16 @@ export default function SearchHeader({
   onSearchChange,
   children,
 }: Props) {
+  const hasAuxControl = Boolean(children);
+
   return (
-    <header className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <h1 className="ui-heading-1">{title}</h1>
-      <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center md:w-auto">
-        <label className="w-full max-w-sm">
+    <header className="mb-6">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <h1 className="ui-heading-1">{title}</h1>
+        <div
+          className={`grid w-full gap-3 ${hasAuxControl ? "sm:grid-cols-2" : ""} lg:w-auto lg:min-w-[24rem]`}
+        >
+          <label className="w-full">
           <span className="sr-only">{searchLabel}</span>
           <input
             type="search"
@@ -31,8 +36,9 @@ export default function SearchHeader({
             aria-label={searchLabel}
             className="ui-input-base ui-input-focus focus-visible:outline-none"
           />
-        </label>
-        {children}
+          </label>
+          {hasAuxControl ? <div className="w-full">{children}</div> : null}
+        </div>
       </div>
     </header>
   );

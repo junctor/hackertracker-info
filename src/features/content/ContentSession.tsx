@@ -49,7 +49,7 @@ export default function ContentSession({
 
   return (
     <li
-      className="ui-card ui-card-interactive group relative overflow-hidden px-4 py-3"
+      className="ui-card ui-card-interactive group relative overflow-hidden p-3 sm:p-4"
       style={
         {
           "--event-color": session.color ?? "#9ca3af",
@@ -68,8 +68,8 @@ export default function ContentSession({
 
       <div className="relative z-10 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         {/* Left: time + location */}
-        <div className="min-w-0 pl-5">
-          <div className="text-base font-medium text-slate-100">{timeLabel}</div>
+        <div className="min-w-0 pl-4">
+          <div className="text-sm font-medium text-slate-100 sm:text-base">{timeLabel}</div>
           {locationName && (
             <div className="mt-1 flex min-w-0 items-center gap-2 text-sm text-slate-400">
               <MapPinIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
@@ -79,7 +79,7 @@ export default function ContentSession({
         </div>
 
         {/* Right: actions */}
-        <div className="flex items-center gap-3 md:gap-4">
+        <div className="flex items-center gap-2 pl-4 md:gap-3 md:pl-0">
           <a
             href={icsHref}
             download={`DEF_CON_${content.id}-${session.id}.ics`}

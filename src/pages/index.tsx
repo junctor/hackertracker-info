@@ -131,7 +131,7 @@ export default function Home() {
               >
                 <span
                   ref={titleRef}
-                  className="inline-block cursor-pointer font-mono text-7xl leading-none font-semibold tracking-[0.07em] whitespace-nowrap text-slate-50 transition select-none sm:text-8xl sm:tracking-widest md:text-9xl md:tracking-[0.12em] lg:text-[10rem]"
+                  className="inline-block max-w-full cursor-pointer text-center font-mono text-[clamp(2.2rem,16vw,5rem)] leading-none font-semibold tracking-[0.04em] text-slate-50 transition select-none sm:text-8xl sm:tracking-[0.07em] md:text-9xl md:tracking-widest lg:text-[10rem]"
                 >
                   {title}
                 </span>

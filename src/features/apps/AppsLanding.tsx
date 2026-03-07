@@ -86,7 +86,7 @@ export default function AppsLanding({ conference }: Props) {
   ];
 
   const btnBase =
-    "ui-btn-base ui-focus-ring rounded-full px-8 py-3 text-lg shadow-lg transition hover:-translate-y-1 focus-visible:outline-none";
+    "ui-btn-base ui-focus-ring rounded-full px-6 py-3 text-base shadow-lg transition hover:-translate-y-1 focus-visible:outline-none sm:px-8 sm:text-lg";
 
   return (
     <div
@@ -97,11 +97,11 @@ export default function AppsLanding({ conference }: Props) {
       }}
       className="ui-container ui-page-content my-8 flex flex-col items-center text-center text-white"
     >
-      <h1 ref={titleRef} className="ui-heading-1 text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
+      <h1 ref={titleRef} className="ui-heading-1 text-4xl sm:text-5xl md:text-7xl lg:text-8xl">
         Hacker Tracker
       </h1>
 
-      <p className="mt-4 max-w-2xl text-xl sm:text-2xl md:text-3xl">
+      <p className="mt-4 max-w-2xl text-base sm:text-xl md:text-2xl">
         Your official {conference.name} schedule companion. Choose your platform below.
       </p>
 

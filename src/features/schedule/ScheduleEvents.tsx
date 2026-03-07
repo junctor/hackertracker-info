@@ -77,7 +77,7 @@ const VIRTUOSO_COMPONENTS: Components<ScheduleEventViewModel, VirtuosoContext> =
   Item: VirtuosoItem,
 };
 
-const SITE_HEADER_OFFSET_PX = 64;
+const SITE_HEADER_OFFSET_PX = 72;
 
 export function buildScheduleDaysFromGrouped(dateGroup: GroupedSchedule): ScheduleDay[] {
   return Object.entries(dateGroup)
@@ -219,34 +219,32 @@ export default function ScheduleEvents({
 
   return (
     <div className="text-slate-100">
-      <div className="ui-topbar">
-        <div className="ui-container flex justify-end gap-2 py-2">
-          <Link
-            href={`/${conf.slug}/bookmarks`}
-            className="ui-icon-btn ui-focus-ring focus-visible:outline-none"
-            aria-label="Filter by bookmarks"
-          >
-            <BookmarkIcon className="h-5 w-5" aria-hidden="true" />
-          </Link>
-          <Link
-            href={`/${conf.slug}/tags`}
-            className="ui-icon-btn ui-focus-ring focus-visible:outline-none"
-            aria-label="Filter by tags"
-          >
-            <TagIcon className="h-5 w-5" aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
+      <div className="ui-topbar sticky top-14 z-40 border-y border-white/10">
+        <div className="ui-container flex items-center gap-2 py-2">
+          <div className="flex shrink-0 items-center gap-2">
+            <Link
+              href={`/${conf.slug}/bookmarks`}
+              className="ui-icon-btn ui-focus-ring focus-visible:outline-none"
+              aria-label="Filter by bookmarks"
+            >
+              <BookmarkIcon className="h-5 w-5" aria-hidden="true" />
+            </Link>
+            <Link
+              href={`/${conf.slug}/tags`}
+              className="ui-icon-btn ui-focus-ring focus-visible:outline-none"
+              aria-label="Filter by tags"
+            >
+              <TagIcon className="h-5 w-5" aria-hidden="true" />
+            </Link>
+          </div>
 
-      <div className="sticky top-16 z-40 border-t border-white/10">
-        <div
-          className="ui-topbar border-b border-white/10"
-          role="tablist"
-          aria-label="Schedule days"
-          aria-orientation="horizontal"
-        >
-          <div className="ui-container overflow-x-auto py-2">
-            <div className="flex min-w-max items-center gap-2">
+          <div
+            role="tablist"
+            aria-label="Schedule days"
+            aria-orientation="horizontal"
+            className="min-w-0 flex-1 overflow-x-auto"
+          >
+            <div className="flex min-w-max items-center gap-2 pr-1">
               {days.map(({ day, events }, index) => (
                 <button
                   key={day}
@@ -259,7 +257,7 @@ export default function ScheduleEvents({
                   aria-selected={resolvedDay === day}
                   aria-controls={`day-panel-${day}`}
                   tabIndex={resolvedDay === day ? 0 : -1}
-                  className={`ui-focus-ring flex h-10 items-center gap-1 rounded-full border px-3 text-sm whitespace-nowrap transition-colors focus-visible:outline-none ${
+                  className={`ui-focus-ring flex min-h-11 items-center gap-1 rounded-full border px-3.5 text-sm whitespace-nowrap transition-colors focus-visible:outline-none ${
                     resolvedDay === day
                       ? "border-[#017FA4]/80 bg-[#0D294A]/55 text-white"
                       : "border-slate-700/85 bg-slate-900/55 text-slate-200 hover:border-[#017FA4]/70 hover:text-slate-100"
@@ -289,7 +287,7 @@ export default function ScheduleEvents({
         >
           <h2
             ref={headingRef}
-            className="ui-container mt-6 mb-3 scroll-mt-28 text-xl font-bold text-slate-100 md:text-2xl"
+            className="ui-container mt-5 mb-3 scroll-mt-32 text-xl font-bold text-slate-100 md:text-2xl"
           >
             {eventDayTable(activeDay.day, conf.timezone)}
           </h2>

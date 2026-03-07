@@ -23,7 +23,7 @@ export default function DocumentDetails({ document, conference }: Props) {
   return (
     <article className="ui-container ui-page-content">
       <nav aria-label="Breadcrumb" className="mb-6" role="navigation">
-        <ol className="inline-flex items-center space-x-2 text-sm">
+        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
           <li>
             <Link
               href={`/${conference.slug}/readme.nfo`}
@@ -35,7 +35,7 @@ export default function DocumentDetails({ document, conference }: Props) {
           <li aria-hidden="true">
             <ChevronRightIcon className="h-4 w-4 text-slate-500" />
           </li>
-          <li aria-current="page" className="text-slate-300">
+          <li aria-current="page" className="min-w-0 max-w-full truncate text-slate-300">
             {document.titleText}
           </li>
         </ol>

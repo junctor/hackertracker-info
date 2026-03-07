@@ -26,21 +26,19 @@ export default function SiteHeader({ conference, activePageId }: Props) {
 
   return (
     <header className="ui-topbar sticky top-0 z-50 text-white">
-      <div className="ui-container flex min-h-16 items-center justify-between gap-3 py-2.5">
-        <div className="flex min-w-0 items-center gap-3 sm:gap-5">
-          <div className="flex min-w-0 items-center gap-3">
-            <Link href={`/${conference.slug}`} className={`rounded-md px-1 py-1 ${focusRingClass}`}>
-              <span
-                className={`${museoFont.className} logo text-2xl font-bold tracking-tight md:text-3xl`}
-              >
-                <span className="block md:hidden">{conference.code}</span>
-                <span className="hidden max-w-96 truncate md:block">{conference.name}</span>
-              </span>
-            </Link>
+      <div className="ui-container flex min-h-14 items-center justify-between gap-2 py-2">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-4">
+          <Link href={`/${conference.slug}`} className={`min-w-0 rounded-md px-1 py-1 ${focusRingClass}`}>
+            <span className={`${museoFont.className} logo text-xl font-bold tracking-tight md:text-3xl`}>
+              <span className="block md:hidden">{conference.code}</span>
+              <span className="hidden max-w-96 truncate md:block">{conference.name}</span>
+            </span>
+          </Link>
 
-            <span className="hidden truncate text-sm text-slate-400 sm:inline">{pageTitle}</span>
-          </div>
+          <span className="hidden truncate text-sm text-slate-400 md:inline">{pageTitle}</span>
+        </div>
 
+        <div className="flex shrink-0 items-center gap-2">
           <nav aria-label="Primary">
             <details className="group relative">
               <summary
@@ -50,7 +48,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                 <span>Explore</span>
               </summary>
 
-              <div className="ui-card absolute top-full left-0 mt-2 max-h-[min(30rem,calc(100dvh-5rem))] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain p-2 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
+              <div className="ui-card absolute top-full right-0 mt-2 max-h-[min(30rem,calc(100dvh-5rem))] w-[min(22rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain p-2 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
                 <ul className="grid gap-2">
                   {menuItems.map(({ title, href, description, icon: Icon }) => {
                     const isActive = href === activeHref;
@@ -85,15 +83,15 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               </div>
             </details>
           </nav>
-        </div>
 
-        <Link
-          href={`/${conference.slug}/apps`}
-          aria-label="Mobile apps"
-          className={`ui-icon-btn ${focusRingClass}`}
-        >
-          <DevicePhoneMobileIcon className="h-5 w-5" aria-hidden />
-        </Link>
+          <Link
+            href={`/${conference.slug}/apps`}
+            aria-label="Mobile apps"
+            className={`ui-icon-btn ${focusRingClass}`}
+          >
+            <DevicePhoneMobileIcon className="h-5 w-5" aria-hidden />
+          </Link>
+        </div>
       </div>
     </header>
   );

@@ -53,8 +53,8 @@ const COUNTDOWN_VARIANTS: Record<
       "absolute right-0 top-1/2 hidden h-12 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-white/14 to-transparent sm:block lg:h-16",
     settledValueColor: "#f8fafc",
     liveAnnouncements: true,
-    glowSize: "h-16 w-16 sm:h-20 sm:w-20 lg:h-28 lg:w-28",
-    glowOpacity: 0.2,
+    glowSize: "h-14 w-14 sm:h-[4.5rem] sm:w-[4.5rem] lg:h-24 lg:w-24",
+    glowOpacity: 0.12,
   },
   tiny: {
     sectionClassName: "mt-2 w-full",
@@ -68,8 +68,8 @@ const COUNTDOWN_VARIANTS: Record<
       "absolute right-0 top-1/2 hidden h-5 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent sm:block",
     settledValueColor: "#e2e8f0",
     liveAnnouncements: false,
-    glowSize: "h-8 w-8 sm:h-10 sm:w-10",
-    glowOpacity: 0.14,
+    glowSize: "h-7 w-7 sm:h-8 sm:w-8",
+    glowOpacity: 0.08,
   },
 };
 
@@ -135,12 +135,12 @@ function animateDigit({
   tl.fromTo(
     valueEl,
     {
-      yPercent: 24,
-      scale: 0.94,
-      opacity: 0,
-      filter: "blur(8px)",
+      yPercent: 16,
+      scale: 0.975,
+      opacity: 0.2,
+      filter: "blur(4px)",
       color: accent,
-      textShadow: `0 0 24px ${accent}66`,
+      textShadow: `0 0 14px ${accent}2e`,
     },
     {
       yPercent: 0,
@@ -148,19 +148,19 @@ function animateDigit({
       opacity: 1,
       filter: "blur(0px)",
       color: accent,
-      textShadow: `0 0 16px ${accent}33`,
-      duration: 0.34,
-      ease: "power3.out",
+      textShadow: `0 0 8px ${accent}1f`,
+      duration: 0.26,
+      ease: "power2.out",
     },
   ).to(
     valueEl,
     {
       color: settledColor,
       textShadow: "0 0 0 rgba(0,0,0,0)",
-      duration: 0.24,
+      duration: 0.2,
       ease: "power2.out",
     },
-    "-=0.05",
+    "-=0.03",
   );
 
   if (glowEl) {
@@ -168,12 +168,12 @@ function animateDigit({
       glowEl,
       {
         opacity: 0,
-        scale: 0.7,
+        scale: 0.82,
       },
       {
-        opacity: 1,
-        scale: 1.08,
-        duration: 0.18,
+        opacity: 0.7,
+        scale: 1,
+        duration: 0.16,
         ease: "power2.out",
       },
       0,
@@ -181,11 +181,11 @@ function animateDigit({
       glowEl,
       {
         opacity: 0,
-        scale: 1.24,
-        duration: 0.42,
-        ease: "power2.out",
+        scale: 1.12,
+        duration: 0.28,
+        ease: "power1.out",
       },
-      0.1,
+      0.08,
     );
   }
 }
@@ -383,19 +383,23 @@ export default function Countdown({ conference, size = "large" }: Props) {
               <div className={variant.valueWrapClassName}>
                 <span
                   aria-hidden="true"
-                  className={`pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 blur-2xl ${variant.glowSize}`}
+                  className={`pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 blur-xl ${variant.glowSize}`}
                   ref={glowRefs[unit.key]}
                   style={{
-                    backgroundColor: accent,
+                    background: `radial-gradient(circle, ${accent} 0%, ${accent}66 36%, transparent 72%)`,
+                    opacity: variant.glowOpacity,
                   }}
                 />
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-x-2 top-1/2 h-px -translate-y-1/2 bg-linear-to-r from-transparent via-white/6 to-transparent"
+                  className="pointer-events-none absolute inset-x-3 top-1/2 h-px -translate-y-1/2 bg-linear-to-r from-transparent via-white/10 to-transparent"
                 />
                 <span
                   ref={valueRefs[unit.key]}
                   className={`${variant.valueClassName} ${atkinsonFont.className}`}
+                  style={{
+                    textShadow: `0 0 10px color-mix(in srgb, ${accent} 10%, transparent)`,
+                  }}
                 >
                   {formatCountdownValue(timer[unit.key])}
                 </span>

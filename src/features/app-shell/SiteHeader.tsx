@@ -28,8 +28,13 @@ export default function SiteHeader({ conference, activePageId }: Props) {
     <header className="ui-topbar sticky top-0 z-50 text-white">
       <div className="ui-container flex min-h-14 items-center justify-between gap-2 py-2">
         <div className="flex min-w-0 items-center gap-2 sm:gap-4">
-          <Link href={`/${conference.slug}`} className={`min-w-0 rounded-md px-1 py-1 ${focusRingClass}`}>
-            <span className={`${museoFont.className} logo text-xl font-bold tracking-tight md:text-3xl`}>
+          <Link
+            href={`/${conference.slug}`}
+            className={`min-w-0 rounded-md px-1 py-1 ${focusRingClass}`}
+          >
+            <span
+              className={`${museoFont.className} logo text-xl font-bold tracking-tight md:text-3xl`}
+            >
               <span className="block md:hidden">{conference.code}</span>
               <span className="hidden max-w-96 truncate md:block">{conference.name}</span>
             </span>
@@ -45,7 +50,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                 className={`ui-btn-base ui-btn-secondary flex cursor-pointer items-center gap-1.5 px-3 py-2 text-sm text-slate-200 [&::-webkit-details-marker]:hidden ${focusRingClass}`}
               >
                 <RocketLaunchIcon className="h-4 w-4 shrink-0" aria-hidden />
-                <span>Explore</span>
+                <span>Menu</span>
               </summary>
 
               <div className="ui-card absolute top-full right-0 mt-2 max-h-[min(30rem,calc(100dvh-5rem))] w-[min(22rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain p-2 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
@@ -86,7 +91,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
 
           <Link
             href={`/${conference.slug}/apps`}
-            aria-label="Mobile apps"
+            aria-label="Get Hacker Tracker apps"
             className={`ui-icon-btn ${focusRingClass}`}
           >
             <DevicePhoneMobileIcon className="h-5 w-5" aria-hidden />

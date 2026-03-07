@@ -16,23 +16,26 @@ type ConferenceCardConfig = {
   subtitle: string;
 };
 
-const conferenceDateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "long",
-  day: "numeric",
-  year: "numeric",
-  weekday: "long",
-});
+const conferenceDateFormatter = (timeZone: string) =>
+  new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    weekday: "long",
+  });
 
-const formatConferenceDate = (date: string) => conferenceDateFormatter.format(new Date(date));
+const formatConferenceDate = (date: string, timeZone: string) =>
+  conferenceDateFormatter(timeZone).format(new Date(date));
 
 const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = [
   {
     conference: CONFERENCES.dcsg2026,
-    subtitle: formatConferenceDate(CONFERENCES.dcsg2026.kickoff),
+    subtitle: formatConferenceDate(CONFERENCES.dcsg2026.kickoff, CONFERENCES.dcsg2026.timezone),
   },
   {
     conference: CONFERENCES.defcon34,
-    subtitle: formatConferenceDate(CONFERENCES.defcon34.kickoff),
+    subtitle: formatConferenceDate(CONFERENCES.defcon34.kickoff, CONFERENCES.defcon34.timezone),
   },
 ];
 

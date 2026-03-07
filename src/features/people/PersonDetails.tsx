@@ -63,7 +63,7 @@ export default function PersonDetails({ person, events, locations, conference }:
                     href={l.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-indigo-400 transition hover:underline focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                    className="ui-focus-ring text-sm text-[#6CCDBB] transition hover:underline focus-visible:outline-none"
                   >
                     {l.title}
                   </a>
@@ -93,9 +93,9 @@ export default function PersonDetails({ person, events, locations, conference }:
                 <li key={e.id}>
                   <Link
                     href={`${contentsBasePath}?id=${e.contentId}`}
-                    className="group block w-full rounded-md focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                    className="ui-focus-ring group block w-full rounded-md focus-visible:outline-none"
                   >
-                    <div className="h-full border-l-4 border-indigo-400 bg-slate-800 pl-5 transition-shadow duration-200 ease-out group-hover:border-indigo-300 group-hover:bg-slate-700 group-hover:shadow-md">
+                    <div className="h-full border-l-4 border-[#017FA4] bg-slate-800 pl-5 transition-shadow duration-200 ease-out group-hover:border-[#6CCDBB] group-hover:bg-slate-700 group-hover:shadow-md">
                       <div className="p-4">
                         <h3 className="text-lg font-semibold text-slate-100">{e.title}</h3>
                         <p className="mt-1 text-sm text-slate-400">

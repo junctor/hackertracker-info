@@ -2,7 +2,7 @@ import type { GetStaticProps } from "next";
 
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useMemo } from "react";
+import React, { useMemo, type ReactElement } from "react";
 import useSWR from "swr";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
@@ -116,7 +116,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
 
   let pageTitle = `People | ${conf.name}`;
   let pageDescription = `Browse bios and sessions for all ${conf.name} participants.`;
-  let pageContent: JSX.Element;
+  let pageContent: ReactElement;
 
   if (shouldLoadDetails) {
     const isDetailLoading = peopleLoading || eventsLoading || locationsLoading;
@@ -150,9 +150,9 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
       </Head>
-      <div className="flex min-h-screen flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">{pageContent}</main>
+        <main className="ui-page-main">{pageContent}</main>
         <SiteFooter />
       </div>
     </>

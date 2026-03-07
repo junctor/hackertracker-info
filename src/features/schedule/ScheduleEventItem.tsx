@@ -44,7 +44,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   return (
     <article
       style={barStyle}
-      className="group relative flex w-full min-w-0 flex-col gap-4 overflow-hidden rounded-lg border border-white/10 bg-slate-900/45 py-3 pr-4 pl-4 transition-colors focus-within:border-[#017FA4]/70 hover:border-slate-700/80 hover:bg-slate-900"
+      className="ui-card ui-card-interactive group relative flex w-full min-w-0 flex-col gap-4 overflow-hidden py-3 pr-4 pl-4 focus-within:border-[#017FA4]/70"
     >
       <span
         aria-hidden="true"
@@ -58,7 +58,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
 
       <Link
         href={href}
-        className="ui-focus-ring relative z-10 flex w-full flex-col gap-3 rounded-md pr-10 pl-5 focus-visible:outline-none md:flex-row md:items-start md:justify-between"
+        className="ui-focus-ring relative z-10 flex w-full flex-col gap-3 rounded-md pr-12 pl-5 focus-visible:outline-none md:flex-row md:items-start md:justify-between"
       >
         <div className="min-w-0 md:w-48">
           {(isLive || isNext) && (
@@ -75,7 +75,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
           <p className="text-base font-semibold text-slate-100">
             <time dateTime={event.beginIso}>{event.beginDisplay}</time>
           </p>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-300/85">
             <time dateTime={event.endIso}>{event.endDisplay}</time>
           </p>
         </div>
@@ -109,7 +109,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
         onClick={handleBookmarkClick}
         aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
         aria-pressed={bookmark}
-        className="ui-focus-ring absolute top-3 right-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-500 transition hover:text-[#017FA4] focus-visible:outline-none"
+        className="ui-focus-ring ui-icon-btn absolute top-2 right-2 z-10 h-11 w-11 border-transparent bg-transparent text-slate-500 focus-visible:outline-none"
       >
         {bookmark ? (
           <BookmarkIconSolid className="h-5 w-5 text-[#6CCDBB]" aria-hidden="true" />

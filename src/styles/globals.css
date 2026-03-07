@@ -4,16 +4,16 @@
 :root {
   color-scheme: dark;
 
-  /* Core surfaces */
-  --color-bg: #020617; /* slate-950 */
-  --color-surface: #0f172a; /* slate-900 */
-  --color-surface-elevated: #111827; /* gray/slate blend for raised panels */
-  --color-fg: #f8fafc; /* slate-50 */
-  --color-muted: #94a3b8; /* slate-400 */
-  --color-border: #334155; /* slate-700 */
+  /* Surfaces */
+  --color-bg: #020617;
+  --color-surface: #0f172a;
+  --color-surface-elevated: #111827;
+  --color-fg: #f8fafc;
+  --color-muted: #94a3b8;
+  --color-border: #334155;
   --color-border-soft: rgba(148, 163, 184, 0.18);
 
-  /* Brand accents */
+  /* Brand */
   --accent-danger: #e0004e;
   --accent-warning: #f1b435;
   --accent-deep: #0d294a;
@@ -28,7 +28,11 @@
 
   --color-accent: var(--accent-primary);
 
-  /* Radii */
+  /* Layout */
+  --layout-max: 72rem;
+  --layout-gutter: clamp(1rem, 2.6vw, 1.5rem);
+
+  /* Radius */
   --radius-1: 0.25rem;
   --radius-2: 0.5rem;
   --radius-3: 0.75rem;
@@ -42,10 +46,15 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
 
-  /* Shadows */
+  /* Shadow */
   --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.22);
   --shadow-md: 0 12px 28px rgba(0, 0, 0, 0.28);
   --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.38);
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 html {
@@ -53,12 +62,15 @@ html {
 }
 
 body {
+  margin: 0;
   background:
-    radial-gradient(circle at top, rgba(59, 130, 246, 0.08), transparent 28%),
-    radial-gradient(circle at 20% 20%, rgba(241, 180, 53, 0.06), transparent 18%), var(--color-bg);
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.06), transparent 34%),
+    radial-gradient(circle at 20% 20%, rgba(241, 180, 53, 0.05), transparent 22%),
+    var(--color-bg);
   color: var(--color-fg);
   font-family: "Atkinson Hyperlegible", "Lato", "Segoe UI", sans-serif;
-  line-height: 1.6;
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
 }
 
 *,
@@ -91,18 +103,43 @@ button {
   color: var(--color-fg);
 }
 
+.ui-page-shell {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+}
+
+.ui-page-main {
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.ui-container {
+  width: min(var(--layout-max), 100% - (var(--layout-gutter) * 2));
+  margin-inline: auto;
+}
+
+.ui-section {
+  padding-block: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.ui-section-lg {
+  padding-block: clamp(2.25rem, 5vw, 3.5rem);
+}
+
 .ui-focus-ring:focus-visible,
 .ui-link:focus-visible,
 .ui-input-focus:focus-visible {
   outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent-primary), transparent 72%);
 }
 
 .ui-link {
-  color: color-mix(in oklab, var(--accent-primary), white 8%);
+  color: color-mix(in oklab, var(--accent-primary), white 12%);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-decoration-color: color-mix(in oklab, var(--accent-primary), transparent 52%);
+  text-decoration-color: color-mix(in oklab, var(--accent-primary), transparent 58%);
   text-underline-offset: 0.16em;
   transition:
     color 0.2s ease,
@@ -117,6 +154,19 @@ button {
 .ui-link:hover {
   color: color-mix(in oklab, var(--accent-primary), white 18%);
   text-decoration-color: color-mix(in oklab, var(--accent-primary), transparent 24%);
+}
+
+.ui-input-base {
+  width: 100%;
+  border-radius: var(--radius-2);
+  border: 1px solid color-mix(in oklab, var(--color-border), white 6%);
+  background: color-mix(in oklab, var(--color-surface), transparent 10%);
+  padding: 0.55rem 0.75rem;
+  color: var(--color-fg);
+}
+
+.ui-input-base::placeholder {
+  color: color-mix(in oklab, var(--color-muted), transparent 14%);
 }
 
 .ui-btn-base {
@@ -151,90 +201,49 @@ button {
   box-shadow: var(--shadow-md);
 }
 
-@keyframes slide {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 300% 50%;
-  }
+.ui-card {
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-3);
+  background: color-mix(in oklab, var(--color-surface), transparent 12%);
+  box-shadow: var(--shadow-sm);
 }
 
-@keyframes sweep {
-  0% {
-    transform: translateX(-120%);
-    opacity: 0.45;
-  }
-  100% {
-    transform: translateX(120%);
-    opacity: 0;
-  }
+.ui-card-interactive {
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
-@keyframes glitch {
-  0% {
-    transform: none;
-  }
-  10% {
-    transform: translate(1px, -1px);
-  }
-  20% {
-    transform: translate(-1px, 1px);
-  }
-  30% {
-    transform: translate(1px, 0);
-  }
-  40% {
-    transform: translate(-1px, 0);
-  }
-  50% {
-    transform: none;
-  }
-  60% {
-    transform: skewX(1deg);
-  }
-  70% {
-    transform: skewX(-1deg);
-  }
-  80% {
-    transform: none;
-  }
-  100% {
-    transform: none;
-  }
+.ui-card-interactive:hover {
+  border-color: color-mix(in oklab, var(--accent-primary), transparent 60%);
+  background: color-mix(in oklab, var(--color-surface-elevated), transparent 6%);
+  transform: translateY(-1px);
 }
 
-@keyframes rgb {
-  0%,
-  100% {
-    transform: translate(1.5px, -0.8px);
-    opacity: 0.95;
-  }
-  50% {
-    transform: translate(2.3px, -1.3px);
-    opacity: 1;
-  }
+.ui-icon-btn {
+  display: inline-flex;
+  min-height: 44px;
+  min-width: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-2);
+  border: 1px solid var(--color-border-soft);
+  background: color-mix(in oklab, var(--color-surface), transparent 20%);
+  color: var(--color-muted);
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
-.scanlines {
-  pointer-events: none;
-  opacity: 0.14;
-  mix-blend-mode: overlay;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 0.035) 0px,
-    rgba(255, 255, 255, 0.035) 2px,
-    transparent 2px,
-    transparent 4px
-  );
+.ui-icon-btn:hover {
+  border-color: color-mix(in oklab, var(--accent-primary), transparent 55%);
+  background: color-mix(in oklab, var(--accent-primary), transparent 84%);
+  color: color-mix(in oklab, var(--accent-primary), white 10%);
 }
 
-.vignette {
-  pointer-events: none;
-  background: radial-gradient(
-    1200px 600px at 50% 50%,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.28) 70%,
-    rgba(0, 0, 0, 0.56) 100%
-  );
+.ui-muted {
+  color: var(--color-muted);
 }

@@ -3,8 +3,6 @@ import type { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import styles from "../../styles/markdown.module.css";
-
 type Props = {
   content: string;
 };
@@ -17,7 +15,7 @@ type CodeProps = {
 
 export default function Markdown({ content }: Props) {
   return (
-    <div className="prose dark:prose-invert prose-sm sm:prose-base md:prose-lg prose-headings:text-slate-100 prose-p:text-slate-200 prose-li:text-slate-200 prose-strong:text-slate-100 prose-a:text-(--accent-primary) hover:prose-a:text-(--accent-success) prose-code:text-slate-100 prose-hr:border-slate-700/80 wrap-break-word antialiased md:max-w-none">
+    <div className="prose prose-invert prose-sm sm:prose-base md:prose-lg max-w-none break-words text-slate-200 antialiased prose-headings:text-slate-100 prose-p:text-slate-200 prose-li:text-slate-200 prose-strong:text-slate-100 prose-a:text-(--accent-primary) hover:prose-a:text-(--accent-success) prose-code:text-slate-100 prose-hr:border-slate-700/80 prose-table:w-full prose-table:border-collapse prose-th:border prose-th:border-slate-700 prose-th:bg-slate-800 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-th:text-slate-100 prose-td:border prose-td:border-slate-700 prose-td:px-3 prose-td:py-2">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -63,12 +61,6 @@ export default function Markdown({ content }: Props) {
               className="mx-auto my-5 rounded-md shadow-sm"
             />
           ),
-
-          div: (props) => {
-            const className = [styles.markdown, props.className].filter(Boolean).join(" ");
-
-            return <div {...props} className={className} />;
-          },
         }}
       >
         {content}

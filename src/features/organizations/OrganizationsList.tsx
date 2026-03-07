@@ -44,7 +44,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
       : `${sortedOrganizations.length} total`;
 
   return (
-    <section className="mx-auto my-10 max-w-7xl px-5">
+    <section className="ui-container ui-section">
       <SearchHeader
         title={title}
         searchLabel={`Search ${title}`}
@@ -67,9 +67,9 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
             <li key={organization.id} className="h-full">
               <Link
                 href={`${detailsBasePath}?id=${organization.id}`}
-                className="group block h-full rounded-2xl focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                className="ui-focus-ring group block h-full rounded-2xl focus-visible:outline-none"
               >
-                <article className="flex h-full items-center gap-4 rounded-2xl border border-white/10 bg-slate-900/60 p-4 transition group-hover:border-white/20 group-hover:bg-slate-800/70">
+                <article className="ui-card ui-card-interactive flex h-full items-center gap-4 rounded-2xl p-4">
                   <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-slate-800 sm:h-20 sm:w-20">
                     {organization.logoUrl ? (
                       <Image

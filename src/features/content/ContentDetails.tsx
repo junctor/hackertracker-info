@@ -108,7 +108,7 @@ export default function ContentDetails(props: Props) {
             type="button"
             onClick={handleShare}
             aria-label="Share content link"
-            className="rounded-md p-2 text-slate-400 transition hover:text-slate-200 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
+            className="ui-focus-ring rounded-md p-2 text-slate-400 transition hover:text-slate-200 focus-visible:outline-none"
           >
             <ShareIcon className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -150,7 +150,7 @@ export default function ContentDetails(props: Props) {
               <li key={tag.id}>
                 <Link
                   href={`/${conference.slug}/tag?id=${tag.id}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:bg-indigo-600/50 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
+                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:bg-[#017FA4]/35 focus-visible:outline-none"
                 >
                   <span
                     className="h-3 w-3 rounded-full"
@@ -190,7 +190,7 @@ export default function ContentDetails(props: Props) {
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-indigo-300 decoration-indigo-500/40 underline-offset-2 transition-colors hover:text-indigo-200 hover:underline hover:decoration-indigo-400 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
+                  className="ui-focus-ring inline-flex items-center gap-2 text-[#6CCDBB] decoration-[#017FA4]/45 underline-offset-2 transition-colors hover:text-slate-100 hover:underline hover:decoration-[#6CCDBB] focus-visible:outline-none"
                 >
                   <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                   <span className="truncate">{l.label}</span>
@@ -212,10 +212,10 @@ export default function ContentDetails(props: Props) {
               <li key={p.id}>
                 <Link
                   href={`${peopleBasePath}/?id=${p.id}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:bg-indigo-600/50 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
+                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:bg-[#017FA4]/35 focus-visible:outline-none"
                   title={p.name}
                 >
-                  <UserIcon className="h-4 w-4 text-indigo-300" aria-hidden="true" />
+                  <UserIcon className="h-4 w-4 text-[#6CCDBB]" aria-hidden="true" />
                   <span className="max-w-56 truncate">{p.name}</span>
                 </Link>
               </li>

@@ -213,9 +213,9 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
           content={`Full ${conf.name} schedule of sessions, talks, and events.`}
         />
       </Head>
-      <div className="flex min-h-screen flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="min-h-0 flex-1">
+        <main className="ui-page-main">
           <h1 className="sr-only">Schedule</h1>
           <ScheduleEvents
             conf={conf}

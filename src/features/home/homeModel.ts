@@ -39,7 +39,7 @@ export const HOME_HERO_LOGO_WRAP_CLASS_NAME =
 export const HOME_ACTION_LINK_CLASS_NAME =
   "ui-btn-base ui-btn-primary ui-focus-ring mt-5 h-11 rounded-lg px-6 text-sm focus-visible:outline-none";
 export const HOME_MENU_TILE_CLASS_NAME =
-  "flex w-full min-w-0 min-h-32 flex-col items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-5 text-center shadow-md transition motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-lg motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/85 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900";
+  "ui-card ui-card-interactive ui-focus-ring flex w-full min-w-0 min-h-32 flex-col items-center justify-center gap-2 rounded-2xl px-4 py-5 text-center focus-visible:outline-none";
 
 export const atkinsonFont = localFont({
   src: "../../../public/fonts/atkinson-hl.woff2",

@@ -43,9 +43,9 @@ const COUNTDOWN_VARIANTS: Record<
   tiny: {
     sectionClassName: "mt-2 w-full",
     gridClassName: "grid grid-cols-4 gap-x-2 text-center",
-    valueClassName: "block text-xs font-semibold tabular-nums text-slate-700 sm:text-sm",
-    labelClassName: "text-[9px] tracking-[0.1em] text-slate-500 uppercase",
-    settledValueColor: "#334155",
+    valueClassName: "block text-xs font-semibold tabular-nums text-slate-200 sm:text-sm",
+    labelClassName: "text-[9px] tracking-[0.1em] text-slate-400 uppercase",
+    settledValueColor: "#e2e8f0",
     liveAnnouncements: false,
   },
 };

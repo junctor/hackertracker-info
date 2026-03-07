@@ -3,6 +3,7 @@ import type { GetStaticProps } from "next";
 import Head from "next/head";
 
 import SiteFooter from "@/features/app-shell/SiteFooter";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 import Menu from "@/features/home/Menu";
 import { ConferenceManifest } from "@/lib/conferences";
 import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
@@ -28,8 +29,9 @@ export default function MenuPage({ conf }: MenuPageProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex min-h-dvh flex-col bg-slate-950 text-slate-100">
-        <main className="flex-1">
+      <div className="ui-page-shell bg-slate-950 text-slate-100">
+        <SiteHeader conference={conf} activePageId="home" />
+        <main className="ui-page-main">
           <Menu conference={conf} />
         </main>
         <SiteFooter />

@@ -28,7 +28,7 @@ export default function DocumentDetails({ document, conference }: Props) {
           <li>
             <Link
               href={`/${conference.slug}/readme.nfo`}
-              className="flex items-center rounded text-indigo-600 hover:underline focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none dark:text-indigo-400"
+              className="ui-link ui-focus-ring flex items-center rounded focus-visible:outline-none"
             >
               readme.nfo
             </Link>
@@ -43,13 +43,13 @@ export default function DocumentDetails({ document, conference }: Props) {
       </nav>
 
       <header className="mb-6">
-        <h1 id="doc-title" className="mb-2 text-4xl font-extrabold tracking-tight">
+        <h1 id="doc-title" className="mb-2 text-4xl font-extrabold tracking-tight text-slate-100">
           {document.titleText}
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">Last updated {updatedLabel}</p>
+        <p className="text-sm text-slate-400">Last updated {updatedLabel}</p>
       </header>
 
-      <section className="prose dark:prose-invert max-w-prose">
+      <section className="max-w-prose">
         <Markdown content={document.bodyText} />
       </section>
     </article>

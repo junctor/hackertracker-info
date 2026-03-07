@@ -18,7 +18,7 @@ export default function PeopleList({ people, conference }: Props) {
   }, [people, query]);
 
   return (
-    <section className="mx-auto my-10 max-w-7xl px-5">
+    <section className="ui-container ui-section">
       <SearchHeader
         title="People"
         searchLabel="Search people"
@@ -35,20 +35,16 @@ export default function PeopleList({ people, conference }: Props) {
             <li key={person.id} className="h-full">
               <Link
                 href={`/${conference.slug}/people/?id=${person.id}`}
-                className="block rounded-2xl focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                className="ui-focus-ring block rounded-2xl focus-visible:outline-none"
               >
-                <div className="h-full transform overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-slate-900 to-slate-800 shadow-xl ring-indigo-600 ring-offset-2 transition-all hover:scale-[1.02] hover:from-slate-800 hover:to-slate-700 hover:ring-2">
-                  <div className="flex flex-col items-center justify-center space-y-4 p-6">
-                    {/* Avatar with initials */}
-
-                    {/* Name */}
+                <div className="ui-card ui-card-interactive h-full overflow-hidden rounded-2xl">
+                  <div className="flex flex-col items-center justify-center gap-4 p-6">
                     <h2 className="text-center text-lg font-medium text-slate-100">
                       {person.name}
                     </h2>
 
-                    {/* Affiliation badges */}
                     {person.title && (
-                      <span className="inline-flex items-center rounded-full bg-slate-900 px-2 py-1 text-xs text-slate-200">
+                      <span className="inline-flex items-center rounded-full bg-slate-800 px-2 py-1 text-xs text-slate-200">
                         {person.title}
                       </span>
                     )}

@@ -49,7 +49,7 @@ export default function ContentSession({
 
   return (
     <li
-      className="group relative overflow-hidden rounded-lg border border-white/10 bg-slate-900/45 px-4 py-3 transition-colors focus-within:border-indigo-500/70 hover:border-slate-700/80 hover:bg-slate-900"
+      className="ui-card ui-card-interactive group relative overflow-hidden px-4 py-3 focus-within:border-[#017FA4]/70"
       style={
         {
           "--event-color": session.color ?? "#9ca3af",
@@ -85,7 +85,7 @@ export default function ContentSession({
             download={`DEF_CON_${content.id}-${session.id}.ics`}
             title={`Download calendar invite for session: ${content.title}`}
             aria-label={`Download calendar invite for session: ${content.title}`}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-400 transition hover:text-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+            className="ui-icon-btn ui-focus-ring h-11 w-11 border-transparent bg-transparent text-slate-400 hover:text-slate-100 focus-visible:outline-none"
           >
             <CalendarIcon className="h-6 w-6" aria-hidden="true" />
           </a>
@@ -95,10 +95,10 @@ export default function ContentSession({
             onClick={handleBookmarkClick}
             aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
             aria-pressed={bookmark}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:text-indigo-300 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+            className="ui-icon-btn ui-focus-ring h-11 w-11 border-transparent bg-transparent text-slate-500 hover:text-[#6CCDBB] focus-visible:outline-none"
           >
             {bookmark ? (
-              <BookmarkIconSolid className="h-5 w-5 text-indigo-400" aria-hidden="true" />
+              <BookmarkIconSolid className="h-5 w-5 text-[#6CCDBB]" aria-hidden="true" />
             ) : (
               <BookmarkIconOutline className="h-5 w-5" aria-hidden="true" />
             )}

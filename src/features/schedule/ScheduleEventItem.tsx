@@ -49,15 +49,9 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
       style={barStyle}
       className="ui-card ui-card-interactive group relative flex w-full min-w-0 flex-col gap-3 overflow-hidden p-3 sm:p-4"
     >
-      <span
-        aria-hidden="true"
-        className="ui-accent-rail"
-      />
+      <span aria-hidden="true" className="ui-accent-rail" />
 
-      <span
-        aria-hidden="true"
-        className="ui-accent-rail-overlay"
-      />
+      <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
       <Link
         href={href}

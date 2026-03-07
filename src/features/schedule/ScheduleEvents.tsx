@@ -282,7 +282,9 @@ export default function ScheduleEvents({
                   onKeyDown={(e) => handleTabKeyDown(e, index, day)}
                 >
                   <span>{tabDateTitle(day, conf.timezone)}</span>
-                  <span className={`text-xs ${resolvedDay === day ? "text-[#6CCDBB]" : "text-slate-400"}`}>
+                  <span
+                    className={`text-xs ${resolvedDay === day ? "text-[#6CCDBB]" : "text-slate-400"}`}
+                  >
                     ({events.length})
                   </span>
                 </button>

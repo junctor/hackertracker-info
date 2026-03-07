@@ -9,7 +9,10 @@ export default function TVPage() {
         <meta httpEquiv="refresh" content={`0;url=${TV_URL}`} />
         <link rel="canonical" href={TV_URL} />
       </Head>
-      <main id="main-content" className="grid min-h-screen place-items-center px-6 text-center text-slate-100">
+      <main
+        id="main-content"
+        className="grid min-h-screen place-items-center px-6 text-center text-slate-100"
+      >
         <div className="space-y-3">
           <h1 className="text-2xl font-semibold">DEF CON TV</h1>
           <p className="text-slate-400">Redirecting to the live stream...</p>

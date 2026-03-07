@@ -37,9 +37,7 @@ export default function PeopleList({ people, conference }: Props) {
       {filtered.length === 0 ? (
         <div className="ui-empty-state">
           <p className="text-slate-200">
-            {trimmedQuery
-              ? `No speakers match "${trimmedQuery}".`
-              : "No speakers are listed yet."}
+            {trimmedQuery ? `No speakers match "${trimmedQuery}".` : "No speakers are listed yet."}
           </p>
           {trimmedQuery ? (
             <button

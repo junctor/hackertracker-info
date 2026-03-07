@@ -35,7 +35,7 @@ export default function DocumentDetails({ document, conference }: Props) {
           <li aria-hidden="true">
             <ChevronRightIcon className="h-4 w-4 text-slate-500" />
           </li>
-          <li aria-current="page" className="min-w-0 max-w-full truncate text-slate-300">
+          <li aria-current="page" className="max-w-full min-w-0 truncate text-slate-300">
             {document.titleText}
           </li>
         </ol>

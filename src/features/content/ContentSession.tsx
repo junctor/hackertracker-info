@@ -60,14 +60,8 @@ export default function ContentSession({
       }
     >
       {/* Accent bar: matches list row style, full height of the card */}
-      <span
-        aria-hidden="true"
-        className="ui-accent-rail"
-      />
-      <span
-        aria-hidden="true"
-        className="ui-accent-rail-overlay"
-      />
+      <span aria-hidden="true" className="ui-accent-rail" />
+      <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
       <div className="relative z-10 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         {/* Left: time + location */}

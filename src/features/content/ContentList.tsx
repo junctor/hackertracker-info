@@ -115,17 +115,11 @@ export default function ContentList({ content, tags, conference }: Props) {
               }
               className="ui-card ui-card-interactive group relative overflow-hidden"
             >
-              <span
-                aria-hidden="true"
-                className="ui-accent-rail"
-              />
-              <span
-                aria-hidden="true"
-                className="ui-accent-rail-overlay"
-              />
+              <span aria-hidden="true" className="ui-accent-rail" />
+              <span aria-hidden="true" className="ui-accent-rail-overlay" />
               <Link
                 href={`/${conference.slug}/content/?id=${item.id}`}
-                className="ui-focus-ring relative z-10 block rounded-lg py-3 pr-3 pl-4 sm:py-4 sm:pr-4 sm:pl-5 focus-visible:outline-none"
+                className="ui-focus-ring relative z-10 block rounded-lg py-3 pr-3 pl-4 focus-visible:outline-none sm:py-4 sm:pr-4 sm:pl-5"
               >
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="line-clamp-2 text-base font-semibold text-slate-100 transition-colors group-hover:text-white sm:text-lg">

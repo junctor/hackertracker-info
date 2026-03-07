@@ -101,6 +101,10 @@ button {
   color: inherit;
 }
 
+button {
+  cursor: pointer;
+}
+
 ::selection {
   background: color-mix(in oklab, var(--color-accent), transparent 68%);
   color: var(--color-fg);
@@ -214,10 +218,10 @@ button {
 
 .ui-input-base {
   width: 100%;
+  min-height: 2.75rem;
   border-radius: var(--radius-2);
   border: 1px solid color-mix(in oklab, var(--color-border), white 6%);
   background: color-mix(in oklab, var(--color-surface), transparent 10%);
-  min-height: 2.75rem;
   padding: 0.625rem 0.875rem;
   color: var(--color-fg);
   transition:
@@ -291,11 +295,11 @@ button {
 }
 
 .ui-card {
+  overflow-wrap: anywhere;
   border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-3);
   background: color-mix(in oklab, var(--color-surface), transparent 8%);
   box-shadow: var(--shadow-sm);
-  overflow-wrap: anywhere;
 }
 
 .ui-card-interactive {
@@ -373,11 +377,17 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
   .ui-btn-base,
   .ui-card-interactive,
   .ui-icon-btn,
   .ui-link,
-  .ui-input-base {
+  .ui-input-base,
+  .ui-skip-link {
     transition: none;
+    animation: none !important;
   }
 }

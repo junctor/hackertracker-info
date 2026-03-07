@@ -12,12 +12,12 @@ type Props = {
 
 export default function PeopleList({ people, conference }: Props) {
   const [query, setQuery] = useState("");
+  const trimmedQuery = query.trim();
   const filtered = useMemo(() => {
-    const q = query.toLowerCase().trim();
+    const q = trimmedQuery.toLowerCase();
     return people.filter((p) => p.name.toLowerCase().includes(q));
-  }, [people, query]);
-  const resultLabel =
-    query.trim().length > 0 ? `${filtered.length} people found` : `${people.length} people total`;
+  }, [people, trimmedQuery]);
+  const showResultCount = trimmedQuery.length > 0;
 
   return (
     <section className="ui-container ui-section">
@@ -28,12 +28,29 @@ export default function PeopleList({ people, conference }: Props) {
         searchValue={query}
         onSearchChange={setQuery}
       />
-      <p role="status" aria-live="polite" className="mb-4 text-sm text-slate-300">
-        {resultLabel}
-      </p>
+      {showResultCount ? (
+        <p role="status" aria-live="polite" className="mb-4 text-sm text-slate-300">
+          {filtered.length} found
+        </p>
+      ) : null}
 
       {filtered.length === 0 ? (
-        <p className="text-center text-slate-300">No people found.</p>
+        <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+          <p className="text-slate-200">
+            {trimmedQuery
+              ? `No speakers match "${trimmedQuery}".`
+              : "No speakers are listed yet."}
+          </p>
+          {trimmedQuery ? (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+            >
+              Clear Search
+            </button>
+          ) : null}
+        </div>
       ) : (
         <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filtered.map((person) => (

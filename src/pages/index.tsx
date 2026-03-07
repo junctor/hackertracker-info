@@ -14,7 +14,6 @@ gsap.registerPlugin(useGSAP, ScrambleTextPlugin);
 type ConferenceCardConfig = {
   conference: ConferenceManifest;
   subtitle: string;
-  statusLabel: string;
 };
 
 const conferenceDateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -30,12 +29,10 @@ const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = [
   {
     conference: CONFERENCES.dcsg2026,
     subtitle: formatConferenceDate(CONFERENCES.dcsg2026.kickoff),
-    statusLabel: "Conference starts in",
   },
   {
     conference: CONFERENCES.defcon34,
     subtitle: formatConferenceDate(CONFERENCES.defcon34.kickoff),
-    statusLabel: "Conference starts in",
   },
 ];
 
@@ -104,7 +101,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main id="main-content" className="ui-page-shell relative overflow-hidden bg-slate-950 text-slate-100">
+      <main
+        id="main-content"
+        className="ui-page-shell relative overflow-hidden bg-slate-950 text-slate-100"
+      >
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.14),transparent_30%),radial-gradient(circle_at_20%_30%,rgba(251,191,36,0.10),transparent_22%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_20%)]"
@@ -144,13 +144,8 @@ export default function Home() {
             aria-label="Available conferences"
             className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:gap-7"
           >
-            {HOME_CONFERENCE_CARDS.map(({ conference, subtitle, statusLabel }) => (
-              <ConferenceCard
-                key={conference.slug}
-                conference={conference}
-                subtitle={subtitle}
-                statusLabel={statusLabel}
-              />
+            {HOME_CONFERENCE_CARDS.map(({ conference, subtitle }) => (
+              <ConferenceCard key={conference.slug} conference={conference} subtitle={subtitle} />
             ))}
           </section>
         </div>
@@ -162,11 +157,9 @@ export default function Home() {
 function ConferenceCard({
   conference,
   subtitle,
-  statusLabel,
 }: {
   conference: ConferenceManifest;
   subtitle: string;
-  statusLabel: string;
 }) {
   const href = `/${conference.slug}`;
   const src = `/images/${conference.logoFile}`;
@@ -238,7 +231,7 @@ function ConferenceCard({
         </div>
 
         <div className="mt-3 rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:mt-4 sm:py-3">
-          <div className="ui-kicker mb-1.5 text-center text-slate-500 sm:mb-2">{statusLabel}</div>
+          <span className="sr-only">Conference starts in</span>
           <Countdown conference={conference} size="tiny" />
         </div>
       </div>

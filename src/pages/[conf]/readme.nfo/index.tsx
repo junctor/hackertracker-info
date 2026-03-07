@@ -34,7 +34,7 @@ export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps
     <>
       <Head>
         <title>readme.nfo | {conf.name}</title>
-        <meta name="description" content={`A collection of information related to ${conf.name}.`} />
+        <meta name="description" content={`Reference docs and updates for ${conf.name}.`} />
       </Head>
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />

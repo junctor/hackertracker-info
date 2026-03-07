@@ -228,19 +228,29 @@ export default function ScheduleEvents({
           <div className="flex shrink-0 items-center gap-2">
             <Link
               href={`/${conf.slug}/bookmarks`}
-              className="ui-icon-btn ui-focus-ring focus-visible:outline-none"
+              className={`ui-btn-base ui-focus-ring min-h-11 gap-1.5 px-3 text-sm focus-visible:outline-none ${
+                isBookmarksFilterActive
+                  ? "border-[#017FA4]/80 bg-[#0D294A]/55 text-white"
+                  : "ui-btn-secondary text-slate-200"
+              }`}
               aria-label="Filter by bookmarks"
               aria-current={isBookmarksFilterActive ? "page" : undefined}
             >
               <BookmarkIcon className="h-5 w-5" aria-hidden="true" />
+              <span>Bookmarks</span>
             </Link>
             <Link
               href={`/${conf.slug}/tags`}
-              className="ui-icon-btn ui-focus-ring focus-visible:outline-none"
+              className={`ui-btn-base ui-focus-ring min-h-11 gap-1.5 px-3 text-sm focus-visible:outline-none ${
+                isTagsFilterActive
+                  ? "border-[#017FA4]/80 bg-[#0D294A]/55 text-white"
+                  : "ui-btn-secondary text-slate-200"
+              }`}
               aria-label="Filter by tags"
               aria-current={isTagsFilterActive ? "page" : undefined}
             >
               <TagIcon className="h-5 w-5" aria-hidden="true" />
+              <span>Tags</span>
             </Link>
           </div>
 

@@ -131,7 +131,7 @@ export default function ContentsPage({ conf, activePageId }: ContentsPageProps) 
   if (isIdInvalid) return <ErrorScreen msg="Invalid content id." />;
 
   let pageTitle = `Content | ${conf.name}`;
-  let pageDescription = `Browse talks, workshops, and presentations at ${conf.name}.`;
+  let pageDescription = `Sessions, talks, and presentation details for ${conf.name}.`;
   let pageContent: ReactElement;
 
   if (shouldLoadDetails) {

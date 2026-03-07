@@ -64,12 +64,6 @@ export default function OrganizationDetails({ org, conference }: Props) {
           <div className="min-w-0 flex-1">
             <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{org.name}</h1>
 
-            {description && (
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-                {description}
-              </p>
-            )}
-
             {org.tagIdAsOrganizer && (
               <div className="mt-4">
                 <Link
@@ -77,7 +71,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
                   className="inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-2 text-sm font-medium text-indigo-100 transition hover:bg-indigo-500/15 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
                 >
                   <CalendarIcon className="h-4 w-4 text-indigo-300" aria-hidden />
-                  <span>View {org.name} events</span>
+                  <span>View Schedule</span>
                 </Link>
               </div>
             )}

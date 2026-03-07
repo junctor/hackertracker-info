@@ -43,8 +43,7 @@ export default function ContentList({ content, tags, conference }: Props) {
         })),
     [tags],
   );
-  const resultLabel =
-    normalizedSearch || selectedTag ? `${filtered.length} content items found` : `${content.length} content items total`;
+  const hasActiveFilters = Boolean(normalizedSearch || selectedTag);
 
   return (
     <section className="ui-container ui-section">
@@ -78,65 +77,89 @@ export default function ContentList({ content, tags, conference }: Props) {
           </select>
         </label>
       </SearchHeader>
-      <p role="status" aria-live="polite" className="mb-4 text-sm text-slate-300">
-        {resultLabel}
-      </p>
+      {hasActiveFilters ? (
+        <p role="status" aria-live="polite" className="mb-4 text-sm text-slate-300">
+          {filtered.length} found
+        </p>
+      ) : null}
 
-      <ul className="space-y-3 leading-relaxed sm:space-y-4">
-        {filtered.map((item) => (
-          <li
-            key={item.id}
-            style={
-              {
-                "--event-color": item.tags[0]?.colorBackground ?? "#9ca3af",
-              } as CSSProperties
-            }
-            className="ui-card ui-card-interactive group relative overflow-hidden"
-          >
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-(--event-color) transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
-            />
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/16 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
-            />
-            <Link
-              href={`/${conference.slug}/content/?id=${item.id}`}
-              className="ui-focus-ring relative z-10 block rounded-lg py-3 pr-3 pl-4 sm:py-4 sm:pr-4 sm:pl-5 focus-visible:outline-none"
+      {filtered.length === 0 ? (
+        <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+          <p className="text-slate-200">
+            {hasActiveFilters
+              ? "No content matches the current filters."
+              : "No content is listed yet."}
+          </p>
+          {hasActiveFilters ? (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch("");
+                setSelectedTag(null);
+              }}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
             >
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="line-clamp-2 text-base font-semibold text-slate-100 transition-colors group-hover:text-white sm:text-lg">
-                  {item.title}
-                </h3>
-                <span
-                  aria-hidden="true"
-                  className="shrink-0 text-lg transition-colors group-hover:text-slate-300 sm:text-xl"
-                  style={{
-                    color: item.tags[0]?.colorBackground ?? "#fff",
-                  }}
-                >
-                  &rarr;
-                </span>
-              </div>
-              <ul className="m-0 mt-2.5 flex list-none flex-wrap gap-1.5 p-0 sm:mt-3 sm:gap-2">
-                {item.tags.map((tag) => (
-                  <li
-                    key={tag.id}
-                    className="inline-flex items-center rounded-full border border-white/10 px-2 py-1 text-[11px] font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:text-xs"
+              Clear Filters
+            </button>
+          ) : null}
+        </div>
+      ) : (
+        <ul className="space-y-3 leading-relaxed sm:space-y-4">
+          {filtered.map((item) => (
+            <li
+              key={item.id}
+              style={
+                {
+                  "--event-color": item.tags[0]?.colorBackground ?? "#9ca3af",
+                } as CSSProperties
+              }
+              className="ui-card ui-card-interactive group relative overflow-hidden"
+            >
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-(--event-color) transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+              />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/16 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+              />
+              <Link
+                href={`/${conference.slug}/content/?id=${item.id}`}
+                className="ui-focus-ring relative z-10 block rounded-lg py-3 pr-3 pl-4 sm:py-4 sm:pr-4 sm:pl-5 focus-visible:outline-none"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="line-clamp-2 text-base font-semibold text-slate-100 transition-colors group-hover:text-white sm:text-lg">
+                    {item.title}
+                  </h3>
+                  <span
+                    aria-hidden="true"
+                    className="shrink-0 text-lg transition-colors group-hover:text-slate-300 sm:text-xl"
                     style={{
-                      backgroundColor: tag.colorBackground,
-                      color: tag.colorForeground ?? "#fff",
+                      color: item.tags[0]?.colorBackground ?? "#fff",
                     }}
                   >
-                    {tag.label}
-                  </li>
-                ))}
-              </ul>
-            </Link>
-          </li>
-        ))}
-      </ul>
+                    &rarr;
+                  </span>
+                </div>
+                <ul className="m-0 mt-2.5 flex list-none flex-wrap gap-1.5 p-0 sm:mt-3 sm:gap-2">
+                  {item.tags.map((tag) => (
+                    <li
+                      key={tag.id}
+                      className="inline-flex items-center rounded-full border border-white/10 px-2 py-1 text-[11px] font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:text-xs"
+                      style={{
+                        backgroundColor: tag.colorBackground,
+                        color: tag.colorForeground ?? "#fff",
+                      }}
+                    >
+                      {tag.label}
+                    </li>
+                  ))}
+                </ul>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }

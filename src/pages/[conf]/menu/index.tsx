@@ -14,7 +14,7 @@ type MenuPageProps = {
 
 export default function MenuPage({ conf }: MenuPageProps) {
   const pageTitle = `${conf.name} | info.defcon.org`;
-  const pageDescription = `${conf.name} navigation, schedule, villages, maps, and conference information`;
+  const pageDescription = `Conference sections for schedule, updates, and key resources.`;
 
   return (
     <>

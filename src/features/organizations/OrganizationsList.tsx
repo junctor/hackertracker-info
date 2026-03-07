@@ -37,11 +37,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
       organization.name.toLowerCase().includes(normalizedSearch),
     );
   }, [sortedOrganizations, normalizedSearch]);
-
-  const resultLabel =
-    normalizedSearch.length > 0
-      ? `${filteredOrganizations.length} found`
-      : `${sortedOrganizations.length} total`;
+  const showResultCount = normalizedSearch.length > 0;
 
   return (
     <section className="ui-container ui-section">
@@ -53,16 +49,29 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
         onSearchChange={setSearch}
       />
 
-      <p role="status" aria-live="polite" className="mt-3 text-sm text-slate-300">
-        {resultLabel}
-      </p>
+      {showResultCount ? (
+        <p role="status" aria-live="polite" className="mt-3 text-sm text-slate-300">
+          {filteredOrganizations.length} found
+        </p>
+      ) : null}
 
       {filteredOrganizations.length === 0 ? (
-        <p role="status" className="mt-10 text-center text-slate-300">
-          {normalizedSearch
-            ? `No ${title.toLowerCase()} match “${search.trim()}”.`
-            : `No ${title.toLowerCase()} found.`}
-        </p>
+        <div role="status" className="mt-10 rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+          <p className="text-slate-200">
+            {normalizedSearch
+              ? `No ${title.toLowerCase()} match "${search.trim()}".`
+              : `No ${title.toLowerCase()} are listed yet.`}
+          </p>
+          {normalizedSearch ? (
+            <button
+              type="button"
+              onClick={() => setSearch("")}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+            >
+              Clear Search
+            </button>
+          ) : null}
+        </div>
       ) : (
         <ul className="mt-6 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredOrganizations.map((organization) => (

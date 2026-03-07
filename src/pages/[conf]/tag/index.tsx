@@ -1,6 +1,7 @@
 import type { GetStaticProps } from "next";
 
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useMemo, useState, useCallback } from "react";
 import useSWR from "swr";
@@ -301,7 +302,15 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
               activeFilter="tags"
             />
           ) : (
-            <p className="mt-8 text-center text-slate-300">No events found for this tag.</p>
+            <div className="ui-container mt-8 rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+              <p className="text-slate-200">No events are scheduled for this tag.</p>
+              <Link
+                href={`/${conf.slug}/tags`}
+                className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+              >
+                Browse Tags
+              </Link>
+            </div>
           )}
         </main>
         <SiteFooter />

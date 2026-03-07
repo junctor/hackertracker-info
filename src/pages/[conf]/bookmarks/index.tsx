@@ -1,6 +1,7 @@
 import type { GetStaticProps } from "next";
 
 import Head from "next/head";
+import Link from "next/link";
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import useSWR from "swr";
 
@@ -314,7 +315,15 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
         <main id="main-content" className="ui-page-main">
           <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center">Bookmarks</h1>
           {bookmarks.length === 0 ? (
-            <p className="mt-8 text-center text-slate-300">No bookmarks found.</p>
+            <div className="ui-container mt-8 rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+              <p className="text-slate-200">No bookmarks yet.</p>
+              <Link
+                href={`/${conf.slug}/schedule`}
+                className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+              >
+                Browse Schedule
+              </Link>
+            </div>
           ) : days.length > 0 && resolvedDay ? (
             <ScheduleEvents
               conf={conf}
@@ -326,7 +335,15 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
               activeFilter="bookmarks"
             />
           ) : (
-            <p className="mt-8 text-center text-slate-300">No bookmarked events found.</p>
+            <div className="ui-container mt-8 rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+              <p className="text-slate-200">No upcoming events match your saved bookmarks.</p>
+              <Link
+                href={`/${conf.slug}/schedule`}
+                className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+              >
+                View Full Schedule
+              </Link>
+            </div>
           )}
         </main>
         <SiteFooter />

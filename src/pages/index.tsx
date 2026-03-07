@@ -61,7 +61,6 @@ export default function Home() {
       if (prefersReduced) return;
 
       gsap.killTweensOf(el);
-
       gsap.fromTo(
         el,
         { opacity: 1 },
@@ -120,33 +119,26 @@ export default function Home() {
         />
 
         <div className="relative mx-auto max-w-6xl px-4 pt-16 pb-14 sm:px-6 sm:pt-20 sm:pb-20 lg:px-8 lg:pt-24">
-          <header className="mx-auto max-w-3xl text-center">
+          <header className="mx-auto max-w-4xl text-center">
             <h1>
-              <span
-                ref={titleRef}
-                aria-label="DEF CON"
-                role="button"
-                tabIndex={0}
+              <button
+                type="button"
                 onPointerEnter={cycleTitle}
                 onFocus={cycleTitle}
                 onClick={cycleTitle}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    cycleTitle();
-                  }
-                }}
-                className="inline-block cursor-pointer font-mono text-7xl leading-none font-semibold tracking-[0.07em] whitespace-nowrap text-slate-50 transition outline-none select-none focus-visible:rounded-xl focus-visible:ring-2 focus-visible:ring-sky-300/70 focus-visible:ring-offset-4 focus-visible:ring-offset-slate-950 sm:text-8xl sm:tracking-[0.1em] md:text-9xl md:tracking-[0.12em] lg:text-[10rem]"
+                className="inline-flex items-center justify-center rounded-xl bg-transparent p-0 text-inherit outline-none"
+                aria-label="Cycle DEF CON title style"
               >
-                {title}
-              </span>
+                <span
+                  ref={titleRef}
+                  className="inline-block cursor-pointer font-mono text-7xl leading-none font-semibold tracking-[0.07em] whitespace-nowrap text-slate-50 transition select-none focus-visible:rounded-xl focus-visible:ring-2 focus-visible:ring-sky-300/70 focus-visible:ring-offset-4 focus-visible:ring-offset-slate-950 sm:text-8xl sm:tracking-[0.1em] md:text-9xl md:tracking-[0.12em] lg:text-[10rem]"
+                >
+                  {title}
+                </span>
+              </button>
             </h1>
 
             <div className="mx-auto mt-6 h-px w-28 bg-linear-to-r from-transparent via-slate-600 to-transparent sm:mt-7 sm:w-32" />
-
-            <p className="mx-auto mt-6 max-w-2xl text-sm leading-6 text-slate-300 sm:mt-7 sm:text-base sm:leading-7">
-              Official DEF CON schedules and conference information for current and upcoming events.
-            </p>
           </header>
 
           <section

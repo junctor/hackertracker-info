@@ -1,15 +1,14 @@
-import React from "react";
-import AppsLanding from "@/features/apps/AppsLanding";
-import Head from "next/head";
-import SiteHeader from "@/features/app-shell/SiteHeader";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import { ConferenceManifest } from "@/lib/conferences";
-import { PageId } from "@/lib/types/page-meta";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
 import type { GetStaticProps } from "next";
+
+import Head from "next/head";
+import React from "react";
+
+import SiteFooter from "@/features/app-shell/SiteFooter";
+import SiteHeader from "@/features/app-shell/SiteHeader";
+import AppsLanding from "@/features/apps/AppsLanding";
+import { ConferenceManifest } from "@/lib/conferences";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
+import { PageId } from "@/lib/types/page-meta";
 
 type AppsPageProps = {
   conf: ConferenceManifest;
@@ -26,9 +25,9 @@ export default function AppsPage({ conf, activePageId }: AppsPageProps) {
           content="Download the official Hacker Tracker apps for iOS and Android."
         />
       </Head>
-      <div className="min-h-screen flex flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main id="main-content" className="ui-page-main">
           <AppsLanding conference={conf} />
         </main>
         <SiteFooter />

@@ -1,5 +1,7 @@
 import type { ReactNode, Dispatch, SetStateAction } from "react";
 
+import { useId } from "react";
+
 type Props = {
   title: string;
   searchLabel: string;
@@ -17,24 +19,31 @@ export default function SearchHeader({
   onSearchChange,
   children,
 }: Props) {
+  const hasAuxControl = Boolean(children);
+  const searchInputId = useId();
+
   return (
-    <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
-      <h1 className="text-3xl md:text-4xl font-extrabold text-gray-100">
-        {title}
-      </h1>
-      <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center">
-        <label className="w-full max-w-sm">
-          <span className="sr-only">{searchLabel}</span>
-          <input
-            type="search"
-            placeholder={searchPlaceholder}
-            value={searchValue}
-            onChange={(e) => onSearchChange(e.currentTarget.value)}
-            aria-label={searchLabel}
-            className="ui-input-focus w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-100 placeholder:text-gray-500 focus-visible:outline-none"
-          />
-        </label>
-        {children}
+    <header className="mb-6">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <h1 className="ui-heading-1">{title}</h1>
+        <form
+          role="search"
+          onSubmit={(e) => e.preventDefault()}
+          className={`grid w-full gap-3 ${hasAuxControl ? "sm:grid-cols-2" : ""} lg:w-auto lg:min-w-[24rem]`}
+        >
+          <label htmlFor={searchInputId} className="w-full">
+            <span className="sr-only">{searchLabel}</span>
+            <input
+              id={searchInputId}
+              type="search"
+              placeholder={searchPlaceholder}
+              value={searchValue}
+              onChange={(e) => onSearchChange(e.currentTarget.value)}
+              className="ui-input-base ui-input-focus focus-visible:outline-none"
+            />
+          </label>
+          {hasAuxControl ? <div className="w-full">{children}</div> : null}
+        </form>
       </div>
     </header>
   );

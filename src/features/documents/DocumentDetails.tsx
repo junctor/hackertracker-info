@@ -1,8 +1,9 @@
-import Link from "next/link";
-import Markdown from "@/components/markdown/Markdown";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { DocumentEntity } from "@/lib/types/ht-types";
+import Link from "next/link";
+
+import Markdown from "@/components/markdown/Markdown";
 import { ConferenceManifest } from "@/lib/conferences";
+import { DocumentEntity } from "@/lib/types/ht-types";
 
 type Props = {
   document: DocumentEntity;
@@ -20,40 +21,34 @@ export default function DocumentDetails({ document, conference }: Props) {
       });
 
   return (
-    <article className="container mx-auto px-4 py-8 lg:py-12">
-      {/* Breadcrumb with chevron separators and improved color contrast */}
+    <article className="ui-container ui-page-content">
       <nav aria-label="Breadcrumb" className="mb-6" role="navigation">
-        <ol className="inline-flex items-center space-x-2 text-sm">
+        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
           <li>
             <Link
               href={`/${conference.slug}/readme.nfo`}
-              className="flex items-center rounded text-indigo-600 dark:text-indigo-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+              className="ui-link ui-focus-ring flex items-center rounded focus-visible:outline-none"
             >
               readme.nfo
             </Link>
           </li>
           <li aria-hidden="true">
-            <ChevronRightIcon className="w-4 h-4 text-gray-400 dark:text-gray-600" />
+            <ChevronRightIcon className="h-4 w-4 text-slate-500" />
           </li>
-          <li aria-current="page" className="text-gray-300">
+          <li aria-current="page" className="max-w-full min-w-0 truncate text-slate-300">
             {document.titleText}
           </li>
         </ol>
       </nav>
 
       <header className="mb-6">
-        <h1
-          id="doc-title"
-          className="text-4xl font-extrabold tracking-tight mb-2"
-        >
+        <h1 id="doc-title" className="ui-heading-1 mb-2">
           {document.titleText}
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Last updated {updatedLabel}
-        </p>
+        <p className="text-sm text-slate-400">Last updated {updatedLabel}</p>
       </header>
 
-      <section className="prose max-w-prose dark:prose-invert">
+      <section className="max-w-prose">
         <Markdown content={document.bodyText} />
       </section>
     </article>

@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { DocumentsListView } from "@/lib/types/ht-types";
+import Link from "next/link";
+
 import { ConferenceManifest } from "@/lib/conferences";
+import { DocumentsListView } from "@/lib/types/ht-types";
 
 export default function DocumentsList({
   documents,
@@ -11,11 +12,9 @@ export default function DocumentsList({
   conference: ConferenceManifest;
 }) {
   return (
-    <div className="mx-5 my-6">
+    <div className="ui-container ui-page-content">
       <header className="mb-6">
-        <h1 className="text-5xl font-extrabold text-gray-100 tracking-tight">
-          readme.nfo
-        </h1>
+        <h1 className="ui-heading-1">readme.nfo</h1>
       </header>
 
       <ul className="space-y-4">
@@ -23,14 +22,14 @@ export default function DocumentsList({
           <li key={doc.id}>
             <Link
               href={`/${conference.slug}/document/?id=${doc.id}`}
-              className="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-900 p-5 transition-colors hover:border-indigo-500 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+              className="ui-focus-ring ui-card ui-card-interactive flex items-start justify-between gap-3 p-4 focus-visible:outline-none sm:items-center sm:p-5"
             >
-              <div>
-                <h2 className="text-xl font-semibold text-gray-100 leading-snug">
+              <div className="min-w-0">
+                <h2 className="text-lg leading-snug font-semibold text-slate-100 sm:text-xl">
                   {doc.titleText}
                 </h2>
-                <p className="mt-1 text-sm text-gray-400">
-                  <span className="font-medium text-gray-200">Updated:</span>{" "}
+                <p className="mt-1 text-sm text-slate-400">
+                  <span className="font-medium text-slate-200">Updated:</span>{" "}
                   {new Date(doc.updatedAtMs).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
@@ -39,7 +38,7 @@ export default function DocumentsList({
                 </p>
               </div>
               <ChevronRightIcon
-                className="h-6 w-6 text-gray-500"
+                className="mt-0.5 h-5 w-5 shrink-0 text-slate-500 sm:h-6 sm:w-6"
                 aria-hidden="true"
               />
             </Link>

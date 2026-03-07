@@ -1,10 +1,10 @@
-import { useMemo } from "react";
 import Link from "next/link";
-import { TagTypesBrowseView } from "@/lib/types/ht-types";
-import { ConferenceManifest } from "@/lib/conferences";
+import { useMemo } from "react";
 
-const formatCategory = (s: string) =>
-  s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+import { ConferenceManifest } from "@/lib/conferences";
+import { TagTypesBrowseView } from "@/lib/types/ht-types";
+
+const formatCategory = (s: string) => s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 type TagPillProps = {
   tag: {
@@ -21,15 +21,12 @@ type TagsListProps = {
   conference: ConferenceManifest;
 };
 
-function TagPill({
-  tag,
-  conference,
-}: TagPillProps & { conference: ConferenceManifest }) {
+function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceManifest }) {
   return (
     <Link
       href={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className="ui-focus-ring inline-flex rounded-full border border-transparent px-3 py-1 text-sm font-medium transition hover:border-[#017FA4]/70 focus-visible:outline-none"
+      className="ui-focus-ring inline-flex rounded-full border border-white/10 px-3 py-1 text-sm font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition hover:border-[#017FA4]/70 focus-visible:outline-none"
       style={{
         backgroundColor: tag.colorBackground,
         color: tag.colorForeground,
@@ -42,31 +39,29 @@ function TagPill({
 
 export default function TagsList({ tagTypes, conference }: TagsListProps) {
   const sortedTagTypes = useMemo(
-    () => [...tagTypes].sort((a, b) => a.sortOrder - b.sortOrder),
+    () => tagTypes.toSorted((a, b) => a.sortOrder - b.sortOrder),
     [tagTypes],
   );
 
   return (
-    <section className="p-6 min-h-screen text-gray-100">
+    <section className="ui-container ui-page-content text-slate-100">
       <header className="mb-6">
-        <h1 className="text-3xl font-bold">Tags</h1>
+        <h1 className="ui-heading-1">Tags</h1>
       </header>
 
       {sortedTagTypes.length === 0 ? (
         <p>No tags available.</p>
       ) : (
         sortedTagTypes.map((tagType) => {
-          const sortedTags = [...tagType.tags].sort(
-            (a, b) => a.sortOrder - b.sortOrder,
-          );
+          const sortedTags = tagType.tags.toSorted((a, b) => a.sortOrder - b.sortOrder);
 
           return (
             <section key={tagType.id} className="mb-10">
-              <h2 className="mb-4 text-2xl font-semibold text-[#6CCDBB]">
+              <h2 className="ui-heading-2 mb-4 text-[#6CCDBB]">
                 {formatCategory(tagType.category)}
               </h2>
 
-              <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+              <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
                 {sortedTags.map((tag) => (
                   <li key={tag.id}>
                     <TagPill tag={tag} conference={conference} />

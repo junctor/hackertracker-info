@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
+import type { ReactNode, TableHTMLAttributes } from "react";
+
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import styles from "../../styles/markdown.module.css";
 
 type Props = {
   content: string;
@@ -13,17 +13,16 @@ type CodeProps = {
   children?: ReactNode;
 };
 
+type TableProps = TableHTMLAttributes<HTMLTableElement>;
+
 export default function Markdown({ content }: Props) {
   return (
-    <div className="prose dark:prose-invert antialiased prose-sm sm:prose-base md:prose-lg wrap-break-word prose-headings:text-gray-100 prose-p:text-gray-200 prose-li:text-gray-200 prose-strong:text-gray-100 prose-a:text-(--accent-primary) hover:prose-a:text-(--accent-success) prose-code:text-gray-100 prose-hr:border-gray-700 md:max-w-none">
+    <div className="prose prose-invert prose-sm sm:prose-base md:prose-lg prose-headings:text-slate-100 prose-p:text-slate-200 prose-li:text-slate-200 prose-strong:text-slate-100 prose-a:text-(--accent-primary) hover:prose-a:text-(--accent-success) prose-code:text-slate-100 prose-hr:border-slate-700/80 prose-table:w-full prose-table:border-collapse prose-th:border prose-th:border-slate-700 prose-th:bg-slate-800 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-th:text-slate-100 prose-td:border prose-td:border-slate-700 prose-td:px-3 prose-td:py-2 max-w-none wrap-break-word text-slate-200 antialiased">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           a: (props) => {
-            const className = [
-              props.className,
-              "ui-link ui-focus-ring focus-visible:outline-none",
-            ]
+            const className = [props.className, "ui-link ui-focus-ring focus-visible:outline-none"]
               .filter(Boolean)
               .join(" ");
 
@@ -34,12 +33,12 @@ export default function Markdown({ content }: Props) {
             inline ? (
               <code
                 {...other}
-                className="bg-gray-700 text-gray-100 px-1 rounded font-mono text-sm"
+                className="rounded bg-slate-700/80 px-1 font-mono text-sm text-slate-100"
               >
                 {children}
               </code>
             ) : (
-              <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-5">
+              <pre className="my-5 overflow-x-auto rounded-lg bg-slate-900 p-4 text-slate-100">
                 <code className={className}>{children}</code>
               </pre>
             ),
@@ -47,13 +46,11 @@ export default function Markdown({ content }: Props) {
           blockquote: (props) => (
             <blockquote
               {...props}
-              className="border-l-4 border-[#105F66] pl-4 italic text-gray-200"
+              className="border-l-4 border-[#105F66] pl-4 text-slate-200 italic"
             />
           ),
 
-          hr: (props) => (
-            <hr {...props} className="my-8 border-t border-gray-700" />
-          ),
+          hr: (props) => <hr {...props} className="my-8 border-t border-slate-700/80" />,
 
           img: (props) => (
             // Markdown images have unknown sizes; keep native img for now.
@@ -67,13 +64,11 @@ export default function Markdown({ content }: Props) {
             />
           ),
 
-          div: (props) => {
-            const className = [styles.markdown, props.className]
-              .filter(Boolean)
-              .join(" ");
-
-            return <div {...props} className={className} />;
-          },
+          table: ({ className, ...props }: TableProps) => (
+            <div className="my-5 overflow-x-auto">
+              <table {...props} className={[className, "min-w-max"].filter(Boolean).join(" ")} />
+            </div>
+          ),
         }}
       >
         {content}

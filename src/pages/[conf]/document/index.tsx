@@ -1,31 +1,27 @@
-import React, { useMemo } from "react";
-import useSWR from "swr";
-import { fetcher } from "@/lib/misc";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import SiteHeader from "@/features/app-shell/SiteHeader";
-import SiteFooter from "@/features/app-shell/SiteFooter";
+import type { GetStaticProps } from "next";
+
 import Head from "next/head";
 import { useRouter } from "next/router";
+import React, { useMemo } from "react";
+import useSWR from "swr";
+
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import SiteFooter from "@/features/app-shell/SiteFooter";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 import DocumentDetails from "@/features/documents/DocumentDetails";
-import { DocumentEntity, DocumentsStore } from "@/lib/types/ht-types/entities";
 import { ConferenceManifest } from "@/lib/conferences";
+import { fetcher } from "@/lib/misc";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
+import { DocumentEntity, DocumentsStore } from "@/lib/types/ht-types/entities";
 import { PageId } from "@/lib/types/page-meta";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
-import type { GetStaticProps } from "next";
 
 type DocumentsPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
 
-export default function DocumentsPage({
-  conf,
-  activePageId,
-}: DocumentsPageProps) {
+export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps) {
   const router = useRouter();
   const idParam = useMemo(() => {
     if (!router.isReady) return null;
@@ -75,14 +71,11 @@ export default function DocumentsPage({
         <title>
           {selectedDocument.titleText} | {conf.name}
         </title>
-        <meta
-          name="description"
-          content={`A collection of information related to ${conf.name}.`}
-        />
+        <meta name="description" content={`Reference document for ${conf.name}.`} />
       </Head>
-      <div className="min-h-screen flex flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main id="main-content" className="ui-page-main">
           <DocumentDetails document={selectedDocument} conference={conf} />
         </main>
         <SiteFooter />
@@ -93,9 +86,7 @@ export default function DocumentsPage({
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<DocumentsPageProps> = async (
-  ctx,
-) => {
+export const getStaticProps: GetStaticProps<DocumentsPageProps> = async (ctx) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
   return { props: { conf: result.conf, activePageId: "document" } };

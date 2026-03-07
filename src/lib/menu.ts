@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+
 import {
   ArchiveBoxIcon,
   BoltIcon,
@@ -32,43 +33,43 @@ export const ORGANIZATION_DIRECTORY_CONFIG: Readonly<
     title: "Communities",
     tagLabel: "community",
     slug: "communities",
-    description: "Connect with special-interest groups and meetups.",
+    description: "Special-interest groups and meetups.",
   },
   departments: {
     title: "Departments",
     tagLabel: "def_con_department",
     slug: "departments",
-    description: "Explore the various departments and their functions.",
+    description: "Departments and responsibilities.",
   },
   villages: {
     title: "Villages",
     tagLabel: "village",
     slug: "villages",
-    description: "Explore hands-on villages for hacking and collaboration.",
+    description: "Hands-on villages and activities.",
   },
   contests: {
     title: "Contests",
     tagLabel: "contest",
     slug: "contests",
-    description: "Test your skills in CTFs, challenges, and competitions.",
+    description: "CTFs, challenges, and competitions.",
   },
   contents: {
     title: "Contents",
     tagLabel: "content",
     slug: "contents",
-    description: "Browse content-focused organizations and initiatives.",
+    description: "Content-focused organizations and initiatives.",
   },
   exhibitors: {
     title: "Exhibitors",
     tagLabel: "exhibitor",
     slug: "exhibitors",
-    description: "Discover exhibitors showcasing tools and solutions.",
+    description: "Exhibitor booths and products.",
   },
   vendors: {
     title: "Vendors",
     tagLabel: "vendor",
     slug: "vendors",
-    description: "Browse vendors offering gear, swag, and services.",
+    description: "Vendor booths and offerings.",
   },
 });
 
@@ -92,7 +93,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
     sort_order: 10,
     title: "readme.nfo",
     href: `/${c.slug}/readme.nfo`,
-    description: `A collection of information related to ${c.name}.`,
+    description: "Reference docs, FAQs, and updates.",
     icon: InformationCircleIcon,
   }),
 
@@ -100,8 +101,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
     sort_order: 20,
     title: "Announcements",
     href: `/${c.slug}/announcements`,
-    description:
-      "Get real-time updates and important news during the conference.",
+    description: "Conference announcements and urgent updates.",
     icon: MegaphoneIcon,
   }),
 
@@ -109,7 +109,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
     sort_order: 30,
     title: "Schedule",
     href: `/${c.slug}/schedule`,
-    description: `Browse the full schedule for ${c.name}.`,
+    description: "Session times, rooms, and live status.",
     icon: ListBulletIcon,
   }),
 
@@ -125,7 +125,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
     sort_order: 50,
     title: "Content",
     href: `/${c.slug}/content`,
-    description: `Browse talks, workshops, and presentations at ${c.name}.`,
+    description: "Talks, workshops, and presentation details.",
     icon: ListBulletIcon,
   }),
 
@@ -135,9 +135,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       sort_order: 55,
       title: directory?.title ?? "Departments",
       href: `/${c.slug}/${directory?.slug ?? "departments"}`,
-      description:
-        directory?.description ??
-        `Explore the various departments and their functions at ${c.name}.`,
+      description: directory?.description ?? "Departments and responsibilities.",
       icon: CubeIcon,
     };
   },
@@ -146,7 +144,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
     sort_order: 60,
     title: "Speakers",
     href: `/${c.slug}/people`,
-    description: `Explore speakers at ${c.name}.`,
+    description: "Speaker profiles and sessions.",
     icon: UserIcon,
   }),
 
@@ -160,9 +158,9 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
 
   locations: (c) => ({
     sort_order: 80,
-    title: "Location Tree",
+    title: "Locations",
     href: `/${c.slug}/locations`,
-    description: "Browse venues, rooms, and spaces.",
+    description: "Rooms and venue locations.",
     icon: GlobeAltIcon,
   }),
 
@@ -170,13 +168,13 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
     sort_order: 90,
     title: "Merch",
     href: `/${c.slug}/merch`,
-    description: "Browse official merch and products.",
+    description: "Official merch and purchasing info.",
     icon: ShoppingBagIcon,
   }),
 
   search: (c) => ({
     sort_order: 100,
-    title: "Global Search",
+    title: "Search Everything",
     href: `/${c.slug}/search`,
     description: "Search talks, people, orgs, and more.",
     icon: MagnifyingGlassIcon,
@@ -188,9 +186,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       sort_order: 110,
       title: directory?.title ?? "Villages",
       href: `/${c.slug}/${directory?.slug ?? "villages"}`,
-      description:
-        directory?.description ??
-        "Explore hands-on villages for hacking, learning, and collaboration.",
+      description: directory?.description ?? "Hands-on villages and activities.",
       icon: ArchiveBoxIcon,
     };
   },
@@ -201,9 +197,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       sort_order: 120,
       title: directory?.title ?? "Communities",
       href: `/${c.slug}/${directory?.slug ?? "communities"}`,
-      description:
-        directory?.description ??
-        `Connect with special-interest groups and meetups at ${c.name}.`,
+      description: directory?.description ?? "Special-interest groups and meetups.",
       icon: UsersIcon,
     };
   },
@@ -214,9 +208,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       sort_order: 130,
       title: directory?.title ?? "Contests",
       href: `/${c.slug}/${directory?.slug ?? "contests"}`,
-      description:
-        directory?.description ??
-        "Test your skills in CTFs, challenges, and competitions.",
+      description: directory?.description ?? "CTFs, challenges, and competitions.",
       icon: BoltIcon,
     };
   },
@@ -227,9 +219,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       sort_order: 140,
       title: directory?.title ?? "Exhibitors",
       href: `/${c.slug}/${directory?.slug ?? "exhibitors"}`,
-      description:
-        directory?.description ??
-        "Discover exhibitors showcasing tools and solutions.",
+      description: directory?.description ?? "Exhibitor booths and products.",
       icon: CubeIcon,
     };
   },
@@ -240,9 +230,7 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       sort_order: 150,
       title: directory?.title ?? "Vendors",
       href: `/${c.slug}/${directory?.slug ?? "vendors"}`,
-      description:
-        directory?.description ??
-        "Browse vendors offering gear, swag, and services.",
+      description: directory?.description ?? "Vendor booths and offerings.",
       icon: CubeIcon,
     };
   },
@@ -253,5 +241,5 @@ export function getSiteMenu(conference: ConferenceManifest): SiteMenuItem[] {
   const items = conference.siteMenu.map((key) => MENU[key](conference));
 
   // Sort just in case keys are rearranged or you want stable ordering.
-  return items.sort((a, b) => a.sort_order - b.sort_order);
+  return items.toSorted((a, b) => a.sort_order - b.sort_order);
 }

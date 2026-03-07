@@ -1,8 +1,7 @@
 import Image from "next/image";
-import { getSiteMenu } from "@/lib/menu";
 import Link from "next/link";
-import { ConferenceManifest } from "@/lib/conferences";
 import { useMemo } from "react";
+
 import {
   HOME_HERO_LOGO_WRAP_CLASS_NAME,
   HOME_HERO_STACK_CLASS_NAME,
@@ -10,6 +9,8 @@ import {
   HOME_SECTION_CLASS_NAME,
   useHomeModel,
 } from "@/features/home/homeModel";
+import { ConferenceManifest } from "@/lib/conferences";
+import { getSiteMenu } from "@/lib/menu";
 
 type Props = {
   conference: ConferenceManifest;
@@ -36,9 +37,9 @@ export default function Menu({ conference }: Props) {
       </div>
       <nav
         aria-label={`${conference.name} sections`}
-        className="mt-10 sm:mt-12 grid place-items-center"
+        className="mt-10 grid place-items-center sm:mt-12"
       >
-        <ul className="m-0 grid list-none p-0 grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+        <ul className="m-0 grid list-none grid-cols-2 gap-4 p-0 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {navMenu.map((item) => {
             const Icon = item.icon;
             const isExternal = item.href.startsWith("http");
@@ -52,15 +53,15 @@ export default function Menu({ conference }: Props) {
                     rel="noopener noreferrer"
                     className={HOME_MENU_TILE_CLASS_NAME}
                   >
-                    <Icon className="h-6 w-6 text-gray-200" aria-hidden />
-                    <span className="text-sm font-semibold text-gray-100 text-center leading-tight">
+                    <Icon className="h-6 w-6 text-slate-200" aria-hidden />
+                    <span className="text-center text-sm leading-tight font-semibold text-slate-100">
                       {item.title}
                     </span>
                   </a>
                 ) : (
                   <Link href={item.href} className={HOME_MENU_TILE_CLASS_NAME}>
-                    <Icon className="h-6 w-6 text-gray-200" aria-hidden />
-                    <span className="text-sm font-semibold text-gray-100 text-center leading-tight">
+                    <Icon className="h-6 w-6 text-slate-200" aria-hidden />
+                    <span className="text-center text-sm leading-tight font-semibold text-slate-100">
                       {item.title}
                     </span>
                   </Link>

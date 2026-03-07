@@ -1,8 +1,9 @@
-import { useState, useMemo } from "react";
 import Link from "next/link";
-import { PeopleCardsView } from "@/lib/types/ht-types";
-import { ConferenceManifest } from "@/lib/conferences";
+import { useState, useMemo } from "react";
+
 import SearchHeader from "@/components/ui/SearchHeader";
+import { ConferenceManifest } from "@/lib/conferences";
+import { PeopleCardsView } from "@/lib/types/ht-types";
 
 type Props = {
   people: PeopleCardsView;
@@ -11,13 +12,15 @@ type Props = {
 
 export default function PeopleList({ people, conference }: Props) {
   const [query, setQuery] = useState("");
+  const trimmedQuery = query.trim();
   const filtered = useMemo(() => {
-    const q = query.toLowerCase().trim();
+    const q = trimmedQuery.toLowerCase();
     return people.filter((p) => p.name.toLowerCase().includes(q));
-  }, [people, query]);
+  }, [people, trimmedQuery]);
+  const showResultCount = trimmedQuery.length > 0;
 
   return (
-    <section className="my-10 mx-auto px-5 max-w-7xl">
+    <section className="ui-container ui-section">
       <SearchHeader
         title="People"
         searchLabel="Search people"
@@ -25,29 +28,43 @@ export default function PeopleList({ people, conference }: Props) {
         searchValue={query}
         onSearchChange={setQuery}
       />
+      {showResultCount ? (
+        <p role="status" aria-live="polite" className="mb-4 text-sm text-slate-300">
+          {filtered.length} found
+        </p>
+      ) : null}
 
       {filtered.length === 0 ? (
-        <p className="text-center text-gray-400">No people found.</p>
+        <div className="ui-empty-state">
+          <p className="text-slate-200">
+            {trimmedQuery ? `No speakers match "${trimmedQuery}".` : "No speakers are listed yet."}
+          </p>
+          {trimmedQuery ? (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+            >
+              Clear Search
+            </button>
+          ) : null}
+        </div>
       ) : (
-        <ul className="grid grid-cols-1 list-none gap-6 p-0 m-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filtered.map((person) => (
             <li key={person.id} className="h-full">
               <Link
                 href={`/${conference.slug}/people/?id=${person.id}`}
-                className="block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+                className="ui-focus-ring block rounded-2xl focus-visible:outline-none"
               >
-                <div className="h-full bg-linear-to-br from-gray-800 to-gray-700 border border-gray-700 shadow-xl rounded-2xl hover:from-gray-700 hover:to-gray-600 ring-offset-2 ring-indigo-600 hover:ring-2 transition-all transform hover:scale-[1.02] overflow-hidden">
-                  <div className="flex flex-col items-center justify-center p-6 space-y-4">
-                    {/* Avatar with initials */}
-
-                    {/* Name */}
-                    <h2 className="text-lg font-medium text-gray-100 text-center">
+                <div className="ui-card ui-card-interactive h-full overflow-hidden rounded-2xl">
+                  <div className="flex flex-col items-center justify-center gap-4 p-6">
+                    <h2 className="text-center text-lg font-medium text-slate-100">
                       {person.name}
                     </h2>
 
-                    {/* Affiliation badges */}
                     {person.title && (
-                      <span className="inline-flex items-center rounded-full bg-gray-900 px-2 py-1 text-xs text-gray-200">
+                      <span className="inline-flex items-center rounded-full bg-slate-800 px-2 py-1 text-xs text-slate-200">
                         {person.title}
                       </span>
                     )}

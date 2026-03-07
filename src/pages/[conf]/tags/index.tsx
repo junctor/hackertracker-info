@@ -1,20 +1,19 @@
+import type { GetStaticProps } from "next";
+
+import Head from "next/head";
 import React from "react";
 import useSWR from "swr";
-import { fetcher } from "@/lib/misc";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
+
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import SiteHeader from "@/features/app-shell/SiteHeader";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
-import Head from "next/head";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 import TagsList from "@/features/tags/TagsList";
 import { ConferenceManifest } from "@/lib/conferences";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
-import type { GetStaticProps } from "next";
-import { PageId } from "@/lib/types/page-meta";
+import { fetcher } from "@/lib/misc";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { TagTypesBrowseView } from "@/lib/types/ht-types";
+import { PageId } from "@/lib/types/page-meta";
 
 type TagsPageProps = {
   conf: ConferenceManifest;
@@ -26,10 +25,7 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
     data: tags,
     error,
     isLoading,
-  } = useSWR<TagTypesBrowseView>(
-    `${conf.dataRoot}/views/tagTypesBrowse.json`,
-    fetcher,
-  );
+  } = useSWR<TagTypesBrowseView>(`${conf.dataRoot}/views/tagTypesBrowse.json`, fetcher);
 
   if (isLoading) return <LoadingScreen />;
   if (error || !tags) return <ErrorScreen />;
@@ -38,14 +34,11 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
     <>
       <Head>
         <title>Tags | {conf.name}</title>
-        <meta
-          name="description"
-          content={`Explore the various tags used in ${conf.name}.`}
-        />
+        <meta name="description" content={`Explore the various tags used in ${conf.name}.`} />
       </Head>
-      <div className="min-h-screen flex flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main id="main-content" className="ui-page-main">
           <TagsList tagTypes={tags} conference={conf} />
         </main>
         <SiteFooter />

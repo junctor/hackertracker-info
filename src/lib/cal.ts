@@ -6,11 +6,7 @@ const pad2 = (n: number) => String(n).padStart(2, "0");
 
 /** Escape special chars per RFC 5545 */
 const escapeICalText = (text = "") =>
-  text
-    .replace(/\\/g, "\\\\")
-    .replace(/;/g, "\\;")
-    .replace(/,/g, "\\,")
-    .replace(/\r?\n/g, "\\n");
+  text.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
 
 /** Format a UTC Date to iCal “YYYYMMDDTHHMMSSZ” */
 const formatICalDate = (d: Date) => {

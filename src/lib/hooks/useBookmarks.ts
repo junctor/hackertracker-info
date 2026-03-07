@@ -1,5 +1,6 @@
-import { addBookmark, removeBookmark } from "@/lib/storage";
 import { useCallback, useState } from "react";
+
+import { addBookmark, removeBookmark } from "@/lib/storage";
 
 export function useBookmarks(eventId: number, initial: boolean) {
   const [bookmarked, setBookmarked] = useState<boolean>(initial);

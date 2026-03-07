@@ -6,11 +6,7 @@ function toDate(value: Dateish): Date {
   return typeof value === "string" ? new Date(value) : value;
 }
 
-export function eventTimeTable(
-  value: Dateish,
-  showTz = true,
-  tz: string,
-): string {
+export function eventTimeTable(value: Dateish, showTz = true, tz: string): string {
   const date = toDate(value);
   return date.toLocaleTimeString(LOCALE, {
     timeZone: tz,
@@ -67,8 +63,7 @@ export function newsTime(
   const { showYear = "auto", showTz = false } = opts ?? {};
 
   const now = new Date();
-  const includeYear =
-    showYear === "auto" ? time.getFullYear() !== now.getFullYear() : showYear;
+  const includeYear = showYear === "auto" ? time.getFullYear() !== now.getFullYear() : showYear;
 
   const fmt = new Intl.DateTimeFormat(LOCALE, {
     timeZone: tz,

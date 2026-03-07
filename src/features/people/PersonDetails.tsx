@@ -1,14 +1,11 @@
 import Image from "next/image";
-import { useMemo } from "react";
 import Link from "next/link";
+import { useMemo } from "react";
+
+import Markdown from "@/components/markdown/Markdown";
 import { ConferenceManifest } from "@/lib/conferences";
 import { eventTime } from "@/lib/dates";
-import Markdown from "@/components/markdown/Markdown";
-import {
-  EventEntity,
-  LocationEntity,
-  PersonEntity,
-} from "@/lib/types/ht-types";
+import { EventEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
 
 type Props = {
   person: PersonEntity;
@@ -17,26 +14,19 @@ type Props = {
   conference: ConferenceManifest;
 };
 
-export default function PersonDetails({
-  person,
-  events,
-  locations,
-  conference,
-}: Props) {
+export default function PersonDetails({ person, events, locations, conference }: Props) {
   const contentsBasePath = `/${conference.slug}/content`;
   const locationNameById = useMemo(() => {
-    const entries = locations.map(
-      (location) => [location.id, location.name] as const,
-    );
+    const entries = locations.map((location) => [location.id, location.name] as const);
     return new Map<number, string>(entries);
   }, [locations]);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
+    <div className="ui-container ui-page-content space-y-10">
       {/* Hero */}
-      <section className="bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6 rounded-lg">
+      <section className="ui-card flex flex-col items-center gap-6 p-6 md:flex-row">
         {person.avatarUrl ? (
-          <div className="w-32 h-32 rounded-full overflow-hidden shadow-lg bg-gray-700">
+          <div className="h-32 w-32 overflow-hidden rounded-full bg-slate-800 shadow-lg">
             <Image
               src={person.avatarUrl}
               alt={person.name}
@@ -46,7 +36,7 @@ export default function PersonDetails({
             />
           </div>
         ) : (
-          <div className="w-32 h-32 flex items-center justify-center text-3xl text-white bg-gray-700 rounded-full">
+          <div className="flex h-32 w-32 items-center justify-center rounded-full bg-slate-800 text-3xl text-white">
             {person.name
               .split(" ")
               .map((w) => w[0])
@@ -55,10 +45,8 @@ export default function PersonDetails({
           </div>
         )}
         <div className="flex-1 space-y-3">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white">
-            {person.name}
-          </h1>
-          <ul className="space-y-1 text-gray-300 list-none p-0 m-0">
+          <h1 className="ui-heading-1">{person.name}</h1>
+          <ul className="m-0 list-none space-y-1 p-0 text-slate-300">
             {person.affiliations?.map((a) => (
               <li key={a.organization} className="text-sm">
                 {a.title} @ {a.organization}
@@ -68,14 +56,14 @@ export default function PersonDetails({
           {person.links.length > 0 && (
             <div className="flex flex-wrap gap-3">
               {person.links
-                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .toSorted((a, b) => a.sortOrder - b.sortOrder)
                 .map((l) => (
                   <a
                     key={l.url}
                     href={l.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-indigo-400 text-sm transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+                    className="ui-focus-ring text-sm text-[#6CCDBB] transition hover:underline focus-visible:outline-none"
                   >
                     {l.title}
                   </a>
@@ -88,8 +76,8 @@ export default function PersonDetails({
       {/* About */}
       {person.description && (
         <section>
-          <h2 className="text-2xl font-semibold text-gray-200 mb-4">About</h2>
-          <div className="prose prose-invert max-w-none text-gray-300">
+          <h2 className="ui-heading-2 mb-4">About</h2>
+          <div className="prose prose-invert max-w-none text-slate-300">
             <Markdown content={person.description} />
           </div>
         </section>
@@ -98,32 +86,22 @@ export default function PersonDetails({
       {/* Events */}
       {events.length > 0 && (
         <section>
-          <h2 className="text-2xl font-semibold text-gray-200 mb-4">Events</h2>
+          <h2 className="ui-heading-2 mb-4">Events</h2>
           <div className="relative">
-            <ul className="space-y-8">
+            <ul className="space-y-4">
               {events.map((e) => (
                 <li key={e.id}>
                   <Link
                     href={`${contentsBasePath}?id=${e.contentId}`}
-                    className="block w-full group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+                    className="ui-focus-ring group block w-full rounded-lg focus-visible:outline-none"
                   >
-                    <div
-                      className="
-                        bg-gray-700 border-l-4 border-indigo-400 pl-5 h-full
-                        transition-shadow duration-200 ease-out
-                        group-hover:shadow-md
-                        group-hover:bg-gray-600
-                        group-hover:border-indigo-300
-                      "
-                    >
+                    <div className="ui-card ui-card-interactive h-full border-l-4 border-[#017FA4] pl-5 transition-shadow duration-200 ease-out group-hover:border-[#6CCDBB]">
                       <div className="p-4">
-                        <h3 className="text-lg font-semibold text-gray-100">
-                          {e.title}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-400">
+                        <h3 className="text-lg font-semibold text-slate-100">{e.title}</h3>
+                        <p className="mt-1 text-sm text-slate-400">
                           {`${eventTime(new Date(e.begin), false, conference.timezone)} – ${eventTime(new Date(e.end), true, conference.timezone)}`}
                         </p>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-sm text-slate-400">
                           {locationNameById.get(e.locationId)}
                         </p>
                       </div>

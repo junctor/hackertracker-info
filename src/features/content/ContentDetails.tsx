@@ -1,12 +1,7 @@
-import React, { useMemo } from "react";
+import { ShareIcon, UserIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import Markdown from "@/components/markdown/Markdown";
-import {
-  ShareIcon,
-  UserIcon,
-  ArrowTopRightOnSquareIcon,
-} from "@heroicons/react/24/outline";
-import ContentSession from "./ContentSession";
+import React, { useMemo } from "react";
+
 import type { ConferenceManifest } from "@/lib/conferences";
 import type {
   ContentEntity,
@@ -15,6 +10,10 @@ import type {
   PersonEntity,
   TagEntity,
 } from "@/lib/types/ht-types";
+
+import Markdown from "@/components/markdown/Markdown";
+
+import ContentSession from "./ContentSession";
 
 type Props = {
   content: ContentEntity;
@@ -33,8 +32,7 @@ function safeParseMs(iso: string): number {
 }
 
 export default function ContentDetails(props: Props) {
-  const { content, sessions, locations, people, tags, bookmarks, conference } =
-    props;
+  const { content, sessions, locations, people, tags, bookmarks, conference } = props;
 
   const peopleBasePath = `/${conference.slug}/people`;
   const contentsBasePath = `/${conference.slug}/content`;
@@ -65,8 +63,7 @@ export default function ContentDetails(props: Props) {
     "--event-color": primarySession?.color ?? "#9ca3af",
   } as React.CSSProperties;
 
-  const canShare =
-    typeof navigator !== "undefined" && typeof navigator.share === "function";
+  const canShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   const handleShare = async () => {
     const url = `${contentsBasePath}?id=${content.id}`;
@@ -81,45 +78,27 @@ export default function ContentDetails(props: Props) {
     }
 
     try {
-      await navigator.clipboard.writeText(
-        new URL(url, window.location.origin).toString(),
-      );
+      await navigator.clipboard.writeText(new URL(url, window.location.origin).toString());
     } catch {
       console.error("Copy link failed");
     }
   };
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 space-y-10">
+    <div className="ui-container ui-page-content space-y-10">
       {/* Title block (bar only here) */}
-      <header
-        style={barStyle}
-        className="flex items-start justify-between gap-4"
-      >
+      <header style={barStyle} className="flex items-start justify-between gap-4">
         <div className="relative min-w-0 pl-5">
           <span
             aria-hidden="true"
-            className="
-              pointer-events-none absolute left-0 top-1 bottom-1
-              w-[clamp(0.3rem,2vw,0.9rem)]
-              rounded-r-md
-              bg-(--event-color)
-            "
+            className="pointer-events-none absolute top-1 bottom-1 left-0 w-[clamp(0.3rem,2vw,0.9rem)] rounded-r-md bg-(--event-color)"
           />
           <span
             aria-hidden="true"
-            className="
-              pointer-events-none absolute left-0 top-1 bottom-1
-              w-[clamp(0.3rem,2vw,0.9rem)]
-              rounded-r-md
-              bg-linear-to-b from-white/0 to-indigo-600/20
-              mix-blend-multiply opacity-60
-            "
+            className="pointer-events-none absolute top-1 bottom-1 left-0 w-[clamp(0.3rem,2vw,0.9rem)] rounded-r-md bg-linear-to-b from-white/0 to-indigo-600/20 opacity-60 mix-blend-multiply"
           />
 
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
-            {content.title}
-          </h1>
+          <h1 className="ui-heading-1">{content.title}</h1>
         </div>
 
         <div className="shrink-0">
@@ -127,12 +106,7 @@ export default function ContentDetails(props: Props) {
             type="button"
             onClick={handleShare}
             aria-label="Share content link"
-            className="
-              rounded-md p-2 text-gray-400 transition
-              hover:text-gray-200
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
-              focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
-            "
+            className="ui-focus-ring rounded-md p-2 text-slate-400 transition hover:text-slate-200 focus-visible:outline-none"
           >
             <ShareIcon className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -142,10 +116,7 @@ export default function ContentDetails(props: Props) {
       {/* Sessions */}
       {sessions.length > 0 && (
         <section aria-labelledby="sessions-title">
-          <h2
-            id="sessions-title"
-            className="text-2xl font-semibold text-gray-200 mb-4"
-          >
+          <h2 id="sessions-title" className="ui-heading-2 mb-4">
             Sessions
           </h2>
 
@@ -172,18 +143,12 @@ export default function ContentDetails(props: Props) {
             Tags
           </h2>
 
-          <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
             {tags.map((tag) => (
               <li key={tag.id}>
                 <Link
                   href={`/${conference.slug}/tag?id=${tag.id}`}
-                  className="
-                    inline-flex items-center gap-2 rounded-full
-                    bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition
-                    hover:bg-indigo-600/50
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
-                    focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
-                  "
+                  className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                 >
                   <span
                     className="h-3 w-3 rounded-full"
@@ -201,13 +166,10 @@ export default function ContentDetails(props: Props) {
       {/* Description */}
       {content.description && (
         <section aria-labelledby="description-title">
-          <h2
-            id="description-title"
-            className="text-2xl font-semibold text-gray-200 mb-4"
-          >
+          <h2 id="description-title" className="ui-heading-2 mb-4">
             Description
           </h2>
-          <div className="prose prose-invert max-w-none text-gray-300">
+          <div className="prose prose-invert max-w-none text-slate-300">
             <Markdown content={content.description} />
           </div>
         </section>
@@ -216,10 +178,7 @@ export default function ContentDetails(props: Props) {
       {/* Links */}
       {content.links && content.links.length > 0 && (
         <section aria-labelledby="links-title">
-          <h2
-            id="links-title"
-            className="text-2xl font-semibold text-gray-200 mb-4"
-          >
+          <h2 id="links-title" className="ui-heading-2 mb-4">
             Links
           </h2>
           <ul className="space-y-2">
@@ -229,19 +188,9 @@ export default function ContentDetails(props: Props) {
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="
-                    inline-flex items-center gap-2
-                    text-indigo-300 underline-offset-2 decoration-indigo-500/40
-                    transition-colors
-                    hover:text-indigo-200 hover:decoration-indigo-400 hover:underline
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
-                    focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
-                  "
+                  className="ui-focus-ring inline-flex items-center gap-2 text-[#6CCDBB] decoration-[#017FA4]/45 underline-offset-2 transition-colors hover:text-white hover:underline hover:decoration-[#6CCDBB] focus-visible:outline-none"
                 >
-                  <ArrowTopRightOnSquareIcon
-                    className="h-4 w-4 shrink-0"
-                    aria-hidden="true"
-                  />
+                  <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                   <span className="truncate">{l.label}</span>
                 </a>
               </li>
@@ -253,31 +202,19 @@ export default function ContentDetails(props: Props) {
       {/* People */}
       {people.length > 0 && (
         <section aria-labelledby="people-title">
-          <h2
-            id="people-title"
-            className="text-2xl font-semibold text-gray-200 mb-4"
-          >
+          <h2 id="people-title" className="ui-heading-2 mb-4">
             People
           </h2>
-          <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
             {people.map((p) => (
               <li key={p.id}>
                 <Link
                   href={`${peopleBasePath}/?id=${p.id}`}
-                  className="
-                    inline-flex items-center gap-2 rounded-full
-                    bg-gray-700/50 px-3 py-1 text-sm text-gray-200 transition
-                    hover:bg-indigo-600/50
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
-                    focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
-                  "
+                  className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                   title={p.name}
                 >
-                  <UserIcon
-                    className="h-4 w-4 text-indigo-300"
-                    aria-hidden="true"
-                  />
-                  <span className="truncate max-w-56">{p.name}</span>
+                  <UserIcon className="h-4 w-4 text-[#6CCDBB]" aria-hidden="true" />
+                  <span className="max-w-56 truncate">{p.name}</span>
                 </Link>
               </li>
             ))}

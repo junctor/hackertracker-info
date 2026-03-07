@@ -1,6 +1,7 @@
-import type { ConferenceManifest } from "@/lib/conferences";
 import localFont from "next/font/local";
 import { useMemo } from "react";
+
+import type { ConferenceManifest } from "@/lib/conferences";
 
 export type TimerUnitKey = "days" | "hours" | "minutes" | "seconds";
 
@@ -30,8 +31,7 @@ export const COUNTDOWN_UNIT_COLORS: Record<TimerUnitKey, string> = {
   seconds: "#105F66",
 };
 
-export const HOME_SECTION_CLASS_NAME =
-  "mx-auto w-full max-w-6xl px-4 py-12 sm:py-14 md:py-16";
+export const HOME_SECTION_CLASS_NAME = "mx-auto w-full max-w-6xl px-4 py-12 sm:py-14 md:py-16";
 export const HOME_HERO_STACK_CLASS_NAME =
   "mx-auto flex max-w-3xl flex-col items-center justify-center text-center";
 export const HOME_HERO_LOGO_WRAP_CLASS_NAME =
@@ -39,7 +39,7 @@ export const HOME_HERO_LOGO_WRAP_CLASS_NAME =
 export const HOME_ACTION_LINK_CLASS_NAME =
   "ui-btn-base ui-btn-primary ui-focus-ring mt-5 h-11 rounded-lg px-6 text-sm focus-visible:outline-none";
 export const HOME_MENU_TILE_CLASS_NAME =
-  "flex w-full min-w-0 min-h-32 flex-col items-center justify-center gap-2 rounded-2xl bg-gray-800 px-4 py-5 text-center shadow-md transition motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-lg motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/85 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900";
+  "ui-card ui-card-interactive ui-focus-ring flex w-full min-w-0 min-h-32 flex-col items-center justify-center gap-2 rounded-2xl px-4 py-5 text-center focus-visible:outline-none";
 
 export const atkinsonFont = localFont({
   src: "../../../public/fonts/atkinson-hl.woff2",
@@ -75,12 +75,7 @@ export function useHomeModel(conference: ConferenceManifest) {
       logoAlt: `${conference.name} logo`,
       kickoffDateMs,
     };
-  }, [
-    conference.kickoff,
-    conference.logoFile,
-    conference.name,
-    conference.slug,
-  ]);
+  }, [conference.kickoff, conference.logoFile, conference.name, conference.slug]);
 }
 
 export function hasKickoffPassed(kickoffDateMs: number, nowMs = Date.now()) {
@@ -92,12 +87,7 @@ export function formatCountdownValue(value: number) {
 }
 
 export function formatCountdownLiveLabel(timer: CountdownTimer) {
-  if (
-    timer.days === 0 &&
-    timer.hours === 0 &&
-    timer.minutes === 0 &&
-    timer.seconds === 0
-  ) {
+  if (timer.days === 0 && timer.hours === 0 && timer.minutes === 0 && timer.seconds === 0) {
     return "Starting now";
   }
 

@@ -1,30 +1,26 @@
+import type { GetStaticProps } from "next";
+
+import Head from "next/head";
 import React from "react";
 import useSWR from "swr";
-import Head from "next/head";
-import { fetcher } from "@/lib/misc";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import SiteHeader from "@/features/app-shell/SiteHeader";
+
 import AnnouncementsList from "@/features/announcements/AnnouncementsList";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import SiteFooter from "@/features/app-shell/SiteFooter";
+import SiteHeader from "@/features/app-shell/SiteHeader";
 import { ConferenceManifest } from "@/lib/conferences";
+import { fetcher } from "@/lib/misc";
+import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { ArticlesStore } from "@/lib/types/ht-types";
 import { PageId } from "@/lib/types/page-meta";
-import {
-  buildConferenceStaticPaths,
-  getConferenceFromParams,
-} from "@/lib/next-static";
-import type { GetStaticProps } from "next";
-import SiteFooter from "@/features/app-shell/SiteFooter";
 
 type AnnouncementsPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
 
-export default function AnnouncementsPage({
-  conf,
-  activePageId,
-}: AnnouncementsPageProps) {
+export default function AnnouncementsPage({ conf, activePageId }: AnnouncementsPageProps) {
   const {
     data: articles,
     error,
@@ -38,14 +34,11 @@ export default function AnnouncementsPage({
     <>
       <Head>
         <title>Announcements | {conf.name}</title>
-        <meta
-          name="description"
-          content={`Latest announcements and updates for ${conf.name}.`}
-        />
+        <meta name="description" content={`Latest announcements and updates for ${conf.name}.`} />
       </Head>
-      <div className="min-h-screen flex flex-col">
+      <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="flex-1">
+        <main id="main-content" className="ui-page-main">
           <AnnouncementsList announcements={articles} conference={conf} />
         </main>
         <SiteFooter />
@@ -56,9 +49,7 @@ export default function AnnouncementsPage({
 
 export const getStaticPaths = buildConferenceStaticPaths;
 
-export const getStaticProps: GetStaticProps<AnnouncementsPageProps> = async (
-  ctx,
-) => {
+export const getStaticProps: GetStaticProps<AnnouncementsPageProps> = async (ctx) => {
   const result = getConferenceFromParams(ctx.params);
   if (!result) return { notFound: true };
   return { props: { conf: result.conf, activePageId: "announcements" } };

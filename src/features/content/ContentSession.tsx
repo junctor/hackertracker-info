@@ -46,6 +46,9 @@ export default function ContentSession({
     e.stopPropagation();
     toggleBookmark();
   };
+  const bookmarkLabel = bookmark
+    ? `Remove bookmark for ${session.title}`
+    : `Add bookmark for ${session.title}`;
 
   return (
     <li
@@ -93,7 +96,7 @@ export default function ContentSession({
           <button
             type="button"
             onClick={handleBookmarkClick}
-            aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
+            aria-label={bookmarkLabel}
             aria-pressed={bookmark}
             className="ui-icon-btn ui-focus-ring h-11 w-11 border-transparent bg-transparent text-slate-500 hover:text-[#6CCDBB] focus-visible:outline-none"
           >

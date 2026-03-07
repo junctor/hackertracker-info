@@ -38,7 +38,7 @@ export default function AnnouncementsPage({ conf, activePageId }: AnnouncementsP
       </Head>
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <AnnouncementsList announcements={articles} conference={conf} />
         </main>
         <SiteFooter />

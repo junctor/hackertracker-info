@@ -28,7 +28,7 @@ export default function Home({ conf }: HomePageProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="min-h-dvh bg-slate-950 text-slate-100">
+      <main id="main-content" className="min-h-dvh bg-slate-950 text-slate-100">
         <Splash conference={conf} />
       </main>
     </>

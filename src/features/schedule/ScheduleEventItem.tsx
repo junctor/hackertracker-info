@@ -40,6 +40,9 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
     !isLive &&
     event.beginTimestampSeconds > nowSeconds &&
     event.beginTimestampSeconds - nowSeconds <= 30 * 60;
+  const bookmarkLabel = bookmark
+    ? `Remove bookmark for ${event.title}`
+    : `Add bookmark for ${event.title}`;
 
   return (
     <article
@@ -112,7 +115,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
         <button
           type="button"
           onClick={handleBookmarkClick}
-          aria-label={bookmark ? "Remove bookmark" : "Add bookmark"}
+          aria-label={bookmarkLabel}
           aria-pressed={bookmark}
           className="ui-focus-ring ui-icon-btn h-11 w-11 border-transparent bg-transparent text-slate-500 hover:text-[#6CCDBB] focus-visible:outline-none"
         >

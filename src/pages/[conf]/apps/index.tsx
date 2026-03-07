@@ -27,7 +27,7 @@ export default function AppsPage({ conf, activePageId }: AppsPageProps) {
       </Head>
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <AppsLanding conference={conf} />
         </main>
         <SiteFooter />

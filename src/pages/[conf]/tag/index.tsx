@@ -286,7 +286,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
       </Head>
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center text-[#6CCDBB]">
             {tag.label} Schedule
           </h1>
@@ -298,9 +298,10 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
               onSelectDay={handleSelectDay}
               bookmarks={bookmarks}
               nowSeconds={nowSeconds}
+              activeFilter="tags"
             />
           ) : (
-            <p className="mt-8 text-center text-slate-500">No events found for this tag.</p>
+            <p className="mt-8 text-center text-slate-300">No events found for this tag.</p>
           )}
         </main>
         <SiteFooter />

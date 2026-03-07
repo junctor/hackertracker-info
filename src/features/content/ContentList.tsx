@@ -43,6 +43,8 @@ export default function ContentList({ content, tags, conference }: Props) {
         })),
     [tags],
   );
+  const resultLabel =
+    normalizedSearch || selectedTag ? `${filtered.length} content items found` : `${content.length} content items total`;
 
   return (
     <section className="ui-container ui-section">
@@ -76,6 +78,9 @@ export default function ContentList({ content, tags, conference }: Props) {
           </select>
         </label>
       </SearchHeader>
+      <p role="status" aria-live="polite" className="mb-4 text-sm text-slate-300">
+        {resultLabel}
+      </p>
 
       <ul className="space-y-3 leading-relaxed sm:space-y-4">
         {filtered.map((item) => (

@@ -75,7 +75,7 @@ export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps
       </Head>
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <DocumentDetails document={selectedDocument} conference={conf} />
         </main>
         <SiteFooter />

@@ -105,7 +105,7 @@ export default function DirectoryPage({
     pageContent = (
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <OrganizationDetails org={selectedOrganization} conference={conf} />
         </main>
         <SiteFooter />
@@ -126,7 +126,7 @@ export default function DirectoryPage({
     pageContent = (
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <OrganizationsList
             organizations={matchingOrganizations}
             title={title}

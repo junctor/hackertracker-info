@@ -6,6 +6,9 @@ export default function Document() {
     <Html lang="en">
       <Head />
       <body className="bg-slate-950 antialiased">
+        <a href="#main-content" className="ui-skip-link">
+          Skip to main content
+        </a>
         <Main />
         <NextScript />
       </body>

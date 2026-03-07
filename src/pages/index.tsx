@@ -104,7 +104,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="ui-page-shell relative overflow-hidden bg-slate-950 text-slate-100">
+      <main id="main-content" className="ui-page-shell relative overflow-hidden bg-slate-950 text-slate-100">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.14),transparent_30%),radial-gradient(circle_at_20%_30%,rgba(251,191,36,0.10),transparent_22%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_20%)]"
@@ -124,7 +124,6 @@ export default function Home() {
               <button
                 type="button"
                 onPointerEnter={cycleTitle}
-                onFocus={cycleTitle}
                 onClick={cycleTitle}
                 className="ui-focus-ring inline-flex items-center justify-center rounded-xl bg-transparent p-0 text-inherit focus-visible:outline-none"
                 aria-label="Cycle DEF CON title style"

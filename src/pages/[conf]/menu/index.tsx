@@ -31,7 +31,7 @@ export default function MenuPage({ conf }: MenuPageProps) {
 
       <div className="ui-page-shell bg-slate-950 text-slate-100">
         <SiteHeader conference={conf} activePageId="home" />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <Menu conference={conf} />
         </main>
         <SiteFooter />

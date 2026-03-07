@@ -16,6 +16,8 @@ export default function PeopleList({ people, conference }: Props) {
     const q = query.toLowerCase().trim();
     return people.filter((p) => p.name.toLowerCase().includes(q));
   }, [people, query]);
+  const resultLabel =
+    query.trim().length > 0 ? `${filtered.length} people found` : `${people.length} people total`;
 
   return (
     <section className="ui-container ui-section">
@@ -26,9 +28,12 @@ export default function PeopleList({ people, conference }: Props) {
         searchValue={query}
         onSearchChange={setQuery}
       />
+      <p role="status" aria-live="polite" className="mb-4 text-sm text-slate-300">
+        {resultLabel}
+      </p>
 
       {filtered.length === 0 ? (
-        <p className="text-center text-slate-400">No people found.</p>
+        <p className="text-center text-slate-300">No people found.</p>
       ) : (
         <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filtered.map((person) => (

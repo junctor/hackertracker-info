@@ -215,7 +215,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
       </Head>
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <h1 className="sr-only">Schedule</h1>
           <ScheduleEvents
             conf={conf}

@@ -123,6 +123,7 @@ export default function ScheduleEvents({
   onSelectDay,
   bookmarks,
   nowSeconds = 0,
+  activeFilter = null,
 }: {
   conf: ConferenceManifest;
   days: ScheduleDay[];
@@ -131,6 +132,7 @@ export default function ScheduleEvents({
   onSelectDay: (day: string) => void;
   bookmarks: number[];
   nowSeconds?: number;
+  activeFilter?: "bookmarks" | "tags" | null;
 }) {
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
   const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -204,6 +206,8 @@ export default function ScheduleEvents({
   );
 
   const activeDay = days.find(({ day }) => day === resolvedDay) ?? null;
+  const isBookmarksFilterActive = activeFilter === "bookmarks";
+  const isTagsFilterActive = activeFilter === "tags";
   const computeItemKey = useCallback((_: number, evt: ScheduleEventViewModel) => evt.id, []);
   const itemContent = useCallback(
     (_: number, evt: ScheduleEventViewModel) => (
@@ -226,6 +230,7 @@ export default function ScheduleEvents({
               href={`/${conf.slug}/bookmarks`}
               className="ui-icon-btn ui-focus-ring focus-visible:outline-none"
               aria-label="Filter by bookmarks"
+              aria-current={isBookmarksFilterActive ? "page" : undefined}
             >
               <BookmarkIcon className="h-5 w-5" aria-hidden="true" />
             </Link>
@@ -233,6 +238,7 @@ export default function ScheduleEvents({
               href={`/${conf.slug}/tags`}
               className="ui-icon-btn ui-focus-ring focus-visible:outline-none"
               aria-label="Filter by tags"
+              aria-current={isTagsFilterActive ? "page" : undefined}
             >
               <TagIcon className="h-5 w-5" aria-hidden="true" />
             </Link>

@@ -38,7 +38,7 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
       </Head>
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <TagsList tagTypes={tags} conference={conf} />
         </main>
         <SiteFooter />

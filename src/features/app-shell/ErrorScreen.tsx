@@ -6,7 +6,7 @@ type Props = {
 
 export default function ErrorScreen({ msg }: Props) {
   return (
-    <main className="ui-page-shell">
+    <main id="main-content" className="ui-page-shell">
       <section className="ui-page-main grid place-items-center px-4 py-10">
         <div className="ui-card w-full max-w-xl p-6 text-center sm:p-8">
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-100 sm:text-4xl">

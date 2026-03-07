@@ -152,7 +152,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
       </Head>
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">{pageContent}</main>
+        <main id="main-content" className="ui-page-main">{pageContent}</main>
         <SiteFooter />
       </div>
     </>

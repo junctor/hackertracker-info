@@ -311,10 +311,10 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
       </Head>
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
-        <main className="ui-page-main">
+        <main id="main-content" className="ui-page-main">
           <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center">Bookmarks</h1>
           {bookmarks.length === 0 ? (
-            <p className="mt-8 text-center text-slate-500">No bookmarks found.</p>
+            <p className="mt-8 text-center text-slate-300">No bookmarks found.</p>
           ) : days.length > 0 && resolvedDay ? (
             <ScheduleEvents
               conf={conf}
@@ -323,9 +323,10 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
               onSelectDay={handleSelectDay}
               bookmarks={scheduleBookmarks}
               nowSeconds={nowSeconds}
+              activeFilter="bookmarks"
             />
           ) : (
-            <p className="mt-8 text-center text-slate-500">No bookmarked events found.</p>
+            <p className="mt-8 text-center text-slate-300">No bookmarked events found.</p>
           )}
         </main>
         <SiteFooter />

@@ -53,10 +53,12 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
         onSearchChange={setSearch}
       />
 
-      <div className="mt-3 text-sm text-slate-400">{resultLabel}</div>
+      <p role="status" aria-live="polite" className="mt-3 text-sm text-slate-300">
+        {resultLabel}
+      </p>
 
       {filteredOrganizations.length === 0 ? (
-        <p role="status" className="mt-10 text-center text-slate-400">
+        <p role="status" className="mt-10 text-center text-slate-300">
           {normalizedSearch
             ? `No ${title.toLowerCase()} match “${search.trim()}”.`
             : `No ${title.toLowerCase()} found.`}

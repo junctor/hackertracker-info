@@ -148,7 +148,7 @@ export default function ContentDetails(props: Props) {
               <li key={tag.id}>
                 <Link
                   href={`/${conference.slug}/tag?id=${tag.id}`}
-                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:border-[#017FA4]/65 hover:bg-[#017FA4]/28 focus-visible:outline-none"
+                  className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                 >
                   <span
                     className="h-3 w-3 rounded-full"
@@ -210,7 +210,7 @@ export default function ContentDetails(props: Props) {
               <li key={p.id}>
                 <Link
                   href={`${peopleBasePath}/?id=${p.id}`}
-                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-800/70 px-3 py-1 text-sm text-slate-200 transition hover:border-[#017FA4]/65 hover:bg-[#017FA4]/28 focus-visible:outline-none"
+                  className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                   title={p.name}
                 >
                   <UserIcon className="h-4 w-4 text-[#6CCDBB]" aria-hidden="true" />

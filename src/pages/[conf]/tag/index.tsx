@@ -302,11 +302,11 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
               activeFilter="tags"
             />
           ) : (
-            <div className="ui-container mt-8 rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+            <div className="ui-container ui-empty-state mt-8">
               <p className="text-slate-200">No events are scheduled for this tag.</p>
               <Link
                 href={`/${conf.slug}/tags`}
-                className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+                className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
               >
                 Browse Tags
               </Link>

@@ -56,7 +56,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
       ) : null}
 
       {filteredOrganizations.length === 0 ? (
-        <div role="status" className="mt-10 rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+        <div role="status" className="ui-empty-state mt-10">
           <p className="text-slate-200">
             {normalizedSearch
               ? `No ${title.toLowerCase()} match "${search.trim()}".`
@@ -66,7 +66,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
             <button
               type="button"
               onClick={() => setSearch("")}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
             >
               Clear Search
             </button>

@@ -315,11 +315,11 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
         <main id="main-content" className="ui-page-main">
           <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center">Bookmarks</h1>
           {bookmarks.length === 0 ? (
-            <div className="ui-container mt-8 rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+            <div className="ui-container ui-empty-state mt-8">
               <p className="text-slate-200">No bookmarks yet.</p>
               <Link
                 href={`/${conf.slug}/schedule`}
-                className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+                className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
               >
                 Browse Schedule
               </Link>
@@ -335,11 +335,11 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
               activeFilter="bookmarks"
             />
           ) : (
-            <div className="ui-container mt-8 rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+            <div className="ui-container ui-empty-state mt-8">
               <p className="text-slate-200">No upcoming events match your saved bookmarks.</p>
               <Link
                 href={`/${conf.slug}/schedule`}
-                className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+                className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
               >
                 View Full Schedule
               </Link>

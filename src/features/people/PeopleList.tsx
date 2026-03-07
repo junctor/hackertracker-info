@@ -35,7 +35,7 @@ export default function PeopleList({ people, conference }: Props) {
       ) : null}
 
       {filtered.length === 0 ? (
-        <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+        <div className="ui-empty-state">
           <p className="text-slate-200">
             {trimmedQuery
               ? `No speakers match "${trimmedQuery}".`
@@ -45,7 +45,7 @@ export default function PeopleList({ people, conference }: Props) {
             <button
               type="button"
               onClick={() => setQuery("")}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
             >
               Clear Search
             </button>

@@ -84,7 +84,7 @@ export default function ContentList({ content, tags, conference }: Props) {
       ) : null}
 
       {filtered.length === 0 ? (
-        <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-6 text-center">
+        <div className="ui-empty-state">
           <p className="text-slate-200">
             {hasActiveFilters
               ? "No content matches the current filters."
@@ -97,7 +97,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                 setSearch("");
                 setSelectedTag(null);
               }}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring mt-4 focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
             >
               Clear Filters
             </button>
@@ -117,11 +117,11 @@ export default function ContentList({ content, tags, conference }: Props) {
             >
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-(--event-color) transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+                className="ui-accent-rail"
               />
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/16 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+                className="ui-accent-rail-overlay"
               />
               <Link
                 href={`/${conference.slug}/content/?id=${item.id}`}
@@ -145,7 +145,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                   {item.tags.map((tag) => (
                     <li
                       key={tag.id}
-                      className="inline-flex items-center rounded-full border border-white/10 px-2 py-1 text-[11px] font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:text-xs"
+                      className="ui-tag-chip sm:text-xs"
                       style={{
                         backgroundColor: tag.colorBackground,
                         color: tag.colorForeground ?? "#fff",

@@ -51,12 +51,12 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-(--event-color) transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+        className="ui-accent-rail"
       />
 
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/18 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+        className="ui-accent-rail-overlay"
       />
 
       <Link
@@ -98,7 +98,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
             {event.tags.map((tag) => (
               <li
                 key={tag.id}
-                className="inline-flex items-center rounded-full border border-white/15 px-2 py-1 text-[11px] font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                className="ui-tag-chip ui-tag-chip-strong"
                 style={{
                   backgroundColor: tag.colorBackground,
                   color: tag.colorForeground ?? "#fff",

@@ -62,11 +62,11 @@ export default function ContentSession({
       {/* Accent bar: matches list row style, full height of the card */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-(--event-color) transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+        className="ui-accent-rail"
       />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute top-0 bottom-0 left-0 w-[clamp(0.3rem,2vw,0.9rem)] bg-linear-to-b from-white/0 to-[#017FA4]/16 opacity-60 mix-blend-multiply transition-[width] duration-200 group-hover:w-[clamp(0.4rem,3vw,1.1rem)]"
+        className="ui-accent-rail-overlay"
       />
 
       <div className="relative z-10 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">

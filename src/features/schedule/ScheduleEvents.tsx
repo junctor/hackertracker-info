@@ -208,6 +208,12 @@ export default function ScheduleEvents({
   const activeDay = days.find(({ day }) => day === resolvedDay) ?? null;
   const isBookmarksFilterActive = activeFilter === "bookmarks";
   const isTagsFilterActive = activeFilter === "tags";
+  const activeFilterClassName = "border-[#017FA4]/80 bg-[#0D294A]/55 text-white";
+  const inactiveFilterClassName = "ui-btn-secondary text-slate-200";
+  const activeDayTabClassName = "border-[#017FA4]/80 bg-[#0D294A]/55 text-white";
+  const inactiveDayTabClassName =
+    "border-slate-700/85 bg-slate-900/55 text-slate-200 hover:border-[#017FA4]/70 hover:text-slate-100";
+
   const computeItemKey = useCallback((_: number, evt: ScheduleEventViewModel) => evt.id, []);
   const itemContent = useCallback(
     (_: number, evt: ScheduleEventViewModel) => (
@@ -229,9 +235,7 @@ export default function ScheduleEvents({
             <Link
               href={`/${conf.slug}/bookmarks`}
               className={`ui-btn-base ui-focus-ring min-h-11 gap-1.5 px-3 text-sm focus-visible:outline-none ${
-                isBookmarksFilterActive
-                  ? "border-[#017FA4]/80 bg-[#0D294A]/55 text-white"
-                  : "ui-btn-secondary text-slate-200"
+                isBookmarksFilterActive ? activeFilterClassName : inactiveFilterClassName
               }`}
               aria-label="Filter by bookmarks"
               aria-current={isBookmarksFilterActive ? "page" : undefined}
@@ -242,9 +246,7 @@ export default function ScheduleEvents({
             <Link
               href={`/${conf.slug}/tags`}
               className={`ui-btn-base ui-focus-ring min-h-11 gap-1.5 px-3 text-sm focus-visible:outline-none ${
-                isTagsFilterActive
-                  ? "border-[#017FA4]/80 bg-[#0D294A]/55 text-white"
-                  : "ui-btn-secondary text-slate-200"
+                isTagsFilterActive ? activeFilterClassName : inactiveFilterClassName
               }`}
               aria-label="Filter by tags"
               aria-current={isTagsFilterActive ? "page" : undefined}
@@ -274,17 +276,13 @@ export default function ScheduleEvents({
                   aria-controls={`day-panel-${day}`}
                   tabIndex={resolvedDay === day ? 0 : -1}
                   className={`ui-focus-ring flex min-h-11 items-center gap-1 rounded-full border px-3.5 text-sm whitespace-nowrap transition-colors focus-visible:outline-none ${
-                    resolvedDay === day
-                      ? "border-[#017FA4]/80 bg-[#0D294A]/55 text-white"
-                      : "border-slate-700/85 bg-slate-900/55 text-slate-200 hover:border-[#017FA4]/70 hover:text-slate-100"
+                    resolvedDay === day ? activeDayTabClassName : inactiveDayTabClassName
                   }`}
                   onClick={() => onSelectDay(day)}
                   onKeyDown={(e) => handleTabKeyDown(e, index, day)}
                 >
                   <span>{tabDateTitle(day, conf.timezone)}</span>
-                  <span
-                    className={`text-xs ${resolvedDay === day ? "text-[#6CCDBB]" : "text-slate-400"}`}
-                  >
+                  <span className={`text-xs ${resolvedDay === day ? "text-[#6CCDBB]" : "text-slate-400"}`}>
                     ({events.length})
                   </span>
                 </button>

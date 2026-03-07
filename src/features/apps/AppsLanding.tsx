@@ -214,7 +214,7 @@ export default function AppsLanding({ conference }: Props) {
         />
         <div
           aria-hidden="true"
-          className="bg-linear-to-rrom-transparent pointer-events-none absolute inset-x-0 top-0 h-px via-white/40 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/40 to-transparent"
         />
         <div
           aria-hidden="true"

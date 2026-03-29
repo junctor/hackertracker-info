@@ -1,3 +1,4 @@
+import { UserIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useMemo, type CSSProperties } from "react";
@@ -13,8 +14,55 @@ type Props = {
 
 const PERSON_ACCENT_COLORS = ["#017FA4", "#2D7FF9", "#0F766E", "#7C3AED", "#C2410C", "#0E7490"];
 
-function getInitials(name: string): string {
-  return name
+type AvatarRecord = {
+  avatar?: { url?: string | null } | string | null;
+  avatarUrl?: string | null;
+  image?: string | null;
+  imageUrl?: string | null;
+  name?: string | null;
+  title?: string | null;
+};
+
+function getTrimmedText(value?: string | null): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function getPersonName(name?: string | null): string {
+  return getTrimmedText(name).replace(/\s+/g, " ");
+}
+
+function getDisplayName(name?: string | null): string {
+  return getPersonName(name) || "Unknown person";
+}
+
+function getDisplayTitle(title?: string | null): string | null {
+  return getTrimmedText(title) || null;
+}
+
+function getPersonAvatarUrl(person: AvatarRecord): string | null {
+  const nestedAvatar = person.avatar;
+  const nestedAvatarUrl =
+    typeof nestedAvatar === "string"
+      ? nestedAvatar
+      : nestedAvatar && typeof nestedAvatar.url === "string"
+        ? nestedAvatar.url
+        : null;
+
+  const candidates = [person.avatarUrl, person.imageUrl, person.image, nestedAvatarUrl];
+
+  for (const candidate of candidates) {
+    const normalized = getTrimmedText(candidate);
+    if (normalized) return normalized;
+  }
+
+  return null;
+}
+
+function getInitials(name?: string | null): string {
+  const normalizedName = getPersonName(name);
+  if (!normalizedName) return "";
+
+  return normalizedName
     .split(/\s+/)
     .filter(Boolean)
     .map((part) => part[0])
@@ -23,9 +71,10 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-function getPersonAccent(name: string): string {
+function getPersonAccent(name?: string | null): string {
+  const normalizedName = getDisplayName(name);
   let hash = 0;
-  for (const char of name) {
+  for (const char of normalizedName) {
     hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   }
   return PERSON_ACCENT_COLORS[hash % PERSON_ACCENT_COLORS.length] ?? PERSON_ACCENT_COLORS[0];
@@ -33,10 +82,17 @@ function getPersonAccent(name: string): string {
 
 export default function PeopleList({ people, conference }: Props) {
   const [query, setQuery] = useState("");
+  const [brokenAvatarIds, setBrokenAvatarIds] = useState<Record<number, true>>({});
   const trimmedQuery = query.trim();
   const filtered = useMemo(() => {
     const q = trimmedQuery.toLowerCase();
-    return people.filter((p) => p.name.toLowerCase().includes(q));
+    if (!q) return people;
+
+    return people.filter((person) => {
+      const personName = getDisplayName(person.name).toLowerCase();
+      const personTitle = getDisplayTitle(person.title)?.toLowerCase() ?? "";
+      return personName.includes(q) || personTitle.includes(q);
+    });
   }, [people, trimmedQuery]);
   const showResultCount = trimmedQuery.length > 0;
   const resultCountLabel = `${filtered.length} ${filtered.length === 1 ? "person" : "people"}`;
@@ -78,8 +134,17 @@ export default function PeopleList({ people, conference }: Props) {
       ) : (
         <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filtered.map((person) => {
+            const personName = getDisplayName(person.name);
+            const personTitle = getDisplayTitle(person.title);
+            const personInitials = getInitials(person.name);
+            const avatarUrl = getPersonAvatarUrl(person);
+            const showAvatarImage = Boolean(avatarUrl) && !brokenAvatarIds[person.id];
+            const accentColor = getPersonAccent(person.name);
             const accentStyle = {
-              "--event-color": getPersonAccent(person.name),
+              "--event-color": accentColor,
+            } as CSSProperties;
+            const avatarStyle = {
+              backgroundImage: `linear-gradient(135deg, ${accentColor}22 0%, rgba(15, 23, 42, 0.9) 100%)`,
             } as CSSProperties;
 
             return (
@@ -96,33 +161,53 @@ export default function PeopleList({ people, conference }: Props) {
                     className="ui-focus-ring relative z-10 block h-full rounded-[inherit] px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[1.1rem] border border-white/10 bg-white/4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                      <div
+                        style={avatarStyle}
+                        className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+                      >
                         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/8" />
                         <div className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden">
-                          {person.avatarUrl ? (
+                          {showAvatarImage && avatarUrl ? (
                             <Image
-                              src={person.avatarUrl}
-                              alt={person.name}
-                              width={48}
-                              height={48}
+                              src={avatarUrl}
+                              alt={personName}
+                              fill
                               sizes="48px"
-                              className="h-full w-full object-cover"
+                              className="object-cover"
+                              onError={() =>
+                                setBrokenAvatarIds((current) =>
+                                  current[person.id] ? current : { ...current, [person.id]: true },
+                                )
+                              }
                             />
                           ) : (
-                            <span className="text-xs font-semibold tracking-[0.08em] text-slate-100 uppercase">
-                              {getInitials(person.name)}
-                            </span>
+                            <>
+                              <div
+                                aria-hidden="true"
+                                className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_62%)]"
+                              />
+                              {personInitials ? (
+                                <span className="relative text-xs font-semibold tracking-[0.08em] text-slate-100 uppercase">
+                                  {personInitials}
+                                </span>
+                              ) : (
+                                <UserIcon
+                                  className="relative h-5 w-5 text-slate-100"
+                                  aria-hidden="true"
+                                />
+                              )}
+                            </>
                           )}
                         </div>
                       </div>
 
                       <div className="min-w-0 flex-1 space-y-1">
                         <h2 className="text-[1rem] leading-6 font-semibold tracking-[-0.01em] text-slate-100 transition-colors group-hover:text-white">
-                          <span className="line-clamp-2">{person.name}</span>
+                          <span className="line-clamp-2">{personName}</span>
                         </h2>
-                        {person.title?.trim() ? (
+                        {personTitle ? (
                           <p className="line-clamp-2 text-sm leading-5 text-slate-400">
-                            {person.title.trim()}
+                            {personTitle}
                           </p>
                         ) : null}
                       </div>

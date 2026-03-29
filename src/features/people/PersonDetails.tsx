@@ -1,6 +1,7 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
-import { useMemo, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 
 import Markdown from "@/components/markdown/Markdown";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -15,16 +16,67 @@ type Props = {
   locations: LocationEntity[];
   conference: ConferenceManifest;
 };
+type PersonLinkView = PersonEntity["links"][number] & {
+  title: string;
+  url: string;
+};
 
 const PERSON_ACCENT_COLORS = ["#017FA4", "#2D7FF9", "#0F766E", "#7C3AED", "#C2410C", "#0E7490"];
 
-function safeParseMs(value: string): number {
+type AvatarRecord = {
+  avatar?: { url?: string | null } | string | null;
+  avatarUrl?: string | null;
+  image?: string | null;
+  imageUrl?: string | null;
+  name?: string | null;
+};
+
+function getTrimmedText(value?: string | null): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function getPersonName(name?: string | null): string {
+  return getTrimmedText(name).replace(/\s+/g, " ");
+}
+
+function getDisplayName(name?: string | null): string {
+  return getPersonName(name) || "Unknown person";
+}
+
+function getOptionalText(value?: string | null): string | null {
+  return getTrimmedText(value) || null;
+}
+
+function getPersonAvatarUrl(person: AvatarRecord): string | null {
+  const nestedAvatar = person.avatar;
+  const nestedAvatarUrl =
+    typeof nestedAvatar === "string"
+      ? nestedAvatar
+      : nestedAvatar && typeof nestedAvatar.url === "string"
+        ? nestedAvatar.url
+        : null;
+
+  const candidates = [person.avatarUrl, person.imageUrl, person.image, nestedAvatarUrl];
+
+  for (const candidate of candidates) {
+    const normalized = getTrimmedText(candidate);
+    if (normalized) return normalized;
+  }
+
+  return null;
+}
+
+function safeParseMs(value?: string | null): number {
+  if (!value) return Number.MAX_SAFE_INTEGER;
   const ms = Date.parse(value);
   return Number.isFinite(ms) ? ms : Number.MAX_SAFE_INTEGER;
 }
 
-function getInitials(name: string): string {
-  return name
+function getInitials(name?: string | null): string {
+  const normalizedName = getPersonName(name);
+  if (!normalizedName) return "";
+
+  return normalizedName
     .split(/\s+/)
     .filter(Boolean)
     .map((part) => part[0])
@@ -33,32 +85,65 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-function getPersonAccent(name: string): string {
+function getPersonAccent(name?: string | null): string {
+  const normalizedName = getDisplayName(name);
   let hash = 0;
-  for (const char of name) {
+  for (const char of normalizedName) {
     hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   }
   return PERSON_ACCENT_COLORS[hash % PERSON_ACCENT_COLORS.length] ?? PERSON_ACCENT_COLORS[0];
 }
 
 export default function PersonDetails({ person, events, locations, conference }: Props) {
+  const [hasAvatarError, setHasAvatarError] = useState(false);
   const contentsBasePath = `/${conference.slug}/content`;
+  const personName = getDisplayName(person.name);
+  const personInitials = getInitials(person.name);
+  const personAvatarUrl = getPersonAvatarUrl(person);
+  const personPronouns = getOptionalText(person.pronouns);
+  const personDescription = getOptionalText(person.description);
   const locationNameById = useMemo(() => {
-    const entries = locations.map((location) => [location.id, location.name] as const);
+    const entries = locations.map(
+      (location) => [location.id, getTrimmedText(location.name) || "Location TBD"] as const,
+    );
     return new Map<number, string>(entries);
   }, [locations]);
   const sortedEvents = useMemo(
     () => events.toSorted((a, b) => safeParseMs(a.beginIso) - safeParseMs(b.beginIso)),
     [events],
   );
-  const primaryEventColor = sortedEvents[0]?.color ?? getPersonAccent(person.name);
+  const accentColor = getPersonAccent(person.name);
+  const primaryEventColor = sortedEvents[0]?.color ?? accentColor;
   const accentStyle = {
     "--event-color": primaryEventColor,
   } as CSSProperties;
-  const affiliations = person.affiliations ?? [];
+  const avatarStyle = {
+    backgroundImage: `linear-gradient(135deg, ${accentColor}22 0%, rgba(15, 23, 42, 0.92) 100%)`,
+  } as CSSProperties;
+  const affiliations = useMemo(
+    () =>
+      (person.affiliations ?? [])
+        .map((affiliation) => ({
+          organization: getOptionalText(affiliation.organization),
+          title: getOptionalText(affiliation.title),
+        }))
+        .filter(
+          (affiliation): affiliation is { organization: string | null; title: string | null } =>
+            Boolean(affiliation.organization || affiliation.title),
+        ),
+    [person.affiliations],
+  );
   const bookmarkSet = useMemo(() => new Set(getBookmarks()), []);
   const sortedLinks = useMemo(
-    () => [...(person.links ?? [])].toSorted((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)),
+    () =>
+      [...(person.links ?? [])]
+        .map((link) => ({
+          ...link,
+          title: getOptionalText(link.title) ?? getOptionalText(link.url) ?? "External link",
+          url: getOptionalText(link.url),
+        }))
+        .filter((link): link is PersonLinkView => Boolean(link.url))
+        .toSorted((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)),
     [person.links],
   );
   const contentEntityByEventId = useMemo(() => {
@@ -76,6 +161,10 @@ export default function PersonDetails({ person, events, locations, conference }:
     return new Map<number, ContentEntity>(entries);
   }, [sortedEvents]);
 
+  useEffect(() => {
+    setHasAvatarError(false);
+  }, [personAvatarUrl]);
+
   return (
     <div className="ui-container ui-page-content space-y-10">
       <header style={accentStyle} className="ui-card relative overflow-hidden">
@@ -84,28 +173,44 @@ export default function PersonDetails({ person, events, locations, conference }:
 
         <div className="relative z-10 flex flex-col gap-6 px-5 py-5 pl-6 sm:px-6 sm:py-6 sm:pl-7">
           <div className="flex flex-col gap-5 md:flex-row md:items-start">
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/4 text-2xl font-semibold tracking-[0.08em] text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:h-28 sm:w-28 sm:text-3xl">
-              {person.avatarUrl ? (
+            <div
+              style={avatarStyle}
+              className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 text-2xl font-semibold tracking-[0.08em] text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:h-28 sm:w-28 sm:text-3xl"
+            >
+              {personAvatarUrl && !hasAvatarError ? (
                 <Image
-                  src={person.avatarUrl}
-                  alt={person.name}
-                  width={112}
-                  height={112}
+                  src={personAvatarUrl}
+                  alt={personName}
+                  fill
                   sizes="(min-width: 640px) 112px, 96px"
-                  className="h-full w-full object-cover"
+                  className="object-cover"
+                  onError={() => setHasAvatarError(true)}
                 />
               ) : (
-                getInitials(person.name)
+                <>
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_62%)]"
+                  />
+                  {personInitials ? (
+                    <span className="relative">{personInitials}</span>
+                  ) : (
+                    <UserIcon
+                      className="relative h-8 w-8 text-slate-100 sm:h-10 sm:w-10"
+                      aria-hidden="true"
+                    />
+                  )}
+                </>
               )}
             </div>
 
             <div className="min-w-0 flex-1 space-y-4">
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="ui-heading-1">{person.name}</h1>
-                  {person.pronouns ? (
+                  <h1 className="ui-heading-1">{personName}</h1>
+                  {personPronouns ? (
                     <span className="inline-flex items-center rounded-full border border-white/8 bg-white/3 px-2.5 py-1 text-xs font-medium text-slate-200">
-                      {person.pronouns}
+                      {personPronouns}
                     </span>
                   ) : null}
                 </div>
@@ -113,10 +218,16 @@ export default function PersonDetails({ person, events, locations, conference }:
                 {affiliations.length > 0 ? (
                   <ul className="m-0 list-none space-y-1.5 p-0 text-sm leading-6 text-slate-300">
                     {affiliations.map((affiliation) => (
-                      <li key={`${affiliation.organization}:${affiliation.title}`}>
-                        <span className="font-semibold text-slate-100">{affiliation.title}</span>
-                        <span className="mx-2 text-slate-500">@</span>
-                        <span>{affiliation.organization}</span>
+                      <li
+                        key={`${affiliation.organization ?? "organization"}:${affiliation.title ?? "title"}`}
+                      >
+                        {affiliation.title ? (
+                          <span className="font-semibold text-slate-100">{affiliation.title}</span>
+                        ) : null}
+                        {affiliation.title && affiliation.organization ? (
+                          <span className="mx-2 text-slate-500">@</span>
+                        ) : null}
+                        {affiliation.organization ? <span>{affiliation.organization}</span> : null}
                       </li>
                     ))}
                   </ul>
@@ -145,14 +256,14 @@ export default function PersonDetails({ person, events, locations, conference }:
         </div>
       </header>
 
-      {person.description && (
+      {personDescription && (
         <section aria-labelledby="about-title" className="space-y-4">
           <h2 id="about-title" className="text-sm font-semibold tracking-[0.02em] text-slate-300">
             About
           </h2>
           <div className="ui-card px-5 py-5 sm:px-6">
             <div className="prose prose-invert prose-headings:text-slate-100 prose-p:leading-7 prose-a:ui-link max-w-none text-slate-300">
-              <Markdown content={person.description} />
+              <Markdown content={personDescription} />
             </div>
           </div>
         </section>

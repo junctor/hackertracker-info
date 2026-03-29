@@ -142,9 +142,9 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
 
   people: (c) => ({
     sort_order: 60,
-    title: "Speakers",
+    title: "People",
     href: `/${c.slug}/people`,
-    description: "Speaker profiles and sessions.",
+    description: "People and their sessions.",
     icon: UserIcon,
   }),
 

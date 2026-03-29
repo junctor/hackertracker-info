@@ -98,7 +98,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   if (isIdInvalid) return <ErrorScreen msg="Invalid person id." />;
 
   let pageTitle = `People | ${conf.name}`;
-  let pageDescription = `Speaker profiles and sessions for ${conf.name}.`;
+  let pageDescription = `People and their sessions at ${conf.name}.`;
   let pageContent: ReactElement;
 
   if (shouldLoadDetails) {

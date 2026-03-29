@@ -76,7 +76,9 @@ export async function getStoredManifest(confKey: string): Promise<StoredManifest
   const db = await openDb();
   return new Promise((resolve, reject) => {
     const req = db.transaction("manifests", "readonly").objectStore("manifests").get(confKey);
-    req.addEventListener("success", () => resolve((req.result as StoredManifest | undefined) ?? null));
+    req.addEventListener("success", () =>
+      resolve((req.result as StoredManifest | undefined) ?? null),
+    );
     req.addEventListener("error", () => reject(req.error));
   });
 }

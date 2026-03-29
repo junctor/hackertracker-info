@@ -143,7 +143,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                         </h3>
                         <ArrowRightIcon
                           aria-hidden="true"
-                          className="mt-0.5 h-5 w-5 shrink-0 text-[var(--event-color)] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-slate-200"
+                          className="mt-0.5 h-5 w-5 shrink-0 text-(--event-color) transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-slate-200"
                         />
                       </div>
 

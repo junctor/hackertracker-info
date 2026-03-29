@@ -1,3 +1,4 @@
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useState, useMemo, type CSSProperties } from "react";
 
@@ -16,6 +17,9 @@ export default function ContentList({ content, tags, conference }: Props) {
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<number | null>(null);
   const normalizedSearch = search.trim().toLowerCase();
+  const headerAccentStyle = {
+    "--event-color": "#64748b",
+  } as CSSProperties;
 
   const filtered = useMemo(() => {
     const result: ContentCardsView = [];
@@ -48,7 +52,13 @@ export default function ContentList({ content, tags, conference }: Props) {
   return (
     <section className="ui-container ui-section">
       <SearchHeader
-        title="Content"
+        title={
+          <div style={headerAccentStyle} className="relative min-w-0 py-1 pl-5 sm:pl-6">
+            <span aria-hidden="true" className="ui-accent-rail top-1 bottom-1" />
+            <span aria-hidden="true" className="ui-accent-rail-overlay top-1 bottom-1" />
+            <h1 className="ui-heading-1">Content</h1>
+          </div>
+        }
         searchLabel="Search content"
         searchPlaceholder="Search content..."
         searchValue={search}
@@ -105,53 +115,65 @@ export default function ContentList({ content, tags, conference }: Props) {
         </div>
       ) : (
         <ul className="space-y-3 leading-relaxed sm:space-y-4">
-          {filtered.map((item) => (
-            <li
-              key={item.id}
-              style={
-                {
-                  "--event-color": item.tags[0]?.colorBackground ?? "#9ca3af",
-                } as CSSProperties
-              }
-              className="ui-card ui-card-interactive group relative overflow-hidden"
-            >
-              <span aria-hidden="true" className="ui-accent-rail" />
-              <span aria-hidden="true" className="ui-accent-rail-overlay" />
-              <Link
-                href={`/${conference.slug}/content/?id=${item.id}`}
-                className="ui-focus-ring relative z-10 block rounded-lg py-3 pr-3 pl-4 focus-visible:outline-none sm:py-4 sm:pr-4 sm:pl-5"
+          {filtered.map((item) => {
+            const visibleTags = item.tags.slice(0, 4);
+            const hiddenTagCount = item.tags.length - visibleTags.length;
+
+            return (
+              <li
+                key={item.id}
+                style={
+                  {
+                    "--event-color": item.tags[0]?.colorBackground ?? "#64748b",
+                  } as CSSProperties
+                }
+                className="ui-card ui-card-interactive group relative overflow-hidden"
               >
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="line-clamp-2 text-base font-semibold text-slate-100 transition-colors group-hover:text-white sm:text-lg">
-                    {item.title}
-                  </h3>
-                  <span
-                    aria-hidden="true"
-                    className="shrink-0 text-lg transition-colors group-hover:text-slate-300 sm:text-xl"
-                    style={{
-                      color: item.tags[0]?.colorBackground ?? "#fff",
-                    }}
-                  >
-                    &rarr;
-                  </span>
-                </div>
-                <ul className="m-0 mt-2.5 flex list-none flex-wrap gap-1.5 p-0 sm:mt-3 sm:gap-2">
-                  {item.tags.map((tag) => (
-                    <li
-                      key={tag.id}
-                      className="ui-tag-chip sm:text-xs"
-                      style={{
-                        backgroundColor: tag.colorBackground,
-                        color: tag.colorForeground ?? "#fff",
-                      }}
-                    >
-                      {tag.label}
-                    </li>
-                  ))}
-                </ul>
-              </Link>
-            </li>
-          ))}
+                <span aria-hidden="true" className="ui-accent-rail" />
+                <span aria-hidden="true" className="ui-accent-rail-overlay" />
+                <Link
+                  href={`/${conference.slug}/content/?id=${item.id}`}
+                  className="ui-focus-ring relative z-10 block rounded-[inherit] px-4 py-4 pl-5 focus-visible:outline-none sm:px-5 sm:py-5 sm:pl-6"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="min-w-0 flex-1 space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="line-clamp-2 text-base leading-6 font-semibold text-slate-100 transition-colors group-hover:text-white sm:text-lg">
+                          {item.title}
+                        </h3>
+                        <ArrowRightIcon
+                          aria-hidden="true"
+                          className="mt-0.5 h-5 w-5 shrink-0 text-[var(--event-color)] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-slate-200"
+                        />
+                      </div>
+
+                      {visibleTags.length > 0 && (
+                        <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+                          {visibleTags.map((tag) => (
+                            <li
+                              key={tag.id}
+                              className="ui-tag-chip sm:text-xs"
+                              style={{
+                                backgroundColor: tag.colorBackground,
+                                color: tag.colorForeground ?? "#fff",
+                              }}
+                            >
+                              {tag.label}
+                            </li>
+                          ))}
+                          {hiddenTagCount > 0 && (
+                            <li className="ui-tag-chip bg-white/3 text-slate-300 sm:text-xs">
+                              +{hiddenTagCount} more
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>

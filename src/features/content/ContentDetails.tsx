@@ -1,6 +1,6 @@
 import { ShareIcon, UserIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { useMemo, type CSSProperties } from "react";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 import type {
@@ -59,11 +59,13 @@ export default function ContentDetails(props: Props) {
     return earliest;
   }, [sessions]);
 
-  const barStyle = {
-    "--event-color": primarySession?.color ?? "#9ca3af",
-  } as React.CSSProperties;
+  const accentStyle = {
+    "--event-color": primarySession?.color ?? "#64748b",
+  } as CSSProperties;
 
   const canShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
+  const canCopyToClipboard =
+    typeof navigator !== "undefined" && typeof navigator.clipboard?.writeText === "function";
 
   const handleShare = async () => {
     const url = `${contentsBasePath}?id=${content.id}`;
@@ -78,6 +80,9 @@ export default function ContentDetails(props: Props) {
     }
 
     try {
+      if (!canCopyToClipboard || typeof window === "undefined") {
+        return;
+      }
       await navigator.clipboard.writeText(new URL(url, window.location.origin).toString());
     } catch {
       console.error("Copy link failed");
@@ -86,64 +91,49 @@ export default function ContentDetails(props: Props) {
 
   return (
     <div className="ui-container ui-page-content space-y-10">
-      {/* Title block (bar only here) */}
-      <header style={barStyle} className="flex items-start justify-between gap-4">
-        <div className="relative min-w-0 pl-5">
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute top-1 bottom-1 left-0 w-[clamp(0.3rem,2vw,0.9rem)] rounded-r-md bg-(--event-color)"
-          />
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute top-1 bottom-1 left-0 w-[clamp(0.3rem,2vw,0.9rem)] rounded-r-md bg-linear-to-b from-white/0 to-indigo-600/20 opacity-60 mix-blend-multiply"
-          />
-
+      <header className="flex items-start justify-between gap-4 sm:gap-5">
+        <div style={accentStyle} className="relative min-w-0 flex-1 py-1 pl-5 sm:pl-6">
+          <span aria-hidden="true" className="ui-accent-rail top-1 bottom-1" />
+          <span aria-hidden="true" className="ui-accent-rail-overlay top-1 bottom-1" />
           <h1 className="ui-heading-1">{content.title}</h1>
         </div>
 
-        <div className="shrink-0">
-          <button
-            type="button"
-            onClick={handleShare}
-            aria-label="Share content link"
-            className="ui-focus-ring rounded-md p-2 text-slate-400 transition hover:text-slate-200 focus-visible:outline-none"
-          >
-            <ShareIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleShare}
+          aria-label="Share content link"
+          className="ui-icon-btn ui-focus-ring shrink-0 self-start focus-visible:outline-none"
+        >
+          <ShareIcon className="h-5 w-5" aria-hidden="true" />
+        </button>
       </header>
 
-      {/* Sessions */}
       {sessions.length > 0 && (
-        <section aria-labelledby="sessions-title">
-          <h2 id="sessions-title" className="ui-heading-2 mb-4">
+        <section aria-labelledby="sessions-title" className="space-y-4">
+          <h2 id="sessions-title" className="ui-heading-2">
             Sessions
           </h2>
-
           <ul className="space-y-4">
             {sessions.map((s) => (
               <ContentSession
                 key={s.id}
-                conferenceSlug={conference.slug}
+                conference={conference}
                 session={s}
-                content={content}
+                contentEntity={content}
                 isBookmarked={bookmarkSet.has(s.id)}
                 locationName={locationNameById.get(s.locationId)}
-                timezone={conference.timezone}
               />
             ))}
           </ul>
         </section>
       )}
 
-      {/* Tags */}
       {tags.length > 0 && (
-        <section aria-labelledby="tags-title">
-          <h2 id="tags-title" className="sr-only">
+        <section aria-labelledby="tags-title" className="space-y-4">
+          <h2 id="tags-title" className="ui-heading-2">
             Tags
           </h2>
-
-          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+          <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
             {tags.map((tag) => (
               <li key={tag.id}>
                 <Link
@@ -163,10 +153,9 @@ export default function ContentDetails(props: Props) {
         </section>
       )}
 
-      {/* Description */}
       {content.description && (
-        <section aria-labelledby="description-title">
-          <h2 id="description-title" className="ui-heading-2 mb-4">
+        <section aria-labelledby="description-title" className="space-y-4">
+          <h2 id="description-title" className="ui-heading-2">
             Description
           </h2>
           <div className="prose prose-invert max-w-none text-slate-300">
@@ -175,20 +164,19 @@ export default function ContentDetails(props: Props) {
         </section>
       )}
 
-      {/* Links */}
       {content.links && content.links.length > 0 && (
-        <section aria-labelledby="links-title">
-          <h2 id="links-title" className="ui-heading-2 mb-4">
+        <section aria-labelledby="links-title" className="space-y-4">
+          <h2 id="links-title" className="ui-heading-2">
             Links
           </h2>
-          <ul className="space-y-2">
+          <ul className="space-y-2.5">
             {content.links.map((l) => (
-              <li key={l.url} className="group">
+              <li key={l.url}>
                 <a
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ui-focus-ring inline-flex items-center gap-2 text-[#6CCDBB] decoration-[#017FA4]/45 underline-offset-2 transition-colors hover:text-white hover:underline hover:decoration-[#6CCDBB] focus-visible:outline-none"
+                  className="ui-focus-ring inline-flex min-w-0 items-center gap-2 rounded-md px-1 py-1 text-[#6CCDBB] decoration-[#017FA4]/45 underline-offset-2 transition-colors hover:text-white hover:underline hover:decoration-[#6CCDBB] focus-visible:outline-none"
                 >
                   <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                   <span className="truncate">{l.label}</span>
@@ -199,13 +187,12 @@ export default function ContentDetails(props: Props) {
         </section>
       )}
 
-      {/* People */}
       {people.length > 0 && (
-        <section aria-labelledby="people-title">
-          <h2 id="people-title" className="ui-heading-2 mb-4">
+        <section aria-labelledby="people-title" className="space-y-4">
+          <h2 id="people-title" className="ui-heading-2">
             People
           </h2>
-          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+          <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
             {people.map((p) => (
               <li key={p.id}>
                 <Link

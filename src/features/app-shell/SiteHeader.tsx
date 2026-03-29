@@ -106,7 +106,12 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                 </summary>
 
                 <div className="absolute top-full right-0 mt-2.5 w-[min(24rem,calc(100vw-1rem))]">
-                  <div className="ui-card max-h-[min(34rem,calc(100dvh-5rem))] overflow-y-auto overscroll-contain rounded-[1.75rem] border-white/10 bg-slate-950/96 p-2.5 shadow-[0_24px_64px_rgba(0,0,0,0.48)] backdrop-blur-xl">
+                  <div className="ui-card relative max-h-[min(34rem,calc(100dvh-5rem))] overflow-y-auto overscroll-contain rounded-[1.75rem] border border-white/12 bg-slate-950/98 p-3 shadow-[0_20px_48px_rgba(0,0,0,0.42)] backdrop-blur-md">
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/10"
+                    />
+
                     <div className={menuHeaderPanelClassName}>
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className={menuAccentPillClassName}>{pageTitle}</span>
@@ -116,13 +121,13 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                       </div>
                     </div>
 
-                    <ul className="mt-2.5 grid gap-2">
+                    <ul className="mt-2 grid gap-2">
                       {menuItems.map(({ title, href, description, icon: Icon }) => {
                         const isActive = href === activeHref;
                         const itemClassName = `group/item relative flex items-start gap-3 overflow-hidden rounded-[1.35rem] border px-3.5 py-3.5 text-left transition duration-200 ease-out ${focusRingClass} ${
                           isActive
                             ? "border-[#017FA4]/36 bg-[linear-gradient(135deg,rgba(13,41,74,0.86),rgba(15,23,42,0.96))] text-white shadow-[0_14px_34px_rgba(2,6,23,0.24),inset_0_1px_0_rgba(255,255,255,0.06)]"
-                            : "border-transparent bg-transparent text-slate-200 hover:border-white/10 hover:bg-white/4.5 hover:text-slate-50 focus-visible:border-white/10 focus-visible:bg-white/4.5 focus-visible:text-slate-50"
+                            : "border-transparent bg-transparent text-slate-200 hover:border-white/10 hover:bg-white/6 hover:text-slate-50 focus-visible:border-white/10 focus-visible:bg-white/6 focus-visible:text-slate-50"
                         }`;
                         const iconClassName = `mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-colors ${
                           isActive
@@ -132,7 +137,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                         const trailingClassName = `mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors ${
                           isActive
                             ? "border-[#017FA4]/26 bg-[#017FA4]/14 text-[#6CCDBB]"
-                            : "border-white/8 bg-white/4.5 text-slate-500 group-hover/item:border-white/12 group-hover/item:bg-white/6 group-hover/item:text-slate-300 group-focus-within/item:border-white/12 group-focus-within/item:bg-white/6 group-focus-within/item:text-slate-300"
+                            : "border-white/8 bg-white/3 text-slate-500 group-hover/item:border-white/12 group-hover/item:bg-white/5 group-hover/item:text-slate-300 group-focus-within/item:border-white/12 group-focus-within/item:bg-white/5 group-focus-within/item:text-slate-300"
                         }`;
 
                         return (

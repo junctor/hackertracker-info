@@ -1,9 +1,9 @@
-import type { ReactNode, Dispatch, SetStateAction } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 
 import { useId } from "react";
 
 type Props = {
-  title: string;
+  title: ReactNode;
   searchLabel: string;
   searchPlaceholder: string;
   searchValue: string;
@@ -21,11 +21,13 @@ export default function SearchHeader({
 }: Props) {
   const hasAuxControl = Boolean(children);
   const searchInputId = useId();
+  const titleContent =
+    typeof title === "string" ? <h1 className="ui-heading-1">{title}</h1> : title;
 
   return (
     <header className="mb-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <h1 className="ui-heading-1">{title}</h1>
+        {titleContent}
         <form
           role="search"
           onSubmit={(e) => e.preventDefault()}

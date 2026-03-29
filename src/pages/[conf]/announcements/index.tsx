@@ -2,7 +2,6 @@ import type { GetStaticProps } from "next";
 
 import Head from "next/head";
 import React from "react";
-import useSWR from "swr";
 
 import AnnouncementsList from "@/features/announcements/AnnouncementsList";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
@@ -10,7 +9,7 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import { ConferenceManifest } from "@/lib/conferences";
-import { fetcher } from "@/lib/misc";
+import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { ArticlesStore } from "@/lib/types/ht-types";
 import { PageId } from "@/lib/types/page-meta";
@@ -25,7 +24,7 @@ export default function AnnouncementsPage({ conf, activePageId }: AnnouncementsP
     data: articles,
     error,
     isLoading,
-  } = useSWR<ArticlesStore>(`${conf.dataRoot}/entities/articles.json`, fetcher);
+  } = useConferenceJson<ArticlesStore>(conf, "entities/articles.json");
 
   if (isLoading) return <LoadingScreen />;
   if (error || !articles) return <ErrorScreen />;

@@ -2,7 +2,6 @@ import type { GetStaticProps } from "next";
 
 import Head from "next/head";
 import React from "react";
-import useSWR from "swr";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
@@ -10,7 +9,7 @@ import SiteFooter from "@/features/app-shell/SiteFooter";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import DocumentsList from "@/features/documents/DocumentsList";
 import { ConferenceManifest } from "@/lib/conferences";
-import { fetcher } from "@/lib/misc";
+import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { DocumentsListView } from "@/lib/types/ht-types";
 import { PageId } from "@/lib/types/page-meta";
@@ -25,7 +24,7 @@ export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps
     data: documents,
     error,
     isLoading,
-  } = useSWR<DocumentsListView>(`${conf.dataRoot}/views/documentsList.json`, fetcher);
+  } = useConferenceJson<DocumentsListView>(conf, "views/documentsList.json");
 
   if (isLoading) return <LoadingScreen />;
   if (error || !documents) return <ErrorScreen />;

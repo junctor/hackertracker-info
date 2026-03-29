@@ -3,7 +3,6 @@ import type { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import React, { useMemo, useState, useCallback, useEffect } from "react";
-import useSWR from "swr";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
@@ -14,8 +13,8 @@ import ScheduleEvents, {
   ScheduleEventViewModel,
 } from "@/features/schedule/ScheduleEvents";
 import { ConferenceManifest } from "@/lib/conferences";
+import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
-import { fetcher } from "@/lib/misc";
 import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { getBookmarks } from "@/lib/storage";
 import {
@@ -31,8 +30,6 @@ type BookmarksPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
-
-const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
 
 type EventViewModelContext = {
   eventsStore: EventsStore;
@@ -150,31 +147,31 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     data: eventsByDay,
     error: eventsByDayError,
     isLoading: eventsByDayLoading,
-  } = useSWR<EventsByDayIndex>(`${conf.dataRoot}/indexes/eventsByDay.json`, fetcher, swrOptions);
+  } = useConferenceJson<EventsByDayIndex>(conf, "indexes/eventsByDay.json");
 
   const {
     data: eventsStore,
     error: eventsError,
     isLoading: eventsLoading,
-  } = useSWR<EventsStore>(`${conf.dataRoot}/entities/events.json`, fetcher, swrOptions);
+  } = useConferenceJson<EventsStore>(conf, "entities/events.json");
 
   const {
     data: locationsStore,
     error: locationsError,
     isLoading: locationsLoading,
-  } = useSWR<LocationsStore>(`${conf.dataRoot}/entities/locations.json`, fetcher, swrOptions);
+  } = useConferenceJson<LocationsStore>(conf, "entities/locations.json");
 
   const {
     data: tagsStore,
     error: tagsError,
     isLoading: tagsLoading,
-  } = useSWR<TagsStore>(`${conf.dataRoot}/entities/tags.json`, fetcher, swrOptions);
+  } = useConferenceJson<TagsStore>(conf, "entities/tags.json");
 
   const {
     data: peopleStore,
     error: peopleError,
     isLoading: peopleLoading,
-  } = useSWR<PeopleStore>(`${conf.dataRoot}/entities/people.json`, fetcher, swrOptions);
+  } = useConferenceJson<PeopleStore>(conf, "entities/people.json");
 
   const loading =
     eventsByDayLoading || eventsLoading || locationsLoading || tagsLoading || peopleLoading;

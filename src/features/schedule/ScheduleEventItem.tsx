@@ -25,7 +25,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
 
   const href = `/${conf.slug}/content/?id=${event.contentId}`;
   const barStyle = {
-    "--event-color": event.color ?? "#fff",
+    "--event-color": event.color ?? "#64748b",
   } as React.CSSProperties;
 
   const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,78 +43,88 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${event.title}`
     : `Add bookmark for ${event.title}`;
+  const visibleTags = event.tags.slice(0, 4);
+  const hiddenTagCount = event.tags.length - visibleTags.length;
 
   return (
     <article
       style={barStyle}
-      className="ui-card ui-card-interactive group relative flex w-full min-w-0 flex-col gap-3 overflow-hidden p-3 sm:p-4"
+      className="ui-card ui-card-interactive group relative w-full min-w-0 overflow-hidden"
     >
       <span aria-hidden="true" className="ui-accent-rail" />
-
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
-      <Link
-        href={href}
-        className="ui-focus-ring relative z-10 flex w-full flex-col gap-3 rounded-lg pl-4 focus-visible:outline-none md:flex-row md:items-start md:gap-5"
-      >
-        <div className="min-w-0 md:w-44">
-          {(isLive || isNext) && (
-            <span
-              className={`mb-1 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] uppercase ${
-                isLive
-                  ? "border-[#E0004E] bg-[#E0004E]/16 text-[#ffb4c9]"
-                  : "border-[#F1B435]/75 bg-[#F1B435]/16 text-[#F1B435]"
-              }`}
-            >
-              {isLive ? "Live" : "Next"}
-            </span>
-          )}
-          <p className="text-sm font-semibold text-slate-100 sm:text-base">
-            <time dateTime={event.beginIso}>{event.beginDisplay}</time>
-          </p>
-          <p className="text-sm text-slate-300/85">
-            <time dateTime={event.endIso}>{event.endDisplay}</time>
-          </p>
-        </div>
+      <div className="relative z-10 flex items-start gap-3 px-4 py-4 pl-5 sm:px-5 sm:py-5 sm:pl-6">
+        <Link
+          href={href}
+          className="ui-focus-ring min-w-0 flex-1 rounded-[inherit] focus-visible:outline-none"
+        >
+          <div className="flex min-w-0 flex-col gap-4 md:flex-row md:items-start md:gap-5">
+            <div className="min-w-0 space-y-1.5 md:w-44 md:shrink-0">
+              {(isLive || isNext) && (
+                <span
+                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] uppercase ${
+                    isLive
+                      ? "border-[#E0004E] bg-[#E0004E]/16 text-[#ffb4c9]"
+                      : "border-[#F1B435]/75 bg-[#F1B435]/16 text-[#F1B435]"
+                  }`}
+                >
+                  {isLive ? "Live" : "Next"}
+                </span>
+              )}
+              <p className="text-sm font-semibold text-slate-100 sm:text-base">
+                <time dateTime={event.beginIso}>{event.beginDisplay}</time>
+              </p>
+              <p className="text-sm text-slate-300/85">
+                <time dateTime={event.endIso}>{event.endDisplay}</time>
+              </p>
+            </div>
 
-        <div className="min-w-0 flex-1">
-          <h3 className="line-clamp-2 text-lg font-semibold text-slate-100 sm:text-xl">
-            {event.title}
-          </h3>
+            <div className="min-w-0 flex-1 space-y-2">
+              <h3 className="line-clamp-2 text-lg leading-7 font-semibold text-slate-100 transition-colors group-hover:text-white sm:text-xl">
+                {event.title}
+              </h3>
 
-          {event.speakers && (
-            <p className="mt-1 line-clamp-2 text-sm text-slate-300 italic">{event.speakers}</p>
-          )}
+              {event.speakers && (
+                <p className="line-clamp-2 text-sm text-slate-300 italic">{event.speakers}</p>
+              )}
 
-          <p className="mt-1 text-sm text-slate-300">{event.locationName}</p>
+              <p className="line-clamp-1 text-sm text-slate-300/90">{event.locationName}</p>
 
-          <ul className="m-0 mt-2 flex list-none flex-wrap gap-1.5 p-0 text-sm uppercase">
-            {event.tags.map((tag) => (
-              <li
-                key={tag.id}
-                className="ui-tag-chip ui-tag-chip-strong"
-                style={{
-                  backgroundColor: tag.colorBackground,
-                  color: tag.colorForeground ?? "#fff",
-                }}
-              >
-                {tag.label}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Link>
+              {visibleTags.length > 0 && (
+                <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+                  {visibleTags.map((tag) => (
+                    <li
+                      key={tag.id}
+                      className="ui-tag-chip ui-tag-chip-strong"
+                      style={{
+                        backgroundColor: tag.colorBackground,
+                        color: tag.colorForeground ?? "#fff",
+                      }}
+                    >
+                      {tag.label}
+                    </li>
+                  ))}
+                  {hiddenTagCount > 0 && (
+                    <li className="ui-tag-chip bg-white/3 text-slate-300">
+                      +{hiddenTagCount} more
+                    </li>
+                  )}
+                </ul>
+              )}
+            </div>
+          </div>
+        </Link>
 
-      <div className="relative z-10 flex justify-end pl-4">
         <button
           type="button"
           onClick={handleBookmarkClick}
           aria-label={bookmarkLabel}
           aria-pressed={bookmark}
-          className="ui-focus-ring ui-icon-btn h-11 w-11 border-transparent bg-transparent text-slate-500 hover:text-[#6CCDBB] focus-visible:outline-none"
+          className="ui-focus-ring ui-icon-btn h-11 w-11 shrink-0 focus-visible:outline-none"
         >
           {bookmark ? (
-            <BookmarkIconSolid className="h-5 w-5 text-[#6CCDBB]" aria-hidden="true" />
+            <BookmarkIconSolid className="h-5 w-5" aria-hidden="true" />
           ) : (
             <BookmarkIconOutline className="h-5 w-5" aria-hidden="true" />
           )}

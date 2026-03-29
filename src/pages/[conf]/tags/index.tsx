@@ -2,7 +2,6 @@ import type { GetStaticProps } from "next";
 
 import Head from "next/head";
 import React from "react";
-import useSWR from "swr";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
@@ -10,7 +9,7 @@ import SiteFooter from "@/features/app-shell/SiteFooter";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import TagsList from "@/features/tags/TagsList";
 import { ConferenceManifest } from "@/lib/conferences";
-import { fetcher } from "@/lib/misc";
+import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { TagTypesBrowseView } from "@/lib/types/ht-types";
 import { PageId } from "@/lib/types/page-meta";
@@ -25,7 +24,7 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
     data: tags,
     error,
     isLoading,
-  } = useSWR<TagTypesBrowseView>(`${conf.dataRoot}/views/tagTypesBrowse.json`, fetcher);
+  } = useConferenceJson<TagTypesBrowseView>(conf, "views/tagTypesBrowse.json");
 
   if (isLoading) return <LoadingScreen />;
   if (error || !tags) return <ErrorScreen />;

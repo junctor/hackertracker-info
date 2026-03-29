@@ -345,7 +345,11 @@ button {
   bottom: 0;
   left: 0;
   width: clamp(0.3rem, 2vw, 0.9rem);
-  transition: width 0.2s ease;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  transition:
+    width 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .group:hover .ui-accent-rail,
@@ -358,9 +362,8 @@ button {
 }
 
 .ui-accent-rail-overlay {
-  background: linear-gradient(to bottom, rgb(255 255 255 / 0), rgb(1 127 164 / 0.16));
-  opacity: 0.6;
-  mix-blend-mode: multiply;
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.16), rgb(1 127 164 / 0.14));
+  opacity: 0.48;
 }
 
 .ui-tag-chip {

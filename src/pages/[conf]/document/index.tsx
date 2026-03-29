@@ -3,7 +3,6 @@ import type { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
-import useSWR from "swr";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
@@ -11,7 +10,7 @@ import SiteFooter from "@/features/app-shell/SiteFooter";
 import SiteHeader from "@/features/app-shell/SiteHeader";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { ConferenceManifest } from "@/lib/conferences";
-import { fetcher } from "@/lib/misc";
+import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { DocumentEntity, DocumentsStore } from "@/lib/types/ht-types/entities";
 import { PageId } from "@/lib/types/page-meta";
@@ -35,16 +34,11 @@ export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps
     return Number.isFinite(parsed) ? parsed : null;
   }, [idParam]);
 
-  const documentsUrl = `${conf.dataRoot}/entities/documents.json`;
   const {
     data: documents,
     error,
     isLoading,
-  } = useSWR<DocumentsStore>(documentsUrl, fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    shouldRetryOnError: false,
-  });
+  } = useConferenceJson<DocumentsStore>(conf, "entities/documents.json");
 
   const selectedDocument = useMemo<DocumentEntity | null>(() => {
     if (docId === null) return null;

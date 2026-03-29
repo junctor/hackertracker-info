@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { JSX, useMemo } from "react";
-import useSWR from "swr";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
@@ -10,7 +9,7 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { ConferenceManifest } from "@/lib/conferences";
-import { fetcher } from "@/lib/misc";
+import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import {
   DerivedTagIdsByLabel,
   OrganizationsCardsView,
@@ -48,27 +47,22 @@ export default function DirectoryPage({
     data: organizations,
     error: organizationsError,
     isLoading: organizationsIsLoading,
-  } = useSWR<OrganizationsCardsView>(`${conf.dataRoot}/views/organizationsCards.json`, fetcher, {
-    revalidateOnFocus: false,
-  });
+  } = useConferenceJson<OrganizationsCardsView>(conf, "views/organizationsCards.json");
 
   const {
     data: derivedTagIdsByLabel,
     error: tagError,
     isLoading: tagIsLoading,
-  } = useSWR<DerivedTagIdsByLabel>(`${conf.dataRoot}/derived/tagIdsByLabel.json`, fetcher, {
-    revalidateOnFocus: false,
-  });
+  } = useConferenceJson<DerivedTagIdsByLabel>(conf, "derived/tagIdsByLabel.json");
 
   const isDetailsRoute = orgId !== null;
   const {
     data: organizationsStore,
     error: organizationsStoreError,
     isLoading: organizationsStoreLoading,
-  } = useSWR<OrganizationsStore>(
-    isDetailsRoute ? `${conf.dataRoot}/entities/organizations.json` : null,
-    fetcher,
-    { revalidateOnFocus: false },
+  } = useConferenceJson<OrganizationsStore>(
+    conf,
+    isDetailsRoute ? "entities/organizations.json" : null,
   );
 
   const selectedOrganization = useMemo(() => {

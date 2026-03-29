@@ -3,7 +3,6 @@ import type { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, type ReactElement } from "react";
-import useSWR from "swr";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
@@ -12,7 +11,7 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import ContentDetails from "@/features/content/ContentDetails";
 import ContentList from "@/features/content/ContentList";
 import { ConferenceManifest } from "@/lib/conferences";
-import { fetcher } from "@/lib/misc";
+import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { getBookmarks } from "@/lib/storage";
 import {
@@ -31,8 +30,6 @@ type ContentsPageProps = {
   activePageId: PageId;
 };
 
-const swrOptions = { revalidateOnFocus: false, revalidateOnReconnect: false };
-
 export default function ContentsPage({ conf, activePageId }: ContentsPageProps) {
   const router = useRouter();
   const {
@@ -49,71 +46,46 @@ export default function ContentsPage({ conf, activePageId }: ContentsPageProps) 
     data: contentCards,
     error: contentCardsError,
     isLoading: contentCardsLoading,
-  } = useSWR<ContentCardsView>(
-    shouldLoadList ? `${conf.dataRoot}/views/contentCards.json` : null,
-    fetcher,
-    swrOptions,
-  );
+  } = useConferenceJson<ContentCardsView>(conf, shouldLoadList ? "views/contentCards.json" : null);
 
   const {
     data: tagTypes,
     error: tagTypesError,
     isLoading: tagTypesLoading,
-  } = useSWR<TagTypesBrowseView>(
-    shouldLoadList ? `${conf.dataRoot}/views/tagTypesBrowse.json` : null,
-    fetcher,
-    swrOptions,
+  } = useConferenceJson<TagTypesBrowseView>(
+    conf,
+    shouldLoadList ? "views/tagTypesBrowse.json" : null,
   );
 
   const {
     data: contentStore,
     error: contentStoreError,
     isLoading: contentStoreLoading,
-  } = useSWR<ContentStore>(
-    shouldLoadDetails ? `${conf.dataRoot}/entities/content.json` : null,
-    fetcher,
-    swrOptions,
-  );
+  } = useConferenceJson<ContentStore>(conf, shouldLoadDetails ? "entities/content.json" : null);
 
   const {
     data: peopleStore,
     error: peopleError,
     isLoading: peopleLoading,
-  } = useSWR<PeopleStore>(
-    shouldLoadDetails ? `${conf.dataRoot}/entities/people.json` : null,
-    fetcher,
-    swrOptions,
-  );
+  } = useConferenceJson<PeopleStore>(conf, shouldLoadDetails ? "entities/people.json" : null);
 
   const {
     data: eventsStore,
     error: eventsError,
     isLoading: eventsLoading,
-  } = useSWR<EventsStore>(
-    shouldLoadDetails ? `${conf.dataRoot}/entities/events.json` : null,
-    fetcher,
-    swrOptions,
-  );
+  } = useConferenceJson<EventsStore>(conf, shouldLoadDetails ? "entities/events.json" : null);
 
   const {
     data: locationsStore,
     error: locationsError,
     isLoading: locationsLoading,
-  } = useSWR<LocationsStore>(
-    shouldLoadDetails ? `${conf.dataRoot}/entities/locations.json` : null,
-    fetcher,
-    swrOptions,
-  );
+  } = useConferenceJson<LocationsStore>(conf, shouldLoadDetails ? "entities/locations.json" : null);
 
   const {
     data: tagsStore,
     error: tagsError,
     isLoading: tagsLoading,
-  } = useSWR<TagsStore>(
-    shouldLoadDetails ? `${conf.dataRoot}/entities/tags.json` : null,
-    fetcher,
-    swrOptions,
-  );
+  } = useConferenceJson<TagsStore>(conf, shouldLoadDetails ? "entities/tags.json" : null);
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 

@@ -55,7 +55,15 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     end: "2026-04-30T15:59:59Z",
 
     dataRoot: "/ht/dcsg2026",
-    siteMenu: ["announcements", "communities", "contests", "readme", "villages"],
+    siteMenu: [
+      "announcements",
+      "communities",
+      "content",
+      "contests",
+      "readme",
+      "schedule",
+      "villages",
+    ],
   },
 
   defcon34: {

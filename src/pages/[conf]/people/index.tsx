@@ -3,7 +3,6 @@ import type { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, type ReactElement } from "react";
-import useSWR from "swr";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
@@ -12,7 +11,7 @@ import SiteHeader from "@/features/app-shell/SiteHeader";
 import PeopleList from "@/features/people/PeopleList";
 import PersonDetails from "@/features/people/PersonDetails";
 import { ConferenceManifest } from "@/lib/conferences";
-import { fetcher } from "@/lib/misc";
+import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { buildConferenceStaticPaths, getConferenceFromParams } from "@/lib/next-static";
 import { EventsStore, LocationsStore, PeopleStore, PersonEntity } from "@/lib/types/ht-types";
 import { PeopleCardsView } from "@/lib/types/ht-types/views";
@@ -40,41 +39,25 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
     data: people,
     error,
     isLoading,
-  } = useSWR<PeopleCardsView>(
-    shouldLoadList ? `${conf.dataRoot}/views/peopleCards.json` : null,
-    fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
-  );
+  } = useConferenceJson<PeopleCardsView>(conf, shouldLoadList ? "views/peopleCards.json" : null);
 
   const {
     data: peopleStore,
     error: peopleError,
     isLoading: peopleLoading,
-  } = useSWR<PeopleStore>(
-    shouldLoadDetails ? `${conf.dataRoot}/entities/people.json` : null,
-    fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
-  );
+  } = useConferenceJson<PeopleStore>(conf, shouldLoadDetails ? "entities/people.json" : null);
 
   const {
     data: events,
     error: eventsError,
     isLoading: eventsLoading,
-  } = useSWR<EventsStore>(
-    shouldLoadDetails ? `${conf.dataRoot}/entities/events.json` : null,
-    fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
-  );
+  } = useConferenceJson<EventsStore>(conf, shouldLoadDetails ? "entities/events.json" : null);
 
   const {
     data: locations,
     error: locationsError,
     isLoading: locationsLoading,
-  } = useSWR<LocationsStore>(
-    shouldLoadDetails ? `${conf.dataRoot}/entities/locations.json` : null,
-    fetcher,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
-  );
+  } = useConferenceJson<LocationsStore>(conf, shouldLoadDetails ? "entities/locations.json" : null);
 
   const person: PersonEntity | null = useMemo(() => {
     if (!peopleStore || personId === null) return null;

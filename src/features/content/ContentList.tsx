@@ -17,9 +17,6 @@ export default function ContentList({ content, tags, conference }: Props) {
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<number | null>(null);
   const normalizedSearch = search.trim().toLowerCase();
-  const headerAccentStyle = {
-    "--event-color": "#64748b",
-  } as CSSProperties;
 
   const filtered = useMemo(() => {
     const result: ContentCardsView = [];
@@ -53,9 +50,7 @@ export default function ContentList({ content, tags, conference }: Props) {
     <section className="ui-container ui-section">
       <SearchHeader
         title={
-          <div style={headerAccentStyle} className="relative min-w-0 py-1 pl-5 sm:pl-6">
-            <span aria-hidden="true" className="ui-accent-rail top-1 bottom-1" />
-            <span aria-hidden="true" className="ui-accent-rail-overlay top-1 bottom-1" />
+          <div className="min-w-0 py-1">
             <h1 className="ui-heading-1">Content</h1>
           </div>
         }

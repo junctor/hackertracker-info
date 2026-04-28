@@ -351,11 +351,6 @@ button {
     opacity 0.2s ease;
 }
 
-.group:hover .ui-accent-rail,
-.group:hover .ui-accent-rail-overlay {
-  width: clamp(0.4rem, 3vw, 1.1rem);
-}
-
 .ui-accent-rail {
   background: var(--event-color);
 }
@@ -447,6 +442,11 @@ button {
 }
 
 @media (hover: hover) {
+  .group:hover .ui-accent-rail,
+  .group:hover .ui-accent-rail-overlay {
+    width: clamp(0.4rem, 3vw, 1.1rem);
+  }
+
   .ui-card-interactive:hover {
     transform: translateY(-1px);
   }

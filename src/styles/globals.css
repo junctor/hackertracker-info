@@ -313,7 +313,6 @@ button {
 .ui-card-interactive:hover {
   border-color: color-mix(in oklab, var(--accent-primary), transparent 60%);
   background: color-mix(in oklab, var(--color-surface-elevated), transparent 2%);
-  transform: translateY(-1px);
 }
 
 .ui-card-interactive:active {
@@ -448,6 +447,10 @@ button {
 }
 
 @media (hover: hover) {
+  .ui-card-interactive:hover {
+    transform: translateY(-1px);
+  }
+
   .ui-btn-base:hover {
     transform: translateY(-1px);
   }
@@ -460,7 +463,10 @@ button {
 
   .ui-btn-base,
   .ui-card-interactive,
+  .ui-accent-rail,
+  .ui-accent-rail-overlay,
   .ui-icon-btn,
+  .ui-pill-link,
   .ui-link,
   .ui-input-base,
   .ui-skip-link {

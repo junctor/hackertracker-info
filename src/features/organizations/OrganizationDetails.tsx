@@ -68,7 +68,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
               <div className="mt-4">
                 <Link
                   href={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-2 text-sm font-medium text-indigo-100 transition hover:bg-indigo-500/15 focus-visible:ring-2 focus-visible:ring-indigo-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-2 text-sm font-medium text-indigo-100 transition hover:bg-indigo-500/15 focus-visible:outline-none"
                 >
                   <CalendarIcon className="h-4 w-4 text-indigo-300" aria-hidden />
                   <span>View Schedule</span>
@@ -110,7 +110,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex h-full items-center justify-between rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3 transition hover:border-white/20 hover:bg-slate-800/60 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                      className="ui-focus-ring group flex h-full items-center justify-between rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3 transition hover:border-white/20 hover:bg-slate-800/60 focus-visible:outline-none"
                     >
                       <div className="min-w-0">
                         <div className="truncate text-sm font-medium text-slate-100">

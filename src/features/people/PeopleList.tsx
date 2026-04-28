@@ -7,6 +7,8 @@ import SearchHeader from "@/components/ui/SearchHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { PeopleCardsView } from "@/lib/types/ht-types";
 
+type SortMode = "name-asc" | "name-desc";
+
 type Props = {
   people: PeopleCardsView;
   conference: ConferenceManifest;
@@ -80,21 +82,47 @@ function getPersonAccent(name?: string | null): string {
   return PERSON_ACCENT_COLORS[hash % PERSON_ACCENT_COLORS.length] ?? PERSON_ACCENT_COLORS[0];
 }
 
+function highlight(text: string, rawQuery: string) {
+  const q = rawQuery.trim();
+  if (!q) return text;
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if (idx === -1) return text;
+
+  return (
+    <>
+      {text.slice(0, idx)}
+      <mark className="rounded bg-[#F1B435]/20 px-0.5 text-[#F1B435]">
+        {text.slice(idx, idx + q.length)}
+      </mark>
+      {text.slice(idx + q.length)}
+    </>
+  );
+}
+
 export default function PeopleList({ people, conference }: Props) {
   const [query, setQuery] = useState("");
+  const [sortMode, setSortMode] = useState<SortMode>("name-asc");
   const [brokenAvatarIds, setBrokenAvatarIds] = useState<Record<number, true>>({});
+  const collator = useMemo(() => new Intl.Collator(undefined, { sensitivity: "base" }), []);
   const trimmedQuery = query.trim();
   const filtered = useMemo(() => {
     const q = trimmedQuery.toLowerCase();
-    if (!q) return people;
+    const base = q
+      ? people.filter((person) => {
+          const personName = getDisplayName(person.name).toLowerCase();
+          const personTitle = getDisplayTitle(person.title)?.toLowerCase() ?? "";
+          return personName.includes(q) || personTitle.includes(q);
+        })
+      : [...people];
 
-    return people.filter((person) => {
-      const personName = getDisplayName(person.name).toLowerCase();
-      const personTitle = getDisplayTitle(person.title)?.toLowerCase() ?? "";
-      return personName.includes(q) || personTitle.includes(q);
+    base.sort((a, b) => {
+      const cmp = collator.compare(getDisplayName(a.name), getDisplayName(b.name));
+      return sortMode === "name-asc" ? cmp : -cmp;
     });
-  }, [people, trimmedQuery]);
-  const showResultCount = trimmedQuery.length > 0;
+
+    return base;
+  }, [people, trimmedQuery, sortMode, collator]);
+  const hasSearch = trimmedQuery.length > 0;
   const resultCountLabel = `${filtered.length} ${filtered.length === 1 ? "person" : "people"}`;
 
   return (
@@ -105,8 +133,20 @@ export default function PeopleList({ people, conference }: Props) {
         searchPlaceholder="Search people..."
         searchValue={query}
         onSearchChange={setQuery}
-      />
-      {showResultCount ? (
+      >
+        <label className="block w-full">
+          <span className="sr-only">Sort people</span>
+          <select
+            value={sortMode}
+            onChange={(e) => setSortMode(e.currentTarget.value as SortMode)}
+            className="ui-input-base ui-focus-ring focus-visible:outline-none"
+          >
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+          </select>
+        </label>
+      </SearchHeader>
+      {hasSearch ? (
         <p
           role="status"
           aria-live="polite"
@@ -203,7 +243,7 @@ export default function PeopleList({ people, conference }: Props) {
 
                       <div className="min-w-0 flex-1 space-y-1">
                         <h2 className="text-[1rem] leading-6 font-semibold tracking-[-0.01em] text-slate-100 transition-colors group-hover:text-white">
-                          <span className="line-clamp-2">{personName}</span>
+                          <span className="line-clamp-2">{highlight(personName, query)}</span>
                         </h2>
                         {personTitle ? (
                           <p className="line-clamp-2 text-sm leading-5 text-slate-400">

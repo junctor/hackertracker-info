@@ -273,18 +273,18 @@ export default function ScheduleEvents({
   const utilityLinkBaseClassName =
     "ui-btn-base ui-focus-ring group min-h-10 gap-2 rounded-xl border px-3 text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] focus-visible:outline-none max-[320px]:w-10 max-[320px]:justify-center max-[320px]:px-0";
   const activeFilterClassName =
-    "border-[#017FA4]/45 bg-neutral-900/90 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
+    "border-[#017FA4]/45 bg-[color-mix(in_oklab,var(--color-surface-elevated),transparent_8%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
   const inactiveFilterClassName =
     "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/14 hover:bg-white/[0.05] hover:text-slate-100";
   const utilityIconBaseClassName = "h-4.5 w-4.5 shrink-0 transition-colors";
   const activeUtilityIconClassName = "text-[#6CCDBB]";
   const inactiveUtilityIconClassName = "text-slate-400 group-hover:text-slate-200";
   const dayTabTrayClassName =
-    "rounded-[1.2rem] border border-white/10 bg-neutral-900/70 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]";
+    "rounded-[1.2rem] border border-white/10 bg-[color-mix(in_oklab,var(--color-surface),transparent_18%)] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]";
   const dayTabBaseClassName =
     "ui-focus-ring group relative flex min-h-11 items-center gap-2 rounded-[0.95rem] border px-3.5 py-2 text-sm whitespace-nowrap transition duration-200 ease-out focus-visible:outline-none";
   const activeDayTabClassName =
-    "border-[#017FA4]/45 bg-neutral-900/95 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
+    "border-[#017FA4]/45 bg-[color-mix(in_oklab,var(--color-surface-elevated),transparent_8%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
   const inactiveDayTabClassName =
     "border-transparent bg-transparent text-slate-300 hover:border-white/10 hover:bg-white/[0.05] hover:text-slate-100";
   const activeDayCountClassName =
@@ -306,7 +306,7 @@ export default function ScheduleEvents({
   );
 
   return (
-    <div className="bg-neutral-950 text-slate-100">
+    <div className="bg-[var(--color-bg)] text-slate-100">
       <div className="ui-container flex justify-end py-3">
         <nav aria-label="Schedule tools">
           <div className="flex items-center gap-2">
@@ -353,7 +353,7 @@ export default function ScheduleEvents({
 
       <div
         ref={stickyTabsRef}
-        className="ui-topbar sticky z-40 border-y border-white/8 bg-neutral-950/95 shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+        className="ui-topbar sticky z-40 border-y border-white/8 bg-[color-mix(in_oklab,var(--color-bg),transparent_5%)] shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
         style={stickyTabsTopStyle}
       >
         <div className="ui-container py-2.5">

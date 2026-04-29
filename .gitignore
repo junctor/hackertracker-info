@@ -10,8 +10,6 @@ node_modules/
 
 # framework/build artifacts
 dist/
-.next/
-out/
 
 # production
 /build
@@ -39,3 +37,6 @@ yarn-error.log*
 
 # Ignore exported HT static files
 public/ht
+
+# Local static data export staging
+out/

@@ -470,6 +470,11 @@ button {
   backdrop-filter: blur(8px);
 }
 
+.ui-schedule-page-shell > .ui-topbar,
+.ui-schedule-day-tabs {
+  background: var(--color-bg);
+}
+
 .ui-muted {
   color: var(--color-muted);
 }

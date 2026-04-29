@@ -155,7 +155,7 @@ export default function ScheduleEvents({
     if (!siteHeader) return;
 
     const updateSiteHeaderHeight = () => {
-      setSiteHeaderHeight(Math.ceil(siteHeader.getBoundingClientRect().height));
+      setSiteHeaderHeight(siteHeader.getBoundingClientRect().height);
     };
 
     updateSiteHeaderHeight();
@@ -353,7 +353,7 @@ export default function ScheduleEvents({
 
       <div
         ref={stickyTabsRef}
-        className="ui-topbar sticky z-40 border-y border-white/8 bg-[color-mix(in_oklab,var(--color-bg),transparent_5%)] shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+        className="ui-topbar ui-schedule-day-tabs sticky z-40 border-y border-white/8 shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
         style={stickyTabsTopStyle}
       >
         <div className="ui-container py-2.5">

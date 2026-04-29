@@ -140,7 +140,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
           content={`Full ${conf.name} schedule of sessions, talks, and events.`}
         />
       </Head>
-      <div className="ui-page-shell">
+      <div className="ui-page-shell ui-schedule-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
         <main id="main-content" className="ui-page-main">
           <h1 className="sr-only">Schedule</h1>

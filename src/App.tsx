@@ -19,6 +19,7 @@ const ContentPage = lazy(() => import("@/routes/conference/ContentPage"));
 const DepartmentsPage = lazy(() => import("@/routes/conference/DepartmentsPage"));
 const DocumentPage = lazy(() => import("@/routes/conference/DocumentPage"));
 const ExhibitorsPage = lazy(() => import("@/routes/conference/ExhibitorsPage"));
+const LocationsPage = lazy(() => import("@/routes/conference/LocationsPage"));
 const MenuPage = lazy(() => import("@/routes/conference/MenuPage"));
 const PeoplePage = lazy(() => import("@/routes/conference/PeoplePage"));
 const ReadmePage = lazy(() => import("@/routes/conference/ReadmePage"));
@@ -89,7 +90,7 @@ export default function App() {
             {conferenceRoute("departments", DepartmentsPage, "departments")}
             {conferenceRoute("document", DocumentPage, "document")}
             {conferenceRoute("exhibitors", ExhibitorsPage, "exhibitors")}
-            {conferenceRoute("locations", NotFound, "home")}
+            {conferenceRoute("locations", LocationsPage, "locations")}
             {conferenceRoute("menu", MenuPage, "home")}
             {conferenceRoute("people", PeoplePage, "people")}
             {conferenceRoute("readme.nfo", ReadmePage, "readme")}

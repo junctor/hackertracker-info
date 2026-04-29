@@ -67,7 +67,7 @@ export type LocationEntity = {
   id: number;
   name: string;
   parentId: number;
-  short_name: string;
+  shortName: string;
 };
 export type LocationsStore = {
   allIds: Array<number>;

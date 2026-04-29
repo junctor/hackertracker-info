@@ -12,6 +12,20 @@ function setAttributes(element: HTMLElement, props: Record<string, unknown>) {
   }
 }
 
+function getTextContent(node: React.ReactNode): string {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number" || typeof node === "bigint") {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    return node.map(getTextContent).join("");
+  }
+  if (React.isValidElement<{ children?: React.ReactNode }>(node)) {
+    return getTextContent(node.props.children);
+  }
+  return "";
+}
+
 export default function Head({ children }: HeadProps) {
   useEffect(() => {
     document.head.querySelectorAll("[data-router-head]").forEach((node) => node.remove());
@@ -20,7 +34,7 @@ export default function Head({ children }: HeadProps) {
       if (!React.isValidElement<Record<string, unknown>>(child)) return;
 
       if (child.type === "title") {
-        document.title = String(child.props.children ?? "");
+        document.title = getTextContent(child.props.children as React.ReactNode);
         return;
       }
 

@@ -62,11 +62,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             </Link>
 
             <div className="hidden min-w-0 items-center md:flex">
-              <span className="inline-flex min-w-0 items-center gap-2 truncate rounded-full border border-white/12 bg-white/5 px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-slate-200 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#6CCDBB]"
-                />
+              <span className="inline-flex min-w-0 items-center truncate rounded-full border border-white/12 bg-white/5 px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-slate-200 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
                 <span className="truncate">{pageTitle}</span>
               </span>
             </div>

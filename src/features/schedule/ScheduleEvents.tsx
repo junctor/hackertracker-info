@@ -3,8 +3,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Link } from "react-router";
 import { Virtuoso, type Components, type ItemProps, type ListProps } from "react-virtuoso";
 
-import type { GroupedSchedule, ScheduleEvent } from "@/lib/types/info";
-
 import { ConferenceManifest } from "@/lib/conferences";
 import { eventDayTable, tabDateTitle } from "@/lib/dates";
 
@@ -79,43 +77,6 @@ const VIRTUOSO_COMPONENTS: Components<ScheduleEventViewModel, VirtuosoContext> =
 
 const SITE_HEADER_FALLBACK_HEIGHT_PX = 64;
 const STICKY_HEADING_CLEARANCE_PX = 16;
-
-export function buildScheduleDaysFromGrouped(dateGroup: GroupedSchedule): ScheduleDay[] {
-  return Object.entries(dateGroup)
-    .toSorted(([a], [b]) => a.localeCompare(b))
-    .map(([day, events]) => {
-      const mapped = (events as ScheduleEvent[]).map((event) => {
-        const beginTimestampSeconds = Math.floor(Date.parse(event.begin) / 1000);
-        const endTimestampSeconds = Math.floor(Date.parse(event.end) / 1000);
-        const speakers = event.speakers?.trim();
-
-        return {
-          id: event.id,
-          title: event.title,
-          begin: event.begin,
-          end: event.end,
-          beginTimestampSeconds,
-          endTimestampSeconds,
-          color: event.color ?? "#fff",
-          contentId: event.content_id,
-          locationName: event.location ?? "Unknown location",
-          tags: event.tags.map((tag) => ({
-            id: tag.id,
-            label: tag.label,
-            colorBackground: tag.color_background,
-            colorForeground: tag.color_foreground,
-          })),
-          speakers: speakers && speakers.length > 0 ? speakers : null,
-          beginDisplay: event.beginDisplay,
-          beginIso: event.beginIso,
-          endDisplay: event.endDisplay,
-          endIso: event.endIso,
-        } satisfies ScheduleEventViewModel;
-      });
-
-      return { day, events: mapped };
-    });
-}
 
 export default function ScheduleEvents({
   conf,

@@ -35,6 +35,7 @@ export default defineConfig({
     },
     rules: {
       "react/react-in-jsx-scope": "off",
+      "nextjs/no-img-element": "off",
     },
     env: {
       browser: true,

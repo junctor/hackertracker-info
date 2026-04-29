@@ -1,0 +1,45 @@
+import { fileURLToPath, URL } from "node:url";
+import { defineConfig } from "vite-plus";
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+  staged: {
+    "*": "vp check --fix",
+  },
+  fmt: {
+    sortImports: {
+      groups: [
+        "type-import",
+        ["value-builtin", "value-external"],
+        "type-internal",
+        "value-internal",
+        ["type-parent", "type-sibling", "type-index"],
+        ["value-parent", "value-sibling", "value-index"],
+        "unknown",
+      ],
+    },
+    sortTailwindcss: {
+      functions: ["clsx", "cn"],
+    },
+  },
+  lint: {
+    ignorePatterns: ["out/**", "node_modules/**", "coverage/**", "dist/**"],
+    plugins: ["nextjs", "react", "typescript", "unicorn", "oxc"],
+    categories: {
+      correctness: "error",
+      suspicious: "warn",
+    },
+    rules: {
+      "react/react-in-jsx-scope": "off",
+    },
+    env: {
+      browser: true,
+      node: true,
+    },
+    options: {},
+  },
+});

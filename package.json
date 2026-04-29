@@ -5,15 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "vp build",
+    "build": "tsc -b && vp build",
     "postbuild": "node scripts/generate-static-routes.mjs",
-    "preview": "vp preview",
-    "start": "vp preview",
+    "check": "vp check",
     "lint": "vp lint",
-    "lint:fix": "vp lint --fix",
-    "format": "vp fmt --write .",
-    "format:check": "vp fmt --check .",
-    "prepare": "vp config"
+    "fmt": "vp fmt",
+    "fmt:check": "vp fmt --check",
+    "preview": "vp preview"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

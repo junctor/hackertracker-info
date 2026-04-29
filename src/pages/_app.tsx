@@ -8,6 +8,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig
       value={{
+        dedupingInterval: 60_000,
+        keepPreviousData: true,
+        revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         shouldRetryOnError: false,

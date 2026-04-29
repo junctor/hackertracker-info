@@ -8,10 +8,11 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
 import SiteHeader from "@/features/app-shell/SiteHeader";
-import ScheduleEvents, {
-  ScheduleDay,
-  ScheduleEventViewModel,
-} from "@/features/schedule/ScheduleEvents";
+import {
+  filterScheduleDaysByBookmarks,
+  getScheduleDaysFromStores,
+} from "@/features/schedule/scheduleData";
+import ScheduleEvents from "@/features/schedule/ScheduleEvents";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
@@ -31,114 +32,8 @@ type BookmarksPageProps = {
   activePageId: PageId;
 };
 
-type EventViewModelContext = {
-  eventsStore: EventsStore;
-  locationsStore: LocationsStore;
-  tagsStore: TagsStore;
-  peopleStore: PeopleStore;
-  timeFormatter: Intl.DateTimeFormat;
-};
-
 function normalizeId(id: unknown): string {
   return String(id);
-}
-
-function parseTimestampSeconds(value: unknown): number | null {
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return Math.floor(value);
-  }
-
-  if (typeof value === "string") {
-    const parsed = Number(value);
-    if (Number.isFinite(parsed)) {
-      return Math.floor(parsed);
-    }
-  }
-
-  return null;
-}
-
-function parseIsoToTimestampSeconds(value: unknown): number | null {
-  if (typeof value !== "string") {
-    return null;
-  }
-
-  const ms = Date.parse(value);
-  if (Number.isNaN(ms)) {
-    return null;
-  }
-
-  return Math.floor(ms / 1000);
-}
-
-function buildEventViewModel(
-  eventId: string,
-  context: EventViewModelContext,
-): ScheduleEventViewModel | null {
-  const { eventsStore, locationsStore, tagsStore, peopleStore, timeFormatter } = context;
-
-  const event = eventsStore.byId[eventId];
-  if (!event) return null;
-
-  const eventWithMaybeTimestamps = event as typeof event & {
-    beginTimestampSeconds?: unknown;
-    endTimestampSeconds?: unknown;
-  };
-
-  const beginTimestampSeconds =
-    parseTimestampSeconds(eventWithMaybeTimestamps.beginTimestampSeconds) ??
-    parseIsoToTimestampSeconds(event.beginIso) ??
-    parseIsoToTimestampSeconds(event.begin);
-  const endTimestampSeconds =
-    parseTimestampSeconds(eventWithMaybeTimestamps.endTimestampSeconds) ??
-    parseIsoToTimestampSeconds(event.endIso) ??
-    parseIsoToTimestampSeconds(event.end);
-
-  if (beginTimestampSeconds === null || endTimestampSeconds === null) {
-    return null;
-  }
-
-  const beginDate = new Date(beginTimestampSeconds * 1000);
-  const endDate = new Date(endTimestampSeconds * 1000);
-  const locationName =
-    locationsStore.byId[normalizeId(event.locationId)]?.name ?? "Unknown location";
-
-  const tags: ScheduleEventViewModel["tags"] = [];
-  for (const eventTagId of event.tagIds ?? []) {
-    const eventTag = tagsStore.byId[normalizeId(eventTagId)];
-    if (!eventTag) continue;
-    tags.push({
-      id: eventTag.id,
-      label: eventTag.label,
-      colorBackground: eventTag.colorBackground,
-      colorForeground: eventTag.colorForeground,
-    });
-  }
-
-  const speakerIds =
-    event.speakerIds && event.speakerIds.length > 0 ? event.speakerIds : (event.personIds ?? []);
-  const speakers = speakerIds
-    .map((id) => peopleStore.byId[normalizeId(id)]?.name)
-    .filter((name): name is string => Boolean(name))
-    .join(", ");
-
-  return {
-    id: event.id,
-    title: event.title,
-    begin: event.begin,
-    end: event.end,
-    beginDisplay: timeFormatter.format(beginDate),
-    beginIso: beginDate.toISOString(),
-    beginTimestampSeconds,
-    endDisplay: timeFormatter.format(endDate),
-    endIso: endDate.toISOString(),
-    endTimestampSeconds,
-    color: event.color,
-    contentId: event.contentId,
-    locationName,
-    tags,
-    speakers: speakers.length > 0 ? speakers : null,
-  };
 }
 
 export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps) {
@@ -203,73 +98,23 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
       .filter((bookmark): bookmark is number => Number.isFinite(bookmark));
   }, [bookmarks]);
 
-  const timeFormatter = useMemo(
-    () =>
-      new Intl.DateTimeFormat(undefined, {
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZone: conf.timezone ?? undefined,
-      }),
-    [conf.timezone],
-  );
-
-  const days: ScheduleDay[] = useMemo(() => {
-    if (
-      !eventsByDay ||
-      !eventsStore ||
-      !locationsStore ||
-      !tagsStore ||
-      !peopleStore ||
-      bookmarkSet.size === 0
-    ) {
+  const fullScheduleDays = useMemo(() => {
+    if (!eventsByDay || !eventsStore || !locationsStore || !tagsStore || !peopleStore) {
       return [];
     }
-
-    const dayKeys = Object.keys(eventsByDay).toSorted((a, b) => a.localeCompare(b));
-    const result: ScheduleDay[] = [];
-    const eventViewModelContext: EventViewModelContext = {
+    return getScheduleDaysFromStores(conf, {
+      eventsByDay,
       eventsStore,
       locationsStore,
       tagsStore,
       peopleStore,
-      timeFormatter,
-    };
+    });
+  }, [conf, eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore]);
 
-    for (const day of dayKeys) {
-      const ids = eventsByDay[day] ?? [];
-      const events: ScheduleEventViewModel[] = [];
-
-      for (const eventId of ids) {
-        const normalizedEventId = normalizeId(eventId);
-        if (!bookmarkSet.has(normalizedEventId)) continue;
-
-        const eventViewModel = buildEventViewModel(normalizedEventId, eventViewModelContext);
-        if (eventViewModel) {
-          events.push(eventViewModel);
-        }
-      }
-
-      const sortedEvents = events.toSorted((a, b) => {
-        if (a.beginTimestampSeconds !== b.beginTimestampSeconds) {
-          return a.beginTimestampSeconds - b.beginTimestampSeconds;
-        }
-        return a.id - b.id;
-      });
-      if (sortedEvents.length > 0) {
-        result.push({ day, events: sortedEvents });
-      }
-    }
-
-    return result;
-  }, [
-    eventsByDay,
-    eventsStore,
-    locationsStore,
-    tagsStore,
-    peopleStore,
-    bookmarkSet,
-    timeFormatter,
-  ]);
+  const days = useMemo(
+    () => filterScheduleDaysByBookmarks(fullScheduleDays, bookmarkSet),
+    [bookmarkSet, fullScheduleDays],
+  );
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;

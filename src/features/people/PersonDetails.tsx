@@ -16,7 +16,7 @@ type Props = {
   locations: LocationEntity[];
   conference: ConferenceManifest;
 };
-type PersonLinkView = PersonEntity["links"][number] & {
+type PersonLinkView = NonNullable<PersonEntity["links"]>[number] & {
   title: string;
   url: string;
 };
@@ -143,7 +143,7 @@ export default function PersonDetails({ person, events, locations, conference }:
           url: getOptionalText(link.url),
         }))
         .filter((link): link is PersonLinkView => Boolean(link.url))
-        .toSorted((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)),
+        .toSorted((a, b) => a.sort_order - b.sort_order),
     [person.links],
   );
   const contentEntityByEventId = useMemo(() => {

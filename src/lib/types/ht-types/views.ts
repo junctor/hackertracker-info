@@ -65,3 +65,12 @@ export type TagTypeBrowse = {
   }>;
 };
 export type TagTypesBrowseView = Array<TagTypeBrowse>;
+
+export type SearchDataType = "content" | "organization" | "person";
+export type SearchDataItem = {
+  id: number;
+  norm: string;
+  text: string;
+  type: SearchDataType;
+};
+export type SearchDataView = Array<SearchDataItem>;

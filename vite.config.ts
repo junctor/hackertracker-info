@@ -27,15 +27,14 @@ export default defineConfig({
     },
   },
   lint: {
-    ignorePatterns: ["out/**", "node_modules/**", "coverage/**", "dist/**"],
-    plugins: ["nextjs", "react", "typescript", "unicorn", "oxc"],
+    ignorePatterns: ["node_modules/**", "coverage/**", "dist/**"],
+    plugins: ["react", "typescript", "unicorn", "oxc"],
     categories: {
       correctness: "error",
       suspicious: "warn",
     },
     rules: {
       "react/react-in-jsx-scope": "off",
-      "nextjs/no-img-element": "off",
     },
     env: {
       browser: true,

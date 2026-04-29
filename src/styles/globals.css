@@ -1,6 +1,24 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  src: url("/fonts/atkinson-hl.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("/fonts/lato.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Museo";
+  src: url("/fonts/Museo700-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
 :root {
   color-scheme: dark;
 
@@ -61,6 +79,14 @@ body {
   min-height: 100%;
 }
 
+.font-atkinson {
+  font-family: "Atkinson Hyperlegible", "Lato", "Segoe UI", sans-serif;
+}
+
+.font-museo {
+  font-family: "Museo", "Atkinson Hyperlegible", "Lato", "Segoe UI", sans-serif;
+}
+
 html {
   background: var(--color-bg);
 }
@@ -91,6 +117,13 @@ svg,
 video {
   display: block;
   max-width: 100%;
+}
+
+.ui-image-fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 input,

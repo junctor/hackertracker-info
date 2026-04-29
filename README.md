@@ -28,7 +28,7 @@
 
 # Why this exists
 
-DEF CON conference data originates from the HackerTracker ecosystem and related internal sources. This project provides a **fast, static, easily browsable interface** for that data without requiring a runtime API or database.
+DEF CON conference data originates from the Hacker Tracker ecosystem and related internal sources. This project provides a **fast, static, easily browsable interface** for that data without requiring a runtime API or database.
 
 All data is generated ahead of time and served as static JSON files.
 

@@ -8,7 +8,8 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
 import SiteHeader from "@/features/app-shell/SiteHeader";
-import ScheduleEvents, { ScheduleEventViewModel } from "@/features/schedule/ScheduleEvents";
+import { getScheduleDaysFromStores } from "@/features/schedule/scheduleData";
+import ScheduleEvents from "@/features/schedule/ScheduleEvents";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
@@ -26,11 +27,6 @@ import { PageId } from "@/lib/types/page-meta";
 type SchedulePageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
-};
-
-type ScheduleDay = {
-  day: string;
-  events: ScheduleEventViewModel[];
 };
 
 export default function SchedulePage({ conf, activePageId }: SchedulePageProps) {
@@ -69,78 +65,18 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
-  const days: ScheduleDay[] = useMemo(() => {
+  const days = useMemo(() => {
     if (!eventsByDay || !eventsStore || !locationsStore || !tagsStore || !peopleStore) {
       return [];
     }
-
-    const dayKeys = Object.keys(eventsByDay).toSorted();
-    const result: ScheduleDay[] = [];
-    const timeFormatter = new Intl.DateTimeFormat(undefined, {
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: conf.timezone,
+    return getScheduleDaysFromStores(conf, {
+      eventsByDay,
+      eventsStore,
+      locationsStore,
+      tagsStore,
+      peopleStore,
     });
-
-    for (const day of dayKeys) {
-      const ids = eventsByDay[day] ?? [];
-      const events: ScheduleEventViewModel[] = [];
-
-      for (const eventId of ids) {
-        const event = eventsStore.byId[eventId];
-        if (!event) continue;
-
-        const locationName = locationsStore.byId[event.locationId]?.name ?? "Unknown location";
-
-        const tags: ScheduleEventViewModel["tags"] = [];
-        for (const tagId of event.tagIds ?? []) {
-          const tag = tagsStore.byId[tagId];
-          if (!tag) continue;
-          tags.push({
-            id: tag.id,
-            label: tag.label,
-            colorBackground: tag.colorBackground,
-            colorForeground: tag.colorForeground,
-          });
-        }
-
-        const speakerIds =
-          event.speakerIds && event.speakerIds.length > 0
-            ? event.speakerIds
-            : (event.personIds ?? []);
-
-        const speakers = speakerIds
-          .map((id) => peopleStore.byId[id]?.name)
-          .filter((name): name is string => Boolean(name))
-          .join(", ");
-
-        const beginDate = new Date(event.begin);
-        const endDate = new Date(event.end);
-
-        events.push({
-          id: event.id,
-          title: event.title,
-          begin: event.begin,
-          end: event.end,
-          beginDisplay: timeFormatter.format(beginDate),
-          beginIso: beginDate.toISOString(),
-          beginTimestampSeconds: Math.floor(beginDate.getTime() / 1000),
-          endDisplay: timeFormatter.format(endDate),
-          endIso: endDate.toISOString(),
-          endTimestampSeconds: Math.floor(endDate.getTime() / 1000),
-          color: event.color,
-          contentId: event.contentId,
-          locationName,
-          tags,
-          speakers: speakers.length > 0 ? speakers : null,
-        });
-      }
-
-      result.push({ day, events });
-    }
-
-    return result;
-  }, [conf.timezone, eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore]);
+  }, [conf, eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore]);
 
   const daySet = useMemo(() => new Set(days.map((d) => d.day)), [days]);
 

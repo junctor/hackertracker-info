@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
@@ -30,9 +30,9 @@
     "@types/node": "^25.0.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "oxfmt": "^0.36.0",
+    "oxfmt": "^0.47.0",
     "oxlint": "^1.51.0",
     "tailwindcss": "^4.1.6",
-    "typescript": "^5"
+    "typescript": "^6.0.3"
   }
 }

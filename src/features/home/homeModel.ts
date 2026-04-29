@@ -1,4 +1,3 @@
-import localFont from "next/font/local";
 import { useMemo } from "react";
 
 import type { ConferenceManifest } from "@/lib/conferences";
@@ -41,17 +40,15 @@ export const HOME_ACTION_LINK_CLASS_NAME =
 export const HOME_MENU_TILE_CLASS_NAME =
   "ui-card ui-card-interactive ui-focus-ring flex w-full min-w-0 min-h-32 flex-col items-center justify-center gap-2 rounded-2xl px-4 py-5 text-center focus-visible:outline-none";
 
-export const atkinsonFont = localFont({
-  src: "../../../public/fonts/atkinson-hl.woff2",
-  display: "swap",
+export const atkinsonFont = {
+  className: "font-atkinson",
   variable: "--font-atkinson",
-});
+} as const;
 
-export const museoFont = localFont({
-  src: "../../../public/fonts/Museo700-Regular.woff2",
-  display: "swap",
+export const museoFont = {
+  className: "font-museo",
   variable: "--font-museo",
-});
+} as const;
 
 export function parseKickoffDateMs(kickoff: string): number {
   const kickoffDateMs = Date.parse(kickoff);

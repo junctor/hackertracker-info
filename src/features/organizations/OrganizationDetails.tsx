@@ -1,8 +1,8 @@
 import { ArrowTopRightOnSquareIcon, CalendarIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
-import Link from "next/link";
 import { useMemo } from "react";
+import { Link } from "react-router";
 
+import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
 import { ConferenceManifest } from "@/lib/conferences";
 import { OrganizationEntity } from "@/lib/types/ht-types";
@@ -67,7 +67,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
             {org.tagIdAsOrganizer && (
               <div className="mt-4">
                 <Link
-                  href={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
+                  to={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
                   className="ui-focus-ring inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-2 text-sm font-medium text-indigo-100 transition hover:bg-indigo-500/15 focus-visible:outline-none"
                 >
                   <CalendarIcon className="h-4 w-4 text-indigo-300" aria-hidden />

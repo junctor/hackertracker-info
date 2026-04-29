@@ -4,8 +4,8 @@ import {
   MapPinIcon,
 } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import Link from "next/link";
 import { useMemo, type CSSProperties, type MouseEvent } from "react";
+import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 import type { ContentEntity, EventEntity } from "@/lib/types/ht-types";
@@ -85,7 +85,7 @@ function ContentSessionCard({
       <div className="relative z-10 flex flex-col gap-4 px-4 py-4 pl-5 sm:px-5 sm:py-5 sm:pl-6 md:flex-row md:items-start md:justify-between">
         {href ? (
           <Link
-            href={href}
+            to={href}
             className="ui-focus-ring min-w-0 flex-1 rounded-[inherit] focus-visible:outline-none"
           >
             {sessionContent}

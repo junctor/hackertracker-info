@@ -1,6 +1,6 @@
 import { ArrowTopRightOnSquareIcon, ShareIcon, UserIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { useMemo, type CSSProperties } from "react";
+import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 import type {
@@ -151,7 +151,7 @@ export default function ContentDetails(props: Props) {
               {tags.map((tag) => (
                 <li key={tag.id}>
                   <Link
-                    href={`/${conference.slug}/tag?id=${tag.id}`}
+                    to={`/${conference.slug}/tag?id=${tag.id}`}
                     className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                   >
                     <span
@@ -224,7 +224,7 @@ export default function ContentDetails(props: Props) {
               {people.map((p) => (
                 <li key={p.id}>
                   <Link
-                    href={`${peopleBasePath}/?id=${p.id}`}
+                    to={`${peopleBasePath}/?id=${p.id}`}
                     className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                     title={p.name}
                   >

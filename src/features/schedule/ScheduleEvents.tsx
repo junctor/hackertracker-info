@@ -1,6 +1,6 @@
 import { BookmarkIcon, TagIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router";
 import { Virtuoso, type Components, type ItemProps, type ListProps } from "react-virtuoso";
 
 import type { GroupedSchedule, ScheduleEvent } from "@/lib/types/info";
@@ -311,7 +311,7 @@ export default function ScheduleEvents({
         <nav aria-label="Schedule tools">
           <div className="flex items-center gap-2">
             <Link
-              href={`/${conf.slug}/bookmarks`}
+              to={`/${conf.slug}/bookmarks`}
               className={`${utilityLinkBaseClassName} ${
                 isBookmarksFilterActive ? activeFilterClassName : inactiveFilterClassName
               }`}
@@ -332,7 +332,7 @@ export default function ScheduleEvents({
             </Link>
 
             <Link
-              href={`/${conf.slug}/tags`}
+              to={`/${conf.slug}/tags`}
               className={`${utilityLinkBaseClassName} ${
                 isTagsFilterActive ? activeFilterClassName : inactiveFilterClassName
               }`}

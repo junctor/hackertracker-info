@@ -1,7 +1,7 @@
 import { BookmarkIcon as BookmarkIconOutline } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import Link from "next/link";
 import React from "react";
+import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
@@ -56,7 +56,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
 
       <div className="relative z-10 flex items-start gap-3 px-4 py-4 pl-5 sm:px-5 sm:py-5 sm:pl-6">
         <Link
-          href={href}
+          to={href}
           className="ui-focus-ring min-w-0 flex-1 rounded-[inherit] focus-visible:outline-none"
         >
           <div className="flex min-w-0 flex-col gap-4 md:flex-row md:items-start md:gap-5">

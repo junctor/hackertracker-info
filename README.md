@@ -104,7 +104,7 @@ public/
 ```bash
 npm run build
 npm run lint
-npm run format:check
+npm run fmt:check
 ```
 
 ## License

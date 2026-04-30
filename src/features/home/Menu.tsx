@@ -1,7 +1,7 @@
 import { ArrowTopRightOnSquareIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "react-router";
 
+import Image from "@/components/Image";
 import {
   HOME_HERO_LOGO_WRAP_CLASS_NAME,
   HOME_HERO_STACK_CLASS_NAME,
@@ -102,7 +102,7 @@ export default function Menu({ conference }: Props) {
                     {content}
                   </a>
                 ) : (
-                  <Link href={item.href} className={menuCardClassName}>
+                  <Link to={item.href} className={menuCardClassName}>
                     {content}
                   </Link>
                 )}

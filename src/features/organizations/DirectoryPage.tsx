@@ -1,7 +1,6 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
 import { JSX, useMemo } from "react";
 
+import Head from "@/components/Head";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SiteFooter from "@/features/app-shell/SiteFooter";
@@ -35,13 +34,12 @@ export default function DirectoryPage({
   description,
   routeSlug,
 }: Props) {
-  const router = useRouter();
   const {
     value: orgId,
     isReady,
     isMissing: isIdMissing,
     isInvalid: isIdInvalid,
-  } = useNumericQueryParam(router, "id");
+  } = useNumericQueryParam("id");
 
   const {
     data: organizations,

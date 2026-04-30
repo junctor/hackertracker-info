@@ -1,7 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
 import { useMemo, useState } from "react";
+import { Link } from "react-router";
 
+import Image from "@/components/Image";
 import SearchHeader from "@/components/ui/SearchHeader";
 import { alphaSort } from "@/lib/misc";
 import { OrganizationCard } from "@/lib/types/ht-types";
@@ -77,7 +77,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
           {filteredOrganizations.map((organization) => (
             <li key={organization.id} className="h-full">
               <Link
-                href={`${detailsBasePath}?id=${organization.id}`}
+                to={`${detailsBasePath}?id=${organization.id}`}
                 className="ui-focus-ring group block h-full rounded-2xl focus-visible:outline-none"
               >
                 <article className="ui-card ui-card-interactive flex h-full items-center gap-4 rounded-2xl p-4">

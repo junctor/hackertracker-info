@@ -1,8 +1,8 @@
 import { UserIcon } from "@heroicons/react/24/solid";
-import Image from "next/image";
-import Link from "next/link";
 import { useState, useMemo, type CSSProperties } from "react";
+import { Link } from "react-router";
 
+import Image from "@/components/Image";
 import SearchHeader from "@/components/ui/SearchHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { PeopleCardsView } from "@/lib/types/ht-types";
@@ -197,7 +197,7 @@ export default function PeopleList({ people, conference }: Props) {
                   <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
                   <Link
-                    href={`/${conference.slug}/people/?id=${person.id}`}
+                    to={`/${conference.slug}/people/?id=${person.id}`}
                     className="ui-focus-ring relative z-10 block h-full rounded-[inherit] px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
                   >
                     <div className="flex items-center gap-3.5">

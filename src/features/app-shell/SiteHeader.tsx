@@ -4,18 +4,15 @@ import {
   DevicePhoneMobileIcon,
   RocketLaunchIcon,
 } from "@heroicons/react/24/outline";
-import localFont from "next/font/local";
-import Link from "next/link";
+import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { getSiteMenu } from "@/lib/menu";
 import { getPageTitle, PageId } from "@/lib/types/page-meta";
 
-const museoFont = localFont({
-  src: "../../../public/fonts/Museo700-Regular.woff2",
-  display: "swap",
-  variable: "--font-museo",
-});
+const museoFont = {
+  className: "font-museo",
+} as const;
 
 const focusRingClass = "ui-focus-ring focus-visible:outline-none";
 
@@ -41,7 +38,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
         <div className="ui-container flex min-h-16 items-center justify-between gap-3 py-2.5">
           <div className="flex min-w-0 items-center gap-2.5 sm:gap-4">
             <Link
-              href={`/${conference.slug}`}
+              to={`/${conference.slug}`}
               className={`group min-w-0 rounded-xl px-2 py-1.5 transition-colors hover:bg-white/4 ${focusRingClass}`}
             >
               <span className="flex min-w-0 items-center gap-3">
@@ -65,11 +62,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             </Link>
 
             <div className="hidden min-w-0 items-center md:flex">
-              <span className="inline-flex min-w-0 items-center gap-2 truncate rounded-full border border-white/12 bg-white/5 px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-slate-200 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#6CCDBB]"
-                />
+              <span className="inline-flex min-w-0 items-center truncate rounded-full border border-white/12 bg-white/5 px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-slate-200 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
                 <span className="truncate">{pageTitle}</span>
               </span>
             </div>
@@ -132,7 +125,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                         return (
                           <li key={href}>
                             <Link
-                              href={href}
+                              to={href}
                               aria-current={isActive ? "page" : undefined}
                               className={itemClassName}
                             >
@@ -175,7 +168,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             </nav>
 
             <Link
-              href={`/${conference.slug}/apps`}
+              to={`/${conference.slug}/apps`}
               aria-label="Get Hacker Tracker apps"
               aria-current={isAppsPage ? "page" : undefined}
               className={`ui-icon-btn h-11 w-11 rounded-xl border-white/10 bg-white/3 text-slate-300 shadow-[0_10px_28px_rgba(2,6,23,0.18)] transition ${focusRingClass} ${

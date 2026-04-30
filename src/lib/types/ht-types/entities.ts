@@ -67,7 +67,7 @@ export type LocationEntity = {
   id: number;
   name: string;
   parentId: number;
-  short_name: string;
+  shortName: string;
 };
 export type LocationsStore = {
   allIds: Array<number>;
@@ -77,14 +77,14 @@ export type LocationsStore = {
 export type MenuEntity = {
   id: number;
   items: Array<{
-    apple_sfsymbol: string;
+    appleSfSymbol: string;
     appliedTagIds: Array<number>;
     documentId: null | number;
     function: string;
-    google_materialsymbol: string;
+    googleMaterialSymbol: string;
     id: number;
     menuId: null | number;
-    prohibitTagFilter: string;
+    prohibitTagFilter: boolean;
     sortOrder: number;
     titleText: string;
   }>;
@@ -100,7 +100,8 @@ export type OrganizationEntity = {
   name: string;
   description: string;
   logoUrl?: string;
-  tagIdAsOrganizer?: number;
+  tagIdAsOrganizer: null | number;
+  tagIds: Array<number>;
   links: Array<{
     label: string;
     type: string;
@@ -117,10 +118,10 @@ export type PersonEntity = {
     organization: string;
     title: string;
   }[];
-  links: {
-    sortOrder: number;
+  links?: {
+    sort_order: number;
     title: string;
-    description: string | null;
+    description: string;
     url: string;
   }[];
   description?: string;

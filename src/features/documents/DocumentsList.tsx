@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
+import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { DocumentsListView } from "@/lib/types/ht-types";
@@ -21,7 +21,7 @@ export default function DocumentsList({
         {documents.map((doc) => (
           <li key={doc.id}>
             <Link
-              href={`/${conference.slug}/document/?id=${doc.id}`}
+              to={`/${conference.slug}/document/?id=${doc.id}`}
               className="ui-focus-ring ui-card ui-card-interactive flex items-start justify-between gap-3 p-4 focus-visible:outline-none sm:items-center sm:p-5"
             >
               <div className="min-w-0">

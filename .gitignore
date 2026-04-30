@@ -8,9 +8,8 @@ node_modules/
 # testing
 /coverage
 
-# next.js
-.next/
-out/
+# framework/build artifacts
+dist/
 
 # production
 /build
@@ -26,7 +25,9 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
-.env*.local
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -36,3 +37,6 @@ yarn-error.log*
 
 # Ignore exported HT static files
 public/ht
+
+# Local static data export staging
+out/

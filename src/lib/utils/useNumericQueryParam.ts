@@ -1,5 +1,5 @@
-import { NextRouter } from "next/router";
 import { useMemo } from "react";
+import { useSearchParams } from "react-router";
 
 export type NumericQueryParamState = {
   value: number | null;
@@ -8,27 +8,17 @@ export type NumericQueryParamState = {
   isInvalid: boolean;
 };
 
-export default function useNumericQueryParam(
-  router: NextRouter,
-  key: string,
-): NumericQueryParamState {
-  return useMemo(() => {
-    if (!router.isReady) {
-      return {
-        value: null,
-        isReady: false,
-        isMissing: false,
-        isInvalid: false,
-      };
-    }
+export default function useNumericQueryParam(key: string): NumericQueryParamState {
+  const [searchParams] = useSearchParams();
 
-    const rawValue = router.query[key];
-    if (rawValue === undefined) {
+  return useMemo(() => {
+    const rawValue = searchParams.get(key);
+    if (rawValue === null) {
       return { value: null, isReady: true, isMissing: true, isInvalid: false };
     }
 
-    const value = Array.isArray(rawValue) ? (rawValue[0] ?? "") : rawValue;
-    if (typeof value !== "string" || value.trim() === "") {
+    const value = rawValue.trim();
+    if (value === "") {
       return { value: null, isReady: true, isMissing: true, isInvalid: false };
     }
 
@@ -43,5 +33,5 @@ export default function useNumericQueryParam(
       isMissing: false,
       isInvalid: false,
     };
-  }, [router.isReady, router.query, key]);
+  }, [key, searchParams]);
 }

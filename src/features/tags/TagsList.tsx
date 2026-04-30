@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { useMemo } from "react";
+import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { TagTypesBrowseView } from "@/lib/types/ht-types";
@@ -24,7 +24,7 @@ type TagsListProps = {
 function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceManifest }) {
   return (
     <Link
-      href={`/${conference.slug}/tag?id=${tag.id}`}
+      to={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
       className="ui-focus-ring inline-flex rounded-full border border-white/10 px-3 py-1 text-sm font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition hover:border-[#017FA4]/70 focus-visible:outline-none"
       style={{

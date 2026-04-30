@@ -15,7 +15,7 @@ import { type ConferenceManifest } from "@/lib/conferences";
  *   - The SWR key is the full URL so different hooks requesting the same file
  *     on the same page share one SWR cache entry and one in-flight request.
  *
- * @param conf         Conference manifest from `getStaticProps`.
+ * @param conf         Conference manifest from the active route.
  * @param relativePath Path relative to `conf.dataRoot`, e.g. `"entities/events.json"`.
  *                     Pass `null` to suspend fetching.
  * @param options      Optional SWR configuration overrides.

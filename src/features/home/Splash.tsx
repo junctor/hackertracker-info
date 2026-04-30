@@ -1,8 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { Link, useNavigate } from "react-router";
 
+import Image from "@/components/Image";
 import Countdown from "@/features/home/Countdown";
 import {
   hasKickoffPassed,
@@ -20,21 +19,21 @@ type Props = {
 };
 
 export default function Splash({ conference }: Props) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const home = useHomeModel(conference);
   const hasKickoffStarted = hasKickoffPassed(home.kickoffDateMs);
 
   useEffect(() => {
     const redirectIfLive = () => {
       if (hasKickoffPassed(home.kickoffDateMs)) {
-        router.replace(home.menuHref);
+        navigate(home.menuHref, { replace: true });
       }
     };
 
     redirectIfLive();
     const intervalId = setInterval(redirectIfLive, 60_000);
     return () => clearInterval(intervalId);
-  }, [home.kickoffDateMs, home.menuHref, router]);
+  }, [home.kickoffDateMs, home.menuHref, navigate]);
 
   return (
     <section className={HOME_SECTION_CLASS_NAME}>
@@ -42,7 +41,7 @@ export default function Splash({ conference }: Props) {
         <h1 className="sr-only">{conference.name}</h1>
         <div className={HOME_HERO_LOGO_WRAP_CLASS_NAME}>
           <Link
-            href={home.menuHref}
+            to={home.menuHref}
             className="ui-focus-ring block h-full w-full rounded-md focus-visible:outline-none"
           >
             <Image
@@ -62,7 +61,7 @@ export default function Splash({ conference }: Props) {
           {conference.dateLabel}
         </time>
 
-        <Link href={home.menuHref} className={HOME_ACTION_LINK_CLASS_NAME}>
+        <Link to={home.menuHref} className={HOME_ACTION_LINK_CLASS_NAME}>
           View Menu
         </Link>
 

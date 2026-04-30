@@ -9,6 +9,7 @@ export type PageId =
   | "departments"
   | "document"
   | "exhibitors"
+  | "locations"
   | "organization"
   | "people"
   | "person"
@@ -31,6 +32,7 @@ export const PAGE_META: Record<PageId, { title: string }> = {
   departments: { title: "Departments" },
   document: { title: "Document" },
   exhibitors: { title: "Exhibitors" },
+  locations: { title: "Locations" },
   organization: { title: "Organizations" },
   people: { title: "People" },
   person: { title: "Person" },

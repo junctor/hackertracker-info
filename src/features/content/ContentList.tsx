@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { useState, useMemo, type CSSProperties } from "react";
+import { Link } from "react-router";
 
 import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 
@@ -128,7 +128,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                 <span aria-hidden="true" className="ui-accent-rail" />
                 <span aria-hidden="true" className="ui-accent-rail-overlay" />
                 <Link
-                  href={`/${conference.slug}/content/?id=${item.id}`}
+                  to={`/${conference.slug}/content/?id=${item.id}`}
                   className="ui-focus-ring relative z-10 block rounded-[inherit] px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
                 >
                   <div className="flex min-w-0 items-start gap-3 sm:gap-4">

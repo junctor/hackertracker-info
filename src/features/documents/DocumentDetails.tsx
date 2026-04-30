@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
+import { Link } from "react-router";
 
 import Markdown from "@/components/markdown/Markdown";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -26,7 +26,7 @@ export default function DocumentDetails({ document, conference }: Props) {
         <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
           <li>
             <Link
-              href={`/${conference.slug}/readme.nfo`}
+              to={`/${conference.slug}/readme.nfo`}
               className="ui-link ui-focus-ring flex items-center rounded focus-visible:outline-none"
             >
               readme.nfo

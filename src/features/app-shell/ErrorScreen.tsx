@@ -1,5 +1,5 @@
 import { ExclamationTriangleIcon, HomeIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
+import { Link } from "react-router";
 
 type Props = {
   msg?: string;
@@ -53,7 +53,7 @@ export default function ErrorScreen({ msg }: Props) {
 
           <div className="mt-7 flex justify-center">
             <Link
-              href="/"
+              to="/"
               className="ui-btn-base ui-btn-secondary ui-focus-ring inline-flex min-w-44 gap-2 rounded-xl px-4 shadow-[0_10px_24px_rgba(2,6,23,0.18)] focus-visible:outline-none"
             >
               <HomeIcon className="h-5 w-5" aria-hidden="true" />

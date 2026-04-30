@@ -56,11 +56,17 @@ async function sanitizeGeneratedAssets() {
 }
 
 const generated = ["index.html"];
+const topLevelRouteSegments = ["tv"];
 
 await sanitizeGeneratedAssets();
 
 await copyFile(entry, path.join(outDir, "404.html"));
 generated.push("404.html");
+
+for (const segment of topLevelRouteSegments) {
+  await copyEntryToRoute(segment);
+  generated.push(`${segment}/index.html`);
+}
 
 for (const conference of Object.values(CONFERENCES)) {
   for (const segment of conferenceRouteSegments) {

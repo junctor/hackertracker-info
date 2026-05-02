@@ -24,10 +24,10 @@ export const COUNTDOWN_UNITS: ReadonlyArray<{
 ];
 
 export const COUNTDOWN_UNIT_COLORS: Record<TimerUnitKey, string> = {
-  days: "#E0004E",
-  hours: "#F1B435",
-  minutes: "#0D294A",
-  seconds: "#105F66",
+  days: "var(--dc34-accent-critical)",
+  hours: "var(--dc34-accent-warning)",
+  minutes: "var(--dc34-bg-primary)",
+  seconds: "var(--dc34-bg-secondary)",
 };
 
 export const HOME_SECTION_CLASS_NAME = "mx-auto w-full max-w-6xl px-4 py-12 sm:py-14 md:py-16";

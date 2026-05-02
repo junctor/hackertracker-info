@@ -215,7 +215,7 @@ function ConferenceCard({
         <span className="ui-home-conference-card-sheen absolute top-0 -left-1/3 h-full w-1/2 -skew-x-12 opacity-0 transition duration-700 group-hover:translate-x-[240%] group-hover:opacity-100" />
       </span>
 
-      <div className="ui-home-conference-card-shell relative flex h-full flex-col rounded-[calc(var(--radius-4)-1px)] p-3.5 backdrop-blur-md sm:p-4">
+      <div className="ui-home-conference-card-shell relative flex h-full flex-col p-3.5 backdrop-blur-md sm:p-4">
         <div className="ui-home-conference-card-panel relative flex flex-1 flex-col justify-center overflow-hidden rounded-2xl px-5 pt-4 pb-4 transition duration-300 sm:px-6 sm:pt-5 sm:pb-5">
           <div
             aria-hidden="true"

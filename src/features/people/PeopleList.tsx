@@ -100,9 +100,7 @@ function highlight(text: string, rawQuery: string) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark className="rounded bg-[color-mix(in_oklab,var(--dc34-accent-warning),transparent_80%)] px-0.5 text-[var(--dc34-accent-warning)]">
-        {text.slice(idx, idx + q.length)}
-      </mark>
+      <mark className="ui-search-highlight rounded px-0.5">{text.slice(idx, idx + q.length)}</mark>
       {text.slice(idx + q.length)}
     </>
   );

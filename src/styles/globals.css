@@ -257,6 +257,10 @@ button {
   color: color-mix(in oklab, var(--color-muted), white 12%);
 }
 
+.ui-kicker-critical {
+  color: color-mix(in oklab, var(--dc34-accent-critical), white 62%);
+}
+
 .ui-focus-ring:focus-visible,
 .ui-link:focus-visible,
 .ui-input-focus:focus-visible {
@@ -441,6 +445,11 @@ button {
   font-size: 11px;
   font-weight: 500;
   box-shadow: inset 0 1px 0 color-mix(in oklab, white, transparent 92%);
+}
+
+.ui-search-highlight {
+  background: color-mix(in oklab, var(--dc34-accent-warning), transparent 80%);
+  color: var(--dc34-accent-warning);
 }
 
 .ui-tag-chip-strong {
@@ -670,8 +679,17 @@ button {
 }
 
 .ui-home-conference-card-shell {
+  border-radius: calc(var(--radius-4) - 1px);
   border: 1px solid color-mix(in oklab, white, transparent 90%);
   background: color-mix(in oklab, var(--color-surface), black 10%);
+}
+
+.ui-surface-soft {
+  background: color-mix(in oklab, var(--color-surface), transparent 18%);
+}
+
+.ui-surface-elevated-soft {
+  background: color-mix(in oklab, var(--color-surface-elevated), transparent 8%);
 }
 
 .ui-home-conference-card-panel {

@@ -251,7 +251,7 @@ export default function PersonDetails({ person, events, locations, conference }:
                         className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                       >
                         <span className="max-w-[16rem] truncate">{link.title}</span>
-                        <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-[var(--dc34-accent-secondary)]" />
+                        <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-(--dc34-accent-secondary)" />
                       </a>
                     </li>
                   ))}

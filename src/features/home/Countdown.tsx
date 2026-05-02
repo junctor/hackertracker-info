@@ -71,10 +71,10 @@ const COUNTDOWN_VARIANTS: Record<
 };
 
 const COUNTDOWN_UNIT_TEXT_CLASS_NAMES: Record<TimerUnitKey, string> = {
-  days: "text-[var(--dc34-accent-critical)]",
-  hours: "text-[var(--dc34-accent-warning)]",
-  minutes: "text-[var(--dc34-bg-primary)]",
-  seconds: "text-[var(--dc34-bg-secondary)]",
+  days: "text-(--dc34-accent-critical)",
+  hours: "text-(--dc34-accent-warning)",
+  minutes: "text-(--dc34-bg-primary)",
+  seconds: "text-(--dc34-bg-secondary)",
 };
 
 function usePrefersReducedMotion() {

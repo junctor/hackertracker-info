@@ -19,16 +19,14 @@ export default function ErrorScreen({ msg }: Props) {
         <div className="ui-card relative w-full max-w-2xl overflow-hidden px-6 py-7 text-center shadow-[0_24px_70px_rgba(2,6,23,0.38)] sm:px-8 sm:py-9">
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[var(--dc34-accent-critical)]/45 to-transparent"
+            className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-(--dc34-accent-critical)/45 to-transparent"
           />
 
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--dc34-accent-critical)]/20 bg-[var(--dc34-accent-critical)]/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-(--dc34-accent-critical)/20 bg-(--dc34-accent-critical)/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
             <ExclamationTriangleIcon className="h-7 w-7" />
           </div>
 
-          <p className="ui-kicker mt-5 text-[color-mix(in_oklab,var(--dc34-accent-critical),white_62%)]">
-            Something went wrong
-          </p>
+          <p className="ui-kicker ui-kicker-critical mt-5">Something went wrong</p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-balance text-slate-50 sm:text-4xl">
             We couldn&apos;t load this page
           </h1>
@@ -40,7 +38,7 @@ export default function ErrorScreen({ msg }: Props) {
           </p>
 
           {hasMessage ? (
-            <div className="mt-6 rounded-2xl border border-[var(--dc34-accent-critical)]/16 bg-[var(--dc34-accent-critical)]/10 p-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+            <div className="mt-6 rounded-2xl border border-(--dc34-accent-critical)/16 bg-(--dc34-accent-critical)/10 p-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
               <p className="text-[11px] font-semibold tracking-[0.16em] text-white/75 uppercase">
                 Error details
               </p>

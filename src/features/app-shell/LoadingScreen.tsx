@@ -15,16 +15,16 @@ export default function LoadingScreen() {
         >
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[var(--dc34-accent-secondary)]/60 to-transparent"
+            className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-(--dc34-accent-secondary)/60 to-transparent"
           />
 
           <div
             aria-hidden="true"
             className="relative mx-auto flex h-16 w-16 items-center justify-center"
           >
-            <span className="absolute inset-0 rounded-full border border-[var(--dc34-accent-primary)]/20 bg-[var(--dc34-accent-primary)]/8" />
-            <span className="absolute inset-[0.35rem] rounded-full border-2 border-slate-700/80 border-t-[var(--dc34-accent-secondary)] motion-safe:animate-spin motion-reduce:animate-none" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[var(--dc34-accent-secondary)] shadow-[0_0_18px_rgba(108,205,187,0.55)] motion-safe:animate-pulse motion-reduce:animate-none" />
+            <span className="absolute inset-0 rounded-full border border-(--dc34-accent-primary)/20 bg-(--dc34-accent-primary)/8" />
+            <span className="absolute inset-[0.35rem] rounded-full border-2 border-slate-700/80 border-t-(--dc34-accent-secondary) motion-safe:animate-spin motion-reduce:animate-none" />
+            <span className="h-2.5 w-2.5 rounded-full bg-(--dc34-accent-secondary) shadow-[0_0_18px_rgba(108,205,187,0.55)] motion-safe:animate-pulse motion-reduce:animate-none" />
           </div>
 
           <p className="ui-kicker mt-5">Loading</p>

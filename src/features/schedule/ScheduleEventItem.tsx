@@ -63,8 +63,8 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
                 <span
                   className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] uppercase ${
                     isLive
-                      ? "border-[var(--dc34-accent-critical)] bg-[var(--dc34-accent-critical)]/16 text-white"
-                      : "border-[var(--dc34-accent-warning)]/75 bg-[var(--dc34-accent-warning)]/16 text-[var(--dc34-accent-warning)]"
+                      ? "border-(--dc34-accent-critical) bg-(--dc34-accent-critical)/16 text-white"
+                      : "border-(--dc34-accent-warning)/75 bg-(--dc34-accent-warning)/16 text-(--dc34-accent-warning)"
                   }`}
                 >
                   {isLive ? "Live" : "Next"}

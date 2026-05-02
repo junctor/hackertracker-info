@@ -27,7 +27,7 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
     <Link
       to={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className={`ui-focus-ring ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)} inline-flex px-3 py-1 text-sm transition hover:border-[var(--dc34-accent-primary)]/70 focus-visible:outline-none`}
+      className={`ui-focus-ring ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)} inline-flex px-3 py-1 text-sm transition hover:border-(--dc34-accent-primary)/70 focus-visible:outline-none`}
     >
       {tag.label}
     </Link>
@@ -54,7 +54,7 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
 
           return (
             <section key={tagType.id} className="mb-10">
-              <h2 className="ui-heading-2 mb-4 text-[var(--dc34-accent-secondary)]">
+              <h2 className="ui-heading-2 mb-4 text-(--dc34-accent-secondary)">
                 {formatCategory(tagType.category)}
               </h2>
 

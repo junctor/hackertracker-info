@@ -281,7 +281,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
       <div className="ui-page-shell">
         <SiteHeader conference={conf} activePageId={activePageId} />
         <main id="main-content" className="ui-page-main">
-          <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center text-[var(--dc34-accent-secondary)]">
+          <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center text-(--dc34-accent-secondary)">
             {tag.label} Schedule
           </h1>
           {days.length > 0 && resolvedDay ? (

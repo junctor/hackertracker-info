@@ -197,12 +197,12 @@ export default function ContentDetails(props: Props) {
                   className="ui-focus-ring ui-card ui-card-interactive group flex min-w-0 items-center justify-between gap-4 px-4 py-3.5 focus-visible:outline-none sm:px-5"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-[var(--dc34-accent-secondary)] transition-colors group-hover:text-white sm:text-[0.95rem]">
+                    <p className="truncate text-sm font-medium text-(--dc34-accent-secondary) transition-colors group-hover:text-white sm:text-[0.95rem]">
                       {l.label}
                     </p>
                   </div>
                   <ArrowTopRightOnSquareIcon
-                    className="h-4 w-4 shrink-0 text-[var(--dc34-accent-secondary)] transition-colors group-hover:text-white"
+                    className="h-4 w-4 shrink-0 text-(--dc34-accent-secondary) transition-colors group-hover:text-white"
                     aria-hidden="true"
                   />
                 </a>
@@ -227,7 +227,7 @@ export default function ContentDetails(props: Props) {
                     title={p.name}
                   >
                     <UserIcon
-                      className="h-4 w-4 text-[var(--dc34-accent-secondary)]"
+                      className="h-4 w-4 text-(--dc34-accent-secondary)"
                       aria-hidden="true"
                     />
                     <span className="max-w-56 truncate">{p.name}</span>

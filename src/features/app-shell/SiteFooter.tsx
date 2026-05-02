@@ -10,7 +10,7 @@ function SiteFooter() {
               Hacker Tracker
             </p>
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="truncate text-sm font-semibold tracking-tight text-[var(--dc34-accent-secondary)] sm:text-base">
+              <span className="truncate text-sm font-semibold tracking-tight text-(--dc34-accent-secondary) sm:text-base">
                 info.defcon.org
               </span>
               <span className="text-xs text-slate-500 sm:text-sm">DEF CON</span>

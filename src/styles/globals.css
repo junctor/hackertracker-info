@@ -22,28 +22,36 @@
 :root {
   color-scheme: dark;
 
+  /* DEF CON 34 palette */
+  --dc34-bg-primary: #0d294a;
+  --dc34-bg-secondary: #105f68;
+  --dc34-accent-primary: #017fa4;
+  --dc34-accent-secondary: #6ccdb8;
+  --dc34-accent-warning: #f1b435;
+  --dc34-accent-critical: #e0004e;
+
   /* Surfaces */
-  --color-bg: #020617;
-  --color-surface: #0f172a;
-  --color-surface-elevated: #111827;
-  --color-fg: #f8fafc;
-  --color-muted: #94a3b8;
-  --color-border: #334155;
+  --color-bg: color-mix(in oklab, var(--dc34-bg-primary), black 55%);
+  --color-surface: color-mix(in oklab, var(--dc34-bg-primary), black 35%);
+  --color-surface-elevated: color-mix(in oklab, var(--dc34-bg-primary), black 24%);
+  --color-fg: color-mix(in oklab, white, var(--dc34-accent-secondary) 5%);
+  --color-muted: color-mix(in oklab, var(--color-fg), var(--color-bg) 42%);
+  --color-border: color-mix(in oklab, var(--dc34-bg-secondary), white 16%);
   --color-border-soft: rgba(148, 163, 184, 0.18);
   --color-overlay: rgba(2, 6, 23, 0.72);
 
   /* Brand */
-  --accent-danger: #e0004e;
-  --accent-warning: #f1b435;
-  --accent-deep: #0d294a;
-  --accent-teal: #105f66;
-  --accent-success: #6ccdbb;
-  --accent-primary: #017fa4;
+  --accent-danger: var(--dc34-accent-critical);
+  --accent-warning: var(--dc34-accent-warning);
+  --accent-deep: var(--dc34-bg-primary);
+  --accent-teal: var(--dc34-bg-secondary);
+  --accent-success: var(--dc34-accent-secondary);
+  --accent-primary: var(--dc34-accent-primary);
 
-  --accent-on-danger: #ffffff;
-  --accent-on-warning: #020617;
-  --accent-on-success: #020617;
-  --accent-on-primary: #ffffff;
+  --accent-on-danger: white;
+  --accent-on-warning: var(--color-bg);
+  --accent-on-success: var(--color-bg);
+  --accent-on-primary: white;
 
   --color-accent: var(--accent-primary);
 
@@ -94,8 +102,17 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top, rgba(59, 130, 246, 0.06), transparent 34%),
-    radial-gradient(circle at 20% 20%, rgba(241, 180, 53, 0.05), transparent 22%), var(--color-bg);
+    radial-gradient(
+      circle at top,
+      color-mix(in oklab, var(--accent-primary), transparent 94%),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 20% 20%,
+      color-mix(in oklab, var(--accent-warning), transparent 95%),
+      transparent 22%
+    ),
+    var(--color-bg);
   color: var(--color-fg);
   font-family: "Atkinson Hyperlegible", "Lato", "Segoe UI", sans-serif;
   line-height: 1.55;
@@ -175,6 +192,26 @@ button {
   min-height: 0;
   flex: 1 1 auto;
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ui-apps-page-shell {
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      color-mix(in oklab, var(--accent-primary), transparent 74%),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 8% 18%,
+      color-mix(in oklab, var(--accent-warning), transparent 86%),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 92% 22%,
+      color-mix(in oklab, var(--accent-danger), transparent 88%),
+      transparent 22%
+    ),
+    var(--color-bg);
 }
 
 .ui-container {
@@ -397,15 +434,118 @@ button {
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  border: 1px solid rgb(255 255 255 / 0.1);
+  border: 1px solid var(--tone-border, rgb(255 255 255 / 0.1));
+  background: var(--tone-bg, rgb(255 255 255 / 0.03));
   padding: 0.25rem 0.5rem;
+  color: var(--tone-fg, var(--color-fg));
   font-size: 11px;
   font-weight: 500;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, white, transparent 92%);
 }
 
 .ui-tag-chip-strong {
   border-color: rgb(255 255 255 / 0.15);
+}
+
+.ui-person-avatar {
+  background-image: var(--person-avatar-bg);
+}
+
+.ui-tag-dot {
+  background: var(--tone-dot, var(--color-muted));
+}
+
+.ui-tone-primary {
+  --event-color: var(--dc34-accent-primary);
+  --tone-dot: var(--dc34-accent-primary);
+  --tone-bg: color-mix(in oklab, var(--dc34-accent-primary), transparent 82%);
+  --tone-border: color-mix(in oklab, var(--dc34-accent-primary), transparent 42%);
+  --tone-fg: color-mix(in oklab, var(--dc34-accent-primary), white 38%);
+}
+
+.ui-tone-secondary {
+  --event-color: var(--dc34-accent-secondary);
+  --tone-dot: var(--dc34-accent-secondary);
+  --tone-bg: color-mix(in oklab, var(--dc34-accent-secondary), transparent 84%);
+  --tone-border: color-mix(in oklab, var(--dc34-accent-secondary), transparent 42%);
+  --tone-fg: color-mix(in oklab, var(--dc34-accent-secondary), white 24%);
+}
+
+.ui-tone-teal {
+  --event-color: var(--dc34-bg-secondary);
+  --tone-dot: var(--dc34-bg-secondary);
+  --tone-bg: color-mix(in oklab, var(--dc34-bg-secondary), transparent 72%);
+  --tone-border: color-mix(in oklab, var(--dc34-bg-secondary), white 14%);
+  --tone-fg: color-mix(in oklab, var(--dc34-bg-secondary), white 62%);
+}
+
+.ui-tone-warning {
+  --event-color: var(--dc34-accent-warning);
+  --tone-dot: var(--dc34-accent-warning);
+  --tone-bg: color-mix(in oklab, var(--dc34-accent-warning), transparent 84%);
+  --tone-border: color-mix(in oklab, var(--dc34-accent-warning), transparent 36%);
+  --tone-fg: color-mix(in oklab, var(--dc34-accent-warning), white 16%);
+}
+
+.ui-tone-critical {
+  --event-color: var(--dc34-accent-critical);
+  --tone-dot: var(--dc34-accent-critical);
+  --tone-bg: color-mix(in oklab, var(--dc34-accent-critical), transparent 82%);
+  --tone-border: color-mix(in oklab, var(--dc34-accent-critical), transparent 38%);
+  --tone-fg: color-mix(in oklab, var(--dc34-accent-critical), white 48%);
+}
+
+.ui-tone-muted {
+  --event-color: var(--color-muted);
+  --tone-dot: var(--color-muted);
+  --tone-bg: rgb(255 255 255 / 0.03);
+  --tone-border: rgb(255 255 255 / 0.1);
+  --tone-fg: var(--color-muted);
+}
+
+.ui-person-accent-0 {
+  --event-color: var(--dc34-accent-primary);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-accent-primary), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
+}
+
+.ui-person-accent-1 {
+  --event-color: var(--dc34-bg-secondary);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-bg-secondary), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
+}
+
+.ui-person-accent-2 {
+  --event-color: var(--dc34-accent-secondary);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-accent-secondary), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
+}
+
+.ui-person-accent-3 {
+  --event-color: var(--dc34-accent-warning);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-accent-warning), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
+}
+
+.ui-person-accent-4 {
+  --event-color: var(--dc34-accent-critical);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-accent-critical), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
 }
 
 .ui-pill-link {
@@ -427,6 +567,333 @@ button {
 .ui-pill-link:hover {
   border-color: rgb(1 127 164 / 0.65);
   background: rgb(1 127 164 / 0.28);
+}
+
+.ui-homepage-shell {
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+.ui-homepage-ambient {
+  background:
+    radial-gradient(
+      circle at top,
+      color-mix(in oklab, var(--accent-primary), transparent 74%),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 20% 30%,
+      color-mix(in oklab, var(--accent-warning), transparent 82%),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      color-mix(in oklab, var(--accent-danger), transparent 84%),
+      transparent 20%
+    );
+}
+
+.ui-homepage-grid {
+  background-image:
+    linear-gradient(color-mix(in oklab, white, transparent 92%) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, white, transparent 92%) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.14;
+  animation: ui-homepage-grid-drift 34s linear infinite;
+}
+
+.ui-homepage-top-light {
+  background: linear-gradient(to bottom, color-mix(in oklab, white, transparent 95%), transparent);
+}
+
+.ui-homepage-title {
+  color: color-mix(in oklab, var(--color-fg), white 10%);
+  text-shadow:
+    0 0 18px color-mix(in oklab, var(--accent-primary), transparent 78%),
+    0 0 42px color-mix(in oklab, var(--accent-danger), transparent 88%);
+}
+
+.ui-homepage-title-rule {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-border), white 24%),
+    transparent
+  );
+}
+
+.ui-home-conference-card {
+  box-shadow: var(--shadow-md);
+}
+
+.ui-home-conference-card:hover,
+.ui-home-conference-card:focus-visible {
+  box-shadow: var(--shadow-lg);
+}
+
+.ui-home-conference-card-accent {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--accent-warning), transparent 60%),
+    color-mix(in oklab, var(--accent-danger), transparent 72%),
+    color-mix(in oklab, var(--accent-primary), transparent 68%)
+  );
+  opacity: 0.82;
+}
+
+.ui-home-conference-card:hover .ui-home-conference-card-accent,
+.ui-home-conference-card:focus-visible .ui-home-conference-card-accent {
+  opacity: 1;
+}
+
+.ui-home-conference-card-glow {
+  background:
+    radial-gradient(
+      circle at top left,
+      color-mix(in oklab, var(--accent-warning), transparent 78%),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      color-mix(in oklab, var(--accent-primary), transparent 80%),
+      transparent 36%
+    );
+}
+
+.ui-home-conference-card-sheen {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, white, transparent 46%),
+    transparent
+  );
+}
+
+.ui-home-conference-card-shell {
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background: color-mix(in oklab, var(--color-surface), black 10%);
+}
+
+.ui-home-conference-card-panel {
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background: radial-gradient(
+    circle at top,
+    color-mix(in oklab, white, transparent 94%),
+    color-mix(in oklab, var(--color-surface), black 20%) 74%
+  );
+}
+
+.ui-home-conference-card:hover .ui-home-conference-card-panel,
+.ui-home-conference-card:focus-visible .ui-home-conference-card-panel {
+  border-color: color-mix(in oklab, var(--accent-warning), transparent 72%);
+}
+
+.ui-home-conference-card-grid {
+  background-image:
+    linear-gradient(color-mix(in oklab, white, transparent 96%) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, white, transparent 96%) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.4;
+}
+
+.ui-home-conference-card-top-light {
+  background: linear-gradient(to bottom, color-mix(in oklab, white, transparent 94%), transparent);
+}
+
+.ui-home-conference-card-name {
+  color: color-mix(in oklab, var(--color-fg), white 4%);
+}
+
+.ui-home-conference-card-date {
+  color: var(--color-muted);
+}
+
+.ui-home-conference-countdown {
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background: color-mix(in oklab, var(--color-bg), transparent 18%);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, white, transparent 96%);
+}
+
+.ui-apps-poster {
+  min-height: 100dvh;
+  display: grid;
+  align-items: center;
+  padding-block: calc(env(safe-area-inset-top) + clamp(2.5rem, 7vw, 5rem))
+    calc(env(safe-area-inset-bottom) + clamp(2.5rem, 7vw, 5rem));
+}
+
+.ui-apps-panel {
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background: color-mix(in oklab, var(--color-bg), transparent 18%);
+  box-shadow: var(--shadow-lg);
+  animation: ui-apps-panel-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ui-apps-ambient {
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      color-mix(in oklab, var(--accent-primary), transparent 82%),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 80% 28%,
+      color-mix(in oklab, var(--accent-success), transparent 88%),
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      color-mix(in oklab, var(--accent-danger), transparent 92%),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--color-surface), black 18%),
+      color-mix(in oklab, var(--color-bg), black 8%)
+    );
+  background-size: 140% 140%;
+  opacity: 0.9;
+  animation: ui-apps-ambient-drift 18s ease-in-out infinite alternate;
+}
+
+.ui-apps-grid {
+  background-image:
+    linear-gradient(color-mix(in oklab, white, transparent 94%) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, white, transparent 94%) 1px, transparent 1px);
+  background-size: 34px 34px;
+  opacity: 0.12;
+  mask-image: linear-gradient(to bottom, black, transparent);
+  animation: ui-apps-grid-drift 28s linear infinite;
+}
+
+.ui-apps-panel-rule {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, white, transparent 60%),
+    transparent
+  );
+}
+
+.ui-apps-orb {
+  background: color-mix(in oklab, var(--accent-primary), transparent 90%);
+  animation: ui-apps-orb-breathe 7s ease-in-out infinite;
+}
+
+.ui-apps-kicker {
+  color: color-mix(in oklab, var(--accent-success), white 30%);
+  animation: ui-apps-copy-enter 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+.ui-apps-choice {
+  color: color-mix(in oklab, var(--color-fg), var(--accent-warning) 18%);
+  font-size: clamp(1.5rem, 5vw, 3.25rem);
+  font-weight: 750;
+  line-height: 1.04;
+  animation: ui-apps-copy-enter 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+}
+
+.ui-apps-title {
+  color: color-mix(in oklab, var(--color-fg), white 10%);
+  text-shadow: 0 0 0 color-mix(in oklab, var(--dc34-accent-primary), transparent 100%);
+  animation:
+    ui-apps-title-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both,
+    ui-apps-title-breathe 6s ease-in-out 0.7s infinite;
+}
+
+.ui-title-glitch-layer-start {
+  color: color-mix(in oklab, var(--accent-success), white 16%);
+  transform: translate(2px, 0);
+}
+
+.ui-title-glitch-layer-end {
+  color: color-mix(in oklab, var(--accent-danger), white 12%);
+  transform: translate(-2px, 0);
+}
+
+.ui-apps-subtitle {
+  color: color-mix(in oklab, var(--color-fg), var(--color-muted) 18%);
+  animation: ui-apps-copy-enter 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+
+.ui-app-card {
+  --app-card-accent: var(--accent-primary);
+
+  border: 1px solid color-mix(in oklab, var(--app-card-accent), transparent 62%);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-surface-elevated), white 3%),
+    color-mix(in oklab, var(--app-card-accent), transparent 86%)
+  );
+  color: var(--color-fg);
+  box-shadow: var(--shadow-md);
+  animation: ui-app-card-enter 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ui-app-card:nth-child(1) {
+  --app-card-accent: var(--accent-primary);
+
+  animation-delay: 0.34s;
+}
+
+.ui-app-card:nth-child(2) {
+  --app-card-accent: var(--accent-success);
+
+  animation-delay: 0.42s;
+}
+
+.ui-app-card:nth-child(3) {
+  --app-card-accent: var(--accent-warning);
+
+  animation-delay: 0.5s;
+}
+
+.ui-app-card:hover,
+.ui-app-card:focus-visible {
+  border-color: color-mix(in oklab, var(--app-card-accent), transparent 46%);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-surface-elevated), white 4%),
+    color-mix(in oklab, var(--app-card-accent), transparent 78%)
+  );
+  box-shadow: var(--shadow-lg);
+}
+
+.ui-app-card-glow {
+  animation: ui-apps-card-glow 8s ease-in-out infinite;
+}
+
+.ui-app-card-glow {
+  background: color-mix(in oklab, var(--app-card-accent), transparent 78%);
+  opacity: 0.54;
+}
+
+.ui-app-card-rule {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, white, transparent 60%),
+    transparent
+  );
+}
+
+.ui-app-card-eyebrow,
+.ui-app-card-reason {
+  color: color-mix(in oklab, var(--app-card-accent), white 34%);
+}
+
+.ui-app-card-icon {
+  border: 1px solid color-mix(in oklab, white, transparent 88%);
+  background: color-mix(in oklab, var(--color-bg), transparent 34%);
+  color: color-mix(in oklab, var(--app-card-accent), white 24%);
+}
+
+.ui-app-card-destination {
+  color: color-mix(in oklab, var(--accent-warning), white 12%);
+}
+
+.ui-app-card-action {
+  color: color-mix(in oklab, var(--color-fg), white 6%);
 }
 
 .ui-icon-btn {
@@ -507,8 +974,151 @@ button {
   .ui-pill-link,
   .ui-link,
   .ui-input-base,
-  .ui-skip-link {
+  .ui-skip-link,
+  .ui-homepage-grid,
+  .ui-homepage-title,
+  .ui-home-conference-card,
+  .ui-home-conference-card *,
+  .ui-apps-panel,
+  .ui-apps-ambient,
+  .ui-apps-grid,
+  .ui-apps-orb,
+  .ui-apps-kicker,
+  .ui-apps-choice,
+  .ui-apps-title,
+  .ui-title-glitch-layer,
+  .ui-apps-subtitle,
+  .ui-app-card-glow,
+  .ui-app-card,
+  .ui-app-card * {
     transition: none;
     animation: none !important;
+  }
+
+  .ui-home-conference-card:hover,
+  .ui-home-conference-card:focus-visible,
+  .ui-home-conference-card:hover img,
+  .ui-home-conference-card:hover .ui-home-conference-card-sheen,
+  .ui-app-card:hover,
+  .ui-app-card:focus-visible,
+  .ui-app-card:hover svg {
+    transform: none !important;
+  }
+}
+
+@keyframes ui-homepage-grid-drift {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 40px 40px;
+  }
+}
+
+@keyframes ui-apps-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+    filter: blur(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes ui-apps-copy-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-apps-ambient-drift {
+  from {
+    background-position: 0% 0%;
+  }
+
+  to {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes ui-apps-grid-drift {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 34px 34px;
+  }
+}
+
+@keyframes ui-apps-orb-breathe {
+  0%,
+  100% {
+    opacity: 0.78;
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    opacity: 0.46;
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+@keyframes ui-apps-title-enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes ui-apps-title-breathe {
+  0%,
+  100% {
+    text-shadow: 0 0 0 color-mix(in oklab, var(--dc34-accent-primary), transparent 100%);
+  }
+
+  50% {
+    text-shadow: 0 0 26px color-mix(in oklab, var(--dc34-accent-primary), transparent 72%);
+  }
+}
+
+@keyframes ui-app-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ui-apps-card-glow {
+  0%,
+  100% {
+    opacity: 0.48;
+  }
+
+  50% {
+    opacity: 0.82;
   }
 }

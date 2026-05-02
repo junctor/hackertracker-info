@@ -4,7 +4,7 @@ import {
   MapPinIcon,
 } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import { useMemo, type CSSProperties, type MouseEvent } from "react";
+import { useMemo, type MouseEvent } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
@@ -13,6 +13,7 @@ import type { ContentEntity, EventEntity } from "@/lib/types/ht-types";
 import cal from "@/lib/cal";
 import { eventTime, formatSessionTime } from "@/lib/dates";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
+import { getToneFromColor } from "@/lib/tone";
 
 export type ContentSessionProps = {
   conference: ConferenceManifest;
@@ -55,9 +56,7 @@ function ContentSessionCard({
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${session.title}`
     : `Add bookmark for ${session.title}`;
-  const accentStyle = {
-    "--event-color": session.color ?? "#64748b",
-  } as CSSProperties;
+  const accentTone = getToneFromColor(session.color);
   const titleLabel = title?.trim() || null;
 
   const sessionContent = (
@@ -78,7 +77,9 @@ function ContentSessionCard({
   );
 
   return (
-    <li className="ui-card ui-card-interactive group relative overflow-hidden" style={accentStyle}>
+    <li
+      className={`ui-card ui-card-interactive group relative overflow-hidden ui-tone-${accentTone}`}
+    >
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
 

@@ -234,22 +234,22 @@ export default function ScheduleEvents({
   const utilityLinkBaseClassName =
     "ui-btn-base ui-focus-ring group min-h-10 gap-2 rounded-xl border px-3 text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] focus-visible:outline-none max-[320px]:w-10 max-[320px]:justify-center max-[320px]:px-0";
   const activeFilterClassName =
-    "border-[#017FA4]/45 bg-[color-mix(in_oklab,var(--color-surface-elevated),transparent_8%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
+    "border-[var(--dc34-accent-primary)]/45 bg-[color-mix(in_oklab,var(--color-surface-elevated),transparent_8%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
   const inactiveFilterClassName =
     "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/14 hover:bg-white/[0.05] hover:text-slate-100";
   const utilityIconBaseClassName = "h-4.5 w-4.5 shrink-0 transition-colors";
-  const activeUtilityIconClassName = "text-[#6CCDBB]";
+  const activeUtilityIconClassName = "text-[var(--dc34-accent-secondary)]";
   const inactiveUtilityIconClassName = "text-slate-400 group-hover:text-slate-200";
   const dayTabTrayClassName =
     "rounded-[1.2rem] border border-white/10 bg-[color-mix(in_oklab,var(--color-surface),transparent_18%)] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]";
   const dayTabBaseClassName =
     "ui-focus-ring group relative flex min-h-11 items-center gap-2 rounded-[0.95rem] border px-3.5 py-2 text-sm whitespace-nowrap transition duration-200 ease-out focus-visible:outline-none";
   const activeDayTabClassName =
-    "border-[#017FA4]/45 bg-[color-mix(in_oklab,var(--color-surface-elevated),transparent_8%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
+    "border-[var(--dc34-accent-primary)]/45 bg-[color-mix(in_oklab,var(--color-surface-elevated),transparent_8%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
   const inactiveDayTabClassName =
     "border-transparent bg-transparent text-slate-300 hover:border-white/10 hover:bg-white/[0.05] hover:text-slate-100";
   const activeDayCountClassName =
-    "rounded-full border border-[#017FA4]/26 bg-[#017FA4]/12 px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-[#9FE4D7]";
+    "rounded-full border border-[var(--dc34-accent-primary)]/26 bg-[var(--dc34-accent-primary)]/12 px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-[var(--dc34-accent-secondary)]";
   const inactiveDayCountClassName =
     "rounded-full border border-white/8 bg-black/15 px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-slate-400 transition-colors group-hover:text-slate-200";
 

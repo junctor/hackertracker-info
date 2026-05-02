@@ -1,5 +1,5 @@
 import { ArrowTopRightOnSquareIcon, ShareIcon, UserIcon } from "@heroicons/react/24/outline";
-import { useMemo, type CSSProperties } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
@@ -12,6 +12,7 @@ import type {
 } from "@/lib/types/ht-types";
 
 import Markdown from "@/components/markdown/Markdown";
+import { getToneFromColor } from "@/lib/tone";
 
 import ContentSession from "./ContentSession";
 
@@ -59,9 +60,7 @@ export default function ContentDetails(props: Props) {
     return earliest;
   }, [sessions]);
 
-  const accentStyle = {
-    "--event-color": primarySession?.color ?? "#64748b",
-  } as CSSProperties;
+  const accentTone = getToneFromColor(primarySession?.color);
   const sharePath = `${contentsBasePath}/?id=${content.id}`;
   const shareUrl =
     typeof window === "undefined"
@@ -94,7 +93,7 @@ export default function ContentDetails(props: Props) {
 
   return (
     <div className="ui-container ui-page-content space-y-10">
-      <header style={accentStyle} className="ui-card relative overflow-hidden">
+      <header className={`ui-card relative overflow-hidden ui-tone-${accentTone}`}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
@@ -155,8 +154,7 @@ export default function ContentDetails(props: Props) {
                     className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                   >
                     <span
-                      className="h-3 w-3 rounded-full"
-                      style={{ backgroundColor: tag.colorBackground }}
+                      className={`ui-tag-dot h-3 w-3 rounded-full ui-tone-${getToneFromColor(tag.colorBackground)}`}
                       aria-hidden="true"
                     />
                     <span className="max-w-[16rem] truncate">{tag.label}</span>
@@ -199,12 +197,12 @@ export default function ContentDetails(props: Props) {
                   className="ui-focus-ring ui-card ui-card-interactive group flex min-w-0 items-center justify-between gap-4 px-4 py-3.5 focus-visible:outline-none sm:px-5"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-[#6CCDBB] transition-colors group-hover:text-white sm:text-[0.95rem]">
+                    <p className="truncate text-sm font-medium text-[var(--dc34-accent-secondary)] transition-colors group-hover:text-white sm:text-[0.95rem]">
                       {l.label}
                     </p>
                   </div>
                   <ArrowTopRightOnSquareIcon
-                    className="h-4 w-4 shrink-0 text-[#6CCDBB] transition-colors group-hover:text-white"
+                    className="h-4 w-4 shrink-0 text-[var(--dc34-accent-secondary)] transition-colors group-hover:text-white"
                     aria-hidden="true"
                   />
                 </a>
@@ -228,7 +226,10 @@ export default function ContentDetails(props: Props) {
                     className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                     title={p.name}
                   >
-                    <UserIcon className="h-4 w-4 text-[#6CCDBB]" aria-hidden="true" />
+                    <UserIcon
+                      className="h-4 w-4 text-[var(--dc34-accent-secondary)]"
+                      aria-hidden="true"
+                    />
                     <span className="max-w-56 truncate">{p.name}</span>
                   </Link>
                 </li>

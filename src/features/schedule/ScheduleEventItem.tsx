@@ -5,6 +5,7 @@ import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
+import { getToneFromColor } from "@/lib/tone";
 
 import type { ScheduleEventViewModel } from "./ScheduleEvents";
 
@@ -24,9 +25,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
 
   const href = `/${conf.slug}/content/?id=${event.contentId}`;
-  const barStyle = {
-    "--event-color": event.color ?? "#64748b",
-  } as React.CSSProperties;
+  const eventTone = getToneFromColor(event.color);
 
   const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -48,8 +47,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
 
   return (
     <article
-      style={barStyle}
-      className="ui-card ui-card-interactive group relative w-full min-w-0 overflow-hidden"
+      className={`ui-card ui-card-interactive group relative w-full min-w-0 overflow-hidden ui-tone-${eventTone}`}
     >
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -65,8 +63,8 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
                 <span
                   className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] uppercase ${
                     isLive
-                      ? "border-[#E0004E] bg-[#E0004E]/16 text-[#ffb4c9]"
-                      : "border-[#F1B435]/75 bg-[#F1B435]/16 text-[#F1B435]"
+                      ? "border-[var(--dc34-accent-critical)] bg-[var(--dc34-accent-critical)]/16 text-white"
+                      : "border-[var(--dc34-accent-warning)]/75 bg-[var(--dc34-accent-warning)]/16 text-[var(--dc34-accent-warning)]"
                   }`}
                 >
                   {isLive ? "Live" : "Next"}
@@ -96,11 +94,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
                   {visibleTags.map((tag) => (
                     <li
                       key={tag.id}
-                      className="ui-tag-chip ui-tag-chip-strong"
-                      style={{
-                        backgroundColor: tag.colorBackground,
-                        color: tag.colorForeground ?? "#fff",
-                      }}
+                      className={`ui-tag-chip ui-tag-chip-strong ui-tone-${getToneFromColor(tag.colorBackground)}`}
                     >
                       {tag.label}
                     </li>

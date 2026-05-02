@@ -1,5 +1,5 @@
 import { UserIcon } from "@heroicons/react/24/solid";
-import { useState, useMemo, type CSSProperties } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router";
 
 import Image from "@/components/Image";
@@ -14,7 +14,13 @@ type Props = {
   conference: ConferenceManifest;
 };
 
-const PERSON_ACCENT_COLORS = ["#017FA4", "#2D7FF9", "#0F766E", "#7C3AED", "#C2410C", "#0E7490"];
+const PERSON_ACCENT_CLASS_NAMES = [
+  "ui-person-accent-0",
+  "ui-person-accent-1",
+  "ui-person-accent-2",
+  "ui-person-accent-3",
+  "ui-person-accent-4",
+];
 
 type AvatarRecord = {
   avatar?: { url?: string | null } | string | null;
@@ -73,13 +79,16 @@ function getInitials(name?: string | null): string {
     .toUpperCase();
 }
 
-function getPersonAccent(name?: string | null): string {
+function getPersonAccentClassName(name?: string | null): string {
   const normalizedName = getDisplayName(name);
   let hash = 0;
   for (const char of normalizedName) {
     hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   }
-  return PERSON_ACCENT_COLORS[hash % PERSON_ACCENT_COLORS.length] ?? PERSON_ACCENT_COLORS[0];
+  return (
+    PERSON_ACCENT_CLASS_NAMES[hash % PERSON_ACCENT_CLASS_NAMES.length] ??
+    PERSON_ACCENT_CLASS_NAMES[0]
+  );
 }
 
 function highlight(text: string, rawQuery: string) {
@@ -91,7 +100,7 @@ function highlight(text: string, rawQuery: string) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark className="rounded bg-[#F1B435]/20 px-0.5 text-[#F1B435]">
+      <mark className="rounded bg-[color-mix(in_oklab,var(--dc34-accent-warning),transparent_80%)] px-0.5 text-[var(--dc34-accent-warning)]">
         {text.slice(idx, idx + q.length)}
       </mark>
       {text.slice(idx + q.length)}
@@ -179,19 +188,12 @@ export default function PeopleList({ people, conference }: Props) {
             const personInitials = getInitials(person.name);
             const avatarUrl = getPersonAvatarUrl(person);
             const showAvatarImage = Boolean(avatarUrl) && !brokenAvatarIds[person.id];
-            const accentColor = getPersonAccent(person.name);
-            const accentStyle = {
-              "--event-color": accentColor,
-            } as CSSProperties;
-            const avatarStyle = {
-              backgroundImage: `linear-gradient(135deg, ${accentColor}22 0%, rgba(15, 23, 42, 0.9) 100%)`,
-            } as CSSProperties;
+            const accentClassName = getPersonAccentClassName(person.name);
 
             return (
               <li key={person.id} className="h-full">
                 <article
-                  style={accentStyle}
-                  className="ui-card ui-card-interactive group relative h-full overflow-hidden"
+                  className={`ui-card ui-card-interactive group relative h-full overflow-hidden ${accentClassName}`}
                 >
                   <span aria-hidden="true" className="ui-accent-rail" />
                   <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -201,10 +203,7 @@ export default function PeopleList({ people, conference }: Props) {
                     className="ui-focus-ring relative z-10 block h-full rounded-[inherit] px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div
-                        style={avatarStyle}
-                        className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
-                      >
+                      <div className="ui-person-avatar relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
                         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/8" />
                         <div className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden">
                           {showAvatarImage && avatarUrl ? (

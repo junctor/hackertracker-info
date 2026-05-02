@@ -21,7 +21,6 @@ export default function Home({ conf }: HomePageProps) {
         <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`https://info.defcon.org/${conf.slug}`} />
-        <meta name="theme-color" content="#020617" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

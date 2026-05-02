@@ -32,7 +32,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
       <div className="relative">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-[#017FA4]/35 to-transparent"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-[var(--dc34-accent-primary)]/35 to-transparent"
         />
 
         <div className="ui-container flex min-h-16 items-center justify-between gap-3 py-2.5">
@@ -42,7 +42,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               className={`group min-w-0 rounded-xl px-2 py-1.5 transition-colors hover:bg-white/4 ${focusRingClass}`}
             >
               <span className="flex min-w-0 items-center gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/4 text-[0.7rem] font-semibold tracking-[0.18em] text-[#6CCDBB] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] md:hidden">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/4 text-[0.7rem] font-semibold tracking-[0.18em] text-[var(--dc34-accent-secondary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] md:hidden">
                   {conference.code}
                 </span>
 
@@ -72,16 +72,16 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             <nav aria-label="Primary">
               <details className="group relative">
                 <summary
-                  className={`ui-btn-base ui-btn-secondary flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-xl border-white/10 bg-white/4 px-3.5 text-left text-sm text-slate-100 shadow-[0_10px_28px_rgba(2,6,23,0.18)] transition duration-200 ease-out group-open:border-[#017FA4]/36 group-open:bg-[#0D294A]/50 group-open:text-white group-open:shadow-[0_18px_42px_rgba(2,6,23,0.3)] [&::-webkit-details-marker]:hidden ${focusRingClass}`}
+                  className={`ui-btn-base ui-btn-secondary flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-xl border-white/10 bg-white/4 px-3.5 text-left text-sm text-slate-100 shadow-[0_10px_28px_rgba(2,6,23,0.18)] transition duration-200 ease-out group-open:border-[var(--dc34-accent-primary)]/36 group-open:bg-[var(--dc34-bg-primary)]/50 group-open:text-white group-open:shadow-[0_18px_42px_rgba(2,6,23,0.3)] [&::-webkit-details-marker]:hidden ${focusRingClass}`}
                 >
                   <RocketLaunchIcon
-                    className="h-4.5 w-4.5 shrink-0 text-[#6CCDBB]"
+                    className="h-4.5 w-4.5 shrink-0 text-[var(--dc34-accent-secondary)]"
                     aria-hidden="true"
                   />
 
                   <span className="font-semibold tracking-[-0.01em] text-slate-100">Menu</span>
 
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/4.5 text-slate-400 transition-colors group-open:bg-[#017FA4]/18 group-open:text-[#6CCDBB]">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/4.5 text-slate-400 transition-colors group-open:bg-[var(--dc34-accent-primary)]/18 group-open:text-[var(--dc34-accent-secondary)]">
                     <ChevronDownIcon
                       className="h-4 w-4 transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
                       aria-hidden="true"
@@ -94,7 +94,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                     aria-hidden="true"
                     className="pointer-events-none absolute top-0 right-7 flex h-2.5 w-5 items-start justify-center"
                   >
-                    <span className="h-2.5 w-px rounded-full bg-[#017FA4]/35" />
+                    <span className="h-2.5 w-px rounded-full bg-[var(--dc34-accent-primary)]/35" />
                   </div>
 
                   <div className="ui-card relative max-h-[min(34rem,calc(100dvh-5rem))] overflow-y-auto overscroll-contain rounded-[1.55rem] border border-white/12 bg-slate-950/98 p-3 shadow-[0_20px_48px_rgba(0,0,0,0.42)] backdrop-blur-md before:pointer-events-none before:absolute before:top-0 before:right-6 before:h-3 before:w-3 before:-translate-y-1/2 before:rotate-45 before:rounded-sm before:border before:border-white/12 before:bg-slate-950/98 before:content-['']">
@@ -108,17 +108,17 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                         const isActive = href === activeHref;
                         const itemClassName = `group/item relative flex items-start gap-3 overflow-hidden rounded-[1.2rem] border px-3 py-3 text-left transition duration-200 ease-out ${focusRingClass} ${
                           isActive
-                            ? "border-[#017FA4]/36 bg-[linear-gradient(135deg,rgba(13,41,74,0.86),rgba(15,23,42,0.96))] text-white shadow-[0_14px_34px_rgba(2,6,23,0.24),inset_0_1px_0_rgba(255,255,255,0.06)]"
+                            ? "border-[var(--dc34-accent-primary)]/36 bg-[linear-gradient(135deg,rgba(13,41,74,0.86),rgba(15,23,42,0.96))] text-white shadow-[0_14px_34px_rgba(2,6,23,0.24),inset_0_1px_0_rgba(255,255,255,0.06)]"
                             : "border-white/6 bg-white/[0.02] text-slate-200 hover:border-white/10 hover:bg-white/[0.045] hover:text-slate-50 focus-visible:border-white/10 focus-visible:bg-white/[0.045] focus-visible:text-slate-50"
                         }`;
                         const iconClassName = `mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[1rem] border shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-colors ${
                           isActive
-                            ? "border-[#017FA4]/30 bg-[#017FA4]/12 text-[#6CCDBB]"
-                            : "border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] text-slate-400 group-hover/item:border-[#017FA4]/24 group-hover/item:bg-[#017FA4]/10 group-hover/item:text-[#6CCDBB] group-focus-within/item:border-[#017FA4]/24 group-focus-within/item:bg-[#017FA4]/10 group-focus-within/item:text-[#6CCDBB]"
+                            ? "border-[var(--dc34-accent-primary)]/30 bg-[var(--dc34-accent-primary)]/12 text-[var(--dc34-accent-secondary)]"
+                            : "border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] text-slate-400 group-hover/item:border-[var(--dc34-accent-primary)]/24 group-hover/item:bg-[var(--dc34-accent-primary)]/10 group-hover/item:text-[var(--dc34-accent-secondary)] group-focus-within/item:border-[var(--dc34-accent-primary)]/24 group-focus-within/item:bg-[var(--dc34-accent-primary)]/10 group-focus-within/item:text-[var(--dc34-accent-secondary)]"
                         }`;
                         const trailingClassName = `mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-200 ${
                           isActive
-                            ? "border-[#017FA4]/26 bg-[#017FA4]/14 text-[#6CCDBB]"
+                            ? "border-[var(--dc34-accent-primary)]/26 bg-[var(--dc34-accent-primary)]/14 text-[var(--dc34-accent-secondary)]"
                             : "border-white/8 bg-white/3 text-slate-500 group-hover/item:translate-x-0.5 group-hover/item:border-white/12 group-hover/item:bg-white/5 group-hover/item:text-slate-300 group-focus-within/item:translate-x-0.5 group-focus-within/item:border-white/12 group-focus-within/item:bg-white/5 group-focus-within/item:text-slate-300"
                         }`;
 
@@ -173,8 +173,8 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               aria-current={isAppsPage ? "page" : undefined}
               className={`ui-icon-btn h-11 w-11 rounded-xl border-white/10 bg-white/3 text-slate-300 shadow-[0_10px_28px_rgba(2,6,23,0.18)] transition ${focusRingClass} ${
                 isAppsPage
-                  ? "border-[#017FA4]/35 bg-[#017FA4]/12 text-[#6CCDBB]"
-                  : "hover:border-[#017FA4]/28 hover:bg-[#017FA4]/8 hover:text-[#6CCDBB]"
+                  ? "border-[var(--dc34-accent-primary)]/35 bg-[var(--dc34-accent-primary)]/12 text-[var(--dc34-accent-secondary)]"
+                  : "hover:border-[var(--dc34-accent-primary)]/28 hover:bg-[var(--dc34-accent-primary)]/8 hover:text-[var(--dc34-accent-secondary)]"
               }`}
               title="Get Hacker Tracker apps"
             >

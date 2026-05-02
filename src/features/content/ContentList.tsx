@@ -1,11 +1,12 @@
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import { useState, useMemo, type CSSProperties } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router";
 
 import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 
 import SearchHeader from "@/components/ui/SearchHeader";
 import { ConferenceManifest } from "@/lib/conferences";
+import { getToneFromColor } from "@/lib/tone";
 
 interface Props {
   conference: ConferenceManifest;
@@ -114,16 +115,12 @@ export default function ContentList({ content, tags, conference }: Props) {
           {filtered.map((item) => {
             const visibleTags = item.tags.slice(0, 4);
             const hiddenTagCount = item.tags.length - visibleTags.length;
+            const itemTone = getToneFromColor(item.tags[0]?.colorBackground);
 
             return (
               <li
                 key={item.id}
-                style={
-                  {
-                    "--event-color": item.tags[0]?.colorBackground ?? "#64748b",
-                  } as CSSProperties
-                }
-                className="ui-card ui-card-interactive group relative overflow-hidden"
+                className={`ui-card ui-card-interactive group relative overflow-hidden ui-tone-${itemTone}`}
               >
                 <span aria-hidden="true" className="ui-accent-rail" />
                 <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -148,11 +145,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                           {visibleTags.map((tag) => (
                             <li
                               key={tag.id}
-                              className="ui-tag-chip sm:text-xs"
-                              style={{
-                                backgroundColor: tag.colorBackground,
-                                color: tag.colorForeground ?? "#fff",
-                              }}
+                              className={`ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)} sm:text-xs`}
                             >
                               {tag.label}
                             </li>

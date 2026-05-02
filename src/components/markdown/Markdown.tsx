@@ -46,7 +46,7 @@ export default function Markdown({ content }: Props) {
           blockquote: (props) => (
             <blockquote
               {...props}
-              className="border-l-4 border-[#105F66] pl-4 text-slate-200 italic"
+              className="border-l-4 border-[var(--dc34-bg-secondary)] pl-4 text-slate-200 italic"
             />
           ),
 

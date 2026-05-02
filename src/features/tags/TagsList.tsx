@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
+import { getToneFromColor } from "@/lib/tone";
 import { TagTypesBrowseView } from "@/lib/types/ht-types";
 
 const formatCategory = (s: string) => s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -26,11 +27,7 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
     <Link
       to={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className="ui-focus-ring inline-flex rounded-full border border-white/10 px-3 py-1 text-sm font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition hover:border-[#017FA4]/70 focus-visible:outline-none"
-      style={{
-        backgroundColor: tag.colorBackground,
-        color: tag.colorForeground,
-      }}
+      className={`ui-focus-ring ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)} inline-flex px-3 py-1 text-sm transition hover:border-[var(--dc34-accent-primary)]/70 focus-visible:outline-none`}
     >
       {tag.label}
     </Link>
@@ -57,7 +54,7 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
 
           return (
             <section key={tagType.id} className="mb-10">
-              <h2 className="ui-heading-2 mb-4 text-[#6CCDBB]">
+              <h2 className="ui-heading-2 mb-4 text-[var(--dc34-accent-secondary)]">
                 {formatCategory(tagType.category)}
               </h2>
 

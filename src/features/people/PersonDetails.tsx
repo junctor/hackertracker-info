@@ -1,11 +1,12 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getBookmarks } from "@/lib/storage";
+import { getToneFromColor } from "@/lib/tone";
 import { ContentEntity, EventEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
 
 import ContentSession from "../content/ContentSession";
@@ -21,7 +22,13 @@ type PersonLinkView = NonNullable<PersonEntity["links"]>[number] & {
   url: string;
 };
 
-const PERSON_ACCENT_COLORS = ["#017FA4", "#2D7FF9", "#0F766E", "#7C3AED", "#C2410C", "#0E7490"];
+const PERSON_ACCENT_CLASS_NAMES = [
+  "ui-person-accent-0",
+  "ui-person-accent-1",
+  "ui-person-accent-2",
+  "ui-person-accent-3",
+  "ui-person-accent-4",
+];
 
 type AvatarRecord = {
   avatar?: { url?: string | null } | string | null;
@@ -85,13 +92,16 @@ function getInitials(name?: string | null): string {
     .toUpperCase();
 }
 
-function getPersonAccent(name?: string | null): string {
+function getPersonAccentClassName(name?: string | null): string {
   const normalizedName = getDisplayName(name);
   let hash = 0;
   for (const char of normalizedName) {
     hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   }
-  return PERSON_ACCENT_COLORS[hash % PERSON_ACCENT_COLORS.length] ?? PERSON_ACCENT_COLORS[0];
+  return (
+    PERSON_ACCENT_CLASS_NAMES[hash % PERSON_ACCENT_CLASS_NAMES.length] ??
+    PERSON_ACCENT_CLASS_NAMES[0]
+  );
 }
 
 export default function PersonDetails({ person, events, locations, conference }: Props) {
@@ -112,14 +122,11 @@ export default function PersonDetails({ person, events, locations, conference }:
     () => events.toSorted((a, b) => safeParseMs(a.beginIso) - safeParseMs(b.beginIso)),
     [events],
   );
-  const accentColor = getPersonAccent(person.name);
-  const primaryEventColor = sortedEvents[0]?.color ?? accentColor;
-  const accentStyle = {
-    "--event-color": primaryEventColor,
-  } as CSSProperties;
-  const avatarStyle = {
-    backgroundImage: `linear-gradient(135deg, ${accentColor}22 0%, rgba(15, 23, 42, 0.92) 100%)`,
-  } as CSSProperties;
+  const accentClassName = getPersonAccentClassName(person.name);
+  const primaryEventColor = sortedEvents[0]?.color;
+  const headerAccentClassName = primaryEventColor
+    ? `ui-tone-${getToneFromColor(primaryEventColor)}`
+    : accentClassName;
   const affiliations = useMemo(
     () =>
       (person.affiliations ?? [])
@@ -167,15 +174,14 @@ export default function PersonDetails({ person, events, locations, conference }:
 
   return (
     <div className="ui-container ui-page-content space-y-10">
-      <header style={accentStyle} className="ui-card relative overflow-hidden">
+      <header className={`ui-card relative overflow-hidden ${headerAccentClassName}`}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
         <div className="relative z-10 flex flex-col gap-6 px-5 py-5 pl-6 sm:px-6 sm:py-6 sm:pl-7">
           <div className="flex flex-col gap-5 md:flex-row md:items-start">
             <div
-              style={avatarStyle}
-              className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 text-2xl font-semibold tracking-[0.08em] text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:h-28 sm:w-28 sm:text-3xl"
+              className={`ui-person-avatar relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 text-2xl font-semibold tracking-[0.08em] text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:h-28 sm:w-28 sm:text-3xl ${accentClassName}`}
             >
               {personAvatarUrl && !hasAvatarError ? (
                 <Image
@@ -245,7 +251,7 @@ export default function PersonDetails({ person, events, locations, conference }:
                         className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                       >
                         <span className="max-w-[16rem] truncate">{link.title}</span>
-                        <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-[#6CCDBB]" />
+                        <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-[var(--dc34-accent-secondary)]" />
                       </a>
                     </li>
                   ))}

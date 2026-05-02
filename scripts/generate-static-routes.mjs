@@ -56,7 +56,7 @@ async function sanitizeGeneratedAssets() {
 }
 
 const generated = ["index.html"];
-const topLevelRouteSegments = ["tv"];
+const topLevelRouteSegments = ["app", "tv"];
 
 await sanitizeGeneratedAssets();
 

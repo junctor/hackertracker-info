@@ -1,33 +1,29 @@
-import React from "react";
-
 import Head from "@/components/Head";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import AppsLanding from "@/features/apps/AppsLanding";
-import { ConferenceManifest } from "@/lib/conferences";
-import { PageId } from "@/lib/types/page-meta";
+import { type ConferenceManifest } from "@/lib/conferences";
+import { type PageId } from "@/lib/types/page-meta";
 
 type AppsPageProps = {
-  conf: ConferenceManifest;
-  activePageId: PageId;
+  conf?: ConferenceManifest;
+  activePageId?: PageId;
 };
 
-export default function AppsPage({ conf, activePageId }: AppsPageProps) {
+export default function AppsPage({ conf }: AppsPageProps) {
+  const title = conf ? `Hacker Tracker Apps | ${conf.name}` : "Hacker Tracker Apps";
+  const description = conf
+    ? `Official ${conf.name} schedule companion. Choose iOS, Android, or Web.`
+    : "Official DEF CON schedule companion. Choose iOS, Android, or Web.";
+
   return (
     <>
       <Head>
-        <title>Apps | {conf.name}</title>
-        <meta
-          name="description"
-          content="Download the official Hacker Tracker apps for iOS and Android."
-        />
+        <title>{title}</title>
+        <meta name="description" content={description} />
       </Head>
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
+      <div className="ui-page-shell ui-apps-page-shell">
         <main id="main-content" className="ui-page-main">
           <AppsLanding conference={conf} />
         </main>
-        <SiteFooter />
       </div>
     </>
   );

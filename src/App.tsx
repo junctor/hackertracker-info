@@ -77,6 +77,7 @@ export default function App() {
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route index element={<HomePage />} />
+          <Route path="app" element={<AppsPage />} />
           <Route path="tv" element={<TVPage />} />
 
           <Route path=":conf">

@@ -81,9 +81,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
 
       <div className="mt-8 space-y-6">
         <section className="rounded-2xl border border-white/10 bg-slate-900/50 p-6">
-          <h2 className="text-sm font-semibold tracking-[0.14em] text-slate-200 uppercase">
-            About
-          </h2>
+          <h2 className="text-sm font-semibold tracking-widest text-slate-200 uppercase">About</h2>
 
           <div className="prose prose-invert mt-4 max-w-none text-slate-300">
             {description ? (
@@ -96,7 +94,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
 
         {hasLinks && (
           <section className="rounded-2xl border border-white/10 bg-slate-900/50 p-6">
-            <h2 className="text-sm font-semibold tracking-[0.14em] text-slate-200 uppercase">
+            <h2 className="text-sm font-semibold tracking-widest text-slate-200 uppercase">
               Links
             </h2>
 

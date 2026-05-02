@@ -12,17 +12,17 @@ export default function ErrorScreen({ msg }: Props) {
     <main id="main-content" className="ui-page-shell relative isolate overflow-hidden">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(circle_at_top,rgba(239,68,68,0.14),transparent_62%)]"
+        className="ui-screen-glow-error pointer-events-none absolute inset-x-0 top-0 h-48"
       />
 
       <section className="ui-page-main grid place-items-center px-4 py-10 sm:py-14">
-        <div className="ui-card relative w-full max-w-2xl overflow-hidden px-6 py-7 text-center shadow-[0_24px_70px_rgba(2,6,23,0.38)] sm:px-8 sm:py-9">
+        <div className="ui-card relative w-full max-w-2xl overflow-hidden px-6 py-7 text-center shadow-2xl sm:px-8 sm:py-9">
           <div
             aria-hidden="true"
             className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-(--dc34-accent-critical)/45 to-transparent"
           />
 
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-(--dc34-accent-critical)/20 bg-(--dc34-accent-critical)/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+          <div className="ui-inset-highlight mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-(--dc34-accent-critical)/20 bg-(--dc34-accent-critical)/10 text-white">
             <ExclamationTriangleIcon className="h-7 w-7" />
           </div>
 
@@ -38,13 +38,13 @@ export default function ErrorScreen({ msg }: Props) {
           </p>
 
           {hasMessage ? (
-            <div className="mt-6 rounded-2xl border border-(--dc34-accent-critical)/16 bg-(--dc34-accent-critical)/10 p-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-              <p className="text-[11px] font-semibold tracking-[0.16em] text-white/75 uppercase">
+            <div className="ui-inset-highlight-soft mt-6 rounded-2xl border border-(--dc34-accent-critical)/16 bg-(--dc34-accent-critical)/10 p-4 text-left">
+              <p className="text-xs font-semibold tracking-widest text-white/75 uppercase">
                 Error details
               </p>
               <pre
                 role="alert"
-                className="mt-2 max-h-[40dvh] overflow-auto font-mono text-xs leading-6 wrap-break-word whitespace-pre-wrap text-white/90 sm:text-sm"
+                className="mt-2 max-h-80 overflow-auto font-mono text-xs leading-6 wrap-break-word whitespace-pre-wrap text-white/90 sm:max-h-96 sm:text-sm"
               >
                 {msg}
               </pre>
@@ -54,7 +54,7 @@ export default function ErrorScreen({ msg }: Props) {
           <div className="mt-7 flex justify-center">
             <Link
               to="/"
-              className="ui-btn-base ui-btn-secondary ui-focus-ring inline-flex min-w-44 gap-2 rounded-xl px-4 shadow-[0_10px_24px_rgba(2,6,23,0.18)] focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring inline-flex min-w-44 gap-2 rounded-xl px-4 shadow-lg focus-visible:outline-none"
             >
               <HomeIcon className="h-5 w-5" aria-hidden="true" />
               <span>Go To Home</span>

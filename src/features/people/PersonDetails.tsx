@@ -181,7 +181,7 @@ export default function PersonDetails({ person, events, locations, conference }:
         <div className="relative z-10 flex flex-col gap-6 px-5 py-5 pl-6 sm:px-6 sm:py-6 sm:pl-7">
           <div className="flex flex-col gap-5 md:flex-row md:items-start">
             <div
-              className={`ui-person-avatar relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 text-2xl font-semibold tracking-[0.08em] text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:h-28 sm:w-28 sm:text-3xl ${accentClassName}`}
+              className={`ui-person-avatar ui-inset-highlight relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 text-2xl font-semibold tracking-widest text-slate-100 sm:h-28 sm:w-28 sm:text-3xl ${accentClassName}`}
             >
               {personAvatarUrl && !hasAvatarError ? (
                 <Image
@@ -194,10 +194,7 @@ export default function PersonDetails({ person, events, locations, conference }:
                 />
               ) : (
                 <>
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_62%)]"
-                  />
+                  <div aria-hidden="true" className="ui-avatar-fallback-glow absolute inset-0" />
                   {personInitials ? (
                     <span className="relative">{personInitials}</span>
                   ) : (
@@ -250,7 +247,7 @@ export default function PersonDetails({ person, events, locations, conference }:
                         rel="noopener noreferrer"
                         className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                       >
-                        <span className="max-w-[16rem] truncate">{link.title}</span>
+                        <span className="max-w-64 truncate">{link.title}</span>
                         <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-(--dc34-accent-secondary)" />
                       </a>
                     </li>
@@ -264,7 +261,7 @@ export default function PersonDetails({ person, events, locations, conference }:
 
       {personDescription && (
         <section aria-labelledby="about-title" className="space-y-4">
-          <h2 id="about-title" className="text-sm font-semibold tracking-[0.02em] text-slate-300">
+          <h2 id="about-title" className="text-sm font-semibold tracking-wide text-slate-300">
             About
           </h2>
           <div className="ui-card px-5 py-5 sm:px-6">
@@ -277,7 +274,7 @@ export default function PersonDetails({ person, events, locations, conference }:
 
       {sortedEvents.length > 0 && (
         <section aria-labelledby="events-title" className="space-y-4">
-          <h2 id="events-title" className="text-sm font-semibold tracking-[0.02em] text-slate-300">
+          <h2 id="events-title" className="text-sm font-semibold tracking-wide text-slate-300">
             Sessions
           </h2>
           <ul className="space-y-4">

@@ -232,26 +232,26 @@ export default function ScheduleEvents({
     ? `${activeDay.events.length} ${activeDay.events.length === 1 ? "event" : "events"}`
     : null;
   const utilityLinkBaseClassName =
-    "ui-btn-base ui-focus-ring group min-h-10 gap-2 rounded-xl border px-3 text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] focus-visible:outline-none max-[320px]:w-10 max-[320px]:justify-center max-[320px]:px-0";
+    "ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button group gap-2 rounded-xl border px-3 text-sm focus-visible:outline-none";
   const activeFilterClassName =
-    "ui-surface-elevated-soft border-(--dc34-accent-primary)/45 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
+    "ui-inset-highlight ui-surface-elevated-soft border-(--dc34-accent-primary)/45 text-white";
   const inactiveFilterClassName =
-    "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/14 hover:bg-white/[0.05] hover:text-slate-100";
+    "border-white/10 bg-white/3 text-slate-300 hover:border-white/14 hover:bg-white/5 hover:text-slate-100";
   const utilityIconBaseClassName = "h-4.5 w-4.5 shrink-0 transition-colors";
   const activeUtilityIconClassName = "text-(--dc34-accent-secondary)";
   const inactiveUtilityIconClassName = "text-slate-400 group-hover:text-slate-200";
   const dayTabTrayClassName =
-    "ui-surface-soft rounded-[1.2rem] border border-white/10 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]";
+    "ui-inset-highlight-soft ui-surface-soft rounded-2xl border border-white/10 p-1";
   const dayTabBaseClassName =
-    "ui-focus-ring group relative flex min-h-11 items-center gap-2 rounded-[0.95rem] border px-3.5 py-2 text-sm whitespace-nowrap transition duration-200 ease-out focus-visible:outline-none";
+    "ui-focus-ring group relative flex min-h-11 items-center gap-2 rounded-2xl border px-3.5 py-2 text-sm whitespace-nowrap transition duration-200 ease-out focus-visible:outline-none";
   const activeDayTabClassName =
-    "ui-surface-elevated-soft border-(--dc34-accent-primary)/45 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
+    "ui-inset-highlight ui-surface-elevated-soft border-(--dc34-accent-primary)/45 text-white";
   const inactiveDayTabClassName =
-    "border-transparent bg-transparent text-slate-300 hover:border-white/10 hover:bg-white/[0.05] hover:text-slate-100";
+    "border-transparent bg-transparent text-slate-300 hover:border-white/10 hover:bg-white/5 hover:text-slate-100";
   const activeDayCountClassName =
-    "rounded-full border border-(--dc34-accent-primary)/26 bg-(--dc34-accent-primary)/12 px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-(--dc34-accent-secondary)";
+    "rounded-full border border-(--dc34-accent-primary)/26 bg-(--dc34-accent-primary)/12 px-2 py-0.5 text-xs font-semibold tracking-wide text-(--dc34-accent-secondary)";
   const inactiveDayCountClassName =
-    "rounded-full border border-white/8 bg-black/15 px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-slate-400 transition-colors group-hover:text-slate-200";
+    "rounded-full border border-white/8 bg-black/15 px-2 py-0.5 text-xs font-semibold tracking-wide text-slate-400 transition-colors group-hover:text-slate-200";
 
   const computeItemKey = useCallback((_: number, evt: ScheduleEventViewModel) => evt.id, []);
   const itemContent = useCallback(
@@ -287,7 +287,7 @@ export default function ScheduleEvents({
                 }`}
                 aria-hidden="true"
               />
-              <span className="font-semibold tracking-[-0.01em] max-[320px]:sr-only">
+              <span className="ui-schedule-compact-label font-semibold tracking-tight">
                 Bookmarks
               </span>
             </Link>
@@ -306,7 +306,7 @@ export default function ScheduleEvents({
                 }`}
                 aria-hidden="true"
               />
-              <span className="font-semibold tracking-[-0.01em] max-[320px]:sr-only">Tags</span>
+              <span className="ui-schedule-compact-label font-semibold tracking-tight">Tags</span>
             </Link>
           </div>
         </nav>
@@ -314,7 +314,7 @@ export default function ScheduleEvents({
 
       <div
         ref={stickyTabsRef}
-        className="ui-topbar ui-schedule-day-tabs sticky z-40 border-y border-white/8 shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+        className="ui-topbar ui-schedule-day-tabs sticky z-40 border-y border-white/8 shadow-lg"
         style={stickyTabsTopStyle}
       >
         <div className="ui-container py-2.5">
@@ -323,7 +323,7 @@ export default function ScheduleEvents({
               role="tablist"
               aria-label="Schedule days"
               aria-orientation="horizontal"
-              className="min-w-0 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="ui-scrollbar-none min-w-0 overflow-x-auto overscroll-x-contain"
             >
               <div className="flex min-w-max items-center gap-2 pr-1">
                 {days.map(({ day, events }, index) => (
@@ -345,7 +345,7 @@ export default function ScheduleEvents({
                     onClick={() => onSelectDay(day)}
                     onKeyDown={(e) => handleTabKeyDown(e, index, day)}
                   >
-                    <span className="font-semibold tracking-[-0.01em]">
+                    <span className="font-semibold tracking-tight">
                       {tabDateTitle(day, conf.timezone)}
                     </span>
                     <span
@@ -376,7 +376,7 @@ export default function ScheduleEvents({
                 <h2
                   ref={headingRef}
                   style={headingScrollStyle}
-                  className="text-xl font-bold tracking-tight text-slate-100 md:text-[1.75rem]"
+                  className="text-xl font-bold tracking-tight text-slate-100 md:text-3xl"
                 >
                   {activeDayLabel}
                 </h2>

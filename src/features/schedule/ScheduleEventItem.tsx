@@ -55,13 +55,13 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
       <div className="relative z-10 flex items-start gap-3 px-4 py-4 pl-5 sm:px-5 sm:py-5 sm:pl-6">
         <Link
           to={href}
-          className="ui-focus-ring min-w-0 flex-1 rounded-[inherit] focus-visible:outline-none"
+          className="ui-focus-ring ui-rounded-inherit min-w-0 flex-1 focus-visible:outline-none"
         >
           <div className="flex min-w-0 flex-col gap-4 md:flex-row md:items-start md:gap-5">
             <div className="min-w-0 space-y-1.5 md:w-44 md:shrink-0">
               {(isLive || isNext) && (
                 <span
-                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] uppercase ${
+                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold tracking-widest uppercase ${
                     isLive
                       ? "border-(--dc34-accent-critical) bg-(--dc34-accent-critical)/16 text-white"
                       : "border-(--dc34-accent-warning)/75 bg-(--dc34-accent-warning)/16 text-(--dc34-accent-warning)"

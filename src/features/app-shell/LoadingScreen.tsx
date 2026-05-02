@@ -3,7 +3,7 @@ export default function LoadingScreen() {
     <main id="main-content" className="ui-page-shell relative isolate overflow-hidden">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_top,rgba(1,127,164,0.16),transparent_62%)]"
+        className="ui-screen-glow-loading pointer-events-none absolute inset-x-0 top-0 h-56"
       />
 
       <section className="ui-page-main grid place-items-center px-4 py-10 sm:py-14">
@@ -11,7 +11,7 @@ export default function LoadingScreen() {
           role="status"
           aria-live="polite"
           aria-busy="true"
-          className="ui-card relative w-full max-w-md overflow-hidden px-6 py-7 text-center shadow-[0_24px_70px_rgba(2,6,23,0.34)] sm:px-8 sm:py-8"
+          className="ui-card relative w-full max-w-md overflow-hidden px-6 py-7 text-center shadow-2xl sm:px-8 sm:py-8"
         >
           <div
             aria-hidden="true"
@@ -23,8 +23,8 @@ export default function LoadingScreen() {
             className="relative mx-auto flex h-16 w-16 items-center justify-center"
           >
             <span className="absolute inset-0 rounded-full border border-(--dc34-accent-primary)/20 bg-(--dc34-accent-primary)/8" />
-            <span className="absolute inset-[0.35rem] rounded-full border-2 border-slate-700/80 border-t-(--dc34-accent-secondary) motion-safe:animate-spin motion-reduce:animate-none" />
-            <span className="h-2.5 w-2.5 rounded-full bg-(--dc34-accent-secondary) shadow-[0_0_18px_rgba(108,205,187,0.55)] motion-safe:animate-pulse motion-reduce:animate-none" />
+            <span className="absolute inset-1.5 rounded-full border-2 border-slate-700/80 border-t-(--dc34-accent-secondary) motion-safe:animate-spin motion-reduce:animate-none" />
+            <span className="ui-loading-pulse-dot h-2.5 w-2.5 rounded-full bg-(--dc34-accent-secondary) motion-safe:animate-pulse motion-reduce:animate-none" />
           </div>
 
           <p className="ui-kicker mt-5">Loading</p>

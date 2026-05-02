@@ -162,7 +162,7 @@ export default function Home() {
               >
                 <span
                   ref={titleRef}
-                  className="ui-homepage-title inline-block max-w-full cursor-pointer text-center font-mono text-[clamp(2.2rem,16vw,5rem)] leading-none font-semibold tracking-[0.04em] transition select-none sm:text-8xl sm:tracking-[0.07em] md:text-9xl md:tracking-widest lg:text-[10rem]"
+                  className="ui-homepage-title ui-homepage-title-display inline-block max-w-full cursor-pointer text-center font-mono leading-none font-semibold transition select-none"
                 >
                   {title}
                 </span>
@@ -212,7 +212,7 @@ function ConferenceCard({
         aria-hidden="true"
         className="ui-home-conference-card-glow pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
       >
-        <span className="ui-home-conference-card-sheen absolute top-0 -left-1/3 h-full w-1/2 -skew-x-12 opacity-0 transition duration-700 group-hover:translate-x-[240%] group-hover:opacity-100" />
+        <span className="ui-home-conference-card-sheen absolute top-0 -left-1/3 h-full w-1/2 -skew-x-12 opacity-0 transition duration-700 group-hover:opacity-100" />
       </span>
 
       <div className="ui-home-conference-card-shell relative flex h-full flex-col p-3.5 backdrop-blur-md sm:p-4">
@@ -241,7 +241,7 @@ function ConferenceCard({
                 alt={`${conference.name} logo`}
                 fill
                 sizes="(min-width: 1024px) 480px, (min-width: 640px) 46vw, 92vw"
-                className="object-contain transition duration-300 group-hover:-translate-y-0.5 group-hover:scale-[1.035]"
+                className="object-contain transition duration-300 group-hover:-translate-y-0.5 group-hover:scale-105"
               />
             </div>
           </div>

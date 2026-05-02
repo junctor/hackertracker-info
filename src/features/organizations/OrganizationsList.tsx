@@ -91,7 +91,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
                         sizes="(min-width: 640px) 5rem, 4rem"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center font-mono text-sm font-semibold tracking-[0.12em] text-white">
+                      <div className="flex h-full w-full items-center justify-center font-mono text-sm font-semibold tracking-widest text-white">
                         {getInitials(organization.name)}
                       </div>
                     )}

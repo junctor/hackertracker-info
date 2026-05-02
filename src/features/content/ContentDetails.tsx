@@ -119,10 +119,7 @@ export default function ContentDetails(props: Props) {
 
       {sessions.length > 0 && (
         <section aria-labelledby="sessions-title" className="space-y-4">
-          <h2
-            id="sessions-title"
-            className="text-sm font-semibold tracking-[0.02em] text-slate-300"
-          >
+          <h2 id="sessions-title" className="text-sm font-semibold tracking-wide text-slate-300">
             Sessions
           </h2>
           <ul className="space-y-4">
@@ -142,7 +139,7 @@ export default function ContentDetails(props: Props) {
 
       {tags.length > 0 && (
         <section aria-labelledby="tags-title" className="space-y-3">
-          <h2 id="tags-title" className="text-sm font-semibold tracking-[0.02em] text-slate-300">
+          <h2 id="tags-title" className="text-sm font-semibold tracking-wide text-slate-300">
             Tags
           </h2>
           <div className="ui-card px-4 py-4 sm:px-5">
@@ -157,7 +154,7 @@ export default function ContentDetails(props: Props) {
                       className={`ui-tag-dot h-3 w-3 rounded-full ui-tone-${getToneFromColor(tag.colorBackground)}`}
                       aria-hidden="true"
                     />
-                    <span className="max-w-[16rem] truncate">{tag.label}</span>
+                    <span className="max-w-64 truncate">{tag.label}</span>
                   </Link>
                 </li>
               ))}
@@ -168,10 +165,7 @@ export default function ContentDetails(props: Props) {
 
       {content.description && (
         <section aria-labelledby="description-title" className="space-y-4">
-          <h2
-            id="description-title"
-            className="text-sm font-semibold tracking-[0.02em] text-slate-300"
-          >
+          <h2 id="description-title" className="text-sm font-semibold tracking-wide text-slate-300">
             Description
           </h2>
           <div className="ui-card px-5 py-5 sm:px-6">
@@ -184,7 +178,7 @@ export default function ContentDetails(props: Props) {
 
       {content.links && content.links.length > 0 && (
         <section aria-labelledby="links-title" className="space-y-4">
-          <h2 id="links-title" className="text-sm font-semibold tracking-[0.02em] text-slate-300">
+          <h2 id="links-title" className="text-sm font-semibold tracking-wide text-slate-300">
             Links
           </h2>
           <ul className="space-y-2.5">
@@ -197,7 +191,7 @@ export default function ContentDetails(props: Props) {
                   className="ui-focus-ring ui-card ui-card-interactive group flex min-w-0 items-center justify-between gap-4 px-4 py-3.5 focus-visible:outline-none sm:px-5"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-(--dc34-accent-secondary) transition-colors group-hover:text-white sm:text-[0.95rem]">
+                    <p className="truncate text-sm font-medium text-(--dc34-accent-secondary) transition-colors group-hover:text-white sm:text-base">
                       {l.label}
                     </p>
                   </div>
@@ -214,7 +208,7 @@ export default function ContentDetails(props: Props) {
 
       {people.length > 0 && (
         <section aria-labelledby="people-title" className="space-y-3">
-          <h2 id="people-title" className="text-sm font-semibold tracking-[0.02em] text-slate-300">
+          <h2 id="people-title" className="text-sm font-semibold tracking-wide text-slate-300">
             People
           </h2>
           <div className="ui-card px-4 py-4 sm:px-5">

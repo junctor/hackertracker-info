@@ -31,7 +31,7 @@ export default function SearchHeader({
         <form
           role="search"
           onSubmit={(e) => e.preventDefault()}
-          className={`grid w-full gap-3 ${hasAuxControl ? "sm:grid-cols-2" : ""} lg:w-auto lg:min-w-[24rem]`}
+          className={`grid w-full gap-3 ${hasAuxControl ? "sm:grid-cols-2" : ""} lg:w-auto lg:min-w-sm`}
         >
           <label htmlFor={searchInputId} className="w-full">
             <span className="sr-only">{searchLabel}</span>

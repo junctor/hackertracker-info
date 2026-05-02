@@ -126,7 +126,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                 <span aria-hidden="true" className="ui-accent-rail-overlay" />
                 <Link
                   to={`/${conference.slug}/content/?id=${item.id}`}
-                  className="ui-focus-ring relative z-10 block rounded-[inherit] px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
+                  className="ui-focus-ring ui-rounded-inherit relative z-10 block px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
                 >
                   <div className="flex min-w-0 items-start gap-3 sm:gap-4">
                     <div className="min-w-0 flex-1 space-y-2.5">

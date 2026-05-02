@@ -43,25 +43,25 @@ const COUNTDOWN_VARIANTS: Record<
       "grid grid-cols-2 gap-x-4 gap-y-6 text-center sm:grid-cols-4 sm:gap-x-6 lg:gap-x-8",
     itemClassName: "relative min-w-0 px-2 sm:px-3",
     valueWrapClassName:
-      "relative mx-auto flex min-h-[3.5rem] items-center justify-center sm:min-h-[4.5rem] md:min-h-[5.25rem] lg:min-h-[6.5rem]",
+      "relative mx-auto flex min-h-14 items-center justify-center sm:min-h-18 md:min-h-20 lg:min-h-24",
     valueClassName:
       "relative z-10 block text-3xl font-bold leading-none tabular-nums text-slate-50 sm:text-4xl md:text-5xl lg:text-7xl",
     labelClassName:
-      "mt-2 block text-[11px] tracking-[0.18em] text-slate-300 uppercase sm:text-xs md:text-sm lg:mt-3 lg:text-base",
+      "mt-2 block text-xs tracking-widest text-slate-300 uppercase md:text-sm lg:mt-3 lg:text-base",
     separatorClassName:
       "absolute right-0 top-1/2 hidden h-12 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-white/14 to-transparent sm:block lg:h-16",
     settledValueColor: "var(--color-fg)",
     liveAnnouncements: true,
-    glowSize: "h-14 w-14 sm:h-[4.5rem] sm:w-[4.5rem] lg:h-24 lg:w-24",
+    glowSize: "h-14 w-14 sm:h-18 sm:w-18 lg:h-24 lg:w-24",
   },
   tiny: {
     sectionClassName: "mt-2 w-full",
     gridClassName: "grid grid-cols-4 gap-x-2 text-center",
     itemClassName: "relative min-w-0",
-    valueWrapClassName: "relative mx-auto flex min-h-[1.4rem] items-center justify-center",
+    valueWrapClassName: "relative mx-auto flex min-h-6 items-center justify-center",
     valueClassName:
       "relative z-10 block text-xs font-semibold leading-none tabular-nums text-slate-100 sm:text-sm",
-    labelClassName: "mt-1 block text-[9px] tracking-[0.12em] text-slate-400 uppercase",
+    labelClassName: "mt-1 block text-xs tracking-widest text-slate-400 uppercase",
     separatorClassName:
       "absolute right-0 top-1/2 hidden h-5 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent sm:block",
     settledValueColor: "var(--color-muted)",
@@ -377,7 +377,7 @@ export default function Countdown({ conference, size = "large" }: Props) {
               <div className={variant.valueWrapClassName}>
                 <span
                   aria-hidden="true"
-                  className={`pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,currentColor_0%,transparent_72%)] opacity-0 blur-xl ${variant.glowSize} ${COUNTDOWN_UNIT_TEXT_CLASS_NAMES[unit.key]}`}
+                  className={`ui-countdown-glow pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 blur-xl ${variant.glowSize} ${COUNTDOWN_UNIT_TEXT_CLASS_NAMES[unit.key]}`}
                   ref={glowRefs[unit.key]}
                 />
                 <span

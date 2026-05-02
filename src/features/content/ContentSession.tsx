@@ -62,7 +62,7 @@ function ContentSessionCard({
   const sessionContent = (
     <div className="min-w-0 flex-1 space-y-1.5">
       {titleLabel ? (
-        <p className="line-clamp-2 text-base leading-6 font-semibold tracking-[-0.01em] text-slate-100 transition-colors group-hover:text-white sm:text-lg">
+        <p className="line-clamp-2 text-base leading-6 font-semibold tracking-tight text-slate-100 transition-colors group-hover:text-white sm:text-lg">
           {titleLabel}
         </p>
       ) : null}
@@ -87,7 +87,7 @@ function ContentSessionCard({
         {href ? (
           <Link
             to={href}
-            className="ui-focus-ring min-w-0 flex-1 rounded-[inherit] focus-visible:outline-none"
+            className="ui-focus-ring ui-rounded-inherit min-w-0 flex-1 focus-visible:outline-none"
           >
             {sessionContent}
           </Link>

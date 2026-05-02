@@ -198,10 +198,10 @@ export default function PeopleList({ people, conference }: Props) {
 
                   <Link
                     to={`/${conference.slug}/people/?id=${person.id}`}
-                    className="ui-focus-ring relative z-10 block h-full rounded-[inherit] px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
+                    className="ui-focus-ring ui-rounded-inherit relative z-10 block h-full px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="ui-person-avatar relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                      <div className="ui-person-avatar ui-inset-highlight-soft relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4">
                         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/8" />
                         <div className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden">
                           {showAvatarImage && avatarUrl ? (
@@ -221,10 +221,10 @@ export default function PeopleList({ people, conference }: Props) {
                             <>
                               <div
                                 aria-hidden="true"
-                                className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_62%)]"
+                                className="ui-avatar-fallback-glow absolute inset-0"
                               />
                               {personInitials ? (
-                                <span className="relative text-xs font-semibold tracking-[0.08em] text-slate-100 uppercase">
+                                <span className="relative text-xs font-semibold tracking-widest text-slate-100 uppercase">
                                   {personInitials}
                                 </span>
                               ) : (
@@ -239,7 +239,7 @@ export default function PeopleList({ people, conference }: Props) {
                       </div>
 
                       <div className="min-w-0 flex-1 space-y-1">
-                        <h2 className="text-[1rem] leading-6 font-semibold tracking-[-0.01em] text-slate-100 transition-colors group-hover:text-white">
+                        <h2 className="text-base leading-6 font-semibold tracking-tight text-slate-100 transition-colors group-hover:text-white">
                           <span className="line-clamp-2">{highlight(personName, query)}</span>
                         </h2>
                         {personTitle ? (

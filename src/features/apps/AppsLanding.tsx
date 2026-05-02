@@ -89,7 +89,7 @@ export default function AppsLanding({ conference }: Props) {
 
           <h1
             id="apps-landing-title"
-            className="ui-apps-title group font-museo relative mx-auto inline-block cursor-default text-5xl font-semibold text-balance sm:text-7xl md:text-8xl lg:text-[6rem] lg:leading-none"
+            className="ui-apps-title group font-museo relative mx-auto inline-block cursor-default text-5xl font-semibold text-balance sm:text-7xl md:text-8xl lg:leading-none"
           >
             <span className="relative z-10">Hacker Tracker</span>
             <span

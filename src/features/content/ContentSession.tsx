@@ -101,7 +101,7 @@ function ContentSessionCard({
             download={`DEF_CON_${contentEntity.id}-${session.id}.ics`}
             title={`Download calendar invite for session: ${contentEntity.title}`}
             aria-label={`Download calendar invite for session: ${contentEntity.title}`}
-            className="ui-icon-btn ui-focus-ring h-11 w-11 focus-visible:outline-none"
+            className="ui-icon-plain"
           >
             <CalendarIcon className="h-5 w-5" aria-hidden="true" />
           </a>
@@ -111,7 +111,7 @@ function ContentSessionCard({
             onClick={handleBookmarkClick}
             aria-label={bookmarkLabel}
             aria-pressed={bookmark}
-            className="ui-icon-btn ui-focus-ring h-11 w-11 focus-visible:outline-none"
+            className="ui-icon-plain"
           >
             {bookmark ? (
               <BookmarkIconSolid className="h-5 w-5" aria-hidden="true" />

@@ -150,11 +150,9 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               aria-label="Get Hacker Tracker apps"
               aria-current={isAppsPage ? "page" : undefined}
               title="Get Hacker Tracker apps"
+              className="ui-icon-plain"
             >
-              <DevicePhoneMobileIcon
-                className={`h-5 w-5 transition ${focusRingClass} hover:border-(--dc34-accent-primary)/28 hover:bg-(--dc34-accent-primary)/8 hover:text-(--dc34-accent-secondary)`}
-                aria-hidden="true"
-              />
+              <DevicePhoneMobileIcon className="h-5 w-5" aria-hidden="true" />
             </Link>
           </div>
         </div>

@@ -108,7 +108,7 @@ export default function ContentDetails(props: Props) {
                 type="button"
                 onClick={handleShare}
                 aria-label="Share content link"
-                className="ui-icon-btn ui-focus-ring shrink-0 self-start focus-visible:outline-none"
+                className="ui-icon-plain"
               >
                 <ShareIcon className="h-5 w-5" aria-hidden="true" />
               </button>

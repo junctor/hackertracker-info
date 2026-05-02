@@ -115,7 +115,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
           onClick={handleBookmarkClick}
           aria-label={bookmarkLabel}
           aria-pressed={bookmark}
-          className="ui-focus-ring ui-icon-btn h-11 w-11 shrink-0 focus-visible:outline-none"
+          className="ui-icon-plain"
         >
           {bookmark ? (
             <BookmarkIconSolid className="h-5 w-5" aria-hidden="true" />

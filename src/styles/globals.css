@@ -1283,3 +1283,25 @@ button {
     opacity: 0.82;
   }
 }
+
+.ui-icon-plain {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+
+  color: var(--color-muted);
+
+  transition: color 0.2s ease;
+}
+
+.ui-icon-plain:hover {
+  color: color-mix(in oklab, var(--dc34-accent-secondary), white 12%);
+}
+
+.ui-icon-plain:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.15);
+  border-radius: 0.5rem;
+}

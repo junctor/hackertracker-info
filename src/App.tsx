@@ -21,9 +21,11 @@ const DocumentPage = lazy(() => import("@/routes/conference/DocumentPage"));
 const ExhibitorsPage = lazy(() => import("@/routes/conference/ExhibitorsPage"));
 const LocationsPage = lazy(() => import("@/routes/conference/LocationsPage"));
 const MenuPage = lazy(() => import("@/routes/conference/MenuPage"));
+const OrganizationPage = lazy(() => import("@/routes/conference/OrganizationPage"));
 const PeoplePage = lazy(() => import("@/routes/conference/PeoplePage"));
 const ReadmePage = lazy(() => import("@/routes/conference/ReadmePage"));
 const SchedulePage = lazy(() => import("@/routes/conference/SchedulePage"));
+const SearchPage = lazy(() => import("@/routes/conference/SearchPage"));
 const TagPage = lazy(() => import("@/routes/conference/TagPage"));
 const TagsPage = lazy(() => import("@/routes/conference/TagsPage"));
 const VendorsPage = lazy(() => import("@/routes/conference/VendorsPage"));
@@ -93,9 +95,11 @@ export default function App() {
             {conferenceRoute("exhibitors", ExhibitorsPage, "exhibitors")}
             {conferenceRoute("locations", LocationsPage, "locations")}
             {conferenceRoute("menu", MenuPage, "home")}
+            {conferenceRoute("organization", OrganizationPage, "organization")}
             {conferenceRoute("people", PeoplePage, "people")}
             {conferenceRoute("readme.nfo", ReadmePage, "readme")}
             {conferenceRoute("schedule", SchedulePage, "schedule")}
+            {conferenceRoute("search", SearchPage, "search")}
             {conferenceRoute("speakers", PeoplePage, "people")}
             {conferenceRoute("tag", TagPage, "tag")}
             {conferenceRoute("tags", TagsPage, "tags")}

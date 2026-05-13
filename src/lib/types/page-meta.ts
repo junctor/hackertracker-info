@@ -15,6 +15,7 @@ export type PageId =
   | "person"
   | "readme"
   | "schedule"
+  | "search"
   | "tag"
   | "tags"
   | "vendors"
@@ -38,6 +39,7 @@ export const PAGE_META: Record<PageId, { title: string }> = {
   person: { title: "Person" },
   readme: { title: "readme.nfo" },
   schedule: { title: "Schedule" },
+  search: { title: "Search" },
   tag: { title: "Tag" },
   tags: { title: "Tags" },
   vendors: { title: "Vendors" },

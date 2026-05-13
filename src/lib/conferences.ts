@@ -63,6 +63,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "people",
       "readme",
       "schedule",
+      "search",
       "villages",
     ],
   },
@@ -82,7 +83,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     end: "2026-08-10T06:59:59Z",
 
     dataRoot: "/ht/defcon34",
-    siteMenu: ["communities", "contests", "readme", "villages"],
+    siteMenu: ["communities", "contests", "readme", "search", "villages"],
   },
 } as const;
 

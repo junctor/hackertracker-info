@@ -23,7 +23,7 @@ function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="View source on GitHub"
-              className="ui-icon-plain"
+              className="ui-icon-plain gap-2 rounded-xl px-3.5 text-sm font-medium"
             >
               <CodeBracketSquareIcon className="h-4 w-4" aria-hidden="true" />
               <span>View Source</span>

@@ -929,9 +929,6 @@ button {
 
 .ui-app-card-glow {
   animation: ui-apps-card-glow 8s ease-in-out infinite;
-}
-
-.ui-app-card-glow {
   background: color-mix(in oklab, var(--app-card-accent), transparent 78%);
   opacity: 0.54;
 }
@@ -945,8 +942,7 @@ button {
   );
 }
 
-.ui-app-card-eyebrow,
-.ui-app-card-reason {
+.ui-app-card-eyebrow {
   color: color-mix(in oklab, var(--app-card-accent), white 34%);
 }
 
@@ -954,10 +950,6 @@ button {
   border: 1px solid color-mix(in oklab, white, transparent 88%);
   background: color-mix(in oklab, var(--color-bg), transparent 34%);
   color: color-mix(in oklab, var(--app-card-accent), white 24%);
-}
-
-.ui-app-card-destination {
-  color: color-mix(in oklab, var(--accent-warning), white 12%);
 }
 
 .ui-app-card-action {
@@ -1298,6 +1290,10 @@ button {
 
 .ui-icon-plain:hover {
   color: color-mix(in oklab, var(--dc34-accent-secondary), white 12%);
+}
+
+.ui-icon-plain[aria-current="page"] {
+  color: color-mix(in oklab, var(--dc34-accent-secondary), white 16%);
 }
 
 .ui-icon-plain:focus-visible {

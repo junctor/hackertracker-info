@@ -19,10 +19,10 @@ const menuCardClassName =
   "ui-card ui-card-interactive ui-focus-ring ui-home-menu-card group/item relative isolate flex min-h-40 w-full min-w-0 flex-col overflow-hidden rounded-3xl border border-white/10 p-4 text-left transition duration-200 ease-out hover:-translate-y-0.5 hover:border-white/14 focus-visible:outline-none focus-visible:-translate-y-0.5 focus-visible:border-white/14 sm:min-h-44 sm:p-5";
 
 const menuCardIconClassName =
-  "ui-home-menu-card-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 text-slate-400 transition-all duration-200 group-hover/item:border-(--dc34-accent-primary)/32 group-hover/item:bg-(--dc34-accent-primary)/12 group-hover/item:text-(--dc34-accent-secondary) group-focus-within/item:border-(--dc34-accent-primary)/32 group-focus-within/item:bg-(--dc34-accent-primary)/12 group-focus-within/item:text-(--dc34-accent-secondary) sm:h-11 sm:w-11";
+  "ui-home-menu-card-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-(--border) text-(--text-muted) transition-all duration-200 group-hover/item:border-(--accent)/32 group-hover/item:bg-(--accent)/12 group-hover/item:text-(--accent-success) group-focus-within/item:border-(--accent)/32 group-focus-within/item:bg-(--accent)/12 group-focus-within/item:text-(--accent-success) sm:h-11 sm:w-11";
 
 const menuCardActionClassName =
-  "mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/8 bg-white/3 text-slate-500 transition-all duration-200 group-hover/item:translate-x-0.5 group-hover/item:border-white/12 group-hover/item:bg-white/5 group-hover/item:text-slate-300 group-focus-within/item:translate-x-0.5 group-focus-within/item:border-white/12 group-focus-within/item:bg-white/5 group-focus-within/item:text-slate-300";
+  "mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-(--border) bg-(--surface-muted) text-(--text-subtle) transition-all duration-200 group-hover/item:translate-x-0.5 group-hover/item:border-(--border-strong) group-hover/item:bg-(--surface-interactive) group-hover/item:text-(--text-primary) group-focus-within/item:translate-x-0.5 group-focus-within/item:border-(--border-strong) group-focus-within/item:bg-(--surface-interactive) group-focus-within/item:text-(--text-primary)";
 
 export default function Menu({ conference }: Props) {
   const home = useHomeModel(conference);
@@ -74,14 +74,14 @@ export default function Menu({ conference }: Props) {
 
                   <div className="mt-4 min-w-0">
                     <div className="flex items-start gap-2.5">
-                      <h2 className="min-w-0 flex-1 text-sm font-semibold tracking-tight text-slate-100 transition-colors group-focus-within/item:text-white group-hover/item:text-white sm:text-base">
+                      <h2 className="ui-card-title min-w-0 flex-1 text-sm sm:text-base">
                         {item.title}
                         {isExternal ? <span className="sr-only">, opens in a new tab</span> : null}
                       </h2>
                     </div>
 
                     {item.description ? (
-                      <p className="mt-2 text-sm leading-6 text-slate-400 transition-colors duration-200 group-focus-within/item:text-slate-300 group-hover/item:text-slate-300">
+                      <p className="ui-card-meta mt-2 transition-colors duration-200 group-focus-within/item:text-(--text-primary) group-hover/item:text-(--text-primary)">
                         {item.description}
                       </p>
                     ) : null}

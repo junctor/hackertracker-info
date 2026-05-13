@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { Link } from "react-router";
 
 import Image from "@/components/Image";
-import SearchHeader from "@/components/ui/SearchHeader";
+import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { PeopleCardsView } from "@/lib/types/ht-types";
 
@@ -123,38 +123,33 @@ export default function PeopleList({ people, conference }: Props) {
 
   return (
     <section className="ui-container ui-section">
-      <SearchHeader
+      <PageHeader
         title="People"
-        searchLabel="Search people"
-        searchPlaceholder="Search people..."
-        searchValue={query}
-        onSearchChange={setQuery}
+        description="Find speakers, authors, builders, and contributors by name or title."
+        resultLabel={hasSearch ? `${resultCountLabel} found` : undefined}
+        search={{
+          label: "Search people",
+          placeholder: "Search people...",
+          value: query,
+          onChange: setQuery,
+        }}
       >
         <label className="block w-full">
           <span className="sr-only">Sort people</span>
           <select
             value={sortMode}
             onChange={(e) => setSortMode(e.currentTarget.value as SortMode)}
-            className="ui-input-base ui-focus-ring focus-visible:outline-none"
+            className="ui-input-base ui-select-control ui-focus-ring focus-visible:outline-none"
           >
             <option value="name-asc">Name (A-Z)</option>
             <option value="name-desc">Name (Z-A)</option>
           </select>
         </label>
-      </SearchHeader>
-      {hasSearch ? (
-        <p
-          role="status"
-          aria-live="polite"
-          className="mb-4 inline-flex items-center rounded-full border border-white/8 bg-white/3 px-3 py-1 text-sm font-medium text-slate-300"
-        >
-          {resultCountLabel} found
-        </p>
-      ) : null}
+      </PageHeader>
 
       {filtered.length === 0 ? (
         <div className="ui-empty-state">
-          <p className="text-slate-200">
+          <p>
             {trimmedQuery ? `No people found for "${trimmedQuery}".` : "No people are listed yet."}
           </p>
           {trimmedQuery ? (
@@ -213,12 +208,12 @@ export default function PeopleList({ people, conference }: Props) {
                                 className="ui-avatar-fallback-glow absolute inset-0"
                               />
                               {personInitials ? (
-                                <span className="relative text-xs font-semibold tracking-widest text-slate-100 uppercase">
+                                <span className="relative text-xs font-semibold tracking-widest text-(--text-primary) uppercase">
                                   {personInitials}
                                 </span>
                               ) : (
                                 <UserIcon
-                                  className="relative h-5 w-5 text-slate-100"
+                                  className="relative h-5 w-5 text-(--text-primary)"
                                   aria-hidden="true"
                                 />
                               )}
@@ -228,13 +223,11 @@ export default function PeopleList({ people, conference }: Props) {
                       </div>
 
                       <div className="min-w-0 flex-1 space-y-1">
-                        <h2 className="text-base leading-6 font-semibold tracking-tight text-slate-100 transition-colors group-hover:text-white">
+                        <h2 className="ui-card-title text-base">
                           <span className="line-clamp-2">{highlight(personName, query)}</span>
                         </h2>
                         {personTitle ? (
-                          <p className="line-clamp-2 text-sm leading-5 text-slate-400">
-                            {personTitle}
-                          </p>
+                          <p className="ui-card-meta line-clamp-2">{personTitle}</p>
                         ) : null}
                       </div>
                     </div>

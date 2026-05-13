@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
 import Image from "@/components/Image";
-import SearchHeader from "@/components/ui/SearchHeader";
+import PageHeader from "@/components/ui/PageHeader";
 import { alphaSort } from "@/lib/misc";
 import { OrganizationCard } from "@/lib/types/ht-types";
 
@@ -41,23 +41,21 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
 
   return (
     <section className="ui-container ui-section">
-      <SearchHeader
+      <PageHeader
         title={title}
-        searchLabel={`Search ${title}`}
-        searchPlaceholder={`Search ${title}...`}
-        searchValue={search}
-        onSearchChange={setSearch}
+        description="Browse conference groups and jump to their schedule or reference links."
+        resultLabel={showResultCount ? `${filteredOrganizations.length} found` : undefined}
+        search={{
+          label: `Search ${title}`,
+          placeholder: `Search ${title}...`,
+          value: search,
+          onChange: setSearch,
+        }}
       />
-
-      {showResultCount ? (
-        <p role="status" aria-live="polite" className="mt-3 text-sm text-slate-300">
-          {filteredOrganizations.length} found
-        </p>
-      ) : null}
 
       {filteredOrganizations.length === 0 ? (
         <div role="status" className="ui-empty-state mt-10">
-          <p className="text-slate-200">
+          <p>
             {normalizedSearch
               ? `No ${title.toLowerCase()} match "${search.trim()}".`
               : `No ${title.toLowerCase()} are listed yet.`}
@@ -81,7 +79,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
                 className="ui-focus-ring group block h-full rounded-2xl focus-visible:outline-none"
               >
                 <article className="ui-card ui-card-interactive flex h-full items-center gap-4 rounded-2xl p-4">
-                  <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-slate-800 sm:h-20 sm:w-20">
+                  <div className="ui-logo-frame h-16 w-16 shrink-0 sm:h-20 sm:w-20">
                     {organization.logoUrl ? (
                       <Image
                         src={organization.logoUrl}
@@ -98,9 +96,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <h2 className="text-base leading-6 font-medium text-slate-100 transition group-hover:text-white">
-                      {organization.name}
-                    </h2>
+                    <h2 className="ui-card-title text-base">{organization.name}</h2>
                   </div>
                 </article>
               </Link>

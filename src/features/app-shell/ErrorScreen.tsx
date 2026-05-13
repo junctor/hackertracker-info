@@ -19,26 +19,26 @@ export default function ErrorScreen({ msg }: Props) {
         <div className="ui-card relative w-full max-w-2xl overflow-hidden px-6 py-7 text-center shadow-2xl sm:px-8 sm:py-9">
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-(--dc34-accent-critical)/45 to-transparent"
+            className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-(--critical)/45 to-transparent"
           />
 
-          <div className="ui-inset-highlight mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-(--dc34-accent-critical)/20 bg-(--dc34-accent-critical)/10 text-white">
+          <div className="ui-inset-highlight mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-(--critical)/20 bg-(--critical)/10 text-white">
             <ExclamationTriangleIcon className="h-7 w-7" />
           </div>
 
           <p className="ui-kicker ui-kicker-critical mt-5">Something went wrong</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-balance text-slate-50 sm:text-4xl">
+          <h1 className="mt-2 text-3xl font-semibold text-balance text-(--text-primary) sm:text-4xl">
             We couldn&apos;t load this page
           </h1>
           <p
             role={hasMessage ? undefined : "alert"}
-            className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-300 sm:text-base"
+            className="mx-auto mt-3 max-w-xl text-sm leading-6 text-(--text-muted) sm:text-base"
           >
             Try again in a moment, or head back to the conference home page.
           </p>
 
           {hasMessage ? (
-            <div className="ui-inset-highlight-soft mt-6 rounded-2xl border border-(--dc34-accent-critical)/16 bg-(--dc34-accent-critical)/10 p-4 text-left">
+            <div className="ui-inset-highlight-soft mt-6 rounded-2xl border border-(--critical)/16 bg-(--critical)/10 p-4 text-left">
               <p className="text-xs font-semibold tracking-widest text-white/75 uppercase">
                 Error details
               </p>

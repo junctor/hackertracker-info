@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router";
 
+import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getToneFromColor } from "@/lib/tone";
 import { TagTypesBrowseView } from "@/lib/types/ht-types";
@@ -27,7 +28,7 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
     <Link
       to={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className={`ui-focus-ring ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)} inline-flex px-3 py-1 text-sm transition hover:border-(--dc34-accent-primary)/70 focus-visible:outline-none`}
+      className={`ui-focus-ring ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)} inline-flex px-3 py-1 text-sm transition hover:border-(--accent)/70 focus-visible:outline-none`}
     >
       {tag.label}
     </Link>
@@ -41,20 +42,23 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
   );
 
   return (
-    <section className="ui-container ui-page-content text-slate-100">
-      <header className="mb-6">
-        <h1 className="ui-heading-1">Tags</h1>
-      </header>
+    <section className="ui-container ui-page-content">
+      <PageHeader
+        title="Tags"
+        description="Browse tags that group schedule items across the conference."
+      />
 
       {sortedTagTypes.length === 0 ? (
-        <p>No tags available.</p>
+        <div className="ui-empty-state" role="status">
+          <p>No tags available.</p>
+        </div>
       ) : (
         sortedTagTypes.map((tagType) => {
           const sortedTags = tagType.tags.toSorted((a, b) => a.sortOrder - b.sortOrder);
 
           return (
             <section key={tagType.id} className="mb-10">
-              <h2 className="ui-heading-2 mb-4 text-(--dc34-accent-secondary)">
+              <h2 className="ui-heading-2 mb-4 text-(--accent-success)">
                 {formatCategory(tagType.category)}
               </h2>
 

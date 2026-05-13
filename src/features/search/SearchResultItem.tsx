@@ -33,14 +33,12 @@ export default function SearchResultItem({ conf, result }: Props) {
         <div className="min-w-0 flex-1 space-y-2">
           <span className={`ui-tag-chip ui-tag-chip-strong ui-tone-${tone}`}>{typeLabel}</span>
 
-          <h2 className="line-clamp-3 text-lg leading-7 font-semibold text-slate-100 transition-colors group-hover:text-white sm:text-xl">
-            {result.text}
-          </h2>
+          <h2 className="ui-card-title line-clamp-3 text-lg sm:text-xl">{result.text}</h2>
         </div>
 
         <ArrowRightIcon
           aria-hidden="true"
-          className="mt-1 h-5 w-5 shrink-0 text-(--event-color) transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-slate-200"
+          className="mt-1 h-5 w-5 shrink-0 text-(--event-color) transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-(--text-primary)"
         />
       </Link>
     </article>

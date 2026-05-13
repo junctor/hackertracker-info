@@ -1,10 +1,9 @@
 import { JSX, useMemo } from "react";
 
 import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -95,13 +94,9 @@ export default function DirectoryPage({
     if (!selectedOrganization) return <ErrorScreen msg="Organization not found" />;
 
     pageContent = (
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <OrganizationDetails org={selectedOrganization} conference={conf} />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <OrganizationDetails org={selectedOrganization} conference={conf} />
+      </ConferenceLayout>
     );
   } else if (isIdMissing) {
     if (isLoading) return <LoadingScreen />;
@@ -116,17 +111,13 @@ export default function DirectoryPage({
     const detailsBasePath = `/${conf.slug}/${routeSlug}`;
 
     pageContent = (
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <OrganizationsList
-            organizations={matchingOrganizations}
-            title={title}
-            detailsBasePath={detailsBasePath}
-          />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <OrganizationsList
+          organizations={matchingOrganizations}
+          title={title}
+          detailsBasePath={detailsBasePath}
+        />
+      </ConferenceLayout>
     );
   } else {
     return <ErrorScreen msg="Missing organization id." />;

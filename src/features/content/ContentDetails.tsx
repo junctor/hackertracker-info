@@ -118,8 +118,8 @@ export default function ContentDetails(props: Props) {
       </header>
 
       {sessions.length > 0 && (
-        <section aria-labelledby="sessions-title" className="space-y-4">
-          <h2 id="sessions-title" className="text-sm font-semibold tracking-wide text-slate-300">
+        <section aria-labelledby="sessions-title" className="ui-detail-section">
+          <h2 id="sessions-title" className="ui-section-label">
             Sessions
           </h2>
           <ul className="space-y-4">
@@ -138,8 +138,8 @@ export default function ContentDetails(props: Props) {
       )}
 
       {tags.length > 0 && (
-        <section aria-labelledby="tags-title" className="space-y-3">
-          <h2 id="tags-title" className="text-sm font-semibold tracking-wide text-slate-300">
+        <section aria-labelledby="tags-title" className="ui-detail-section">
+          <h2 id="tags-title" className="ui-section-label">
             Tags
           </h2>
           <div className="ui-card px-4 py-4 sm:px-5">
@@ -164,21 +164,19 @@ export default function ContentDetails(props: Props) {
       )}
 
       {content.description && (
-        <section aria-labelledby="description-title" className="space-y-4">
-          <h2 id="description-title" className="text-sm font-semibold tracking-wide text-slate-300">
+        <section aria-labelledby="description-title" className="ui-detail-section">
+          <h2 id="description-title" className="ui-section-label">
             Description
           </h2>
-          <div className="ui-card px-5 py-5 sm:px-6">
-            <div className="prose prose-invert prose-headings:text-slate-100 prose-p:leading-7 prose-a:ui-link max-w-none text-slate-300">
-              <Markdown content={content.description} />
-            </div>
+          <div className="ui-card ui-detail-panel">
+            <Markdown content={content.description} />
           </div>
         </section>
       )}
 
       {content.links && content.links.length > 0 && (
-        <section aria-labelledby="links-title" className="space-y-4">
-          <h2 id="links-title" className="text-sm font-semibold tracking-wide text-slate-300">
+        <section aria-labelledby="links-title" className="ui-detail-section">
+          <h2 id="links-title" className="ui-section-label">
             Links
           </h2>
           <ul className="space-y-2.5">
@@ -191,12 +189,10 @@ export default function ContentDetails(props: Props) {
                   className="ui-focus-ring ui-card ui-card-interactive group flex min-w-0 items-center justify-between gap-4 px-4 py-3.5 focus-visible:outline-none sm:px-5"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-(--dc34-accent-secondary) transition-colors group-hover:text-white sm:text-base">
-                      {l.label}
-                    </p>
+                    <p className="ui-card-title truncate text-sm sm:text-base">{l.label}</p>
                   </div>
                   <ArrowTopRightOnSquareIcon
-                    className="h-4 w-4 shrink-0 text-(--dc34-accent-secondary) transition-colors group-hover:text-white"
+                    className="h-4 w-4 shrink-0 text-(--accent-success) transition-colors group-hover:text-white"
                     aria-hidden="true"
                   />
                 </a>
@@ -207,8 +203,8 @@ export default function ContentDetails(props: Props) {
       )}
 
       {people.length > 0 && (
-        <section aria-labelledby="people-title" className="space-y-3">
-          <h2 id="people-title" className="text-sm font-semibold tracking-wide text-slate-300">
+        <section aria-labelledby="people-title" className="ui-detail-section">
+          <h2 id="people-title" className="ui-section-label">
             People
           </h2>
           <div className="ui-card px-4 py-4 sm:px-5">
@@ -220,10 +216,7 @@ export default function ContentDetails(props: Props) {
                     className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                     title={p.name}
                   >
-                    <UserIcon
-                      className="h-4 w-4 text-(--dc34-accent-secondary)"
-                      aria-hidden="true"
-                    />
+                    <UserIcon className="h-4 w-4 text-(--accent-success)" aria-hidden="true" />
                     <span className="max-w-56 truncate">{p.name}</span>
                   </Link>
                 </li>

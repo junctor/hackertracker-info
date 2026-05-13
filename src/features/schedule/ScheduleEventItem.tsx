@@ -63,31 +63,29 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
                 <span
                   className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold tracking-widest uppercase ${
                     isLive
-                      ? "border-(--dc34-accent-critical) bg-(--dc34-accent-critical)/16 text-white"
-                      : "border-(--dc34-accent-warning)/75 bg-(--dc34-accent-warning)/16 text-(--dc34-accent-warning)"
+                      ? "border-(--critical) bg-(--critical)/16 text-white"
+                      : "border-(--warning)/75 bg-(--warning)/16 text-(--warning)"
                   }`}
                 >
                   {isLive ? "Live" : "Next"}
                 </span>
               )}
-              <p className="text-sm font-semibold text-slate-100 sm:text-base">
+              <p className="text-sm font-semibold text-(--text-primary) sm:text-base">
                 <time dateTime={event.beginIso}>{event.beginDisplay}</time>
               </p>
-              <p className="text-sm text-slate-300/85">
+              <p className="ui-card-meta">
                 <time dateTime={event.endIso}>{event.endDisplay}</time>
               </p>
             </div>
 
             <div className="min-w-0 flex-1 space-y-2">
-              <h3 className="line-clamp-2 text-lg leading-7 font-semibold text-slate-100 transition-colors group-hover:text-white sm:text-xl">
-                {event.title}
-              </h3>
+              <h3 className="ui-card-title line-clamp-2 text-lg sm:text-xl">{event.title}</h3>
 
               {event.speakers && (
-                <p className="line-clamp-2 text-sm text-slate-300 italic">{event.speakers}</p>
+                <p className="ui-card-meta line-clamp-2 italic">{event.speakers}</p>
               )}
 
-              <p className="line-clamp-1 text-sm text-slate-300/90">{event.locationName}</p>
+              <p className="ui-card-meta line-clamp-1">{event.locationName}</p>
 
               {visibleTags.length > 0 && (
                 <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
@@ -100,9 +98,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
                     </li>
                   ))}
                   {hiddenTagCount > 0 && (
-                    <li className="ui-tag-chip bg-white/3 text-slate-300">
-                      +{hiddenTagCount} more
-                    </li>
+                    <li className="ui-tag-chip ui-tone-muted">+{hiddenTagCount} more</li>
                   )}
                 </ul>
               )}

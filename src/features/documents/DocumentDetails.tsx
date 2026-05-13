@@ -2,6 +2,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router";
 
 import Markdown from "@/components/markdown/Markdown";
+import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { DocumentEntity } from "@/lib/types/ht-types";
 
@@ -33,20 +34,15 @@ export default function DocumentDetails({ document, conference }: Props) {
             </Link>
           </li>
           <li aria-hidden="true">
-            <ChevronRightIcon className="h-4 w-4 text-slate-500" />
+            <ChevronRightIcon className="h-4 w-4 text-(--text-subtle)" />
           </li>
-          <li aria-current="page" className="max-w-full min-w-0 truncate text-slate-300">
+          <li aria-current="page" className="max-w-full min-w-0 truncate text-(--text-muted)">
             {document.titleText}
           </li>
         </ol>
       </nav>
 
-      <header className="mb-6">
-        <h1 id="doc-title" className="ui-heading-1 mb-2">
-          {document.titleText}
-        </h1>
-        <p className="text-sm text-slate-400">Last updated {updatedLabel}</p>
-      </header>
+      <PageHeader title={document.titleText} resultLabel={`Last updated ${updatedLabel}`} />
 
       <section className="max-w-prose">
         <Markdown content={document.bodyText} />

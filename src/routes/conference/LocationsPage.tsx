@@ -1,10 +1,9 @@
 import React from "react";
 
 import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import LocationsList from "@/features/locations/LocationsList";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
@@ -32,13 +31,9 @@ export default function LocationsPage({ conf, activePageId }: LocationsPageProps
         <title>Locations | {conf.name}</title>
         <meta name="description" content={`Rooms and venue locations for ${conf.name}.`} />
       </Head>
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <LocationsList locations={locations} />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <LocationsList locations={locations} />
+      </ConferenceLayout>
     </>
   );
 }

@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 
-import SearchHeader from "@/components/ui/SearchHeader";
+import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getToneFromColor } from "@/lib/tone";
 
@@ -50,12 +50,16 @@ export default function ContentList({ content, tags, conference }: Props) {
 
   return (
     <section className="ui-container ui-section">
-      <SearchHeader
+      <PageHeader
         title="Content"
-        searchLabel="Search content"
-        searchPlaceholder="Search content..."
-        searchValue={search}
-        onSearchChange={setSearch}
+        description="Search talks, sessions, and reference material without changing result order."
+        resultLabel={hasActiveFilters ? `${resultCountLabel} found` : undefined}
+        search={{
+          label: "Search content",
+          placeholder: "Search content...",
+          value: search,
+          onChange: setSearch,
+        }}
       >
         <label className="block w-full">
           <span className="sr-only">Filter by tag</span>
@@ -65,7 +69,7 @@ export default function ContentList({ content, tags, conference }: Props) {
               const nextValue = e.target.value;
               setSelectedTag(nextValue ? Number(nextValue) : null);
             }}
-            className="ui-input-base ui-focus-ring focus-visible:outline-none"
+            className="ui-input-base ui-select-control ui-focus-ring focus-visible:outline-none"
           >
             <option value="">All tags</option>
             {tagOptions.map((tag) => (
@@ -79,20 +83,11 @@ export default function ContentList({ content, tags, conference }: Props) {
             ))}
           </select>
         </label>
-      </SearchHeader>
-      {hasActiveFilters ? (
-        <p
-          role="status"
-          aria-live="polite"
-          className="mb-4 inline-flex items-center rounded-full border border-white/8 bg-white/3 px-3 py-1 text-sm font-medium text-slate-300"
-        >
-          {resultCountLabel} found
-        </p>
-      ) : null}
+      </PageHeader>
 
       {filtered.length === 0 ? (
         <div className="ui-empty-state">
-          <p className="text-slate-200">
+          <p>
             {hasActiveFilters
               ? "No content matches the current search and tag filters."
               : "No content is listed yet."}
@@ -131,12 +126,12 @@ export default function ContentList({ content, tags, conference }: Props) {
                   <div className="flex min-w-0 items-start gap-3 sm:gap-4">
                     <div className="min-w-0 flex-1 space-y-2.5">
                       <div className="flex items-start justify-between gap-3">
-                        <h2 className="line-clamp-2 text-base leading-6 font-semibold text-slate-100 transition-colors group-hover:text-white sm:text-lg sm:leading-7">
+                        <h2 className="ui-card-title line-clamp-2 text-base sm:text-lg">
                           {item.title}
                         </h2>
                         <ArrowRightIcon
                           aria-hidden="true"
-                          className="mt-0.5 h-5 w-5 shrink-0 text-(--event-color) transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-slate-200"
+                          className="mt-0.5 h-5 w-5 shrink-0 text-(--event-color) transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-(--text-primary)"
                         />
                       </div>
 
@@ -151,7 +146,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                             </li>
                           ))}
                           {hiddenTagCount > 0 && (
-                            <li className="ui-tag-chip bg-white/3 text-slate-300 sm:text-xs">
+                            <li className="ui-tag-chip ui-tone-muted sm:text-xs">
                               +{hiddenTagCount} more
                             </li>
                           )}

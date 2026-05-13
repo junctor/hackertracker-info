@@ -2,10 +2,9 @@ import React from "react";
 
 import Head from "@/components/Head";
 import AnnouncementsList from "@/features/announcements/AnnouncementsList";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { ArticlesStore } from "@/lib/types/ht-types";
@@ -32,13 +31,9 @@ export default function AnnouncementsPage({ conf, activePageId }: AnnouncementsP
         <title>Announcements | {conf.name}</title>
         <meta name="description" content={`Latest announcements and updates for ${conf.name}.`} />
       </Head>
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <AnnouncementsList announcements={articles} conference={conf} />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <AnnouncementsList announcements={articles} conference={conf} />
+      </ConferenceLayout>
     </>
   );
 }

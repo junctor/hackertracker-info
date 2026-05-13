@@ -2,18 +2,16 @@ import { CodeBracketSquareIcon } from "@heroicons/react/16/solid";
 
 function SiteFooter() {
   return (
-    <footer className="ui-site-footer border-t border-white/10 text-slate-300">
+    <footer className="ui-site-footer border-t border-(--border) text-(--text-muted)">
       <div className="ui-container py-5 sm:py-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="min-w-0 space-y-1.5">
-            <p className="text-xs font-semibold tracking-widest text-slate-500 uppercase">
-              Hacker Tracker
-            </p>
+            <p className="ui-section-label text-xs">Hacker Tracker</p>
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="truncate text-sm font-semibold tracking-tight text-(--dc34-accent-secondary) sm:text-base">
+              <span className="truncate text-sm font-semibold text-(--accent-success) sm:text-base">
                 info.defcon.org
               </span>
-              <span className="text-xs text-slate-500 sm:text-sm">DEF CON</span>
+              <span className="text-xs text-(--text-subtle) sm:text-sm">DEF CON</span>
             </div>
           </div>
 

@@ -1,10 +1,9 @@
 import type { UniversalSearchResult } from "@/features/search/searchData";
 
 import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import SearchPageContent from "@/features/search/SearchPageContent";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
@@ -34,13 +33,9 @@ export default function SearchPage({ conf, activePageId }: SearchPageProps) {
           content={`Search sessions, people, and organizations for ${conf.name}.`}
         />
       </Head>
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <SearchPageContent conf={conf} searchData={searchData} />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <SearchPageContent conf={conf} searchData={searchData} />
+      </ConferenceLayout>
     </>
   );
 }

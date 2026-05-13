@@ -1,8 +1,7 @@
 import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
@@ -49,13 +48,9 @@ export default function OrganizationPage({ conf, activePageId }: OrganizationPag
         </title>
         <meta name="description" content={description} />
       </Head>
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <OrganizationDetails org={organization} conference={conf} />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <OrganizationDetails org={organization} conference={conf} />
+      </ConferenceLayout>
     </>
   );
 }

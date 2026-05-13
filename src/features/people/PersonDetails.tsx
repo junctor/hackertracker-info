@@ -169,7 +169,7 @@ export default function PersonDetails({ person, events, locations, conference }:
         <div className="relative z-10 flex flex-col gap-6 px-5 py-5 pl-6 sm:px-6 sm:py-6 sm:pl-7">
           <div className="flex flex-col gap-5 md:flex-row md:items-start">
             <div
-              className={`ui-person-avatar ui-inset-highlight relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 text-2xl font-semibold tracking-widest text-slate-100 sm:h-28 sm:w-28 sm:text-3xl ${accentClassName}`}
+              className={`ui-person-avatar ui-inset-highlight relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-(--border) bg-(--surface-muted) text-2xl font-semibold tracking-widest text-(--text-primary) sm:h-28 sm:w-28 sm:text-3xl ${accentClassName}`}
             >
               {personAvatarUrl && !hasAvatarError ? (
                 <Image
@@ -187,7 +187,7 @@ export default function PersonDetails({ person, events, locations, conference }:
                     <span className="relative">{personInitials}</span>
                   ) : (
                     <UserIcon
-                      className="relative h-8 w-8 text-slate-100 sm:h-10 sm:w-10"
+                      className="relative h-8 w-8 text-(--text-primary) sm:h-10 sm:w-10"
                       aria-hidden="true"
                     />
                   )}
@@ -200,23 +200,23 @@ export default function PersonDetails({ person, events, locations, conference }:
                 <div className="flex flex-wrap items-center gap-2">
                   <h1 className="ui-heading-1">{personName}</h1>
                   {personPronouns ? (
-                    <span className="inline-flex items-center rounded-full border border-white/8 bg-white/3 px-2.5 py-1 text-xs font-medium text-slate-200">
-                      {personPronouns}
-                    </span>
+                    <span className="ui-meta-pill px-2.5 py-1 text-xs">{personPronouns}</span>
                   ) : null}
                 </div>
 
                 {affiliations.length > 0 ? (
-                  <ul className="m-0 list-none space-y-1.5 p-0 text-sm leading-6 text-slate-300">
+                  <ul className="m-0 list-none space-y-1.5 p-0 text-sm leading-6 text-(--text-muted)">
                     {affiliations.map((affiliation) => (
                       <li
                         key={`${affiliation.organization ?? "organization"}:${affiliation.title ?? "title"}`}
                       >
                         {affiliation.title ? (
-                          <span className="font-semibold text-slate-100">{affiliation.title}</span>
+                          <span className="font-semibold text-(--text-primary)">
+                            {affiliation.title}
+                          </span>
                         ) : null}
                         {affiliation.title && affiliation.organization ? (
-                          <span className="mx-2 text-slate-500">@</span>
+                          <span className="mx-2 text-(--text-subtle)">@</span>
                         ) : null}
                         {affiliation.organization ? <span>{affiliation.organization}</span> : null}
                       </li>
@@ -236,7 +236,7 @@ export default function PersonDetails({ person, events, locations, conference }:
                         className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                       >
                         <span className="max-w-64 truncate">{link.title}</span>
-                        <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-(--dc34-accent-secondary)" />
+                        <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-(--accent-success)" />
                       </a>
                     </li>
                   ))}
@@ -248,21 +248,19 @@ export default function PersonDetails({ person, events, locations, conference }:
       </header>
 
       {personDescription && (
-        <section aria-labelledby="about-title" className="space-y-4">
-          <h2 id="about-title" className="text-sm font-semibold tracking-wide text-slate-300">
+        <section aria-labelledby="about-title" className="ui-detail-section">
+          <h2 id="about-title" className="ui-section-label">
             About
           </h2>
-          <div className="ui-card px-5 py-5 sm:px-6">
-            <div className="prose prose-invert prose-headings:text-slate-100 prose-p:leading-7 prose-a:ui-link max-w-none text-slate-300">
-              <Markdown content={personDescription} />
-            </div>
+          <div className="ui-card ui-detail-panel">
+            <Markdown content={personDescription} />
           </div>
         </section>
       )}
 
       {sortedEvents.length > 0 && (
-        <section aria-labelledby="events-title" className="space-y-4">
-          <h2 id="events-title" className="text-sm font-semibold tracking-wide text-slate-300">
+        <section aria-labelledby="events-title" className="ui-detail-section">
+          <h2 id="events-title" className="ui-section-label">
             Sessions
           </h2>
           <ul className="space-y-4">

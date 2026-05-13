@@ -234,24 +234,24 @@ export default function ScheduleEvents({
   const utilityLinkBaseClassName =
     "ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button group gap-2 rounded-xl border px-3 text-sm focus-visible:outline-none";
   const activeFilterClassName =
-    "ui-inset-highlight ui-surface-elevated-soft border-(--dc34-accent-primary)/45 text-white";
+    "ui-inset-highlight ui-surface-elevated-soft border-(--accent)/45 text-white";
   const inactiveFilterClassName =
-    "border-white/10 bg-white/3 text-slate-300 hover:border-white/14 hover:bg-white/5 hover:text-slate-100";
+    "border-(--border) bg-(--surface-muted) text-(--text-muted) hover:border-(--border-strong) hover:bg-(--surface-interactive) hover:text-(--text-primary)";
   const utilityIconBaseClassName = "h-4.5 w-4.5 shrink-0 transition-colors";
-  const activeUtilityIconClassName = "text-(--dc34-accent-secondary)";
-  const inactiveUtilityIconClassName = "text-slate-400 group-hover:text-slate-200";
+  const activeUtilityIconClassName = "text-(--accent-success)";
+  const inactiveUtilityIconClassName = "text-(--text-muted) group-hover:text-(--text-primary)";
   const dayTabTrayClassName =
     "ui-inset-highlight-soft ui-surface-soft rounded-2xl border border-white/10 p-1";
   const dayTabBaseClassName =
     "ui-focus-ring group relative flex min-h-11 items-center gap-2 rounded-2xl border px-3.5 py-2 text-sm whitespace-nowrap transition duration-200 ease-out focus-visible:outline-none";
   const activeDayTabClassName =
-    "ui-inset-highlight ui-surface-elevated-soft border-(--dc34-accent-primary)/45 text-white";
+    "ui-inset-highlight ui-surface-elevated-soft border-(--accent)/45 text-white";
   const inactiveDayTabClassName =
-    "border-transparent bg-transparent text-slate-300 hover:border-white/10 hover:bg-white/5 hover:text-slate-100";
+    "border-transparent bg-transparent text-(--text-muted) hover:border-(--border) hover:bg-(--surface-muted) hover:text-(--text-primary)";
   const activeDayCountClassName =
-    "rounded-full border border-(--dc34-accent-primary)/26 bg-(--dc34-accent-primary)/12 px-2 py-0.5 text-xs font-semibold tracking-wide text-(--dc34-accent-secondary)";
+    "rounded-full border border-(--accent)/26 bg-(--accent)/12 px-2 py-0.5 text-xs font-semibold tracking-wide text-(--accent-success)";
   const inactiveDayCountClassName =
-    "rounded-full border border-white/8 bg-black/15 px-2 py-0.5 text-xs font-semibold tracking-wide text-slate-400 transition-colors group-hover:text-slate-200";
+    "rounded-full border border-(--border) bg-(--surface-muted) px-2 py-0.5 text-xs font-semibold tracking-wide text-(--text-muted) transition-colors group-hover:text-(--text-primary)";
 
   const computeItemKey = useCallback((_: number, evt: ScheduleEventViewModel) => evt.id, []);
   const itemContent = useCallback(
@@ -267,7 +267,7 @@ export default function ScheduleEvents({
   );
 
   return (
-    <div className="bg-(--color-bg) text-slate-100">
+    <div className="bg-(--color-bg) text-(--text-primary)">
       <div className="ui-container flex justify-end py-3">
         <nav aria-label="Schedule tools">
           <div className="flex items-center gap-2">
@@ -287,9 +287,7 @@ export default function ScheduleEvents({
                 }`}
                 aria-hidden="true"
               />
-              <span className="ui-schedule-compact-label font-semibold tracking-tight">
-                Bookmarks
-              </span>
+              <span className="ui-schedule-compact-label font-semibold">Bookmarks</span>
             </Link>
 
             <Link
@@ -306,7 +304,7 @@ export default function ScheduleEvents({
                 }`}
                 aria-hidden="true"
               />
-              <span className="ui-schedule-compact-label font-semibold tracking-tight">Tags</span>
+              <span className="ui-schedule-compact-label font-semibold">Tags</span>
             </Link>
           </div>
         </nav>
@@ -345,9 +343,7 @@ export default function ScheduleEvents({
                     onClick={() => onSelectDay(day)}
                     onKeyDown={(e) => handleTabKeyDown(e, index, day)}
                   >
-                    <span className="font-semibold tracking-tight">
-                      {tabDateTitle(day, conf.timezone)}
-                    </span>
+                    <span className="font-semibold">{tabDateTitle(day, conf.timezone)}</span>
                     <span
                       className={
                         resolvedDay === day ? activeDayCountClassName : inactiveDayCountClassName
@@ -376,16 +372,14 @@ export default function ScheduleEvents({
                 <h2
                   ref={headingRef}
                   style={headingScrollStyle}
-                  className="text-xl font-bold tracking-tight text-slate-100 md:text-3xl"
+                  className="text-xl font-bold text-(--text-primary) md:text-3xl"
                 >
                   {activeDayLabel}
                 </h2>
               </div>
 
               {activeDayEventCountLabel ? (
-                <p className="inline-flex items-center self-start rounded-full border border-white/8 bg-white/3 px-3 py-1 text-sm font-medium text-slate-300 sm:self-auto">
-                  {activeDayEventCountLabel}
-                </p>
+                <p className="ui-meta-pill self-start sm:self-auto">{activeDayEventCountLabel}</p>
               ) : null}
             </div>
           </div>

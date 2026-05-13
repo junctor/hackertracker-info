@@ -1,6 +1,5 @@
 import Head from "@/components/Head";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import Menu from "@/features/home/Menu";
 import { ConferenceManifest } from "@/lib/conferences";
 
@@ -24,13 +23,9 @@ export default function MenuPage({ conf }: MenuPageProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="ui-page-shell bg-slate-950 text-slate-100">
-        <SiteHeader conference={conf} activePageId="home" />
-        <main id="main-content" className="ui-page-main">
-          <Menu conference={conf} />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId="home">
+        <Menu conference={conf} />
+      </ConferenceLayout>
     </>
   );
 }

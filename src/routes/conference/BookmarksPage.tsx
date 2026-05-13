@@ -2,10 +2,9 @@ import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { Link } from "react-router";
 
 import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import {
   filterScheduleDaysByBookmarks,
   getScheduleDaysFromStores,
@@ -149,44 +148,40 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
         <title>Bookmarks | {conf.name}</title>
         <meta name="description" content={`${conf.name} schedule for bookmarks`} />
       </Head>
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center">Bookmarks</h1>
-          {bookmarks.length === 0 ? (
-            <div className="ui-container ui-empty-state mt-8">
-              <p className="text-slate-200">No bookmarks yet.</p>
-              <Link
-                to={`/${conf.slug}/schedule`}
-                className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
-              >
-                Browse Schedule
-              </Link>
-            </div>
-          ) : days.length > 0 && resolvedDay ? (
-            <ScheduleEvents
-              conf={conf}
-              days={days}
-              selectedDay={resolvedDay}
-              onSelectDay={handleSelectDay}
-              bookmarks={scheduleBookmarks}
-              nowSeconds={nowSeconds}
-              activeFilter="bookmarks"
-            />
-          ) : (
-            <div className="ui-container ui-empty-state mt-8">
-              <p className="text-slate-200">No upcoming events match your saved bookmarks.</p>
-              <Link
-                to={`/${conf.slug}/schedule`}
-                className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
-              >
-                View Full Schedule
-              </Link>
-            </div>
-          )}
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center">Bookmarks</h1>
+        {bookmarks.length === 0 ? (
+          <div className="ui-container ui-empty-state mt-8">
+            <p>No bookmarks yet.</p>
+            <Link
+              to={`/${conf.slug}/schedule`}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+            >
+              Browse Schedule
+            </Link>
+          </div>
+        ) : days.length > 0 && resolvedDay ? (
+          <ScheduleEvents
+            conf={conf}
+            days={days}
+            selectedDay={resolvedDay}
+            onSelectDay={handleSelectDay}
+            bookmarks={scheduleBookmarks}
+            nowSeconds={nowSeconds}
+            activeFilter="bookmarks"
+          />
+        ) : (
+          <div className="ui-container ui-empty-state mt-8">
+            <p>No upcoming events match your saved bookmarks.</p>
+            <Link
+              to={`/${conf.slug}/schedule`}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+            >
+              View Full Schedule
+            </Link>
+          </div>
+        )}
+      </ConferenceLayout>
     </>
   );
 }

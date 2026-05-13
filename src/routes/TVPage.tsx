@@ -17,14 +17,14 @@ export default function TVPage() {
       </Head>
       <main
         id="main-content"
-        className="grid min-h-screen place-items-center px-6 text-center text-slate-100"
+        className="grid min-h-screen place-items-center px-6 text-center text-(--text-primary)"
       >
         <div className="space-y-3">
           <h1 className="text-2xl font-semibold">DEF CON TV</h1>
-          <p className="text-slate-400">Redirecting to the live stream...</p>
+          <p className="text-(--text-muted)">Redirecting to the live stream...</p>
           <a
             href={TV_URL}
-            className="ui-focus-ring inline-flex items-center justify-center rounded-md border border-slate-700/80 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-slate-500 hover:bg-slate-900 focus-visible:outline-none"
+            className="ui-btn-base ui-btn-secondary ui-focus-ring focus-visible:outline-none"
           >
             Open DEF CON TV
           </a>

@@ -37,10 +37,12 @@ export default function OrganizationDetails({ org, conference }: Props) {
   const hasLinks = org.links.length > 0;
 
   return (
-    <article className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-      <header className="rounded-2xl border border-white/10 bg-slate-900/70 p-6 shadow-sm">
+    <article className="ui-container ui-page-content max-w-4xl">
+      <header className="ui-card relative overflow-hidden p-5 sm:p-6">
+        <span aria-hidden="true" className="ui-accent-rail ui-tone-secondary" />
+        <span aria-hidden="true" className="ui-accent-rail-overlay" />
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-800 sm:h-24 sm:w-24">
+          <div className="ui-logo-frame h-20 w-20 shrink-0 sm:h-24 sm:w-24">
             {org.logoUrl ? (
               <Image
                 src={org.logoUrl}
@@ -52,7 +54,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
               />
             ) : (
               <div
-                className="absolute inset-0 flex items-center justify-center bg-slate-800 font-mono text-xl font-semibold tracking-wide text-white"
+                className="absolute inset-0 flex items-center justify-center font-mono text-xl font-semibold tracking-wide text-white"
                 role="img"
                 aria-label={`${org.name} logo`}
               >
@@ -62,15 +64,15 @@ export default function OrganizationDetails({ org, conference }: Props) {
           </div>
 
           <div className="min-w-0 flex-1">
-            <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{org.name}</h1>
+            <h1 className="ui-heading-1">{org.name}</h1>
 
             {org.tagIdAsOrganizer && (
               <div className="mt-4">
                 <Link
                   to={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
-                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-2 text-sm font-medium text-indigo-100 transition hover:bg-indigo-500/15 focus-visible:outline-none"
+                  className="ui-focus-ring ui-pill-link focus-visible:outline-none"
                 >
-                  <CalendarIcon className="h-4 w-4 text-indigo-300" aria-hidden />
+                  <CalendarIcon className="h-4 w-4 text-(--accent-success)" aria-hidden />
                   <span>View Schedule</span>
                 </Link>
               </div>
@@ -80,23 +82,21 @@ export default function OrganizationDetails({ org, conference }: Props) {
       </header>
 
       <div className="mt-8 space-y-6">
-        <section className="rounded-2xl border border-white/10 bg-slate-900/50 p-6">
-          <h2 className="text-sm font-semibold tracking-widest text-slate-200 uppercase">About</h2>
+        <section className="ui-card ui-detail-panel">
+          <h2 className="ui-section-label">About</h2>
 
-          <div className="prose prose-invert mt-4 max-w-none text-slate-300">
+          <div className="mt-4">
             {description ? (
               <Markdown content={description} />
             ) : (
-              <p className="text-slate-400">No description available.</p>
+              <p className="ui-card-meta">No description available.</p>
             )}
           </div>
         </section>
 
         {hasLinks && (
-          <section className="rounded-2xl border border-white/10 bg-slate-900/50 p-6">
-            <h2 className="text-sm font-semibold tracking-widest text-slate-200 uppercase">
-              Links
-            </h2>
+          <section className="ui-card ui-detail-panel">
+            <h2 className="ui-section-label">Links</h2>
 
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
               {org.links.map((link) => {
@@ -108,17 +108,15 @@ export default function OrganizationDetails({ org, conference }: Props) {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ui-focus-ring group flex h-full items-center justify-between rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3 transition hover:border-white/20 hover:bg-slate-800/60 focus-visible:outline-none"
+                      className="ui-focus-ring ui-card ui-card-interactive group flex h-full items-center justify-between rounded-xl px-4 py-3 focus-visible:outline-none"
                     >
                       <div className="min-w-0">
-                        <div className="truncate text-sm font-medium text-slate-100">
-                          {link.label}
-                        </div>
-                        <div className="truncate text-xs text-slate-400">{hostname}</div>
+                        <div className="ui-card-title truncate text-sm">{link.label}</div>
+                        <div className="ui-card-meta truncate text-xs">{hostname}</div>
                       </div>
 
                       <ArrowTopRightOnSquareIcon
-                        className="ml-3 h-4 w-4 shrink-0 text-slate-500 transition group-hover:text-slate-300"
+                        className="ml-3 h-4 w-4 shrink-0 text-(--accent-success) transition group-hover:text-white"
                         aria-hidden
                       />
                     </a>

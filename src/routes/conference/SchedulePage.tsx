@@ -2,10 +2,9 @@ import React, { useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router";
 
 import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import { getScheduleDaysFromStores } from "@/features/schedule/scheduleData";
 import ScheduleEvents from "@/features/schedule/ScheduleEvents";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -140,21 +139,21 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
           content={`Full ${conf.name} schedule of sessions, talks, and events.`}
         />
       </Head>
-      <div className="ui-page-shell ui-schedule-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <h1 className="sr-only">Schedule</h1>
-          <ScheduleEvents
-            conf={conf}
-            days={days}
-            selectedDay={resolvedDay}
-            onSelectDay={handleSelectDay}
-            bookmarks={bookmarks}
-            nowSeconds={nowSeconds}
-          />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout
+        conference={conf}
+        activePageId={activePageId}
+        className="ui-schedule-page-shell"
+      >
+        <h1 className="sr-only">Schedule</h1>
+        <ScheduleEvents
+          conf={conf}
+          days={days}
+          selectedDay={resolvedDay}
+          onSelectDay={handleSelectDay}
+          bookmarks={bookmarks}
+          nowSeconds={nowSeconds}
+        />
+      </ConferenceLayout>
     </>
   );
 }

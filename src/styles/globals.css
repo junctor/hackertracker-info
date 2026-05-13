@@ -40,6 +40,22 @@
   --color-border-soft: rgba(148, 163, 184, 0.18);
   --color-overlay: rgba(2, 6, 23, 0.72);
 
+  /* Semantic roles */
+  --surface: var(--color-surface);
+  --surface-muted: color-mix(in oklab, var(--color-surface), transparent 18%);
+  --surface-elevated: var(--color-surface-elevated);
+  --surface-interactive: color-mix(in oklab, var(--color-surface-elevated), transparent 4%);
+  --border: var(--color-border-soft);
+  --border-strong: color-mix(in oklab, var(--color-border), white 8%);
+  --text-primary: var(--color-fg);
+  --text-muted: var(--color-muted);
+  --text-subtle: color-mix(in oklab, var(--color-muted), var(--color-bg) 24%);
+  --accent: var(--dc34-accent-primary);
+  --accent-soft: color-mix(in oklab, var(--dc34-accent-primary), transparent 82%);
+  --warning: var(--dc34-accent-warning);
+  --critical: var(--dc34-accent-critical);
+  --focus: var(--dc34-accent-secondary);
+
   /* Brand */
   --accent-danger: var(--dc34-accent-critical);
   --accent-warning: var(--dc34-accent-warning);
@@ -234,7 +250,7 @@ button {
 .ui-heading-1 {
   font-size: clamp(1.5rem, 6vw, 2.5rem);
   font-weight: 750;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   line-height: 1.12;
   color: var(--color-fg);
   text-wrap: balance;
@@ -243,10 +259,236 @@ button {
 .ui-heading-2 {
   font-size: clamp(1.125rem, 4vw, 1.75rem);
   font-weight: 650;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   line-height: 1.25;
   color: color-mix(in oklab, var(--color-fg), var(--color-muted) 12%);
   text-wrap: balance;
+}
+
+.ui-page-header {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid color-mix(in oklab, var(--border), white 8%);
+}
+
+.ui-page-header-row {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (width >= 40rem) {
+  .ui-page-header-row {
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
+  }
+}
+
+.ui-page-description {
+  margin-top: var(--space-2);
+  max-width: 42rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.ui-section-label {
+  color: color-mix(in oklab, var(--text-muted), white 10%);
+  font-family: "Lato", "Atkinson Hyperlegible", "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ui-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, var(--border), white 6%);
+  background: color-mix(in oklab, var(--surface-muted), transparent 8%);
+  padding: 0.25rem 0.75rem;
+  color: var(--text-muted);
+  font-family: "Lato", "Atkinson Hyperlegible", "Segoe UI", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.ui-control-panel {
+  display: grid;
+  width: 100%;
+  gap: var(--space-3);
+}
+
+@media (width >= 40rem) {
+  .ui-control-panel {
+    grid-template-columns: minmax(16rem, 1fr) auto;
+    align-items: center;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-control-panel {
+    max-width: 44rem;
+  }
+}
+
+.ui-search-field {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  gap: var(--space-3);
+  border-radius: var(--radius-3);
+  border: 1px solid color-mix(in oklab, var(--border), white 8%);
+  background: color-mix(in oklab, var(--surface-muted), transparent 8%);
+  color: color-mix(in oklab, var(--accent-success), white 12%);
+  padding-inline: 0.875rem;
+  box-shadow: inset 0 1px 0 color-mix(in oklab, white, transparent 95%);
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ui-search-field:focus-within {
+  border-color: color-mix(in oklab, var(--focus), transparent 38%);
+  background: color-mix(in oklab, var(--surface-elevated), transparent 8%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white, transparent 94%),
+    0 0 0 2px color-mix(in oklab, var(--focus), transparent 76%);
+}
+
+.ui-search-input {
+  min-height: 2.75rem;
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 1rem;
+  outline: none;
+}
+
+.ui-search-input::placeholder {
+  color: var(--text-subtle);
+}
+
+.ui-select-control {
+  min-height: 3rem;
+  min-width: min(100%, 14rem);
+  border-radius: var(--radius-3);
+}
+
+.ui-detail-section {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.ui-detail-panel {
+  padding: var(--space-5);
+}
+
+@media (width >= 40rem) {
+  .ui-detail-panel {
+    padding: var(--space-6);
+  }
+}
+
+.ui-logo-frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-3);
+  border: 1px solid color-mix(in oklab, var(--border), white 8%);
+  background: color-mix(in oklab, var(--surface-elevated), transparent 12%);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, white, transparent 94%);
+}
+
+.ui-card-title {
+  color: var(--text-primary);
+  font-weight: 650;
+  line-height: 1.35;
+  transition: color 0.2s ease;
+}
+
+.group:hover .ui-card-title,
+.group:focus-within .ui-card-title {
+  color: white;
+}
+
+.ui-card-meta {
+  color: var(--text-muted);
+  font-family: "Lato", "Atkinson Hyperlegible", "Segoe UI", sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.ui-page-kicker {
+  color: color-mix(in oklab, var(--accent-success), white 22%);
+}
+
+.ui-markdown {
+  color: color-mix(in oklab, var(--text-primary), var(--text-muted) 22%);
+}
+
+.ui-markdown :where(h1, h2, h3, h4, strong) {
+  color: var(--text-primary);
+}
+
+.ui-markdown :where(a) {
+  color: color-mix(in oklab, var(--accent), white 12%);
+  text-decoration-color: color-mix(in oklab, var(--accent), transparent 58%);
+}
+
+.ui-markdown :where(a:hover) {
+  color: color-mix(in oklab, var(--accent-success), white 10%);
+  text-decoration-color: color-mix(in oklab, var(--accent-success), transparent 42%);
+}
+
+.ui-markdown :where(code) {
+  border-radius: var(--radius-1);
+  background: color-mix(in oklab, var(--surface-elevated), white 4%);
+  color: var(--text-primary);
+  padding: 0.125rem 0.25rem;
+  font-size: 0.9em;
+}
+
+.ui-markdown :where(pre) {
+  overflow-x: auto;
+  border-radius: var(--radius-3);
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--surface-elevated), black 8%);
+  padding: var(--space-4);
+  color: var(--text-primary);
+}
+
+.ui-markdown :where(pre code) {
+  background: transparent;
+  padding: 0;
+}
+
+.ui-markdown :where(blockquote) {
+  border-left: 4px solid var(--accent-success);
+  color: color-mix(in oklab, var(--text-primary), var(--text-muted) 24%);
+}
+
+.ui-markdown :where(hr) {
+  border-color: var(--border);
+}
+
+.ui-markdown :where(th, td) {
+  border-color: var(--border);
+}
+
+.ui-markdown :where(th) {
+  background: color-mix(in oklab, var(--surface-elevated), white 3%);
+  color: var(--text-primary);
 }
 
 .ui-kicker {
@@ -264,9 +506,9 @@ button {
 .ui-focus-ring:focus-visible,
 .ui-link:focus-visible,
 .ui-input-focus:focus-visible {
-  outline: 2px solid var(--accent-primary);
+  outline: 2px solid var(--focus);
   outline-offset: 3px;
-  box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent-primary), transparent 72%);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--focus), transparent 72%);
 }
 
 .ui-link {
@@ -370,9 +612,9 @@ button {
 
 .ui-card {
   overflow-wrap: anywhere;
-  border: 1px solid var(--color-border-soft);
+  border: 1px solid var(--border);
   border-radius: var(--radius-3);
-  background: color-mix(in oklab, var(--color-surface), transparent 8%);
+  background: color-mix(in oklab, var(--surface), transparent 8%);
   box-shadow: var(--shadow-sm);
 }
 
@@ -386,7 +628,7 @@ button {
 
 .ui-card-interactive:hover {
   border-color: color-mix(in oklab, var(--accent-primary), transparent 60%);
-  background: color-mix(in oklab, var(--color-surface-elevated), transparent 2%);
+  background: var(--surface-interactive);
 }
 
 .ui-card-interactive:active {
@@ -395,7 +637,7 @@ button {
 
 .ui-card-interactive:focus-within {
   border-color: color-mix(in oklab, var(--accent-primary), transparent 45%);
-  background: color-mix(in oklab, var(--color-surface-elevated), transparent 2%);
+  background: var(--surface-interactive);
 }
 
 .ui-rounded-inherit {
@@ -412,10 +654,11 @@ button {
 
 .ui-empty-state {
   border-radius: 1rem;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background: rgb(15 23 42 / 0.4);
+  border: 1px solid color-mix(in oklab, var(--border), white 8%);
+  background: color-mix(in oklab, var(--surface-muted), transparent 8%);
   padding: 1.5rem;
   text-align: center;
+  color: var(--text-muted);
 }
 
 .ui-empty-state-action {

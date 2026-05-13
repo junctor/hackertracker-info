@@ -62,13 +62,11 @@ function ContentSessionCard({
   const sessionContent = (
     <div className="min-w-0 flex-1 space-y-1.5">
       {titleLabel ? (
-        <p className="line-clamp-2 text-base leading-6 font-semibold tracking-tight text-slate-100 transition-colors group-hover:text-white sm:text-lg">
-          {titleLabel}
-        </p>
+        <p className="ui-card-title line-clamp-2 text-base sm:text-lg">{titleLabel}</p>
       ) : null}
-      <p className="text-sm font-semibold text-slate-100 sm:text-base">{timeLabel}</p>
+      <p className="text-sm font-semibold text-(--text-primary) sm:text-base">{timeLabel}</p>
       {locationName ? (
-        <div className="flex min-w-0 items-center gap-2 text-sm text-slate-400">
+        <div className="ui-card-meta flex min-w-0 items-center gap-2">
           <MapPinIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
           <span className="truncate">{locationName}</span>
         </div>

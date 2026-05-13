@@ -2,10 +2,9 @@ import React, { useMemo } from "react";
 import { useSearchParams } from "react-router";
 
 import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
@@ -61,13 +60,9 @@ export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps
         </title>
         <meta name="description" content={`Reference document for ${conf.name}.`} />
       </Head>
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <DocumentDetails document={selectedDocument} conference={conf} />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <DocumentDetails document={selectedDocument} conference={conf} />
+      </ConferenceLayout>
     </>
   );
 }

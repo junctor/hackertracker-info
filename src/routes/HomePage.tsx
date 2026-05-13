@@ -1,7 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 
 import Head from "@/components/Head";
@@ -41,6 +41,7 @@ const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = [
 
 const TITLE_CYCLE = ["DEF CON", "D3F CON", "DEF C0N", "D3F C0N", "D3F_C0N", "STAHP IT"] as const;
 const TITLE_SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-/\\[]{}()<>|";
+const TITLE_INTERACTION_COOLDOWN_MS = 200;
 const MAX_COUNTDOWN_REFRESH_DELAY_MS = 2_147_483_647;
 
 function hasActiveCountdown(kickoff: string, nowMs = Date.now()) {
@@ -56,6 +57,10 @@ function getCountdownRefreshDelay(kickoff: string) {
   if (remainingMs <= 0) return 0;
 
   return Math.min(remainingMs + 1000, MAX_COUNTDOWN_REFRESH_DELAY_MS);
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
 }
 
 function useHasActiveCountdown(kickoff: string) {
@@ -79,44 +84,76 @@ function useHasActiveCountdown(kickoff: string) {
 
 export default function Home() {
   const titleRef = useRef<HTMLSpanElement | null>(null);
-  const [interactionCount, setInteractionCount] = useState(0);
+  const titleIndexRef = useRef(0);
+  const titleTweenRef = useRef<gsap.core.Tween | null>(null);
+  const isAnimatingTitleRef = useRef(false);
+  const lastTitleInteractionRef = useRef(0);
 
-  const title = useMemo(
-    () => TITLE_CYCLE[interactionCount % TITLE_CYCLE.length],
-    [interactionCount],
-  );
+  useGSAP(() => {
+    const el = titleRef.current;
+    if (!el) return;
 
-  useGSAP(
-    () => {
-      const el = titleRef.current;
-      if (!el) return;
+    el.textContent = TITLE_CYCLE[titleIndexRef.current];
 
-      const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    return () => {
+      titleTweenRef.current?.kill();
+      titleTweenRef.current = null;
+      isAnimatingTitleRef.current = false;
+    };
+  }, []);
 
-      el.textContent = title;
-      if (prefersReducedMotion) return;
+  const cycleTitle = useCallback(() => {
+    const el = titleRef.current;
+    if (!el) return;
 
-      gsap.killTweensOf(el);
-      gsap.fromTo(
-        el,
-        { opacity: 1 },
-        {
-          duration: 1.2,
-          ease: "none",
-          scrambleText: {
-            text: title,
-            chars: TITLE_SCRAMBLE_CHARS,
-            speed: 0.25,
-          },
-        },
-      );
-    },
-    { dependencies: [title] },
-  );
+    const now = Date.now();
+    if (
+      isAnimatingTitleRef.current ||
+      now - lastTitleInteractionRef.current < TITLE_INTERACTION_COOLDOWN_MS
+    ) {
+      return;
+    }
 
-  const cycleTitle = () => {
-    setInteractionCount((prev) => prev + 1);
-  };
+    lastTitleInteractionRef.current = now;
+
+    const nextTitleIndex = (titleIndexRef.current + 1) % TITLE_CYCLE.length;
+    const nextTitle = TITLE_CYCLE[nextTitleIndex];
+
+    if (prefersReducedMotion()) {
+      titleTweenRef.current?.kill();
+      titleTweenRef.current = null;
+      el.textContent = nextTitle;
+      titleIndexRef.current = nextTitleIndex;
+      isAnimatingTitleRef.current = false;
+      return;
+    }
+
+    isAnimatingTitleRef.current = true;
+    titleTweenRef.current?.kill();
+
+    titleTweenRef.current = gsap.to(el, {
+      duration: 0.85,
+      ease: "none",
+      overwrite: "auto",
+      scrambleText: {
+        text: nextTitle,
+        chars: TITLE_SCRAMBLE_CHARS,
+        speed: 0.45,
+        revealDelay: 0.08,
+        tweenLength: true,
+      },
+      onComplete: () => {
+        el.textContent = nextTitle;
+        titleIndexRef.current = nextTitleIndex;
+        titleTweenRef.current = null;
+        isAnimatingTitleRef.current = false;
+      },
+      onInterrupt: () => {
+        titleTweenRef.current = null;
+        isAnimatingTitleRef.current = false;
+      },
+    });
+  }, []);
 
   return (
     <>
@@ -162,9 +199,9 @@ export default function Home() {
               >
                 <span
                   ref={titleRef}
-                  className="ui-homepage-title ui-homepage-title-display inline-block max-w-full cursor-pointer text-center font-mono leading-none font-semibold transition select-none"
+                  className="ui-homepage-title ui-homepage-title-display inline-block max-w-full min-w-[8ch] cursor-pointer text-center font-mono leading-none font-semibold whitespace-nowrap transition select-none"
                 >
-                  {title}
+                  {TITLE_CYCLE[0]}
                 </span>
               </button>
             </h1>

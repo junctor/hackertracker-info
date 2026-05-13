@@ -60,13 +60,13 @@ The app is a fully static Vite+ React application using React Router. Conference
 ```bash
 git clone https://github.com/junctor/hackertracker-info.git
 cd hackertracker-info
-npm install
+vp install
 ```
 
 ### Development
 
 ```bash
-npm run dev
+vp dev
 ```
 
 Open the local URL printed by Vite. Conference slugs are defined in `src/lib/conferences.ts`, and matching static data is expected under `public/ht/<conference-slug>/`.
@@ -74,7 +74,7 @@ Open the local URL printed by Vite. Conference slugs are defined in `src/lib/con
 ### Production Build
 
 ```bash
-npm run build
+vp run build
 ```
 
 Production assets are written to `dist/`.
@@ -82,28 +82,28 @@ Production assets are written to `dist/`.
 To inspect the built site locally:
 
 ```bash
-npm run preview
+vp preview
 ```
 
 ### Linting, Formatting, and Validation
 
 ```bash
-npm run check
-npm run lint
-npm run fmt:check
+vp check
+vp lint
+vp fmt --check
 ```
 
 To apply formatter changes:
 
 ```bash
-npm run fmt
+vp fmt
 ```
 
 ## Static Hosting
 
 The app is static-hosting compatible and does not require a Node server at runtime. Deploy the contents of `dist/`.
 
-After `npm run build`, the `postbuild` script runs `scripts/generate-static-routes.mjs`. It creates route-based `index.html` files, including conference route entries, so direct navigation and refreshes work on static hosts without rewrite rules.
+After `vp run build`, the `postbuild` script runs `scripts/generate-static-routes.mjs`. It creates route-based `index.html` files, including conference route entries, so direct navigation and refreshes work on static hosts without rewrite rules.
 
 ## Strict CSP
 

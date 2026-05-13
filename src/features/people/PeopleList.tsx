@@ -7,6 +7,8 @@ import SearchHeader from "@/components/ui/SearchHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { PeopleCardsView } from "@/lib/types/ht-types";
 
+import { getPersonInitials } from "./personInitials";
+
 type SortMode = "name-asc" | "name-desc";
 
 type Props = {
@@ -64,19 +66,6 @@ function getPersonAvatarUrl(person: AvatarRecord): string | null {
   }
 
   return null;
-}
-
-function getInitials(name?: string | null): string {
-  const normalizedName = getPersonName(name);
-  if (!normalizedName) return "";
-
-  return normalizedName
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 }
 
 function getPersonAccentClassName(name?: string | null): string {
@@ -183,7 +172,7 @@ export default function PeopleList({ people, conference }: Props) {
           {filtered.map((person) => {
             const personName = getDisplayName(person.name);
             const personTitle = getDisplayTitle(person.title);
-            const personInitials = getInitials(person.name);
+            const personInitials = getPersonInitials(person.name);
             const avatarUrl = getPersonAvatarUrl(person);
             const showAvatarImage = Boolean(avatarUrl) && !brokenAvatarIds[person.id];
             const accentClassName = getPersonAccentClassName(person.name);

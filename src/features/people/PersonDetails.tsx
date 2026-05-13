@@ -10,6 +10,7 @@ import { getToneFromColor } from "@/lib/tone";
 import { ContentEntity, EventEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
 
 import ContentSession from "../content/ContentSession";
+import { getPersonInitials } from "./personInitials";
 
 type Props = {
   person: PersonEntity;
@@ -79,19 +80,6 @@ function safeParseMs(value?: string | null): number {
   return Number.isFinite(ms) ? ms : Number.MAX_SAFE_INTEGER;
 }
 
-function getInitials(name?: string | null): string {
-  const normalizedName = getPersonName(name);
-  if (!normalizedName) return "";
-
-  return normalizedName
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
-
 function getPersonAccentClassName(name?: string | null): string {
   const normalizedName = getDisplayName(name);
   let hash = 0;
@@ -108,7 +96,7 @@ export default function PersonDetails({ person, events, locations, conference }:
   const [hasAvatarError, setHasAvatarError] = useState(false);
   const contentsBasePath = `/${conference.slug}/content`;
   const personName = getDisplayName(person.name);
-  const personInitials = getInitials(person.name);
+  const personInitials = getPersonInitials(person.name);
   const personAvatarUrl = getPersonAvatarUrl(person);
   const personPronouns = getOptionalText(person.pronouns);
   const personDescription = getOptionalText(person.description);

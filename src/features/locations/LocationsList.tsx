@@ -5,6 +5,8 @@ import { type LocationEntity, type LocationsStore } from "@/lib/types/ht-types";
 
 type Props = {
   locations: LocationsStore;
+  title?: string;
+  description?: string;
 };
 
 function getLocationName(location: LocationEntity) {
@@ -17,7 +19,11 @@ function getLocationShortName(location: LocationEntity) {
   return shortName;
 }
 
-export default function LocationsList({ locations }: Props) {
+export default function LocationsList({
+  locations,
+  title = "Locations",
+  description = "Find rooms, villages, and venue references used across the schedule.",
+}: Props) {
   const [search, setSearch] = useState("");
   const normalizedSearch = search.trim().toLowerCase();
 
@@ -44,8 +50,8 @@ export default function LocationsList({ locations }: Props) {
   return (
     <section className="ui-container ui-section">
       <PageHeader
-        title="Locations"
-        description="Find rooms, villages, and venue references used across the schedule."
+        title={title}
+        description={description}
         resultLabel={showResultCount ? `${filteredLocations.length} found` : undefined}
         search={{
           label: "Search locations",

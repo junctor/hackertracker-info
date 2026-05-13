@@ -13,9 +13,16 @@ import { PageId } from "@/lib/types/page-meta";
 type LocationsPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
+  title?: string;
+  description?: string;
 };
 
-export default function LocationsPage({ conf, activePageId }: LocationsPageProps) {
+export default function LocationsPage({
+  conf,
+  activePageId,
+  title = "Locations",
+  description = `Rooms and venue locations for ${conf.name}.`,
+}: LocationsPageProps) {
   const {
     data: locations,
     error,
@@ -28,11 +35,13 @@ export default function LocationsPage({ conf, activePageId }: LocationsPageProps
   return (
     <>
       <Head>
-        <title>Locations | {conf.name}</title>
-        <meta name="description" content={`Rooms and venue locations for ${conf.name}.`} />
+        <title>
+          {title} | {conf.name}
+        </title>
+        <meta name="description" content={description} />
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
-        <LocationsList locations={locations} />
+        <LocationsList locations={locations} title={title} description={description} />
       </ConferenceLayout>
     </>
   );

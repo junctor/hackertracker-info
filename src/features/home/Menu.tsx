@@ -9,7 +9,7 @@ import {
   useHomeModel,
 } from "@/features/home/homeModel";
 import { ConferenceManifest } from "@/lib/conferences";
-import { getSiteMenu } from "@/lib/menu";
+import { useSiteMenu } from "@/lib/hooks/useSiteMenu";
 
 type Props = {
   conference: ConferenceManifest;
@@ -26,7 +26,7 @@ const menuCardActionClassName =
 
 export default function Menu({ conference }: Props) {
   const home = useHomeModel(conference);
-  const navMenu = getSiteMenu(conference);
+  const navMenu = useSiteMenu(conference);
 
   return (
     <section className={HOME_SECTION_CLASS_NAME}>
@@ -36,8 +36,8 @@ export default function Menu({ conference }: Props) {
           <Image
             src={home.logoSrc}
             alt={home.logoAlt}
-            fill
-            priority
+            fillContainer
+            loading="eager"
             sizes="(min-width: 1024px) 672px, (min-width: 640px) 66vw, 92vw"
             className="object-contain"
           />

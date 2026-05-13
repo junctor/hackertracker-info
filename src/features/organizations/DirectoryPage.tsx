@@ -1,19 +1,21 @@
 import { JSX, useMemo } from "react";
 
+import type { ConferenceManifest } from "@/lib/conferences";
+import type { PageId } from "@/lib/types/page-meta";
+
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
-import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { getOrganizationDirectoryConfig } from "@/lib/menu";
 import {
   DerivedTagIdsByLabel,
   OrganizationsCardsView,
   OrganizationsStore,
 } from "@/lib/types/ht-types";
-import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
 type Props = {
@@ -24,6 +26,28 @@ type Props = {
   description?: string;
   routeSlug: string;
 };
+
+type OrganizationDirectoryPageProps = Pick<Props, "conf" | "activePageId">;
+
+export function createOrganizationDirectoryRoute(directoryPageId: PageId) {
+  const directoryConfig = getOrganizationDirectoryConfig(directoryPageId)!;
+
+  return function OrganizationDirectoryRoute({
+    conf,
+    activePageId,
+  }: OrganizationDirectoryPageProps) {
+    return (
+      <DirectoryPage
+        conf={conf}
+        activePageId={activePageId}
+        title={directoryConfig.title}
+        tagLabel={directoryConfig.tagLabel}
+        description={directoryConfig.description}
+        routeSlug={directoryConfig.slug}
+      />
+    );
+  };
+}
 
 export default function DirectoryPage({
   conf,

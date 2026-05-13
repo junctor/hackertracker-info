@@ -175,7 +175,7 @@ export default function PersonDetails({ person, events, locations, conference }:
                 <Image
                   src={personAvatarUrl}
                   alt={personName}
-                  fill
+                  fillContainer
                   sizes="(min-width: 640px) 112px, 96px"
                   className="object-cover"
                   onError={() => setHasAvatarError(true)}

@@ -239,7 +239,7 @@ function ConferenceCard({
               <Image
                 src={src}
                 alt={`${conference.name} logo`}
-                fill
+                fillContainer
                 sizes="(min-width: 1024px) 480px, (min-width: 640px) 46vw, 92vw"
                 className="object-contain transition duration-300 group-hover:-translate-y-0.5 group-hover:scale-105"
               />

@@ -84,7 +84,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
                       <Image
                         src={organization.logoUrl}
                         alt={`${organization.name} logo`}
-                        fill
+                        fillContainer
                         className="object-contain p-2"
                         sizes="(min-width: 640px) 5rem, 4rem"
                       />

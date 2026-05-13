@@ -4,15 +4,15 @@ export type PageId =
   | "bookmarks"
   | "communities"
   | "content"
-  | "contents"
   | "contests"
   | "departments"
   | "document"
   | "exhibitors"
   | "locations"
+  | "maps"
+  | "merch"
   | "organization"
   | "people"
-  | "person"
   | "readme"
   | "schedule"
   | "search"
@@ -28,15 +28,15 @@ export const PAGE_META: Record<PageId, { title: string }> = {
   bookmarks: { title: "Bookmarks" },
   communities: { title: "Communities" },
   content: { title: "Content" },
-  contents: { title: "Contents" },
   contests: { title: "Contests" },
   departments: { title: "Departments" },
   document: { title: "Document" },
   exhibitors: { title: "Exhibitors" },
   locations: { title: "Locations" },
+  maps: { title: "Map" },
+  merch: { title: "Merch" },
   organization: { title: "Organizations" },
   people: { title: "People" },
-  person: { title: "Person" },
   readme: { title: "readme.nfo" },
   schedule: { title: "Schedule" },
   search: { title: "Search" },

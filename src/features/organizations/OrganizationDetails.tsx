@@ -47,9 +47,9 @@ export default function OrganizationDetails({ org, conference }: Props) {
               <Image
                 src={org.logoUrl}
                 alt={`${org.name} logo`}
-                fill
+                fillContainer
                 className="object-contain p-2"
-                priority
+                loading="eager"
                 sizes="(min-width: 640px) 6rem, 5rem"
               />
             ) : (

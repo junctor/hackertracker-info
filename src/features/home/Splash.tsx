@@ -47,8 +47,8 @@ export default function Splash({ conference }: Props) {
             <Image
               src={home.logoSrc}
               alt={home.logoAlt}
-              fill
-              priority
+              fillContainer
+              loading="eager"
               sizes="(min-width: 1024px) 520px, (min-width: 640px) 52vw, 90vw"
               className="object-contain"
             />

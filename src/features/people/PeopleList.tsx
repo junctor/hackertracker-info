@@ -192,7 +192,7 @@ export default function PeopleList({ people, conference }: Props) {
                             <Image
                               src={avatarUrl}
                               alt={personName}
-                              fill
+                              fillContainer
                               sizes="48px"
                               className="object-cover"
                               onError={() =>

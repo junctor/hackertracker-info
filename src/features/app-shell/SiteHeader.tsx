@@ -7,7 +7,7 @@ import {
 import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
-import { getSiteMenu } from "@/lib/menu";
+import { useSiteMenu } from "@/lib/hooks/useSiteMenu";
 import { getPageTitle, PageId } from "@/lib/types/page-meta";
 
 const museoFont = {
@@ -17,7 +17,7 @@ const museoFont = {
 const focusRingClass = "ui-focus-ring focus-visible:outline-none";
 
 export default function SiteHeader({ conference, activePageId }: Props) {
-  const menuItems = getSiteMenu(conference);
+  const menuItems = useSiteMenu(conference);
   const pageTitle = getPageTitle(activePageId);
   const activeHref =
     activePageId === "home"

@@ -92,25 +92,25 @@ export default function ContentDetails(props: Props) {
   };
 
   return (
-    <div className="ui-container ui-page-content space-y-10">
-      <header className={`ui-card relative overflow-hidden ui-tone-${accentTone}`}>
+    <div className="ui-container ui-page-content ui-detail-stack">
+      <header className={`ui-card ui-detail-card ui-tone-${accentTone}`}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
-        <div className="relative z-10 flex flex-col gap-6 px-5 py-5 pl-6 sm:px-6 sm:py-6 sm:pl-7">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div className="min-w-0 flex-1">
+        <div className="ui-detail-header-body">
+          <div className="ui-detail-header-row">
+            <div className="ui-detail-title-wrap">
               <h1 className="ui-heading-1">{content.title}</h1>
             </div>
 
-            <div className="flex shrink-0 items-center gap-2">
+            <div className="ui-detail-actions">
               <button
                 type="button"
                 onClick={handleShare}
                 aria-label="Share content link"
                 className="ui-icon-plain"
               >
-                <ShareIcon className="h-5 w-5" aria-hidden="true" />
+                <ShareIcon className="ui-icon-sm" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -122,7 +122,7 @@ export default function ContentDetails(props: Props) {
           <h2 id="sessions-title" className="ui-section-label">
             Sessions
           </h2>
-          <ul className="space-y-4">
+          <ul className="ui-list-stack">
             {sessions.map((s) => (
               <ContentSession
                 key={s.id}
@@ -142,19 +142,19 @@ export default function ContentDetails(props: Props) {
           <h2 id="tags-title" className="ui-section-label">
             Tags
           </h2>
-          <div className="ui-card px-4 py-4 sm:px-5">
-            <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
+          <div className="ui-card ui-detail-list-card">
+            <ul className="ui-chip-list">
               {tags.map((tag) => (
                 <li key={tag.id}>
                   <Link
                     to={`/${conference.slug}/tag?id=${tag.id}`}
-                    className="ui-focus-ring ui-pill-link focus-visible:outline-none"
+                    className="ui-focus-ring ui-pill-link"
                   >
                     <span
-                      className={`ui-tag-dot h-3 w-3 rounded-full ui-tone-${getToneFromColor(tag.colorBackground)}`}
+                      className={`ui-tag-dot ui-tag-dot-mark ui-tone-${getToneFromColor(tag.colorBackground)}`}
                       aria-hidden="true"
                     />
-                    <span className="max-w-64 truncate">{tag.label}</span>
+                    <span className="ui-pill-label ui-clip-text">{tag.label}</span>
                   </Link>
                 </li>
               ))}
@@ -179,20 +179,20 @@ export default function ContentDetails(props: Props) {
           <h2 id="links-title" className="ui-section-label">
             Links
           </h2>
-          <ul className="space-y-2.5">
+          <ul className="ui-list-stack-sm">
             {content.links.map((l) => (
               <li key={l.url}>
                 <a
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ui-focus-ring ui-card ui-card-interactive group flex min-w-0 items-center justify-between gap-4 px-4 py-3.5 focus-visible:outline-none sm:px-5"
+                  className="ui-focus-ring ui-card ui-card-interactive ui-detail-link-card"
                 >
-                  <div className="min-w-0">
-                    <p className="ui-card-title truncate text-sm sm:text-base">{l.label}</p>
+                  <div className="ui-item-main">
+                    <p className="ui-card-title ui-clip-text">{l.label}</p>
                   </div>
                   <ArrowTopRightOnSquareIcon
-                    className="h-4 w-4 shrink-0 text-(--accent-success) transition-colors group-hover:text-white"
+                    className="ui-icon-xs ui-card-external-icon"
                     aria-hidden="true"
                   />
                 </a>
@@ -207,17 +207,17 @@ export default function ContentDetails(props: Props) {
           <h2 id="people-title" className="ui-section-label">
             People
           </h2>
-          <div className="ui-card px-4 py-4 sm:px-5">
-            <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
+          <div className="ui-card ui-detail-list-card">
+            <ul className="ui-chip-list">
               {people.map((p) => (
                 <li key={p.id}>
                   <Link
                     to={`${peopleBasePath}/?id=${p.id}`}
-                    className="ui-focus-ring ui-pill-link focus-visible:outline-none"
+                    className="ui-focus-ring ui-pill-link"
                     title={p.name}
                   >
-                    <UserIcon className="h-4 w-4 text-(--accent-success)" aria-hidden="true" />
-                    <span className="max-w-56 truncate">{p.name}</span>
+                    <UserIcon className="ui-icon-xs ui-card-external-icon" aria-hidden="true" />
+                    <span className="ui-pill-label-narrow ui-clip-text">{p.name}</span>
                   </Link>
                 </li>
               ))}

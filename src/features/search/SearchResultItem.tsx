@@ -20,26 +20,21 @@ export default function SearchResultItem({ conf, result }: Props) {
   const typeLabel = getSearchResultLabel(result.type);
 
   return (
-    <article
-      className={`ui-card ui-card-interactive group relative w-full min-w-0 overflow-hidden ui-tone-${tone}`}
-    >
+    <article className={`ui-card ui-card-interactive ui-accent-card ui-tone-${tone}`}>
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
       <Link
         to={getSearchResultHref(conf.slug, result)}
-        className="ui-focus-ring ui-rounded-inherit relative z-10 flex min-w-0 items-start gap-3 px-4 py-4 pl-5 focus-visible:outline-none sm:px-5 sm:py-5 sm:pl-6"
+        className="ui-focus-ring ui-search-result-link"
       >
-        <div className="min-w-0 flex-1 space-y-2">
+        <div className="ui-item-main ui-item-copy">
           <span className={`ui-tag-chip ui-tag-chip-strong ui-tone-${tone}`}>{typeLabel}</span>
 
-          <h2 className="ui-card-title line-clamp-3 text-lg sm:text-xl">{result.text}</h2>
+          <h2 className="ui-card-title ui-search-result-title ui-clamp-three">{result.text}</h2>
         </div>
 
-        <ArrowRightIcon
-          aria-hidden="true"
-          className="mt-1 h-5 w-5 shrink-0 text-(--event-color) transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-(--text-primary)"
-        />
+        <ArrowRightIcon aria-hidden="true" className="ui-icon-sm ui-card-arrow" />
       </Link>
     </article>
   );

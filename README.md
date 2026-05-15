@@ -7,7 +7,7 @@ Official DEF CON schedule and event guide, published as static files.
 [![Vite+ / Vite 8](https://img.shields.io/badge/Bundler-Vite%2B%20%2F%20Vite_8-646CFF.svg)](https://viteplus.dev/)
 [![React 19](https://img.shields.io/badge/Framework-React_19-61DAFB.svg)](https://react.dev/)
 [![TypeScript 6](https://img.shields.io/badge/Language-TypeScript_6-3178C6.svg)](https://www.typescriptlang.org/)
-[![Tailwind CSS 4](https://img.shields.io/badge/Styling-Tailwind_4-38BDF8.svg)](https://tailwindcss.com/)
+[![Vanilla CSS](https://img.shields.io/badge/Styling-Vanilla_CSS-1572B6.svg)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 
 `info.defcon.org` is the static web guide for DEF CON conference information. It browses talks, villages, workshops, contests, people, organizations, announcements, documents, and related event data from pre-generated JSON exports.
 
@@ -37,7 +37,7 @@ The app is a fully static Vite+ React application using React Router. Conference
   - TypeScript project builds
   - Post-build static route generation
 - Styling and content
-  - Tailwind CSS 4
+  - Vanilla CSS with project design tokens
   - Local fonts and images from `public/`
   - `react-markdown` with `remark-gfm`
   - Heroicons

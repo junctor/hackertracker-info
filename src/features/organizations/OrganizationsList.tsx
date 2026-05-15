@@ -54,7 +54,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
       />
 
       {filteredOrganizations.length === 0 ? (
-        <div role="status" className="ui-empty-state mt-10">
+        <div role="status" className="ui-empty-state ui-page-empty-offset">
           <p>
             {normalizedSearch
               ? `No ${title.toLowerCase()} match "${search.trim()}".`
@@ -64,39 +64,37 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
             <button
               type="button"
               onClick={() => setSearch("")}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Clear Search
             </button>
           ) : null}
         </div>
       ) : (
-        <ul className="mt-6 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <ul className="ui-organization-grid">
           {filteredOrganizations.map((organization) => (
-            <li key={organization.id} className="h-full">
+            <li key={organization.id} className="ui-grid-card-item">
               <Link
                 to={`${detailsBasePath}?id=${organization.id}`}
-                className="ui-focus-ring group block h-full rounded-2xl focus-visible:outline-none"
+                className="ui-focus-ring ui-organization-card-link"
               >
-                <article className="ui-card ui-card-interactive flex h-full items-center gap-4 rounded-2xl p-4">
-                  <div className="ui-logo-frame h-16 w-16 shrink-0 sm:h-20 sm:w-20">
+                <article className="ui-card ui-card-interactive ui-organization-card">
+                  <div className="ui-logo-frame ui-logo-frame-sm">
                     {organization.logoUrl ? (
                       <Image
                         src={organization.logoUrl}
                         alt={`${organization.name} logo`}
                         fillContainer
-                        className="object-contain p-2"
+                        className="ui-image-contain ui-logo-image-pad"
                         sizes="(min-width: 640px) 5rem, 4rem"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center font-mono text-sm font-semibold tracking-widest text-white">
-                        {getInitials(organization.name)}
-                      </div>
+                      <div className="ui-logo-initials">{getInitials(organization.name)}</div>
                     )}
                   </div>
 
-                  <div className="min-w-0 flex-1">
-                    <h2 className="ui-card-title text-base">{organization.name}</h2>
+                  <div className="ui-organization-name">
+                    <h2 className="ui-card-title">{organization.name}</h2>
                   </div>
                 </article>
               </Link>

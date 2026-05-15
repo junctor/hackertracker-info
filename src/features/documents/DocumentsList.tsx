@@ -16,17 +16,17 @@ export default function DocumentsList({
     <div className="ui-container ui-page-content">
       <PageHeader title="readme.nfo" description="Conference reference files and updates." />
 
-      <ul className="space-y-4">
+      <ul className="ui-list-stack">
         {documents.map((doc) => (
           <li key={doc.id}>
             <Link
               to={`/${conference.slug}/document/?id=${doc.id}`}
-              className="ui-focus-ring ui-card ui-card-interactive flex items-start justify-between gap-3 p-4 focus-visible:outline-none sm:items-center sm:p-5"
+              className="ui-focus-ring ui-card ui-card-interactive ui-document-list-link"
             >
-              <div className="min-w-0">
-                <h2 className="ui-card-title text-lg sm:text-xl">{doc.titleText}</h2>
-                <p className="ui-card-meta mt-1">
-                  <span className="font-medium text-(--text-primary)">Updated:</span>{" "}
+              <div className="ui-item-main">
+                <h2 className="ui-card-title ui-document-list-title">{doc.titleText}</h2>
+                <p className="ui-card-meta ui-document-list-meta">
+                  <span className="ui-muted-strong">Updated:</span>{" "}
                   {new Date(doc.updatedAtMs).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
@@ -34,10 +34,7 @@ export default function DocumentsList({
                   })}
                 </p>
               </div>
-              <ChevronRightIcon
-                className="mt-0.5 h-5 w-5 shrink-0 text-(--text-muted) sm:h-6 sm:w-6"
-                aria-hidden="true"
-              />
+              <ChevronRightIcon className="ui-icon-sm ui-document-list-icon" aria-hidden="true" />
             </Link>
           </li>
         ))}

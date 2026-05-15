@@ -161,15 +161,15 @@ export default function PersonDetails({ person, events, locations, conference }:
   }, [personAvatarUrl]);
 
   return (
-    <div className="ui-container ui-page-content space-y-10">
-      <header className={`ui-card relative overflow-hidden ${headerAccentClassName}`}>
+    <div className="ui-container ui-page-content ui-detail-stack">
+      <header className={`ui-card ui-detail-card ${headerAccentClassName}`}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
-        <div className="relative z-10 flex flex-col gap-6 px-5 py-5 pl-6 sm:px-6 sm:py-6 sm:pl-7">
-          <div className="flex flex-col gap-5 md:flex-row md:items-start">
+        <div className="ui-detail-header-body">
+          <div className="ui-person-details-row">
             <div
-              className={`ui-person-avatar ui-inset-highlight relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-(--border) bg-(--surface-muted) text-2xl font-semibold tracking-widest text-(--text-primary) sm:h-28 sm:w-28 sm:text-3xl ${accentClassName}`}
+              className={`ui-person-avatar ui-inset-highlight ui-person-avatar-large ${accentClassName}`}
             >
               {personAvatarUrl && !hasAvatarError ? (
                 <Image
@@ -177,46 +177,41 @@ export default function PersonDetails({ person, events, locations, conference }:
                   alt={personName}
                   fillContainer
                   sizes="(min-width: 640px) 112px, 96px"
-                  className="object-cover"
+                  className="ui-image-cover"
                   onError={() => setHasAvatarError(true)}
                 />
               ) : (
                 <>
-                  <div aria-hidden="true" className="ui-avatar-fallback-glow absolute inset-0" />
+                  <div aria-hidden="true" className="ui-avatar-fallback-glow ui-fill-layer" />
                   {personInitials ? (
-                    <span className="relative">{personInitials}</span>
+                    <span className="ui-layer-above">{personInitials}</span>
                   ) : (
-                    <UserIcon
-                      className="relative h-8 w-8 text-(--text-primary) sm:h-10 sm:w-10"
-                      aria-hidden="true"
-                    />
+                    <UserIcon className="ui-icon-lg ui-layer-above" aria-hidden="true" />
                   )}
                 </>
               )}
             </div>
 
-            <div className="min-w-0 flex-1 space-y-4">
-              <div className="space-y-2">
-                <div className="flex flex-wrap items-center gap-2">
+            <div className="ui-person-header-copy">
+              <div className="ui-person-title-line">
+                <div className="ui-person-title-row">
                   <h1 className="ui-heading-1">{personName}</h1>
                   {personPronouns ? (
-                    <span className="ui-meta-pill px-2.5 py-1 text-xs">{personPronouns}</span>
+                    <span className="ui-meta-pill ui-person-pronouns">{personPronouns}</span>
                   ) : null}
                 </div>
 
                 {affiliations.length > 0 ? (
-                  <ul className="m-0 list-none space-y-1.5 p-0 text-sm leading-6 text-(--text-muted)">
+                  <ul className="ui-person-affiliations">
                     {affiliations.map((affiliation) => (
                       <li
                         key={`${affiliation.organization ?? "organization"}:${affiliation.title ?? "title"}`}
                       >
                         {affiliation.title ? (
-                          <span className="font-semibold text-(--text-primary)">
-                            {affiliation.title}
-                          </span>
+                          <span className="ui-muted-strong">{affiliation.title}</span>
                         ) : null}
                         {affiliation.title && affiliation.organization ? (
-                          <span className="mx-2 text-(--text-subtle)">@</span>
+                          <span className="ui-inline-separator">@</span>
                         ) : null}
                         {affiliation.organization ? <span>{affiliation.organization}</span> : null}
                       </li>
@@ -226,17 +221,17 @@ export default function PersonDetails({ person, events, locations, conference }:
               </div>
 
               {sortedLinks.length > 0 ? (
-                <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
+                <ul className="ui-chip-list">
                   {sortedLinks.map((link) => (
                     <li key={link.url}>
                       <a
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="ui-focus-ring ui-pill-link focus-visible:outline-none"
+                        className="ui-focus-ring ui-pill-link"
                       >
-                        <span className="max-w-64 truncate">{link.title}</span>
-                        <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-(--accent-success)" />
+                        <span className="ui-pill-label ui-clip-text">{link.title}</span>
+                        <ArrowTopRightOnSquareIcon className="ui-icon-xs ui-card-external-icon" />
                       </a>
                     </li>
                   ))}
@@ -263,7 +258,7 @@ export default function PersonDetails({ person, events, locations, conference }:
           <h2 id="events-title" className="ui-section-label">
             Sessions
           </h2>
-          <ul className="space-y-4">
+          <ul className="ui-list-stack">
             {sortedEvents.map((event) => {
               const contentEntity = contentEntityByEventId.get(event.id);
               if (!contentEntity) return null;

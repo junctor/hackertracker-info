@@ -61,15 +61,15 @@ export default function ContentList({ content, tags, conference }: Props) {
           onChange: setSearch,
         }}
       >
-        <label className="block w-full">
-          <span className="sr-only">Filter by tag</span>
+        <label className="ui-control-label">
+          <span className="ui-visually-hidden">Filter by tag</span>
           <select
             value={selectedTag ?? ""}
             onChange={(e) => {
               const nextValue = e.target.value;
               setSelectedTag(nextValue ? Number(nextValue) : null);
             }}
-            className="ui-input-base ui-select-control ui-focus-ring focus-visible:outline-none"
+            className="ui-input-base ui-select-control ui-focus-ring"
           >
             <option value="">All tags</option>
             {tagOptions.map((tag) => (
@@ -99,14 +99,14 @@ export default function ContentList({ content, tags, conference }: Props) {
                 setSearch("");
                 setSelectedTag(null);
               }}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Clear filters
             </button>
           ) : null}
         </div>
       ) : (
-        <ul className="space-y-3 leading-relaxed sm:space-y-4">
+        <ul className="ui-list-stack-sm">
           {filtered.map((item) => {
             const visibleTags = item.tags.slice(0, 4);
             const hiddenTagCount = item.tags.length - visibleTags.length;
@@ -115,40 +115,35 @@ export default function ContentList({ content, tags, conference }: Props) {
             return (
               <li
                 key={item.id}
-                className={`ui-card ui-card-interactive group relative overflow-hidden ui-tone-${itemTone}`}
+                className={`ui-card ui-card-interactive ui-accent-card ui-tone-${itemTone}`}
               >
                 <span aria-hidden="true" className="ui-accent-rail" />
                 <span aria-hidden="true" className="ui-accent-rail-overlay" />
                 <Link
                   to={`/${conference.slug}/content/?id=${item.id}`}
-                  className="ui-focus-ring ui-rounded-inherit relative z-10 block px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
+                  className="ui-focus-ring ui-accent-card-link"
                 >
-                  <div className="flex min-w-0 items-start gap-3 sm:gap-4">
-                    <div className="min-w-0 flex-1 space-y-2.5">
-                      <div className="flex items-start justify-between gap-3">
-                        <h2 className="ui-card-title line-clamp-2 text-base sm:text-lg">
+                  <div className="ui-content-list-row">
+                    <div className="ui-item-main ui-item-copy">
+                      <div className="ui-content-card-title-row">
+                        <h2 className="ui-card-title ui-accent-card-title-md ui-clamp-two">
                           {item.title}
                         </h2>
-                        <ArrowRightIcon
-                          aria-hidden="true"
-                          className="mt-0.5 h-5 w-5 shrink-0 text-(--event-color) transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-(--text-primary)"
-                        />
+                        <ArrowRightIcon aria-hidden="true" className="ui-icon-sm ui-card-arrow" />
                       </div>
 
                       {visibleTags.length > 0 && (
-                        <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+                        <ul className="ui-chip-list-tight">
                           {visibleTags.map((tag) => (
                             <li
                               key={tag.id}
-                              className={`ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)} sm:text-xs`}
+                              className={`ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)}`}
                             >
                               {tag.label}
                             </li>
                           ))}
                           {hiddenTagCount > 0 && (
-                            <li className="ui-tag-chip ui-tone-muted sm:text-xs">
-                              +{hiddenTagCount} more
-                            </li>
+                            <li className="ui-tag-chip ui-tone-muted">+{hiddenTagCount} more</li>
                           )}
                         </ul>
                       )}

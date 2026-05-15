@@ -149,13 +149,13 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
         <meta name="description" content={`${conf.name} schedule for bookmarks`} />
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
-        <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center">Bookmarks</h1>
+        <h1 className="ui-heading-1 ui-container ui-page-title-centered">Bookmarks</h1>
         {bookmarks.length === 0 ? (
-          <div className="ui-container ui-empty-state mt-8">
+          <div className="ui-container ui-empty-state ui-page-empty-offset">
             <p>No bookmarks yet.</p>
             <Link
               to={`/${conf.slug}/schedule`}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Browse Schedule
             </Link>
@@ -171,11 +171,11 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
             activeFilter="bookmarks"
           />
         ) : (
-          <div className="ui-container ui-empty-state mt-8">
+          <div className="ui-container ui-empty-state ui-page-empty-offset">
             <p>No upcoming events match your saved bookmarks.</p>
             <Link
               to={`/${conf.slug}/schedule`}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               View Full Schedule
             </Link>

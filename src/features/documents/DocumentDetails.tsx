@@ -23,20 +23,20 @@ export default function DocumentDetails({ document, conference }: Props) {
 
   return (
     <article className="ui-container ui-page-content">
-      <nav aria-label="Breadcrumb" className="mb-6" role="navigation">
-        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+      <nav aria-label="Breadcrumb" className="ui-breadcrumb" role="navigation">
+        <ol className="ui-breadcrumb-list">
           <li>
             <Link
               to={`/${conference.slug}/readme.nfo`}
-              className="ui-link ui-focus-ring flex items-center rounded focus-visible:outline-none"
+              className="ui-link ui-focus-ring ui-breadcrumb-link"
             >
               readme.nfo
             </Link>
           </li>
           <li aria-hidden="true">
-            <ChevronRightIcon className="h-4 w-4 text-(--text-subtle)" />
+            <ChevronRightIcon className="ui-icon-xs" />
           </li>
-          <li aria-current="page" className="max-w-full min-w-0 truncate text-(--text-muted)">
+          <li aria-current="page" className="ui-breadcrumb-current ui-clip-text">
             {document.titleText}
           </li>
         </ol>
@@ -44,7 +44,7 @@ export default function DocumentDetails({ document, conference }: Props) {
 
       <PageHeader title={document.titleText} resultLabel={`Last updated ${updatedLabel}`} />
 
-      <section className="max-w-prose">
+      <section className="ui-document-body">
         <Markdown content={document.bodyText} />
       </section>
     </article>

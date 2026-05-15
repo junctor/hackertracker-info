@@ -30,24 +30,22 @@ export const COUNTDOWN_UNIT_COLORS: Record<TimerUnitKey, string> = {
   seconds: "var(--dc34-bg-secondary)",
 };
 
-export const HOME_SECTION_CLASS_NAME = "mx-auto w-full max-w-6xl px-4 py-12 sm:py-14 md:py-16";
-export const HOME_HERO_STACK_CLASS_NAME =
-  "mx-auto flex max-w-3xl flex-col items-center justify-center text-center";
-export const HOME_HERO_LOGO_WRAP_CLASS_NAME =
-  "relative mx-auto h-40 w-11/12 max-w-2xl sm:h-44 md:h-52 lg:h-56";
+export const HOME_SECTION_CLASS_NAME = "ui-home-section";
+export const HOME_HERO_STACK_CLASS_NAME = "ui-home-hero-stack";
+export const HOME_HERO_LOGO_WRAP_CLASS_NAME = "ui-home-hero-logo";
 export const HOME_ACTION_LINK_CLASS_NAME =
-  "ui-btn-base ui-btn-primary ui-focus-ring mt-5 h-11 rounded-lg px-6 text-sm focus-visible:outline-none";
+  "ui-btn-base ui-btn-primary ui-focus-ring ui-home-action-link";
 export const HOME_MENU_TILE_CLASS_NAME =
-  "ui-card ui-card-interactive ui-focus-ring flex w-full min-w-0 min-h-32 flex-col items-center justify-center gap-2 rounded-2xl px-4 py-5 text-center focus-visible:outline-none";
+  "ui-card ui-card-interactive ui-focus-ring ui-home-menu-tile";
 
 export const atkinsonFont = {
-  className: "font-atkinson",
-  variable: "--font-atkinson",
+  className: "ui-typeface-atkinson",
+  variable: "--typeface-atkinson",
 } as const;
 
 export const museoFont = {
-  className: "font-museo",
-  variable: "--font-museo",
+  className: "ui-typeface-museo",
+  variable: "--typeface-museo",
 } as const;
 
 export function parseKickoffDateMs(kickoff: string): number {

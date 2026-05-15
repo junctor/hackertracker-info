@@ -19,7 +19,7 @@ export default function MerchPage({ conf, activePageId }: MerchPageProps) {
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         <section className="ui-container ui-section">
           <PageHeader title="Merch" description={`Official merch information for ${conf.name}.`} />
-          <div className="ui-empty-state mt-10" role="status">
+          <div className="ui-empty-state ui-page-empty-offset" role="status">
             <p>Merch information is not available yet.</p>
           </div>
         </section>

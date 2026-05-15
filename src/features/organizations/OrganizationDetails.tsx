@@ -37,42 +37,38 @@ export default function OrganizationDetails({ org, conference }: Props) {
   const hasLinks = org.links.length > 0;
 
   return (
-    <article className="ui-container ui-page-content max-w-4xl">
-      <header className="ui-card relative overflow-hidden p-5 sm:p-6">
+    <article className="ui-container ui-page-content ui-organization-detail-page">
+      <header className="ui-card ui-detail-card ui-organization-header">
         <span aria-hidden="true" className="ui-accent-rail ui-tone-secondary" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-          <div className="ui-logo-frame h-20 w-20 shrink-0 sm:h-24 sm:w-24">
+        <div className="ui-organization-header-row">
+          <div className="ui-logo-frame ui-logo-frame-lg">
             {org.logoUrl ? (
               <Image
                 src={org.logoUrl}
                 alt={`${org.name} logo`}
                 fillContainer
-                className="object-contain p-2"
+                className="ui-image-contain ui-logo-image-pad"
                 loading="eager"
                 sizes="(min-width: 640px) 6rem, 5rem"
               />
             ) : (
-              <div
-                className="absolute inset-0 flex items-center justify-center font-mono text-xl font-semibold tracking-wide text-white"
-                role="img"
-                aria-label={`${org.name} logo`}
-              >
+              <div className="ui-logo-initials-fill" role="img" aria-label={`${org.name} logo`}>
                 {initials}
               </div>
             )}
           </div>
 
-          <div className="min-w-0 flex-1">
+          <div className="ui-item-main">
             <h1 className="ui-heading-1">{org.name}</h1>
 
             {org.tagIdAsOrganizer && (
-              <div className="mt-4">
+              <div className="ui-organization-actions">
                 <Link
                   to={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
-                  className="ui-focus-ring ui-pill-link focus-visible:outline-none"
+                  className="ui-focus-ring ui-pill-link"
                 >
-                  <CalendarIcon className="h-4 w-4 text-(--accent-success)" aria-hidden />
+                  <CalendarIcon className="ui-icon-xs ui-card-external-icon" aria-hidden />
                   <span>View Schedule</span>
                 </Link>
               </div>
@@ -81,11 +77,11 @@ export default function OrganizationDetails({ org, conference }: Props) {
         </div>
       </header>
 
-      <div className="mt-8 space-y-6">
+      <div className="ui-organization-sections">
         <section className="ui-card ui-detail-panel">
           <h2 className="ui-section-label">About</h2>
 
-          <div className="mt-4">
+          <div className="ui-section-body">
             {description ? (
               <Markdown content={description} />
             ) : (
@@ -98,7 +94,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
           <section className="ui-card ui-detail-panel">
             <h2 className="ui-section-label">Links</h2>
 
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            <ul className="ui-organization-link-grid">
               {org.links.map((link) => {
                 const hostname = getHostname(link.url);
 
@@ -108,15 +104,15 @@ export default function OrganizationDetails({ org, conference }: Props) {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ui-focus-ring ui-card ui-card-interactive group flex h-full items-center justify-between rounded-xl px-4 py-3 focus-visible:outline-none"
+                      className="ui-focus-ring ui-card ui-card-interactive ui-organization-link-card"
                     >
-                      <div className="min-w-0">
-                        <div className="ui-card-title truncate text-sm">{link.label}</div>
-                        <div className="ui-card-meta truncate text-xs">{hostname}</div>
+                      <div className="ui-item-main">
+                        <div className="ui-card-title ui-clip-text">{link.label}</div>
+                        <div className="ui-card-meta ui-clip-text">{hostname}</div>
                       </div>
 
                       <ArrowTopRightOnSquareIcon
-                        className="ml-3 h-4 w-4 shrink-0 text-(--accent-success) transition group-hover:text-white"
+                        className="ui-icon-xs ui-organization-link-icon"
                         aria-hidden
                       />
                     </a>

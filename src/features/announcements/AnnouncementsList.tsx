@@ -38,15 +38,15 @@ export default function AnnouncementsList({ announcements, conference }: Props) 
         resultLabel={`${sorted.length} ${sorted.length === 1 ? "update" : "updates"}`}
       />
 
-      <ul className="list-none space-y-4" role="list">
+      <ul className="ui-announcement-list" role="list">
         {sorted.map((item, index) => {
           const date = new Date(item.updatedAtMs);
           return (
             <li key={item.id}>
-              <details open={index === 0} className="ui-card overflow-hidden">
-                <summary className="ui-focus-ring cursor-pointer list-none px-4 py-3 focus-visible:outline-none">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h2 className="ui-card-title text-lg">{item.name}</h2>
+              <details open={index === 0} className="ui-card ui-announcement-card">
+                <summary className="ui-focus-ring ui-announcement-summary">
+                  <div className="ui-announcement-summary-row">
+                    <h2 className="ui-card-title ui-announcement-title">{item.name}</h2>
                     <time
                       dateTime={date.toISOString()}
                       title={date.toLocaleString()}
@@ -57,7 +57,7 @@ export default function AnnouncementsList({ announcements, conference }: Props) 
                   </div>
                 </summary>
                 {item.text && (
-                  <div className="border-t border-white/10 px-4 pt-2 pb-4">
+                  <div className="ui-announcement-body">
                     <Markdown content={item.text} />
                   </div>
                 )}

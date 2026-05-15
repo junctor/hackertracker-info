@@ -22,9 +22,6 @@ export default defineConfig({
         "unknown",
       ],
     },
-    sortTailwindcss: {
-      functions: ["clsx", "cn"],
-    },
   },
   lint: {
     ignorePatterns: ["node_modules/**", "coverage/**", "dist/**"],

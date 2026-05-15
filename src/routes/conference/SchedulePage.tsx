@@ -144,7 +144,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
         activePageId={activePageId}
         className="ui-schedule-page-shell"
       >
-        <h1 className="sr-only">Schedule</h1>
+        <h1 className="ui-visually-hidden">Schedule</h1>
         <ScheduleEvents
           conf={conf}
           days={days}

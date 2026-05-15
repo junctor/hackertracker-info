@@ -62,7 +62,7 @@ export default function LocationsList({
       />
 
       {filteredLocations.length === 0 ? (
-        <div role="status" className="ui-empty-state mt-10">
+        <div role="status" className="ui-empty-state ui-page-empty-offset">
           <p>
             {normalizedSearch
               ? `No locations match "${search.trim()}".`
@@ -72,23 +72,25 @@ export default function LocationsList({
             <button
               type="button"
               onClick={() => setSearch("")}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Clear Search
             </button>
           ) : null}
         </div>
       ) : (
-        <ul className="mt-6 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="ui-location-grid">
           {filteredLocations.map((location) => {
             const name = getLocationName(location);
             const shortName = getLocationShortName(location);
 
             return (
               <li key={location.id}>
-                <article className="ui-card h-full px-4 py-3.5 sm:px-5 sm:py-4">
-                  <h2 className="ui-card-title text-base">{name}</h2>
-                  {shortName ? <p className="ui-card-meta mt-1">{shortName}</p> : null}
+                <article className="ui-card ui-location-card">
+                  <h2 className="ui-card-title">{name}</h2>
+                  {shortName ? (
+                    <p className="ui-card-meta ui-location-subtitle">{shortName}</p>
+                  ) : null}
                 </article>
               </li>
             );

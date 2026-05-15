@@ -38,43 +38,36 @@ const COUNTDOWN_VARIANTS: Record<
   }
 > = {
   large: {
-    sectionClassName: "mt-4 w-full max-w-5xl px-2 sm:mt-8 md:mt-10",
-    gridClassName:
-      "grid grid-cols-2 gap-x-4 gap-y-6 text-center sm:grid-cols-4 sm:gap-x-6 lg:gap-x-8",
-    itemClassName: "relative min-w-0 px-2 sm:px-3",
-    valueWrapClassName:
-      "relative mx-auto flex min-h-14 items-center justify-center sm:min-h-18 md:min-h-20 lg:min-h-24",
-    valueClassName:
-      "relative z-10 block text-3xl font-bold leading-none tabular-nums text-slate-50 sm:text-4xl md:text-5xl lg:text-7xl",
-    labelClassName:
-      "mt-2 block text-xs tracking-widest text-slate-300 uppercase md:text-sm lg:mt-3 lg:text-base",
-    separatorClassName:
-      "absolute right-0 top-1/2 hidden h-12 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-white/14 to-transparent sm:block lg:h-16",
+    sectionClassName: "ui-countdown-large",
+    gridClassName: "ui-countdown-grid-large",
+    itemClassName: "ui-countdown-item-large",
+    valueWrapClassName: "ui-countdown-value-wrap-large",
+    valueClassName: "ui-countdown-value-large",
+    labelClassName: "ui-countdown-label-large",
+    separatorClassName: "ui-countdown-separator-large",
     settledValueColor: "var(--color-fg)",
     liveAnnouncements: true,
-    glowSize: "h-14 w-14 sm:h-18 sm:w-18 lg:h-24 lg:w-24",
+    glowSize: "ui-countdown-glow-large",
   },
   tiny: {
-    sectionClassName: "mt-2 w-full",
-    gridClassName: "grid grid-cols-4 gap-x-2 text-center",
-    itemClassName: "relative min-w-0",
-    valueWrapClassName: "relative mx-auto flex min-h-6 items-center justify-center",
-    valueClassName:
-      "relative z-10 block text-xs font-semibold leading-none tabular-nums text-slate-100 sm:text-sm",
-    labelClassName: "mt-1 block text-xs tracking-widest text-slate-400 uppercase",
-    separatorClassName:
-      "absolute right-0 top-1/2 hidden h-5 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent sm:block",
+    sectionClassName: "ui-countdown-tiny",
+    gridClassName: "ui-countdown-grid-tiny",
+    itemClassName: "ui-countdown-item-tiny",
+    valueWrapClassName: "ui-countdown-value-wrap-tiny",
+    valueClassName: "ui-countdown-value-tiny",
+    labelClassName: "ui-countdown-label-tiny",
+    separatorClassName: "ui-countdown-separator-tiny",
     settledValueColor: "var(--color-muted)",
     liveAnnouncements: false,
-    glowSize: "h-7 w-7 sm:h-8 sm:w-8",
+    glowSize: "ui-countdown-glow-tiny",
   },
 };
 
 const COUNTDOWN_UNIT_TEXT_CLASS_NAMES: Record<TimerUnitKey, string> = {
-  days: "text-(--dc34-accent-critical)",
-  hours: "text-(--dc34-accent-warning)",
-  minutes: "text-(--dc34-bg-primary)",
-  seconds: "text-(--dc34-bg-secondary)",
+  days: "ui-countdown-unit-days",
+  hours: "ui-countdown-unit-hours",
+  minutes: "ui-countdown-unit-minutes",
+  seconds: "ui-countdown-unit-seconds",
 };
 
 function usePrefersReducedMotion() {
@@ -356,7 +349,7 @@ export default function Countdown({ conference, size = "large" }: Props) {
   return (
     <section aria-label="Countdown to conference kickoff" className={variant.sectionClassName}>
       {variant.liveAnnouncements && (
-        <p className="sr-only" aria-live="polite" aria-atomic="true">
+        <p className="ui-visually-hidden" aria-live="polite" aria-atomic="true">
           {liveLabel}
         </p>
       )}
@@ -377,13 +370,10 @@ export default function Countdown({ conference, size = "large" }: Props) {
               <div className={variant.valueWrapClassName}>
                 <span
                   aria-hidden="true"
-                  className={`ui-countdown-glow pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 blur-xl ${variant.glowSize} ${COUNTDOWN_UNIT_TEXT_CLASS_NAMES[unit.key]}`}
+                  className={`ui-countdown-glow ${variant.glowSize} ${COUNTDOWN_UNIT_TEXT_CLASS_NAMES[unit.key]}`}
                   ref={glowRefs[unit.key]}
                 />
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-x-3 top-1/2 h-px -translate-y-1/2 bg-linear-to-r from-transparent via-white/10 to-transparent"
-                />
+                <span aria-hidden="true" className="ui-countdown-rule" />
                 <span
                   ref={valueRefs[unit.key]}
                   className={`${variant.valueClassName} ${atkinsonFont.className}`}

@@ -28,7 +28,7 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
     <Link
       to={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className={`ui-focus-ring ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)} inline-flex px-3 py-1 text-sm transition hover:border-(--accent)/70 focus-visible:outline-none`}
+      className={`ui-focus-ring ui-tag-chip ui-tag-link ui-tone-${getToneFromColor(tag.colorBackground)}`}
     >
       {tag.label}
     </Link>
@@ -57,12 +57,10 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
           const sortedTags = tagType.tags.toSorted((a, b) => a.sortOrder - b.sortOrder);
 
           return (
-            <section key={tagType.id} className="mb-10">
-              <h2 className="ui-heading-2 mb-4 text-(--accent-success)">
-                {formatCategory(tagType.category)}
-              </h2>
+            <section key={tagType.id} className="ui-tags-section">
+              <h2 className="ui-heading-2 ui-tags-heading">{formatCategory(tagType.category)}</h2>
 
-              <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+              <ul className="ui-chip-list-tight">
                 {sortedTags.map((tag) => (
                   <li key={tag.id}>
                     <TagPill tag={tag} conference={conference} />

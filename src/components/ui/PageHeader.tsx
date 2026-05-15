@@ -35,14 +35,14 @@ export default function PageHeader({
   return (
     <header className="ui-page-header">
       <div className="ui-page-header-row">
-        <div className="min-w-0">
-          {kicker ? <p className="ui-kicker mb-2">{kicker}</p> : null}
+        <div className="ui-page-header-copy">
+          {kicker ? <p className="ui-kicker ui-page-header-kicker">{kicker}</p> : null}
           {titleContent}
           {description ? <p className="ui-page-description">{description}</p> : null}
         </div>
 
         {resultLabel ? (
-          <p role="status" aria-live="polite" className="ui-meta-pill self-start lg:self-auto">
+          <p role="status" aria-live="polite" className="ui-meta-pill ui-page-header-count">
             {resultLabel}
           </p>
         ) : null}
@@ -55,10 +55,10 @@ export default function PageHeader({
           className="ui-control-panel"
         >
           {search ? (
-            <label htmlFor={searchInputId} className="min-w-0 flex-1">
-              <span className="sr-only">{search.label}</span>
+            <label htmlFor={searchInputId} className="ui-page-header-search-label">
+              <span className="ui-visually-hidden">{search.label}</span>
               <span className="ui-search-field">
-                <MagnifyingGlassIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
+                <MagnifyingGlassIcon className="ui-icon-sm ui-search-icon" aria-hidden="true" />
                 <input
                   id={searchInputId}
                   type="search"
@@ -72,7 +72,7 @@ export default function PageHeader({
             </label>
           ) : null}
 
-          {children ? <div className="min-w-0 flex-1 sm:flex-none">{children}</div> : null}
+          {children ? <div className="ui-page-header-extra">{children}</div> : null}
         </form>
       ) : null}
     </header>

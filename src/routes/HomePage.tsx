@@ -176,43 +176,31 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main id="main-content" className="ui-page-shell ui-homepage-shell relative overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="ui-homepage-ambient pointer-events-none absolute inset-0"
-        />
-        <div aria-hidden="true" className="ui-homepage-grid pointer-events-none absolute inset-0" />
-        <div
-          aria-hidden="true"
-          className="ui-homepage-top-light pointer-events-none absolute inset-x-0 top-0 h-40"
-        />
+      <main id="main-content" className="ui-page-shell ui-homepage-shell">
+        <div aria-hidden="true" className="ui-homepage-ambient" />
+        <div aria-hidden="true" className="ui-homepage-grid" />
+        <div aria-hidden="true" className="ui-homepage-top-light" />
 
-        <div className="ui-container relative pt-16 pb-14 sm:pt-20 sm:pb-20 lg:pt-24">
-          <header className="mx-auto max-w-4xl text-center">
+        <div className="ui-container ui-homepage-content">
+          <header className="ui-homepage-header">
             <h1>
               <button
                 type="button"
                 onPointerEnter={cycleTitle}
                 onClick={cycleTitle}
-                className="ui-focus-ring inline-flex items-center justify-center rounded-xl bg-transparent p-0 text-inherit focus-visible:outline-none"
+                className="ui-focus-ring ui-homepage-title-button"
                 aria-label="Cycle DEF CON title style"
               >
-                <span
-                  ref={titleRef}
-                  className="ui-homepage-title ui-homepage-title-display inline-block max-w-full min-w-[8ch] cursor-pointer text-center font-mono leading-none font-semibold whitespace-nowrap transition select-none"
-                >
+                <span ref={titleRef} className="ui-homepage-title ui-homepage-title-display">
                   {TITLE_CYCLE[0]}
                 </span>
               </button>
             </h1>
 
-            <div className="ui-homepage-title-rule mx-auto mt-6 h-px w-28 sm:mt-7 sm:w-32" />
+            <div className="ui-homepage-title-rule" />
           </header>
 
-          <section
-            aria-label="Available conferences"
-            className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:gap-7"
-          >
+          <section aria-label="Available conferences" className="ui-homepage-card-grid">
             {HOME_CONFERENCE_CARDS.map(({ conference, subtitle }) => (
               <ConferenceCard key={conference.slug} conference={conference} subtitle={subtitle} />
             ))}
@@ -238,55 +226,41 @@ function ConferenceCard({
     <Link
       to={href}
       aria-label={`View ${conference.name}`}
-      className="ui-focus-ring ui-home-conference-card group relative block h-full overflow-hidden rounded-3xl p-px transition duration-300 hover:-translate-y-1.5 focus-visible:outline-none"
+      className="ui-focus-ring ui-home-conference-card"
     >
-      <span
-        aria-hidden="true"
-        className="ui-home-conference-card-accent pointer-events-none absolute inset-0 rounded-3xl transition duration-300"
-      />
+      <span aria-hidden="true" className="ui-home-conference-card-accent" />
 
-      <span
-        aria-hidden="true"
-        className="ui-home-conference-card-glow pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
-      >
-        <span className="ui-home-conference-card-sheen absolute top-0 -left-1/3 h-full w-1/2 -skew-x-12 opacity-0 transition duration-700 group-hover:opacity-100" />
+      <span aria-hidden="true" className="ui-home-conference-card-glow">
+        <span className="ui-home-conference-card-sheen" />
       </span>
 
-      <div className="ui-home-conference-card-shell relative flex h-full flex-col p-3.5 backdrop-blur-md sm:p-4">
-        <div className="ui-home-conference-card-panel relative flex flex-1 flex-col justify-center overflow-hidden rounded-2xl px-5 pt-4 pb-4 transition duration-300 sm:px-6 sm:pt-5 sm:pb-5">
-          <div
-            aria-hidden="true"
-            className="ui-home-conference-card-grid pointer-events-none absolute inset-0"
-          />
+      <div className="ui-home-conference-card-shell">
+        <div className="ui-home-conference-card-panel">
+          <div aria-hidden="true" className="ui-home-conference-card-grid" />
 
-          <div
-            aria-hidden="true"
-            className="ui-home-conference-card-top-light pointer-events-none absolute inset-x-0 top-0 h-14 sm:h-16"
-          />
+          <div aria-hidden="true" className="ui-home-conference-card-top-light" />
 
-          <div className="relative z-10">
-            <div className="text-center">
-              <div className="ui-kicker ui-home-conference-card-name sm:text-base">
-                {conference.name}
-              </div>
-              <p className="ui-home-conference-card-date mt-2 text-sm leading-6">{subtitle}</p>
+          <div className="ui-home-conference-card-content">
+            <div className="ui-home-conference-card-copy">
+              <div className="ui-kicker ui-home-conference-card-name">{conference.name}</div>
+              <p className="ui-home-conference-card-date">{subtitle}</p>
             </div>
 
-            <div className="relative mt-4 aspect-16/6 w-full sm:mt-5">
+            <div className="ui-home-conference-card-logo">
               <Image
                 src={src}
                 alt={`${conference.name} logo`}
                 fillContainer
                 sizes="(min-width: 1024px) 480px, (min-width: 640px) 46vw, 92vw"
-                className="object-contain transition duration-300 group-hover:-translate-y-0.5 group-hover:scale-105"
+                className="ui-home-conference-card-logo-image"
               />
             </div>
           </div>
         </div>
 
         {showCountdown && (
-          <div className="ui-home-conference-countdown mt-3 rounded-xl px-3 py-2.5 sm:mt-4 sm:py-3">
-            <span className="sr-only">Conference starts in</span>
+          <div className="ui-home-conference-countdown">
+            <span className="ui-visually-hidden">Conference starts in</span>
             <Countdown conference={conference} size="tiny" />
           </div>
         )}

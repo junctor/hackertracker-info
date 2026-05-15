@@ -60,40 +60,35 @@ function ContentSessionCard({
   const titleLabel = title?.trim() || null;
 
   const sessionContent = (
-    <div className="min-w-0 flex-1 space-y-1.5">
+    <div className="ui-item-main ui-item-copy-compact">
       {titleLabel ? (
-        <p className="ui-card-title line-clamp-2 text-base sm:text-lg">{titleLabel}</p>
+        <p className="ui-card-title ui-accent-card-title-md ui-clamp-two">{titleLabel}</p>
       ) : null}
-      <p className="text-sm font-semibold text-(--text-primary) sm:text-base">{timeLabel}</p>
+      <p className="ui-event-time-primary">{timeLabel}</p>
       {locationName ? (
-        <div className="ui-card-meta flex min-w-0 items-center gap-2">
-          <MapPinIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
-          <span className="truncate">{locationName}</span>
+        <div className="ui-card-meta ui-content-session-location">
+          <MapPinIcon className="ui-icon-xs" aria-hidden="true" />
+          <span className="ui-clip-text">{locationName}</span>
         </div>
       ) : null}
     </div>
   );
 
   return (
-    <li
-      className={`ui-card ui-card-interactive group relative overflow-hidden ui-tone-${accentTone}`}
-    >
+    <li className={`ui-card ui-card-interactive ui-accent-card ui-tone-${accentTone}`}>
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
-      <div className="relative z-10 flex flex-col gap-4 px-4 py-4 pl-5 sm:px-5 sm:py-5 sm:pl-6 md:flex-row md:items-start md:justify-between">
+      <div className="ui-content-session-row">
         {href ? (
-          <Link
-            to={href}
-            className="ui-focus-ring ui-rounded-inherit min-w-0 flex-1 focus-visible:outline-none"
-          >
+          <Link to={href} className="ui-focus-ring ui-radius-inherit ui-item-main">
             {sessionContent}
           </Link>
         ) : (
           sessionContent
         )}
 
-        <div className="flex shrink-0 items-center gap-2 md:self-start">
+        <div className="ui-content-session-actions">
           <a
             href={icsHref}
             download={`DEF_CON_${contentEntity.id}-${session.id}.ics`}
@@ -101,7 +96,7 @@ function ContentSessionCard({
             aria-label={`Download calendar invite for session: ${contentEntity.title}`}
             className="ui-icon-plain"
           >
-            <CalendarIcon className="h-5 w-5" aria-hidden="true" />
+            <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
           </a>
 
           <button
@@ -112,9 +107,9 @@ function ContentSessionCard({
             className="ui-icon-plain"
           >
             {bookmark ? (
-              <BookmarkIconSolid className="h-5 w-5" aria-hidden="true" />
+              <BookmarkIconSolid className="ui-icon-sm" aria-hidden="true" />
             ) : (
-              <BookmarkIconOutline className="h-5 w-5" aria-hidden="true" />
+              <BookmarkIconOutline className="ui-icon-sm" aria-hidden="true" />
             )}
           </button>
         </div>

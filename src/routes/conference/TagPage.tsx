@@ -278,7 +278,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
         <meta name="description" content={`${conf.name} schedule for ${tag.label}`} />
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
-        <h1 className="ui-heading-1 ui-container mt-6 mb-4 text-center text-(--accent-success)">
+        <h1 className="ui-heading-1 ui-container ui-page-title-centered ui-page-title-accent">
           {tag.label} Schedule
         </h1>
         {days.length > 0 && resolvedDay ? (
@@ -292,11 +292,11 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
             activeFilter="tags"
           />
         ) : (
-          <div className="ui-container ui-empty-state mt-8">
+          <div className="ui-container ui-empty-state ui-page-empty-offset">
             <p>No events are scheduled for this tag.</p>
             <Link
               to={`/${conf.slug}/tags`}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Browse Tags
             </Link>

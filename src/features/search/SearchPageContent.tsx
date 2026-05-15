@@ -35,7 +35,7 @@ export default function SearchPageContent({ conf, searchData }: Props) {
         />
 
         {!hasQuery ? (
-          <div className="ui-empty-state text-left sm:text-center">
+          <div className="ui-empty-state ui-search-empty-start">
             <p>Start typing to search sessions, people, and organizations.</p>
           </div>
         ) : results.length === 0 ? (
@@ -43,7 +43,7 @@ export default function SearchPageContent({ conf, searchData }: Props) {
             <p>No results found for "{trimmedQuery}".</p>
           </div>
         ) : (
-          <ul className="m-0 list-none space-y-3 p-0 sm:space-y-4">
+          <ul className="ui-list-stack-sm">
             {results.map((result) => (
               <li key={`${result.type}:${result.id}`}>
                 <SearchResultItem conf={conf} result={result} />

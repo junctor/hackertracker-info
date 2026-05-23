@@ -2,6 +2,14 @@ import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: {
+        apps: fileURLToPath(new URL("./apps/index.html", import.meta.url)),
+        main: fileURLToPath(new URL("./index.html", import.meta.url)),
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

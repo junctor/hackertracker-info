@@ -1,4 +1,4 @@
-import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
+import { lazy, Suspense, useEffect, type ComponentType, type LazyExoticComponent } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
@@ -10,7 +10,6 @@ import { PageId } from "@/lib/types/page-meta";
 const HomePage = lazy(() => import("@/routes/HomePage"));
 const TVPage = lazy(() => import("@/routes/TVPage"));
 const AnnouncementsPage = lazy(() => import("@/routes/conference/AnnouncementsPage"));
-const AppsPage = lazy(() => import("@/routes/conference/AppsPage"));
 const BookmarksPage = lazy(() => import("@/routes/conference/BookmarksPage"));
 const CommunitiesPage = lazy(() => import("@/routes/conference/CommunitiesPage"));
 const ConferenceHomePage = lazy(() => import("@/routes/conference/ConferenceHomePage"));
@@ -44,6 +43,14 @@ type ConferenceRouteComponent =
 
 function NotFound() {
   return <ErrorScreen msg="Page not found." />;
+}
+
+function DocumentRedirect({ to }: { to: string }) {
+  useEffect(() => {
+    window.location.replace(to);
+  }, [to]);
+
+  return <ErrorScreen msg={`Redirecting to ${to}`} />;
 }
 
 function ConferenceRoute({
@@ -81,13 +88,14 @@ export default function App() {
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route index element={<HomePage />} />
-          <Route path="app" element={<AppsPage />} />
+          <Route path="app" element={<DocumentRedirect to="/apps" />} />
+          <Route path="apps" element={<DocumentRedirect to="/apps/" />} />
           <Route path="tv" element={<TVPage />} />
 
           <Route path=":conf">
             {conferenceRoute(undefined, ConferenceHomePage, "home")}
             {conferenceRoute("announcements", AnnouncementsPage, "announcements")}
-            {conferenceRoute("apps", AppsPage, "apps")}
+            <Route path="apps" element={<DocumentRedirect to="/apps" />} />
             {conferenceRoute("bookmarks", BookmarksPage, "bookmarks")}
             {conferenceRoute("communities", CommunitiesPage, "communities")}
             {conferenceRoute("contests", ContestsPage, "contests")}

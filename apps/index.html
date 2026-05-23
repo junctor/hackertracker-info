@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Get the official DEF CON schedule." />
+    <link rel="canonical" href="https://info.defcon.org/apps/" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>Hacker Tracker | DEF CON Schedule</title>
+    <style>
+      :root {
+        --bg: #07090b;
+        --panel: #10151a;
+        --panel-strong: #151d23;
+        --text: #f4f7f5;
+        --muted: #bac5be;
+        --border: #2d3a34;
+        --accent: #a6ff4d;
+        --ios: #5eb6ff;
+        --ios-text: #06111b;
+        --android: #a6ff4d;
+        --android-text: #071006;
+        --web: #f6d45a;
+        --web-text: #161106;
+        --focus: #ff3b30;
+        --shadow: rgba(0, 0, 0, 0.34);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100svh;
+        background: var(--bg);
+      }
+
+      main {
+        width: min(100%, 34rem);
+        margin: 0 auto;
+        padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+      }
+
+      .shell {
+        min-height: calc(100vh - 2.5rem);
+        min-height: calc(100svh - 2.5rem);
+        display: flex;
+        align-items: center;
+      }
+
+      .panel {
+        width: 100%;
+        padding: 1.25rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 0 1rem 2.25rem var(--shadow);
+      }
+
+      .brand {
+        margin: 0 0 0.75rem;
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 8ch;
+        font-size: clamp(3.25rem, 18vw, 5.25rem);
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+
+      .intro {
+        margin: 1rem 0 0;
+        color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.5;
+      }
+
+      .actions {
+        display: grid;
+        gap: 0.8rem;
+        margin: 1.5rem 0 0;
+      }
+
+      a.action {
+        --action-bg: var(--panel-strong);
+        --action-text: var(--text);
+
+        display: grid;
+        min-height: 4.2rem;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 1rem;
+        border: 1px solid var(--action-bg);
+        border-radius: 8px;
+        padding: 0.95rem 1rem 1rem;
+        background: var(--action-bg);
+        color: var(--action-text);
+        font-size: 1.05rem;
+        font-weight: 800;
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      a.action.ios {
+        --action-bg: var(--ios);
+        --action-text: var(--ios-text);
+      }
+
+      a.action.android {
+        --action-bg: var(--android);
+        --action-text: var(--android-text);
+      }
+
+      a.action.web {
+        --action-bg: var(--web);
+        --action-text: var(--web-text);
+      }
+
+      .action-text {
+        display: grid;
+        gap: 0.18rem;
+        line-height: 1.05;
+      }
+
+      .action-label {
+        font-size: 1.1rem;
+      }
+
+      .action-detail {
+        font-size: 0.86rem;
+        font-weight: 700;
+        opacity: 0.74;
+      }
+
+      a.action:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 3px;
+      }
+
+      .arrow {
+        flex: none;
+        font-size: 1.4rem;
+        line-height: 1;
+      }
+
+      @media (min-width: 42rem) {
+        main {
+          padding-right: 1.5rem;
+          padding-left: 1.5rem;
+        }
+
+        .panel {
+          padding: 1.5rem;
+        }
+      }
+
+      @media (max-height: 38rem) {
+        .shell {
+          align-items: flex-start;
+        }
+
+        h1 {
+          font-size: clamp(2.7rem, 15vw, 4.25rem);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="shell">
+        <section class="panel" aria-labelledby="apps-title">
+          <p class="brand">Official DEF CON schedule</p>
+          <h1 id="apps-title">Hacker Tracker</h1>
+          <p class="intro">Get the official DEF CON schedule.</p>
+
+          <div class="actions" aria-label="Hacker Tracker app links">
+            <a
+              class="action ios"
+              href="https://apps.apple.com/us/app/hackertracker/id1021141595?mt=8"
+            >
+              <span class="action-text">
+                <span class="action-label">Download for iOS</span>
+                <span class="action-detail">Download on the App Store</span>
+              </span>
+              <span class="arrow" aria-hidden="true">-&gt;</span>
+            </a>
+            <a
+              class="action android"
+              href="https://play.google.com/store/apps/details?id=com.shortstack.hackertracker"
+            >
+              <span class="action-text">
+                <span class="action-label">Download for Android</span>
+                <span class="action-detail">Get it on Google Play</span>
+              </span>
+              <span class="arrow" aria-hidden="true">-&gt;</span>
+            </a>
+            <a class="action web" href="https://info.defcon.org/">
+              <span class="action-text">
+                <span class="action-label">Open web schedule</span>
+                <span class="action-detail">info.defcon.org</span>
+              </span>
+              <span class="arrow" aria-hidden="true">-&gt;</span>
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

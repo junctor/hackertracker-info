@@ -5,6 +5,12 @@ import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SearchPageContent from "@/features/search/SearchPageContent";
+import {
+  aiMetadata,
+  collectionStructuredDataPath,
+  conferenceDataFeeds,
+  conferencePath,
+} from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { PageId } from "@/lib/types/page-meta";
@@ -28,10 +34,13 @@ export default function SearchPage({ conf, activePageId }: SearchPageProps) {
     <>
       <Head>
         <title>Search | {conf.name}</title>
-        <meta
-          name="description"
-          content={`Search sessions, people, and organizations for ${conf.name}.`}
-        />
+        {aiMetadata({
+          title: `Search | ${conf.name}`,
+          description: `Search sessions, people, and organizations for ${conf.name}.`,
+          path: conferencePath(conf, "search"),
+          jsonFeeds: conferenceDataFeeds(conf),
+          structuredData: [collectionStructuredDataPath(conf, "search")],
+        })}
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         <SearchPageContent conf={conf} searchData={searchData} />

@@ -5,6 +5,7 @@ import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import LocationsList from "@/features/locations/LocationsList";
+import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { LocationsStore } from "@/lib/types/ht-types";
@@ -38,7 +39,12 @@ export default function LocationsPage({
         <title>
           {title} | {conf.name}
         </title>
-        <meta name="description" content={description} />
+        {aiMetadata({
+          title: `${title} | ${conf.name}`,
+          description,
+          path: conferencePath(conf, "locations"),
+          jsonFeeds: conferenceDataFeeds(conf),
+        })}
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         <LocationsList locations={locations} title={title} description={description} />

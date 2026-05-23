@@ -9,6 +9,7 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
+import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { getOrganizationDirectoryConfig } from "@/lib/menu";
 import {
@@ -151,7 +152,15 @@ export default function DirectoryPage({
     <>
       <Head>
         <title>{pageTitle}</title>
-        <meta name="description" content={metaDescription} />
+        {aiMetadata({
+          title: pageTitle,
+          description: metaDescription,
+          path: conferencePath(
+            conf,
+            selectedOrganization && orgId !== null ? `${routeSlug}?id=${orgId}` : routeSlug,
+          ),
+          jsonFeeds: conferenceDataFeeds(conf),
+        })}
       </Head>
       {pageContent}
     </>

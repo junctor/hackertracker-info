@@ -6,6 +6,7 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import PeopleList from "@/features/people/PeopleList";
 import PersonDetails from "@/features/people/PersonDetails";
+import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { EventsStore, LocationsStore, PeopleStore, PersonEntity } from "@/lib/types/ht-types";
@@ -125,7 +126,15 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
     <>
       <Head>
         <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
+        {aiMetadata({
+          title: pageTitle,
+          description: pageDescription,
+          path: conferencePath(
+            conf,
+            shouldLoadDetails && personId !== null ? `speakers?id=${personId}` : "speakers",
+          ),
+          jsonFeeds: conferenceDataFeeds(conf),
+        })}
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         {pageContent}

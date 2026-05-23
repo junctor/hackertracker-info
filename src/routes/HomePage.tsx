@@ -7,6 +7,7 @@ import { Link } from "react-router";
 import Head from "@/components/Head";
 import Image from "@/components/Image";
 import Countdown from "@/features/home/Countdown";
+import { aiMetadata, conferenceDataFeeds, SITE_DESCRIPTION } from "@/lib/aiMetadata";
 import { CONFERENCES, type ConferenceManifest } from "@/lib/conferences";
 
 gsap.registerPlugin(useGSAP, ScrambleTextPlugin);
@@ -159,20 +160,12 @@ export default function Home() {
     <>
       <Head>
         <title>info.defcon.org | DEF CON schedules and conference information</title>
-        <meta
-          name="description"
-          content="Official DEF CON schedules and conference information for current and upcoming events."
-        />
-        <meta
-          property="og:title"
-          content="info.defcon.org | DEF CON schedules and conference information"
-        />
-        <meta
-          property="og:description"
-          content="Official DEF CON schedules and conference information for current and upcoming events."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://info.defcon.org" />
+        {aiMetadata({
+          title: "info.defcon.org | DEF CON schedules and conference information",
+          description: SITE_DESCRIPTION,
+          path: "/",
+          jsonFeeds: Object.values(CONFERENCES).flatMap(conferenceDataFeeds),
+        })}
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

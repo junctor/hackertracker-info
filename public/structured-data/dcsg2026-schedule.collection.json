@@ -1,0 +1,17 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "https://info.defcon.org/dcsg2026/schedule#collection",
+  "name": "DEF CON Singapore 2026 Schedule",
+  "url": "https://info.defcon.org/dcsg2026/schedule",
+  "description": "Client-rendered DEF CON Singapore 2026 schedule backed by authoritative runtime JSON data.",
+  "isPartOf": {
+    "@id": "https://info.defcon.org/#website"
+  },
+  "mainEntity": {
+    "@type": "DataFeed",
+    "name": "DEF CON Singapore 2026 schedule events JSON",
+    "contentUrl": "https://info.defcon.org/ht/dcsg2026/entities/events.json",
+    "encodingFormat": "application/json"
+  }
+}

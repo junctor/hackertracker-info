@@ -2,6 +2,7 @@ import React from "react";
 
 import Head from "@/components/Head";
 import Splash from "@/features/home/Splash";
+import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 
 type HomePageProps = {
@@ -16,11 +17,12 @@ export default function Home({ conf }: HomePageProps) {
     <>
       <Head>
         <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://info.defcon.org/${conf.slug}`} />
+        {aiMetadata({
+          title: pageTitle,
+          description: pageDescription,
+          path: conferencePath(conf),
+          jsonFeeds: conferenceDataFeeds(conf),
+        })}
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

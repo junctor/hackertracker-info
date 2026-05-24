@@ -13,6 +13,7 @@ import type {
 
 import Markdown from "@/components/markdown/Markdown";
 import { getToneFromColor } from "@/lib/tone";
+import { getSafeExternalHref } from "@/lib/url";
 
 import ContentSession from "./ContentSession";
 
@@ -180,24 +181,37 @@ export default function ContentDetails(props: Props) {
             Links
           </h2>
           <ul className="ui-list-stack-sm">
-            {content.links.map((l) => (
-              <li key={l.url}>
-                <a
-                  href={l.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ui-focus-ring ui-card ui-card-interactive ui-detail-link-card"
-                >
-                  <div className="ui-item-main">
-                    <p className="ui-card-title ui-clip-text">{l.label}</p>
-                  </div>
-                  <ArrowTopRightOnSquareIcon
-                    className="ui-icon-xs ui-card-external-icon"
-                    aria-hidden="true"
-                  />
-                </a>
-              </li>
-            ))}
+            {content.links.map((l) => {
+              const safeHref = getSafeExternalHref(l.url);
+
+              return (
+                <li key={l.url}>
+                  {safeHref ? (
+                    <a
+                      href={safeHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ui-focus-ring ui-card ui-card-interactive ui-detail-link-card"
+                    >
+                      <div className="ui-item-main">
+                        <p className="ui-card-title ui-clip-text">{l.label}</p>
+                      </div>
+                      <ArrowTopRightOnSquareIcon
+                        className="ui-icon-xs ui-card-external-icon"
+                        aria-hidden="true"
+                      />
+                    </a>
+                  ) : (
+                    <div className="ui-card ui-detail-link-card">
+                      <div className="ui-item-main">
+                        <p className="ui-card-title ui-clip-text">{l.label}</p>
+                        <p className="ui-card-meta ui-clip-text">{l.url}</p>
+                      </div>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}

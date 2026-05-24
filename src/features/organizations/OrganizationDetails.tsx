@@ -6,6 +6,7 @@ import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
 import { ConferenceManifest } from "@/lib/conferences";
 import { OrganizationEntity } from "@/lib/types/ht-types";
+import { getSafeExternalHref } from "@/lib/url";
 
 type Props = {
   org: OrganizationEntity;
@@ -14,7 +15,7 @@ type Props = {
 
 function getHostname(url: string) {
   try {
-    return new URL(url).hostname.replace(/^www\./, "");
+    return new URL(url).hostname.replace(/^www\./, "") || url;
   } catch {
     return url;
   }
@@ -96,26 +97,36 @@ export default function OrganizationDetails({ org, conference }: Props) {
 
             <ul className="ui-organization-link-grid">
               {org.links.map((link) => {
-                const hostname = getHostname(link.url);
+                const safeHref = getSafeExternalHref(link.url);
+                const hostname = safeHref ? getHostname(safeHref) : link.url;
 
                 return (
                   <li key={link.url}>
-                    <a
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ui-focus-ring ui-card ui-card-interactive ui-organization-link-card"
-                    >
-                      <div className="ui-item-main">
-                        <div className="ui-card-title ui-clip-text">{link.label}</div>
-                        <div className="ui-card-meta ui-clip-text">{hostname}</div>
-                      </div>
+                    {safeHref ? (
+                      <a
+                        href={safeHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ui-focus-ring ui-card ui-card-interactive ui-organization-link-card"
+                      >
+                        <div className="ui-item-main">
+                          <div className="ui-card-title ui-clip-text">{link.label}</div>
+                          <div className="ui-card-meta ui-clip-text">{hostname}</div>
+                        </div>
 
-                      <ArrowTopRightOnSquareIcon
-                        className="ui-icon-xs ui-organization-link-icon"
-                        aria-hidden
-                      />
-                    </a>
+                        <ArrowTopRightOnSquareIcon
+                          className="ui-icon-xs ui-organization-link-icon"
+                          aria-hidden
+                        />
+                      </a>
+                    ) : (
+                      <div className="ui-card ui-organization-link-card">
+                        <div className="ui-item-main">
+                          <div className="ui-card-title ui-clip-text">{link.label}</div>
+                          <div className="ui-card-meta ui-clip-text">{hostname}</div>
+                        </div>
+                      </div>
+                    )}
                   </li>
                 );
               })}

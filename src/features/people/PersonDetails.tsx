@@ -8,6 +8,7 @@ import { ConferenceManifest } from "@/lib/conferences";
 import { getBookmarks } from "@/lib/storage";
 import { getToneFromColor } from "@/lib/tone";
 import { ContentEntity, EventEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
+import { getSafeExternalHref } from "@/lib/url";
 
 import ContentSession from "../content/ContentSession";
 import { getPersonInitials } from "./personInitials";
@@ -135,7 +136,7 @@ export default function PersonDetails({ person, events, locations, conference }:
         .map((link) => ({
           ...link,
           title: getOptionalText(link.title) ?? getOptionalText(link.url) ?? "External link",
-          url: getOptionalText(link.url),
+          url: getSafeExternalHref(link.url),
         }))
         .filter((link): link is PersonLinkView => Boolean(link.url))
         .toSorted((a, b) => a.sort_order - b.sort_order),

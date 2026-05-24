@@ -97,6 +97,10 @@
 
   /* Controls */
   --control-min: 44px;
+
+  /* Standalone display safe areas */
+  --safe-area-top: 0px;
+  --safe-area-bottom: 0px;
 }
 
 html,
@@ -114,6 +118,19 @@ body {
 
 html {
   background: var(--color-bg);
+}
+
+@media (display-mode: standalone) {
+  :root {
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+html.is-ios-standalone,
+html.is-standalone {
+  --safe-area-top: env(safe-area-inset-top);
+  --safe-area-bottom: env(safe-area-inset-bottom);
 }
 
 body {
@@ -282,7 +299,7 @@ button {
 
 .ui-skip-link {
   position: fixed;
-  top: 0.5rem;
+  top: calc(0.5rem + var(--safe-area-top));
   left: 0.5rem;
   z-index: 1000;
   border-radius: var(--radius-2);
@@ -311,7 +328,7 @@ button {
 .ui-page-main {
   min-height: 0;
   flex: 1 1 auto;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: var(--safe-area-bottom);
 }
 
 .ui-apps-page-shell {
@@ -3145,11 +3162,13 @@ button {
 
 .ui-site-footer-inner {
   padding-block: var(--space-5);
+  padding-bottom: calc(var(--space-5) + var(--safe-area-bottom));
 }
 
 @media (width >= 40rem) {
   .ui-site-footer-inner {
     padding-block: var(--space-6);
+    padding-bottom: calc(var(--space-6) + var(--safe-area-bottom));
   }
 }
 
@@ -3534,6 +3553,10 @@ button {
   backdrop-filter: blur(8px);
 }
 
+.ui-page-shell > .ui-topbar {
+  padding-top: var(--safe-area-top);
+}
+
 .ui-topbar-frame {
   position: relative;
 }
@@ -3719,7 +3742,8 @@ button {
 
 .ui-header-menu-shell {
   position: fixed;
-  inset: 4rem var(--space-2) var(--space-2);
+  inset: calc(4rem + var(--safe-area-top)) var(--space-2)
+    calc(var(--space-2) + var(--safe-area-bottom));
   padding-top: var(--space-2);
 }
 

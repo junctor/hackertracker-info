@@ -114,14 +114,14 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               </details>
             </nav>
 
-            <Link
-              to="/apps"
+            <a
+              href="/apps"
               aria-label="Get Hacker Tracker apps"
               title="Get Hacker Tracker apps"
               className="ui-icon-plain"
             >
               <DevicePhoneMobileIcon className="ui-icon-sm" aria-hidden="true" />
-            </Link>
+            </a>
           </div>
         </div>
       </div>

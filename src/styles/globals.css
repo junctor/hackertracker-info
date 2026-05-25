@@ -1922,14 +1922,25 @@ button {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-5);
+  width: 100%;
+  max-width: 72rem;
   margin-top: var(--space-10);
+  margin-inline: auto;
 }
 
 @media (width >= 40rem) {
   .ui-homepage-card-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
     gap: var(--space-6);
     margin-top: var(--space-12);
+  }
+
+  .ui-homepage-card-grid[data-count="1"] {
+    max-width: 34rem;
+  }
+
+  .ui-homepage-card-grid[data-count="2"] {
+    max-width: 58rem;
   }
 }
 
@@ -1937,6 +1948,24 @@ button {
   .ui-homepage-card-grid {
     gap: 1.75rem;
   }
+
+  .ui-homepage-card-grid[data-count="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.ui-homepage-empty {
+  max-width: 34rem;
+  margin-inline: auto;
+  border-radius: var(--radius-3);
+  border: 1px solid color-mix(in oklab, white, transparent 88%);
+  background: color-mix(in oklab, var(--color-surface), transparent 8%);
+  padding: var(--space-5) var(--space-6);
+  color: var(--color-muted);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
 }
 
 .ui-home-conference-card {

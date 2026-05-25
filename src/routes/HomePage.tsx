@@ -29,16 +29,12 @@ const conferenceDateFormatter = (timeZone: string) =>
 const formatConferenceDate = (date: string, timeZone: string) =>
   conferenceDateFormatter(timeZone).format(new Date(date));
 
-const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = [
-  {
-    conference: CONFERENCES.dcsg2026,
-    subtitle: formatConferenceDate(CONFERENCES.dcsg2026.kickoff, CONFERENCES.dcsg2026.timezone),
-  },
-  {
-    conference: CONFERENCES.defcon34,
-    subtitle: formatConferenceDate(CONFERENCES.defcon34.kickoff, CONFERENCES.defcon34.timezone),
-  },
-];
+const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = Object.values(CONFERENCES)
+  .filter((conference) => conference.showOnHome)
+  .map((conference) => ({
+    conference,
+    subtitle: formatConferenceDate(conference.kickoff, conference.timezone),
+  }));
 
 const TITLE_CYCLE = ["DEF CON", "D3F CON", "DEF C0N", "D3F C0N", "D3F_C0N", "STAHP IT"] as const;
 const TITLE_SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-/\\[]{}()<>|";
@@ -83,7 +79,7 @@ function useHasActiveCountdown(kickoff: string) {
   return isActive;
 }
 
-export default function Home() {
+export default function HomePage() {
   const titleRef = useRef<HTMLSpanElement | null>(null);
   const titleIndexRef = useRef(0);
   const titleTweenRef = useRef<gsap.core.Tween | null>(null);
@@ -193,10 +189,18 @@ export default function Home() {
             <div className="ui-homepage-title-rule" />
           </header>
 
-          <section aria-label="Available conferences" className="ui-homepage-card-grid">
-            {HOME_CONFERENCE_CARDS.map(({ conference, subtitle }) => (
-              <ConferenceCard key={conference.slug} conference={conference} subtitle={subtitle} />
-            ))}
+          <section
+            aria-label="Available conferences"
+            className="ui-homepage-card-grid"
+            data-count={HOME_CONFERENCE_CARDS.length}
+          >
+            {HOME_CONFERENCE_CARDS.length > 0 ? (
+              HOME_CONFERENCE_CARDS.map(({ conference, subtitle }) => (
+                <ConferenceCard key={conference.slug} conference={conference} subtitle={subtitle} />
+              ))
+            ) : (
+              <p className="ui-homepage-empty">No conferences are currently available.</p>
+            )}
           </section>
         </div>
       </main>

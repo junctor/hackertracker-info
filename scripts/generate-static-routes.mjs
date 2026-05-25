@@ -1,4 +1,4 @@
-import { access, copyFile, mkdir, writeFile } from "node:fs/promises";
+import { access, copyFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 
 import { CONFERENCES } from "../src/lib/conferences.ts";
@@ -8,7 +8,6 @@ const entry = path.join(outDir, "index.html");
 const appsEntry = path.join(outDir, "apps", "index.html");
 
 const topLevelRouteSegments = ["tv"];
-const legacyAppRoutePaths = ["app", "dc33/apps", "dc34/apps", "defcon33/apps"];
 
 const conferenceRouteSegments = [
   "",
@@ -47,29 +46,6 @@ async function copyEntryToRoute(routePath) {
   await copyFile(entry, path.join(directory, "index.html"));
 }
 
-async function writeRedirectRoute(routePath, destination) {
-  const directory = path.join(outDir, ...routePath.split("/"));
-  const html = `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="refresh" content="0; url=${destination}">
-    <link rel="canonical" href="${destination}">
-    <title>Hacker Tracker Apps</title>
-  </head>
-  <body>
-    <main>
-      <p>Hacker Tracker Apps moved to <a href="${destination}">${destination}</a>.</p>
-    </main>
-  </body>
-</html>
-`;
-
-  await mkdir(directory, { recursive: true });
-  await writeFile(path.join(directory, "index.html"), html, "utf8");
-}
-
 await access(entry);
 await access(appsEntry);
 
@@ -83,11 +59,6 @@ for (const segment of topLevelRouteSegments) {
   generated.push(`${segment}/index.html`);
 }
 
-for (const routePath of legacyAppRoutePaths) {
-  await writeRedirectRoute(routePath, "/apps");
-  generated.push(`${routePath}/index.html`);
-}
-
 for (const conference of Object.values(CONFERENCES)) {
   for (const segment of conferenceRouteSegments) {
     const routePath = joinRoute(conference.slug, segment);
@@ -95,11 +66,6 @@ for (const conference of Object.values(CONFERENCES)) {
     await copyEntryToRoute(routePath);
     generated.push(`${routePath}/index.html`);
   }
-
-  const appsRoutePath = joinRoute(conference.slug, "apps");
-
-  await writeRedirectRoute(appsRoutePath, "/apps");
-  generated.push(`${appsRoutePath}/index.html`);
 }
 
 console.log("Generated static route entries:");

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, type ComponentType, type LazyExoticComponent } from "react";
+import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
@@ -45,14 +45,6 @@ function NotFound() {
   return <ErrorScreen msg="Page not found." />;
 }
 
-function DocumentRedirect({ to }: { to: string }) {
-  useEffect(() => {
-    window.location.replace(to);
-  }, [to]);
-
-  return <ErrorScreen msg={`Redirecting to ${to}`} />;
-}
-
 function ConferenceRoute({
   component: Component,
   activePageId,
@@ -88,14 +80,11 @@ export default function App() {
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route index element={<HomePage />} />
-          <Route path="app" element={<DocumentRedirect to="/apps" />} />
-          <Route path="apps" element={<DocumentRedirect to="/apps/" />} />
           <Route path="tv" element={<TVPage />} />
 
           <Route path=":conf">
             {conferenceRoute(undefined, ConferenceHomePage, "home")}
             {conferenceRoute("announcements", AnnouncementsPage, "announcements")}
-            <Route path="apps" element={<DocumentRedirect to="/apps" />} />
             {conferenceRoute("bookmarks", BookmarksPage, "bookmarks")}
             {conferenceRoute("communities", CommunitiesPage, "communities")}
             {conferenceRoute("contests", ContestsPage, "contests")}

@@ -4,10 +4,7 @@ import {
   ArchiveBoxIcon,
   BoltIcon,
   BookmarkIcon,
-  CalendarDaysIcon,
-  CreditCardIcon,
   CubeIcon,
-  DocumentTextIcon,
   GlobeAltIcon,
   InformationCircleIcon,
   ListBulletIcon,
@@ -15,13 +12,11 @@ import {
   MapIcon,
   MegaphoneIcon,
   ShoppingBagIcon,
-  UserGroupIcon,
   UserIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
 
 import type { ConferenceManifest, SiteMenuKey } from "./conferences";
-import type { DerivedSiteMenu, DerivedSiteMenuItem } from "./types/ht-types";
 import type { PageId } from "./types/page-meta";
 
 export type OrganizationDirectoryConfig = {
@@ -82,133 +77,12 @@ export type SiteMenuItem = {
   href: string;
   description?: string;
   icon: ComponentType<{ className?: string }>;
-  sourceId?: number;
-  fn?: string;
-  tagIds?: number[];
 };
-
-const HT_ICON_COMPONENTS: Readonly<Record<string, ComponentType<{ className?: string }>>> =
-  Object.freeze({
-    calendar_month: CalendarDaysIcon,
-    description: DocumentTextIcon,
-    groups: UserGroupIcon,
-    map: MapIcon,
-    point_of_sale: CreditCardIcon,
-    search: MagnifyingGlassIcon,
-    shopping_bag: ShoppingBagIcon,
-  });
-
-const ORGANIZATION_TITLE_TO_PAGE_ID: Readonly<Record<string, PageId>> = Object.freeze({
-  communities: "communities",
-  community: "communities",
-  contests: "contests",
-  contest: "contests",
-  departments: "departments",
-  department: "departments",
-  exhibitors: "exhibitors",
-  exhibitor: "exhibitors",
-  vendors: "vendors",
-  vendor: "vendors",
-  villages: "villages",
-  village: "villages",
-});
-
-function warnUnsupportedDerivedMenuItem(item: DerivedSiteMenuItem, reason: string) {
-  if (!import.meta.env.DEV) return;
-  console.warn(
-    `[siteMenu] Omitting unsupported derived menu item "${item.title}": ${reason}`,
-    item,
-  );
-}
-
-function normalizeTitleKey(title: string) {
-  return title
-    .trim()
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
-export function getHtMenuIcon(iconName: string | undefined) {
-  if (!iconName) return InformationCircleIcon;
-  return HT_ICON_COMPONENTS[iconName] ?? InformationCircleIcon;
-}
-
-function toDerivedSiteMenuItem(
-  conference: ConferenceManifest,
-  item: DerivedSiteMenuItem,
-): SiteMenuItem | null {
-  const title = item.title?.trim();
-  if (!title) {
-    warnUnsupportedDerivedMenuItem(item, "missing title");
-    return null;
-  }
-
-  const baseItem = {
-    sort_order: item.sort,
-    title,
-    icon: getHtMenuIcon(item.icon),
-    sourceId: item.id,
-    fn: item.fn,
-    tagIds: item.tagIds,
-  } satisfies Omit<SiteMenuItem, "href">;
-
-  switch (item.fn) {
-    case "content":
-      return { ...baseItem, href: `/${conference.slug}/content` };
-    case "schedule":
-      return { ...baseItem, href: `/${conference.slug}/schedule` };
-    case "people":
-      return { ...baseItem, href: `/${conference.slug}/people` };
-    case "maps":
-      return { ...baseItem, href: `/${conference.slug}/maps` };
-    case "products":
-      return { ...baseItem, href: `/${conference.slug}/merch` };
-    case "document":
-      if (!item.documentId) {
-        warnUnsupportedDerivedMenuItem(item, "document item is missing documentId");
-        return null;
-      }
-      return { ...baseItem, href: `/${conference.slug}/document/?id=${item.documentId}` };
-    case "organizations": {
-      const pageId = ORGANIZATION_TITLE_TO_PAGE_ID[normalizeTitleKey(title)];
-      const directory = pageId ? getOrganizationDirectoryConfig(pageId) : null;
-      if (!directory) {
-        warnUnsupportedDerivedMenuItem(item, "organization title does not map to a known route");
-        return null;
-      }
-      return {
-        ...baseItem,
-        href: `/${conference.slug}/${directory.slug}`,
-        description: directory.description,
-      };
-    }
-    default:
-      warnUnsupportedDerivedMenuItem(item, `unsupported fn "${item.fn}"`);
-      return null;
-  }
-}
-
-function normalizeDerivedSiteMenu(
-  conference: ConferenceManifest,
-  derivedMenu: DerivedSiteMenu | null | undefined,
-) {
-  if (!derivedMenu || derivedMenu.version !== 1 || !Array.isArray(derivedMenu.primary)) return null;
-
-  const items = derivedMenu.primary
-    .map((item, index) => ({ item: toDerivedSiteMenuItem(conference, item), index }))
-    .filter((entry): entry is { item: SiteMenuItem; index: number } => entry.item !== null)
-    .toSorted((a, b) => a.item.sort_order - b.item.sort_order || a.index - b.index)
-    .map(({ item }) => item);
-
-  return items.length > 0 ? items : null;
-}
 
 // eslint-disable-next-line no-unused-vars
 type MenuBuilder = (conference: ConferenceManifest) => SiteMenuItem;
 
-const MENU: Record<SiteMenuKey, MenuBuilder> = {
+const SITE_MENU = {
   readme: (c) => ({
     sort_order: 10,
     title: "readme.nfo",
@@ -354,17 +228,9 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       icon: CubeIcon,
     };
   },
-};
+} satisfies Record<SiteMenuKey, MenuBuilder>;
 
-function getFallbackSiteMenu(conference: ConferenceManifest): SiteMenuItem[] {
-  const items = conference.siteMenu.map((key) => MENU[key](conference));
-
+export function getSiteMenu(conference: ConferenceManifest): SiteMenuItem[] {
+  const items = conference.siteMenu.map((key) => SITE_MENU[key](conference));
   return items.toSorted((a, b) => a.sort_order - b.sort_order);
-}
-
-export function getSiteMenu(
-  conference: ConferenceManifest,
-  derivedMenu?: DerivedSiteMenu | null,
-): SiteMenuItem[] {
-  return normalizeDerivedSiteMenu(conference, derivedMenu) ?? getFallbackSiteMenu(conference);
 }

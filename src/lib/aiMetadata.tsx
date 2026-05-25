@@ -36,7 +36,6 @@ export function conferenceDataFeeds(conf: ConferenceManifest): ReadonlyArray<Jso
     { title: `${conf.name} schedule events`, href: `${conf.dataRoot}/entities/events.json` },
     { title: `${conf.name} speakers and people`, href: `${conf.dataRoot}/entities/people.json` },
     { title: `${conf.name} search index`, href: `${conf.dataRoot}/views/searchData.json` },
-    { title: `${conf.name} site menu`, href: `${conf.dataRoot}/derived/siteMenu.json` },
   ];
 }
 

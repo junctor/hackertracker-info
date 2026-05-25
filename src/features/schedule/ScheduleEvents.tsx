@@ -1,5 +1,5 @@
 import { BookmarkIcon, TagIcon } from "@heroicons/react/24/outline";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router";
 import { Virtuoso, type Components, type ItemProps, type ListProps } from "react-virtuoso";
 
@@ -46,6 +46,7 @@ const VirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(functio
   { children, style, "data-testid": dataTestId },
   ref,
 ) {
+  // react-virtuoso owns runtime list sizing here; dropping this breaks window virtualization.
   return (
     <ul
       ref={ref as unknown as React.Ref<HTMLUListElement>}
@@ -62,6 +63,7 @@ VirtuosoList.displayName = "VirtuosoList";
 function VirtuosoItem({ children, style, context, item, ...itemProps }: VirtuosoItemProps) {
   void context;
   void item;
+  // react-virtuoso uses per-item runtime offsets while measuring large schedule days.
   return (
     <li {...itemProps} style={style} className="ui-schedule-event-list-item">
       {children}
@@ -74,9 +76,6 @@ const VIRTUOSO_COMPONENTS: Components<ScheduleEventViewModel, VirtuosoContext> =
   List: VirtuosoList,
   Item: VirtuosoItem,
 };
-
-const SITE_HEADER_FALLBACK_HEIGHT_PX = 64;
-const STICKY_HEADING_CLEARANCE_PX = 16;
 
 export default function ScheduleEvents({
   conf,
@@ -99,9 +98,6 @@ export default function ScheduleEvents({
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
   const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const stickyTabsRef = useRef<HTMLDivElement | null>(null);
-  const [siteHeaderHeight, setSiteHeaderHeight] = useState(SITE_HEADER_FALLBACK_HEIGHT_PX);
-  const [stickyTabsHeight, setStickyTabsHeight] = useState(0);
 
   const resolvedDay = useMemo(() => {
     if (selectedDay && days.some(({ day }) => day === selectedDay)) {
@@ -111,68 +107,18 @@ export default function ScheduleEvents({
   }, [days, selectedDay]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const siteHeader = document.querySelector<HTMLElement>("header.ui-topbar");
-    if (!siteHeader) return;
-
-    const updateSiteHeaderHeight = () => {
-      setSiteHeaderHeight(siteHeader.getBoundingClientRect().height);
-    };
-
-    updateSiteHeaderHeight();
-
-    const resizeObserver =
-      typeof ResizeObserver !== "undefined" ? new ResizeObserver(updateSiteHeaderHeight) : null;
-
-    resizeObserver?.observe(siteHeader);
-    window.addEventListener("resize", updateSiteHeaderHeight);
-
-    return () => {
-      resizeObserver?.disconnect();
-      window.removeEventListener("resize", updateSiteHeaderHeight);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stickyTabs = stickyTabsRef.current;
-    if (!stickyTabs) return;
-
-    const updateStickyTabsHeight = () => {
-      setStickyTabsHeight(Math.ceil(stickyTabs.getBoundingClientRect().height));
-    };
-
-    updateStickyTabsHeight();
-
-    const resizeObserver =
-      typeof ResizeObserver !== "undefined" ? new ResizeObserver(updateStickyTabsHeight) : null;
-
-    resizeObserver?.observe(stickyTabs);
-    window.addEventListener("resize", updateStickyTabsHeight);
-
-    return () => {
-      resizeObserver?.disconnect();
-      window.removeEventListener("resize", updateStickyTabsHeight);
-    };
-  }, []);
-
-  const headingScrollOffsetPx = siteHeaderHeight + stickyTabsHeight + STICKY_HEADING_CLEARANCE_PX;
-  const stickyTabsTopStyle = useMemo(() => ({ top: `${siteHeaderHeight}px` }), [siteHeaderHeight]);
-  const headingScrollStyle = useMemo(
-    () => ({ scrollMarginTop: `${headingScrollOffsetPx}px` }),
-    [headingScrollOffsetPx],
-  );
-
-  useEffect(() => {
     if (!resolvedDay) return;
     const heading = headingRef.current;
     if (!heading || typeof window === "undefined") return;
     const rect = heading.getBoundingClientRect();
+    const scrollMarginTop = Number.parseFloat(window.getComputedStyle(heading).scrollMarginTop);
+    const headingScrollOffsetPx = Number.isFinite(scrollMarginTop) ? scrollMarginTop : 0;
+
     if (rect.top < headingScrollOffsetPx || rect.bottom > window.innerHeight) {
       const top = window.scrollY + rect.top - headingScrollOffsetPx;
       window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
     }
-  }, [headingScrollOffsetPx, resolvedDay]);
+  }, [resolvedDay]);
 
   const handleTabKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLButtonElement>, index: number, day: string) => {
@@ -272,11 +218,7 @@ export default function ScheduleEvents({
         </nav>
       </div>
 
-      <div
-        ref={stickyTabsRef}
-        className="ui-topbar ui-schedule-day-tabs"
-        style={stickyTabsTopStyle}
-      >
+      <div className="ui-topbar ui-schedule-day-tabs">
         <div className="ui-container ui-schedule-tabs-inner">
           <div className="ui-inset-highlight-soft ui-schedule-tabs-tray">
             <div
@@ -325,11 +267,7 @@ export default function ScheduleEvents({
           <div className="ui-container ui-schedule-heading-wrap">
             <div className="ui-schedule-heading-row">
               <div className="ui-schedule-heading-title-wrap">
-                <h2
-                  ref={headingRef}
-                  style={headingScrollStyle}
-                  className="ui-schedule-heading-title"
-                >
+                <h2 ref={headingRef} className="ui-schedule-heading-title">
                   {activeDayLabel}
                 </h2>
               </div>

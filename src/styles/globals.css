@@ -237,14 +237,17 @@ video {
 
 .ui-clamp-one {
   -webkit-line-clamp: 1;
+  line-clamp: 1;
 }
 
 .ui-clamp-two {
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .ui-clamp-three {
   -webkit-line-clamp: 3;
+  line-clamp: 3;
 }
 
 .ui-icon-xs {
@@ -3541,7 +3544,7 @@ button {
 
 .ui-schedule-day-tabs {
   position: sticky;
-  top: calc(4rem + var(--safe-area-top));
+  top: calc(4.25rem + var(--safe-area-top));
   z-index: 40;
   border-block: 1px solid color-mix(in oklab, white, transparent 92%);
   box-shadow: var(--shadow-lg);

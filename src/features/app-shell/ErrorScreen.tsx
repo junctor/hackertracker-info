@@ -3,9 +3,15 @@ import { Link } from "react-router";
 
 type Props = {
   msg?: string;
+  title?: string;
+  copy?: string;
 };
 
-export default function ErrorScreen({ msg }: Props) {
+export default function ErrorScreen({
+  msg,
+  title = "We couldn't load this page",
+  copy = "Try again in a moment, or head back to the conference home page.",
+}: Props) {
   const hasMessage = Boolean(msg?.trim());
 
   return (
@@ -21,9 +27,9 @@ export default function ErrorScreen({ msg }: Props) {
           </div>
 
           <p className="ui-kicker ui-kicker-critical ui-screen-kicker">Something went wrong</p>
-          <h1 className="ui-error-title">We couldn&apos;t load this page</h1>
+          <h1 className="ui-error-title">{title}</h1>
           <p role={hasMessage ? undefined : "alert"} className="ui-error-copy">
-            Try again in a moment, or head back to the conference home page.
+            {copy}
           </p>
 
           {hasMessage ? (

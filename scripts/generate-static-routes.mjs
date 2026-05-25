@@ -2,38 +2,16 @@ import { access, copyFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 
 import { CONFERENCES } from "../src/lib/conferences.ts";
+import {
+  CONFERENCE_ROUTE_DEFINITIONS,
+  TOP_LEVEL_STATIC_ROUTE_SEGMENTS,
+} from "../src/lib/routes.ts";
 
 const outDir = "dist";
 const entry = path.join(outDir, "index.html");
 const appsEntry = path.join(outDir, "apps", "index.html");
 
-const topLevelRouteSegments = ["tv"];
-
-const conferenceRouteSegments = [
-  "",
-  "announcements",
-  "bookmarks",
-  "communities",
-  "contests",
-  "content",
-  "departments",
-  "document",
-  "exhibitors",
-  "locations",
-  "maps",
-  "menu",
-  "merch",
-  "organization",
-  "people",
-  "readme.nfo",
-  "schedule",
-  "search",
-  "speakers",
-  "tag",
-  "tags",
-  "vendors",
-  "villages",
-];
+const conferenceRouteSegments = CONFERENCE_ROUTE_DEFINITIONS.map((route) => route.staticSegment);
 
 function joinRoute(...segments) {
   return segments.filter(Boolean).join("/");
@@ -54,7 +32,7 @@ const generated = ["index.html", "apps/index.html"];
 await copyFile(entry, path.join(outDir, "404.html"));
 generated.push("404.html");
 
-for (const segment of topLevelRouteSegments) {
+for (const segment of TOP_LEVEL_STATIC_ROUTE_SEGMENTS) {
   await copyEntryToRoute(segment);
   generated.push(`${segment}/index.html`);
 }

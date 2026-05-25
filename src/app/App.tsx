@@ -5,6 +5,7 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceRouteParam } from "@/lib/hooks/useConferenceRouteParam";
+import { CONFERENCE_ROUTE_DEFINITIONS, type ConferenceRouteKey } from "@/lib/routes";
 import { PageId } from "@/lib/types/page-meta";
 
 const HomePage = lazy(() => import("@/routes/HomePage"));
@@ -32,6 +33,32 @@ const TagsPage = lazy(() => import("@/routes/conference/TagsPage"));
 const VendorsPage = lazy(() => import("@/routes/conference/VendorsPage"));
 const VillagesPage = lazy(() => import("@/routes/conference/VillagesPage"));
 
+const CONFERENCE_ROUTE_COMPONENTS = {
+  announcements: AnnouncementsPage,
+  bookmarks: BookmarksPage,
+  communities: CommunitiesPage,
+  conferenceHome: ConferenceHomePage,
+  contests: ContestsPage,
+  content: ContentPage,
+  departments: DepartmentsPage,
+  document: DocumentPage,
+  exhibitors: ExhibitorsPage,
+  locations: LocationsPage,
+  maps: MapsPage,
+  menu: MenuPage,
+  merch: MerchPage,
+  organization: OrganizationPage,
+  people: PeoplePage,
+  readme: ReadmePage,
+  schedule: SchedulePage,
+  search: SearchPage,
+  speakers: PeoplePage,
+  tag: TagPage,
+  tags: TagsPage,
+  vendors: VendorsPage,
+  villages: VillagesPage,
+} satisfies Record<ConferenceRouteKey, ConferenceRouteComponent>;
+
 type ConferenceRouteProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
@@ -42,7 +69,13 @@ type ConferenceRouteComponent =
   | LazyExoticComponent<ComponentType<ConferenceRouteProps>>;
 
 function NotFound() {
-  return <ErrorScreen msg="Page not found." />;
+  return (
+    <ErrorScreen
+      title="Page not found"
+      copy="Check the address, or head back to the conference home page."
+      msg="No route matched this URL."
+    />
+  );
 }
 
 function ConferenceRoute({
@@ -83,29 +116,9 @@ export default function App() {
           <Route path="tv" element={<TVPage />} />
 
           <Route path=":conf">
-            {conferenceRoute(undefined, ConferenceHomePage, "home")}
-            {conferenceRoute("announcements", AnnouncementsPage, "announcements")}
-            {conferenceRoute("bookmarks", BookmarksPage, "bookmarks")}
-            {conferenceRoute("communities", CommunitiesPage, "communities")}
-            {conferenceRoute("contests", ContestsPage, "contests")}
-            {conferenceRoute("content", ContentPage, "content")}
-            {conferenceRoute("departments", DepartmentsPage, "departments")}
-            {conferenceRoute("document", DocumentPage, "document")}
-            {conferenceRoute("exhibitors", ExhibitorsPage, "exhibitors")}
-            {conferenceRoute("locations", LocationsPage, "locations")}
-            {conferenceRoute("maps", MapsPage, "maps")}
-            {conferenceRoute("menu", MenuPage, "home")}
-            {conferenceRoute("merch", MerchPage, "merch")}
-            {conferenceRoute("organization", OrganizationPage, "organization")}
-            {conferenceRoute("people", PeoplePage, "people")}
-            {conferenceRoute("readme.nfo", ReadmePage, "readme")}
-            {conferenceRoute("schedule", SchedulePage, "schedule")}
-            {conferenceRoute("search", SearchPage, "search")}
-            {conferenceRoute("speakers", PeoplePage, "people")}
-            {conferenceRoute("tag", TagPage, "tag")}
-            {conferenceRoute("tags", TagsPage, "tags")}
-            {conferenceRoute("vendors", VendorsPage, "vendors")}
-            {conferenceRoute("villages", VillagesPage, "villages")}
+            {CONFERENCE_ROUTE_DEFINITIONS.map(({ key, path, activePageId }) =>
+              conferenceRoute(path, CONFERENCE_ROUTE_COMPONENTS[key], activePageId),
+            )}
           </Route>
 
           <Route path="*" element={<NotFound />} />

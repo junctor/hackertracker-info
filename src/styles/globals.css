@@ -3541,6 +3541,7 @@ button {
 
 .ui-schedule-day-tabs {
   position: sticky;
+  top: calc(4rem + var(--safe-area-top));
   z-index: 40;
   border-block: 1px solid color-mix(in oklab, white, transparent 92%);
   box-shadow: var(--shadow-lg);
@@ -3661,6 +3662,7 @@ button {
 }
 
 .ui-schedule-heading-title {
+  scroll-margin-top: calc(4rem + var(--safe-area-top) + 4.75rem + 1rem);
   color: var(--text-primary);
   font-size: 1.25rem;
   font-weight: 700;

@@ -1,7 +1,9 @@
 import { useMemo } from "react";
 import { Link } from "react-router";
 
+import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
+import { getToneFromColor } from "@/lib/tone";
 import { TagTypesBrowseView } from "@/lib/types/ht-types";
 
 const formatCategory = (s: string) => s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -26,11 +28,7 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
     <Link
       to={`/${conference.slug}/tag?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className="ui-focus-ring inline-flex rounded-full border border-white/10 px-3 py-1 text-sm font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition hover:border-[#017FA4]/70 focus-visible:outline-none"
-      style={{
-        backgroundColor: tag.colorBackground,
-        color: tag.colorForeground,
-      }}
+      className={`ui-focus-ring ui-tag-chip ui-tag-link ui-tone-${getToneFromColor(tag.colorBackground)}`}
     >
       {tag.label}
     </Link>
@@ -44,24 +42,25 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
   );
 
   return (
-    <section className="ui-container ui-page-content text-slate-100">
-      <header className="mb-6">
-        <h1 className="ui-heading-1">Tags</h1>
-      </header>
+    <section className="ui-container ui-page-content">
+      <PageHeader
+        title="Tags"
+        description="Browse tags that group schedule items across the conference."
+      />
 
       {sortedTagTypes.length === 0 ? (
-        <p>No tags available.</p>
+        <div className="ui-empty-state" role="status">
+          <p>No tags available.</p>
+        </div>
       ) : (
         sortedTagTypes.map((tagType) => {
           const sortedTags = tagType.tags.toSorted((a, b) => a.sortOrder - b.sortOrder);
 
           return (
-            <section key={tagType.id} className="mb-10">
-              <h2 className="ui-heading-2 mb-4 text-[#6CCDBB]">
-                {formatCategory(tagType.category)}
-              </h2>
+            <section key={tagType.id} className="ui-tags-section">
+              <h2 className="ui-heading-2 ui-tags-heading">{formatCategory(tagType.category)}</h2>
 
-              <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+              <ul className="ui-chip-list-tight">
                 {sortedTags.map((tag) => (
                   <li key={tag.id}>
                     <TagPill tag={tag} conference={conference} />

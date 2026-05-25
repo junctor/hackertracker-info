@@ -1,5 +1,5 @@
 import { BookmarkIcon, TagIcon } from "@heroicons/react/24/outline";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router";
 import { Virtuoso, type Components, type ItemProps, type ListProps } from "react-virtuoso";
 
@@ -46,12 +46,13 @@ const VirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(functio
   { children, style, "data-testid": dataTestId },
   ref,
 ) {
+  // react-virtuoso owns runtime list sizing here; dropping this breaks window virtualization.
   return (
     <ul
       ref={ref as unknown as React.Ref<HTMLUListElement>}
       style={style}
       data-testid={dataTestId}
-      className="mb-8 list-none p-0"
+      className="ui-schedule-event-list"
     >
       {children}
     </ul>
@@ -62,8 +63,9 @@ VirtuosoList.displayName = "VirtuosoList";
 function VirtuosoItem({ children, style, context, item, ...itemProps }: VirtuosoItemProps) {
   void context;
   void item;
+  // react-virtuoso uses per-item runtime offsets while measuring large schedule days.
   return (
-    <li {...itemProps} style={style} className="mb-3 last:mb-0">
+    <li {...itemProps} style={style} className="ui-schedule-event-list-item">
       {children}
     </li>
   );
@@ -74,9 +76,6 @@ const VIRTUOSO_COMPONENTS: Components<ScheduleEventViewModel, VirtuosoContext> =
   List: VirtuosoList,
   Item: VirtuosoItem,
 };
-
-const SITE_HEADER_FALLBACK_HEIGHT_PX = 64;
-const STICKY_HEADING_CLEARANCE_PX = 16;
 
 export default function ScheduleEvents({
   conf,
@@ -99,9 +98,6 @@ export default function ScheduleEvents({
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
   const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const stickyTabsRef = useRef<HTMLDivElement | null>(null);
-  const [siteHeaderHeight, setSiteHeaderHeight] = useState(SITE_HEADER_FALLBACK_HEIGHT_PX);
-  const [stickyTabsHeight, setStickyTabsHeight] = useState(0);
 
   const resolvedDay = useMemo(() => {
     if (selectedDay && days.some(({ day }) => day === selectedDay)) {
@@ -111,68 +107,18 @@ export default function ScheduleEvents({
   }, [days, selectedDay]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const siteHeader = document.querySelector<HTMLElement>("header.ui-topbar");
-    if (!siteHeader) return;
-
-    const updateSiteHeaderHeight = () => {
-      setSiteHeaderHeight(siteHeader.getBoundingClientRect().height);
-    };
-
-    updateSiteHeaderHeight();
-
-    const resizeObserver =
-      typeof ResizeObserver !== "undefined" ? new ResizeObserver(updateSiteHeaderHeight) : null;
-
-    resizeObserver?.observe(siteHeader);
-    window.addEventListener("resize", updateSiteHeaderHeight);
-
-    return () => {
-      resizeObserver?.disconnect();
-      window.removeEventListener("resize", updateSiteHeaderHeight);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stickyTabs = stickyTabsRef.current;
-    if (!stickyTabs) return;
-
-    const updateStickyTabsHeight = () => {
-      setStickyTabsHeight(Math.ceil(stickyTabs.getBoundingClientRect().height));
-    };
-
-    updateStickyTabsHeight();
-
-    const resizeObserver =
-      typeof ResizeObserver !== "undefined" ? new ResizeObserver(updateStickyTabsHeight) : null;
-
-    resizeObserver?.observe(stickyTabs);
-    window.addEventListener("resize", updateStickyTabsHeight);
-
-    return () => {
-      resizeObserver?.disconnect();
-      window.removeEventListener("resize", updateStickyTabsHeight);
-    };
-  }, []);
-
-  const headingScrollOffsetPx = siteHeaderHeight + stickyTabsHeight + STICKY_HEADING_CLEARANCE_PX;
-  const stickyTabsTopStyle = useMemo(() => ({ top: `${siteHeaderHeight}px` }), [siteHeaderHeight]);
-  const headingScrollStyle = useMemo(
-    () => ({ scrollMarginTop: `${headingScrollOffsetPx}px` }),
-    [headingScrollOffsetPx],
-  );
-
-  useEffect(() => {
     if (!resolvedDay) return;
     const heading = headingRef.current;
     if (!heading || typeof window === "undefined") return;
     const rect = heading.getBoundingClientRect();
+    const scrollMarginTop = Number.parseFloat(window.getComputedStyle(heading).scrollMarginTop);
+    const headingScrollOffsetPx = Number.isFinite(scrollMarginTop) ? scrollMarginTop : 0;
+
     if (rect.top < headingScrollOffsetPx || rect.bottom > window.innerHeight) {
       const top = window.scrollY + rect.top - headingScrollOffsetPx;
       window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
     }
-  }, [headingScrollOffsetPx, resolvedDay]);
+  }, [resolvedDay]);
 
   const handleTabKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLButtonElement>, index: number, day: string) => {
@@ -231,28 +177,6 @@ export default function ScheduleEvents({
   const activeDayEventCountLabel = activeDay
     ? `${activeDay.events.length} ${activeDay.events.length === 1 ? "event" : "events"}`
     : null;
-  const utilityLinkBaseClassName =
-    "ui-btn-base ui-focus-ring group min-h-10 gap-2 rounded-xl border px-3 text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] focus-visible:outline-none max-[320px]:w-10 max-[320px]:justify-center max-[320px]:px-0";
-  const activeFilterClassName =
-    "border-[#017FA4]/45 bg-[color-mix(in_oklab,var(--color-surface-elevated),transparent_8%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
-  const inactiveFilterClassName =
-    "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/14 hover:bg-white/[0.05] hover:text-slate-100";
-  const utilityIconBaseClassName = "h-4.5 w-4.5 shrink-0 transition-colors";
-  const activeUtilityIconClassName = "text-[#6CCDBB]";
-  const inactiveUtilityIconClassName = "text-slate-400 group-hover:text-slate-200";
-  const dayTabTrayClassName =
-    "rounded-[1.2rem] border border-white/10 bg-[color-mix(in_oklab,var(--color-surface),transparent_18%)] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]";
-  const dayTabBaseClassName =
-    "ui-focus-ring group relative flex min-h-11 items-center gap-2 rounded-[0.95rem] border px-3.5 py-2 text-sm whitespace-nowrap transition duration-200 ease-out focus-visible:outline-none";
-  const activeDayTabClassName =
-    "border-[#017FA4]/45 bg-[color-mix(in_oklab,var(--color-surface-elevated),transparent_8%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
-  const inactiveDayTabClassName =
-    "border-transparent bg-transparent text-slate-300 hover:border-white/10 hover:bg-white/[0.05] hover:text-slate-100";
-  const activeDayCountClassName =
-    "rounded-full border border-[#017FA4]/26 bg-[#017FA4]/12 px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-[#9FE4D7]";
-  const inactiveDayCountClassName =
-    "rounded-full border border-white/8 bg-black/15 px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-slate-400 transition-colors group-hover:text-slate-200";
-
   const computeItemKey = useCallback((_: number, evt: ScheduleEventViewModel) => evt.id, []);
   const itemContent = useCallback(
     (_: number, evt: ScheduleEventViewModel) => (
@@ -267,65 +191,43 @@ export default function ScheduleEvents({
   );
 
   return (
-    <div className="bg-[var(--color-bg)] text-slate-100">
-      <div className="ui-container flex justify-end py-3">
+    <div className="ui-schedule-shell">
+      <div className="ui-container ui-schedule-tools">
         <nav aria-label="Schedule tools">
-          <div className="flex items-center gap-2">
+          <div className="ui-schedule-tool-list">
             <Link
               to={`/${conf.slug}/bookmarks`}
-              className={`${utilityLinkBaseClassName} ${
-                isBookmarksFilterActive ? activeFilterClassName : inactiveFilterClassName
-              }`}
+              className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link"
               aria-label="View bookmarked events"
               aria-current={isBookmarksFilterActive ? "page" : undefined}
             >
-              <BookmarkIcon
-                className={`${utilityIconBaseClassName} ${
-                  isBookmarksFilterActive
-                    ? activeUtilityIconClassName
-                    : inactiveUtilityIconClassName
-                }`}
-                aria-hidden="true"
-              />
-              <span className="font-semibold tracking-[-0.01em] max-[320px]:sr-only">
-                Bookmarks
-              </span>
+              <BookmarkIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
+              <span className="ui-schedule-compact-label ui-schedule-tool-label">Bookmarks</span>
             </Link>
 
             <Link
               to={`/${conf.slug}/tags`}
-              className={`${utilityLinkBaseClassName} ${
-                isTagsFilterActive ? activeFilterClassName : inactiveFilterClassName
-              }`}
+              className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link"
               aria-label="Browse schedule tags"
               aria-current={isTagsFilterActive ? "page" : undefined}
             >
-              <TagIcon
-                className={`${utilityIconBaseClassName} ${
-                  isTagsFilterActive ? activeUtilityIconClassName : inactiveUtilityIconClassName
-                }`}
-                aria-hidden="true"
-              />
-              <span className="font-semibold tracking-[-0.01em] max-[320px]:sr-only">Tags</span>
+              <TagIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
+              <span className="ui-schedule-compact-label ui-schedule-tool-label">Tags</span>
             </Link>
           </div>
         </nav>
       </div>
 
-      <div
-        ref={stickyTabsRef}
-        className="ui-topbar ui-schedule-day-tabs sticky z-40 border-y border-white/8 shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
-        style={stickyTabsTopStyle}
-      >
-        <div className="ui-container py-2.5">
-          <div className={dayTabTrayClassName}>
+      <div className="ui-topbar ui-schedule-day-tabs">
+        <div className="ui-container ui-schedule-tabs-inner">
+          <div className="ui-inset-highlight-soft ui-schedule-tabs-tray">
             <div
               role="tablist"
               aria-label="Schedule days"
               aria-orientation="horizontal"
-              className="min-w-0 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="ui-scrollbar-none ui-schedule-tab-scroll"
             >
-              <div className="flex min-w-max items-center gap-2 pr-1">
+              <div className="ui-schedule-tab-list">
                 {days.map(({ day, events }, index) => (
                   <button
                     key={day}
@@ -339,22 +241,14 @@ export default function ScheduleEvents({
                     aria-controls={`day-panel-${day}`}
                     aria-label={`${tabDateTitle(day, conf.timezone)}, ${events.length} events`}
                     tabIndex={resolvedDay === day ? 0 : -1}
-                    className={`${dayTabBaseClassName} ${
-                      resolvedDay === day ? activeDayTabClassName : inactiveDayTabClassName
-                    }`}
+                    className="ui-focus-ring ui-schedule-day-tab"
                     onClick={() => onSelectDay(day)}
                     onKeyDown={(e) => handleTabKeyDown(e, index, day)}
                   >
-                    <span className="font-semibold tracking-[-0.01em]">
+                    <span className="ui-schedule-day-tab-title">
                       {tabDateTitle(day, conf.timezone)}
                     </span>
-                    <span
-                      className={
-                        resolvedDay === day ? activeDayCountClassName : inactiveDayCountClassName
-                      }
-                    >
-                      {events.length}
-                    </span>
+                    <span className="ui-schedule-day-count">{events.length}</span>
                   </button>
                 ))}
               </div>
@@ -370,22 +264,16 @@ export default function ScheduleEvents({
           aria-labelledby={`day-tab-${activeDay.day}`}
           tabIndex={0}
         >
-          <div className="ui-container mt-4 mb-3">
-            <div className="flex flex-col gap-3 border-b border-white/8 pb-3.5 sm:flex-row sm:items-end sm:justify-between">
-              <div className="min-w-0">
-                <h2
-                  ref={headingRef}
-                  style={headingScrollStyle}
-                  className="text-xl font-bold tracking-tight text-slate-100 md:text-[1.75rem]"
-                >
+          <div className="ui-container ui-schedule-heading-wrap">
+            <div className="ui-schedule-heading-row">
+              <div className="ui-schedule-heading-title-wrap">
+                <h2 ref={headingRef} className="ui-schedule-heading-title">
                   {activeDayLabel}
                 </h2>
               </div>
 
               {activeDayEventCountLabel ? (
-                <p className="inline-flex items-center self-start rounded-full border border-white/8 bg-white/3 px-3 py-1 text-sm font-medium text-slate-300 sm:self-auto">
-                  {activeDayEventCountLabel}
-                </p>
+                <p className="ui-meta-pill ui-page-header-count">{activeDayEventCountLabel}</p>
               ) : null}
             </div>
           </div>

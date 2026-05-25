@@ -1,11 +1,13 @@
 import { UserIcon } from "@heroicons/react/24/solid";
-import { useState, useMemo, type CSSProperties } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router";
 
 import Image from "@/components/Image";
-import SearchHeader from "@/components/ui/SearchHeader";
+import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { PeopleCardsView } from "@/lib/types/ht-types";
+
+import { getPersonInitials } from "./personInitials";
 
 type SortMode = "name-asc" | "name-desc";
 
@@ -14,7 +16,13 @@ type Props = {
   conference: ConferenceManifest;
 };
 
-const PERSON_ACCENT_COLORS = ["#017FA4", "#2D7FF9", "#0F766E", "#7C3AED", "#C2410C", "#0E7490"];
+const PERSON_ACCENT_CLASS_NAMES = [
+  "ui-person-accent-0",
+  "ui-person-accent-1",
+  "ui-person-accent-2",
+  "ui-person-accent-3",
+  "ui-person-accent-4",
+];
 
 type AvatarRecord = {
   avatar?: { url?: string | null } | string | null;
@@ -60,26 +68,16 @@ function getPersonAvatarUrl(person: AvatarRecord): string | null {
   return null;
 }
 
-function getInitials(name?: string | null): string {
-  const normalizedName = getPersonName(name);
-  if (!normalizedName) return "";
-
-  return normalizedName
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
-
-function getPersonAccent(name?: string | null): string {
+function getPersonAccentClassName(name?: string | null): string {
   const normalizedName = getDisplayName(name);
   let hash = 0;
   for (const char of normalizedName) {
     hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   }
-  return PERSON_ACCENT_COLORS[hash % PERSON_ACCENT_COLORS.length] ?? PERSON_ACCENT_COLORS[0];
+  return (
+    PERSON_ACCENT_CLASS_NAMES[hash % PERSON_ACCENT_CLASS_NAMES.length] ??
+    PERSON_ACCENT_CLASS_NAMES[0]
+  );
 }
 
 function highlight(text: string, rawQuery: string) {
@@ -91,9 +89,7 @@ function highlight(text: string, rawQuery: string) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark className="rounded bg-[#F1B435]/20 px-0.5 text-[#F1B435]">
-        {text.slice(idx, idx + q.length)}
-      </mark>
+      <mark className="ui-search-highlight">{text.slice(idx, idx + q.length)}</mark>
       {text.slice(idx + q.length)}
     </>
   );
@@ -127,93 +123,78 @@ export default function PeopleList({ people, conference }: Props) {
 
   return (
     <section className="ui-container ui-section">
-      <SearchHeader
+      <PageHeader
         title="People"
-        searchLabel="Search people"
-        searchPlaceholder="Search people..."
-        searchValue={query}
-        onSearchChange={setQuery}
+        description="Find speakers, authors, builders, and contributors by name or title."
+        resultLabel={hasSearch ? `${resultCountLabel} found` : undefined}
+        search={{
+          label: "Search people",
+          placeholder: "Search people...",
+          value: query,
+          onChange: setQuery,
+        }}
       >
-        <label className="block w-full">
-          <span className="sr-only">Sort people</span>
+        <label className="ui-control-label">
+          <span className="ui-visually-hidden">Sort people</span>
           <select
             value={sortMode}
             onChange={(e) => setSortMode(e.currentTarget.value as SortMode)}
-            className="ui-input-base ui-focus-ring focus-visible:outline-none"
+            className="ui-input-base ui-select-control ui-focus-ring"
           >
             <option value="name-asc">Name (A-Z)</option>
             <option value="name-desc">Name (Z-A)</option>
           </select>
         </label>
-      </SearchHeader>
-      {hasSearch ? (
-        <p
-          role="status"
-          aria-live="polite"
-          className="mb-4 inline-flex items-center rounded-full border border-white/8 bg-white/3 px-3 py-1 text-sm font-medium text-slate-300"
-        >
-          {resultCountLabel} found
-        </p>
-      ) : null}
+      </PageHeader>
 
       {filtered.length === 0 ? (
         <div className="ui-empty-state">
-          <p className="text-slate-200">
+          <p>
             {trimmedQuery ? `No people found for "${trimmedQuery}".` : "No people are listed yet."}
           </p>
           {trimmedQuery ? (
             <button
               type="button"
               onClick={() => setQuery("")}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action focus-visible:outline-none"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Clear search
             </button>
           ) : null}
         </div>
       ) : (
-        <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <ul className="ui-people-grid">
           {filtered.map((person) => {
             const personName = getDisplayName(person.name);
             const personTitle = getDisplayTitle(person.title);
-            const personInitials = getInitials(person.name);
+            const personInitials = getPersonInitials(person.name);
             const avatarUrl = getPersonAvatarUrl(person);
             const showAvatarImage = Boolean(avatarUrl) && !brokenAvatarIds[person.id];
-            const accentColor = getPersonAccent(person.name);
-            const accentStyle = {
-              "--event-color": accentColor,
-            } as CSSProperties;
-            const avatarStyle = {
-              backgroundImage: `linear-gradient(135deg, ${accentColor}22 0%, rgba(15, 23, 42, 0.9) 100%)`,
-            } as CSSProperties;
+            const accentClassName = getPersonAccentClassName(person.name);
 
             return (
-              <li key={person.id} className="h-full">
+              <li key={person.id} className="ui-grid-card-item">
                 <article
-                  style={accentStyle}
-                  className="ui-card ui-card-interactive group relative h-full overflow-hidden"
+                  className={`ui-card ui-card-interactive ui-accent-card ui-person-list-card ${accentClassName}`}
                 >
                   <span aria-hidden="true" className="ui-accent-rail" />
                   <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
                   <Link
                     to={`/${conference.slug}/people/?id=${person.id}`}
-                    className="ui-focus-ring relative z-10 block h-full rounded-[inherit] px-4 py-3.5 pl-5 focus-visible:outline-none sm:px-5 sm:py-4 sm:pl-6"
+                    className="ui-focus-ring ui-person-list-link"
                   >
-                    <div className="flex items-center gap-3.5">
-                      <div
-                        style={avatarStyle}
-                        className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
-                      >
-                        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/8" />
-                        <div className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden">
+                    <div className="ui-person-list-row">
+                      <div className="ui-person-avatar ui-inset-highlight-soft ui-person-avatar-small">
+                        <div className="ui-person-avatar-rule" />
+                        <div className="ui-person-avatar-inner">
                           {showAvatarImage && avatarUrl ? (
                             <Image
                               src={avatarUrl}
                               alt={personName}
-                              fill
+                              fillContainer
                               sizes="48px"
-                              className="object-cover"
+                              className="ui-image-cover"
                               onError={() =>
                                 setBrokenAvatarIds((current) =>
                                   current[person.id] ? current : { ...current, [person.id]: true },
@@ -224,15 +205,13 @@ export default function PeopleList({ people, conference }: Props) {
                             <>
                               <div
                                 aria-hidden="true"
-                                className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_62%)]"
+                                className="ui-avatar-fallback-glow ui-fill-layer"
                               />
                               {personInitials ? (
-                                <span className="relative text-xs font-semibold tracking-[0.08em] text-slate-100 uppercase">
-                                  {personInitials}
-                                </span>
+                                <span className="ui-person-initials">{personInitials}</span>
                               ) : (
                                 <UserIcon
-                                  className="relative h-5 w-5 text-slate-100"
+                                  className="ui-icon-sm ui-layer-above"
                                   aria-hidden="true"
                                 />
                               )}
@@ -241,14 +220,12 @@ export default function PeopleList({ people, conference }: Props) {
                         </div>
                       </div>
 
-                      <div className="min-w-0 flex-1 space-y-1">
-                        <h2 className="text-[1rem] leading-6 font-semibold tracking-[-0.01em] text-slate-100 transition-colors group-hover:text-white">
-                          <span className="line-clamp-2">{highlight(personName, query)}</span>
+                      <div className="ui-person-card-copy">
+                        <h2 className="ui-card-title">
+                          <span className="ui-clamp-two">{highlight(personName, query)}</span>
                         </h2>
                         {personTitle ? (
-                          <p className="line-clamp-2 text-sm leading-5 text-slate-400">
-                            {personTitle}
-                          </p>
+                          <p className="ui-card-meta ui-clamp-two">{personTitle}</p>
                         ) : null}
                       </div>
                     </div>

@@ -6,6 +6,7 @@ import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
 import { ConferenceManifest } from "@/lib/conferences";
 import { OrganizationEntity } from "@/lib/types/ht-types";
+import { getSafeExternalHref } from "@/lib/url";
 
 type Props = {
   org: OrganizationEntity;
@@ -14,7 +15,7 @@ type Props = {
 
 function getHostname(url: string) {
   try {
-    return new URL(url).hostname.replace(/^www\./, "");
+    return new URL(url).hostname.replace(/^www\./, "") || url;
   } catch {
     return url;
   }
@@ -37,40 +38,38 @@ export default function OrganizationDetails({ org, conference }: Props) {
   const hasLinks = org.links.length > 0;
 
   return (
-    <article className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-      <header className="rounded-2xl border border-white/10 bg-slate-900/70 p-6 shadow-sm">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-800 sm:h-24 sm:w-24">
+    <article className="ui-container ui-page-content ui-organization-detail-page">
+      <header className="ui-card ui-detail-card ui-organization-header">
+        <span aria-hidden="true" className="ui-accent-rail ui-tone-secondary" />
+        <span aria-hidden="true" className="ui-accent-rail-overlay" />
+        <div className="ui-organization-header-row">
+          <div className="ui-logo-frame ui-logo-frame-lg">
             {org.logoUrl ? (
               <Image
                 src={org.logoUrl}
                 alt={`${org.name} logo`}
-                fill
-                className="object-contain p-2"
-                priority
+                fillContainer
+                className="ui-image-contain ui-logo-image-pad"
+                loading="eager"
                 sizes="(min-width: 640px) 6rem, 5rem"
               />
             ) : (
-              <div
-                className="absolute inset-0 flex items-center justify-center bg-slate-800 font-mono text-xl font-semibold tracking-wide text-white"
-                role="img"
-                aria-label={`${org.name} logo`}
-              >
+              <div className="ui-logo-initials-fill" role="img" aria-label={`${org.name} logo`}>
                 {initials}
               </div>
             )}
           </div>
 
-          <div className="min-w-0 flex-1">
-            <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{org.name}</h1>
+          <div className="ui-item-main">
+            <h1 className="ui-heading-1">{org.name}</h1>
 
             {org.tagIdAsOrganizer && (
-              <div className="mt-4">
+              <div className="ui-organization-actions">
                 <Link
                   to={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
-                  className="ui-focus-ring inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-2 text-sm font-medium text-indigo-100 transition hover:bg-indigo-500/15 focus-visible:outline-none"
+                  className="ui-focus-ring ui-pill-link"
                 >
-                  <CalendarIcon className="h-4 w-4 text-indigo-300" aria-hidden />
+                  <CalendarIcon className="ui-icon-xs ui-card-external-icon" aria-hidden />
                   <span>View Schedule</span>
                 </Link>
               </div>
@@ -79,51 +78,55 @@ export default function OrganizationDetails({ org, conference }: Props) {
         </div>
       </header>
 
-      <div className="mt-8 space-y-6">
-        <section className="rounded-2xl border border-white/10 bg-slate-900/50 p-6">
-          <h2 className="text-sm font-semibold tracking-[0.14em] text-slate-200 uppercase">
-            About
-          </h2>
+      <div className="ui-organization-sections">
+        <section className="ui-card ui-detail-panel">
+          <h2 className="ui-section-label">About</h2>
 
-          <div className="prose prose-invert mt-4 max-w-none text-slate-300">
+          <div className="ui-section-body">
             {description ? (
               <Markdown content={description} />
             ) : (
-              <p className="text-slate-400">No description available.</p>
+              <p className="ui-card-meta">No description available.</p>
             )}
           </div>
         </section>
 
         {hasLinks && (
-          <section className="rounded-2xl border border-white/10 bg-slate-900/50 p-6">
-            <h2 className="text-sm font-semibold tracking-[0.14em] text-slate-200 uppercase">
-              Links
-            </h2>
+          <section className="ui-card ui-detail-panel">
+            <h2 className="ui-section-label">Links</h2>
 
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            <ul className="ui-organization-link-grid">
               {org.links.map((link) => {
-                const hostname = getHostname(link.url);
+                const safeHref = getSafeExternalHref(link.url);
+                const hostname = safeHref ? getHostname(safeHref) : link.url;
 
                 return (
                   <li key={link.url}>
-                    <a
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ui-focus-ring group flex h-full items-center justify-between rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3 transition hover:border-white/20 hover:bg-slate-800/60 focus-visible:outline-none"
-                    >
-                      <div className="min-w-0">
-                        <div className="truncate text-sm font-medium text-slate-100">
-                          {link.label}
+                    {safeHref ? (
+                      <a
+                        href={safeHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ui-focus-ring ui-card ui-card-interactive ui-organization-link-card"
+                      >
+                        <div className="ui-item-main">
+                          <div className="ui-card-title ui-clip-text">{link.label}</div>
+                          <div className="ui-card-meta ui-clip-text">{hostname}</div>
                         </div>
-                        <div className="truncate text-xs text-slate-400">{hostname}</div>
-                      </div>
 
-                      <ArrowTopRightOnSquareIcon
-                        className="ml-3 h-4 w-4 shrink-0 text-slate-500 transition group-hover:text-slate-300"
-                        aria-hidden
-                      />
-                    </a>
+                        <ArrowTopRightOnSquareIcon
+                          className="ui-icon-xs ui-organization-link-icon"
+                          aria-hidden
+                        />
+                      </a>
+                    ) : (
+                      <div className="ui-card ui-organization-link-card">
+                        <div className="ui-item-main">
+                          <div className="ui-card-title ui-clip-text">{link.label}</div>
+                          <div className="ui-card-meta ui-clip-text">{hostname}</div>
+                        </div>
+                      </div>
+                    )}
                   </li>
                 );
               })}

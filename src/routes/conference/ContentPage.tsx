@@ -1,10 +1,9 @@
 import React, { useMemo, type ReactElement } from "react";
 
 import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import ContentDetails from "@/features/content/ContentDetails";
 import ContentList from "@/features/content/ContentList";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -21,12 +20,12 @@ import { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
-type ContentsPageProps = {
+type ContentPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
 
-export default function ContentsPage({ conf, activePageId }: ContentsPageProps) {
+export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   const {
     value: contentId,
     isReady,
@@ -168,13 +167,9 @@ export default function ContentsPage({ conf, activePageId }: ContentsPageProps) 
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
       </Head>
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          {pageContent}
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        {pageContent}
+      </ConferenceLayout>
     </>
   );
 }

@@ -4,7 +4,7 @@ import {
   MapPinIcon,
 } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import { useMemo, type CSSProperties, type MouseEvent } from "react";
+import { useMemo, type MouseEvent } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
@@ -13,6 +13,7 @@ import type { ContentEntity, EventEntity } from "@/lib/types/ht-types";
 import cal from "@/lib/cal";
 import { eventTime, formatSessionTime } from "@/lib/dates";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
+import { getToneFromColor } from "@/lib/tone";
 
 export type ContentSessionProps = {
   conference: ConferenceManifest;
@@ -55,54 +56,47 @@ function ContentSessionCard({
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${session.title}`
     : `Add bookmark for ${session.title}`;
-  const accentStyle = {
-    "--event-color": session.color ?? "#64748b",
-  } as CSSProperties;
+  const accentTone = getToneFromColor(session.color);
   const titleLabel = title?.trim() || null;
 
   const sessionContent = (
-    <div className="min-w-0 flex-1 space-y-1.5">
+    <div className="ui-item-main ui-item-copy-compact">
       {titleLabel ? (
-        <p className="line-clamp-2 text-base leading-6 font-semibold tracking-[-0.01em] text-slate-100 transition-colors group-hover:text-white sm:text-lg">
-          {titleLabel}
-        </p>
+        <p className="ui-card-title ui-accent-card-title-md ui-clamp-two">{titleLabel}</p>
       ) : null}
-      <p className="text-sm font-semibold text-slate-100 sm:text-base">{timeLabel}</p>
+      <p className="ui-event-time-primary">{timeLabel}</p>
       {locationName ? (
-        <div className="flex min-w-0 items-center gap-2 text-sm text-slate-400">
-          <MapPinIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
-          <span className="truncate">{locationName}</span>
+        <div className="ui-card-meta ui-content-session-location">
+          <MapPinIcon className="ui-icon-xs" aria-hidden="true" />
+          <span className="ui-clip-text">{locationName}</span>
         </div>
       ) : null}
     </div>
   );
 
   return (
-    <li className="ui-card ui-card-interactive group relative overflow-hidden" style={accentStyle}>
+    <li className={`ui-card ui-card-interactive ui-accent-card ui-tone-${accentTone}`}>
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
-      <div className="relative z-10 flex flex-col gap-4 px-4 py-4 pl-5 sm:px-5 sm:py-5 sm:pl-6 md:flex-row md:items-start md:justify-between">
+      <div className="ui-content-session-row">
         {href ? (
-          <Link
-            to={href}
-            className="ui-focus-ring min-w-0 flex-1 rounded-[inherit] focus-visible:outline-none"
-          >
+          <Link to={href} className="ui-focus-ring ui-radius-inherit ui-item-main">
             {sessionContent}
           </Link>
         ) : (
           sessionContent
         )}
 
-        <div className="flex shrink-0 items-center gap-2 md:self-start">
+        <div className="ui-content-session-actions">
           <a
             href={icsHref}
             download={`DEF_CON_${contentEntity.id}-${session.id}.ics`}
             title={`Download calendar invite for session: ${contentEntity.title}`}
             aria-label={`Download calendar invite for session: ${contentEntity.title}`}
-            className="ui-icon-btn ui-focus-ring h-11 w-11 focus-visible:outline-none"
+            className="ui-icon-plain"
           >
-            <CalendarIcon className="h-5 w-5" aria-hidden="true" />
+            <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
           </a>
 
           <button
@@ -110,12 +104,12 @@ function ContentSessionCard({
             onClick={handleBookmarkClick}
             aria-label={bookmarkLabel}
             aria-pressed={bookmark}
-            className="ui-icon-btn ui-focus-ring h-11 w-11 focus-visible:outline-none"
+            className="ui-icon-plain"
           >
             {bookmark ? (
-              <BookmarkIconSolid className="h-5 w-5" aria-hidden="true" />
+              <BookmarkIconSolid className="ui-icon-sm" aria-hidden="true" />
             ) : (
-              <BookmarkIconOutline className="h-5 w-5" aria-hidden="true" />
+              <BookmarkIconOutline className="ui-icon-sm" aria-hidden="true" />
             )}
           </button>
         </div>

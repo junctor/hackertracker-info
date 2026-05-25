@@ -1,14 +1,17 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getBookmarks } from "@/lib/storage";
+import { getToneFromColor } from "@/lib/tone";
 import { ContentEntity, EventEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
+import { getSafeExternalHref } from "@/lib/url";
 
 import ContentSession from "../content/ContentSession";
+import { getPersonInitials } from "./personInitials";
 
 type Props = {
   person: PersonEntity;
@@ -21,7 +24,13 @@ type PersonLinkView = NonNullable<PersonEntity["links"]>[number] & {
   url: string;
 };
 
-const PERSON_ACCENT_COLORS = ["#017FA4", "#2D7FF9", "#0F766E", "#7C3AED", "#C2410C", "#0E7490"];
+const PERSON_ACCENT_CLASS_NAMES = [
+  "ui-person-accent-0",
+  "ui-person-accent-1",
+  "ui-person-accent-2",
+  "ui-person-accent-3",
+  "ui-person-accent-4",
+];
 
 type AvatarRecord = {
   avatar?: { url?: string | null } | string | null;
@@ -72,33 +81,23 @@ function safeParseMs(value?: string | null): number {
   return Number.isFinite(ms) ? ms : Number.MAX_SAFE_INTEGER;
 }
 
-function getInitials(name?: string | null): string {
-  const normalizedName = getPersonName(name);
-  if (!normalizedName) return "";
-
-  return normalizedName
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
-
-function getPersonAccent(name?: string | null): string {
+function getPersonAccentClassName(name?: string | null): string {
   const normalizedName = getDisplayName(name);
   let hash = 0;
   for (const char of normalizedName) {
     hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   }
-  return PERSON_ACCENT_COLORS[hash % PERSON_ACCENT_COLORS.length] ?? PERSON_ACCENT_COLORS[0];
+  return (
+    PERSON_ACCENT_CLASS_NAMES[hash % PERSON_ACCENT_CLASS_NAMES.length] ??
+    PERSON_ACCENT_CLASS_NAMES[0]
+  );
 }
 
 export default function PersonDetails({ person, events, locations, conference }: Props) {
   const [hasAvatarError, setHasAvatarError] = useState(false);
   const contentsBasePath = `/${conference.slug}/content`;
   const personName = getDisplayName(person.name);
-  const personInitials = getInitials(person.name);
+  const personInitials = getPersonInitials(person.name);
   const personAvatarUrl = getPersonAvatarUrl(person);
   const personPronouns = getOptionalText(person.pronouns);
   const personDescription = getOptionalText(person.description);
@@ -112,14 +111,11 @@ export default function PersonDetails({ person, events, locations, conference }:
     () => events.toSorted((a, b) => safeParseMs(a.beginIso) - safeParseMs(b.beginIso)),
     [events],
   );
-  const accentColor = getPersonAccent(person.name);
-  const primaryEventColor = sortedEvents[0]?.color ?? accentColor;
-  const accentStyle = {
-    "--event-color": primaryEventColor,
-  } as CSSProperties;
-  const avatarStyle = {
-    backgroundImage: `linear-gradient(135deg, ${accentColor}22 0%, rgba(15, 23, 42, 0.92) 100%)`,
-  } as CSSProperties;
+  const accentClassName = getPersonAccentClassName(person.name);
+  const primaryEventColor = sortedEvents[0]?.color;
+  const headerAccentClassName = primaryEventColor
+    ? `ui-tone-${getToneFromColor(primaryEventColor)}`
+    : accentClassName;
   const affiliations = useMemo(
     () =>
       (person.affiliations ?? [])
@@ -140,7 +136,7 @@ export default function PersonDetails({ person, events, locations, conference }:
         .map((link) => ({
           ...link,
           title: getOptionalText(link.title) ?? getOptionalText(link.url) ?? "External link",
-          url: getOptionalText(link.url),
+          url: getSafeExternalHref(link.url),
         }))
         .filter((link): link is PersonLinkView => Boolean(link.url))
         .toSorted((a, b) => a.sort_order - b.sort_order),
@@ -166,66 +162,57 @@ export default function PersonDetails({ person, events, locations, conference }:
   }, [personAvatarUrl]);
 
   return (
-    <div className="ui-container ui-page-content space-y-10">
-      <header style={accentStyle} className="ui-card relative overflow-hidden">
+    <div className="ui-container ui-page-content ui-detail-stack">
+      <header className={`ui-card ui-detail-card ${headerAccentClassName}`}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
-        <div className="relative z-10 flex flex-col gap-6 px-5 py-5 pl-6 sm:px-6 sm:py-6 sm:pl-7">
-          <div className="flex flex-col gap-5 md:flex-row md:items-start">
+        <div className="ui-detail-header-body">
+          <div className="ui-person-details-row">
             <div
-              style={avatarStyle}
-              className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/4 text-2xl font-semibold tracking-[0.08em] text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:h-28 sm:w-28 sm:text-3xl"
+              className={`ui-person-avatar ui-inset-highlight ui-person-avatar-large ${accentClassName}`}
             >
               {personAvatarUrl && !hasAvatarError ? (
                 <Image
                   src={personAvatarUrl}
                   alt={personName}
-                  fill
+                  fillContainer
                   sizes="(min-width: 640px) 112px, 96px"
-                  className="object-cover"
+                  className="ui-image-cover"
                   onError={() => setHasAvatarError(true)}
                 />
               ) : (
                 <>
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_62%)]"
-                  />
+                  <div aria-hidden="true" className="ui-avatar-fallback-glow ui-fill-layer" />
                   {personInitials ? (
-                    <span className="relative">{personInitials}</span>
+                    <span className="ui-layer-above">{personInitials}</span>
                   ) : (
-                    <UserIcon
-                      className="relative h-8 w-8 text-slate-100 sm:h-10 sm:w-10"
-                      aria-hidden="true"
-                    />
+                    <UserIcon className="ui-icon-lg ui-layer-above" aria-hidden="true" />
                   )}
                 </>
               )}
             </div>
 
-            <div className="min-w-0 flex-1 space-y-4">
-              <div className="space-y-2">
-                <div className="flex flex-wrap items-center gap-2">
+            <div className="ui-person-header-copy">
+              <div className="ui-person-title-line">
+                <div className="ui-person-title-row">
                   <h1 className="ui-heading-1">{personName}</h1>
                   {personPronouns ? (
-                    <span className="inline-flex items-center rounded-full border border-white/8 bg-white/3 px-2.5 py-1 text-xs font-medium text-slate-200">
-                      {personPronouns}
-                    </span>
+                    <span className="ui-meta-pill ui-person-pronouns">{personPronouns}</span>
                   ) : null}
                 </div>
 
                 {affiliations.length > 0 ? (
-                  <ul className="m-0 list-none space-y-1.5 p-0 text-sm leading-6 text-slate-300">
+                  <ul className="ui-person-affiliations">
                     {affiliations.map((affiliation) => (
                       <li
                         key={`${affiliation.organization ?? "organization"}:${affiliation.title ?? "title"}`}
                       >
                         {affiliation.title ? (
-                          <span className="font-semibold text-slate-100">{affiliation.title}</span>
+                          <span className="ui-muted-strong">{affiliation.title}</span>
                         ) : null}
                         {affiliation.title && affiliation.organization ? (
-                          <span className="mx-2 text-slate-500">@</span>
+                          <span className="ui-inline-separator">@</span>
                         ) : null}
                         {affiliation.organization ? <span>{affiliation.organization}</span> : null}
                       </li>
@@ -235,17 +222,17 @@ export default function PersonDetails({ person, events, locations, conference }:
               </div>
 
               {sortedLinks.length > 0 ? (
-                <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
+                <ul className="ui-chip-list">
                   {sortedLinks.map((link) => (
                     <li key={link.url}>
                       <a
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="ui-focus-ring ui-pill-link focus-visible:outline-none"
+                        className="ui-focus-ring ui-pill-link"
                       >
-                        <span className="max-w-[16rem] truncate">{link.title}</span>
-                        <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-[#6CCDBB]" />
+                        <span className="ui-pill-label ui-clip-text">{link.title}</span>
+                        <ArrowTopRightOnSquareIcon className="ui-icon-xs ui-card-external-icon" />
                       </a>
                     </li>
                   ))}
@@ -257,24 +244,22 @@ export default function PersonDetails({ person, events, locations, conference }:
       </header>
 
       {personDescription && (
-        <section aria-labelledby="about-title" className="space-y-4">
-          <h2 id="about-title" className="text-sm font-semibold tracking-[0.02em] text-slate-300">
+        <section aria-labelledby="about-title" className="ui-detail-section">
+          <h2 id="about-title" className="ui-section-label">
             About
           </h2>
-          <div className="ui-card px-5 py-5 sm:px-6">
-            <div className="prose prose-invert prose-headings:text-slate-100 prose-p:leading-7 prose-a:ui-link max-w-none text-slate-300">
-              <Markdown content={personDescription} />
-            </div>
+          <div className="ui-card ui-detail-panel">
+            <Markdown content={personDescription} />
           </div>
         </section>
       )}
 
       {sortedEvents.length > 0 && (
-        <section aria-labelledby="events-title" className="space-y-4">
-          <h2 id="events-title" className="text-sm font-semibold tracking-[0.02em] text-slate-300">
+        <section aria-labelledby="events-title" className="ui-detail-section">
+          <h2 id="events-title" className="ui-section-label">
             Sessions
           </h2>
-          <ul className="space-y-4">
+          <ul className="ui-list-stack">
             {sortedEvents.map((event) => {
               const contentEntity = contentEntityByEventId.get(event.id);
               if (!contentEntity) return null;

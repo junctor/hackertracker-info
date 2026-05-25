@@ -1,12 +1,13 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 
 import Head from "@/components/Head";
 import Image from "@/components/Image";
 import Countdown from "@/features/home/Countdown";
+import { aiMetadata, conferenceDataFeeds, SITE_DESCRIPTION } from "@/lib/aiMetadata";
 import { CONFERENCES, type ConferenceManifest } from "@/lib/conferences";
 
 gsap.registerPlugin(useGSAP, ScrambleTextPlugin);
@@ -28,128 +29,178 @@ const conferenceDateFormatter = (timeZone: string) =>
 const formatConferenceDate = (date: string, timeZone: string) =>
   conferenceDateFormatter(timeZone).format(new Date(date));
 
-const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = [
-  {
-    conference: CONFERENCES.dcsg2026,
-    subtitle: formatConferenceDate(CONFERENCES.dcsg2026.kickoff, CONFERENCES.dcsg2026.timezone),
-  },
-  {
-    conference: CONFERENCES.defcon34,
-    subtitle: formatConferenceDate(CONFERENCES.defcon34.kickoff, CONFERENCES.defcon34.timezone),
-  },
-];
+const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = Object.values(CONFERENCES)
+  .filter((conference) => conference.showOnHome)
+  .map((conference) => ({
+    conference,
+    subtitle: formatConferenceDate(conference.kickoff, conference.timezone),
+  }));
 
 const TITLE_CYCLE = ["DEF CON", "D3F CON", "DEF C0N", "D3F C0N", "D3F_C0N", "STAHP IT"] as const;
+const TITLE_SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-/\\[]{}()<>|";
+const TITLE_INTERACTION_COOLDOWN_MS = 200;
+const MAX_COUNTDOWN_REFRESH_DELAY_MS = 2_147_483_647;
 
-export default function Home() {
+function hasActiveCountdown(kickoff: string, nowMs = Date.now()) {
+  const kickoffMs = Date.parse(kickoff);
+  return Number.isFinite(kickoffMs) && kickoffMs > nowMs;
+}
+
+function getCountdownRefreshDelay(kickoff: string) {
+  const kickoffMs = Date.parse(kickoff);
+  if (!Number.isFinite(kickoffMs)) return null;
+
+  const remainingMs = kickoffMs - Date.now();
+  if (remainingMs <= 0) return 0;
+
+  return Math.min(remainingMs + 1000, MAX_COUNTDOWN_REFRESH_DELAY_MS);
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+}
+
+function useHasActiveCountdown(kickoff: string) {
+  const [isActive, setIsActive] = useState(() => hasActiveCountdown(kickoff));
+
+  useEffect(() => {
+    setIsActive(hasActiveCountdown(kickoff));
+
+    const refreshDelay = getCountdownRefreshDelay(kickoff);
+    if (refreshDelay === null || refreshDelay <= 0) return;
+
+    const timeoutId = setTimeout(() => {
+      setIsActive(hasActiveCountdown(kickoff));
+    }, refreshDelay);
+
+    return () => clearTimeout(timeoutId);
+  }, [kickoff]);
+
+  return isActive;
+}
+
+export default function HomePage() {
   const titleRef = useRef<HTMLSpanElement | null>(null);
-  const [interactionCount, setInteractionCount] = useState(0);
+  const titleIndexRef = useRef(0);
+  const titleTweenRef = useRef<gsap.core.Tween | null>(null);
+  const isAnimatingTitleRef = useRef(false);
+  const lastTitleInteractionRef = useRef(0);
 
-  const title = useMemo(
-    () => TITLE_CYCLE[interactionCount % TITLE_CYCLE.length],
-    [interactionCount],
-  );
+  useGSAP(() => {
+    const el = titleRef.current;
+    if (!el) return;
 
-  useGSAP(
-    () => {
-      const el = titleRef.current;
-      if (!el) return;
+    el.textContent = TITLE_CYCLE[titleIndexRef.current];
 
-      const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    return () => {
+      titleTweenRef.current?.kill();
+      titleTweenRef.current = null;
+      isAnimatingTitleRef.current = false;
+    };
+  }, []);
 
-      el.textContent = title;
-      if (prefersReduced) return;
+  const cycleTitle = useCallback(() => {
+    const el = titleRef.current;
+    if (!el) return;
 
-      gsap.killTweensOf(el);
-      gsap.fromTo(
-        el,
-        { opacity: 1 },
-        {
-          duration: 1.2,
-          ease: "none",
-          scrambleText: {
-            text: title,
-            chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-/\\[]{}()<>|",
-            speed: 0.25,
-          },
-        },
-      );
-    },
-    { dependencies: [title] },
-  );
+    const now = Date.now();
+    if (
+      isAnimatingTitleRef.current ||
+      now - lastTitleInteractionRef.current < TITLE_INTERACTION_COOLDOWN_MS
+    ) {
+      return;
+    }
 
-  const cycleTitle = () => {
-    setInteractionCount((prev) => prev + 1);
-  };
+    lastTitleInteractionRef.current = now;
+
+    const nextTitleIndex = (titleIndexRef.current + 1) % TITLE_CYCLE.length;
+    const nextTitle = TITLE_CYCLE[nextTitleIndex];
+
+    if (prefersReducedMotion()) {
+      titleTweenRef.current?.kill();
+      titleTweenRef.current = null;
+      el.textContent = nextTitle;
+      titleIndexRef.current = nextTitleIndex;
+      isAnimatingTitleRef.current = false;
+      return;
+    }
+
+    isAnimatingTitleRef.current = true;
+    titleTweenRef.current?.kill();
+
+    titleTweenRef.current = gsap.to(el, {
+      duration: 0.85,
+      ease: "none",
+      overwrite: "auto",
+      scrambleText: {
+        text: nextTitle,
+        chars: TITLE_SCRAMBLE_CHARS,
+        speed: 0.45,
+        revealDelay: 0.08,
+        tweenLength: true,
+      },
+      onComplete: () => {
+        el.textContent = nextTitle;
+        titleIndexRef.current = nextTitleIndex;
+        titleTweenRef.current = null;
+        isAnimatingTitleRef.current = false;
+      },
+      onInterrupt: () => {
+        titleTweenRef.current = null;
+        isAnimatingTitleRef.current = false;
+      },
+    });
+  }, []);
 
   return (
     <>
       <Head>
         <title>info.defcon.org | DEF CON schedules and conference information</title>
-        <meta
-          name="description"
-          content="Official DEF CON schedules and conference information for current and upcoming events."
-        />
-        <meta
-          property="og:title"
-          content="info.defcon.org | DEF CON schedules and conference information"
-        />
-        <meta
-          property="og:description"
-          content="Official DEF CON schedules and conference information for current and upcoming events."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://info.defcon.org" />
-        <meta name="theme-color" content="#020617" />
+        {aiMetadata({
+          title: "info.defcon.org | DEF CON schedules and conference information",
+          description: SITE_DESCRIPTION,
+          path: "/",
+          jsonFeeds: Object.values(CONFERENCES).flatMap(conferenceDataFeeds),
+        })}
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main
-        id="main-content"
-        className="ui-page-shell relative overflow-hidden bg-slate-950 text-slate-100"
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.14),transparent_30%),radial-gradient(circle_at_20%_30%,rgba(251,191,36,0.10),transparent_22%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_20%)]"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-size-[40px_40px] opacity-[0.14]"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b from-white/5 to-transparent"
-        />
+      <main id="main-content" className="ui-page-shell ui-homepage-shell">
+        <div aria-hidden="true" className="ui-homepage-ambient" />
+        <div aria-hidden="true" className="ui-homepage-grid" />
+        <div aria-hidden="true" className="ui-homepage-top-light" />
 
-        <div className="ui-container relative pt-16 pb-14 sm:pt-20 sm:pb-20 lg:pt-24">
-          <header className="mx-auto max-w-4xl text-center">
+        <div className="ui-container ui-homepage-content">
+          <header className="ui-homepage-header">
             <h1>
               <button
                 type="button"
                 onPointerEnter={cycleTitle}
                 onClick={cycleTitle}
-                className="ui-focus-ring inline-flex items-center justify-center rounded-xl bg-transparent p-0 text-inherit focus-visible:outline-none"
+                className="ui-focus-ring ui-homepage-title-button"
                 aria-label="Cycle DEF CON title style"
               >
-                <span
-                  ref={titleRef}
-                  className="inline-block max-w-full cursor-pointer text-center font-mono text-[clamp(2.2rem,16vw,5rem)] leading-none font-semibold tracking-[0.04em] text-slate-50 transition select-none sm:text-8xl sm:tracking-[0.07em] md:text-9xl md:tracking-widest lg:text-[10rem]"
-                >
-                  {title}
+                <span ref={titleRef} className="ui-homepage-title ui-homepage-title-display">
+                  {TITLE_CYCLE[0]}
                 </span>
               </button>
             </h1>
 
-            <div className="mx-auto mt-6 h-px w-28 bg-linear-to-r from-transparent via-slate-600 to-transparent sm:mt-7 sm:w-32" />
+            <div className="ui-homepage-title-rule" />
           </header>
 
           <section
             aria-label="Available conferences"
-            className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:gap-7"
+            className="ui-homepage-card-grid"
+            data-count={HOME_CONFERENCE_CARDS.length}
           >
-            {HOME_CONFERENCE_CARDS.map(({ conference, subtitle }) => (
-              <ConferenceCard key={conference.slug} conference={conference} subtitle={subtitle} />
-            ))}
+            {HOME_CONFERENCE_CARDS.length > 0 ? (
+              HOME_CONFERENCE_CARDS.map(({ conference, subtitle }) => (
+                <ConferenceCard key={conference.slug} conference={conference} subtitle={subtitle} />
+              ))
+            ) : (
+              <p className="ui-homepage-empty">No conferences are currently available.</p>
+            )}
           </section>
         </div>
       </main>
@@ -166,77 +217,50 @@ function ConferenceCard({
 }) {
   const href = `/${conference.slug}`;
   const src = `/images/${conference.logoFile}`;
-
-  const accentClasses =
-    conference.slug === "dcsg2026"
-      ? {
-          border:
-            "bg-[linear-gradient(135deg,rgba(34,197,94,0.38),rgba(59,130,246,0.34),rgba(168,85,247,0.30))]",
-          glow: "bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.20),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.18),transparent_36%)]",
-          ring: "group-hover:border-emerald-300/20",
-        }
-      : {
-          border:
-            "bg-[linear-gradient(135deg,rgba(251,191,36,0.40),rgba(244,114,182,0.28),rgba(96,165,250,0.32))]",
-          glow: "bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.20),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(96,165,250,0.18),transparent_36%)]",
-          ring: "group-hover:border-amber-300/20",
-        };
+  const showCountdown = useHasActiveCountdown(conference.kickoff);
 
   return (
     <Link
       to={href}
       aria-label={`View ${conference.name}`}
-      className="ui-focus-ring group relative block overflow-hidden rounded-3xl p-px shadow-[0_10px_30px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.38)] focus-visible:outline-none"
+      className="ui-focus-ring ui-home-conference-card"
     >
-      <span
-        aria-hidden="true"
-        className={`pointer-events-none absolute inset-0 rounded-3xl opacity-80 transition duration-300 group-hover:opacity-100 ${accentClasses.border}`}
-      />
+      <span aria-hidden="true" className="ui-home-conference-card-accent" />
 
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
-      >
-        <span className={`absolute inset-0 rounded-3xl ${accentClasses.glow}`} />
-        <span className="absolute top-0 -left-1/3 h-full w-1/2 -skew-x-12 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent)] opacity-0 transition duration-700 group-hover:translate-x-[240%] group-hover:opacity-100" />
+      <span aria-hidden="true" className="ui-home-conference-card-glow">
+        <span className="ui-home-conference-card-sheen" />
       </span>
 
-      <div className="relative rounded-[calc(var(--radius-4)-1px)] border border-white/10 bg-slate-900/90 p-3.5 backdrop-blur-md sm:p-4">
-        <div
-          className={`relative overflow-hidden rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),rgba(15,23,42,0.92))] px-5 pt-4 pb-4 transition duration-300 sm:px-6 sm:pt-5 sm:pb-5 ${accentClasses.ring}`}
-        >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[28px_28px] opacity-40"
-          />
+      <div className="ui-home-conference-card-shell">
+        <div className="ui-home-conference-card-panel">
+          <div aria-hidden="true" className="ui-home-conference-card-grid" />
 
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 h-14 bg-linear-to-b from-white/6 to-transparent sm:h-16"
-          />
+          <div aria-hidden="true" className="ui-home-conference-card-top-light" />
 
-          <div className="relative z-10">
-            <div className="text-center">
-              <div className="ui-kicker text-slate-200 sm:text-base">{conference.name}</div>
-              <p className="mt-2 text-sm leading-6 text-slate-400">{subtitle}</p>
+          <div className="ui-home-conference-card-content">
+            <div className="ui-home-conference-card-copy">
+              <div className="ui-kicker ui-home-conference-card-name">{conference.name}</div>
+              <p className="ui-home-conference-card-date">{subtitle}</p>
             </div>
 
-            <div className="relative mt-4 aspect-16/6 w-full sm:mt-5">
+            <div className="ui-home-conference-card-logo">
               <Image
                 src={src}
                 alt={`${conference.name} logo`}
-                fill
+                fillContainer
                 sizes="(min-width: 1024px) 480px, (min-width: 640px) 46vw, 92vw"
-                className="object-contain transition duration-300 group-hover:-translate-y-0.5 group-hover:scale-[1.035]"
+                className="ui-home-conference-card-logo-image"
               />
             </div>
           </div>
         </div>
 
-        <div className="mt-3 rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:mt-4 sm:py-3">
-          <span className="sr-only">Conference starts in</span>
-          <Countdown conference={conference} size="tiny" />
-        </div>
+        {showCountdown && (
+          <div className="ui-home-conference-countdown">
+            <span className="ui-visually-hidden">Conference starts in</span>
+            <Countdown conference={conference} size="tiny" />
+          </div>
+        )}
       </div>
     </Link>
   );

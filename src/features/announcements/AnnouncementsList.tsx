@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 
 import Markdown from "@/components/markdown/Markdown";
+import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { newsAgo, newsTime } from "@/lib/dates";
 import { ArticlesStore } from "@/lib/types/ht-types";
@@ -17,36 +18,46 @@ export default function AnnouncementsList({ announcements, conference }: Props) 
 
   if (!sorted.length) {
     return (
-      <div className="ui-container ui-page-content text-center text-slate-500">
-        No announcements at this time.
+      <div className="ui-container ui-page-content">
+        <PageHeader
+          title="Announcements"
+          description="Official conference updates in publish order."
+        />
+        <div className="ui-empty-state" role="status">
+          <p>No announcements at this time.</p>
+        </div>
       </div>
     );
   }
 
   return (
     <section className="ui-container ui-page-content">
-      <h1 className="ui-heading-1 mb-5">Announcements</h1>
+      <PageHeader
+        title="Announcements"
+        description="Official conference updates in publish order."
+        resultLabel={`${sorted.length} ${sorted.length === 1 ? "update" : "updates"}`}
+      />
 
-      <ul className="list-none space-y-4" role="list">
+      <ul className="ui-announcement-list" role="list">
         {sorted.map((item, index) => {
           const date = new Date(item.updatedAtMs);
           return (
             <li key={item.id}>
-              <details open={index === 0} className="ui-card overflow-hidden">
-                <summary className="ui-focus-ring cursor-pointer list-none px-4 py-3 focus-visible:outline-none">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h2 className="text-lg font-semibold text-slate-100">{item.name}</h2>
+              <details open={index === 0} className="ui-card ui-announcement-card">
+                <summary className="ui-focus-ring ui-announcement-summary">
+                  <div className="ui-announcement-summary-row">
+                    <h2 className="ui-card-title ui-announcement-title">{item.name}</h2>
                     <time
                       dateTime={date.toISOString()}
                       title={date.toLocaleString()}
-                      className="text-sm text-slate-300/90"
+                      className="ui-card-meta"
                     >
                       {newsAgo(date)} · {newsTime(date, conference.timezone, { showTz: true })}
                     </time>
                   </div>
                 </summary>
                 {item.text && (
-                  <div className="border-t border-white/10 px-4 pt-2 pb-4">
+                  <div className="ui-announcement-body">
                     <Markdown content={item.text} />
                   </div>
                 )}

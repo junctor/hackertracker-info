@@ -1,20 +1,22 @@
 import { JSX, useMemo } from "react";
 
+import type { ConferenceManifest } from "@/lib/conferences";
+import type { PageId } from "@/lib/types/page-meta";
+
 import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import SiteFooter from "@/features/app-shell/SiteFooter";
-import SiteHeader from "@/features/app-shell/SiteHeader";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
-import { ConferenceManifest } from "@/lib/conferences";
+import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { getOrganizationDirectoryConfig } from "@/lib/menu";
 import {
   DerivedTagIdsByLabel,
   OrganizationsCardsView,
   OrganizationsStore,
 } from "@/lib/types/ht-types";
-import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
 type Props = {
@@ -25,6 +27,28 @@ type Props = {
   description?: string;
   routeSlug: string;
 };
+
+type OrganizationDirectoryPageProps = Pick<Props, "conf" | "activePageId">;
+
+export function createOrganizationDirectoryRoute(directoryPageId: PageId) {
+  const directoryConfig = getOrganizationDirectoryConfig(directoryPageId)!;
+
+  return function OrganizationDirectoryRoute({
+    conf,
+    activePageId,
+  }: OrganizationDirectoryPageProps) {
+    return (
+      <DirectoryPage
+        conf={conf}
+        activePageId={activePageId}
+        title={directoryConfig.title}
+        tagLabel={directoryConfig.tagLabel}
+        description={directoryConfig.description}
+        routeSlug={directoryConfig.slug}
+      />
+    );
+  };
+}
 
 export default function DirectoryPage({
   conf,
@@ -95,13 +119,9 @@ export default function DirectoryPage({
     if (!selectedOrganization) return <ErrorScreen msg="Organization not found" />;
 
     pageContent = (
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <OrganizationDetails org={selectedOrganization} conference={conf} />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <OrganizationDetails org={selectedOrganization} conference={conf} />
+      </ConferenceLayout>
     );
   } else if (isIdMissing) {
     if (isLoading) return <LoadingScreen />;
@@ -116,17 +136,13 @@ export default function DirectoryPage({
     const detailsBasePath = `/${conf.slug}/${routeSlug}`;
 
     pageContent = (
-      <div className="ui-page-shell">
-        <SiteHeader conference={conf} activePageId={activePageId} />
-        <main id="main-content" className="ui-page-main">
-          <OrganizationsList
-            organizations={matchingOrganizations}
-            title={title}
-            detailsBasePath={detailsBasePath}
-          />
-        </main>
-        <SiteFooter />
-      </div>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <OrganizationsList
+          organizations={matchingOrganizations}
+          title={title}
+          detailsBasePath={detailsBasePath}
+        />
+      </ConferenceLayout>
     );
   } else {
     return <ErrorScreen msg="Missing organization id." />;
@@ -136,7 +152,15 @@ export default function DirectoryPage({
     <>
       <Head>
         <title>{pageTitle}</title>
-        <meta name="description" content={metaDescription} />
+        {aiMetadata({
+          title: pageTitle,
+          description: metaDescription,
+          path: conferencePath(
+            conf,
+            selectedOrganization && orgId !== null ? `${routeSlug}?id=${orgId}` : routeSlug,
+          ),
+          jsonFeeds: conferenceDataFeeds(conf),
+        })}
       </Head>
       {pageContent}
     </>

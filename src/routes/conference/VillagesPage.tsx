@@ -1,20 +1,3 @@
-import React from "react";
+import { createOrganizationDirectoryRoute } from "@/features/organizations/DirectoryPage";
 
-import DirectoryPage from "@/features/organizations/DirectoryPage";
-import { getOrganizationDirectoryConfig } from "@/lib/menu";
-import { OrganizationDirectoryPageProps } from "@/lib/types/orgs";
-
-const DIRECTORY_CONFIG = getOrganizationDirectoryConfig("villages")!;
-
-export default function VillagesPage({ conf, activePageId }: OrganizationDirectoryPageProps) {
-  return (
-    <DirectoryPage
-      conf={conf}
-      activePageId={activePageId}
-      title={DIRECTORY_CONFIG.title}
-      tagLabel={DIRECTORY_CONFIG.tagLabel}
-      description={DIRECTORY_CONFIG.description}
-      routeSlug={DIRECTORY_CONFIG.slug}
-    />
-  );
-}
+export default createOrganizationDirectoryRoute("villages");

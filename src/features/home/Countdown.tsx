@@ -1,6 +1,6 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 
 import {
   atkinsonFont,
@@ -35,42 +35,39 @@ const COUNTDOWN_VARIANTS: Record<
     settledValueColor: string;
     liveAnnouncements: boolean;
     glowSize: string;
-    glowOpacity: number;
   }
 > = {
   large: {
-    sectionClassName: "mt-4 w-full max-w-5xl px-2 sm:mt-8 md:mt-10",
-    gridClassName:
-      "grid grid-cols-2 gap-x-4 gap-y-6 text-center sm:grid-cols-4 sm:gap-x-6 lg:gap-x-8",
-    itemClassName: "relative min-w-0 px-2 sm:px-3",
-    valueWrapClassName:
-      "relative mx-auto flex min-h-[3.5rem] items-center justify-center sm:min-h-[4.5rem] md:min-h-[5.25rem] lg:min-h-[6.5rem]",
-    valueClassName:
-      "relative z-10 block text-3xl font-bold leading-none tabular-nums text-slate-50 sm:text-4xl md:text-5xl lg:text-7xl",
-    labelClassName:
-      "mt-2 block text-[11px] tracking-[0.18em] text-slate-300 uppercase sm:text-xs md:text-sm lg:mt-3 lg:text-base",
-    separatorClassName:
-      "absolute right-0 top-1/2 hidden h-12 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-white/14 to-transparent sm:block lg:h-16",
-    settledValueColor: "#f8fafc",
+    sectionClassName: "ui-countdown-large",
+    gridClassName: "ui-countdown-grid-large",
+    itemClassName: "ui-countdown-item-large",
+    valueWrapClassName: "ui-countdown-value-wrap-large",
+    valueClassName: "ui-countdown-value-large",
+    labelClassName: "ui-countdown-label-large",
+    separatorClassName: "ui-countdown-separator-large",
+    settledValueColor: "var(--color-fg)",
     liveAnnouncements: true,
-    glowSize: "h-14 w-14 sm:h-[4.5rem] sm:w-[4.5rem] lg:h-24 lg:w-24",
-    glowOpacity: 0.12,
+    glowSize: "ui-countdown-glow-large",
   },
   tiny: {
-    sectionClassName: "mt-2 w-full",
-    gridClassName: "grid grid-cols-4 gap-x-2 text-center",
-    itemClassName: "relative min-w-0",
-    valueWrapClassName: "relative mx-auto flex min-h-[1.4rem] items-center justify-center",
-    valueClassName:
-      "relative z-10 block text-xs font-semibold leading-none tabular-nums text-slate-100 sm:text-sm",
-    labelClassName: "mt-1 block text-[9px] tracking-[0.12em] text-slate-400 uppercase",
-    separatorClassName:
-      "absolute right-0 top-1/2 hidden h-5 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent sm:block",
-    settledValueColor: "#e2e8f0",
+    sectionClassName: "ui-countdown-tiny",
+    gridClassName: "ui-countdown-grid-tiny",
+    itemClassName: "ui-countdown-item-tiny",
+    valueWrapClassName: "ui-countdown-value-wrap-tiny",
+    valueClassName: "ui-countdown-value-tiny",
+    labelClassName: "ui-countdown-label-tiny",
+    separatorClassName: "ui-countdown-separator-tiny",
+    settledValueColor: "var(--color-muted)",
     liveAnnouncements: false,
-    glowSize: "h-7 w-7 sm:h-8 sm:w-8",
-    glowOpacity: 0.08,
+    glowSize: "ui-countdown-glow-tiny",
   },
+};
+
+const COUNTDOWN_UNIT_TEXT_CLASS_NAMES: Record<TimerUnitKey, string> = {
+  days: "ui-countdown-unit-days",
+  hours: "ui-countdown-unit-hours",
+  minutes: "ui-countdown-unit-minutes",
+  seconds: "ui-countdown-unit-seconds",
 };
 
 function usePrefersReducedMotion() {
@@ -140,7 +137,7 @@ function animateDigit({
       opacity: 0.2,
       filter: "blur(4px)",
       color: accent,
-      textShadow: `0 0 14px ${accent}2e`,
+      textShadow: `0 0 14px color-mix(in srgb, ${accent} 18%, transparent)`,
     },
     {
       yPercent: 0,
@@ -148,7 +145,7 @@ function animateDigit({
       opacity: 1,
       filter: "blur(0px)",
       color: accent,
-      textShadow: `0 0 8px ${accent}1f`,
+      textShadow: `0 0 8px color-mix(in srgb, ${accent} 12%, transparent)`,
       duration: 0.26,
       ease: "power2.out",
     },
@@ -352,7 +349,7 @@ export default function Countdown({ conference, size = "large" }: Props) {
   return (
     <section aria-label="Countdown to conference kickoff" className={variant.sectionClassName}>
       {variant.liveAnnouncements && (
-        <p className="sr-only" aria-live="polite" aria-atomic="true">
+        <p className="ui-visually-hidden" aria-live="polite" aria-atomic="true">
           {liveLabel}
         </p>
       )}
@@ -364,42 +361,22 @@ export default function Countdown({ conference, size = "large" }: Props) {
         className={variant.gridClassName}
       >
         {COUNTDOWN_UNITS.map((unit, index) => {
-          const accent = COUNTDOWN_UNIT_COLORS[unit.key];
           const isLast = index === COUNTDOWN_UNITS.length - 1;
 
           return (
-            <div
-              key={unit.key}
-              className={variant.itemClassName}
-              style={
-                {
-                  "--countdown-accent": accent,
-                  "--countdown-glow-opacity": variant.glowOpacity,
-                } as CSSProperties
-              }
-            >
+            <div key={unit.key} className={variant.itemClassName}>
               {!isLast && <span aria-hidden="true" className={variant.separatorClassName} />}
 
               <div className={variant.valueWrapClassName}>
                 <span
                   aria-hidden="true"
-                  className={`pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 blur-xl ${variant.glowSize}`}
+                  className={`ui-countdown-glow ${variant.glowSize} ${COUNTDOWN_UNIT_TEXT_CLASS_NAMES[unit.key]}`}
                   ref={glowRefs[unit.key]}
-                  style={{
-                    background: `radial-gradient(circle, ${accent} 0%, ${accent}66 36%, transparent 72%)`,
-                    opacity: variant.glowOpacity,
-                  }}
                 />
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-x-3 top-1/2 h-px -translate-y-1/2 bg-linear-to-r from-transparent via-white/10 to-transparent"
-                />
+                <span aria-hidden="true" className="ui-countdown-rule" />
                 <span
                   ref={valueRefs[unit.key]}
                   className={`${variant.valueClassName} ${atkinsonFont.className}`}
-                  style={{
-                    textShadow: `0 0 10px color-mix(in srgb, ${accent} 10%, transparent)`,
-                  }}
                 >
                   {formatCountdownValue(timer[unit.key])}
                 </span>

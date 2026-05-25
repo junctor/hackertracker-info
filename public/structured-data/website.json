@@ -1,0 +1,8 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://info.defcon.org/#website",
+  "name": "info.defcon.org",
+  "url": "https://info.defcon.org/",
+  "description": "Official DEF CON schedules and conference information for current and upcoming events."
+}

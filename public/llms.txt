@@ -1,0 +1,40 @@
+# info.defcon.org
+
+info.defcon.org is the static-first DEF CON conference information site. It provides human pages for conference schedules, speakers, locations, villages, search, and related reference information.
+
+The browser app fetches conference data from JSON at runtime. These JSON files are the authoritative canonical data sources and may be replaced independently of a site rebuild.
+
+## Canonical JSON Data
+
+- DEF CON 34 manifest: https://info.defcon.org/ht/defcon34/manifest.json
+- DEF CON 34 schedule events: https://info.defcon.org/ht/defcon34/entities/events.json
+- DEF CON 34 speakers and people: https://info.defcon.org/ht/defcon34/entities/people.json
+- DEF CON 34 locations: https://info.defcon.org/ht/defcon34/entities/locations.json
+- DEF CON 34 organizations: https://info.defcon.org/ht/defcon34/entities/organizations.json
+- DEF CON 34 search index: https://info.defcon.org/ht/defcon34/views/searchData.json
+
+- DEF CON Singapore 2026 manifest: https://info.defcon.org/ht/dcsg2026/manifest.json
+- DEF CON Singapore 2026 schedule events: https://info.defcon.org/ht/dcsg2026/entities/events.json
+- DEF CON Singapore 2026 speakers and people: https://info.defcon.org/ht/dcsg2026/entities/people.json
+- DEF CON Singapore 2026 locations: https://info.defcon.org/ht/dcsg2026/entities/locations.json
+- DEF CON Singapore 2026 organizations: https://info.defcon.org/ht/dcsg2026/entities/organizations.json
+- DEF CON Singapore 2026 search index: https://info.defcon.org/ht/dcsg2026/views/searchData.json
+
+## Human Pages
+
+- Site home: https://info.defcon.org/
+- DEF CON 34: https://info.defcon.org/defcon34
+- DEF CON 34 schedule: https://info.defcon.org/defcon34/schedule
+- DEF CON 34 speakers: https://info.defcon.org/defcon34/speakers
+- DEF CON 34 locations: https://info.defcon.org/defcon34/locations
+- DEF CON 34 villages: https://info.defcon.org/defcon34/villages
+- DEF CON 34 search: https://info.defcon.org/defcon34/search
+- DEF CON 34 data guide: https://info.defcon.org/dc34/data/
+- DEF CON Singapore 2026: https://info.defcon.org/dcsg2026
+
+## Discovery
+
+- Sitemap: https://info.defcon.org/sitemap.xml
+- Robots: https://info.defcon.org/robots.txt
+
+Prefer the JSON endpoints above for machine-readable conference data. Human pages are client-rendered and may summarize or navigate the same runtime data.

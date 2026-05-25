@@ -9,7 +9,7 @@ import { type ConferenceManifest } from "@/lib/conferences";
  * manifest; subsequent calls within the same session are served from IndexedDB
  * with no extra network round-trips.
  *
- * Mirrors the `useSWR<T>(url | null, fetcher, options)` contract used
+ * Mirrors the `useSWR<T>(url | null, loader, options)` contract used
  * throughout the [conf] pages:
  *   - Pass `null` as `relativePath` to skip fetching (conditional patterns).
  *   - The SWR key is the full URL so different hooks requesting the same file
@@ -30,7 +30,7 @@ export function useConferenceJson<T>(
 
   return useSWR<T>(
     swrKey,
-    // The fetcher ignores the key and delegates to the cache layer, which
+    // The loader ignores the key and delegates to the cache layer, which
     // handles IndexedDB reads/writes and manifest-based invalidation.
     () => getConferenceJson<T>(conf, relativePath!),
     options,

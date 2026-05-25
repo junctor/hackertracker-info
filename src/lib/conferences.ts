@@ -29,6 +29,7 @@ export type ConferenceManifest = {
   tagline: string | null;
   timezone: string;
   logoFile: string;
+  showOnHome: boolean;
 
   // Time (canonical, machine-readable)
   kickoff: string; // IsoUtcTimestamp;
@@ -50,6 +51,8 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     tagline: null,
     timezone: "Asia/Singapore",
     logoFile: "dcsingapore.webp",
+    showOnHome: true,
+
     kickoff: "2026-04-28T01:00:00Z",
     begin: "2026-04-25T16:00:00Z",
     end: "2026-04-30T15:59:59Z",
@@ -63,6 +66,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "people",
       "readme",
       "schedule",
+      "search",
       "villages",
     ],
   },
@@ -76,13 +80,14 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
     timezone: "America/Los_Angeles",
     logoFile: "dc-lv.webp",
+    showOnHome: true,
 
     kickoff: "2026-08-07T17:00:00Z",
     begin: "2026-08-06T07:00:00Z",
     end: "2026-08-10T06:59:59Z",
 
     dataRoot: "/ht/defcon34",
-    siteMenu: ["communities", "contests", "readme", "villages"],
+    siteMenu: ["communities", "contests", "readme", "search", "villages"],
   },
 } as const;
 

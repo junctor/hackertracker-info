@@ -53,12 +53,6 @@ export const ORGANIZATION_DIRECTORY_CONFIG: Readonly<
     slug: "contests",
     description: "CTFs, challenges, and competitions.",
   },
-  contents: {
-    title: "Contents",
-    tagLabel: "content",
-    slug: "contents",
-    description: "Content-focused organizations and initiatives.",
-  },
   exhibitors: {
     title: "Exhibitors",
     tagLabel: "exhibitor",
@@ -88,7 +82,7 @@ export type SiteMenuItem = {
 // eslint-disable-next-line no-unused-vars
 type MenuBuilder = (conference: ConferenceManifest) => SiteMenuItem;
 
-const MENU: Record<SiteMenuKey, MenuBuilder> = {
+const SITE_MENU = {
   readme: (c) => ({
     sort_order: 10,
     title: "readme.nfo",
@@ -234,12 +228,9 @@ const MENU: Record<SiteMenuKey, MenuBuilder> = {
       icon: CubeIcon,
     };
   },
-};
+} satisfies Record<SiteMenuKey, MenuBuilder>;
 
 export function getSiteMenu(conference: ConferenceManifest): SiteMenuItem[] {
-  // Build exactly what the conference manifest asks for.
-  const items = conference.siteMenu.map((key) => MENU[key](conference));
-
-  // Sort just in case keys are rearranged or you want stable ordering.
+  const items = conference.siteMenu.map((key) => SITE_MENU[key](conference));
   return items.toSorted((a, b) => a.sort_order - b.sort_order);
 }

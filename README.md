@@ -7,7 +7,7 @@ Official DEF CON schedule and event guide, published as static files.
 [![Vite+ / Vite 8](https://img.shields.io/badge/Bundler-Vite%2B%20%2F%20Vite_8-646CFF.svg)](https://viteplus.dev/)
 [![React 19](https://img.shields.io/badge/Framework-React_19-61DAFB.svg)](https://react.dev/)
 [![TypeScript 6](https://img.shields.io/badge/Language-TypeScript_6-3178C6.svg)](https://www.typescriptlang.org/)
-[![Tailwind CSS 4](https://img.shields.io/badge/Styling-Tailwind_4-38BDF8.svg)](https://tailwindcss.com/)
+[![Vanilla CSS](https://img.shields.io/badge/Styling-Vanilla_CSS-1572B6.svg)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 
 `info.defcon.org` is the static web guide for DEF CON conference information. It browses talks, villages, workshops, contests, people, organizations, announcements, documents, and related event data from pre-generated JSON exports.
 
@@ -37,7 +37,7 @@ The app is a fully static Vite+ React application using React Router. Conference
   - TypeScript project builds
   - Post-build static route generation
 - Styling and content
-  - Tailwind CSS 4
+  - Vanilla CSS with project design tokens
   - Local fonts and images from `public/`
   - `react-markdown` with `remark-gfm`
   - Heroicons
@@ -60,13 +60,13 @@ The app is a fully static Vite+ React application using React Router. Conference
 ```bash
 git clone https://github.com/junctor/hackertracker-info.git
 cd hackertracker-info
-npm install
+vp install
 ```
 
 ### Development
 
 ```bash
-npm run dev
+vp dev
 ```
 
 Open the local URL printed by Vite. Conference slugs are defined in `src/lib/conferences.ts`, and matching static data is expected under `public/ht/<conference-slug>/`.
@@ -74,7 +74,7 @@ Open the local URL printed by Vite. Conference slugs are defined in `src/lib/con
 ### Production Build
 
 ```bash
-npm run build
+vp run build
 ```
 
 Production assets are written to `dist/`.
@@ -82,38 +82,61 @@ Production assets are written to `dist/`.
 To inspect the built site locally:
 
 ```bash
-npm run preview
+vp preview
 ```
 
 ### Linting, Formatting, and Validation
 
 ```bash
-npm run check
-npm run lint
-npm run fmt:check
+vp check
+vp lint
+vp fmt --check
 ```
 
 To apply formatter changes:
 
 ```bash
-npm run fmt
+vp fmt
 ```
 
 ## Static Hosting
 
 The app is static-hosting compatible and does not require a Node server at runtime. Deploy the contents of `dist/`.
 
-After `npm run build`, the `postbuild` script runs `scripts/generate-static-routes.mjs`. It creates route-based `index.html` files, including conference route entries, so direct navigation and refreshes work on static hosts without rewrite rules.
+After `vp run build`, the `postbuild` script runs `scripts/generate-static-routes.mjs`. It creates route-based `index.html` files, including conference route entries, so direct navigation and refreshes work on static hosts without rewrite rules.
 
 ## Strict CSP
 
-Strict CSP compatibility is required. Keep production output compatible with:
+`info.defcon.org` is a static React app and must stay compatible with the
+production CSP on the final HTTPS document response:
 
-- no inline scripts
-- no inline styles or `style=""` attributes
-- no inline event handlers
-- no service workers, workers, frames, manifests, or object embeds
-- no external resources except explicitly allowed data endpoints
+```http
+Content-Security-Policy: block-all-mixed-content ; default-src 'none' ; script-src 'self' ; style-src 'self' 'unsafe-inline' ; img-src 'self' data: ; connect-src https://firestore.googleapis.com/ 'self' ; font-src 'self' ; object-src 'self' ; media-src 'self' data: ; frame-src 'none' ; form-action 'none' ; frame-ancestors 'self' https://forum.defcon.org/ ; base-uri 'self' ; worker-src 'none' ; manifest-src 'none' ; sandbox allow-same-origin allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox
+```
+
+Practical constraints for app code:
+
+- JavaScript must be bundled by Vite and served from this origin.
+- Stylesheets must be local and served from this origin.
+- Fonts must be self-hosted, such as files under `public/fonts`.
+- Images and media must be same-origin, except `data:` images/media are allowed.
+- Firestore is the only expected loaded external endpoint.
+- Normal outbound links to stores, docs, GitHub, maps, or DEF CON pages are fine.
+- Do not add inline scripts or inline event handlers.
+- Do not add service workers, web workers, PWA manifests, iframes, object/embed
+  content, external scripts, external stylesheets, or external fonts.
+
+The final HTML document response must not include a bare `sandbox` directive. A
+bare CSP sandbox blocks JavaScript and prevents the app from booting. A sandbox
+that includes `allow-scripts` and `allow-same-origin` can run the Vite and React
+app. App code cannot relax or override a CSP response header, and a CSP meta tag
+cannot make a server policy less restrictive.
+
+Large schedule lists use `react-virtuoso`, which requires runtime `style`
+attributes while it measures and positions virtualized layout. The current
+production document policy includes `style-src 'self' 'unsafe-inline'`, so those
+runtime style attributes are allowed. Do not remove virtualization unless the
+data scale changes enough that it is no longer needed.
 
 ## Static Data Export
 

@@ -2,6 +2,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router";
 
 import Markdown from "@/components/markdown/Markdown";
+import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { DocumentEntity } from "@/lib/types/ht-types";
 
@@ -22,33 +23,28 @@ export default function DocumentDetails({ document, conference }: Props) {
 
   return (
     <article className="ui-container ui-page-content">
-      <nav aria-label="Breadcrumb" className="mb-6" role="navigation">
-        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+      <nav aria-label="Breadcrumb" className="ui-breadcrumb" role="navigation">
+        <ol className="ui-breadcrumb-list">
           <li>
             <Link
               to={`/${conference.slug}/readme.nfo`}
-              className="ui-link ui-focus-ring flex items-center rounded focus-visible:outline-none"
+              className="ui-link ui-focus-ring ui-breadcrumb-link"
             >
               readme.nfo
             </Link>
           </li>
           <li aria-hidden="true">
-            <ChevronRightIcon className="h-4 w-4 text-slate-500" />
+            <ChevronRightIcon className="ui-icon-xs" />
           </li>
-          <li aria-current="page" className="max-w-full min-w-0 truncate text-slate-300">
+          <li aria-current="page" className="ui-breadcrumb-current ui-clip-text">
             {document.titleText}
           </li>
         </ol>
       </nav>
 
-      <header className="mb-6">
-        <h1 id="doc-title" className="ui-heading-1 mb-2">
-          {document.titleText}
-        </h1>
-        <p className="text-sm text-slate-400">Last updated {updatedLabel}</p>
-      </header>
+      <PageHeader title={document.titleText} resultLabel={`Last updated ${updatedLabel}`} />
 
-      <section className="max-w-prose">
+      <section className="ui-document-body">
         <Markdown content={document.bodyText} />
       </section>
     </article>

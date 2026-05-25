@@ -21,9 +21,14 @@ function readBookmarks(): number[] {
   }
 }
 
-function writeBookmarks(bookmarks: number[]) {
-  localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
-  window.dispatchEvent(new Event("bookmarks:changed"));
+function writeBookmarks(bookmarks: number[]): boolean {
+  try {
+    localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+    window.dispatchEvent(new Event("bookmarks:changed"));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export const addBookmark = (eventId: number) => {

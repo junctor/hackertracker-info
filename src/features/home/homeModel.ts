@@ -35,8 +35,6 @@ export const HOME_HERO_STACK_CLASS_NAME = "ui-home-hero-stack";
 export const HOME_HERO_LOGO_WRAP_CLASS_NAME = "ui-home-hero-logo";
 export const HOME_ACTION_LINK_CLASS_NAME =
   "ui-btn-base ui-btn-primary ui-focus-ring ui-home-action-link";
-export const HOME_MENU_TILE_CLASS_NAME =
-  "ui-card ui-card-interactive ui-focus-ring ui-home-menu-tile";
 
 export const atkinsonFont = {
   className: "ui-typeface-atkinson",

@@ -9,7 +9,7 @@ type HomePageProps = {
   conf: ConferenceManifest;
 };
 
-export default function Home({ conf }: HomePageProps) {
+export default function ConferenceHomePage({ conf }: HomePageProps) {
   const pageTitle = `${conf.name} | info.defcon.org`;
   const pageDescription = `${conf.name} schedule and conference information`;
 

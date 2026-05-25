@@ -10,12 +10,12 @@ import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { DocumentsListView } from "@/lib/types/ht-types";
 import { PageId } from "@/lib/types/page-meta";
 
-type DocumentsPageProps = {
+type ReadmePageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
 
-export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps) {
+export default function ReadmePage({ conf, activePageId }: ReadmePageProps) {
   const {
     data: documents,
     error,

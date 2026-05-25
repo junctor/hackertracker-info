@@ -25,15 +25,12 @@ export function useBookmarks(eventId: number, initial: boolean) {
   }, [eventId]);
 
   const toggle = useCallback(() => {
-    setBookmarked((prev) => {
-      const next = !prev;
-      if (next) {
-        addBookmark(eventId);
-      } else {
-        removeBookmark(eventId);
-      }
-      return next;
-    });
-  }, [eventId]);
+    if (bookmarked) {
+      removeBookmark(eventId);
+    } else {
+      addBookmark(eventId);
+    }
+    setBookmarked(getBookmarks().includes(eventId));
+  }, [bookmarked, eventId]);
   return [bookmarked, toggle] as const;
 }

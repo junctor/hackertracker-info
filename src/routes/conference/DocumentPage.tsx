@@ -11,12 +11,12 @@ import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { DocumentEntity, DocumentsStore } from "@/lib/types/ht-types/entities";
 import { PageId } from "@/lib/types/page-meta";
 
-type DocumentsPageProps = {
+type DocumentPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
 
-export default function DocumentsPage({ conf, activePageId }: DocumentsPageProps) {
+export default function DocumentPage({ conf, activePageId }: DocumentPageProps) {
   const [searchParams] = useSearchParams();
   const idParam = useMemo(() => {
     return searchParams.get("id");

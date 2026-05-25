@@ -20,12 +20,12 @@ import { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
-type ContentsPageProps = {
+type ContentPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
 
-export default function ContentsPage({ conf, activePageId }: ContentsPageProps) {
+export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   const {
     value: contentId,
     isReady,

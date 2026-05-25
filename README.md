@@ -107,13 +107,36 @@ After `vp run build`, the `postbuild` script runs `scripts/generate-static-route
 
 ## Strict CSP
 
-Strict CSP compatibility is required. Keep production output compatible with:
+`info.defcon.org` is a static React app and must stay compatible with the
+production CSP on the final HTTPS document response:
 
-- no inline scripts
-- no inline styles or `style=""` attributes
-- no inline event handlers
-- no service workers, workers, frames, manifests, or object embeds
-- no external resources except explicitly allowed data endpoints
+```http
+Content-Security-Policy: block-all-mixed-content ; default-src 'none' ; script-src 'self' ; style-src 'self' 'unsafe-inline' ; img-src 'self' data: ; connect-src https://firestore.googleapis.com/ 'self' ; font-src 'self' ; object-src 'self' ; media-src 'self' data: ; frame-src 'none' ; form-action 'none' ; frame-ancestors 'self' https://forum.defcon.org/ ; base-uri 'self' ; worker-src 'none' ; manifest-src 'none' ; sandbox allow-same-origin allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox
+```
+
+Practical constraints for app code:
+
+- JavaScript must be bundled by Vite and served from this origin.
+- Stylesheets must be local and served from this origin.
+- Fonts must be self-hosted, such as files under `public/fonts`.
+- Images and media must be same-origin, except `data:` images/media are allowed.
+- Firestore is the only expected loaded external endpoint.
+- Normal outbound links to stores, docs, GitHub, maps, or DEF CON pages are fine.
+- Do not add inline scripts or inline event handlers.
+- Do not add service workers, web workers, PWA manifests, iframes, object/embed
+  content, external scripts, external stylesheets, or external fonts.
+
+The final HTML document response must not include a bare `sandbox` directive. A
+bare CSP sandbox blocks JavaScript and prevents the app from booting. A sandbox
+that includes `allow-scripts` and `allow-same-origin` can run the Vite and React
+app. App code cannot relax or override a CSP response header, and a CSP meta tag
+cannot make a server policy less restrictive.
+
+Large schedule lists use `react-virtuoso`, which requires runtime `style`
+attributes while it measures and positions virtualized layout. The current
+production document policy includes `style-src 'self' 'unsafe-inline'`, so those
+runtime style attributes are allowed. Do not remove virtualization unless the
+data scale changes enough that it is no longer needed.
 
 ## Static Data Export
 

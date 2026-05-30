@@ -2853,36 +2853,44 @@ button {
   isolation: isolate;
   position: relative;
   display: flex;
-  min-height: 10rem;
+  min-height: 9.25rem;
   width: 100%;
   min-width: 0;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 1.5rem;
+  border-radius: var(--radius-3);
   border-width: 1px;
-  border-color: color-mix(in oklab, white, transparent 90%);
-  background: linear-gradient(180deg, rgb(5 11 25 / 0.94), rgb(2 6 23 / 0.84));
+  border-color: color-mix(in oklab, var(--border), white 8%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--surface-elevated), transparent 4%),
+    color-mix(in oklab, var(--surface), black 14%)
+  );
   padding: var(--space-4);
   text-align: left;
   transition:
     transform 0.2s ease-out,
     border-color 0.2s ease-out,
     box-shadow 0.2s ease-out;
-  box-shadow: 0 18px 44px rgb(2 6 23 / 0.24);
+  box-shadow: var(--shadow-sm);
 }
 
 .ui-home-menu-card:hover,
 .ui-home-menu-card:focus-visible {
   transform: translateY(-0.125rem);
-  border-color: color-mix(in oklab, white, transparent 86%);
-  box-shadow: 0 28px 64px rgb(2 6 23 / 0.34);
+  border-color: color-mix(in oklab, var(--accent-primary), transparent 52%);
+  box-shadow: var(--shadow-md);
 }
 
 @media (width >= 40rem) {
   .ui-home-menu-card {
-    min-height: 11rem;
+    min-height: 10.5rem;
     padding: var(--space-5);
   }
+}
+
+.ui-home-menu-card-featured {
+  border-color: color-mix(in oklab, var(--accent-success), transparent 68%);
 }
 
 .ui-home-menu-card-icon {
@@ -2950,7 +2958,11 @@ button {
   inset: 0;
   opacity: 0;
   transition: opacity 0.2s ease;
-  background: radial-gradient(circle at top right, rgb(1 127 164 / 0.14), transparent 40%);
+  background: radial-gradient(
+    circle at top right,
+    color-mix(in oklab, var(--accent-primary), transparent 84%),
+    transparent 42%
+  );
 }
 
 .ui-home-menu-card:hover .ui-home-menu-card-aura,
@@ -3013,6 +3025,10 @@ button {
   padding: 3rem var(--space-4);
 }
 
+.ui-home-menu-section {
+  max-width: 76rem;
+}
+
 @media (width >= 40rem) {
   .ui-home-section {
     padding-block: 3.5rem;
@@ -3023,17 +3039,6 @@ button {
   .ui-home-section {
     padding-block: 4rem;
   }
-}
-
-.ui-home-hero-stack {
-  display: flex;
-  max-width: 48rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-4);
-  margin-inline: auto;
-  text-align: center;
 }
 
 .ui-home-hero-logo {
@@ -3062,43 +3067,92 @@ button {
   }
 }
 
-.ui-home-logo-link {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: var(--radius-1);
-}
-
-.ui-home-date {
-  color: color-mix(in oklab, var(--text-primary), transparent 10%);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-@media (width >= 40rem) {
-  .ui-home-date {
-    font-size: 0.875rem;
-  }
+.ui-home-menu-hero {
+  display: grid;
+  align-items: center;
+  gap: var(--space-6);
 }
 
 @media (width >= 48rem) {
-  .ui-home-date {
-    font-size: 1rem;
+  .ui-home-menu-hero {
+    grid-template-columns: minmax(13rem, 0.9fr) minmax(0, 1.1fr);
+    gap: var(--space-8);
   }
 }
 
-.ui-home-action-link {
-  height: 2.75rem;
+.ui-home-menu-logo {
+  width: 100%;
+  max-width: 31rem;
+  height: clamp(8rem, 26vw, 14rem);
+}
+
+@media (width < 48rem) {
+  .ui-home-menu-logo {
+    max-width: 24rem;
+  }
+}
+
+.ui-home-menu-hero-copy {
+  min-width: 0;
+  text-align: center;
+}
+
+@media (width >= 48rem) {
+  .ui-home-menu-hero-copy {
+    text-align: left;
+  }
+}
+
+.ui-home-menu-title {
+  margin-top: var(--space-2);
+  color: var(--text-primary);
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 0.95;
+}
+
+@media (width >= 48rem) {
+  .ui-home-menu-title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-home-menu-title {
+    font-size: 4.5rem;
+  }
+}
+
+.ui-home-menu-description {
+  max-width: 38rem;
+  margin: var(--space-4) auto 0;
+  color: color-mix(in oklab, var(--text-primary), var(--text-muted) 26%);
+  font-size: 1rem;
+}
+
+@media (width >= 48rem) {
+  .ui-home-menu-description {
+    margin-inline: 0;
+    font-size: 1.0625rem;
+  }
+}
+
+.ui-home-menu-date {
+  display: inline-flex;
+  width: fit-content;
   margin-top: var(--space-5);
-  border-radius: var(--radius-2);
-  padding-inline: var(--space-6);
-  font-size: 0.875rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in oklab, var(--accent-success), transparent 70%);
+  background: color-mix(in oklab, var(--accent-success), transparent 90%);
+  padding: 0.35rem 0.75rem;
+  color: color-mix(in oklab, var(--accent-success), white 12%);
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .ui-home-menu-nav {
   max-width: 72rem;
-  margin: var(--space-10) auto 0;
+  margin: var(--space-8) auto 0;
 }
 
 @media (width >= 40rem) {

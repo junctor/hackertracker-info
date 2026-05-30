@@ -6,7 +6,6 @@ export type ConferenceRouteKey =
   | "announcements"
   | "bookmarks"
   | "communities"
-  | "conferenceHome"
   | "contests"
   | "content"
   | "departments"
@@ -35,7 +34,7 @@ export type ConferenceRouteDefinition = {
 };
 
 export const CONFERENCE_ROUTE_DEFINITIONS = [
-  { key: "conferenceHome", path: undefined, activePageId: "home", staticSegment: "" },
+  { key: "menu", path: undefined, activePageId: "home", staticSegment: "" },
   {
     key: "announcements",
     path: "announcements",

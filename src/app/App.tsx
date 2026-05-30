@@ -13,7 +13,6 @@ const TVPage = lazy(() => import("@/routes/TVPage"));
 const AnnouncementsPage = lazy(() => import("@/routes/conference/AnnouncementsPage"));
 const BookmarksPage = lazy(() => import("@/routes/conference/BookmarksPage"));
 const CommunitiesPage = lazy(() => import("@/routes/conference/CommunitiesPage"));
-const ConferenceHomePage = lazy(() => import("@/routes/conference/ConferenceHomePage"));
 const ContestsPage = lazy(() => import("@/routes/conference/ContestsPage"));
 const ContentPage = lazy(() => import("@/routes/conference/ContentPage"));
 const DepartmentsPage = lazy(() => import("@/routes/conference/DepartmentsPage"));
@@ -37,7 +36,6 @@ const CONFERENCE_ROUTE_COMPONENTS = {
   announcements: AnnouncementsPage,
   bookmarks: BookmarksPage,
   communities: CommunitiesPage,
-  conferenceHome: ConferenceHomePage,
   contests: ContestsPage,
   content: ContentPage,
   departments: DepartmentsPage,

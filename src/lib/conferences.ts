@@ -51,7 +51,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     tagline: null,
     timezone: "Asia/Singapore",
     logoFile: "dcsingapore.webp",
-    showOnHome: true,
+    showOnHome: false,
 
     kickoff: "2026-04-28T01:00:00Z",
     begin: "2026-04-25T16:00:00Z",
@@ -79,7 +79,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     dateLabel: "August 6–9, 2026",
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
     timezone: "America/Los_Angeles",
-    logoFile: "dc-lv.webp",
+    logoFile: "dc-34-logo.svg",
     showOnHome: true,
 
     kickoff: "2026-08-07T17:00:00Z",

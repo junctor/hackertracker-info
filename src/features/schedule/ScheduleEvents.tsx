@@ -284,6 +284,7 @@ export default function ScheduleEvents({
               data={activeDay.events}
               computeItemKey={computeItemKey}
               components={VIRTUOSO_COMPONENTS}
+              initialItemCount={8}
               itemContent={itemContent}
               increaseViewportBy={{ top: 200, bottom: 400 }}
             />

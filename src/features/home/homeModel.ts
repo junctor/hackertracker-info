@@ -31,10 +31,7 @@ export const COUNTDOWN_UNIT_COLORS: Record<TimerUnitKey, string> = {
 };
 
 export const HOME_SECTION_CLASS_NAME = "ui-home-section";
-export const HOME_HERO_STACK_CLASS_NAME = "ui-home-hero-stack";
 export const HOME_HERO_LOGO_WRAP_CLASS_NAME = "ui-home-hero-logo";
-export const HOME_ACTION_LINK_CLASS_NAME =
-  "ui-btn-base ui-btn-primary ui-focus-ring ui-home-action-link";
 
 export const atkinsonFont = {
   className: "ui-typeface-atkinson",
@@ -60,15 +57,12 @@ export function parseKickoffDateMs(kickoff: string): number {
 export function useHomeModel(conference: ConferenceManifest) {
   return useMemo(() => {
     const kickoffDateMs = parseKickoffDateMs(conference.kickoff);
-    const menuHref = `/${conference.slug}/menu`;
 
     return {
-      menuHref,
       logoSrc: `/images/${conference.logoFile}`,
-      logoAlt: `${conference.name} logo`,
       kickoffDateMs,
     };
-  }, [conference.kickoff, conference.logoFile, conference.name, conference.slug]);
+  }, [conference.kickoff, conference.logoFile]);
 }
 
 export function hasKickoffPassed(kickoffDateMs: number, nowMs = Date.now()) {

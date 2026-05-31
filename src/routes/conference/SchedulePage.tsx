@@ -3,8 +3,8 @@ import { useSearchParams } from "react-router";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import { getScheduleDaysFromStores } from "@/features/schedule/scheduleData";
 import ScheduleEvents from "@/features/schedule/ScheduleEvents";
 import {
@@ -131,7 +131,12 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
 
   const error = eventsByDayError || eventsError || locationsError || tagsError || peopleError;
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading) {
+    return (
+      <ConferenceLoadingScreen conference={conf} activePageId={activePageId} variant="schedule" />
+    );
+  }
+
   if (error || !eventsByDay || !eventsStore || !locationsStore || !tagsStore || !peopleStore) {
     return <ErrorScreen />;
   }

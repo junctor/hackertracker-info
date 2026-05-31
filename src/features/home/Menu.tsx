@@ -4,7 +4,6 @@ import { Link } from "react-router";
 import Image from "@/components/Image";
 import {
   HOME_HERO_LOGO_WRAP_CLASS_NAME,
-  HOME_HERO_STACK_CLASS_NAME,
   HOME_SECTION_CLASS_NAME,
   useHomeModel,
 } from "@/features/home/homeModel";
@@ -24,28 +23,50 @@ const menuCardActionClassName = "ui-home-menu-card-action";
 export default function Menu({ conference }: Props) {
   const home = useHomeModel(conference);
   const navMenu = useSiteMenu(conference);
+  const description =
+    conference.tagline ??
+    "Find the conference schedule, announcements, people, maps, and key resources.";
 
   return (
-    <section className={HOME_SECTION_CLASS_NAME}>
-      <div className={HOME_HERO_STACK_CLASS_NAME}>
-        <h1 className="ui-visually-hidden">{conference.name}</h1>
-        <div className={HOME_HERO_LOGO_WRAP_CLASS_NAME}>
+    <section
+      className={`${HOME_SECTION_CLASS_NAME} ui-home-menu-section`}
+      aria-labelledby="menu-title"
+    >
+      <div className="ui-home-menu-hero">
+        <div className={`${HOME_HERO_LOGO_WRAP_CLASS_NAME} ui-home-menu-logo`} aria-hidden="true">
           <Image
             src={home.logoSrc}
-            alt={home.logoAlt}
+            alt=""
             fillContainer
             loading="eager"
             sizes="(min-width: 1024px) 672px, (min-width: 640px) 66vw, 92vw"
             className="ui-image-contain"
           />
         </div>
+
+        <div className="ui-home-menu-hero-copy">
+          <p className="ui-kicker">Conference Menu</p>
+          <h1 id="menu-title" className="ui-home-menu-title">
+            {conference.name}
+          </h1>
+          <p className="ui-home-menu-description">{description}</p>
+          <time dateTime={conference.begin} className="ui-home-menu-date">
+            {conference.dateLabel}
+          </time>
+        </div>
       </div>
 
       <nav aria-label={`${conference.name} sections`} className="ui-home-menu-nav">
         <ul className="ui-home-menu-grid">
-          {navMenu.map((item) => {
+          {navMenu.map((item, index) => {
             const Icon = item.icon;
             const isExternal = item.href.startsWith("http");
+            const cardClassName = [
+              menuCardClassName,
+              index < 2 ? "ui-home-menu-card-featured" : null,
+            ]
+              .filter(Boolean)
+              .join(" ");
 
             const content = (
               <>
@@ -93,12 +114,12 @@ export default function Menu({ conference }: Props) {
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={menuCardClassName}
+                    className={cardClassName}
                   >
                     {content}
                   </a>
                 ) : (
-                  <Link to={item.href} className={menuCardClassName}>
+                  <Link to={item.href} className={cardClassName}>
                     {content}
                   </Link>
                 )}

@@ -1,9 +1,10 @@
 import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import { ConferenceManifest } from "@/lib/conferences";
+import { ConferenceManifest, getConference } from "@/lib/conferences";
 import { useConferenceRouteParam } from "@/lib/hooks/useConferenceRouteParam";
 import { CONFERENCE_ROUTE_DEFINITIONS, type ConferenceRouteKey } from "@/lib/routes";
 import { PageId } from "@/lib/types/page-meta";
@@ -13,7 +14,6 @@ const TVPage = lazy(() => import("@/routes/TVPage"));
 const AnnouncementsPage = lazy(() => import("@/routes/conference/AnnouncementsPage"));
 const BookmarksPage = lazy(() => import("@/routes/conference/BookmarksPage"));
 const CommunitiesPage = lazy(() => import("@/routes/conference/CommunitiesPage"));
-const ConferenceHomePage = lazy(() => import("@/routes/conference/ConferenceHomePage"));
 const ContestsPage = lazy(() => import("@/routes/conference/ContestsPage"));
 const ContentPage = lazy(() => import("@/routes/conference/ContentPage"));
 const DepartmentsPage = lazy(() => import("@/routes/conference/DepartmentsPage"));
@@ -37,7 +37,6 @@ const CONFERENCE_ROUTE_COMPONENTS = {
   announcements: AnnouncementsPage,
   bookmarks: BookmarksPage,
   communities: CommunitiesPage,
-  conferenceHome: ConferenceHomePage,
   contests: ContestsPage,
   content: ContentPage,
   departments: DepartmentsPage,
@@ -107,10 +106,32 @@ function conferenceRoute(
   );
 }
 
+function RouteLoadingFallback() {
+  const location = useLocation();
+  const [conferenceSegment = "", routeSegment = ""] = location.pathname.split("/").filter(Boolean);
+  const conference = getConference(conferenceSegment);
+
+  if (!conference) return <LoadingScreen />;
+
+  const route = CONFERENCE_ROUTE_DEFINITIONS.find(
+    ({ staticSegment }) => staticSegment === routeSegment,
+  );
+
+  if (!route) return <LoadingScreen />;
+
+  return (
+    <ConferenceLoadingScreen
+      conference={conference}
+      activePageId={route.activePageId}
+      variant={route.activePageId === "schedule" ? "schedule" : "default"}
+    />
+  );
+}
+
 export default function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<LoadingScreen />}>
+      <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
           <Route index element={<HomePage />} />
           <Route path="tv" element={<TVPage />} />

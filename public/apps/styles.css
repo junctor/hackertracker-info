@@ -16,6 +16,9 @@
   --web-text: #161106;
   --focus: #ff3b30;
   --shadow: rgb(0 0 0 / 0.34);
+  --ht-cyan: #00ffff;
+  --ht-red: #fe0000;
+  --ht-white: #ffffff;
 }
 
 * {
@@ -227,4 +230,11 @@ a.action:focus-visible {
   *::after {
     scroll-behavior: auto !important;
   }
+}
+
+#apps-title {
+  color: var(--ht-white);
+  text-shadow:
+    0.045em 0.045em 0 var(--ht-cyan),
+    -0.045em -0.045em 0 var(--ht-red);
 }

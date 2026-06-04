@@ -1,9 +1,4 @@
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  DevicePhoneMobileIcon,
-  RocketLaunchIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronDownIcon, ChevronRightIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
@@ -120,7 +115,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               title="Get Hacker Tracker apps"
               className="ui-icon-plain"
             >
-              <DevicePhoneMobileIcon className="ui-icon-sm" aria-hidden="true" />
+              <img src="/images/ht-logo.png" alt="Get the app" className="ui-icon-sm" />
             </a>
           </div>
         </div>

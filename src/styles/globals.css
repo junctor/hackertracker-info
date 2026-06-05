@@ -101,6 +101,11 @@
   /* Standalone display safe areas */
   --safe-area-top: 0px;
   --safe-area-bottom: 0px;
+
+  /* Hacker Tracker custom colors */
+  --ht-cyan: #00ffff;
+  --ht-red: #fe0000;
+  --ht-white: #ffffff;
 }
 
 html,
@@ -2931,6 +2936,13 @@ button {
 .ui-site-footer-label {
   font-size: 0.75rem;
   line-height: 1.2;
+}
+
+.hacker-tracker-text {
+  color: var(--ht-white);
+  text-shadow:
+    0.045em 0.045em 0 var(--ht-cyan),
+    -0.045em -0.045em 0 var(--ht-red);
 }
 
 .ui-site-footer-title-row {

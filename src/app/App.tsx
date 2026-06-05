@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 
+import AppErrorBoundary from "@/features/app-shell/AppErrorBoundary";
 import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
@@ -131,20 +132,22 @@ function RouteLoadingFallback() {
 export default function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<RouteLoadingFallback />}>
-        <Routes>
-          <Route index element={<HomePage />} />
-          <Route path="tv" element={<TVPage />} />
+      <AppErrorBoundary>
+        <Suspense fallback={<RouteLoadingFallback />}>
+          <Routes>
+            <Route index element={<HomePage />} />
+            <Route path="tv" element={<TVPage />} />
 
-          <Route path=":conf">
-            {CONFERENCE_ROUTE_DEFINITIONS.map(({ key, path, activePageId }) =>
-              conferenceRoute(path, CONFERENCE_ROUTE_COMPONENTS[key], activePageId),
-            )}
-          </Route>
+            <Route path=":conf">
+              {CONFERENCE_ROUTE_DEFINITIONS.map(({ key, path, activePageId }) =>
+                conferenceRoute(path, CONFERENCE_ROUTE_COMPONENTS[key], activePageId),
+              )}
+            </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </AppErrorBoundary>
     </BrowserRouter>
   );
 }

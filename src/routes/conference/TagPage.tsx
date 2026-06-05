@@ -252,6 +252,11 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     setSelectedDay(day);
   }, []);
 
+  const emptyMessage =
+    tagEventIds.size > 0
+      ? "This tag has schedule references, but none of those events could be matched in the current schedule data."
+      : "No events are scheduled for this tag.";
+
   if (!isReady) return <LoadingScreen />;
   if (isIdInvalid) return <ErrorScreen msg="Invalid tag id." />;
   if (isIdMissing) return <ErrorScreen msg="Missing tag id." />;
@@ -293,7 +298,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
           />
         ) : (
           <div className="ui-container ui-empty-state ui-page-empty-offset">
-            <p>No events are scheduled for this tag.</p>
+            <p>{emptyMessage}</p>
             <Link
               to={`/${conf.slug}/tags`}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"

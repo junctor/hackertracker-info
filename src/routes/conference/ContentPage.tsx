@@ -143,6 +143,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
     pageDescription = metaDescription;
     pageContent = (
       <ContentDetails
+        key={content.id}
         content={content}
         sessions={sessions}
         locations={locations}

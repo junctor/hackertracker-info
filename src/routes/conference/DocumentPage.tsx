@@ -61,7 +61,7 @@ export default function DocumentPage({ conf, activePageId }: DocumentPageProps) 
         <meta name="description" content={`Reference document for ${conf.name}.`} />
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
-        <DocumentDetails document={selectedDocument} conference={conf} />
+        <DocumentDetails key={selectedDocument.id} document={selectedDocument} conference={conf} />
       </ConferenceLayout>
     </>
   );

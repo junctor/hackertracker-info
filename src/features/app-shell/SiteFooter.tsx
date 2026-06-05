@@ -1,15 +1,14 @@
-import { CodeBracketSquareIcon } from "@heroicons/react/16/solid";
-
 function SiteFooter() {
   return (
     <footer className="ui-site-footer">
       <div className="ui-container ui-site-footer-inner">
         <div className="ui-site-footer-row">
           <div className="ui-site-footer-brand">
-            <p className="ui-section-label ui-site-footer-label">Hacker Tracker</p>
+            <p className="ui-section-label ui-site-footer-label hacker-tracker-text">
+              Hacker Tracker
+            </p>
             <div className="ui-site-footer-title-row">
               <span className="ui-site-footer-title ui-clip-text">info.defcon.org</span>
-              <span className="ui-site-footer-subtitle">DEF CON</span>
             </div>
           </div>
 
@@ -21,8 +20,11 @@ function SiteFooter() {
               aria-label="View source on GitHub"
               className="ui-icon-plain ui-site-footer-source"
             >
-              <CodeBracketSquareIcon className="ui-icon-xs" aria-hidden="true" />
-              <span>View Source</span>
+              <img
+                src="/images/GitHub_Invertocat_White.svg"
+                className="ui-icon-xs"
+                aria-hidden="true"
+              />
             </a>
           </div>
         </div>

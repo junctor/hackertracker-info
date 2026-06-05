@@ -49,7 +49,7 @@ export default function OrganizationPage({ conf, activePageId }: OrganizationPag
         <meta name="description" content={description} />
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
-        <OrganizationDetails org={organization} conference={conf} />
+        <OrganizationDetails key={organization.id} org={organization} conference={conf} />
       </ConferenceLayout>
     </>
   );

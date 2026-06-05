@@ -177,16 +177,20 @@ export default function ScheduleEvents({
   const activeDayEventCountLabel = activeDay
     ? `${activeDay.events.length} ${activeDay.events.length === 1 ? "event" : "events"}`
     : null;
-  const computeItemKey = useCallback((_: number, evt: ScheduleEventViewModel) => evt.id, []);
+  const computeItemKey = useCallback(
+    (index: number, evt?: ScheduleEventViewModel) => evt?.id ?? `missing-event-${index}`,
+    [],
+  );
   const itemContent = useCallback(
-    (_: number, evt: ScheduleEventViewModel) => (
-      <ScheduleEventItem
-        conf={conf}
-        event={evt}
-        isBookmarked={bookmarkSet.has(evt.id)}
-        nowSeconds={nowSeconds}
-      />
-    ),
+    (_: number, evt?: ScheduleEventViewModel) =>
+      evt ? (
+        <ScheduleEventItem
+          conf={conf}
+          event={evt}
+          isBookmarked={bookmarkSet.has(evt.id)}
+          nowSeconds={nowSeconds}
+        />
+      ) : null,
     [bookmarkSet, conf, nowSeconds],
   );
 
@@ -284,7 +288,7 @@ export default function ScheduleEvents({
               data={activeDay.events}
               computeItemKey={computeItemKey}
               components={VIRTUOSO_COMPONENTS}
-              initialItemCount={8}
+              initialItemCount={Math.min(8, activeDay.events.length)}
               itemContent={itemContent}
               increaseViewportBy={{ top: 200, bottom: 400 }}
             />

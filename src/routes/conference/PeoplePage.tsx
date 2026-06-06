@@ -110,6 +110,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
     pageDescription = metaDescription;
     pageContent = (
       <PersonDetails
+        key={person.id}
         person={person}
         events={eventForContentIds}
         locations={locationsForEventIds}

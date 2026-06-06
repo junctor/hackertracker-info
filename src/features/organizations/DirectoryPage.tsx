@@ -120,7 +120,11 @@ export default function DirectoryPage({
 
     pageContent = (
       <ConferenceLayout conference={conf} activePageId={activePageId}>
-        <OrganizationDetails org={selectedOrganization} conference={conf} />
+        <OrganizationDetails
+          key={selectedOrganization.id}
+          org={selectedOrganization}
+          conference={conf}
+        />
       </ConferenceLayout>
     );
   } else if (isIdMissing) {

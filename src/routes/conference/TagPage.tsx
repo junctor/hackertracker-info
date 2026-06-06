@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Link } from "react-router";
 
 import Head from "@/components/Head";
@@ -241,6 +241,10 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
 
+  useEffect(() => {
+    setSelectedDay(null);
+  }, [tagId]);
+
   const resolvedDay = useMemo(() => {
     if (selectedDay && days.some(({ day }) => day === selectedDay)) {
       return selectedDay;
@@ -288,6 +292,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
         </h1>
         {days.length > 0 && resolvedDay ? (
           <ScheduleEvents
+            key={tag.id}
             conf={conf}
             days={days}
             selectedDay={resolvedDay}

@@ -10,6 +10,8 @@ import { useConferenceRouteParam } from "@/lib/hooks/useConferenceRouteParam";
 import { CONFERENCE_ROUTE_DEFINITIONS, type ConferenceRouteKey } from "@/lib/routes";
 import { PageId } from "@/lib/types/page-meta";
 
+import AppScrollRestoration from "./AppScrollRestoration";
+
 const HomePage = lazy(() => import("@/routes/HomePage"));
 const TVPage = lazy(() => import("@/routes/TVPage"));
 const AnnouncementsPage = lazy(() => import("@/routes/conference/AnnouncementsPage"));
@@ -132,6 +134,7 @@ function RouteLoadingFallback() {
 export default function App() {
   return (
     <BrowserRouter>
+      <AppScrollRestoration />
       <AppErrorBoundary>
         <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>

@@ -115,7 +115,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               title="Get Hacker Tracker apps"
               className="ui-icon-plain"
             >
-              <img src="/images/ht-logo.png" alt="Get the app" className="ui-icon-sm" />
+              <img src="/images/ht-logo.png" alt="" className="ui-icon-sm" />
             </a>
           </div>
         </div>

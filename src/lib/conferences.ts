@@ -50,7 +50,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     dateLabel: "August 6–9, 2026",
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
     timezone: "America/Los_Angeles",
-    logoFile: "dc-34-logo.svg",
+    logoFile: "logos/conferences/dc-34-logo.svg",
     showOnHome: true,
 
     kickoff: "2026-08-07T17:00:00Z",
@@ -58,7 +58,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     end: "2026-08-10T06:59:59Z",
 
     dataRoot: "/ht/defcon34",
-    siteMenu: ["communities", "contests", "readme", "search", "villages"],
+    siteMenu: ["communities", "content", "contests", "readme", "search", "villages"],
   },
 
   dcsg2026: {
@@ -69,7 +69,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     dateLabel: "April 28–30, 2026",
     tagline: null,
     timezone: "Asia/Singapore",
-    logoFile: "dcsingapore.webp",
+    logoFile: "logos/conferences/dcsingapore.webp",
     showOnHome: false,
 
     kickoff: "2026-04-28T01:00:00Z",
@@ -98,7 +98,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     dateLabel: "November 5–6, 2025",
     tagline: null,
     timezone: "Asia/Bahrain",
-    logoFile: "dc-bahrain-logo.webp",
+    logoFile: "logos/conferences/dc-bahrain-logo.webp",
     showOnHome: false,
 
     kickoff: "2025-11-05T06:00:00Z",
@@ -127,7 +127,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     dateLabel: "August 7–10, 2025",
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
     timezone: "America/Los_Angeles",
-    logoFile: "dc33-logo.webp",
+    logoFile: "logos/conferences/dc33-logo.webp",
     showOnHome: false,
 
     kickoff: "2025-08-07T17:00:00Z",

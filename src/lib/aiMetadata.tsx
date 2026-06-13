@@ -79,7 +79,11 @@ export function aiMetadata({
     <meta key="og-description" property="og:description" content={description} />,
     <meta key="og-type" property="og:type" content="website" />,
     <meta key="og-url" property="og:url" content={canonical} />,
-    <meta key="og-image" property="og:image" content={absoluteUrl("/images/skull_600x600.png")} />,
+    <meta
+      key="og-image"
+      property="og:image"
+      content={absoluteUrl("/images/icons/skull-600x600.png")}
+    />,
     <meta key="twitter-card" name="twitter:card" content="summary" />,
     <meta key="twitter-title" name="twitter:title" content={title} />,
     <meta key="twitter-description" name="twitter:description" content={description} />,

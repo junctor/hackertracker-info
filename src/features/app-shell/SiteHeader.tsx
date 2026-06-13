@@ -59,7 +59,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               <details className="ui-header-menu">
                 <summary className={`ui-details-summary ui-header-menu-summary ${focusRingClass}`}>
                   <img
-                    src="/images/skull_icon.png"
+                    src="/images/icons/skull-icon.png"
                     alt=""
                     className="ui-icon-menu ui-header-menu-summary-icon"
                   />
@@ -129,7 +129,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               title="Get Hacker Tracker apps"
               className="ui-icon-plain"
             >
-              <img src="/images/ht-logo.png" alt="" className="ui-icon-sm" />
+              <img src="/images/logos/ht-logo.png" alt="" className="ui-icon-sm" />
             </a>
           </div>
         </div>

@@ -2043,6 +2043,33 @@ button {
   box-shadow: var(--shadow-sm);
 }
 
+.ui-homepage-archive-link-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+.ui-homepage-archive-link,
+.ui-conferences-home-link {
+  color: color-mix(in oklab, var(--text-muted), white 8%);
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--accent-success), transparent 38%);
+  text-underline-offset: 0.25rem;
+  transition:
+    color 0.18s ease,
+    text-decoration-color 0.18s ease;
+}
+
+.ui-homepage-archive-link:hover,
+.ui-homepage-archive-link:focus-visible,
+.ui-conferences-home-link:hover,
+.ui-conferences-home-link:focus-visible {
+  color: var(--text-primary);
+  text-decoration-color: var(--accent-success);
+}
+
 .ui-home-conference-card {
   position: relative;
   display: block;
@@ -2267,6 +2294,117 @@ button {
   .ui-home-conference-countdown {
     margin-top: var(--space-4);
     padding-block: var(--space-3);
+  }
+}
+
+.ui-conferences-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.ui-conferences-content {
+  position: relative;
+  padding-block: clamp(3rem, 8vw, 5rem);
+}
+
+.ui-conferences-header {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 44rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.ui-conferences-kicker {
+  margin-top: var(--space-6);
+}
+
+.ui-conferences-header .ui-page-description {
+  margin-inline: auto;
+}
+
+.ui-conferences-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  max-width: 54rem;
+  margin: var(--space-8) auto 0;
+}
+
+@media (width >= 48rem) {
+  .ui-conferences-grid {
+    gap: var(--space-4);
+  }
+}
+
+.ui-conference-archive-card {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  min-height: 6.5rem;
+  align-items: center;
+  gap: var(--space-4);
+  overflow: hidden;
+  border-radius: var(--radius-3);
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background:
+    linear-gradient(135deg, color-mix(in oklab, white, transparent 96%), transparent 48%),
+    color-mix(in oklab, var(--color-surface), black 8%);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.ui-conference-archive-card:hover,
+.ui-conference-archive-card:focus-visible {
+  border-color: color-mix(in oklab, var(--accent-success), transparent 48%);
+  background-color: color-mix(in oklab, var(--color-surface-elevated), transparent 4%);
+  transform: translateY(-0.125rem);
+}
+
+.ui-conference-archive-logo {
+  position: relative;
+  display: block;
+  width: 5rem;
+  aspect-ratio: 1;
+}
+
+.ui-conference-archive-logo-image {
+  object-fit: contain;
+}
+
+.ui-conference-archive-copy {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-1);
+}
+
+.ui-conference-archive-name {
+  color: var(--text-primary);
+  font-size: clamp(1rem, 3.6vw, 1.25rem);
+  font-weight: 750;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.ui-conference-archive-date {
+  color: var(--text-muted);
+  font-size: 0.925rem;
+  line-height: 1.35;
+}
+
+@media (width >= 48rem) {
+  .ui-conference-archive-card {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    min-height: 8rem;
+    gap: var(--space-5);
+    padding: var(--space-5);
+  }
+
+  .ui-conference-archive-logo {
+    width: 7rem;
   }
 }
 

@@ -21,7 +21,7 @@ function SiteFooter() {
               className="ui-icon-plain ui-site-footer-source"
             >
               <img
-                src="/images/GitHub_Invertocat_White.svg"
+                src="/images/icons/github-invertocat-white.svg"
                 className="ui-icon-xs"
                 aria-hidden="true"
               />

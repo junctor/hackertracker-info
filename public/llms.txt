@@ -37,7 +37,7 @@ The browser app fetches conference data from JSON at runtime. These JSON files a
 ## Human Pages
 
 - Site home: https://info.defcon.org/
-- Past conferences: https://info.defcon.org/conferences
+- Conferences: https://info.defcon.org/conferences
 - DEF CON 34: https://info.defcon.org/defcon34
 - DEF CON 34 schedule: https://info.defcon.org/defcon34/schedule
 - DEF CON 34 speakers: https://info.defcon.org/defcon34/speakers

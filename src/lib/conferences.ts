@@ -1,4 +1,9 @@
-export type ConferenceSlug = "dcsg2026" | "defcon34" | "defcon33" | "defconbahrain2025";
+export type ConferenceSlug =
+  | "dcme2026"
+  | "dcsg2026"
+  | "defcon33"
+  | "defcon34"
+  | "defconbahrain2025";
 
 export type SiteMenuKey =
   | "announcements"
@@ -42,6 +47,25 @@ export type ConferenceManifest = {
 };
 
 export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
+  dcme2026: {
+    slug: "dcme2026",
+    code: "DCME2026",
+    name: "DEF CON Middle East 2026",
+
+    dateLabel: "November 11–12, 2026",
+    tagline: null,
+    timezone: "Asia/Bahrain",
+    logoFile: "logos/conferences/dcme-logo.webp",
+    showOnHome: false,
+
+    kickoff: "2026-11-11T06:00:00Z",
+    begin: "2026-11-09T16:00:00Z",
+    end: "2026-11-12T15:59:59Z",
+
+    dataRoot: "/ht/dcme2026",
+    siteMenu: ["announcements", "readme", "search"],
+  },
+
   defcon34: {
     slug: "defcon34",
     code: "DEFCON34",

@@ -239,7 +239,7 @@ export default function HomePage() {
 
           <div className="ui-homepage-archive-link-wrap">
             <Link to="/conferences" className="ui-focus-ring ui-homepage-archive-link">
-              Conferences
+              All conferences
             </Link>
           </div>
         </div>

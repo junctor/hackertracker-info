@@ -1,4 +1,4 @@
-export type ConferenceSlug = "dcsg2026" | "defcon34";
+export type ConferenceSlug = "dcsg2026" | "defcon34" | "defcon33" | "defconbahrain2025";
 
 export type SiteMenuKey =
   | "announcements"
@@ -42,6 +42,25 @@ export type ConferenceManifest = {
 };
 
 export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
+  defcon34: {
+    slug: "defcon34",
+    code: "DEFCON34",
+    name: "DEF CON 34",
+
+    dateLabel: "August 6–9, 2026",
+    tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
+    timezone: "America/Los_Angeles",
+    logoFile: "dc-34-logo.svg",
+    showOnHome: true,
+
+    kickoff: "2026-08-07T17:00:00Z",
+    begin: "2026-08-06T07:00:00Z",
+    end: "2026-08-10T06:59:59Z",
+
+    dataRoot: "/ht/defcon34",
+    siteMenu: ["communities", "contests", "readme", "search", "villages"],
+  },
+
   dcsg2026: {
     slug: "dcsg2026",
     code: "DCSG2026",
@@ -71,23 +90,62 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     ],
   },
 
-  defcon34: {
-    slug: "defcon34",
-    code: "DEFCON34",
-    name: "DEF CON 34",
+  defconbahrain2025: {
+    slug: "defconbahrain2025",
+    code: "DEFCONBAHRAIN2025",
+    name: "DEF CON Bahrain 2025",
 
-    dateLabel: "August 6–9, 2026",
+    dateLabel: "November 5–6, 2025",
+    tagline: null,
+    timezone: "Asia/Bahrain",
+    logoFile: "dc-bahrain-logo.webp",
+    showOnHome: false,
+
+    kickoff: "2025-11-05T06:00:00Z",
+    begin: "2025-11-03T16:00:00Z",
+    end: "2025-11-06T15:59:59Z",
+
+    dataRoot: "/ht/defconbahrain2025",
+    siteMenu: [
+      "announcements",
+      "communities",
+      "content",
+      "contests",
+      "people",
+      "readme",
+      "schedule",
+      "search",
+      "villages",
+    ],
+  },
+
+  defcon33: {
+    slug: "defcon33",
+    code: "DEFCON33",
+    name: "DEF CON 33",
+
+    dateLabel: "August 7–10, 2025",
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
     timezone: "America/Los_Angeles",
-    logoFile: "dc-34-logo.svg",
-    showOnHome: true,
+    logoFile: "dc33-logo.webp",
+    showOnHome: false,
 
-    kickoff: "2026-08-07T17:00:00Z",
-    begin: "2026-08-06T07:00:00Z",
-    end: "2026-08-10T06:59:59Z",
+    kickoff: "2025-08-07T17:00:00Z",
+    begin: "2025-08-06T07:00:00Z",
+    end: "2025-08-10T06:59:59Z",
 
-    dataRoot: "/ht/defcon34",
-    siteMenu: ["communities", "contests", "readme", "search", "villages"],
+    dataRoot: "/ht/defcon33",
+    siteMenu: [
+      "announcements",
+      "communities",
+      "content",
+      "contests",
+      "people",
+      "readme",
+      "schedule",
+      "search",
+      "villages",
+    ],
   },
 } as const;
 

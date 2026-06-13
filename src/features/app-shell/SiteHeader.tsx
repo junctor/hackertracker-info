@@ -1,4 +1,8 @@
-import { ChevronDownIcon, ChevronRightIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
@@ -54,9 +58,10 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             <nav aria-label="Primary">
               <details className="ui-header-menu">
                 <summary className={`ui-details-summary ui-header-menu-summary ${focusRingClass}`}>
-                  <RocketLaunchIcon
+                  <img
+                    src="/images/skull_icon.png"
+                    alt=""
                     className="ui-icon-menu ui-header-menu-summary-icon"
-                    aria-hidden="true"
                   />
 
                   <span className="ui-header-menu-label">Menu</span>
@@ -108,6 +113,15 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                 </div>
               </details>
             </nav>
+
+            <a
+              href={`/${conference.slug}/search`}
+              aria-label="Search"
+              title="Search "
+              className="ui-icon-plain"
+            >
+              <MagnifyingGlassIcon className="ui-icon-sm" aria-label="Search" title="Search" />
+            </a>
 
             <a
               href="/apps"

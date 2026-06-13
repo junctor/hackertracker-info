@@ -42,8 +42,10 @@
   --surface-muted: color-mix(in oklab, var(--color-surface), transparent 18%);
   --surface-elevated: var(--color-surface-elevated);
   --surface-interactive: color-mix(in oklab, var(--color-surface-elevated), transparent 4%);
+  --surface-chrome: color-mix(in oklab, var(--color-bg), var(--surface) 8%);
   --border: var(--color-border-soft);
   --border-strong: color-mix(in oklab, var(--color-border), white 8%);
+  --border-chrome: color-mix(in oklab, var(--color-border-soft), white 14%);
   --text-primary: var(--color-fg);
   --text-muted: var(--color-muted);
   --text-subtle: color-mix(in oklab, var(--color-muted), var(--color-bg) 24%);

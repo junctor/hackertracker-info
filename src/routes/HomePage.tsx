@@ -37,7 +37,7 @@ const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = Object.values
   }));
 
 const TITLE_CYCLE = ["DEF CON", "D3F CON", "DEF C0N", "D3F C0N", "D3F_C0N", "STAHP IT"] as const;
-const TITLE_SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-/\\[]{}()<>|";
+const TITLE_SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-/\\[]{}()<>|█▓▒░";
 const TITLE_INTERACTION_COOLDOWN_MS = 200;
 const MAX_COUNTDOWN_REFRESH_DELAY_MS = 2_147_483_647;
 
@@ -86,27 +86,15 @@ export default function HomePage() {
   const isAnimatingTitleRef = useRef(false);
   const lastTitleInteractionRef = useRef(0);
 
-  useGSAP(() => {
-    const el = titleRef.current;
-    if (!el) return;
-
-    el.textContent = TITLE_CYCLE[titleIndexRef.current];
-
-    return () => {
-      titleTweenRef.current?.kill();
-      titleTweenRef.current = null;
-      isAnimatingTitleRef.current = false;
-    };
-  }, []);
-
-  const cycleTitle = useCallback(() => {
+  const cycleTitle = useCallback((respectCooldown = true) => {
     const el = titleRef.current;
     if (!el) return;
 
     const now = Date.now();
+
     if (
       isAnimatingTitleRef.current ||
-      now - lastTitleInteractionRef.current < TITLE_INTERACTION_COOLDOWN_MS
+      (respectCooldown && now - lastTitleInteractionRef.current < TITLE_INTERACTION_COOLDOWN_MS)
     ) {
       return;
     }
@@ -152,6 +140,52 @@ export default function HomePage() {
     });
   }, []);
 
+  useGSAP(() => {
+    const el = titleRef.current;
+    if (!el) return;
+
+    const initialTitle = TITLE_CYCLE[0];
+
+    if (prefersReducedMotion()) {
+      el.textContent = initialTitle;
+      return;
+    }
+
+    titleTweenRef.current?.kill();
+    isAnimatingTitleRef.current = true;
+
+    el.textContent = "███████";
+
+    titleTweenRef.current = gsap.to(el, {
+      duration: 1.4,
+      ease: "none",
+      overwrite: "auto",
+      scrambleText: {
+        text: initialTitle,
+        chars: TITLE_SCRAMBLE_CHARS,
+        speed: 0.28,
+        revealDelay: 0.45,
+        tweenLength: false,
+      },
+      onComplete: () => {
+        el.textContent = initialTitle;
+        titleIndexRef.current = 0;
+        titleTweenRef.current = null;
+        isAnimatingTitleRef.current = false;
+      },
+      onInterrupt: () => {
+        titleTweenRef.current = null;
+        isAnimatingTitleRef.current = false;
+      },
+    });
+
+    return () => {
+      titleTweenRef.current?.kill();
+      titleTweenRef.current = null;
+      isAnimatingTitleRef.current = false;
+    };
+  }, []);
+
   return (
     <>
       <Head>
@@ -175,8 +209,8 @@ export default function HomePage() {
             <h1>
               <button
                 type="button"
-                onPointerEnter={cycleTitle}
-                onClick={cycleTitle}
+                onPointerEnter={() => cycleTitle()}
+                onClick={() => cycleTitle()}
                 className="ui-focus-ring ui-homepage-title-button"
                 aria-label="Cycle DEF CON title style"
               >

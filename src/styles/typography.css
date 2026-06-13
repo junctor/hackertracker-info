@@ -1,0 +1,80 @@
+.ui-typeface-atkinson {
+  font-family: "Atkinson Hyperlegible", "Lato", "Segoe UI", sans-serif;
+}
+
+.ui-typeface-museo {
+  font-family: "Museo", "Atkinson Hyperlegible", "Lato", "Segoe UI", sans-serif;
+}
+
+.ui-muted-strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.ui-inline-separator {
+  margin-inline: var(--space-2);
+  color: var(--text-subtle);
+}
+
+.ui-heading-1 {
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
+  font-weight: 750;
+  letter-spacing: 0;
+  line-height: 1.12;
+  color: var(--color-fg);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.ui-heading-2 {
+  font-size: clamp(1.125rem, 4vw, 1.75rem);
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.25;
+  color: color-mix(in oklab, var(--color-fg), var(--color-muted) 12%);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.ui-section-label {
+  color: color-mix(in oklab, var(--text-muted), white 10%);
+  font-family: "Lato", "Atkinson Hyperlegible", "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ui-card-title {
+  color: var(--text-primary);
+  font-weight: 650;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  transition: color 0.2s ease;
+}
+
+.ui-card-meta {
+  color: var(--text-muted);
+  font-family: "Lato", "Atkinson Hyperlegible", "Segoe UI", sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.ui-kicker {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-muted), white 12%);
+}
+
+.ui-kicker-critical {
+  color: color-mix(in oklab, var(--dc34-accent-critical), white 62%);
+}
+
+.hacker-tracker-text {
+  color: var(--ht-white);
+  text-shadow:
+    0.045em 0.045em 0 var(--ht-cyan),
+    -0.045em -0.045em 0 var(--ht-red);
+}

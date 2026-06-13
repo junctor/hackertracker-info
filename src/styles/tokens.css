@@ -1,0 +1,202 @@
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  src: url("/fonts/atkinson-hl.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("/fonts/lato.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Museo";
+  src: url("/fonts/Museo700-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+
+  /* DEF CON 34 palette */
+  --dc34-bg-primary: #0d294a;
+  --dc34-bg-secondary: #105f68;
+  --dc34-accent-primary: #017fa4;
+  --dc34-accent-secondary: #6ccdb8;
+  --dc34-accent-warning: #f1b435;
+  --dc34-accent-critical: #e0004e;
+
+  /* Surfaces */
+  --color-bg: color-mix(in oklab, var(--dc34-bg-primary), black 55%);
+  --color-surface: color-mix(in oklab, var(--dc34-bg-primary), black 35%);
+  --color-surface-elevated: color-mix(in oklab, var(--dc34-bg-primary), black 24%);
+  --color-fg: color-mix(in oklab, white, var(--dc34-accent-secondary) 5%);
+  --color-muted: color-mix(in oklab, var(--color-fg), var(--color-bg) 42%);
+  --color-border: color-mix(in oklab, var(--dc34-bg-secondary), white 16%);
+  --color-border-soft: rgba(148, 163, 184, 0.18);
+  --color-overlay: rgba(2, 6, 23, 0.72);
+
+  /* Semantic roles */
+  --surface: var(--color-surface);
+  --surface-muted: color-mix(in oklab, var(--color-surface), transparent 18%);
+  --surface-elevated: var(--color-surface-elevated);
+  --surface-interactive: color-mix(in oklab, var(--color-surface-elevated), transparent 4%);
+  --border: var(--color-border-soft);
+  --border-strong: color-mix(in oklab, var(--color-border), white 8%);
+  --text-primary: var(--color-fg);
+  --text-muted: var(--color-muted);
+  --text-subtle: color-mix(in oklab, var(--color-muted), var(--color-bg) 24%);
+  --accent: var(--dc34-accent-primary);
+  --accent-soft: color-mix(in oklab, var(--dc34-accent-primary), transparent 82%);
+  --warning: var(--dc34-accent-warning);
+  --critical: var(--dc34-accent-critical);
+  --focus: var(--dc34-accent-secondary);
+
+  /* Brand */
+  --accent-danger: var(--dc34-accent-critical);
+  --accent-warning: var(--dc34-accent-warning);
+  --accent-deep: var(--dc34-bg-primary);
+  --accent-teal: var(--dc34-bg-secondary);
+  --accent-success: var(--dc34-accent-secondary);
+  --accent-primary: var(--dc34-accent-primary);
+
+  --accent-on-danger: white;
+  --accent-on-warning: var(--color-bg);
+  --accent-on-success: var(--color-bg);
+  --accent-on-primary: white;
+
+  --color-accent: var(--accent-primary);
+
+  /* Layout */
+  --layout-max: 72rem;
+  --layout-gutter: clamp(0.875rem, 3vw, 1.5rem);
+
+  /* Radius */
+  --radius-1: 0.375rem;
+  --radius-2: 0.625rem;
+  --radius-3: 0.875rem;
+  --radius-4: 1.125rem;
+  --radius-pill: 9999px;
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Shadow */
+  --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 14px 32px rgba(0, 0, 0, 0.28);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.36);
+
+  /* Controls */
+  --control-min: 44px;
+
+  /* Standalone display safe areas */
+  --safe-area-top: 0px;
+  --safe-area-bottom: 0px;
+
+  /* Hacker Tracker custom colors */
+  --ht-cyan: #00ffff;
+  --ht-red: #fe0000;
+  --ht-white: #ffffff;
+}
+
+.ui-tone-primary {
+  --event-color: var(--dc34-accent-primary);
+  --tone-dot: var(--dc34-accent-primary);
+  --tone-bg: color-mix(in oklab, var(--dc34-accent-primary), transparent 82%);
+  --tone-border: color-mix(in oklab, var(--dc34-accent-primary), transparent 42%);
+  --tone-fg: color-mix(in oklab, var(--dc34-accent-primary), white 38%);
+}
+
+.ui-tone-secondary {
+  --event-color: var(--dc34-accent-secondary);
+  --tone-dot: var(--dc34-accent-secondary);
+  --tone-bg: color-mix(in oklab, var(--dc34-accent-secondary), transparent 84%);
+  --tone-border: color-mix(in oklab, var(--dc34-accent-secondary), transparent 42%);
+  --tone-fg: color-mix(in oklab, var(--dc34-accent-secondary), white 24%);
+}
+
+.ui-tone-teal {
+  --event-color: var(--dc34-bg-secondary);
+  --tone-dot: var(--dc34-bg-secondary);
+  --tone-bg: color-mix(in oklab, var(--dc34-bg-secondary), transparent 72%);
+  --tone-border: color-mix(in oklab, var(--dc34-bg-secondary), white 14%);
+  --tone-fg: color-mix(in oklab, var(--dc34-bg-secondary), white 62%);
+}
+
+.ui-tone-warning {
+  --event-color: var(--dc34-accent-warning);
+  --tone-dot: var(--dc34-accent-warning);
+  --tone-bg: color-mix(in oklab, var(--dc34-accent-warning), transparent 84%);
+  --tone-border: color-mix(in oklab, var(--dc34-accent-warning), transparent 36%);
+  --tone-fg: color-mix(in oklab, var(--dc34-accent-warning), white 16%);
+}
+
+.ui-tone-critical {
+  --event-color: var(--dc34-accent-critical);
+  --tone-dot: var(--dc34-accent-critical);
+  --tone-bg: color-mix(in oklab, var(--dc34-accent-critical), transparent 82%);
+  --tone-border: color-mix(in oklab, var(--dc34-accent-critical), transparent 38%);
+  --tone-fg: color-mix(in oklab, var(--dc34-accent-critical), white 48%);
+}
+
+.ui-tone-muted {
+  --event-color: var(--color-muted);
+  --tone-dot: var(--color-muted);
+  --tone-bg: rgb(255 255 255 / 0.03);
+  --tone-border: rgb(255 255 255 / 0.1);
+  --tone-fg: var(--color-muted);
+}
+
+.ui-person-accent-0 {
+  --event-color: var(--dc34-accent-primary);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-accent-primary), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
+}
+
+.ui-person-accent-1 {
+  --event-color: var(--dc34-bg-secondary);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-bg-secondary), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
+}
+
+.ui-person-accent-2 {
+  --event-color: var(--dc34-accent-secondary);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-accent-secondary), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
+}
+
+.ui-person-accent-3 {
+  --event-color: var(--dc34-accent-warning);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-accent-warning), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
+}
+
+.ui-person-accent-4 {
+  --event-color: var(--dc34-accent-critical);
+  --person-avatar-bg: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--dc34-accent-critical), transparent 86%) 0%,
+    color-mix(in oklab, var(--color-bg), transparent 10%) 100%
+  );
+}

@@ -13,6 +13,7 @@ import { PageId } from "@/lib/types/page-meta";
 import AppScrollRestoration from "./AppScrollRestoration";
 
 const HomePage = lazy(() => import("@/routes/HomePage"));
+const ConferencesPage = lazy(() => import("@/routes/ConferencesPage"));
 const TVPage = lazy(() => import("@/routes/TVPage"));
 const AnnouncementsPage = lazy(() => import("@/routes/conference/AnnouncementsPage"));
 const BookmarksPage = lazy(() => import("@/routes/conference/BookmarksPage"));
@@ -139,6 +140,7 @@ export default function App() {
         <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
             <Route index element={<HomePage />} />
+            <Route path="conferences" element={<ConferencesPage />} />
             <Route path="tv" element={<TVPage />} />
 
             <Route path=":conf">

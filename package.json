@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "generate:data-indexes": "node scripts/generate-public-data-indexes.mjs",
-    "prebuild": "node scripts/generate-public-data-indexes.mjs",
+    "generate:public-indexes": "node scripts/generate-public-indexes.mjs",
+    "prebuild": "npm run generate:public-indexes",
     "build": "tsc -b && vp build",
     "postbuild": "node scripts/generate-static-routes.mjs",
     "check": "vp check",

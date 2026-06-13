@@ -1,3 +1,7 @@
+.ui-detail-page {
+  --layout-max: 80rem;
+}
+
 .ui-person-details-row {
   display: flex;
   flex-direction: column;
@@ -43,10 +47,6 @@
   color: var(--text-muted);
   font-size: 0.875rem;
   line-height: 1.5rem;
-}
-
-.ui-organization-detail-page {
-  --layout-max: 56rem;
 }
 
 .ui-organization-header-row {
@@ -183,7 +183,7 @@
 
 .ui-detail-link-list {
   display: grid;
-  max-width: 44rem;
+  max-width: 56rem;
   list-style: none;
 }
 

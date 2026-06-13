@@ -99,7 +99,7 @@ export default function ContentDetails(props: Props) {
       : `${sessions.length} session${sessions.length === 1 ? "" : "s"}`;
 
   return (
-    <article className="ui-container ui-page-content ui-detail-stack">
+    <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
       <div className={`ui-detail-header-accent ui-tone-${accentTone}`}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -107,6 +107,7 @@ export default function ContentDetails(props: Props) {
         <PageHeader
           title={content.title}
           resultLabel={sessionCountLabel}
+          actionsInline
           actions={
             <button
               type="button"

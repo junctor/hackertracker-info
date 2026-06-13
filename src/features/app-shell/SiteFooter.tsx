@@ -1,7 +1,7 @@
 function SiteFooter() {
   return (
     <footer className="ui-site-footer">
-      <div className="ui-container ui-site-footer-inner">
+      <div className="ui-chrome-container ui-site-footer-inner">
         <div className="ui-site-footer-row">
           <div className="ui-site-footer-brand">
             <p className="ui-section-label ui-site-footer-label hacker-tracker-text">

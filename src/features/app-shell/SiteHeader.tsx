@@ -30,7 +30,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
       <div className="ui-topbar-frame">
         <div aria-hidden="true" className="ui-topbar-rule" />
 
-        <div className="ui-container ui-topbar-row">
+        <div className="ui-chrome-container ui-topbar-row">
           <div className="ui-topbar-brand-group">
             <Link to={`/${conference.slug}`} className={`ui-topbar-brand-link ${focusRingClass}`}>
               <span className="ui-topbar-brand-name">

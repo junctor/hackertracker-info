@@ -163,7 +163,7 @@ export default function PersonDetails({ person, events, locations, conference }:
   }, [personAvatarUrl]);
 
   return (
-    <article className="ui-container ui-page-content ui-detail-stack">
+    <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
       <div className={`ui-detail-header-accent ${headerAccentClassName}`}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />

@@ -39,12 +39,13 @@ export default function OrganizationDetails({ org, conference }: Props) {
   const hasLinks = org.links.length > 0;
 
   return (
-    <article className="ui-container ui-page-content ui-detail-stack ui-organization-detail-page">
+    <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
       <div className="ui-detail-header-accent ui-tone-secondary">
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
         <PageHeader
+          actionsInline
           title={
             <div className="ui-organization-header-row">
               <div className="ui-logo-frame ui-logo-frame-lg">

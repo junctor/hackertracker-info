@@ -14,6 +14,7 @@ type SearchProps = {
 type Props = {
   title: ReactNode;
   actions?: ReactNode;
+  actionsInline?: boolean;
   description?: ReactNode;
   kicker?: ReactNode;
   resultLabel?: ReactNode;
@@ -24,6 +25,7 @@ type Props = {
 export default function PageHeader({
   title,
   actions,
+  actionsInline,
   description,
   kicker,
   resultLabel,
@@ -33,12 +35,13 @@ export default function PageHeader({
   const searchInputId = useId();
   const hasControls = Boolean(search || children);
   const hasHeaderAside = Boolean(resultLabel || actions);
+  const isInlineHeader = Boolean(actionsInline && hasHeaderAside);
   const titleContent =
     typeof title === "string" ? <h1 className="ui-heading-1">{title}</h1> : title;
 
   return (
     <header className="ui-page-header">
-      <div className="ui-page-header-row">
+      <div className={`ui-page-header-row${isInlineHeader ? " ui-page-header-row-inline" : ""}`}>
         <div className="ui-page-header-copy">
           {kicker ? <p className="ui-kicker ui-page-header-kicker">{kicker}</p> : null}
           {titleContent}

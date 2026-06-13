@@ -57,6 +57,12 @@
   margin-inline: auto;
 }
 
+.ui-chrome-container {
+  width: min(96rem, 100% - (var(--layout-gutter) * 2));
+  min-width: 0;
+  margin-inline: auto;
+}
+
 .ui-section {
   padding-block: clamp(1.25rem, 4.5vw, 2.5rem);
 }

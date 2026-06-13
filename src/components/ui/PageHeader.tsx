@@ -8,6 +8,7 @@ type SearchProps = {
   placeholder: string;
   value: string;
   onChange: Dispatch<SetStateAction<string>>;
+  onSubmit?: () => void;
 };
 
 type Props = {
@@ -59,7 +60,10 @@ export default function PageHeader({
       {hasControls ? (
         <form
           role={search ? "search" : undefined}
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault();
+            search?.onSubmit?.();
+          }}
           className="ui-control-panel"
         >
           {search ? (
@@ -78,6 +82,16 @@ export default function PageHeader({
                 />
               </span>
             </label>
+          ) : null}
+
+          {search?.onSubmit ? (
+            <button
+              type="submit"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-page-header-search-submit"
+            >
+              <MagnifyingGlassIcon className="ui-icon-sm" aria-hidden="true" />
+              <span>Search</span>
+            </button>
           ) : null}
 
           {children ? <div className="ui-page-header-extra">{children}</div> : null}

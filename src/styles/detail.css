@@ -46,7 +46,7 @@
 }
 
 .ui-organization-detail-page {
-  max-width: 56rem;
+  --layout-max: 56rem;
 }
 
 .ui-organization-header-row {

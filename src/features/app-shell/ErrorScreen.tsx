@@ -1,5 +1,7 @@
 import { ExclamationTriangleIcon, HomeIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
+
+import { getConference } from "@/lib/conferences";
 
 type Props = {
   msg?: string;
@@ -12,7 +14,11 @@ export default function ErrorScreen({
   title = "We couldn't load this page",
   copy = "Try again in a moment, or head back to the conference home page.",
 }: Props) {
+  const location = useLocation();
   const hasMessage = Boolean(msg?.trim());
+  const [conferenceSegment = ""] = location.pathname.split("/").filter(Boolean);
+  const conference = getConference(conferenceSegment);
+  const homeHref = conference ? `/${conference.slug}` : "/";
 
   return (
     <main id="main-content" className="ui-page-shell ui-detail-card">
@@ -42,7 +48,10 @@ export default function ErrorScreen({
           ) : null}
 
           <div className="ui-error-actions">
-            <Link to="/" className="ui-btn-base ui-btn-secondary ui-focus-ring ui-error-home-link">
+            <Link
+              to={homeHref}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-error-home-link"
+            >
               <HomeIcon className="ui-icon-sm" aria-hidden="true" />
               <span>Go To Home</span>
             </Link>

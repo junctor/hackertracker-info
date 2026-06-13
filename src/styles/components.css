@@ -70,6 +70,17 @@
   flex: 1 1 auto;
 }
 
+.ui-page-header-search-submit {
+  justify-content: center;
+  min-height: 3rem;
+}
+
+@media (width < 40rem) {
+  .ui-page-header-search-submit {
+    min-height: var(--control-min);
+  }
+}
+
 .ui-page-header-extra {
   min-width: 0;
   flex: 1 1 auto;
@@ -903,6 +914,10 @@
 
 .ui-header-menu {
   position: relative;
+}
+
+.ui-header-menu:not([open]) .ui-header-menu-shell {
+  display: none;
 }
 
 .ui-header-menu[open] {

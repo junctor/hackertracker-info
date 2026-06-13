@@ -1,4 +1,8 @@
-import { ChevronDownIcon, ChevronRightIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
@@ -26,7 +30,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
       <div className="ui-topbar-frame">
         <div aria-hidden="true" className="ui-topbar-rule" />
 
-        <div className="ui-container ui-topbar-row">
+        <div className="ui-chrome-container ui-topbar-row">
           <div className="ui-topbar-brand-group">
             <Link to={`/${conference.slug}`} className={`ui-topbar-brand-link ${focusRingClass}`}>
               <span className="ui-topbar-brand-name">
@@ -54,9 +58,10 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             <nav aria-label="Primary">
               <details className="ui-header-menu">
                 <summary className={`ui-details-summary ui-header-menu-summary ${focusRingClass}`}>
-                  <RocketLaunchIcon
+                  <img
+                    src="/images/icons/skull-icon.png"
+                    alt=""
                     className="ui-icon-menu ui-header-menu-summary-icon"
-                    aria-hidden="true"
                   />
 
                   <span className="ui-header-menu-label">Menu</span>
@@ -110,12 +115,21 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             </nav>
 
             <a
+              href={`/${conference.slug}/search`}
+              aria-label="Search"
+              title="Search "
+              className="ui-icon-plain"
+            >
+              <MagnifyingGlassIcon className="ui-icon-sm" aria-label="Search" title="Search" />
+            </a>
+
+            <a
               href="/apps"
               aria-label="Get Hacker Tracker apps"
               title="Get Hacker Tracker apps"
               className="ui-icon-plain"
             >
-              <img src="/images/ht-logo.png" alt="Get the app" className="ui-icon-sm" />
+              <img src="/images/logos/ht-logo.png" alt="" className="ui-icon-sm" />
             </a>
           </div>
         </div>

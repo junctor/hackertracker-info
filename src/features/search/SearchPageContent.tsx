@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 
@@ -13,11 +14,32 @@ type Props = {
 };
 
 export default function SearchPageContent({ conf, searchData }: Props) {
-  const [query, setQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get("q") ?? "";
+  const [draftQuery, setDraftQuery] = useState(query);
   const trimmedQuery = query.trim();
   const results = useMemo(() => filterSearchResults(searchData, query), [searchData, query]);
   const hasQuery = trimmedQuery.length > 0;
   const resultCountLabel = `${results.length} ${results.length === 1 ? "result" : "results"}`;
+
+  useEffect(() => {
+    setDraftQuery(query);
+  }, [query]);
+
+  const submitSearch = () => {
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams);
+      const value = draftQuery.trim();
+
+      if (value) {
+        nextParams.set("q", value);
+      } else {
+        nextParams.delete("q");
+      }
+
+      return nextParams;
+    });
+  };
 
   return (
     <section>
@@ -29,14 +51,15 @@ export default function SearchPageContent({ conf, searchData }: Props) {
           search={{
             label: `Search ${conf.name}`,
             placeholder: "Search everything...",
-            value: query,
-            onChange: setQuery,
+            value: draftQuery,
+            onChange: setDraftQuery,
+            onSubmit: submitSearch,
           }}
         />
 
         {!hasQuery ? (
           <div className="ui-empty-state ui-search-empty-start">
-            <p>Start typing to search sessions, people, and organizations.</p>
+            <p>Enter a search term to search sessions, people, and organizations.</p>
           </div>
         ) : results.length === 0 ? (
           <div className="ui-empty-state" role="status">

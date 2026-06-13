@@ -1,0 +1,126 @@
+html,
+body {
+  min-height: 100%;
+}
+
+html {
+  background: var(--color-bg);
+}
+
+@media (display-mode: standalone) {
+  :root {
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+html.is-ios-standalone,
+html.is-standalone {
+  --safe-area-top: env(safe-area-inset-top);
+  --safe-area-bottom: env(safe-area-inset-bottom);
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(
+      circle at top,
+      color-mix(in oklab, var(--accent-primary), transparent 94%),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 20% 20%,
+      color-mix(in oklab, var(--accent-warning), transparent 95%),
+      transparent 22%
+    ),
+    var(--color-bg);
+  color: var(--color-fg);
+  font-family: "Atkinson Hyperlegible", "Lato", "Segoe UI", sans-serif;
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  border-color: var(--color-border-soft);
+  border-style: solid;
+  border-width: 0;
+}
+
+:where(h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, figure, blockquote, pre) {
+  margin: 0;
+}
+
+:where(ul, ol) {
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+.ui-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-accent), transparent 68%);
+  color: var(--color-fg);
+}
+
+.ui-skip-link {
+  position: fixed;
+  top: calc(0.5rem + var(--safe-area-top));
+  left: 0.5rem;
+  z-index: 1000;
+  border-radius: var(--radius-2);
+  border: 1px solid color-mix(in oklab, var(--accent-primary), white 20%);
+  background: var(--color-surface-elevated);
+  color: var(--color-fg);
+  padding: 0.55rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-140%);
+  transition: transform 0.18s ease;
+}
+
+.ui-skip-link:focus-visible {
+  transform: translateY(0);
+}

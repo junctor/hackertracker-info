@@ -1,7 +1,7 @@
 function SiteFooter() {
   return (
     <footer className="ui-site-footer">
-      <div className="ui-container ui-site-footer-inner">
+      <div className="ui-chrome-container ui-site-footer-inner">
         <div className="ui-site-footer-row">
           <div className="ui-site-footer-brand">
             <p className="ui-section-label ui-site-footer-label hacker-tracker-text">
@@ -21,7 +21,7 @@ function SiteFooter() {
               className="ui-icon-plain ui-site-footer-source"
             >
               <img
-                src="/images/GitHub_Invertocat_White.svg"
+                src="/images/icons/github-invertocat-white.svg"
                 className="ui-icon-xs"
                 aria-hidden="true"
               />

@@ -75,7 +75,9 @@ function ContentSessionCard({
   );
 
   return (
-    <li className={`ui-card ui-card-interactive ui-accent-card ui-tone-${accentTone}`}>
+    <li
+      className={`ui-card ui-card-interactive ui-accent-card ui-content-session-card ui-tone-${accentTone}`}
+    >
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
 

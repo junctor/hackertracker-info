@@ -7,6 +7,7 @@ type ImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "style"> & {
 
 export default function Image({
   className,
+  decoding = "async",
   fillContainer,
   loading = "lazy",
   ...props
@@ -15,5 +16,12 @@ export default function Image({
     .filter(Boolean)
     .join(" ");
 
-  return <img {...props} loading={loading} className={resolvedClassName || undefined} />;
+  return (
+    <img
+      {...props}
+      decoding={decoding}
+      loading={loading}
+      className={resolvedClassName || undefined}
+    />
+  );
 }

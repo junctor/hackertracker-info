@@ -8,10 +8,13 @@ type SearchProps = {
   placeholder: string;
   value: string;
   onChange: Dispatch<SetStateAction<string>>;
+  onSubmit?: () => void;
 };
 
 type Props = {
   title: ReactNode;
+  actions?: ReactNode;
+  actionsInline?: boolean;
   description?: ReactNode;
   kicker?: ReactNode;
   resultLabel?: ReactNode;
@@ -21,6 +24,8 @@ type Props = {
 
 export default function PageHeader({
   title,
+  actions,
+  actionsInline,
   description,
   kicker,
   resultLabel,
@@ -29,29 +34,39 @@ export default function PageHeader({
 }: Props) {
   const searchInputId = useId();
   const hasControls = Boolean(search || children);
+  const hasHeaderAside = Boolean(resultLabel || actions);
+  const isInlineHeader = Boolean(actionsInline && hasHeaderAside);
   const titleContent =
     typeof title === "string" ? <h1 className="ui-heading-1">{title}</h1> : title;
 
   return (
     <header className="ui-page-header">
-      <div className="ui-page-header-row">
+      <div className={`ui-page-header-row${isInlineHeader ? " ui-page-header-row-inline" : ""}`}>
         <div className="ui-page-header-copy">
           {kicker ? <p className="ui-kicker ui-page-header-kicker">{kicker}</p> : null}
           {titleContent}
           {description ? <p className="ui-page-description">{description}</p> : null}
         </div>
 
-        {resultLabel ? (
-          <p role="status" aria-live="polite" className="ui-meta-pill ui-page-header-count">
-            {resultLabel}
-          </p>
+        {hasHeaderAside ? (
+          <div className="ui-page-header-aside">
+            {resultLabel ? (
+              <p role="status" aria-live="polite" className="ui-meta-pill ui-page-header-count">
+                {resultLabel}
+              </p>
+            ) : null}
+            {actions ? <div className="ui-page-header-actions">{actions}</div> : null}
+          </div>
         ) : null}
       </div>
 
       {hasControls ? (
         <form
           role={search ? "search" : undefined}
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault();
+            search?.onSubmit?.();
+          }}
           className="ui-control-panel"
         >
           {search ? (
@@ -70,6 +85,16 @@ export default function PageHeader({
                 />
               </span>
             </label>
+          ) : null}
+
+          {search?.onSubmit ? (
+            <button
+              type="submit"
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-page-header-search-submit"
+            >
+              <MagnifyingGlassIcon className="ui-icon-sm" aria-hidden="true" />
+              <span>Search</span>
+            </button>
           ) : null}
 
           {children ? <div className="ui-page-header-extra">{children}</div> : null}

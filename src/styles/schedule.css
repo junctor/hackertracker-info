@@ -1,0 +1,333 @@
+.ui-schedule-compact-button {
+  min-height: 2.5rem;
+}
+
+.ui-schedule-shell {
+  background: var(--color-bg);
+  color: var(--text-primary);
+}
+
+.ui-schedule-loading-shell {
+  min-height: calc(100dvh + 12rem);
+}
+
+.ui-schedule-tools {
+  display: flex;
+  justify-content: flex-end;
+  padding-block: var(--space-3);
+}
+
+@media (width < 40rem) {
+  .ui-schedule-tools {
+    justify-content: stretch;
+  }
+}
+
+.ui-schedule-tool-list {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+@media (width < 40rem) {
+  .ui-schedule-tool-list {
+    width: 100%;
+  }
+}
+
+.ui-schedule-tool-link {
+  min-width: 0;
+  gap: var(--space-2);
+  border-width: 1px;
+  border-radius: 0.75rem;
+  padding-inline: var(--space-3);
+  font-size: 0.875rem;
+}
+
+.ui-schedule-tool-link[aria-current="page"] {
+  border-color: color-mix(in oklab, var(--accent), transparent 55%);
+  background: color-mix(in oklab, var(--surface-elevated), transparent 8%);
+  color: white;
+}
+
+.ui-schedule-tool-link:not([aria-current="page"]) {
+  border-color: var(--border);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+}
+
+.ui-schedule-tool-link:not([aria-current="page"]):hover {
+  border-color: var(--border-strong);
+  background: var(--surface-interactive);
+  color: var(--text-primary);
+}
+
+.ui-schedule-tool-icon {
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.ui-schedule-tool-link[aria-current="page"] .ui-schedule-tool-icon {
+  color: var(--accent-success);
+}
+
+.ui-schedule-tool-link:not([aria-current="page"]):hover .ui-schedule-tool-icon {
+  color: var(--text-primary);
+}
+
+.ui-schedule-tool-label {
+  font-weight: 600;
+}
+
+.ui-schedule-loading-tool {
+  width: 7.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--surface-elevated), white 3%);
+}
+
+.ui-schedule-day-tabs {
+  position: sticky;
+  top: calc(4.25rem + var(--safe-area-top));
+  z-index: 40;
+  border-block: 1px solid color-mix(in oklab, white, transparent 92%);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (width < 40rem) {
+  .ui-schedule-day-tabs {
+    top: calc(4rem + var(--safe-area-top));
+  }
+}
+
+.ui-schedule-tabs-inner {
+  padding-block: 0.625rem;
+}
+
+.ui-schedule-tabs-tray {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background: color-mix(in oklab, var(--color-surface), transparent 18%);
+  padding: var(--space-1);
+}
+
+@media (width < 40rem) {
+  .ui-schedule-tabs-tray {
+    border-radius: var(--radius-3);
+    background: color-mix(in oklab, var(--surface-elevated), black 4%);
+  }
+}
+
+.ui-schedule-tab-scroll {
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.ui-schedule-tab-list {
+  display: flex;
+  min-width: max-content;
+  align-items: center;
+  gap: var(--space-2);
+  padding-right: var(--space-1);
+}
+
+.ui-schedule-day-tab {
+  position: relative;
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: var(--space-2);
+  border-radius: 1rem;
+  border-width: 1px;
+  padding: var(--space-2) 0.875rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  transition:
+    border-color 0.2s ease-out,
+    background-color 0.2s ease-out,
+    color 0.2s ease-out;
+}
+
+.ui-schedule-day-tab[aria-selected="true"] {
+  border-color: color-mix(in oklab, var(--accent), transparent 55%);
+  background: color-mix(in oklab, var(--surface-elevated), transparent 8%);
+  color: white;
+}
+
+.ui-schedule-day-tab[aria-selected="false"] {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.ui-schedule-day-tab[aria-selected="false"]:hover {
+  border-color: var(--border);
+  background: var(--surface-muted);
+  color: var(--text-primary);
+}
+
+.ui-schedule-day-tab-title {
+  font-weight: 600;
+}
+
+.ui-schedule-loading-tab {
+  width: 8rem;
+  height: 2.75rem;
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--surface-elevated), white 4%);
+}
+
+.ui-schedule-day-count {
+  border-radius: var(--radius-pill);
+  border-width: 1px;
+  padding: 0.125rem var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transition: color 0.2s ease;
+}
+
+.ui-schedule-day-tab[aria-selected="true"] .ui-schedule-day-count {
+  border-color: color-mix(in oklab, var(--accent), transparent 74%);
+  background: color-mix(in oklab, var(--accent), transparent 88%);
+  color: var(--accent-success);
+}
+
+.ui-schedule-day-tab[aria-selected="false"] .ui-schedule-day-count {
+  border-color: var(--border);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+}
+
+.ui-schedule-day-tab[aria-selected="false"]:hover .ui-schedule-day-count {
+  color: var(--text-primary);
+}
+
+.ui-schedule-heading-wrap {
+  margin-block: var(--space-4) var(--space-3);
+}
+
+.ui-schedule-heading-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-bottom: 1px solid color-mix(in oklab, white, transparent 92%);
+  padding-bottom: 0.875rem;
+}
+
+@media (width >= 40rem) {
+  .ui-schedule-heading-row {
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
+  }
+}
+
+.ui-schedule-heading-title-wrap {
+  min-width: 0;
+}
+
+.ui-schedule-heading-title {
+  scroll-margin-top: calc(4rem + var(--safe-area-top) + 4.75rem + 1rem);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+@media (width >= 48rem) {
+  .ui-schedule-heading-title {
+    font-size: 1.875rem;
+  }
+}
+
+.ui-schedule-event-list {
+  margin-bottom: var(--space-8);
+  list-style: none;
+}
+
+.ui-schedule-loading-content {
+  padding-top: var(--space-4);
+}
+
+.ui-schedule-loading-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  border-bottom: 1px solid color-mix(in oklab, white, transparent 92%);
+  padding-bottom: 0.875rem;
+}
+
+@media (width >= 40rem) {
+  .ui-schedule-loading-heading {
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
+  }
+}
+
+.ui-schedule-loading-list {
+  margin-bottom: 0;
+}
+
+.ui-schedule-loading-card {
+  display: block;
+  min-height: 8.5rem;
+  background: color-mix(in oklab, var(--surface), white 3%);
+}
+
+@media (width >= 48rem) {
+  .ui-schedule-loading-card {
+    min-height: 7rem;
+  }
+}
+
+.ui-schedule-event-list-item {
+  margin-bottom: var(--space-3);
+}
+
+@media (width < 40rem) {
+  .ui-schedule-event-list-item {
+    margin-bottom: var(--space-2);
+  }
+}
+
+.ui-schedule-event-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.ui-scrollbar-none {
+  scrollbar-width: none;
+}
+
+.ui-scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@media (width <= 20rem) {
+  .ui-schedule-compact-button {
+    width: 2.5rem;
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .ui-schedule-compact-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+.ui-schedule-page-shell > .ui-topbar,
+.ui-schedule-day-tabs {
+  background: var(--color-bg);
+}

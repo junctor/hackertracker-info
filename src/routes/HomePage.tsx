@@ -202,6 +202,12 @@ export default function HomePage() {
               <p className="ui-homepage-empty">No conferences are currently available.</p>
             )}
           </section>
+
+          <div className="ui-homepage-archive-link-wrap">
+            <Link to="/conferences" className="ui-focus-ring ui-homepage-archive-link">
+              Older conferences
+            </Link>
+          </div>
         </div>
       </main>
     </>

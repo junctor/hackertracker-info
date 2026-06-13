@@ -22,7 +22,7 @@ export default function DocumentDetails({ document, conference }: Props) {
       });
 
   return (
-    <article className="ui-container ui-page-content">
+    <article className="ui-container ui-page-content ui-detail-page">
       <nav aria-label="Breadcrumb" className="ui-breadcrumb" role="navigation">
         <ol className="ui-breadcrumb-list">
           <li>

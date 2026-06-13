@@ -1,0 +1,1207 @@
+.ui-homepage-shell {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+.ui-homepage-ambient,
+.ui-homepage-grid {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.ui-homepage-top-light {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 10rem;
+}
+
+.ui-homepage-content {
+  position: relative;
+  padding-block: 4rem 3.5rem;
+}
+
+@media (width >= 40rem) {
+  .ui-homepage-content {
+    padding-block: 5rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-homepage-content {
+    padding-top: 6rem;
+  }
+}
+
+.ui-homepage-header {
+  max-width: 56rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.ui-homepage-title-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  color: inherit;
+}
+
+.ui-homepage-ambient {
+  background:
+    radial-gradient(
+      circle at top,
+      color-mix(in oklab, var(--accent-primary), transparent 74%),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 20% 30%,
+      color-mix(in oklab, var(--accent-warning), transparent 82%),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      color-mix(in oklab, var(--accent-danger), transparent 84%),
+      transparent 20%
+    );
+}
+
+.ui-homepage-grid {
+  background-image:
+    linear-gradient(color-mix(in oklab, white, transparent 92%) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, white, transparent 92%) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.14;
+  animation: ui-homepage-grid-drift 34s linear infinite;
+}
+
+.ui-homepage-top-light {
+  background: linear-gradient(to bottom, color-mix(in oklab, white, transparent 95%), transparent);
+}
+
+.ui-homepage-title {
+  display: inline-block;
+  min-width: 8ch;
+  max-width: 100%;
+  cursor: pointer;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+  color: color-mix(in oklab, var(--color-fg), white 10%);
+  text-shadow:
+    0 0 18px color-mix(in oklab, var(--accent-primary), transparent 78%),
+    0 0 42px color-mix(in oklab, var(--accent-danger), transparent 88%);
+}
+
+.ui-homepage-title-display {
+  font-size: clamp(2.2rem, 16vw, 5rem);
+  letter-spacing: 0.04em;
+}
+
+@media (width >= 40rem) {
+  .ui-homepage-title-display {
+    font-size: 6rem;
+    letter-spacing: 0.07em;
+  }
+}
+
+@media (width >= 48rem) {
+  .ui-homepage-title-display {
+    font-size: 8rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-homepage-title-display {
+    font-size: 10rem;
+  }
+}
+
+.ui-homepage-title-rule {
+  width: 7rem;
+  height: 1px;
+  margin: var(--space-6) auto 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-border), white 24%),
+    transparent
+  );
+}
+
+@media (width >= 40rem) {
+  .ui-homepage-title-rule {
+    width: 8rem;
+    margin-top: 1.75rem;
+  }
+}
+
+.ui-homepage-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  width: 100%;
+  max-width: 72rem;
+  margin-top: var(--space-10);
+  margin-inline: auto;
+}
+
+@media (width >= 40rem) {
+  .ui-homepage-card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+  }
+
+  .ui-homepage-card-grid[data-count="1"] {
+    max-width: 34rem;
+  }
+
+  .ui-homepage-card-grid[data-count="2"] {
+    max-width: 58rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-homepage-card-grid {
+    gap: 1.75rem;
+  }
+
+  .ui-homepage-card-grid[data-count="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.ui-homepage-empty {
+  max-width: 34rem;
+  margin-inline: auto;
+  border-radius: var(--radius-3);
+  border: 1px solid color-mix(in oklab, white, transparent 88%);
+  background: color-mix(in oklab, var(--color-surface), transparent 8%);
+  padding: var(--space-5) var(--space-6);
+  color: var(--color-muted);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-homepage-archive-link-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+.ui-homepage-archive-link,
+.ui-conferences-home-link {
+  color: color-mix(in oklab, var(--text-muted), white 8%);
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--accent-success), transparent 38%);
+  text-underline-offset: 0.25rem;
+  transition:
+    color 0.18s ease,
+    text-decoration-color 0.18s ease;
+}
+
+.ui-homepage-archive-link:hover,
+.ui-homepage-archive-link:focus-visible,
+.ui-conferences-home-link:hover,
+.ui-conferences-home-link:focus-visible {
+  color: var(--text-primary);
+  text-decoration-color: var(--accent-success);
+}
+
+.ui-home-conference-card {
+  position: relative;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  padding: 1px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.ui-home-conference-card:hover,
+.ui-home-conference-card:focus-visible {
+  transform: translateY(-0.375rem);
+  box-shadow: var(--shadow-lg);
+}
+
+.ui-home-conference-card-accent {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transition: opacity 0.3s ease;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--accent-warning), transparent 60%),
+    color-mix(in oklab, var(--accent-danger), transparent 72%),
+    color-mix(in oklab, var(--accent-primary), transparent 68%)
+  );
+  opacity: 0.82;
+}
+
+.ui-home-conference-card:hover .ui-home-conference-card-accent,
+.ui-home-conference-card:focus-visible .ui-home-conference-card-accent {
+  opacity: 1;
+}
+
+.ui-home-conference-card-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background:
+    radial-gradient(
+      circle at top left,
+      color-mix(in oklab, var(--accent-warning), transparent 78%),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      color-mix(in oklab, var(--accent-primary), transparent 80%),
+      transparent 36%
+    );
+}
+
+.ui-home-conference-card:hover .ui-home-conference-card-glow,
+.ui-home-conference-card:focus-visible .ui-home-conference-card-glow {
+  opacity: 1;
+}
+
+.ui-home-conference-card-sheen {
+  position: absolute;
+  top: 0;
+  left: -33.3333%;
+  width: 50%;
+  height: 100%;
+  transform: skewX(-12deg);
+  opacity: 0;
+  transition:
+    opacity 0.7s ease,
+    translate 0.7s ease;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, white, transparent 46%),
+    transparent
+  );
+}
+
+.ui-home-conference-card:hover .ui-home-conference-card-sheen,
+.ui-home-conference-card:focus-visible .ui-home-conference-card-sheen {
+  opacity: 1;
+  translate: 240% 0;
+}
+
+.ui-home-conference-card-shell {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding: 0.875rem;
+  backdrop-filter: blur(12px);
+  border-radius: calc(var(--radius-4) - 1px);
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background: color-mix(in oklab, var(--color-surface), black 10%);
+}
+
+@media (width >= 40rem) {
+  .ui-home-conference-card-shell {
+    padding: var(--space-4);
+  }
+}
+
+.ui-home-conference-card-panel {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 1rem;
+  padding: var(--space-4) var(--space-5);
+  transition: border-color 0.3s ease;
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background: radial-gradient(
+    circle at top,
+    color-mix(in oklab, white, transparent 94%),
+    color-mix(in oklab, var(--color-surface), black 20%) 74%
+  );
+}
+
+@media (width >= 40rem) {
+  .ui-home-conference-card-panel {
+    padding: var(--space-5) var(--space-6);
+  }
+}
+
+.ui-home-conference-card:hover .ui-home-conference-card-panel,
+.ui-home-conference-card:focus-visible .ui-home-conference-card-panel {
+  border-color: color-mix(in oklab, var(--accent-warning), transparent 72%);
+}
+
+.ui-home-conference-card-grid {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(color-mix(in oklab, white, transparent 96%) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, white, transparent 96%) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.4;
+}
+
+.ui-home-conference-card-top-light {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 3.5rem;
+  background: linear-gradient(to bottom, color-mix(in oklab, white, transparent 94%), transparent);
+}
+
+@media (width >= 40rem) {
+  .ui-home-conference-card-top-light {
+    height: 4rem;
+  }
+}
+
+.ui-home-conference-card-content {
+  position: relative;
+  z-index: 10;
+}
+
+.ui-home-conference-card-copy {
+  text-align: center;
+}
+
+.ui-home-conference-card-name {
+  color: color-mix(in oklab, var(--color-fg), white 4%);
+}
+
+@media (width >= 40rem) {
+  .ui-home-conference-card-name {
+    font-size: 1rem;
+  }
+}
+
+.ui-home-conference-card-date {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+
+.ui-home-conference-card-logo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 6;
+  margin-top: var(--space-4);
+}
+
+@media (width >= 40rem) {
+  .ui-home-conference-card-logo {
+    margin-top: var(--space-5);
+  }
+}
+
+.ui-home-conference-card-logo-image {
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.ui-home-conference-card:hover .ui-home-conference-card-logo-image,
+.ui-home-conference-card:focus-visible .ui-home-conference-card-logo-image {
+  transform: translateY(-0.125rem) scale(1.05);
+}
+
+.ui-home-conference-countdown {
+  margin-top: var(--space-3);
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background: color-mix(in oklab, var(--color-bg), transparent 18%);
+  padding: 0.625rem var(--space-3);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, white, transparent 96%);
+}
+
+@media (width >= 40rem) {
+  .ui-home-conference-countdown {
+    margin-top: var(--space-4);
+    padding-block: var(--space-3);
+  }
+}
+
+.ui-conferences-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.ui-conferences-content {
+  position: relative;
+  padding-block: clamp(3rem, 8vw, 5rem);
+}
+
+.ui-conferences-header {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 44rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.ui-conferences-kicker {
+  margin-top: var(--space-6);
+}
+
+.ui-conferences-header .ui-page-description {
+  margin-inline: auto;
+}
+
+.ui-conferences-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  max-width: 54rem;
+  margin: var(--space-8) auto 0;
+}
+
+@media (width >= 48rem) {
+  .ui-conferences-grid {
+    gap: var(--space-4);
+  }
+}
+
+.ui-conference-archive-card {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  min-height: 6.5rem;
+  align-items: center;
+  gap: var(--space-4);
+  overflow: hidden;
+  border-radius: var(--radius-3);
+  border: 1px solid color-mix(in oklab, white, transparent 90%);
+  background:
+    linear-gradient(135deg, color-mix(in oklab, white, transparent 96%), transparent 48%),
+    color-mix(in oklab, var(--color-surface), black 8%);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.ui-conference-archive-card:hover,
+.ui-conference-archive-card:focus-visible {
+  border-color: color-mix(in oklab, var(--accent-success), transparent 48%);
+  background-color: color-mix(in oklab, var(--color-surface-elevated), transparent 4%);
+  transform: translateY(-0.125rem);
+}
+
+.ui-conference-archive-logo {
+  position: relative;
+  display: block;
+  width: 5rem;
+  aspect-ratio: 1;
+}
+
+.ui-conference-archive-logo-image {
+  object-fit: contain;
+}
+
+.ui-conference-archive-copy {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-1);
+}
+
+.ui-conference-archive-name {
+  color: var(--text-primary);
+  font-size: clamp(1rem, 3.6vw, 1.25rem);
+  font-weight: 750;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.ui-conference-archive-date {
+  color: var(--text-muted);
+  font-size: 0.925rem;
+  line-height: 1.35;
+}
+
+@media (width >= 48rem) {
+  .ui-conference-archive-card {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    min-height: 8rem;
+    gap: var(--space-5);
+    padding: var(--space-5);
+  }
+
+  .ui-conference-archive-logo {
+    width: 7rem;
+  }
+}
+
+.ui-countdown-glow {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  filter: blur(24px);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, currentcolor 0%, transparent 72%);
+}
+
+.ui-countdown-large {
+  width: 100%;
+  max-width: 64rem;
+  margin-top: var(--space-4);
+  padding-inline: var(--space-2);
+}
+
+@media (width >= 40rem) {
+  .ui-countdown-large {
+    margin-top: var(--space-8);
+  }
+}
+
+@media (width >= 48rem) {
+  .ui-countdown-large {
+    margin-top: var(--space-10);
+  }
+}
+
+.ui-countdown-tiny {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.ui-countdown-grid-large,
+.ui-countdown-grid-tiny {
+  display: grid;
+  text-align: center;
+}
+
+.ui-countdown-grid-large {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6) var(--space-4);
+}
+
+@media (width >= 40rem) {
+  .ui-countdown-grid-large {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: var(--space-6);
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-countdown-grid-large {
+    column-gap: var(--space-8);
+  }
+}
+
+.ui-countdown-grid-tiny {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--space-2);
+}
+
+.ui-countdown-item-large,
+.ui-countdown-item-tiny {
+  position: relative;
+  min-width: 0;
+}
+
+.ui-countdown-item-large {
+  padding-inline: var(--space-2);
+}
+
+@media (width >= 40rem) {
+  .ui-countdown-item-large {
+    padding-inline: var(--space-3);
+  }
+}
+
+.ui-countdown-value-wrap-large,
+.ui-countdown-value-wrap-tiny {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+.ui-countdown-value-wrap-large {
+  min-height: 3.5rem;
+}
+
+@media (width >= 40rem) {
+  .ui-countdown-value-wrap-large {
+    min-height: 4.5rem;
+  }
+}
+
+@media (width >= 48rem) {
+  .ui-countdown-value-wrap-large {
+    min-height: 5rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-countdown-value-wrap-large {
+    min-height: 6rem;
+  }
+}
+
+.ui-countdown-value-wrap-tiny {
+  min-height: 1.5rem;
+}
+
+.ui-countdown-value-large,
+.ui-countdown-value-tiny {
+  position: relative;
+  z-index: 10;
+  display: block;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.ui-countdown-value-large {
+  color: color-mix(in oklab, white, transparent 2%);
+  font-size: 1.875rem;
+}
+
+@media (width >= 40rem) {
+  .ui-countdown-value-large {
+    font-size: 2.25rem;
+  }
+}
+
+@media (width >= 48rem) {
+  .ui-countdown-value-large {
+    font-size: 3rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-countdown-value-large {
+    font-size: 4.5rem;
+  }
+}
+
+.ui-countdown-value-tiny {
+  color: color-mix(in oklab, var(--text-primary), transparent 4%);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+@media (width >= 40rem) {
+  .ui-countdown-value-tiny {
+    font-size: 0.875rem;
+  }
+}
+
+.ui-countdown-label-large,
+.ui-countdown-label-tiny {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.ui-countdown-label-large {
+  margin-top: var(--space-2);
+  color: color-mix(in oklab, var(--text-primary), transparent 18%);
+  font-size: 0.75rem;
+}
+
+@media (width >= 48rem) {
+  .ui-countdown-label-large {
+    font-size: 0.875rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-countdown-label-large {
+    margin-top: var(--space-3);
+    font-size: 1rem;
+  }
+}
+
+.ui-countdown-label-tiny {
+  margin-top: var(--space-1);
+  color: var(--text-subtle);
+  font-size: 0.75rem;
+}
+
+.ui-countdown-separator-large,
+.ui-countdown-separator-tiny {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  display: none;
+  width: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in oklab, white, transparent 86%),
+    transparent
+  );
+}
+
+.ui-countdown-separator-large {
+  height: 3rem;
+}
+
+.ui-countdown-separator-tiny {
+  height: 1.25rem;
+}
+
+@media (width >= 40rem) {
+  .ui-countdown-separator-large,
+  .ui-countdown-separator-tiny {
+    display: block;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-countdown-separator-large {
+    height: 4rem;
+  }
+}
+
+.ui-countdown-glow-large {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+@media (width >= 40rem) {
+  .ui-countdown-glow-large {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-countdown-glow-large {
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
+.ui-countdown-glow-tiny {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+@media (width >= 40rem) {
+  .ui-countdown-glow-tiny {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.ui-countdown-rule {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: var(--space-3);
+  top: 50%;
+  height: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, white, transparent 90%),
+    transparent
+  );
+}
+
+.ui-countdown-unit-days {
+  color: var(--dc34-accent-critical);
+}
+
+.ui-countdown-unit-hours {
+  color: var(--dc34-accent-warning);
+}
+
+.ui-countdown-unit-minutes {
+  color: var(--dc34-bg-primary);
+}
+
+.ui-countdown-unit-seconds {
+  color: var(--dc34-bg-secondary);
+}
+
+.ui-home-menu-card {
+  isolation: isolate;
+  position: relative;
+  display: flex;
+  min-height: 8.75rem;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-3);
+  border-width: 1px;
+  border-color: color-mix(in oklab, var(--border), white 8%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--surface-elevated), transparent 4%),
+    color-mix(in oklab, var(--surface), black 14%)
+  );
+  padding: var(--space-4);
+  text-align: left;
+  transition:
+    transform 0.2s ease-out,
+    border-color 0.2s ease-out,
+    box-shadow 0.2s ease-out;
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-home-menu-card:hover,
+.ui-home-menu-card:focus-visible {
+  transform: translateY(-0.125rem);
+  border-color: color-mix(in oklab, var(--accent-primary), transparent 52%);
+  box-shadow: var(--shadow-md);
+}
+
+@media (width >= 40rem) {
+  .ui-home-menu-card {
+    min-height: 10.5rem;
+    padding: var(--space-5);
+  }
+}
+
+.ui-home-menu-card-featured {
+  border-color: color-mix(in oklab, var(--accent-success), transparent 68%);
+}
+
+.ui-home-menu-card-icon {
+  display: flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.025));
+  color: var(--text-muted);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+.ui-home-menu-card:hover .ui-home-menu-card-icon,
+.ui-home-menu-card:focus-within .ui-home-menu-card-icon {
+  border-color: color-mix(in oklab, var(--accent), transparent 68%);
+  background: color-mix(in oklab, var(--accent), transparent 88%);
+  color: var(--accent-success);
+}
+
+@media (width >= 40rem) {
+  .ui-home-menu-card-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
+.ui-home-menu-card-action {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.125rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  color: var(--text-subtle);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.ui-home-menu-card:hover .ui-home-menu-card-action,
+.ui-home-menu-card:focus-within .ui-home-menu-card-action {
+  transform: translateX(0.125rem);
+  border-color: var(--border-strong);
+  background: var(--surface-interactive);
+  color: var(--text-primary);
+}
+
+.ui-home-menu-card-aura {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background: radial-gradient(
+    circle at top right,
+    color-mix(in oklab, var(--accent-primary), transparent 84%),
+    transparent 42%
+  );
+}
+
+.ui-home-menu-card:hover .ui-home-menu-card-aura,
+.ui-home-menu-card:focus-within .ui-home-menu-card-aura {
+  opacity: 1;
+}
+
+.ui-home-menu-card-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.ui-home-menu-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.ui-home-menu-card-copy {
+  min-width: 0;
+  margin-top: var(--space-4);
+}
+
+.ui-home-menu-card-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+}
+
+.ui-home-menu-card-title {
+  min-width: 0;
+  flex: 1 1 auto;
+  font-size: 0.875rem;
+}
+
+@media (width >= 40rem) {
+  .ui-home-menu-card-title {
+    font-size: 1rem;
+  }
+}
+
+.ui-home-menu-card-description {
+  margin-top: var(--space-2);
+  transition: color 0.2s ease;
+}
+
+.ui-home-menu-card:hover .ui-home-menu-card-description,
+.ui-home-menu-card:focus-within .ui-home-menu-card-description {
+  color: var(--text-primary);
+}
+
+.ui-home-section {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 2.5rem var(--layout-gutter);
+}
+
+.ui-home-menu-section {
+  max-width: 76rem;
+}
+
+@media (width >= 40rem) {
+  .ui-home-section {
+    padding-block: 3.5rem;
+  }
+}
+
+@media (width >= 48rem) {
+  .ui-home-section {
+    padding-block: 4rem;
+  }
+}
+
+.ui-home-hero-logo {
+  position: relative;
+  width: 91.6667%;
+  max-width: 42rem;
+  height: 10rem;
+  margin-inline: auto;
+}
+
+@media (width >= 40rem) {
+  .ui-home-hero-logo {
+    height: 11rem;
+  }
+}
+
+@media (width >= 48rem) {
+  .ui-home-hero-logo {
+    height: 13rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-home-hero-logo {
+    height: 14rem;
+  }
+}
+
+.ui-home-menu-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-6);
+}
+
+@media (width >= 48rem) {
+  .ui-home-menu-hero {
+    grid-template-columns: minmax(13rem, 0.9fr) minmax(0, 1.1fr);
+    gap: var(--space-8);
+  }
+}
+
+.ui-home-menu-logo {
+  width: 100%;
+  max-width: 31rem;
+  height: clamp(8rem, 26vw, 14rem);
+}
+
+@media (width < 48rem) {
+  .ui-home-menu-logo {
+    max-width: 24rem;
+  }
+}
+
+.ui-home-menu-hero-copy {
+  min-width: 0;
+  max-width: 100%;
+  text-align: center;
+}
+
+@media (width >= 48rem) {
+  .ui-home-menu-hero-copy {
+    text-align: left;
+  }
+}
+
+.ui-home-menu-title {
+  margin-top: var(--space-2);
+  color: var(--text-primary);
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 0.95;
+  overflow-wrap: anywhere;
+}
+
+@media (width >= 48rem) {
+  .ui-home-menu-title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-home-menu-title {
+    font-size: 4.5rem;
+  }
+}
+
+.ui-home-menu-description {
+  width: min(100%, 38rem);
+  max-width: 38rem;
+  margin: var(--space-4) auto 0;
+  color: color-mix(in oklab, var(--text-primary), var(--text-muted) 26%);
+  font-size: 1rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+@media (width >= 48rem) {
+  .ui-home-menu-description {
+    margin-inline: 0;
+    font-size: 1.0625rem;
+  }
+}
+
+.ui-home-menu-date {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: var(--space-5);
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in oklab, var(--accent-success), transparent 70%);
+  background: color-mix(in oklab, var(--accent-success), transparent 90%);
+  padding: 0.35rem 0.75rem;
+  color: color-mix(in oklab, var(--accent-success), white 12%);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.ui-home-menu-nav {
+  max-width: 72rem;
+  margin: var(--space-8) auto 0;
+}
+
+@media (width >= 40rem) {
+  .ui-home-menu-nav {
+    margin-top: var(--space-12);
+  }
+}
+
+.ui-home-menu-grid {
+  display: grid;
+  list-style: none;
+  gap: 0.875rem;
+}
+
+@media (width >= 40rem) {
+  .ui-home-menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+@media (width >= 64rem) {
+  .ui-home-menu-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 80rem) {
+  .ui-home-menu-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@keyframes ui-homepage-grid-drift {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 40px 40px;
+  }
+}

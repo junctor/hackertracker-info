@@ -1,0 +1,423 @@
+.ui-empty-state {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in oklab, var(--border), white 8%);
+  background: color-mix(in oklab, var(--surface-muted), transparent 8%);
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+@media (width < 40rem) {
+  .ui-empty-state {
+    background: color-mix(in oklab, var(--surface-elevated), black 2%);
+    padding: var(--space-5);
+  }
+}
+
+.ui-empty-state-action {
+  margin-top: 1rem;
+}
+
+.ui-screen-glow-loading {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 14rem;
+  background: radial-gradient(circle at top, rgb(1 127 164 / 0.16), transparent 62%);
+}
+
+.ui-screen-glow-error {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 12rem;
+  background: radial-gradient(circle at top, rgb(239 68 68 / 0.14), transparent 62%);
+}
+
+.ui-screen-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--space-10) var(--layout-gutter);
+}
+
+@media (width >= 40rem) {
+  .ui-screen-main {
+    padding-block: 3.5rem;
+  }
+}
+
+.ui-loading-card,
+.ui-error-card {
+  position: relative;
+  width: min(calc(100vw - (var(--layout-gutter) * 2)), var(--screen-card-max, 42rem));
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+.ui-loading-card {
+  --screen-card-max: 28rem;
+  padding: 1.75rem var(--space-6);
+}
+
+.ui-error-card {
+  --screen-card-max: 42rem;
+  padding: 1.75rem var(--space-6);
+}
+
+@media (width >= 40rem) {
+  .ui-loading-card {
+    padding: var(--space-8);
+  }
+
+  .ui-error-card {
+    padding: 2.25rem var(--space-8);
+  }
+}
+
+.ui-screen-card-rule,
+.ui-screen-card-rule-critical {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+}
+
+.ui-screen-card-rule {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--accent-success), transparent 40%),
+    transparent
+  );
+}
+
+.ui-screen-card-rule-critical {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--critical), transparent 55%),
+    transparent
+  );
+}
+
+.ui-loading-mark {
+  position: relative;
+  display: flex;
+  width: 4rem;
+  height: 4rem;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+.ui-loading-ring,
+.ui-loading-spinner {
+  position: absolute;
+  border-radius: var(--radius-pill);
+}
+
+.ui-loading-ring {
+  inset: 0;
+  border-width: 1px;
+  border-color: color-mix(in oklab, var(--accent), transparent 80%);
+  background: color-mix(in oklab, var(--accent), transparent 92%);
+}
+
+.ui-loading-spinner {
+  inset: 0.375rem;
+  border-width: 2px;
+  border-color: var(--border-strong);
+  border-top-color: var(--accent-success);
+  animation: ui-spin 1s linear infinite;
+}
+
+.ui-loading-pulse-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: var(--radius-pill);
+  background: var(--accent-success);
+  animation: ui-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 18px rgb(108 205 187 / 0.55);
+}
+
+.ui-screen-kicker {
+  margin-top: var(--space-5);
+}
+
+.ui-loading-title {
+  margin-top: var(--space-2);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+@media (width >= 40rem) {
+  .ui-loading-title {
+    font-size: 1.5rem;
+  }
+}
+
+.ui-loading-copy {
+  margin-top: var(--space-3);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+.ui-loading-skeleton {
+  display: grid;
+  gap: 0.625rem;
+  margin-top: var(--space-6);
+}
+
+.ui-loading-skeleton-line {
+  height: 0.5rem;
+  border-radius: var(--radius-pill);
+  animation: ui-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.ui-loading-skeleton-line:nth-child(1) {
+  background: color-mix(in oklab, white, transparent 94%);
+}
+
+.ui-loading-skeleton-line:nth-child(2) {
+  width: 83.3333%;
+  background: color-mix(in oklab, white, transparent 95%);
+}
+
+.ui-loading-skeleton-line:nth-child(3) {
+  width: 66.6667%;
+  background: color-mix(in oklab, white, transparent 96%);
+}
+
+.ui-route-loading {
+  min-height: calc(100dvh + 8rem);
+}
+
+.ui-route-loading-header {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 42rem;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid color-mix(in oklab, var(--border), white 8%);
+}
+
+.ui-route-loading-list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.ui-route-loading-card {
+  display: block;
+  min-height: 7rem;
+  background: color-mix(in oklab, var(--surface), white 3%);
+}
+
+.ui-skeleton-line,
+.ui-skeleton-control {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, white, transparent 92%);
+  animation: ui-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.ui-skeleton-line {
+  height: 0.875rem;
+}
+
+.ui-skeleton-line-kicker {
+  width: 8rem;
+  height: 0.75rem;
+}
+
+.ui-skeleton-line-title {
+  width: min(24rem, 82%);
+  height: 1.625rem;
+}
+
+.ui-skeleton-line-copy {
+  width: min(34rem, 100%);
+}
+
+.ui-skeleton-line-pill {
+  width: 6.5rem;
+  height: 2rem;
+}
+
+.ui-error-icon {
+  display: flex;
+  width: 3.5rem;
+  height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in oklab, var(--critical), transparent 80%);
+  background: color-mix(in oklab, var(--critical), transparent 90%);
+  color: white;
+}
+
+.ui-error-title {
+  margin-top: var(--space-2);
+  color: var(--text-primary);
+  font-size: 1.875rem;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+@media (width >= 40rem) {
+  .ui-error-title {
+    font-size: 2.25rem;
+  }
+}
+
+.ui-error-copy {
+  max-width: 36rem;
+  margin: var(--space-3) auto 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+
+@media (width >= 40rem) {
+  .ui-error-copy {
+    font-size: 1rem;
+  }
+}
+
+.ui-error-details {
+  margin-top: var(--space-6);
+  border-radius: 1rem;
+  border: 1px solid color-mix(in oklab, var(--critical), transparent 84%);
+  background: color-mix(in oklab, var(--critical), transparent 90%);
+  padding: var(--space-4);
+  text-align: left;
+}
+
+.ui-error-details-label {
+  color: color-mix(in oklab, white, transparent 25%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ui-error-message {
+  max-height: 20rem;
+  margin-top: var(--space-2);
+  overflow: auto;
+  color: color-mix(in oklab, white, transparent 10%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+@media (width >= 40rem) {
+  .ui-error-message {
+    max-height: 24rem;
+    font-size: 0.875rem;
+  }
+}
+
+.ui-error-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.75rem;
+}
+
+.ui-error-home-link {
+  min-width: 11rem;
+  gap: var(--space-2);
+  border-radius: 0.75rem;
+  padding-inline: var(--space-4);
+  box-shadow: var(--shadow-lg);
+}
+
+.ui-tv-main {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding-inline: var(--space-6);
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.ui-tv-stack {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.ui-tv-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.ui-tv-copy {
+  color: var(--text-muted);
+}
+
+@media (hover: hover) {
+  .ui-card-interactive:hover {
+    transform: translateY(-1px);
+  }
+
+  .ui-btn-base:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  .ui-btn-base,
+  .ui-card-interactive,
+  .ui-accent-rail,
+  .ui-accent-rail-overlay,
+  .ui-pill-link,
+  .ui-link,
+  .ui-input-base,
+  .ui-skip-link,
+  .ui-homepage-grid,
+  .ui-homepage-title,
+  .ui-home-conference-card,
+  .ui-home-conference-card * {
+    transition: none;
+    animation: none !important;
+  }
+
+  .ui-home-conference-card:hover,
+  .ui-home-conference-card:focus-visible,
+  .ui-home-conference-card:hover img,
+  .ui-home-conference-card:hover .ui-home-conference-card-sheen {
+    transform: none !important;
+  }
+}
+
+@keyframes ui-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ui-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}

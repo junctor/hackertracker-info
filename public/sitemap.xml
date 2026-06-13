@@ -7,6 +7,9 @@
     <loc>https://info.defcon.org/apps/</loc>
   </url>
   <url>
+    <loc>https://info.defcon.org/conferences</loc>
+  </url>
+  <url>
     <loc>https://info.defcon.org/defcon34</loc>
   </url>
   <url>
@@ -25,7 +28,7 @@
     <loc>https://info.defcon.org/defcon34/search</loc>
   </url>
   <url>
-    <loc>https://info.defcon.org/dc34/data/</loc>
+    <loc>https://info.defcon.org/defcon34/data/</loc>
   </url>
   <url>
     <loc>https://info.defcon.org/dcsg2026</loc>
@@ -44,5 +47,38 @@
   </url>
   <url>
     <loc>https://info.defcon.org/dcsg2026/search</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/dcsg2026/data/</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defconbahrain2025</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defconbahrain2025/schedule</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defconbahrain2025/speakers</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defconbahrain2025/search</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defconbahrain2025/data/</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defcon33</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defcon33/schedule</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defcon33/speakers</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defcon33/search</loc>
+  </url>
+  <url>
+    <loc>https://info.defcon.org/defcon33/data/</loc>
   </url>
 </urlset>

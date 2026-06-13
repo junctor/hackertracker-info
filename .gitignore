@@ -38,5 +38,10 @@ yarn-error.log*
 # Ignore exported HT static files
 public/ht
 
+# Generated public discovery files
+/public/llms.txt
+/public/sitemap.xml
+/public/**/data/index.html
+
 # Local static data export staging
 out/

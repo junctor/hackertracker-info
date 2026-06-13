@@ -1,6 +1,7 @@
 import {
   ChevronDownIcon,
   ChevronRightIcon,
+  HomeIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router";
@@ -117,6 +118,10 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             className="ui-icon-plain"
           >
             <MagnifyingGlassIcon className="ui-icon-sm" aria-label="Search" title="Search" />
+          </a>
+
+          <a href="/" aria-label="Home" title="Home" className="ui-icon-plain">
+            <HomeIcon className="ui-icon-sm" aria-label="Home" title="Home" />
           </a>
 
           <a

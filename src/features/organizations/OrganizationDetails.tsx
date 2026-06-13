@@ -4,6 +4,7 @@ import { Link } from "react-router";
 
 import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
+import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { OrganizationEntity } from "@/lib/types/ht-types";
 import { getSafeExternalHref } from "@/lib/url";
@@ -38,102 +39,108 @@ export default function OrganizationDetails({ org, conference }: Props) {
   const hasLinks = org.links.length > 0;
 
   return (
-    <article className="ui-container ui-page-content ui-organization-detail-page">
-      <header className="ui-card ui-detail-card ui-organization-header">
-        <span aria-hidden="true" className="ui-accent-rail ui-tone-secondary" />
+    <article className="ui-container ui-page-content ui-detail-stack ui-organization-detail-page">
+      <div className="ui-detail-header-accent ui-tone-secondary">
+        <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
-        <div className="ui-organization-header-row">
-          <div className="ui-logo-frame ui-logo-frame-lg">
-            {org.logoUrl ? (
-              <Image
-                src={org.logoUrl}
-                alt={`${org.name} logo`}
-                fillContainer
-                className="ui-image-contain ui-logo-image-pad"
-                loading="eager"
-                sizes="(min-width: 640px) 6rem, 5rem"
-              />
-            ) : (
-              <div className="ui-logo-initials-fill" role="img" aria-label={`${org.name} logo`}>
-                {initials}
+
+        <PageHeader
+          title={
+            <div className="ui-organization-header-row">
+              <div className="ui-logo-frame ui-logo-frame-lg">
+                {org.logoUrl ? (
+                  <Image
+                    src={org.logoUrl}
+                    alt={`${org.name} logo`}
+                    fillContainer
+                    className="ui-image-contain ui-logo-image-pad"
+                    loading="eager"
+                    sizes="(min-width: 640px) 6rem, 5rem"
+                  />
+                ) : (
+                  <div className="ui-logo-initials-fill" role="img" aria-label={`${org.name} logo`}>
+                    {initials}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <div className="ui-item-main">
-            <h1 className="ui-heading-1">{org.name}</h1>
-
-            {org.tagIdAsOrganizer && (
-              <div className="ui-organization-actions">
-                <Link
-                  to={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
-                  className="ui-focus-ring ui-pill-link"
-                >
-                  <CalendarIcon className="ui-icon-xs ui-card-external-icon" aria-hidden />
-                  <span>View Schedule</span>
-                </Link>
+              <div className="ui-item-main">
+                <h1 className="ui-heading-1">{org.name}</h1>
               </div>
-            )}
-          </div>
-        </div>
-      </header>
-
-      <div className="ui-organization-sections">
-        <section className="ui-card ui-detail-panel">
-          <h2 className="ui-section-label">About</h2>
-
-          <div className="ui-section-body">
-            {description ? (
-              <Markdown content={description} />
-            ) : (
-              <p className="ui-card-meta">No description available.</p>
-            )}
-          </div>
-        </section>
-
-        {hasLinks && (
-          <section className="ui-card ui-detail-panel">
-            <h2 className="ui-section-label">Links</h2>
-
-            <ul className="ui-organization-link-grid">
-              {org.links.map((link) => {
-                const safeHref = getSafeExternalHref(link.url);
-                const hostname = safeHref ? getHostname(safeHref) : link.url;
-
-                return (
-                  <li key={link.url}>
-                    {safeHref ? (
-                      <a
-                        href={safeHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ui-focus-ring ui-card ui-card-interactive ui-organization-link-card"
-                      >
-                        <div className="ui-item-main">
-                          <div className="ui-card-title ui-clip-text">{link.label}</div>
-                          <div className="ui-card-meta ui-clip-text">{hostname}</div>
-                        </div>
-
-                        <ArrowTopRightOnSquareIcon
-                          className="ui-icon-xs ui-organization-link-icon"
-                          aria-hidden
-                        />
-                      </a>
-                    ) : (
-                      <div className="ui-card ui-organization-link-card">
-                        <div className="ui-item-main">
-                          <div className="ui-card-title ui-clip-text">{link.label}</div>
-                          <div className="ui-card-meta ui-clip-text">{hostname}</div>
-                        </div>
-                      </div>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        )}
+            </div>
+          }
+          actions={
+            org.tagIdAsOrganizer ? (
+              <Link
+                to={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
+                className="ui-focus-ring ui-pill-link"
+              >
+                <CalendarIcon className="ui-icon-xs ui-card-external-icon" aria-hidden />
+                <span>View Schedule</span>
+              </Link>
+            ) : undefined
+          }
+        />
       </div>
+
+      <section aria-labelledby="organization-about-title" className="ui-detail-section">
+        <h2 id="organization-about-title" className="ui-section-label">
+          About
+        </h2>
+
+        <div className="ui-document-body ui-detail-body-panel">
+          {description ? (
+            <Markdown content={description} />
+          ) : (
+            <p className="ui-card-meta">No description available.</p>
+          )}
+        </div>
+      </section>
+
+      {hasLinks && (
+        <section aria-labelledby="organization-links-title" className="ui-detail-section">
+          <h2 id="organization-links-title" className="ui-section-label">
+            Links
+          </h2>
+
+          <ul className="ui-detail-link-list">
+            {org.links.map((link) => {
+              const safeHref = getSafeExternalHref(link.url);
+              const hostname = safeHref ? getHostname(safeHref) : link.url;
+
+              return (
+                <li key={link.url}>
+                  {safeHref ? (
+                    <a
+                      href={safeHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ui-focus-ring ui-detail-link-row"
+                    >
+                      <div className="ui-item-main">
+                        <div className="ui-card-title ui-clip-text">{link.label}</div>
+                        <div className="ui-card-meta ui-clip-text">{hostname}</div>
+                      </div>
+
+                      <ArrowTopRightOnSquareIcon
+                        className="ui-icon-xs ui-card-external-icon"
+                        aria-hidden
+                      />
+                    </a>
+                  ) : (
+                    <div className="ui-detail-link-row ui-detail-link-row-disabled">
+                      <div className="ui-item-main">
+                        <div className="ui-card-title ui-clip-text">{link.label}</div>
+                        <div className="ui-card-meta ui-clip-text">{hostname}</div>
+                      </div>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
     </article>
   );
 }

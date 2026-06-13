@@ -459,6 +459,19 @@ button {
   margin-bottom: var(--space-2);
 }
 
+.ui-page-header-aside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ui-page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 .ui-page-header-count {
   align-self: flex-start;
 }
@@ -992,6 +1005,17 @@ button {
 .ui-detail-section {
   display: grid;
   gap: var(--space-4);
+}
+
+.ui-detail-body-panel {
+  border-left: 1px solid color-mix(in oklab, var(--border), white 10%);
+  padding-left: var(--space-4);
+}
+
+@media (width >= 40rem) {
+  .ui-detail-body-panel {
+    padding-left: var(--space-5);
+  }
 }
 
 .ui-detail-panel {
@@ -1760,6 +1784,17 @@ button {
   gap: var(--space-2);
 }
 
+.ui-content-session-card {
+  border-color: color-mix(in oklab, var(--border), white 4%);
+  background: color-mix(in oklab, var(--surface-muted), transparent 36%);
+  box-shadow: none;
+}
+
+.ui-content-session-card.ui-card-interactive:hover,
+.ui-content-session-card.ui-card-interactive:focus-within {
+  background: color-mix(in oklab, var(--surface-interactive), transparent 18%);
+}
+
 .ui-detail-stack {
   display: grid;
   gap: var(--space-10);
@@ -1769,6 +1804,64 @@ button {
   .ui-detail-stack {
     gap: var(--space-8);
   }
+}
+
+.ui-detail-stack > .ui-page-header,
+.ui-detail-header-accent > .ui-page-header {
+  margin-bottom: 0;
+}
+
+.ui-detail-header-accent {
+  position: relative;
+  min-width: 0;
+  padding-left: var(--space-4);
+}
+
+@media (width >= 40rem) {
+  .ui-detail-header-accent {
+    padding-left: var(--space-5);
+  }
+}
+
+.ui-detail-header-accent .ui-accent-rail,
+.ui-detail-header-accent .ui-accent-rail-overlay {
+  bottom: var(--space-4);
+  width: 0.25rem;
+  border-radius: var(--radius-pill);
+}
+
+.ui-detail-link-list {
+  display: grid;
+  max-width: 44rem;
+  list-style: none;
+}
+
+.ui-detail-link-list > li + li {
+  border-top: 1px solid color-mix(in oklab, var(--border), white 6%);
+}
+
+.ui-detail-link-row {
+  display: flex;
+  min-width: 0;
+  min-height: var(--control-min);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-radius: var(--radius-2);
+  padding: var(--space-3) 0;
+  color: inherit;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.ui-detail-link-row:not(.ui-detail-link-row-disabled):hover {
+  background: color-mix(in oklab, var(--surface-muted), transparent 72%);
+  color: var(--text-primary);
+}
+
+.ui-detail-link-row-disabled {
+  color: var(--text-muted);
 }
 
 .ui-detail-header-body {

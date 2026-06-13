@@ -12,6 +12,7 @@ import type {
 } from "@/lib/types/ht-types";
 
 import Markdown from "@/components/markdown/Markdown";
+import PageHeader from "@/components/ui/PageHeader";
 import { getToneFromColor } from "@/lib/tone";
 import { getSafeExternalHref } from "@/lib/url";
 
@@ -92,31 +93,32 @@ export default function ContentDetails(props: Props) {
     }
   };
 
+  const sessionCountLabel =
+    sessions.length === 0
+      ? undefined
+      : `${sessions.length} session${sessions.length === 1 ? "" : "s"}`;
+
   return (
-    <div className="ui-container ui-page-content ui-detail-stack">
-      <header className={`ui-card ui-detail-card ui-tone-${accentTone}`}>
+    <article className="ui-container ui-page-content ui-detail-stack">
+      <div className={`ui-detail-header-accent ui-tone-${accentTone}`}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
-        <div className="ui-detail-header-body">
-          <div className="ui-detail-header-row">
-            <div className="ui-detail-title-wrap">
-              <h1 className="ui-heading-1">{content.title}</h1>
-            </div>
-
-            <div className="ui-detail-actions">
-              <button
-                type="button"
-                onClick={handleShare}
-                aria-label="Share content link"
-                className="ui-icon-plain"
-              >
-                <ShareIcon className="ui-icon-sm" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+        <PageHeader
+          title={content.title}
+          resultLabel={sessionCountLabel}
+          actions={
+            <button
+              type="button"
+              onClick={handleShare}
+              aria-label="Share content link"
+              className="ui-icon-plain"
+            >
+              <ShareIcon className="ui-icon-sm" aria-hidden="true" />
+            </button>
+          }
+        />
+      </div>
 
       {sessions.length > 0 && (
         <section aria-labelledby="sessions-title" className="ui-detail-section">
@@ -143,24 +145,22 @@ export default function ContentDetails(props: Props) {
           <h2 id="tags-title" className="ui-section-label">
             Tags
           </h2>
-          <div className="ui-card ui-detail-list-card">
-            <ul className="ui-chip-list">
-              {tags.map((tag) => (
-                <li key={tag.id}>
-                  <Link
-                    to={`/${conference.slug}/tag?id=${tag.id}`}
-                    className="ui-focus-ring ui-pill-link"
-                  >
-                    <span
-                      className={`ui-tag-dot ui-tag-dot-mark ui-tone-${getToneFromColor(tag.colorBackground)}`}
-                      aria-hidden="true"
-                    />
-                    <span className="ui-pill-label ui-clip-text">{tag.label}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="ui-chip-list">
+            {tags.map((tag) => (
+              <li key={tag.id}>
+                <Link
+                  to={`/${conference.slug}/tag?id=${tag.id}`}
+                  className="ui-focus-ring ui-pill-link"
+                >
+                  <span
+                    className={`ui-tag-dot ui-tag-dot-mark ui-tone-${getToneFromColor(tag.colorBackground)}`}
+                    aria-hidden="true"
+                  />
+                  <span className="ui-pill-label ui-clip-text">{tag.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
@@ -169,7 +169,7 @@ export default function ContentDetails(props: Props) {
           <h2 id="description-title" className="ui-section-label">
             Description
           </h2>
-          <div className="ui-card ui-detail-panel">
+          <div className="ui-document-body ui-detail-body-panel">
             <Markdown content={content.description} />
           </div>
         </section>
@@ -180,7 +180,7 @@ export default function ContentDetails(props: Props) {
           <h2 id="links-title" className="ui-section-label">
             Links
           </h2>
-          <ul className="ui-list-stack-sm">
+          <ul className="ui-detail-link-list">
             {content.links.map((l) => {
               const safeHref = getSafeExternalHref(l.url);
 
@@ -191,7 +191,7 @@ export default function ContentDetails(props: Props) {
                       href={safeHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ui-focus-ring ui-card ui-card-interactive ui-detail-link-card"
+                      className="ui-focus-ring ui-detail-link-row"
                     >
                       <div className="ui-item-main">
                         <p className="ui-card-title ui-clip-text">{l.label}</p>
@@ -202,7 +202,7 @@ export default function ContentDetails(props: Props) {
                       />
                     </a>
                   ) : (
-                    <div className="ui-card ui-detail-link-card">
+                    <div className="ui-detail-link-row ui-detail-link-row-disabled">
                       <div className="ui-item-main">
                         <p className="ui-card-title ui-clip-text">{l.label}</p>
                         <p className="ui-card-meta ui-clip-text">{l.url}</p>
@@ -221,24 +221,22 @@ export default function ContentDetails(props: Props) {
           <h2 id="people-title" className="ui-section-label">
             People
           </h2>
-          <div className="ui-card ui-detail-list-card">
-            <ul className="ui-chip-list">
-              {people.map((p) => (
-                <li key={p.id}>
-                  <Link
-                    to={`${peopleBasePath}/?id=${p.id}`}
-                    className="ui-focus-ring ui-pill-link"
-                    title={p.name}
-                  >
-                    <UserIcon className="ui-icon-xs ui-card-external-icon" aria-hidden="true" />
-                    <span className="ui-pill-label-narrow ui-clip-text">{p.name}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="ui-chip-list">
+            {people.map((p) => (
+              <li key={p.id}>
+                <Link
+                  to={`${peopleBasePath}/?id=${p.id}`}
+                  className="ui-focus-ring ui-pill-link"
+                  title={p.name}
+                >
+                  <UserIcon className="ui-icon-xs ui-card-external-icon" aria-hidden="true" />
+                  <span className="ui-pill-label-narrow ui-clip-text">{p.name}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
-    </div>
+    </article>
   );
 }

@@ -12,6 +12,7 @@ type SearchProps = {
 
 type Props = {
   title: ReactNode;
+  actions?: ReactNode;
   description?: ReactNode;
   kicker?: ReactNode;
   resultLabel?: ReactNode;
@@ -21,6 +22,7 @@ type Props = {
 
 export default function PageHeader({
   title,
+  actions,
   description,
   kicker,
   resultLabel,
@@ -29,6 +31,7 @@ export default function PageHeader({
 }: Props) {
   const searchInputId = useId();
   const hasControls = Boolean(search || children);
+  const hasHeaderAside = Boolean(resultLabel || actions);
   const titleContent =
     typeof title === "string" ? <h1 className="ui-heading-1">{title}</h1> : title;
 
@@ -41,10 +44,15 @@ export default function PageHeader({
           {description ? <p className="ui-page-description">{description}</p> : null}
         </div>
 
-        {resultLabel ? (
-          <p role="status" aria-live="polite" className="ui-meta-pill ui-page-header-count">
-            {resultLabel}
-          </p>
+        {hasHeaderAside ? (
+          <div className="ui-page-header-aside">
+            {resultLabel ? (
+              <p role="status" aria-live="polite" className="ui-meta-pill ui-page-header-count">
+                {resultLabel}
+              </p>
+            ) : null}
+            {actions ? <div className="ui-page-header-actions">{actions}</div> : null}
+          </div>
         ) : null}
       </div>
 

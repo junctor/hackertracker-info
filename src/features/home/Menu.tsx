@@ -57,7 +57,7 @@ export default function Menu({ conference }: Props) {
       </div>
 
       <nav aria-label={`${conference.name} sections`} className="ui-home-menu-nav">
-        <ul className="ui-home-menu-grid">
+        <ul className="ui-home-menu-grid" data-count={navMenu.length}>
           {navMenu.map((item, index) => {
             const Icon = item.icon;
             const isExternal = item.href.startsWith("http");

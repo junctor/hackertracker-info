@@ -20,7 +20,7 @@ export type PageId =
   | "tags"
   | "vendors"
   | "villages"
-  | "home";
+  | "menu";
 
 export const PAGE_META: Record<PageId, { title: string }> = {
   announcements: { title: "Announcements" },
@@ -44,7 +44,7 @@ export const PAGE_META: Record<PageId, { title: string }> = {
   tags: { title: "Tags" },
   vendors: { title: "Vendors" },
   villages: { title: "Villages" },
-  home: { title: "Home" },
+  menu: { title: "Menu" },
 };
 
 export function getPageTitle(id: PageId): string {

@@ -4,11 +4,15 @@ function SiteFooter() {
       <div className="ui-chrome-container ui-site-footer-inner">
         <div className="ui-site-footer-row">
           <div className="ui-site-footer-brand">
-            <p className="ui-section-label ui-site-footer-label hacker-tracker-text">
-              Hacker Tracker
-            </p>
+            <a href="https://info.defcon.org/apps">
+              <p className="ui-section-label ui-site-footer-label hacker-tracker-text">
+                Hacker Tracker
+              </p>
+            </a>
             <div className="ui-site-footer-title-row">
-              <span className="ui-site-footer-title ui-clip-text">info.defcon.org</span>
+              <a href="https://info.defcon.org">
+                <span className="ui-site-footer-title ui-clip-text">info.defcon.org</span>
+              </a>
             </div>
           </div>
 

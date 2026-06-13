@@ -161,7 +161,7 @@
 
 @media (width >= 64rem) {
   .ui-control-panel {
-    max-width: 44rem;
+    max-width: 52rem;
   }
 }
 
@@ -774,21 +774,19 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  border-bottom: 1px solid color-mix(in oklab, var(--color-border-soft), white 14%);
-  background: color-mix(in oklab, var(--color-bg), transparent 8%);
+  width: 100%;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-chrome);
+  background: color-mix(in oklab, var(--surface-chrome), transparent 8%);
   color: var(--text-primary);
   backdrop-filter: blur(8px);
 }
 
 @media (width < 40rem) {
   .ui-topbar {
-    background: color-mix(in oklab, var(--color-bg), black 5%);
+    background: color-mix(in oklab, var(--surface-chrome), black 4%);
     backdrop-filter: none;
   }
-}
-
-.ui-topbar-frame {
-  position: relative;
 }
 
 .ui-topbar-rule {
@@ -1453,9 +1451,10 @@
 }
 
 .ui-site-footer {
+  width: 100%;
   flex-shrink: 0;
-  border-top: 1px solid var(--border);
-  background: color-mix(in oklab, var(--color-bg), var(--surface) 14%);
+  border-top: 1px solid var(--border-chrome);
+  background: var(--surface-chrome);
   color: var(--text-muted);
 }
 

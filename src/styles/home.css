@@ -1175,6 +1175,7 @@
   display: grid;
   list-style: none;
   gap: 0.875rem;
+  align-items: stretch;
 }
 
 @media (width >= 40rem) {
@@ -1193,6 +1194,11 @@
 @media (width >= 80rem) {
   .ui-home-menu-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .ui-home-menu-grid[data-count="6"],
+  .ui-home-menu-grid[data-count="9"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

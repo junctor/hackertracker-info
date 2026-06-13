@@ -774,6 +774,8 @@
   position: sticky;
   top: 0;
   z-index: 50;
+  width: 100%;
+  flex-shrink: 0;
   border-bottom: 1px solid color-mix(in oklab, var(--color-border-soft), white 14%);
   background: color-mix(in oklab, var(--color-bg), transparent 8%);
   color: var(--text-primary);
@@ -785,10 +787,6 @@
     background: color-mix(in oklab, var(--color-bg), black 5%);
     backdrop-filter: none;
   }
-}
-
-.ui-topbar-frame {
-  position: relative;
 }
 
 .ui-topbar-rule {
@@ -1453,6 +1451,7 @@
 }
 
 .ui-site-footer {
+  width: 100%;
   flex-shrink: 0;
   border-top: 1px solid var(--border);
   background: color-mix(in oklab, var(--color-bg), var(--surface) 14%);

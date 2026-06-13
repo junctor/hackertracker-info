@@ -34,7 +34,7 @@ export type ConferenceRouteDefinition = {
 };
 
 export const CONFERENCE_ROUTE_DEFINITIONS = [
-  { key: "menu", path: undefined, activePageId: "home", staticSegment: "" },
+  { key: "menu", path: undefined, activePageId: "menu", staticSegment: "" },
   {
     key: "announcements",
     path: "announcements",
@@ -65,7 +65,7 @@ export const CONFERENCE_ROUTE_DEFINITIONS = [
   },
   { key: "locations", path: "locations", activePageId: "locations", staticSegment: "locations" },
   { key: "maps", path: "maps", activePageId: "maps", staticSegment: "maps" },
-  { key: "menu", path: "menu", activePageId: "home", staticSegment: "menu" },
+  { key: "menu", path: "menu", activePageId: "menu", staticSegment: "menu" },
   { key: "merch", path: "merch", activePageId: "merch", staticSegment: "merch" },
   {
     key: "organization",

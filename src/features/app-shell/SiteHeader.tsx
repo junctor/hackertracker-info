@@ -19,7 +19,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
   const menuItems = useSiteMenu(conference);
   const pageTitle = getPageTitle(activePageId);
   const activeHref =
-    activePageId === "home"
+    activePageId === "menu"
       ? `/${conference.slug}`
       : activePageId === "readme"
         ? `/${conference.slug}/readme.nfo`

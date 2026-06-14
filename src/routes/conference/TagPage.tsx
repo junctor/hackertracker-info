@@ -14,6 +14,7 @@ import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { getBookmarks } from "@/lib/storage";
 import {
+  ContentStore,
   EventsByDayIndex,
   EventsByTagIndex,
   EventsStore,
@@ -103,20 +104,28 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     isLoading: peopleLoading,
   } = useConferenceJson<PeopleStore>(conf, shouldLoadTag ? "entities/people.json" : null);
 
+  const {
+    data: contentStore,
+    error: contentError,
+    isLoading: contentLoading,
+  } = useConferenceJson<ContentStore>(conf, shouldLoadTag ? "entities/content.json" : null);
+
   const loading =
     eventsByTagLoading ||
     eventsByDayLoading ||
     eventsLoading ||
     locationsLoading ||
     tagsLoading ||
-    peopleLoading;
+    peopleLoading ||
+    contentLoading;
   const isError =
     eventsByTagError ||
     eventsByDayError ||
     eventsError ||
     locationsError ||
     tagsError ||
-    peopleError;
+    peopleError ||
+    contentError;
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
@@ -138,6 +147,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
       !locationsStore ||
       !tagsStore ||
       !peopleStore ||
+      !contentStore ||
       tagEventIds.size === 0
     ) {
       return [];
@@ -202,6 +212,8 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
           endTimestampSeconds: Math.floor(endDate.getTime() / 1000),
           color: event.color,
           contentId: event.contentId,
+          contentEntity: contentStore.byId[String(event.contentId)] ?? null,
+          session: event,
           locationName,
           tags,
           speakers: speakers.length > 0 ? speakers : null,
@@ -223,6 +235,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     locationsStore,
     tagsStore,
     peopleStore,
+    contentStore,
     tagEventIds,
     conf.timezone,
   ]);
@@ -272,7 +285,8 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     !eventsStore ||
     !locationsStore ||
     !tagsStore ||
-    !peopleStore
+    !peopleStore ||
+    !contentStore
   ) {
     return <ErrorScreen />;
   }

@@ -15,6 +15,7 @@ import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { getBookmarks } from "@/lib/storage";
 import {
+  ContentStore,
   EventsByDayIndex,
   EventsStore,
   LocationsStore,
@@ -64,9 +65,21 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     isLoading: peopleLoading,
   } = useConferenceJson<PeopleStore>(conf, "entities/people.json");
 
+  const {
+    data: contentStore,
+    error: contentError,
+    isLoading: contentLoading,
+  } = useConferenceJson<ContentStore>(conf, "entities/content.json");
+
   const loading =
-    eventsByDayLoading || eventsLoading || locationsLoading || tagsLoading || peopleLoading;
-  const isError = eventsByDayError || eventsError || locationsError || tagsError || peopleError;
+    eventsByDayLoading ||
+    eventsLoading ||
+    locationsLoading ||
+    tagsLoading ||
+    peopleLoading ||
+    contentLoading;
+  const isError =
+    eventsByDayError || eventsError || locationsError || tagsError || peopleError || contentError;
 
   const [bookmarks, setBookmarks] = useState<string[]>(() => getBookmarks().map(normalizeId));
 
@@ -95,7 +108,14 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
   }, [bookmarks]);
 
   const fullScheduleDays = useMemo(() => {
-    if (!eventsByDay || !eventsStore || !locationsStore || !tagsStore || !peopleStore) {
+    if (
+      !eventsByDay ||
+      !eventsStore ||
+      !locationsStore ||
+      !tagsStore ||
+      !peopleStore ||
+      !contentStore
+    ) {
       return [];
     }
     return getScheduleDaysFromStores(conf, {
@@ -104,8 +124,9 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
       locationsStore,
       tagsStore,
       peopleStore,
+      contentStore,
     });
-  }, [conf, eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore]);
+  }, [conf, eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore, contentStore]);
 
   const days = useMemo(
     () => filterScheduleDaysByBookmarks(fullScheduleDays, bookmarkSet),
@@ -138,7 +159,15 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
   }, []);
 
   if (loading) return <LoadingScreen />;
-  if (isError || !eventsByDay || !eventsStore || !locationsStore || !tagsStore || !peopleStore) {
+  if (
+    isError ||
+    !eventsByDay ||
+    !eventsStore ||
+    !locationsStore ||
+    !tagsStore ||
+    !peopleStore ||
+    !contentStore
+  ) {
     return <ErrorScreen />;
   }
 

@@ -1,5 +1,6 @@
 import type { ConferenceManifest } from "@/lib/conferences";
 import type {
+  ContentStore,
   EventsByDayIndex,
   EventsStore,
   LocationsStore,
@@ -15,6 +16,7 @@ type ScheduleSources = {
   locationsStore: LocationsStore;
   tagsStore: TagsStore;
   peopleStore: PeopleStore;
+  contentStore: ContentStore;
 };
 
 type ScheduleCacheEntry = ScheduleSources & {
@@ -33,7 +35,8 @@ function toTimestampSeconds(value: string): number {
 }
 
 function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): ScheduleDay[] {
-  const { eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore } = sources;
+  const { eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore, contentStore } =
+    sources;
   const dayKeys = Object.keys(eventsByDay).toSorted();
   const result: ScheduleDay[] = [];
   const timeFormatter = new Intl.DateTimeFormat(undefined, {
@@ -91,6 +94,8 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
         endTimestampSeconds: toTimestampSeconds(event.end),
         color: event.color,
         contentId: event.contentId,
+        contentEntity: contentStore.byId[normalizeId(event.contentId)] ?? null,
+        session: event,
         locationName,
         tags,
         speakers: speakers.length > 0 ? speakers : null,
@@ -115,7 +120,8 @@ export function getScheduleDaysFromStores(
     cached.eventsStore === sources.eventsStore &&
     cached.locationsStore === sources.locationsStore &&
     cached.tagsStore === sources.tagsStore &&
-    cached.peopleStore === sources.peopleStore
+    cached.peopleStore === sources.peopleStore &&
+    cached.contentStore === sources.contentStore
   ) {
     return cached.days;
   }

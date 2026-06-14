@@ -1,7 +1,21 @@
-import { BookmarkIcon, TagIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowDownCircleIcon,
+  BookmarkIcon,
+  ClockIcon,
+  ListBulletIcon,
+  TagIcon,
+} from "@heroicons/react/24/outline";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router";
-import { Virtuoso, type Components, type ItemProps, type ListProps } from "react-virtuoso";
+import {
+  Virtuoso,
+  type Components,
+  type ItemProps,
+  type ListProps,
+  type VirtuosoHandle,
+} from "react-virtuoso";
+
+import type { ContentEntity, EventEntity } from "@/lib/types/ht-types";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { eventDayTable, tabDateTitle } from "@/lib/dates";
@@ -17,6 +31,8 @@ export type ScheduleEventViewModel = {
   endTimestampSeconds: number;
   color: string;
   contentId: number;
+  contentEntity: ContentEntity | null;
+  session: EventEntity;
   locationName: string;
   tags: Array<{
     id: number;
@@ -34,6 +50,26 @@ export type ScheduleEventViewModel = {
 export type ScheduleDay = {
   day: string;
   events: ScheduleEventViewModel[];
+};
+
+export type ScheduleViewMode = "full" | "now" | "next";
+
+export type ScheduleViewLinks = Record<ScheduleViewMode, string>;
+
+type ScheduleEmptyState = {
+  message: string;
+  actionHref?: string;
+  actionLabel?: string;
+};
+
+export type ScheduleJumpRequest = {
+  eventId: number;
+  requestId: number;
+};
+
+export type ScheduleActivitySummary = {
+  liveCount: number;
+  startingSoonCount: number;
 };
 
 type VirtuosoContext = unknown;
@@ -85,6 +121,14 @@ export default function ScheduleEvents({
   bookmarks,
   nowSeconds = 0,
   activeFilter = null,
+  scheduleView,
+  scheduleViewLinks,
+  emptyState,
+  onJumpToNow,
+  jumpRequest,
+  highlightedEventId,
+  jumpStatus,
+  activitySummary,
 }: {
   conf: ConferenceManifest;
   days: ScheduleDay[];
@@ -94,10 +138,20 @@ export default function ScheduleEvents({
   bookmarks: number[];
   nowSeconds?: number;
   activeFilter?: "bookmarks" | "tags" | null;
+  scheduleView?: ScheduleViewMode;
+  scheduleViewLinks?: ScheduleViewLinks;
+  emptyState?: ScheduleEmptyState;
+  onJumpToNow?: () => void;
+  jumpRequest?: ScheduleJumpRequest | null;
+  highlightedEventId?: number | null;
+  jumpStatus?: string | null;
+  activitySummary?: ScheduleActivitySummary | null;
 }) {
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
   const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const headingRef = useRef<HTMLHeadingElement | null>(null);
+  const virtuosoRef = useRef<VirtuosoHandle | null>(null);
+  const handledJumpRequestRef = useRef<number | null>(null);
 
   const resolvedDay = useMemo(() => {
     if (selectedDay && days.some(({ day }) => day === selectedDay)) {
@@ -173,6 +227,7 @@ export default function ScheduleEvents({
   const activeDay = days.find(({ day }) => day === resolvedDay) ?? null;
   const isBookmarksFilterActive = activeFilter === "bookmarks";
   const isTagsFilterActive = activeFilter === "tags";
+  const showScheduleViewControls = Boolean(scheduleView && scheduleViewLinks);
   const activeDayLabel = activeDay ? eventDayTable(activeDay.day, conf.timezone) : null;
   const activeDayEventCountLabel = activeDay
     ? `${activeDay.events.length} ${activeDay.events.length === 1 ? "event" : "events"}`
@@ -189,16 +244,122 @@ export default function ScheduleEvents({
           event={evt}
           isBookmarked={bookmarkSet.has(evt.id)}
           nowSeconds={nowSeconds}
+          isHighlighted={highlightedEventId === evt.id}
         />
       ) : null,
-    [bookmarkSet, conf, nowSeconds],
+    [bookmarkSet, conf, highlightedEventId, nowSeconds],
   );
+
+  useEffect(() => {
+    if (!activeDay || !jumpRequest) return;
+    if (handledJumpRequestRef.current === jumpRequest.requestId) return;
+
+    const targetIndex = activeDay.events.findIndex((event) => event.id === jumpRequest.eventId);
+    if (targetIndex < 0) return;
+
+    handledJumpRequestRef.current = jumpRequest.requestId;
+
+    let frameId = 0;
+    let scrollTimeout: number | null = null;
+    let settleTimeout: number | null = null;
+
+    frameId = window.requestAnimationFrame(() => {
+      scrollTimeout = window.setTimeout(() => {
+        virtuosoRef.current?.scrollToIndex({
+          index: targetIndex,
+          align: "start",
+          behavior: "smooth",
+        });
+
+        settleTimeout = window.setTimeout(() => {
+          const target = document.querySelector<HTMLElement>(
+            `[data-schedule-event-id="${jumpRequest.eventId}"]`,
+          );
+          target?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+        }, 350);
+      }, 0);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      if (scrollTimeout) window.clearTimeout(scrollTimeout);
+      if (settleTimeout) window.clearTimeout(settleTimeout);
+    };
+  }, [activeDay, jumpRequest]);
 
   return (
     <div className="ui-schedule-shell">
       <div className="ui-container ui-schedule-tools">
-        <nav aria-label="Schedule tools">
+        <div className="ui-schedule-primary-tools">
+          {showScheduleViewControls && scheduleView && scheduleViewLinks ? (
+            <nav aria-label="Schedule view">
+              <div className="ui-schedule-view-list">
+                <Link
+                  to={scheduleViewLinks.full}
+                  className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-view-link"
+                  aria-current={scheduleView === "full" ? "page" : undefined}
+                  aria-label="View full schedule"
+                >
+                  <ListBulletIcon
+                    className="ui-icon-menu ui-schedule-tool-icon"
+                    aria-hidden="true"
+                  />
+                  <span className="ui-schedule-compact-label ui-schedule-tool-label">
+                    Full Schedule
+                  </span>
+                </Link>
+
+                <Link
+                  to={scheduleViewLinks.now}
+                  className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-view-link"
+                  aria-current={scheduleView === "now" ? "page" : undefined}
+                  aria-label="View events happening now"
+                >
+                  <ClockIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
+                  <span className="ui-schedule-compact-label ui-schedule-tool-label">
+                    Happening Now
+                  </span>
+                </Link>
+
+                <Link
+                  to={scheduleViewLinks.next}
+                  className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-view-link"
+                  aria-current={scheduleView === "next" ? "page" : undefined}
+                  aria-label="View events coming up next"
+                >
+                  <ClockIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
+                  <span className="ui-schedule-compact-label ui-schedule-tool-label">Up Next</span>
+                </Link>
+              </div>
+            </nav>
+          ) : null}
+
+          {activitySummary ? (
+            <p className="ui-schedule-summary" aria-live="polite">
+              <span>Live now: {activitySummary.liveCount} events</span>
+              <span>Starting within 30 minutes: {activitySummary.startingSoonCount} events</span>
+            </p>
+          ) : null}
+        </div>
+
+        <nav aria-label="Schedule tools" className="ui-schedule-secondary-tools">
           <div className="ui-schedule-tool-list">
+            {onJumpToNow ? (
+              <button
+                type="button"
+                onClick={onJumpToNow}
+                className="ui-btn-base ui-btn-primary ui-focus-ring ui-schedule-compact-button ui-schedule-jump-button"
+              >
+                <ArrowDownCircleIcon
+                  className="ui-icon-menu ui-schedule-tool-icon"
+                  aria-hidden="true"
+                />
+                <span className="ui-schedule-compact-label ui-schedule-tool-label">
+                  Jump to Now
+                </span>
+              </button>
+            ) : null}
+
             <Link
               to={`/${conf.slug}/bookmarks`}
               className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link"
@@ -222,44 +383,54 @@ export default function ScheduleEvents({
         </nav>
       </div>
 
-      <div className="ui-topbar ui-schedule-day-tabs">
-        <div className="ui-container ui-schedule-tabs-inner">
-          <div className="ui-inset-highlight-soft ui-schedule-tabs-tray">
-            <div
-              role="tablist"
-              aria-label="Schedule days"
-              aria-orientation="horizontal"
-              className="ui-scrollbar-none ui-schedule-tab-scroll"
-            >
-              <div className="ui-schedule-tab-list">
-                {days.map(({ day, events }, index) => (
-                  <button
-                    key={day}
-                    ref={(el) => {
-                      tabButtonRefs.current[day] = el;
-                    }}
-                    id={`day-tab-${day}`}
-                    type="button"
-                    role="tab"
-                    aria-selected={resolvedDay === day}
-                    aria-controls={`day-panel-${day}`}
-                    aria-label={`${tabDateTitle(day, conf.timezone)}, ${events.length} events`}
-                    tabIndex={resolvedDay === day ? 0 : -1}
-                    className="ui-focus-ring ui-schedule-day-tab"
-                    onClick={() => onSelectDay(day)}
-                    onKeyDown={(e) => handleTabKeyDown(e, index, day)}
-                  >
-                    <span className="ui-schedule-day-tab-title">
-                      {tabDateTitle(day, conf.timezone)}
-                    </span>
-                    <span className="ui-schedule-day-count">{events.length}</span>
-                  </button>
-                ))}
+      {jumpStatus ? (
+        <div className="ui-container">
+          <p className="ui-schedule-feedback" role="status">
+            {jumpStatus}
+          </p>
+        </div>
+      ) : null}
+
+      {days.length > 0 ? (
+        <div className="ui-topbar ui-schedule-day-tabs">
+          <div className="ui-container ui-schedule-tabs-inner">
+            <div className="ui-inset-highlight-soft ui-schedule-tabs-tray">
+              <div
+                role="tablist"
+                aria-label="Schedule days"
+                aria-orientation="horizontal"
+                className="ui-scrollbar-none ui-schedule-tab-scroll"
+              >
+                <div className="ui-schedule-tab-list">
+                  {days.map(({ day, events }, index) => (
+                    <button
+                      key={day}
+                      ref={(el) => {
+                        tabButtonRefs.current[day] = el;
+                      }}
+                      id={`day-tab-${day}`}
+                      type="button"
+                      role="tab"
+                      aria-selected={resolvedDay === day}
+                      aria-controls={`day-panel-${day}`}
+                      aria-label={`${tabDateTitle(day, conf.timezone)}, ${events.length} events`}
+                      tabIndex={resolvedDay === day ? 0 : -1}
+                      className="ui-focus-ring ui-schedule-day-tab"
+                      onClick={() => onSelectDay(day)}
+                      onKeyDown={(e) => handleTabKeyDown(e, index, day)}
+                    >
+                      <span className="ui-schedule-day-tab-title">
+                        {tabDateTitle(day, conf.timezone)}
+                      </span>
+                      <span className="ui-schedule-day-count">{events.length}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : null}
 
       {activeDay && (
         <section
@@ -284,6 +455,7 @@ export default function ScheduleEvents({
 
           <div className="ui-container">
             <Virtuoso
+              ref={virtuosoRef}
               useWindowScroll
               data={activeDay.events}
               computeItemKey={computeItemKey}
@@ -295,6 +467,20 @@ export default function ScheduleEvents({
           </div>
         </section>
       )}
+
+      {!activeDay && emptyState ? (
+        <div className="ui-container ui-empty-state ui-schedule-empty-state" role="status">
+          <p>{emptyState.message}</p>
+          {emptyState.actionHref && emptyState.actionLabel ? (
+            <Link
+              to={emptyState.actionHref}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
+            >
+              {emptyState.actionLabel}
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

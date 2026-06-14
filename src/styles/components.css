@@ -65,6 +65,7 @@
 
 .ui-page-header-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
 }
@@ -1399,6 +1400,14 @@
   outline-offset: 2px;
   background: var(--surface-muted);
   box-shadow: 0 0 0 2px color-mix(in oklab, var(--focus), transparent 72%);
+}
+
+.ui-action-status {
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 @media (width < 40rem) {

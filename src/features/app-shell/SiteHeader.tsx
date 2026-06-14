@@ -5,7 +5,8 @@ import {
   HomeIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router";
+import { useEffect, useId, useRef, useState } from "react";
+import { Link, useLocation } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { useSiteMenu } from "@/lib/hooks/useSiteMenu";
@@ -18,7 +19,11 @@ const museoFont = {
 const focusRingClass = "ui-focus-ring";
 
 export default function SiteHeader({ conference, activePageId }: Props) {
+  const location = useLocation();
   const menuItems = useSiteMenu(conference);
+  const menuId = useId();
+  const menuDetailsRef = useRef<HTMLDetailsElement | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const conferenceRootPath = `/${conference.slug}/`;
   const conferenceDisplayTitle = conference.displayTitle ?? conference.name;
   const conferenceShortTitle = conference.shortTitle ?? conferenceDisplayTitle;
@@ -32,6 +37,34 @@ export default function SiteHeader({ conference, activePageId }: Props) {
       : activePageId === "readme"
         ? `/${conference.slug}/readme.nfo`
         : `/${conference.slug}/${activePageId}`;
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname, location.search]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return undefined;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node) || menuDetailsRef.current?.contains(target)) return;
+      setIsMenuOpen(false);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setIsMenuOpen(false);
+      menuDetailsRef.current?.querySelector<HTMLElement>("summary")?.focus();
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isMenuOpen]);
 
   return (
     <header className="ui-topbar">
@@ -76,16 +109,28 @@ export default function SiteHeader({ conference, activePageId }: Props) {
           <Link
             to={`/${conference.slug}/search`}
             aria-current={activePageId === "search" ? "page" : undefined}
-            aria-label="Search"
-            title="Search"
+            aria-label={`Search ${conference.name}`}
+            title={`Search ${conference.name}`}
             className="ui-icon-plain"
           >
             <MagnifyingGlassIcon className="ui-icon-sm" aria-hidden="true" />
           </Link>
 
           <nav aria-label="Primary">
-            <details className="ui-header-menu">
-              <summary className={`ui-details-summary ui-header-menu-summary ${focusRingClass}`}>
+            <details
+              ref={menuDetailsRef}
+              open={isMenuOpen}
+              onToggle={(event) => setIsMenuOpen(event.currentTarget.open)}
+              className="ui-header-menu"
+            >
+              <summary
+                aria-controls={menuId}
+                aria-expanded={isMenuOpen}
+                aria-label={
+                  isMenuOpen ? "Close primary navigation menu" : "Open primary navigation menu"
+                }
+                className={`ui-details-summary ui-header-menu-summary ${focusRingClass}`}
+              >
                 <img
                   src="/images/icons/skull-icon.png"
                   alt=""
@@ -97,7 +142,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                 <ChevronDownIcon className="ui-icon-xs ui-header-menu-chevron" aria-hidden="true" />
               </summary>
 
-              <div className="ui-header-menu-shell">
+              <div id={menuId} className="ui-header-menu-shell">
                 <div className="ui-card ui-header-menu-popover">
                   <ul className="ui-header-menu-list">
                     {menuItems.map(({ title, href, description, icon: Icon }) => {
@@ -109,6 +154,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
                             to={href}
                             aria-current={isActive ? "page" : undefined}
                             className={`ui-header-menu-item ${focusRingClass}`}
+                            onClick={() => setIsMenuOpen(false)}
                           >
                             <span className="ui-header-menu-item-icon">
                               <Icon className="ui-icon-menu" aria-hidden="true" />

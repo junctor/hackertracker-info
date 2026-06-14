@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import cal from "@/lib/cal";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
+import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { getToneFromColor } from "@/lib/tone";
 
 import type { ScheduleEventViewModel } from "./ScheduleEvents";
@@ -32,6 +33,8 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   isHighlighted = false,
 }: Props) {
   const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
+  const actionStatusId = `schedule-event-action-status-${event.id}`;
+  const [actionStatus, setActionStatus] = useTransientStatus();
 
   const href = `/${conf.slug}/content/?id=${event.contentId}`;
   const eventTone = getToneFromColor(event.color);
@@ -39,7 +42,14 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    const nextBookmarked = !bookmark;
     toggleBookmark();
+    setActionStatus(nextBookmarked ? "Bookmark added." : "Bookmark removed.");
+  };
+
+  const handleCalendarClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    stopCalendarClickPropagation(e);
+    setActionStatus("Calendar download started.");
   };
 
   const calendarContent = useMemo(() => {
@@ -123,9 +133,10 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
             <a
               href={icsHref}
               download={`DEF_CON_${event.contentId}-${event.id}.ics`}
-              title={`Download calendar invite for session: ${event.title}`}
-              aria-label={`Download calendar invite for session: ${event.title}`}
-              onClick={stopCalendarClickPropagation}
+              title={`Download calendar invite for ${event.title}`}
+              aria-label={`Download calendar invite for ${event.title}`}
+              aria-describedby={actionStatus ? actionStatusId : undefined}
+              onClick={handleCalendarClick}
               className="ui-icon-plain"
             >
               <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
@@ -137,6 +148,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
             onClick={handleBookmarkClick}
             aria-label={bookmarkLabel}
             aria-pressed={bookmark}
+            aria-describedby={actionStatus ? actionStatusId : undefined}
             className="ui-icon-plain"
           >
             {bookmark ? (
@@ -145,6 +157,11 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
               <BookmarkIconOutline className="ui-icon-sm" aria-hidden="true" />
             )}
           </button>
+          {actionStatus ? (
+            <span id={actionStatusId} role="status" className="ui-action-status">
+              {actionStatus}
+            </span>
+          ) : null}
         </div>
       </div>
     </article>

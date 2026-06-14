@@ -1,5 +1,5 @@
 import { ArrowTopRightOnSquareIcon, ShareIcon, UserIcon } from "@heroicons/react/24/outline";
-import { useMemo } from "react";
+import { useId, useMemo } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
@@ -13,6 +13,7 @@ import type {
 
 import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
+import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { getToneFromColor } from "@/lib/tone";
 import { getSafeExternalHref } from "@/lib/url";
 
@@ -36,6 +37,8 @@ function safeParseMs(iso: string): number {
 
 export default function ContentDetails(props: Props) {
   const { content, sessions, locations, people, tags, bookmarks, conference } = props;
+  const shareStatusId = useId();
+  const [shareStatus, setShareStatus] = useTransientStatus();
 
   const peopleBasePath = `/${conference.slug}/people`;
   const contentsBasePath = `/${conference.slug}/content`;
@@ -77,6 +80,7 @@ export default function ContentDetails(props: Props) {
     try {
       if (canShare) {
         await navigator.share({ title: content.title, url: shareUrl });
+        setShareStatus("Shared.");
         return;
       }
     } catch {
@@ -85,11 +89,13 @@ export default function ContentDetails(props: Props) {
 
     try {
       if (!canCopyToClipboard) {
+        setShareStatus("Copy unavailable.");
         return;
       }
       await navigator.clipboard.writeText(shareUrl);
+      setShareStatus("Link copied.");
     } catch {
-      console.error("Copy link failed");
+      setShareStatus("Could not copy link.");
     }
   };
 
@@ -109,14 +115,22 @@ export default function ContentDetails(props: Props) {
           resultLabel={sessionCountLabel}
           actionsInline
           actions={
-            <button
-              type="button"
-              onClick={handleShare}
-              aria-label="Share content link"
-              className="ui-icon-plain"
-            >
-              <ShareIcon className="ui-icon-sm" aria-hidden="true" />
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={handleShare}
+                aria-label={`Share link to ${content.title}`}
+                aria-describedby={shareStatus ? shareStatusId : undefined}
+                className="ui-icon-plain"
+              >
+                <ShareIcon className="ui-icon-sm" aria-hidden="true" />
+              </button>
+              {shareStatus ? (
+                <span id={shareStatusId} role="status" className="ui-action-status">
+                  {shareStatus}
+                </span>
+              ) : null}
+            </>
           }
         />
       </div>

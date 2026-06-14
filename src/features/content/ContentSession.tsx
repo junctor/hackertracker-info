@@ -13,6 +13,7 @@ import type { ContentEntity, EventEntity } from "@/lib/types/ht-types";
 import cal from "@/lib/cal";
 import { eventTime, formatSessionTime } from "@/lib/dates";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
+import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { getToneFromColor } from "@/lib/tone";
 
 export type ContentSessionProps = {
@@ -35,6 +36,8 @@ function ContentSessionCard({
   title,
 }: ContentSessionProps) {
   const [bookmark, toggleBookmark] = useBookmarks(session.id, isBookmarked);
+  const actionStatusId = `content-session-action-status-${session.id}`;
+  const [actionStatus, setActionStatus] = useTransientStatus();
 
   const begin = useMemo(() => new Date(session.begin), [session.begin]);
   const end = useMemo(() => new Date(session.end), [session.end]);
@@ -51,7 +54,13 @@ function ContentSessionCard({
 
   const handleBookmarkClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    const nextBookmarked = !bookmark;
     toggleBookmark();
+    setActionStatus(nextBookmarked ? "Bookmark added." : "Bookmark removed.");
+  };
+
+  const handleCalendarClick = () => {
+    setActionStatus("Calendar download started.");
   };
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${session.title}`
@@ -94,8 +103,10 @@ function ContentSessionCard({
           <a
             href={icsHref}
             download={`DEF_CON_${contentEntity.id}-${session.id}.ics`}
-            title={`Download calendar invite for session: ${contentEntity.title}`}
-            aria-label={`Download calendar invite for session: ${contentEntity.title}`}
+            title={`Download calendar invite for ${contentEntity.title}`}
+            aria-label={`Download calendar invite for ${contentEntity.title}`}
+            aria-describedby={actionStatus ? actionStatusId : undefined}
+            onClick={handleCalendarClick}
             className="ui-icon-plain"
           >
             <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
@@ -106,6 +117,7 @@ function ContentSessionCard({
             onClick={handleBookmarkClick}
             aria-label={bookmarkLabel}
             aria-pressed={bookmark}
+            aria-describedby={actionStatus ? actionStatusId : undefined}
             className="ui-icon-plain"
           >
             {bookmark ? (
@@ -114,6 +126,11 @@ function ContentSessionCard({
               <BookmarkIconOutline className="ui-icon-sm" aria-hidden="true" />
             )}
           </button>
+          {actionStatus ? (
+            <span id={actionStatusId} role="status" className="ui-action-status">
+              {actionStatus}
+            </span>
+          ) : null}
         </div>
       </div>
     </li>

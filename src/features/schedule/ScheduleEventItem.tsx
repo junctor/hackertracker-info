@@ -1,26 +1,35 @@
-import { BookmarkIcon as BookmarkIconOutline } from "@heroicons/react/24/outline";
+import { BookmarkIcon as BookmarkIconOutline, CalendarIcon } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router";
 
+import cal from "@/lib/cal";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { getToneFromColor } from "@/lib/tone";
 
 import type { ScheduleEventViewModel } from "./ScheduleEvents";
 
+import { isScheduleEventLive, isScheduleEventStartingSoon } from "./scheduleTime";
+
 type Props = {
   conf: ConferenceManifest;
   event: ScheduleEventViewModel;
   isBookmarked: boolean;
   nowSeconds: number;
+  isHighlighted?: boolean;
 };
+
+function stopCalendarClickPropagation(e: React.MouseEvent<HTMLAnchorElement>) {
+  e.stopPropagation();
+}
 
 const ScheduleEventItem = React.memo(function ScheduleEventItem({
   conf,
   event,
   isBookmarked,
   nowSeconds,
+  isHighlighted = false,
 }: Props) {
   const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
 
@@ -33,12 +42,19 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
     toggleBookmark();
   };
 
-  const isLive =
-    event.beginTimestampSeconds <= nowSeconds && nowSeconds < event.endTimestampSeconds;
-  const isNext =
-    !isLive &&
-    event.beginTimestampSeconds > nowSeconds &&
-    event.beginTimestampSeconds - nowSeconds <= 30 * 60;
+  const calendarContent = useMemo(() => {
+    if (!event.contentEntity) return null;
+    return { ...event.contentEntity, title: event.title };
+  }, [event.contentEntity, event.title]);
+
+  const icsHref = useMemo(() => {
+    if (!calendarContent) return null;
+    const ics = cal(conf.slug, calendarContent, event.session, event.locationName);
+    return `data:text/calendar;charset=utf8,${encodeURIComponent(ics)}`;
+  }, [calendarContent, conf.slug, event.locationName, event.session]);
+
+  const isLive = isScheduleEventLive(event, nowSeconds);
+  const isNext = isScheduleEventStartingSoon(event, nowSeconds);
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${event.title}`
     : `Add bookmark for ${event.title}`;
@@ -46,7 +62,10 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   const hiddenTagCount = event.tags.length - visibleTags.length;
 
   return (
-    <article className={`ui-card ui-card-interactive ui-accent-card ui-tone-${eventTone}`}>
+    <article
+      data-schedule-event-id={event.id}
+      className={`ui-card ui-card-interactive ui-accent-card ui-tone-${eventTone}${isHighlighted ? " ui-schedule-event-jump-highlight" : ""}`}
+    >
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
@@ -99,19 +118,34 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
           </div>
         </Link>
 
-        <button
-          type="button"
-          onClick={handleBookmarkClick}
-          aria-label={bookmarkLabel}
-          aria-pressed={bookmark}
-          className="ui-icon-plain"
-        >
-          {bookmark ? (
-            <BookmarkIconSolid className="ui-icon-sm" aria-hidden="true" />
-          ) : (
-            <BookmarkIconOutline className="ui-icon-sm" aria-hidden="true" />
-          )}
-        </button>
+        <div className="ui-schedule-card-actions">
+          {icsHref ? (
+            <a
+              href={icsHref}
+              download={`DEF_CON_${event.contentId}-${event.id}.ics`}
+              title={`Download calendar invite for session: ${event.title}`}
+              aria-label={`Download calendar invite for session: ${event.title}`}
+              onClick={stopCalendarClickPropagation}
+              className="ui-icon-plain"
+            >
+              <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
+            </a>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={handleBookmarkClick}
+            aria-label={bookmarkLabel}
+            aria-pressed={bookmark}
+            className="ui-icon-plain"
+          >
+            {bookmark ? (
+              <BookmarkIconSolid className="ui-icon-sm" aria-hidden="true" />
+            ) : (
+              <BookmarkIconOutline className="ui-icon-sm" aria-hidden="true" />
+            )}
+          </button>
+        </div>
       </div>
     </article>
   );

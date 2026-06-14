@@ -1,4 +1,5 @@
 import {
+  CalendarIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   HomeIcon,
@@ -8,7 +9,7 @@ import { Link } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { useSiteMenu } from "@/lib/hooks/useSiteMenu";
-import { getPageTitle, PageId } from "@/lib/types/page-meta";
+import { PageId } from "@/lib/types/page-meta";
 
 const museoFont = {
   className: "ui-typeface-museo",
@@ -18,10 +19,16 @@ const focusRingClass = "ui-focus-ring";
 
 export default function SiteHeader({ conference, activePageId }: Props) {
   const menuItems = useSiteMenu(conference);
-  const pageTitle = getPageTitle(activePageId);
+  const conferenceRootPath = `/${conference.slug}/`;
+  const conferenceDisplayTitle = conference.displayTitle ?? conference.name;
+  const conferenceShortTitle = conference.shortTitle ?? conferenceDisplayTitle;
+  const scheduleHref =
+    conference.schedulePath ??
+    (conference.siteMenu.includes("schedule") ? `/${conference.slug}/schedule` : null);
+  const trackerHref = conference.externalTrackerUrl;
   const activeHref =
     activePageId === "menu"
-      ? `/${conference.slug}`
+      ? conferenceRootPath
       : activePageId === "readme"
         ? `/${conference.slug}/readme.nfo`
         : `/${conference.slug}/${activePageId}`;
@@ -32,29 +39,50 @@ export default function SiteHeader({ conference, activePageId }: Props) {
 
       <div className="ui-chrome-container ui-topbar-row">
         <div className="ui-topbar-brand-group">
-          <Link to={`/${conference.slug}`} className={`ui-topbar-brand-link ${focusRingClass}`}>
+          <Link to="/" aria-label="Home" title="Home" className="ui-icon-plain ui-topbar-home-link">
+            <HomeIcon className="ui-icon-sm" aria-hidden="true" />
+          </Link>
+
+          <Link
+            to={conferenceRootPath}
+            aria-label={`${conference.name} home`}
+            className={`ui-topbar-brand-link ${focusRingClass}`}
+          >
             <span className="ui-topbar-brand-name">
-              <span
-                className={`${museoFont.className} logo ui-topbar-logo ui-topbar-logo-mobile ui-clip-text`}
-              >
-                {conference.code}
+              <span className={`${museoFont.className} logo ui-topbar-logo ui-topbar-logo-short`}>
+                {conferenceShortTitle}
               </span>
-              <span
-                className={`${museoFont.className} logo ui-topbar-logo ui-topbar-logo-desktop ui-clip-text`}
-              >
-                {conference.name}
+              <span className={`${museoFont.className} logo ui-topbar-logo ui-topbar-logo-full`}>
+                {conferenceDisplayTitle}
               </span>
             </span>
           </Link>
-
-          <div className="ui-topbar-page-pill">
-            <span className="ui-meta-pill ui-topbar-page-title ui-clip-text">
-              <span className="ui-clip-text">{pageTitle}</span>
-            </span>
-          </div>
         </div>
 
         <div className="ui-topbar-actions">
+          {scheduleHref ? (
+            <Link
+              to={scheduleHref}
+              aria-current={activePageId === "schedule" ? "page" : undefined}
+              aria-label="Schedule"
+              title="Schedule"
+              className="ui-topbar-action-link ui-topbar-schedule-link"
+            >
+              <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
+              <span className="ui-topbar-schedule-label">Schedule</span>
+            </Link>
+          ) : null}
+
+          <Link
+            to={`/${conference.slug}/search`}
+            aria-current={activePageId === "search" ? "page" : undefined}
+            aria-label="Search"
+            title="Search"
+            className="ui-icon-plain"
+          >
+            <MagnifyingGlassIcon className="ui-icon-sm" aria-hidden="true" />
+          </Link>
+
           <nav aria-label="Primary">
             <details className="ui-header-menu">
               <summary className={`ui-details-summary ui-header-menu-summary ${focusRingClass}`}>
@@ -111,27 +139,16 @@ export default function SiteHeader({ conference, activePageId }: Props) {
             </details>
           </nav>
 
-          <a
-            href={`/${conference.slug}/search`}
-            aria-label="Search"
-            title="Search "
-            className="ui-icon-plain"
-          >
-            <MagnifyingGlassIcon className="ui-icon-sm" aria-label="Search" title="Search" />
-          </a>
-
-          <a href="/" aria-label="Home" title="Home" className="ui-icon-plain">
-            <HomeIcon className="ui-icon-sm" aria-label="Home" title="Home" />
-          </a>
-
-          <a
-            href="/apps"
-            aria-label="Get Hacker Tracker apps"
-            title="Get Hacker Tracker apps"
-            className="ui-icon-plain"
-          >
-            <img src="/images/logos/ht-logo.png" alt="" className="ui-icon-sm" />
-          </a>
+          {trackerHref ? (
+            <a
+              href={trackerHref}
+              aria-label="Get Hacker Tracker apps"
+              title="Get Hacker Tracker apps"
+              className="ui-icon-plain"
+            >
+              <img src="/images/logos/ht-logo.png" alt="" className="ui-icon-sm" />
+            </a>
+          ) : null}
         </div>
       </div>
     </header>

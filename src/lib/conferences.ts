@@ -28,6 +28,8 @@ export type ConferenceManifest = {
   slug: ConferenceSlug;
   code: string;
   name: string;
+  displayTitle?: string;
+  shortTitle?: string;
 
   // Display
   dateLabel: string;
@@ -44,6 +46,8 @@ export type ConferenceManifest = {
   // Data + nav
   dataRoot: string;
   siteMenu: SiteMenuKey[];
+  schedulePath?: string;
+  externalTrackerUrl?: string;
 };
 
 export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
@@ -51,6 +55,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     slug: "dcme2026",
     code: "DCME2026",
     name: "DEF CON Middle East 2026",
+    shortTitle: "DC Middle East",
 
     dateLabel: "November 11–12, 2026",
     tagline: null,
@@ -64,12 +69,14 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
 
     dataRoot: "/ht/dcme2026",
     siteMenu: ["announcements", "readme", "search"],
+    externalTrackerUrl: "/apps",
   },
 
   defcon34: {
     slug: "defcon34",
     code: "DEFCON34",
     name: "DEF CON 34",
+    shortTitle: "DEF CON 34",
 
     dateLabel: "August 6–9, 2026",
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
@@ -83,12 +90,15 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
 
     dataRoot: "/ht/defcon34",
     siteMenu: ["communities", "content", "contests", "readme", "search", "villages"],
+    schedulePath: "/defcon34/schedule",
+    externalTrackerUrl: "/apps",
   },
 
   dcsg2026: {
     slug: "dcsg2026",
     code: "DCSG2026",
     name: "DEF CON Singapore 2026",
+    shortTitle: "DC Singapore",
 
     dateLabel: "April 28–30, 2026",
     tagline: null,
@@ -112,12 +122,15 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "search",
       "villages",
     ],
+    schedulePath: "/dcsg2026/schedule",
+    externalTrackerUrl: "/apps",
   },
 
   defconbahrain2025: {
     slug: "defconbahrain2025",
     code: "DEFCONBAHRAIN2025",
     name: "DEF CON Bahrain 2025",
+    shortTitle: "DC Bahrain",
 
     dateLabel: "November 5–6, 2025",
     tagline: null,
@@ -141,12 +154,15 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "search",
       "villages",
     ],
+    schedulePath: "/defconbahrain2025/schedule",
+    externalTrackerUrl: "/apps",
   },
 
   defcon33: {
     slug: "defcon33",
     code: "DEFCON33",
     name: "DEF CON 33",
+    shortTitle: "DEF CON 33",
 
     dateLabel: "August 7–10, 2025",
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
@@ -170,6 +186,8 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "search",
       "villages",
     ],
+    schedulePath: "/defcon33/schedule",
+    externalTrackerUrl: "/apps",
   },
 } as const;
 

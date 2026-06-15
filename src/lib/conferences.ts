@@ -90,7 +90,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
 
     dataRoot: "/ht/defcon34",
     siteMenu: ["communities", "content", "contests", "readme", "search", "villages"],
-    schedulePath: "/defcon34/schedule",
+    schedulePath: "/defcon34/schedule/",
     externalTrackerUrl: "/apps",
   },
 
@@ -122,7 +122,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "search",
       "villages",
     ],
-    schedulePath: "/dcsg2026/schedule",
+    schedulePath: "/dcsg2026/schedule/",
     externalTrackerUrl: "/apps",
   },
 
@@ -154,7 +154,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "search",
       "villages",
     ],
-    schedulePath: "/defconbahrain2025/schedule",
+    schedulePath: "/defconbahrain2025/schedule/",
     externalTrackerUrl: "/apps",
   },
 
@@ -186,7 +186,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "search",
       "villages",
     ],
-    schedulePath: "/defcon33/schedule",
+    schedulePath: "/defcon33/schedule/",
     externalTrackerUrl: "/apps",
   },
 } as const;

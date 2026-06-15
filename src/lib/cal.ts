@@ -47,7 +47,7 @@ export const generateICal = (
   const summary = escapeICalText(content.title);
   const description = escapeICalText(content.description ?? "");
   const location = escapeICalText(locationName ?? "");
-  const url = `https://info.defcon.org/${conferenceSlug}/content?id=${content.id}`;
+  const url = `https://info.defcon.org/${conferenceSlug}/content/?id=${content.id}`;
 
   const lines: string[] = [
     "BEGIN:VCALENDAR",

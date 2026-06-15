@@ -54,7 +54,7 @@ function hasLiveScheduleParams(params: URLSearchParams): boolean {
 
 function buildSchedulePath(confSlug: string, params: URLSearchParams): string {
   const query = params.toString();
-  return `/${confSlug}/schedule${query ? `?${query}` : ""}`;
+  return `/${confSlug}/schedule/${query ? `?${query}` : ""}`;
 }
 
 function filterScheduleDaysByView(
@@ -171,6 +171,21 @@ function findScheduleJumpTarget(
   return nextTarget ? { day: nextTarget.day, eventId: nextTarget.eventId } : null;
 }
 
+function afterInitialPaint(callback: () => void): () => void {
+  const idleWindow = window as Window & {
+    requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number;
+    cancelIdleCallback?: (handle: number) => void;
+  };
+
+  if (idleWindow.requestIdleCallback && idleWindow.cancelIdleCallback) {
+    const handle = idleWindow.requestIdleCallback(callback, { timeout: 1500 });
+    return () => idleWindow.cancelIdleCallback?.(handle);
+  }
+
+  const handle = window.setTimeout(callback, 0);
+  return () => window.clearTimeout(handle);
+}
+
 export default function SchedulePage({ conf, activePageId }: SchedulePageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const nowSeconds = useNowSeconds();
@@ -181,6 +196,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   const [jumpRequest, setJumpRequest] = useState<ScheduleJumpRequest | null>(null);
   const [highlightedEventId, setHighlightedEventId] = useState<number | null>(null);
   const [jumpStatus, setJumpStatus] = useState<string | null>(null);
+  const [shouldLoadSupplementalData, setShouldLoadSupplementalData] = useState(false);
 
   const {
     data: eventsByDay,
@@ -206,29 +222,36 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     isLoading: tagsLoading,
   } = useConferenceJson<TagsStore>(conf, "entities/tags.json");
 
-  const {
-    data: peopleStore,
-    error: peopleError,
-    isLoading: peopleLoading,
-  } = useConferenceJson<PeopleStore>(conf, "entities/people.json");
+  const { data: peopleStore } = useConferenceJson<PeopleStore>(
+    conf,
+    shouldLoadSupplementalData ? "entities/people.json" : null,
+  );
 
-  const {
-    data: contentStore,
-    error: contentError,
-    isLoading: contentLoading,
-  } = useConferenceJson<ContentStore>(conf, "entities/content.json");
+  const { data: contentStore } = useConferenceJson<ContentStore>(
+    conf,
+    shouldLoadSupplementalData ? "entities/content.json" : null,
+  );
+
+  useEffect(() => {
+    if (
+      shouldLoadSupplementalData ||
+      !eventsByDay ||
+      !eventsStore ||
+      !locationsStore ||
+      !tagsStore
+    ) {
+      return undefined;
+    }
+
+    return afterInitialPaint(() => {
+      setShouldLoadSupplementalData(true);
+    });
+  }, [eventsByDay, eventsStore, locationsStore, shouldLoadSupplementalData, tagsStore]);
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
   const days = useMemo(() => {
-    if (
-      !eventsByDay ||
-      !eventsStore ||
-      !locationsStore ||
-      !tagsStore ||
-      !peopleStore ||
-      !contentStore
-    ) {
+    if (!eventsByDay || !eventsStore || !locationsStore || !tagsStore) {
       return [];
     }
     return getScheduleDaysFromStores(conf, {
@@ -405,16 +428,9 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     };
   }, [scheduleView, scheduleViewLinks.full]);
 
-  const isLoading =
-    eventsByDayLoading ||
-    eventsLoading ||
-    locationsLoading ||
-    tagsLoading ||
-    peopleLoading ||
-    contentLoading;
+  const isLoading = eventsByDayLoading || eventsLoading || locationsLoading || tagsLoading;
 
-  const error =
-    eventsByDayError || eventsError || locationsError || tagsError || peopleError || contentError;
+  const error = eventsByDayError || eventsError || locationsError || tagsError;
 
   if (isLoading) {
     return (
@@ -422,15 +438,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     );
   }
 
-  if (
-    error ||
-    !eventsByDay ||
-    !eventsStore ||
-    !locationsStore ||
-    !tagsStore ||
-    !peopleStore ||
-    !contentStore
-  ) {
+  if (error || !eventsByDay || !eventsStore || !locationsStore || !tagsStore) {
     return <ErrorScreen />;
   }
 

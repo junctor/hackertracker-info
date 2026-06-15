@@ -25,9 +25,21 @@ export function absoluteUrl(path: string) {
   return `${SITE_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+function isFileLikePath(path: string) {
+  const lastSegment = path.split("/").filter(Boolean).at(-1) ?? "";
+  return lastSegment.includes(".");
+}
+
+function addDirectorySlash(path: string) {
+  const [pathname, query = ""] = path.split("?", 2);
+  const canonicalPathname =
+    pathname.endsWith("/") || isFileLikePath(pathname) ? pathname : `${pathname}/`;
+  return query ? `${canonicalPathname}?${query}` : canonicalPathname;
+}
+
 export function conferencePath(conf: ConferenceManifest, route?: string) {
   const suffix = route?.trim().replace(/^\/+/, "");
-  return suffix ? `/${conf.slug}/${suffix}` : `/${conf.slug}`;
+  return addDirectorySlash(suffix ? `/${conf.slug}/${suffix}` : `/${conf.slug}`);
 }
 
 export function conferenceDataFeeds(conf: ConferenceManifest): ReadonlyArray<JsonFeed> {

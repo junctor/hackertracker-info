@@ -1,22 +1,20 @@
-import React, { useMemo, type ReactElement } from "react";
+import React, { lazy, useMemo, type ReactElement } from "react";
+
+import type {
+  ContentCardsView,
+  ContentDetailView,
+  TagTypesBrowseView,
+} from "@/lib/types/ht-types/views";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import ContentDetails from "@/features/content/ContentDetails";
 import ContentList from "@/features/content/ContentList";
+import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { getBookmarks } from "@/lib/storage";
-import {
-  ContentStore,
-  EventsStore,
-  LocationsStore,
-  PeopleStore,
-  TagsStore,
-} from "@/lib/types/ht-types";
-import { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
@@ -24,6 +22,8 @@ type ContentPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
+
+const ContentDetails = lazy(() => import("@/features/content/ContentDetails"));
 
 export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   const {
@@ -52,46 +52,25 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   );
 
   const {
-    data: contentStore,
-    error: contentStoreError,
-    isLoading: contentStoreLoading,
-  } = useConferenceJson<ContentStore>(conf, shouldLoadDetails ? "entities/content.json" : null);
-
-  const {
-    data: peopleStore,
-    error: peopleError,
-    isLoading: peopleLoading,
-  } = useConferenceJson<PeopleStore>(conf, shouldLoadDetails ? "entities/people.json" : null);
-
-  const {
-    data: eventsStore,
-    error: eventsError,
-    isLoading: eventsLoading,
-  } = useConferenceJson<EventsStore>(conf, shouldLoadDetails ? "entities/events.json" : null);
-
-  const {
-    data: locationsStore,
-    error: locationsError,
-    isLoading: locationsLoading,
-  } = useConferenceJson<LocationsStore>(conf, shouldLoadDetails ? "entities/locations.json" : null);
-
-  const {
-    data: tagsStore,
-    error: tagsError,
-    isLoading: tagsLoading,
-  } = useConferenceJson<TagsStore>(conf, shouldLoadDetails ? "entities/tags.json" : null);
+    data: contentDetail,
+    error: contentDetailError,
+    isLoading: contentDetailLoading,
+  } = useConferenceJson<ContentDetailView>(
+    conf,
+    shouldLoadDetails && contentId !== null ? `details/content/${contentId}.json` : null,
+  );
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
   const metaDescription = useMemo(() => {
     const fallback = `Learn more about ${conf.name} content.`;
-    const rawDescription = contentStore?.byId[contentId ?? -1]?.description;
+    const rawDescription = contentDetail?.content.description;
     const base = rawDescription && rawDescription.trim().length > 0 ? rawDescription : fallback;
     const normalized = base.replace(/\s+/g, " ").trim();
     if (normalized.length === 0) return fallback;
     if (normalized.length <= 150) return normalized;
     return `${normalized.slice(0, 147).trimEnd()}...`;
-  }, [conf.name, contentId, contentStore]);
+  }, [conf.name, contentDetail]);
 
   if (!isReady) return <LoadingScreen />;
   if (isIdInvalid) return <ErrorScreen msg="Invalid content id." />;
@@ -101,43 +80,15 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   let pageContent: ReactElement;
 
   if (shouldLoadDetails) {
-    const isDetailLoading =
-      contentStoreLoading || peopleLoading || eventsLoading || locationsLoading || tagsLoading;
-    const detailError =
-      contentStoreError || peopleError || eventsError || locationsError || tagsError;
+    const isDetailLoading = contentDetailLoading;
+    const detailError = contentDetailError;
 
     if (isDetailLoading) return <LoadingScreen />;
-    if (
-      detailError ||
-      !contentStore ||
-      !peopleStore ||
-      !eventsStore ||
-      !locationsStore ||
-      !tagsStore
-    ) {
+    if (detailError || !contentDetail) {
       return <ErrorScreen />;
     }
 
-    const content = contentStore.byId[contentId] ?? null;
-    if (!content) return <ErrorScreen msg="Content not found." />;
-
-    const sessions = Object.values(eventsStore.byId).filter(
-      (event) => event.contentId === content.id,
-    );
-    const locationIds = new Set(sessions.map((event) => event.locationId));
-    const locations = Object.values(locationsStore.byId).filter((location) =>
-      locationIds.has(location.id),
-    );
-    const people = (content.people ?? [])
-      .toSorted((a, b) => a.sortOrder - b.sortOrder)
-      .map((p) => peopleStore.byId[p.personId])
-      .filter((p): p is NonNullable<typeof p> => Boolean(p));
-    const tags = content.tagIds
-      .map((id) => tagsStore.byId[id])
-      .filter((tag): tag is NonNullable<typeof tag> => Boolean(tag));
-    const relatedContent = (content.relatedContentIds ?? [])
-      .map((id) => contentStore.byId[id])
-      .filter((item): item is NonNullable<typeof item> => Boolean(item));
+    const { content, sessions, locations, people, tags } = contentDetail;
 
     pageTitle = `${content.title} | ${conf.name}`;
     pageDescription = metaDescription;
@@ -148,7 +99,6 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
         sessions={sessions}
         locations={locations}
         people={people}
-        related_content={relatedContent}
         tags={tags}
         bookmarks={bookmarks}
         conference={conf}
@@ -166,7 +116,15 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
     <>
       <Head>
         <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
+        {aiMetadata({
+          title: pageTitle,
+          description: pageDescription,
+          path: conferencePath(
+            conf,
+            shouldLoadDetails && contentId !== null ? `content/?id=${contentId}` : "content/",
+          ),
+          jsonFeeds: conferenceDataFeeds(conf),
+        })}
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         {pageContent}

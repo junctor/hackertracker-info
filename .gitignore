@@ -42,6 +42,7 @@ public/ht
 /public/llms.txt
 /public/sitemap.xml
 /public/**/data/index.html
+/public/structured-data/
 
 # Local static data export staging
 out/

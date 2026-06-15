@@ -68,11 +68,7 @@ export default function ConferencesPage() {
 
 function ConferenceArchiveCard({ conference }: { conference: ConferenceManifest }) {
   return (
-    <Link
-      to={`/${conference.slug}`}
-      aria-label={`View ${conference.name}`}
-      className="ui-focus-ring ui-conference-archive-card"
-    >
+    <Link to={`/${conference.slug}/`} className="ui-focus-ring ui-conference-archive-card">
       <span className="ui-conference-archive-logo">
         <Image
           src={`/images/${conference.logoFile}`}

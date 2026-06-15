@@ -183,7 +183,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
           <div className="ui-container ui-empty-state ui-page-empty-offset">
             <p>No bookmarks yet.</p>
             <Link
-              to={`/${conf.slug}/schedule`}
+              to={`/${conf.slug}/schedule/`}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Browse Schedule
@@ -203,7 +203,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
           <div className="ui-container ui-empty-state ui-page-empty-offset">
             <p>No upcoming events match your saved bookmarks.</p>
             <Link
-              to={`/${conf.slug}/schedule`}
+              to={`/${conf.slug}/schedule/`}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               View Full Schedule

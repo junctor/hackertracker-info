@@ -361,9 +361,8 @@ export default function ScheduleEvents({
             ) : null}
 
             <Link
-              to={`/${conf.slug}/bookmarks`}
+              to={`/${conf.slug}/bookmarks/`}
               className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link"
-              aria-label="View bookmarked events"
               aria-current={isBookmarksFilterActive ? "page" : undefined}
             >
               <BookmarkIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
@@ -371,7 +370,7 @@ export default function ScheduleEvents({
             </Link>
 
             <Link
-              to={`/${conf.slug}/tags`}
+              to={`/${conf.slug}/tags/`}
               className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link"
               aria-label="Browse schedule tags"
               aria-current={isTagsFilterActive ? "page" : undefined}
@@ -413,7 +412,6 @@ export default function ScheduleEvents({
                       role="tab"
                       aria-selected={resolvedDay === day}
                       aria-controls={`day-panel-${day}`}
-                      aria-label={`${tabDateTitle(day, conf.timezone)}, ${events.length} events`}
                       tabIndex={resolvedDay === day ? 0 : -1}
                       className="ui-focus-ring ui-schedule-day-tab"
                       onClick={() => onSelectDay(day)}
@@ -422,7 +420,10 @@ export default function ScheduleEvents({
                       <span className="ui-schedule-day-tab-title">
                         {tabDateTitle(day, conf.timezone)}
                       </span>
-                      <span className="ui-schedule-day-count">{events.length}</span>
+                      <span className="ui-schedule-day-count">
+                        {events.length}
+                        <span className="ui-visually-hidden"> events</span>
+                      </span>
                     </button>
                   ))}
                 </div>

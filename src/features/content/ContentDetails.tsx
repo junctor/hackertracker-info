@@ -24,7 +24,6 @@ type Props = {
   sessions: EventEntity[];
   locations: LocationEntity[];
   people: PersonEntity[];
-  related_content: ContentEntity[];
   tags: TagEntity[];
   bookmarks: number[];
   conference: ConferenceManifest;
@@ -40,8 +39,8 @@ export default function ContentDetails(props: Props) {
   const shareStatusId = useId();
   const [shareStatus, setShareStatus] = useTransientStatus();
 
-  const peopleBasePath = `/${conference.slug}/people`;
-  const contentsBasePath = `/${conference.slug}/content`;
+  const peopleBasePath = `/${conference.slug}/people/`;
+  const contentsBasePath = `/${conference.slug}/content/`;
 
   const locationNameById = useMemo(
     () => new Map<number, string>(locations.map((l) => [l.id, l.name])),
@@ -164,7 +163,7 @@ export default function ContentDetails(props: Props) {
             {tags.map((tag) => (
               <li key={tag.id}>
                 <Link
-                  to={`/${conference.slug}/tag?id=${tag.id}`}
+                  to={`/${conference.slug}/tag/?id=${tag.id}`}
                   className="ui-focus-ring ui-pill-link"
                 >
                   <span

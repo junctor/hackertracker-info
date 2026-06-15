@@ -29,14 +29,16 @@ export default function SiteHeader({ conference, activePageId }: Props) {
   const conferenceShortTitle = conference.shortTitle ?? conferenceDisplayTitle;
   const scheduleHref =
     conference.schedulePath ??
-    (conference.siteMenu.includes("schedule") ? `/${conference.slug}/schedule` : null);
+    (conference.siteMenu.includes("schedule") ? `/${conference.slug}/schedule/` : null);
   const trackerHref = conference.externalTrackerUrl;
   const activeHref =
     activePageId === "menu"
       ? conferenceRootPath
-      : activePageId === "readme"
-        ? `/${conference.slug}/readme.nfo`
-        : `/${conference.slug}/${activePageId}`;
+      : activePageId === "schedule"
+        ? (scheduleHref ?? `/${conference.slug}/schedule/`)
+        : activePageId === "readme"
+          ? `/${conference.slug}/readme.nfo`
+          : `/${conference.slug}/${activePageId}/`;
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -107,7 +109,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
           ) : null}
 
           <Link
-            to={`/${conference.slug}/search`}
+            to={`/${conference.slug}/search/`}
             aria-current={activePageId === "search" ? "page" : undefined}
             aria-label={`Search ${conference.name}`}
             title={`Search ${conference.name}`}

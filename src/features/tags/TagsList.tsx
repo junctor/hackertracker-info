@@ -26,7 +26,7 @@ type TagsListProps = {
 function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceManifest }) {
   return (
     <Link
-      to={`/${conference.slug}/tag?id=${tag.id}`}
+      to={`/${conference.slug}/tag/?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
       className={`ui-focus-ring ui-tag-chip ui-tag-link ui-tone-${getToneFromColor(tag.colorBackground)}`}
     >

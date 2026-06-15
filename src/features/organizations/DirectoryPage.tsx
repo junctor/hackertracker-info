@@ -1,4 +1,4 @@
-import { JSX, useMemo } from "react";
+import { JSX, lazy, useMemo } from "react";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 import type { PageId } from "@/lib/types/page-meta";
@@ -7,7 +7,6 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
@@ -29,6 +28,8 @@ type Props = {
 };
 
 type OrganizationDirectoryPageProps = Pick<Props, "conf" | "activePageId">;
+
+const OrganizationDetails = lazy(() => import("@/features/organizations/OrganizationDetails"));
 
 export function createOrganizationDirectoryRoute(directoryPageId: PageId) {
   const directoryConfig = getOrganizationDirectoryConfig(directoryPageId)!;
@@ -137,7 +138,7 @@ export default function DirectoryPage({
     }
 
     const matchingOrganizations = organizations[tagId] ?? [];
-    const detailsBasePath = `/${conf.slug}/${routeSlug}`;
+    const detailsBasePath = `/${conf.slug}/${routeSlug}/`;
 
     pageContent = (
       <ConferenceLayout conference={conf} activePageId={activePageId}>

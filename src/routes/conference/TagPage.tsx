@@ -319,7 +319,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
           <div className="ui-container ui-empty-state ui-page-empty-offset">
             <p>{emptyMessage}</p>
             <Link
-              to={`/${conf.slug}/tags`}
+              to={`/${conf.slug}/tags/`}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Browse Tags

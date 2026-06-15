@@ -96,7 +96,7 @@ function getPersonAccentClassName(name?: string | null): string {
 
 export default function PersonDetails({ person, events, locations, conference }: Props) {
   const [hasAvatarError, setHasAvatarError] = useState(false);
-  const contentsBasePath = `/${conference.slug}/content`;
+  const contentsBasePath = `/${conference.slug}/content/`;
   const personName = getDisplayName(person.name);
   const personInitials = getPersonInitials(person.name);
   const personAvatarUrl = getPersonAvatarUrl(person);

@@ -1,3 +1,11 @@
+import type {
+  ContentEntity,
+  EventEntity,
+  LocationEntity,
+  PersonEntity,
+  TagEntity,
+} from "./entities";
+
 export type ContentCard = {
   id: number;
   tags: Array<{
@@ -74,3 +82,17 @@ export type SearchDataItem = {
   type: SearchDataType;
 };
 export type SearchDataView = Array<SearchDataItem>;
+
+export type ContentDetailView = {
+  content: ContentEntity;
+  sessions: EventEntity[];
+  locations: LocationEntity[];
+  people: PersonEntity[];
+  tags: TagEntity[];
+};
+
+export type PersonDetailView = {
+  person: PersonEntity;
+  events: EventEntity[];
+  locations: LocationEntity[];
+};

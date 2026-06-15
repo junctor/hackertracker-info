@@ -15,8 +15,8 @@ type ScheduleSources = {
   eventsStore: EventsStore;
   locationsStore: LocationsStore;
   tagsStore: TagsStore;
-  peopleStore: PeopleStore;
-  contentStore: ContentStore;
+  peopleStore?: PeopleStore | null;
+  contentStore?: ContentStore | null;
 };
 
 type ScheduleCacheEntry = ScheduleSources & {
@@ -73,10 +73,12 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
           ? event.speakerIds
           : (event.personIds ?? []);
 
-      const speakers = speakerIds
-        .map((id) => peopleStore.byId[normalizeId(id)]?.name)
-        .filter((name): name is string => Boolean(name))
-        .join(", ");
+      const speakers = peopleStore
+        ? speakerIds
+            .map((id) => peopleStore.byId[normalizeId(id)]?.name)
+            .filter((name): name is string => Boolean(name))
+            .join(", ")
+        : "";
 
       const beginDate = new Date(event.begin);
       const endDate = new Date(event.end);
@@ -94,7 +96,7 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
         endTimestampSeconds: toTimestampSeconds(event.end),
         color: event.color,
         contentId: event.contentId,
-        contentEntity: contentStore.byId[normalizeId(event.contentId)] ?? null,
+        contentEntity: contentStore?.byId[normalizeId(event.contentId)] ?? null,
         session: event,
         locationName,
         tags,

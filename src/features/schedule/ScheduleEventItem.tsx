@@ -3,7 +3,7 @@ import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
 import React, { useMemo } from "react";
 import { Link } from "react-router";
 
-import cal from "@/lib/cal";
+import cal, { encodeICalDataUri } from "@/lib/cal";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
@@ -60,7 +60,7 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   const icsHref = useMemo(() => {
     if (!calendarContent) return null;
     const ics = cal(conf.slug, calendarContent, event.session, event.locationName);
-    return `data:text/calendar;charset=utf8,${encodeURIComponent(ics)}`;
+    return encodeICalDataUri(ics);
   }, [calendarContent, conf.slug, event.locationName, event.session]);
 
   const isLive = isScheduleEventLive(event, nowSeconds);

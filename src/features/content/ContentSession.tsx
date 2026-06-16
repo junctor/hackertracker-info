@@ -10,7 +10,7 @@ import { Link } from "react-router";
 import type { ConferenceManifest } from "@/lib/conferences";
 import type { ContentEntity, EventEntity } from "@/lib/types/ht-types";
 
-import cal from "@/lib/cal";
+import cal, { encodeICalDataUri } from "@/lib/cal";
 import { eventTime, formatSessionTime } from "@/lib/dates";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
@@ -49,7 +49,7 @@ function ContentSessionCard({
 
   const icsHref = useMemo(() => {
     const ics = cal(conference.slug, contentEntity, session, locationName);
-    return `data:text/calendar;charset=utf8,${encodeURIComponent(ics)}`;
+    return encodeICalDataUri(ics);
   }, [conference.slug, contentEntity, session, locationName]);
 
   const handleBookmarkClick = (e: MouseEvent<HTMLButtonElement>) => {

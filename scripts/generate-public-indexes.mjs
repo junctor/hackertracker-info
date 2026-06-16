@@ -1,4 +1,4 @@
-import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { CONFERENCES } from "../src/lib/conferences.ts";
@@ -204,7 +204,14 @@ function renderAlternateLink(href) {
 }
 
 async function listJsonFiles(directory, prefix = "") {
-  const entries = await readdir(directory, { withFileTypes: true });
+  let entries;
+  try {
+    entries = await readdir(directory, { withFileTypes: true });
+  } catch (error) {
+    if (error?.code === "ENOENT") return [];
+    throw error;
+  }
+
   const files = [];
 
   for (const entry of entries) {
@@ -223,116 +230,6 @@ async function listJsonFiles(directory, prefix = "") {
   }
 
   return files.toSorted((left, right) => left.localeCompare(right));
-}
-
-async function readJsonFile(filePath) {
-  return JSON.parse(await readFile(filePath, "utf8"));
-}
-
-function byIdValues(store) {
-  return Object.values(store?.byId ?? {});
-}
-
-function normalizeId(id) {
-  return String(id);
-}
-
-function buildEventsByContentId(eventsStore) {
-  const eventsByContentId = new Map();
-
-  for (const event of byIdValues(eventsStore)) {
-    const events = eventsByContentId.get(event.contentId) ?? [];
-    events.push(event);
-    eventsByContentId.set(event.contentId, events);
-  }
-
-  for (const events of eventsByContentId.values()) {
-    events.sort((a, b) => Date.parse(a.begin) - Date.parse(b.begin));
-  }
-
-  return eventsByContentId;
-}
-
-function uniqueById(items) {
-  const seen = new Set();
-  const result = [];
-
-  for (const item of items) {
-    if (!item || seen.has(item.id)) continue;
-    seen.add(item.id);
-    result.push(item);
-  }
-
-  return result;
-}
-
-async function writeJson(filePath, data) {
-  await mkdir(path.dirname(filePath), { recursive: true });
-  await writeFile(filePath, `${JSON.stringify(data)}\n`, "utf8");
-}
-
-async function generateDetailViews(conference) {
-  const conferenceDataDir = path.join(dataRootDir, conference.slug);
-  const contentStore = await readJsonFile(path.join(conferenceDataDir, "entities/content.json"));
-  const eventsStore = await readJsonFile(path.join(conferenceDataDir, "entities/events.json"));
-  const locationsStore = await readJsonFile(
-    path.join(conferenceDataDir, "entities/locations.json"),
-  );
-  const peopleStore = await readJsonFile(path.join(conferenceDataDir, "entities/people.json"));
-  const tagsStore = await readJsonFile(path.join(conferenceDataDir, "entities/tags.json"));
-  const detailsDir = path.join(conferenceDataDir, "details");
-  const contentDetailsDir = path.join(detailsDir, "content");
-  const peopleDetailsDir = path.join(detailsDir, "people");
-  const eventsByContentId = buildEventsByContentId(eventsStore);
-
-  await rm(contentDetailsDir, { force: true, recursive: true });
-  await rm(peopleDetailsDir, { force: true, recursive: true });
-
-  let contentDetailCount = 0;
-  for (const content of byIdValues(contentStore)) {
-    const sessions =
-      content.sessions && content.sessions.length > 0
-        ? content.sessions.map((id) => eventsStore.byId[normalizeId(id)]).filter(Boolean)
-        : (eventsByContentId.get(content.id) ?? []);
-    const locations = uniqueById(
-      sessions.map((session) => locationsStore.byId[normalizeId(session.locationId)]),
-    );
-    const people = (content.people ?? [])
-      .toSorted((a, b) => a.sortOrder - b.sortOrder)
-      .map((personRef) => peopleStore.byId[normalizeId(personRef.personId)])
-      .filter(Boolean);
-    const tags = (content.tagIds ?? [])
-      .map((id) => tagsStore.byId[normalizeId(id)])
-      .filter(Boolean);
-    await writeJson(path.join(contentDetailsDir, `${content.id}.json`), {
-      content,
-      sessions,
-      locations,
-      people,
-      tags,
-    });
-    contentDetailCount += 1;
-  }
-
-  let peopleDetailCount = 0;
-  for (const person of byIdValues(peopleStore)) {
-    const contentIds = new Set(person.contentIds ?? []);
-    const events = uniqueById(
-      [...contentIds].flatMap((contentId) => eventsByContentId.get(contentId) ?? []),
-    );
-    const locations = uniqueById(
-      events.map((event) => locationsStore.byId[normalizeId(event.locationId)]),
-    );
-
-    await writeJson(path.join(peopleDetailsDir, `${person.id}.json`), {
-      person,
-      events,
-      locations,
-    });
-    peopleDetailCount += 1;
-  }
-
-  return { contentDetailCount, peopleDetailCount };
 }
 
 function renderLinks(items, makeHref) {
@@ -724,12 +621,6 @@ const generated = [];
 const conferences = Object.values(CONFERENCES);
 
 for (const conference of conferences) {
-  const { contentDetailCount, peopleDetailCount } = await generateDetailViews(conference);
-  generated.push(
-    `${conference.slug}/details/content/*.json (${contentDetailCount} files)`,
-    `${conference.slug}/details/people/*.json (${peopleDetailCount} files)`,
-  );
-
   const jsonFiles = await listJsonFiles(path.join(dataRootDir, conference.slug));
 
   await writeGeneratedFile(conference.slug, renderDataIndex(conference, jsonFiles));

@@ -1,7 +1,10 @@
 import type {
+  ArticleEntity,
   ContentEntity,
+  DocumentEntity,
   EventEntity,
   LocationEntity,
+  OrganizationEntity,
   PersonEntity,
   TagEntity,
 } from "./entities";
@@ -83,6 +86,48 @@ export type SearchDataItem = {
 };
 export type SearchDataView = Array<SearchDataItem>;
 
+export type ScheduleEventViewModel = {
+  id: number;
+  title: string;
+  begin: string;
+  end: string;
+  beginTimestampSeconds: number;
+  endTimestampSeconds: number;
+  color: string;
+  contentId: number;
+  contentEntity: ContentEntity | null;
+  session: EventEntity;
+  locationName: string;
+  tags: Array<{
+    id: number;
+    label: string;
+    colorBackground: string;
+    colorForeground?: string;
+  }>;
+  speakers: string | null;
+  beginDisplay: string;
+  beginIso: string;
+  endDisplay: string;
+  endIso: string;
+};
+
+export type ScheduleDayView = {
+  day: string;
+  events: ScheduleEventViewModel[];
+};
+export type ScheduleDaysView = ScheduleDayView[];
+export type BookmarkEventsByIdView = Record<string, ScheduleEventViewModel>;
+
+export type LocationCard = {
+  id: number;
+  name: string;
+  parentId: number | null;
+  shortName: string | null;
+};
+export type LocationCardsView = LocationCard[];
+
+export type AnnouncementsListView = ArticleEntity[];
+
 export type ContentDetailView = {
   content: ContentEntity;
   sessions: EventEntity[];
@@ -96,3 +141,16 @@ export type PersonDetailView = {
   events: EventEntity[];
   locations: LocationEntity[];
 };
+
+export type TagDetailView = {
+  tag: TagEntity;
+  days: ScheduleDaysView;
+};
+
+export type LocationDetailView = {
+  location: LocationEntity;
+  days: ScheduleDaysView;
+};
+
+export type DocumentDetailView = DocumentEntity;
+export type OrganizationDetailView = OrganizationEntity;

@@ -8,7 +8,7 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { DocumentEntity, DocumentsStore } from "@/lib/types/ht-types/entities";
+import { DocumentDetailView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type DocumentPageProps = {
@@ -28,25 +28,23 @@ export default function DocumentPage({ conf, activePageId }: DocumentPageProps) 
   }, [idParam]);
 
   const {
-    data: documents,
+    data: selectedDocument,
     error,
     isLoading,
-  } = useConferenceJson<DocumentsStore>(conf, "entities/documents.json");
-
-  const selectedDocument = useMemo<DocumentEntity | null>(() => {
-    if (docId === null) return null;
-    return documents ? (documents.byId[docId] ?? null) : null;
-  }, [documents, docId]);
+  } = useConferenceJson<DocumentDetailView>(
+    conf,
+    docId !== null ? `details/documents/${docId}.json` : null,
+  );
 
   if (isLoading) return <LoadingScreen />;
-  if (error || !documents) {
-    return <ErrorScreen msg="Unable to load documents." />;
-  }
   if (idParam === null) {
     return <ErrorScreen msg="Missing document id." />;
   }
   if (docId === null) {
     return <ErrorScreen msg="Invalid document id." />;
+  }
+  if (error) {
+    return <ErrorScreen msg="Unable to load document." />;
   }
   if (!selectedDocument) {
     return <ErrorScreen msg="Document not found." />;

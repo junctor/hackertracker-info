@@ -15,42 +15,18 @@ import {
   type VirtuosoHandle,
 } from "react-virtuoso";
 
-import type { ContentEntity, EventEntity } from "@/lib/types/ht-types";
+import type {
+  ScheduleDayView,
+  ScheduleEventViewModel as ScheduleEventViewModelContract,
+} from "@/lib/types/ht-types/views";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { eventDayTable, tabDateTitle } from "@/lib/dates";
 
 import ScheduleEventItem from "./ScheduleEventItem";
 
-export type ScheduleEventViewModel = {
-  id: number;
-  title: string;
-  begin: string;
-  end: string;
-  beginTimestampSeconds: number;
-  endTimestampSeconds: number;
-  color: string;
-  contentId: number;
-  contentEntity: ContentEntity | null;
-  session: EventEntity;
-  locationName: string;
-  tags: Array<{
-    id: number;
-    label: string;
-    colorBackground: string;
-    colorForeground?: string;
-  }>;
-  speakers: string | null;
-  beginDisplay: string;
-  beginIso: string;
-  endDisplay: string;
-  endIso: string;
-};
-
-export type ScheduleDay = {
-  day: string;
-  events: ScheduleEventViewModel[];
-};
+export type ScheduleEventViewModel = ScheduleEventViewModelContract;
+export type ScheduleDay = ScheduleDayView;
 
 export type ScheduleViewMode = "full" | "now" | "next";
 

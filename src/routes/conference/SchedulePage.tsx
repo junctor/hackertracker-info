@@ -5,7 +5,6 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import { getScheduleDaysFromStores } from "@/features/schedule/scheduleData";
 import ScheduleEvents, {
   type ScheduleActivitySummary,
   type ScheduleDay,
@@ -28,14 +27,7 @@ import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { getBookmarks } from "@/lib/storage";
-import {
-  ContentStore,
-  EventsByDayIndex,
-  EventsStore,
-  LocationsStore,
-  PeopleStore,
-  TagsStore,
-} from "@/lib/types/ht-types";
+import { ScheduleDaysView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type SchedulePageProps = {
@@ -171,21 +163,6 @@ function findScheduleJumpTarget(
   return nextTarget ? { day: nextTarget.day, eventId: nextTarget.eventId } : null;
 }
 
-function afterInitialPaint(callback: () => void): () => void {
-  const idleWindow = window as Window & {
-    requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number;
-    cancelIdleCallback?: (handle: number) => void;
-  };
-
-  if (idleWindow.requestIdleCallback && idleWindow.cancelIdleCallback) {
-    const handle = idleWindow.requestIdleCallback(callback, { timeout: 1500 });
-    return () => idleWindow.cancelIdleCallback?.(handle);
-  }
-
-  const handle = window.setTimeout(callback, 0);
-  return () => window.clearTimeout(handle);
-}
-
 export default function SchedulePage({ conf, activePageId }: SchedulePageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const nowSeconds = useNowSeconds();
@@ -196,73 +173,18 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   const [jumpRequest, setJumpRequest] = useState<ScheduleJumpRequest | null>(null);
   const [highlightedEventId, setHighlightedEventId] = useState<number | null>(null);
   const [jumpStatus, setJumpStatus] = useState<string | null>(null);
-  const [shouldLoadSupplementalData, setShouldLoadSupplementalData] = useState(false);
 
   const {
-    data: eventsByDay,
-    error: eventsByDayError,
-    isLoading: eventsByDayLoading,
-  } = useConferenceJson<EventsByDayIndex>(conf, "indexes/eventsByDay.json");
-
-  const {
-    data: eventsStore,
-    error: eventsError,
-    isLoading: eventsLoading,
-  } = useConferenceJson<EventsStore>(conf, "entities/events.json");
-
-  const {
-    data: locationsStore,
-    error: locationsError,
-    isLoading: locationsLoading,
-  } = useConferenceJson<LocationsStore>(conf, "entities/locations.json");
-
-  const {
-    data: tagsStore,
-    error: tagsError,
-    isLoading: tagsLoading,
-  } = useConferenceJson<TagsStore>(conf, "entities/tags.json");
-
-  const { data: peopleStore } = useConferenceJson<PeopleStore>(
-    conf,
-    shouldLoadSupplementalData ? "entities/people.json" : null,
-  );
-
-  const { data: contentStore } = useConferenceJson<ContentStore>(
-    conf,
-    shouldLoadSupplementalData ? "entities/content.json" : null,
-  );
-
-  useEffect(() => {
-    if (
-      shouldLoadSupplementalData ||
-      !eventsByDay ||
-      !eventsStore ||
-      !locationsStore ||
-      !tagsStore
-    ) {
-      return undefined;
-    }
-
-    return afterInitialPaint(() => {
-      setShouldLoadSupplementalData(true);
-    });
-  }, [eventsByDay, eventsStore, locationsStore, shouldLoadSupplementalData, tagsStore]);
+    data: scheduleDays,
+    error: scheduleDaysError,
+    isLoading: scheduleDaysLoading,
+  } = useConferenceJson<ScheduleDaysView>(conf, "views/scheduleDays.json");
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
   const days = useMemo(() => {
-    if (!eventsByDay || !eventsStore || !locationsStore || !tagsStore) {
-      return [];
-    }
-    return getScheduleDaysFromStores(conf, {
-      eventsByDay,
-      eventsStore,
-      locationsStore,
-      tagsStore,
-      peopleStore,
-      contentStore,
-    });
-  }, [conf, eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore, contentStore]);
+    return scheduleDays ?? [];
+  }, [scheduleDays]);
 
   const requestedScheduleView = useMemo(
     () => getScheduleView(searchParams.get("view")),
@@ -428,17 +350,13 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     };
   }, [scheduleView, scheduleViewLinks.full]);
 
-  const isLoading = eventsByDayLoading || eventsLoading || locationsLoading || tagsLoading;
-
-  const error = eventsByDayError || eventsError || locationsError || tagsError;
-
-  if (isLoading) {
+  if (scheduleDaysLoading) {
     return (
       <ConferenceLoadingScreen conference={conf} activePageId={activePageId} variant="schedule" />
     );
   }
 
-  if (error || !eventsByDay || !eventsStore || !locationsStore || !tagsStore) {
+  if (scheduleDaysError || !scheduleDays) {
     return <ErrorScreen />;
   }
 

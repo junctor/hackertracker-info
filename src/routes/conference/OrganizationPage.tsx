@@ -5,7 +5,7 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { OrganizationsStore } from "@/lib/types/ht-types";
+import { OrganizationDetailView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
@@ -20,21 +20,21 @@ export default function OrganizationPage({ conf, activePageId }: OrganizationPag
   const shouldLoadDetails = isReady && !isMissing && !isInvalid && organizationId !== null;
 
   const {
-    data: organizationsStore,
+    data: organization,
     error,
     isLoading,
-  } = useConferenceJson<OrganizationsStore>(
+  } = useConferenceJson<OrganizationDetailView>(
     conf,
-    shouldLoadDetails ? "entities/organizations.json" : null,
+    shouldLoadDetails && organizationId !== null
+      ? `details/organizations/${organizationId}.json`
+      : null,
   );
 
   if (!isReady) return <LoadingScreen />;
   if (isInvalid) return <ErrorScreen msg="Invalid organization id." />;
   if (isMissing || organizationId === null) return <ErrorScreen msg="Missing organization id." />;
   if (isLoading) return <LoadingScreen />;
-  if (error || !organizationsStore) return <ErrorScreen />;
-
-  const organization = organizationsStore.byId[organizationId] ?? null;
+  if (error) return <ErrorScreen />;
   if (!organization) return <ErrorScreen msg="Organization not found." />;
 
   const description =

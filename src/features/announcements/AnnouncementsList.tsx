@@ -1,22 +1,16 @@
-import { useMemo } from "react";
-
 import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { newsAgo, newsTime } from "@/lib/dates";
-import { ArticlesStore } from "@/lib/types/ht-types";
+import { AnnouncementsListView } from "@/lib/types/ht-types/views";
 
 type Props = {
-  announcements: ArticlesStore;
+  announcements: AnnouncementsListView;
   conference: ConferenceManifest;
 };
 
 export default function AnnouncementsList({ announcements, conference }: Props) {
-  const sorted = useMemo(() => {
-    return Object.values(announcements.byId).toSorted((a, b) => b.updatedAtMs - a.updatedAtMs);
-  }, [announcements.byId]);
-
-  if (!sorted.length) {
+  if (!announcements.length) {
     return (
       <div className="ui-container ui-page-content">
         <PageHeader
@@ -35,11 +29,11 @@ export default function AnnouncementsList({ announcements, conference }: Props) 
       <PageHeader
         title="Announcements"
         description="Official conference updates in publish order."
-        resultLabel={`${sorted.length} ${sorted.length === 1 ? "update" : "updates"}`}
+        resultLabel={`${announcements.length} ${announcements.length === 1 ? "update" : "updates"}`}
       />
 
       <ul className="ui-announcement-list" role="list">
-        {sorted.map((item, index) => {
+        {announcements.map((item, index) => {
           const date = new Date(item.updatedAtMs);
           return (
             <li key={item.id}>

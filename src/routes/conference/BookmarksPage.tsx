@@ -5,23 +5,12 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import {
-  filterScheduleDaysByBookmarks,
-  getScheduleDaysFromStores,
-} from "@/features/schedule/scheduleData";
-import ScheduleEvents from "@/features/schedule/ScheduleEvents";
+import ScheduleEvents, { ScheduleDay } from "@/features/schedule/ScheduleEvents";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { getBookmarks } from "@/lib/storage";
-import {
-  ContentStore,
-  EventsByDayIndex,
-  EventsStore,
-  LocationsStore,
-  PeopleStore,
-  TagsStore,
-} from "@/lib/types/ht-types";
+import { BookmarkEventsByIdView, ScheduleEventViewModel } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type BookmarksPageProps = {
@@ -33,53 +22,59 @@ function normalizeId(id: unknown): string {
   return String(id);
 }
 
+function getEventDay(event: ScheduleEventViewModel, timeZone: string): string {
+  const date = new Date(event.begin);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const byType = new Map(parts.map((part) => [part.type, part.value]));
+  const year = byType.get("year");
+  const month = byType.get("month");
+  const day = byType.get("day");
+
+  return year && month && day ? `${year}-${month}-${day}` : "";
+}
+
+function groupBookmarkedEventsByDay(
+  bookmarkEventsById: BookmarkEventsByIdView,
+  bookmarkSet: ReadonlySet<string>,
+  timeZone: string,
+): ScheduleDay[] {
+  if (bookmarkSet.size === 0) return [];
+
+  const bookmarkedEvents = Object.values(bookmarkEventsById)
+    .filter((event) => bookmarkSet.has(String(event.id)))
+    .toSorted((a, b) => {
+      if (a.beginTimestampSeconds !== b.beginTimestampSeconds) {
+        return a.beginTimestampSeconds - b.beginTimestampSeconds;
+      }
+      return a.id - b.id;
+    });
+
+  const days = new Map<string, ScheduleEventViewModel[]>();
+  for (const event of bookmarkedEvents) {
+    const day = getEventDay(event, timeZone);
+    if (!day) continue;
+    const list = days.get(day) ?? [];
+    list.push(event);
+    days.set(day, list);
+  }
+
+  return [...days.entries()].map(([day, events]) => ({ day, events }));
+}
+
 export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps) {
   const nowSeconds = useNowSeconds();
   const {
-    data: eventsByDay,
-    error: eventsByDayError,
-    isLoading: eventsByDayLoading,
-  } = useConferenceJson<EventsByDayIndex>(conf, "indexes/eventsByDay.json");
-
-  const {
-    data: eventsStore,
-    error: eventsError,
-    isLoading: eventsLoading,
-  } = useConferenceJson<EventsStore>(conf, "entities/events.json");
-
-  const {
-    data: locationsStore,
-    error: locationsError,
-    isLoading: locationsLoading,
-  } = useConferenceJson<LocationsStore>(conf, "entities/locations.json");
-
-  const {
-    data: tagsStore,
-    error: tagsError,
-    isLoading: tagsLoading,
-  } = useConferenceJson<TagsStore>(conf, "entities/tags.json");
-
-  const {
-    data: peopleStore,
-    error: peopleError,
-    isLoading: peopleLoading,
-  } = useConferenceJson<PeopleStore>(conf, "entities/people.json");
-
-  const {
-    data: contentStore,
-    error: contentError,
-    isLoading: contentLoading,
-  } = useConferenceJson<ContentStore>(conf, "entities/content.json");
-
-  const loading =
-    eventsByDayLoading ||
-    eventsLoading ||
-    locationsLoading ||
-    tagsLoading ||
-    peopleLoading ||
-    contentLoading;
-  const isError =
-    eventsByDayError || eventsError || locationsError || tagsError || peopleError || contentError;
+    data: bookmarkEventsById,
+    error,
+    isLoading,
+  } = useConferenceJson<BookmarkEventsByIdView>(conf, "views/bookmarkEventsById.json");
 
   const [bookmarks, setBookmarks] = useState<string[]>(() => getBookmarks().map(normalizeId));
 
@@ -107,31 +102,10 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
       .filter((bookmark): bookmark is number => Number.isFinite(bookmark));
   }, [bookmarks]);
 
-  const fullScheduleDays = useMemo(() => {
-    if (
-      !eventsByDay ||
-      !eventsStore ||
-      !locationsStore ||
-      !tagsStore ||
-      !peopleStore ||
-      !contentStore
-    ) {
-      return [];
-    }
-    return getScheduleDaysFromStores(conf, {
-      eventsByDay,
-      eventsStore,
-      locationsStore,
-      tagsStore,
-      peopleStore,
-      contentStore,
-    });
-  }, [conf, eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore, contentStore]);
-
-  const days = useMemo(
-    () => filterScheduleDaysByBookmarks(fullScheduleDays, bookmarkSet),
-    [bookmarkSet, fullScheduleDays],
-  );
+  const days = useMemo(() => {
+    if (!bookmarkEventsById) return [];
+    return groupBookmarkedEventsByDay(bookmarkEventsById, bookmarkSet, conf.timezone);
+  }, [bookmarkEventsById, bookmarkSet, conf.timezone]);
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
@@ -158,18 +132,8 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     setSelectedDay(day);
   }, []);
 
-  if (loading) return <LoadingScreen />;
-  if (
-    isError ||
-    !eventsByDay ||
-    !eventsStore ||
-    !locationsStore ||
-    !tagsStore ||
-    !peopleStore ||
-    !contentStore
-  ) {
-    return <ErrorScreen />;
-  }
+  if (isLoading) return <LoadingScreen />;
+  if (error || !bookmarkEventsById) return <ErrorScreen />;
 
   return (
     <>

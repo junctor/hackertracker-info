@@ -7,7 +7,7 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { ArticlesStore } from "@/lib/types/ht-types";
+import { AnnouncementsListView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type AnnouncementsPageProps = {
@@ -20,7 +20,7 @@ export default function AnnouncementsPage({ conf, activePageId }: AnnouncementsP
     data: articles,
     error,
     isLoading,
-  } = useConferenceJson<ArticlesStore>(conf, "entities/articles.json");
+  } = useConferenceJson<AnnouncementsListView>(conf, "views/announcementsList.json");
 
   if (isLoading) return <LoadingScreen />;
   if (error || !articles) return <ErrorScreen />;

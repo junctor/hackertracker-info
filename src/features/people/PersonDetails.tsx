@@ -7,7 +7,6 @@ import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getBookmarks } from "@/lib/storage";
-import { getToneFromColor } from "@/lib/tone";
 import { ContentEntity, SessionEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
 import { getSafeExternalHref } from "@/lib/url";
 
@@ -113,10 +112,7 @@ export default function PersonDetails({ person, sessions, locations, conference 
     [sessions],
   );
   const accentClassName = getPersonAccentClassName(person.name);
-  const primarySessionColor = sortedSessions[0]?.color;
-  const headerAccentClassName = primarySessionColor
-    ? `ui-tone-${getToneFromColor(primarySessionColor)}`
-    : accentClassName;
+  const headerAccentClassName = accentClassName;
   const affiliations = useMemo(
     () =>
       (person.affiliations ?? [])

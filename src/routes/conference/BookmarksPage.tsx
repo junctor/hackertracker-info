@@ -5,12 +5,12 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import ScheduleEvents, { ScheduleDay } from "@/features/schedule/ScheduleEvents";
+import ScheduleSessions, { ScheduleDay } from "@/features/schedule/ScheduleSessions";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { getBookmarks } from "@/lib/storage";
-import { bookmarkSessionsByIdView, ScheduleSessionViewModel } from "@/lib/types/ht-types/views";
+import { BookmarkSessionsByIdView, ScheduleSessionViewModel } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type BookmarksPageProps = {
@@ -22,8 +22,8 @@ function normalizeId(id: unknown): string {
   return String(id);
 }
 
-function getEventDay(event: ScheduleSessionViewModel, timeZone: string): string {
-  const date = new Date(event.begin);
+function getSessionDay(session: ScheduleSessionViewModel, timeZone: string): string {
+  const date = new Date(session.begin);
   if (Number.isNaN(date.getTime())) return "";
 
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -40,15 +40,15 @@ function getEventDay(event: ScheduleSessionViewModel, timeZone: string): string 
   return year && month && day ? `${year}-${month}-${day}` : "";
 }
 
-function groupBookmarkedsessionsByDay(
-  bookmarkSessionsById: bookmarkSessionsByIdView,
+function groupBookmarkedSessionsByDay(
+  bookmarkSessionsById: BookmarkSessionsByIdView,
   bookmarkSet: ReadonlySet<string>,
   timeZone: string,
 ): ScheduleDay[] {
   if (bookmarkSet.size === 0) return [];
 
-  const bookmarkedEvents = Object.values(bookmarkSessionsById)
-    .filter((event) => bookmarkSet.has(String(event.id)))
+  const bookmarkedSessions = Object.values(bookmarkSessionsById)
+    .filter((session) => bookmarkSet.has(String(session.id)))
     .toSorted((a, b) => {
       if (a.beginTimestampSeconds !== b.beginTimestampSeconds) {
         return a.beginTimestampSeconds - b.beginTimestampSeconds;
@@ -57,11 +57,11 @@ function groupBookmarkedsessionsByDay(
     });
 
   const days = new Map<string, ScheduleSessionViewModel[]>();
-  for (const event of bookmarkedEvents) {
-    const day = getEventDay(event, timeZone);
+  for (const session of bookmarkedSessions) {
+    const day = getSessionDay(session, timeZone);
     if (!day) continue;
     const list = days.get(day) ?? [];
-    list.push(event);
+    list.push(session);
     days.set(day, list);
   }
 
@@ -74,7 +74,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     data: bookmarkSessionsById,
     error,
     isLoading,
-  } = useConferenceJson<bookmarkSessionsByIdView>(conf, "views/bookmarkSessionsById.json");
+  } = useConferenceJson<BookmarkSessionsByIdView>(conf, "views/bookmarkSessionsById.json");
 
   const [bookmarks, setBookmarks] = useState<string[]>(() => getBookmarks().map(normalizeId));
 
@@ -104,14 +104,17 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
 
   const days = useMemo(() => {
     if (!bookmarkSessionsById) return [];
-    return groupBookmarkedsessionsByDay(bookmarkSessionsById, bookmarkSet, conf.timezone);
+    return groupBookmarkedSessionsByDay(bookmarkSessionsById, bookmarkSet, conf.timezone);
   }, [bookmarkSessionsById, bookmarkSet, conf.timezone]);
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
     for (const { day, sessions } of days) {
-      for (const event of sessions) {
-        if (event.beginTimestampSeconds <= nowSeconds && nowSeconds <= event.endTimestampSeconds) {
+      for (const session of sessions) {
+        if (
+          session.beginTimestampSeconds <= nowSeconds &&
+          nowSeconds <= session.endTimestampSeconds
+        ) {
           return day;
         }
       }
@@ -154,7 +157,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
             </Link>
           </div>
         ) : days.length > 0 && resolvedDay ? (
-          <ScheduleEvents
+          <ScheduleSessions
             conf={conf}
             days={days}
             selectedDay={resolvedDay}

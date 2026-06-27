@@ -8,7 +8,7 @@ import type {
   SessionsStore,
 } from "@/lib/types/ht-types";
 
-import type { ScheduleDay, ScheduleEventViewModel } from "./ScheduleEvents";
+import type { ScheduleDay, ScheduleSessionViewModel } from "./ScheduleSessions";
 
 type ScheduleSources = {
   sessionsByDay: SessionsByDayIndex;
@@ -47,16 +47,16 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
 
   for (const day of dayKeys) {
     const ids = sessionsByDay[day] ?? [];
-    const sessions: ScheduleEventViewModel[] = [];
+    const sessions: ScheduleSessionViewModel[] = [];
 
-    for (const eventId of ids) {
-      const session = sessionsStore.byId[normalizeId(eventId)];
+    for (const sessionId of ids) {
+      const session = sessionsStore.byId[normalizeId(sessionId)];
       if (!session) continue;
 
       const locationName =
         locationsStore.byId[normalizeId(session.locationId)]?.name ?? "Unknown location";
 
-      const tags: ScheduleEventViewModel["tags"] = [];
+      const tags: ScheduleSessionViewModel["tags"] = [];
       for (const tagId of session.tagIds ?? []) {
         const tag = tagsStore.byId[normalizeId(tagId)];
         if (!tag) continue;
@@ -68,13 +68,8 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
         });
       }
 
-      const speakerIds =
-        session.speakerIds && session.speakerIds.length > 0
-          ? session.speakerIds
-          : (session.personIds ?? []);
-
       const speakers = peopleStore
-        ? speakerIds
+        ? (session.personIds ?? [])
             .map((id) => peopleStore.byId[normalizeId(id)]?.name)
             .filter((name): name is string => Boolean(name))
             .join(", ")
@@ -94,7 +89,7 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
         endDisplay: timeFormatter.format(endDate),
         endIso: endDate.toISOString(),
         endTimestampSeconds: toTimestampSeconds(session.end),
-        color: session.color,
+        color: tags[0]?.colorBackground ?? "",
         contentId: session.contentId,
         contentEntity: contentStore?.byId[normalizeId(session.contentId)] ?? null,
         session: session,

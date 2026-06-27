@@ -5,7 +5,7 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import ScheduleEvents from "@/features/schedule/ScheduleEvents";
+import ScheduleSessions from "@/features/schedule/ScheduleSessions";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
@@ -46,8 +46,11 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
     for (const { day, sessions } of days) {
-      for (const event of sessions) {
-        if (event.beginTimestampSeconds <= nowSeconds && nowSeconds <= event.endTimestampSeconds) {
+      for (const session of sessions) {
+        if (
+          session.beginTimestampSeconds <= nowSeconds &&
+          nowSeconds <= session.endTimestampSeconds
+        ) {
           return day;
         }
       }
@@ -94,7 +97,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
           {tag.label} Schedule
         </h1>
         {days.length > 0 && resolvedDay ? (
-          <ScheduleEvents
+          <ScheduleSessions
             key={tag.id}
             conf={conf}
             days={days}

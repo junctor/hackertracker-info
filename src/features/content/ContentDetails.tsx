@@ -34,6 +34,18 @@ function safeParseMs(iso: string): number {
   return Number.isFinite(ms) ? ms : Number.MAX_SAFE_INTEGER;
 }
 
+function getSessionAccentColor(
+  session: SessionEntity | undefined,
+  tags: TagEntity[],
+): string | undefined {
+  if (!session) return undefined;
+
+  const firstTagId = session.tagIds[0];
+  if (firstTagId == null) return undefined;
+
+  return tags.find((tag) => tag.id === firstTagId)?.colorBackground;
+}
+
 export default function ContentDetails(props: Props) {
   const { content, sessions, locations, people, tags, bookmarks, conference } = props;
   const shareStatusId = useId();
@@ -64,7 +76,7 @@ export default function ContentDetails(props: Props) {
     return earliest;
   }, [sessions]);
 
-  const accentTone = getToneFromColor(primarySession?.color);
+  const accentTone = getToneFromColor(getSessionAccentColor(primarySession, tags));
   const sharePath = `${contentsBasePath}/?id=${content.id}`;
   const shareUrl =
     typeof window === "undefined"
@@ -147,6 +159,7 @@ export default function ContentDetails(props: Props) {
                 session={s}
                 contentEntity={content}
                 isBookmarked={bookmarkSet.has(s.id)}
+                accentColor={getSessionAccentColor(s, tags)}
                 locationName={locationNameById.get(s.locationId)}
               />
             ))}

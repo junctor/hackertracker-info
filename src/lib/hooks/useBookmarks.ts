@@ -2,16 +2,16 @@ import { useCallback, useEffect, useState } from "react";
 
 import { addBookmark, getBookmarks, removeBookmark } from "@/lib/storage";
 
-export function useBookmarks(eventId: number, initial: boolean) {
+export function useBookmarks(sessionId: number, initial: boolean) {
   const [bookmarked, setBookmarked] = useState<boolean>(() =>
-    typeof window === "undefined" ? initial : getBookmarks().includes(eventId),
+    typeof window === "undefined" ? initial : getBookmarks().includes(sessionId),
   );
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
 
     const syncBookmark = () => {
-      setBookmarked(getBookmarks().includes(eventId));
+      setBookmarked(getBookmarks().includes(sessionId));
     };
 
     syncBookmark();
@@ -22,15 +22,15 @@ export function useBookmarks(eventId: number, initial: boolean) {
       window.removeEventListener("storage", syncBookmark);
       window.removeEventListener("bookmarks:changed", syncBookmark);
     };
-  }, [eventId]);
+  }, [sessionId]);
 
   const toggle = useCallback(() => {
     if (bookmarked) {
-      removeBookmark(eventId);
+      removeBookmark(sessionId);
     } else {
-      addBookmark(eventId);
+      addBookmark(sessionId);
     }
-    setBookmarked(getBookmarks().includes(eventId));
-  }, [bookmarked, eventId]);
+    setBookmarked(getBookmarks().includes(sessionId));
+  }, [bookmarked, sessionId]);
   return [bookmarked, toggle] as const;
 }

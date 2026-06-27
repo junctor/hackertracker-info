@@ -11,15 +11,15 @@ import { Virtuoso, type Components, type VirtuosoHandle } from "react-virtuoso";
 
 import type {
   ScheduleDayView,
-  ScheduleSessionViewModel as ScheduleEventViewModelContract,
+  ScheduleSessionViewModel as ScheduleSessionViewModelContract,
 } from "@/lib/types/ht-types/views";
 
 import { ConferenceManifest } from "@/lib/conferences";
-import { eventDayTable, tabDateTitle } from "@/lib/dates";
+import { sessionDayTable, tabDateTitle } from "@/lib/dates";
 
-import ScheduleEventItem from "./ScheduleEventItem";
+import ScheduleSessionItem from "./ScheduleSessionItem";
 
-export type ScheduleEventViewModel = ScheduleEventViewModelContract;
+export type ScheduleSessionViewModel = ScheduleSessionViewModelContract;
 export type ScheduleDay = ScheduleDayView;
 
 export type ScheduleViewMode = "full" | "now" | "next";
@@ -33,7 +33,7 @@ type ScheduleEmptyState = {
 };
 
 export type ScheduleJumpRequest = {
-  eventId: number;
+  sessionId: number;
   requestId: number;
 };
 
@@ -50,7 +50,7 @@ type VirtuosoListProps = React.ComponentPropsWithoutRef<"div"> & {
 
 type VirtuosoItemProps = React.ComponentPropsWithoutRef<"div"> & {
   context?: VirtuosoContext;
-  item?: ScheduleEventViewModel;
+  item?: ScheduleSessionViewModel;
 };
 
 const VirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(function VirtuosoList(
@@ -66,7 +66,7 @@ const VirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(functio
       ref={ref}
       role="list"
       style={style}
-      className={["ui-schedule-event-list", className].filter(Boolean).join(" ")}
+      className={["ui-schedule-session-list", className].filter(Boolean).join(" ")}
     >
       {children}
     </div>
@@ -91,7 +91,7 @@ function VirtuosoItem({
       {...itemProps}
       role="listitem"
       style={style}
-      className={["ui-schedule-event-list-item", className].filter(Boolean).join(" ")}
+      className={["ui-schedule-session-list-item", className].filter(Boolean).join(" ")}
     >
       {children}
     </div>
@@ -99,12 +99,12 @@ function VirtuosoItem({
 }
 VirtuosoItem.displayName = "VirtuosoItem";
 
-const VIRTUOSO_COMPONENTS: Components<ScheduleEventViewModel, VirtuosoContext> = {
+const VIRTUOSO_COMPONENTS: Components<ScheduleSessionViewModel, VirtuosoContext> = {
   List: VirtuosoList,
   Item: VirtuosoItem,
 };
 
-export default function ScheduleEvents({
+export default function ScheduleSessions({
   conf,
   days,
   selectedDay,
@@ -117,7 +117,7 @@ export default function ScheduleEvents({
   emptyState,
   onJumpToNow,
   jumpRequest,
-  highlightedEventId,
+  highlightedSessionId,
   jumpStatus,
   activitySummary,
 }: {
@@ -134,7 +134,7 @@ export default function ScheduleEvents({
   emptyState?: ScheduleEmptyState;
   onJumpToNow?: () => void;
   jumpRequest?: ScheduleJumpRequest | null;
-  highlightedEventId?: number | null;
+  highlightedSessionId?: number | null;
   jumpStatus?: string | null;
   activitySummary?: ScheduleActivitySummary | null;
 }) {
@@ -225,28 +225,29 @@ export default function ScheduleEvents({
   const isBookmarksFilterActive = activeFilter === "bookmarks";
   const isTagsFilterActive = activeFilter === "tags";
   const showScheduleViewControls = Boolean(scheduleView && scheduleViewLinks);
-  const activeDayLabel = activeDay ? eventDayTable(activeDay.day, conf.timezone) : null;
-  const activeDayEventCountLabel = activeDay
+  const activeDayLabel = activeDay ? sessionDayTable(activeDay.day, conf.timezone) : null;
+  const activeDaySessionCountLabel = activeDay
     ? `${activeDay.sessions.length} ${activeDay.sessions.length === 1 ? "session" : "sessions"}`
     : null;
 
   const computeItemKey = useCallback(
-    (index: number, evt?: ScheduleEventViewModel) => evt?.id ?? `missing-event-${index}`,
+    (index: number, session?: ScheduleSessionViewModel) =>
+      session?.id ?? `missing-session-${index}`,
     [],
   );
 
   const itemContent = useCallback(
-    (_: number, evt?: ScheduleEventViewModel) =>
-      evt ? (
-        <ScheduleEventItem
+    (_: number, session?: ScheduleSessionViewModel) =>
+      session ? (
+        <ScheduleSessionItem
           conf={conf}
-          event={evt}
-          isBookmarked={bookmarkSet.has(evt.id)}
+          session={session}
+          isBookmarked={bookmarkSet.has(session.id)}
           nowSeconds={nowSeconds}
-          isHighlighted={highlightedEventId === evt.id}
+          isHighlighted={highlightedSessionId === session.id}
         />
       ) : null,
-    [bookmarkSet, conf, highlightedEventId, nowSeconds],
+    [bookmarkSet, conf, highlightedSessionId, nowSeconds],
   );
 
   useEffect(() => {
@@ -254,7 +255,7 @@ export default function ScheduleEvents({
     if (handledJumpRequestRef.current === jumpRequest.requestId) return;
 
     const targetIndex = activeDay.sessions.findIndex(
-      (session) => session.id === jumpRequest.eventId,
+      (session) => session.id === jumpRequest.sessionId,
     );
 
     if (targetIndex < 0) return;
@@ -275,7 +276,7 @@ export default function ScheduleEvents({
 
         settleTimeout = window.setTimeout(() => {
           const target = document.querySelector<HTMLElement>(
-            `[data-schedule-event-id="${jumpRequest.eventId}"]`,
+            `[data-schedule-session-id="${jumpRequest.sessionId}"]`,
           );
           target?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
         }, 350);
@@ -456,8 +457,8 @@ export default function ScheduleEvents({
                 </h2>
               </div>
 
-              {activeDayEventCountLabel ? (
-                <p className="ui-meta-pill ui-page-header-count">{activeDayEventCountLabel}</p>
+              {activeDaySessionCountLabel ? (
+                <p className="ui-meta-pill ui-page-header-count">{activeDaySessionCountLabel}</p>
               ) : null}
             </div>
           </div>

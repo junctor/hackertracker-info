@@ -46,16 +46,18 @@ export type SessionEntity = {
   begin: string;
   beginDisplay: string;
   beginIso: string;
-  color: string;
+  beginTimestampSeconds: number;
   contentId: number;
   end: string;
   endDisplay: string;
   endIso: string;
+  endTimestampSeconds: number;
   id: number;
   locationId: number;
   personIds?: Array<number>;
-  speakerIds?: Array<number>;
+  recordingPolicyId?: number;
   tagIds: Array<number>;
+  timezoneName?: string;
   title: string;
 };
 export type SessionsStore = {
@@ -128,6 +130,7 @@ export type PersonEntity = {
   id: number;
   name: string;
   pronouns?: string;
+  title?: string;
   contentIds: number[];
   avatarUrl?: string;
 };

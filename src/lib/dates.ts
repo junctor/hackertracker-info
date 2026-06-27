@@ -6,7 +6,7 @@ function toDate(value: Dateish): Date {
   return typeof value === "string" ? new Date(value) : value;
 }
 
-export function eventTimeTable(value: Dateish, showTz = true, tz: string): string {
+export function sessionTimeTable(value: Dateish, showTz = true, tz: string): string {
   const date = toDate(value);
   return date.toLocaleTimeString(LOCALE, {
     timeZone: tz,
@@ -17,7 +17,7 @@ export function eventTimeTable(value: Dateish, showTz = true, tz: string): strin
   });
 }
 
-export function eventDayTable(day: string, tz: string): string {
+export function sessionDayTable(day: string, tz: string): string {
   const [y, m, d] = day.split("-").map(Number);
   const safe = new Date(Date.UTC(y, m - 1, d, 12, 0, 0)); // noon UTC
 
@@ -41,7 +41,7 @@ export function tabDateTitle(day: string, tz: string): string {
   });
 }
 
-export function eventTime(value: Dateish, showTz = true, tz: string): string {
+export function sessionTime(value: Dateish, showTz = true, tz: string): string {
   const date = toDate(value);
   return date.toLocaleTimeString(LOCALE, {
     timeZone: tz,
@@ -145,5 +145,5 @@ export function formatSessionTime(begin: Date, end: Date, tz: string): string {
     return `${dateStr} at ${startTime} – ${endTime}`;
   }
 
-  return `${eventTime(begin, false, tz)} – ${eventTime(end, true, tz)}`;
+  return `${sessionTime(begin, false, tz)} – ${sessionTime(end, true, tz)}`;
 }

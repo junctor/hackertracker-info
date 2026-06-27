@@ -31,20 +31,20 @@ function writeBookmarks(bookmarks: number[]): boolean {
   }
 }
 
-export const addBookmark = (eventId: number) => {
+export const addBookmark = (sessionId: number) => {
   if (typeof window === "undefined") return;
 
   const bookmarks = readBookmarks();
-  if (bookmarks.includes(eventId)) return;
+  if (bookmarks.includes(sessionId)) return;
 
-  writeBookmarks([...bookmarks, eventId]);
+  writeBookmarks([...bookmarks, sessionId]);
 };
 
-export const removeBookmark = (eventId: number) => {
+export const removeBookmark = (sessionId: number) => {
   if (typeof window === "undefined") return;
 
   const bookmarks = readBookmarks();
-  const nextBookmarks = bookmarks.filter((b) => b !== eventId);
+  const nextBookmarks = bookmarks.filter((b) => b !== sessionId);
   if (nextBookmarks.length === bookmarks.length) return;
 
   writeBookmarks(nextBookmarks);

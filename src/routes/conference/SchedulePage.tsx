@@ -5,17 +5,17 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import ScheduleEvents, {
+import ScheduleSessions, {
   type ScheduleActivitySummary,
   type ScheduleDay,
   type ScheduleJumpRequest,
   type ScheduleViewLinks,
   type ScheduleViewMode,
-} from "@/features/schedule/ScheduleEvents";
+} from "@/features/schedule/ScheduleSessions";
 import {
   isConferenceInProgress,
-  isScheduleEventLive,
-  isScheduleEventStartingSoon,
+  isScheduleSessionLive,
+  isScheduleSessionStartingSoon,
 } from "@/features/schedule/scheduleTime";
 import {
   aiMetadata,
@@ -83,7 +83,7 @@ function filterScheduleDaysByView(
 
   for (const { day, sessions } of days) {
     const filteredSessions = sessions.filter((session) => {
-      return isScheduleEventLive(session, nowSeconds);
+      return isScheduleSessionLive(session, nowSeconds);
     });
 
     if (filteredSessions.length > 0) {
@@ -128,9 +128,9 @@ function getScheduleActivitySummary(
 
   for (const { sessions } of days) {
     for (const session of sessions) {
-      if (isScheduleEventLive(session, nowSeconds)) {
+      if (isScheduleSessionLive(session, nowSeconds)) {
         liveCount += 1;
-      } else if (isScheduleEventStartingSoon(session, nowSeconds)) {
+      } else if (isScheduleSessionStartingSoon(session, nowSeconds)) {
         startingSoonCount += 1;
       }
     }
@@ -142,25 +142,25 @@ function getScheduleActivitySummary(
 function findScheduleJumpTarget(
   days: ScheduleDay[],
   nowSeconds: number,
-): { day: string; eventId: number } | null {
-  let nextTarget: { day: string; eventId: number; beginsAt: number } | null = null;
+): { day: string; sessionId: number } | null {
+  let nextTarget: { day: string; sessionId: number; beginsAt: number } | null = null;
 
   for (const { day, sessions } of days) {
     for (const session of sessions) {
-      if (isScheduleEventLive(session, nowSeconds)) {
-        return { day, eventId: session.id };
+      if (isScheduleSessionLive(session, nowSeconds)) {
+        return { day, sessionId: session.id };
       }
 
       const beginsAt = session.beginTimestampSeconds;
       if (!Number.isFinite(beginsAt) || beginsAt <= nowSeconds) continue;
 
       if (!nextTarget || beginsAt < nextTarget.beginsAt) {
-        nextTarget = { day, eventId: session.id, beginsAt };
+        nextTarget = { day, sessionId: session.id, beginsAt };
       }
     }
   }
 
-  return nextTarget ? { day: nextTarget.day, eventId: nextTarget.eventId } : null;
+  return nextTarget ? { day: nextTarget.day, sessionId: nextTarget.sessionId } : null;
 }
 
 export default function SchedulePage({ conf, activePageId }: SchedulePageProps) {
@@ -171,7 +171,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   const autoNowHandledRef = useRef(false);
   const jumpRequestIdRef = useRef(0);
   const [jumpRequest, setJumpRequest] = useState<ScheduleJumpRequest | null>(null);
-  const [highlightedEventId, setHighlightedEventId] = useState<number | null>(null);
+  const [highlightedSessionId, setHighlightedSessionId] = useState<number | null>(null);
   const [jumpStatus, setJumpStatus] = useState<string | null>(null);
 
   const {
@@ -262,15 +262,15 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
 
     if (!target) {
       setJumpRequest(null);
-      setHighlightedEventId(null);
+      setHighlightedSessionId(null);
       setJumpStatus("No live or upcoming sessions are available. Check the full schedule.");
       return;
     }
 
     jumpRequestIdRef.current += 1;
     setJumpStatus(null);
-    setHighlightedEventId(target.eventId);
-    setJumpRequest({ eventId: target.eventId, requestId: jumpRequestIdRef.current });
+    setHighlightedSessionId(target.sessionId);
+    setJumpRequest({ sessionId: target.sessionId, requestId: jumpRequestIdRef.current });
 
     setSearchParams((current) => {
       const next = new URLSearchParams(current);
@@ -285,7 +285,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     if (isLiveScheduleAvailable || !hasLiveScheduleParams(searchParams)) return;
 
     setJumpRequest(null);
-    setHighlightedEventId(null);
+    setHighlightedSessionId(null);
     setJumpStatus(null);
     autoNowHandledRef.current = false;
 
@@ -319,14 +319,14 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   }, [days.length, effectiveNowSeconds, handleJumpToNow, isLiveScheduleAvailable, searchParams]);
 
   useEffect(() => {
-    if (highlightedEventId === null) return;
+    if (highlightedSessionId === null) return;
 
     const timeoutId = window.setTimeout(() => {
-      setHighlightedEventId(null);
+      setHighlightedSessionId(null);
     }, 2600);
 
     return () => window.clearTimeout(timeoutId);
-  }, [highlightedEventId]);
+  }, [highlightedSessionId]);
 
   const emptyState = useMemo(() => {
     if (scheduleView === "now") {
@@ -378,7 +378,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
         className="ui-schedule-page-shell"
       >
         <h1 className="ui-visually-hidden">Schedule</h1>
-        <ScheduleEvents
+        <ScheduleSessions
           conf={conf}
           days={visibleDays}
           selectedDay={resolvedDay}
@@ -390,7 +390,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
           emptyState={emptyState}
           onJumpToNow={isLiveScheduleAvailable ? handleJumpToNow : undefined}
           jumpRequest={jumpRequest}
-          highlightedEventId={highlightedEventId}
+          highlightedSessionId={highlightedSessionId}
           jumpStatus={jumpStatus}
           activitySummary={activitySummary}
         />

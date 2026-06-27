@@ -9,13 +9,13 @@ import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { getToneFromColor } from "@/lib/tone";
 
-import type { ScheduleEventViewModel } from "./ScheduleEvents";
+import type { ScheduleSessionViewModel } from "./ScheduleSessions";
 
-import { isScheduleEventLive, isScheduleEventStartingSoon } from "./scheduleTime";
+import { isScheduleSessionLive, isScheduleSessionStartingSoon } from "./scheduleTime";
 
 type Props = {
   conf: ConferenceManifest;
-  event: ScheduleEventViewModel;
+  session: ScheduleSessionViewModel;
   isBookmarked: boolean;
   nowSeconds: number;
   isHighlighted?: boolean;
@@ -25,19 +25,19 @@ function stopCalendarClickPropagation(e: React.MouseEvent<HTMLAnchorElement>) {
   e.stopPropagation();
 }
 
-const ScheduleEventItem = React.memo(function ScheduleEventItem({
+const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   conf,
-  event,
+  session,
   isBookmarked,
   nowSeconds,
   isHighlighted = false,
 }: Props) {
-  const [bookmark, toggleBookmark] = useBookmarks(event.id, isBookmarked);
-  const actionStatusId = `schedule-event-action-status-${event.id}`;
+  const [bookmark, toggleBookmark] = useBookmarks(session.id, isBookmarked);
+  const actionStatusId = `schedule-session-action-status-${session.id}`;
   const [actionStatus, setActionStatus] = useTransientStatus();
 
-  const href = `/${conf.slug}/content/?id=${event.contentId}`;
-  const eventTone = getToneFromColor(event.color);
+  const href = `/${conf.slug}/content/?id=${session.contentId}`;
+  const sessionTone = getToneFromColor(session.color);
 
   const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -53,28 +53,28 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   };
 
   const calendarContent = useMemo(() => {
-    if (!event.contentEntity) return null;
-    return { ...event.contentEntity, title: event.title };
-  }, [event.contentEntity, event.title]);
+    if (!session.contentEntity) return null;
+    return { ...session.contentEntity, title: session.title };
+  }, [session.contentEntity, session.title]);
 
   const icsHref = useMemo(() => {
     if (!calendarContent) return null;
-    const ics = cal(conf.slug, calendarContent, event.session, event.locationName);
+    const ics = cal(conf.slug, calendarContent, session.session, session.locationName);
     return encodeICalDataUri(ics);
-  }, [calendarContent, conf.slug, event.locationName, event.session]);
+  }, [calendarContent, conf.slug, session.locationName, session.session]);
 
-  const isLive = isScheduleEventLive(event, nowSeconds);
-  const isNext = isScheduleEventStartingSoon(event, nowSeconds);
+  const isLive = isScheduleSessionLive(session, nowSeconds);
+  const isNext = isScheduleSessionStartingSoon(session, nowSeconds);
   const bookmarkLabel = bookmark
-    ? `Remove bookmark for ${event.title}`
-    : `Add bookmark for ${event.title}`;
-  const visibleTags = event.tags.slice(0, 4);
-  const hiddenTagCount = event.tags.length - visibleTags.length;
+    ? `Remove bookmark for ${session.title}`
+    : `Add bookmark for ${session.title}`;
+  const visibleTags = session.tags.slice(0, 4);
+  const hiddenTagCount = session.tags.length - visibleTags.length;
 
   return (
     <article
-      data-schedule-event-id={event.id}
-      className={`ui-card ui-card-interactive ui-accent-card ui-tone-${eventTone}${isHighlighted ? " ui-schedule-event-jump-highlight" : ""}`}
+      data-schedule-session-id={session.id}
+      className={`ui-card ui-card-interactive ui-accent-card ui-tone-${sessionTone}${isHighlighted ? " ui-schedule-session-jump-highlight" : ""}`}
     >
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -90,24 +90,26 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
                   {isLive ? "Live" : "Next"}
                 </span>
               )}
-              <p className="ui-event-time-primary">
-                <time dateTime={event.beginIso}>{event.beginDisplay}</time>
+              <p className="ui-session-time-primary">
+                <time dateTime={session.beginIso}>{session.beginDisplay}</time>
               </p>
               <p className="ui-card-meta">
-                <time dateTime={event.endIso}>{event.endDisplay}</time>
+                <time dateTime={session.endIso}>{session.endDisplay}</time>
               </p>
             </div>
 
             <div className="ui-accent-card-main">
-              <h3 className="ui-card-title ui-accent-card-title-lg ui-clamp-two">{event.title}</h3>
+              <h3 className="ui-card-title ui-accent-card-title-lg ui-clamp-two">
+                {session.title}
+              </h3>
 
-              {event.speakers && (
+              {session.speakers && (
                 <p className="ui-card-meta ui-clamp-two">
-                  <em>{event.speakers}</em>
+                  <em>{session.speakers}</em>
                 </p>
               )}
 
-              <p className="ui-card-meta ui-clamp-one">{event.locationName}</p>
+              <p className="ui-card-meta ui-clamp-one">{session.locationName}</p>
 
               {visibleTags.length > 0 && (
                 <ul className="ui-chip-list-tight">
@@ -132,9 +134,9 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
           {icsHref ? (
             <a
               href={icsHref}
-              download={`DEF_CON_${event.contentId}-${event.id}.ics`}
-              title={`Download calendar invite for ${event.title}`}
-              aria-label={`Download calendar invite for ${event.title}`}
+              download={`DEF_CON_${session.contentId}-${session.id}.ics`}
+              title={`Download calendar invite for ${session.title}`}
+              aria-label={`Download calendar invite for ${session.title}`}
               aria-describedby={actionStatus ? actionStatusId : undefined}
               onClick={handleCalendarClick}
               className="ui-icon-plain"
@@ -168,6 +170,6 @@ const ScheduleEventItem = React.memo(function ScheduleEventItem({
   );
 });
 
-ScheduleEventItem.displayName = "ScheduleEventItem";
+ScheduleSessionItem.displayName = "ScheduleSessionItem";
 
-export default ScheduleEventItem;
+export default ScheduleSessionItem;

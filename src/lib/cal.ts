@@ -77,7 +77,7 @@ const foldLine = (line: string) => {
 export const encodeICalDataUri = (ics: string) =>
   `data:text/calendar;charset=utf8,${encodeURIComponent(toWellFormedText(ics))}`;
 
-/** Generate a full iCal string for an event */
+/** Generate a full iCal string for a session */
 export const generateICal = (
   conferenceSlug: string,
   content: ContentEntity,

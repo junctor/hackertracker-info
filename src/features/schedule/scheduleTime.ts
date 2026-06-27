@@ -1,4 +1,4 @@
-type TimedScheduleEvent = {
+type TimedScheduleSession = {
   beginTimestampSeconds: number;
   endTimestampSeconds: number;
 };
@@ -27,9 +27,9 @@ export function isConferenceInProgress(conference: TimedConference, nowSeconds: 
   );
 }
 
-export function isScheduleEventLive(event: TimedScheduleEvent, nowSeconds: number): boolean {
-  const beginsAt = event.beginTimestampSeconds;
-  const endsAt = event.endTimestampSeconds;
+export function isScheduleSessionLive(session: TimedScheduleSession, nowSeconds: number): boolean {
+  const beginsAt = session.beginTimestampSeconds;
+  const endsAt = session.endTimestampSeconds;
 
   return (
     Number.isFinite(beginsAt) &&
@@ -39,14 +39,14 @@ export function isScheduleEventLive(event: TimedScheduleEvent, nowSeconds: numbe
   );
 }
 
-export function isScheduleEventStartingSoon(
-  event: TimedScheduleEvent,
+export function isScheduleSessionStartingSoon(
+  session: TimedScheduleSession,
   nowSeconds: number,
 ): boolean {
-  const beginsAt = event.beginTimestampSeconds;
+  const beginsAt = session.beginTimestampSeconds;
 
   return (
-    !isScheduleEventLive(event, nowSeconds) &&
+    !isScheduleSessionLive(session, nowSeconds) &&
     Number.isFinite(beginsAt) &&
     beginsAt > nowSeconds &&
     beginsAt - nowSeconds <= NEXT_WINDOW_SECONDS

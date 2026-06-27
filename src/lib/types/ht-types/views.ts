@@ -116,7 +116,7 @@ export type ScheduleDayView = {
   sessions: ScheduleSessionViewModel[];
 };
 export type ScheduleDaysView = ScheduleDayView[];
-export type bookmarkSessionsByIdView = Record<string, ScheduleSessionViewModel>;
+export type BookmarkSessionsByIdView = Record<string, ScheduleSessionViewModel>;
 
 export type LocationCard = {
   id: number;
@@ -132,6 +132,14 @@ export type ContentDetailView = {
   content: ContentEntity;
   sessions: SessionEntity[];
   locations: LocationEntity[];
+  people: PersonEntity[];
+  tags: TagEntity[];
+};
+
+export type SessionDetailView = {
+  content: ContentEntity;
+  session: SessionEntity;
+  location: LocationEntity;
   people: PersonEntity[];
   tags: TagEntity[];
 };

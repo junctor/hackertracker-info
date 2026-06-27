@@ -11,7 +11,7 @@ import type { ConferenceManifest } from "@/lib/conferences";
 import type { ContentEntity, SessionEntity } from "@/lib/types/ht-types";
 
 import cal, { encodeICalDataUri } from "@/lib/cal";
-import { eventTime, formatSessionTime } from "@/lib/dates";
+import { sessionTime, formatSessionTime } from "@/lib/dates";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { getToneFromColor } from "@/lib/tone";
@@ -21,6 +21,7 @@ export type ContentSessionProps = {
   session: SessionEntity;
   contentEntity: ContentEntity;
   isBookmarked: boolean;
+  accentColor?: string;
   locationName?: string;
   href?: string;
   title?: string;
@@ -31,6 +32,7 @@ function ContentSessionCard({
   session,
   contentEntity,
   isBookmarked,
+  accentColor,
   locationName,
   href,
   title,
@@ -44,7 +46,7 @@ function ContentSessionCard({
   const sameTime = session.end === session.begin;
 
   const timeLabel = sameTime
-    ? eventTime(begin, true, conference.timezone)
+    ? sessionTime(begin, true, conference.timezone)
     : formatSessionTime(begin, end, conference.timezone);
 
   const icsHref = useMemo(() => {
@@ -65,7 +67,7 @@ function ContentSessionCard({
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${session.title}`
     : `Add bookmark for ${session.title}`;
-  const accentTone = getToneFromColor(session.color);
+  const accentTone = getToneFromColor(accentColor);
   const titleLabel = title?.trim() || null;
 
   const sessionContent = (

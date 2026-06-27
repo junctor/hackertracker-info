@@ -312,7 +312,7 @@
   }
 }
 
-.ui-schedule-event-list {
+.ui-schedule-session-list {
   margin-bottom: var(--space-8);
   list-style: none;
 }
@@ -354,17 +354,17 @@
   }
 }
 
-.ui-schedule-event-list-item {
+.ui-schedule-session-list-item {
   margin-bottom: var(--space-3);
 }
 
 @media (width < 40rem) {
-  .ui-schedule-event-list-item {
+  .ui-schedule-session-list-item {
     margin-bottom: var(--space-2);
   }
 }
 
-.ui-schedule-event-list-item:last-child {
+.ui-schedule-session-list-item:last-child {
   margin-bottom: 0;
 }
 
@@ -384,7 +384,7 @@
   }
 }
 
-.ui-schedule-event-jump-highlight {
+.ui-schedule-session-jump-highlight {
   animation: ui-schedule-jump-highlight 2.4s ease-out;
   outline: 2px solid color-mix(in oklab, var(--accent-success), transparent 20%);
   outline-offset: 2px;

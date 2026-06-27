@@ -111,7 +111,7 @@
 }
 
 .ui-tone-primary {
-  --event-color: var(--dc34-accent-primary);
+  --session-color: var(--dc34-accent-primary);
   --tone-dot: var(--dc34-accent-primary);
   --tone-bg: color-mix(in oklab, var(--dc34-accent-primary), transparent 82%);
   --tone-border: color-mix(in oklab, var(--dc34-accent-primary), transparent 42%);
@@ -119,7 +119,7 @@
 }
 
 .ui-tone-secondary {
-  --event-color: var(--dc34-accent-secondary);
+  --session-color: var(--dc34-accent-secondary);
   --tone-dot: var(--dc34-accent-secondary);
   --tone-bg: color-mix(in oklab, var(--dc34-accent-secondary), transparent 84%);
   --tone-border: color-mix(in oklab, var(--dc34-accent-secondary), transparent 42%);
@@ -127,7 +127,7 @@
 }
 
 .ui-tone-teal {
-  --event-color: var(--dc34-bg-secondary);
+  --session-color: var(--dc34-bg-secondary);
   --tone-dot: var(--dc34-bg-secondary);
   --tone-bg: color-mix(in oklab, var(--dc34-bg-secondary), transparent 72%);
   --tone-border: color-mix(in oklab, var(--dc34-bg-secondary), white 14%);
@@ -135,7 +135,7 @@
 }
 
 .ui-tone-warning {
-  --event-color: var(--dc34-accent-warning);
+  --session-color: var(--dc34-accent-warning);
   --tone-dot: var(--dc34-accent-warning);
   --tone-bg: color-mix(in oklab, var(--dc34-accent-warning), transparent 84%);
   --tone-border: color-mix(in oklab, var(--dc34-accent-warning), transparent 36%);
@@ -143,7 +143,7 @@
 }
 
 .ui-tone-critical {
-  --event-color: var(--dc34-accent-critical);
+  --session-color: var(--dc34-accent-critical);
   --tone-dot: var(--dc34-accent-critical);
   --tone-bg: color-mix(in oklab, var(--dc34-accent-critical), transparent 82%);
   --tone-border: color-mix(in oklab, var(--dc34-accent-critical), transparent 38%);
@@ -151,7 +151,7 @@
 }
 
 .ui-tone-muted {
-  --event-color: var(--color-muted);
+  --session-color: var(--color-muted);
   --tone-dot: var(--color-muted);
   --tone-bg: rgb(255 255 255 / 0.03);
   --tone-border: rgb(255 255 255 / 0.1);
@@ -159,7 +159,7 @@
 }
 
 .ui-person-accent-0 {
-  --event-color: var(--dc34-accent-primary);
+  --session-color: var(--dc34-accent-primary);
   --person-avatar-bg: linear-gradient(
     135deg,
     color-mix(in oklab, var(--dc34-accent-primary), transparent 86%) 0%,
@@ -168,7 +168,7 @@
 }
 
 .ui-person-accent-1 {
-  --event-color: var(--dc34-bg-secondary);
+  --session-color: var(--dc34-bg-secondary);
   --person-avatar-bg: linear-gradient(
     135deg,
     color-mix(in oklab, var(--dc34-bg-secondary), transparent 86%) 0%,
@@ -177,7 +177,7 @@
 }
 
 .ui-person-accent-2 {
-  --event-color: var(--dc34-accent-secondary);
+  --session-color: var(--dc34-accent-secondary);
   --person-avatar-bg: linear-gradient(
     135deg,
     color-mix(in oklab, var(--dc34-accent-secondary), transparent 86%) 0%,
@@ -186,7 +186,7 @@
 }
 
 .ui-person-accent-3 {
-  --event-color: var(--dc34-accent-warning);
+  --session-color: var(--dc34-accent-warning);
   --person-avatar-bg: linear-gradient(
     135deg,
     color-mix(in oklab, var(--dc34-accent-warning), transparent 86%) 0%,
@@ -195,7 +195,7 @@
 }
 
 .ui-person-accent-4 {
-  --event-color: var(--dc34-accent-critical);
+  --session-color: var(--dc34-accent-critical);
   --person-avatar-bg: linear-gradient(
     135deg,
     color-mix(in oklab, var(--dc34-accent-critical), transparent 86%) 0%,

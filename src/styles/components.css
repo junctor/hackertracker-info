@@ -525,7 +525,7 @@
 }
 
 .ui-accent-rail {
-  background: color-mix(in srgb, var(--event-color) 68%, black);
+  background: color-mix(in srgb, var(--session-color) 68%, black);
 }
 
 .ui-accent-rail-overlay {
@@ -670,14 +670,14 @@
   color: var(--warning);
 }
 
-.ui-event-time-primary {
+.ui-session-time-primary {
   color: var(--text-primary);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 @media (width >= 40rem) {
-  .ui-event-time-primary {
+  .ui-session-time-primary {
     font-size: 1rem;
   }
 }
@@ -713,7 +713,7 @@
 
 .ui-card-arrow,
 .ui-card-external-icon {
-  color: var(--event-color, var(--accent-success));
+  color: var(--session-color, var(--accent-success));
   transition:
     transform 0.2s ease,
     color 0.2s ease;

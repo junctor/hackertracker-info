@@ -87,11 +87,14 @@
 
 .ui-page-header-search-submit {
   justify-content: center;
+  width: 3rem;
   min-height: 3rem;
+  padding-inline: 0;
 }
 
 @media (width < 40rem) {
   .ui-page-header-search-submit {
+    width: var(--control-min);
     min-height: var(--control-min);
   }
 }
@@ -397,6 +400,70 @@
 
 .ui-location-subtitle {
   margin-top: var(--space-1);
+}
+
+.ui-map-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  padding: 0;
+}
+
+@media (width >= 40rem) {
+  .ui-map-list {
+    gap: var(--space-8);
+  }
+}
+
+.ui-map-card {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+@media (width >= 40rem) {
+  .ui-map-card {
+    padding: var(--space-5);
+  }
+}
+
+.ui-map-card-copy {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.ui-map-card-heading {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.ui-map-description {
+  max-width: 48rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.ui-map-preview-frame {
+  overflow: hidden;
+  border-radius: var(--radius-2);
+  border: 1px solid color-mix(in oklab, var(--border), white 8%);
+  background: white;
+}
+
+.ui-map-preview-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: min(70vh, 34rem);
+  object-fit: contain;
+}
+
+.ui-map-pdf-link {
+  justify-self: start;
+  gap: var(--space-2);
 }
 
 .ui-logo-frame {
@@ -1103,11 +1170,16 @@
 }
 
 .ui-header-menu-popover {
+  --header-menu-trailing-inset: 1.25rem;
+  --header-menu-trailing-size: 1rem;
+
   position: relative;
   max-height: min(32rem, calc(100dvh - 5rem - var(--safe-area-top) - var(--safe-area-bottom)));
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   border-radius: 1rem;
+  background: var(--surface-elevated);
   padding: var(--space-2);
   box-shadow: var(--shadow-lg);
 }
@@ -1149,10 +1221,17 @@
 .ui-header-menu-item {
   position: relative;
   display: flex;
+  width: 100%;
+  min-width: 0;
   align-items: flex-start;
   gap: var(--space-3);
   border-radius: 0.75rem;
-  padding: 0.625rem var(--space-3);
+  padding-block: 0.625rem;
+  padding-inline-start: var(--space-3);
+  padding-inline-end: calc(
+    var(--space-3) + var(--header-menu-trailing-inset) + var(--header-menu-trailing-size)
+  );
+  background: color-mix(in oklab, var(--surface-muted), transparent 35%);
   color: var(--text-muted);
   text-align: left;
   transition:
@@ -1170,7 +1249,7 @@
     align-items: center;
     border: 1px solid transparent;
     padding-block: 0.75rem;
-    background: color-mix(in oklab, var(--surface), transparent 3%);
+    background: color-mix(in oklab, var(--surface-muted), transparent 18%);
   }
 }
 
@@ -1255,9 +1334,19 @@
 }
 
 .ui-header-menu-trailing {
+  position: absolute;
+  top: 50%;
+  inset-inline-end: var(--header-menu-trailing-inset);
+  display: flex;
+  width: var(--header-menu-trailing-size);
+  height: var(--header-menu-trailing-size);
   flex-shrink: 0;
-  margin-top: var(--space-1);
+  align-items: center;
+  justify-content: center;
+  margin: 0;
   color: var(--text-subtle);
+  pointer-events: none;
+  transform: translateY(-50%);
   transition:
     transform 0.2s ease,
     color 0.2s ease;
@@ -1265,7 +1354,7 @@
 
 .ui-header-menu-item:hover .ui-header-menu-trailing,
 .ui-header-menu-item:focus-visible .ui-header-menu-trailing {
-  transform: translateX(0.125rem);
+  transform: translateY(-50%) translateX(0.125rem);
   color: var(--text-muted);
 }
 
@@ -1417,6 +1506,13 @@
     min-width: 2.5rem;
     min-height: 2.5rem;
   }
+
+  .ui-header-menu-summary {
+    width: 2.5rem;
+    height: 2.5rem;
+    justify-content: center;
+    padding-inline: 0;
+  }
 }
 
 @media (width < 22rem) {
@@ -1425,6 +1521,11 @@
   .ui-header-menu-summary {
     min-width: 2.25rem;
     min-height: 2.25rem;
+  }
+
+  .ui-header-menu-summary {
+    width: 2.25rem;
+    height: 2.25rem;
   }
 }
 

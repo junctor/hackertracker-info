@@ -116,6 +116,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "communities",
       "content",
       "contests",
+      "maps",
       "people",
       "readme",
       "schedule",

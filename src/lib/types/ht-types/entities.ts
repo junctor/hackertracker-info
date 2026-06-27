@@ -97,6 +97,30 @@ export type MenusStore = {
   byId: Record<string, MenuEntity>;
 };
 
+export type ConferenceMapEntity = {
+  description?: string;
+  file?: string;
+  filename?: string;
+  id: number;
+  name: string;
+  name_text?: string;
+  sort_order?: number;
+  svg_filename?: string;
+  svg_url?: string;
+  url?: string;
+};
+
+export type ConferenceEntity = {
+  code: string;
+  end_date?: string;
+  id: number;
+  maps?: ConferenceMapEntity[];
+  name: string;
+  start_date?: string;
+  timezone?: string;
+  updated_at?: string;
+};
+
 export type OrganizationEntity = {
   id: number;
   name: string;

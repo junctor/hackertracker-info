@@ -1,6 +1,13 @@
+import Head from "@/components/Head";
+import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ConferenceMapsList from "@/features/maps/ConferenceMapsList";
+import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { type ConferenceManifest } from "@/lib/conferences";
+import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { type ConferenceEntity } from "@/lib/types/ht-types";
 import { type PageId } from "@/lib/types/page-meta";
-import LocationsPage from "@/routes/conference/LocationsPage";
 
 type MapsPageProps = {
   conf: ConferenceManifest;
@@ -8,12 +15,35 @@ type MapsPageProps = {
 };
 
 export default function MapsPage({ conf, activePageId }: MapsPageProps) {
+  const {
+    data: conference,
+    error,
+    isLoading,
+  } = useConferenceJson<ConferenceEntity>(conf, "conference.json");
+
+  if (isLoading) return <LoadingScreen />;
+  if (error || !conference) return <ErrorScreen />;
+
+  const title = `Maps | ${conference.name}`;
+  const description = `Venue maps for ${conference.name}.`;
+
   return (
-    <LocationsPage
-      conf={conf}
-      activePageId={activePageId}
-      title="Map"
-      description={`Venue map and location references for ${conf.name}.`}
-    />
+    <>
+      <Head>
+        <title>{title}</title>
+        {aiMetadata({
+          title,
+          description,
+          path: conferencePath(conf, "maps"),
+          jsonFeeds: [
+            ...conferenceDataFeeds(conf),
+            { title: `${conf.name} conference details`, href: `${conf.dataRoot}/conference.json` },
+          ],
+        })}
+      </Head>
+      <ConferenceLayout conference={conf} activePageId={activePageId}>
+        <ConferenceMapsList conference={conference} />
+      </ConferenceLayout>
+    </>
   );
 }

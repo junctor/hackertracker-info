@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { Link } from "react-router";
 
 import cal, { encodeICalDataUri } from "@/lib/cal";
+import { getAccentStyle } from "@/lib/color";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
@@ -38,6 +39,7 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
 
   const href = `/${conf.slug}/content/?id=${session.contentId}`;
   const sessionTone = getToneFromColor(session.color);
+  const accentStyle = getAccentStyle(session.color);
 
   const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -74,6 +76,7 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   return (
     <article
       data-schedule-session-id={session.id}
+      style={accentStyle}
       className={`ui-card ui-card-interactive ui-accent-card ui-tone-${sessionTone}${isHighlighted ? " ui-schedule-session-jump-highlight" : ""}`}
     >
       <span aria-hidden="true" className="ui-accent-rail" />

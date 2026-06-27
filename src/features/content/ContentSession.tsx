@@ -11,6 +11,7 @@ import type { ConferenceManifest } from "@/lib/conferences";
 import type { ContentEntity, SessionEntity } from "@/lib/types/ht-types";
 
 import cal, { encodeICalDataUri } from "@/lib/cal";
+import { getAccentStyle } from "@/lib/color";
 import { sessionTime, formatSessionTime } from "@/lib/dates";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
@@ -68,6 +69,7 @@ function ContentSessionCard({
     ? `Remove bookmark for ${session.title}`
     : `Add bookmark for ${session.title}`;
   const accentTone = getToneFromColor(accentColor);
+  const accentStyle = getAccentStyle(accentColor);
   const titleLabel = title?.trim() || null;
 
   const sessionContent = (
@@ -87,6 +89,7 @@ function ContentSessionCard({
 
   return (
     <li
+      style={accentStyle}
       className={`ui-card ui-card-interactive ui-accent-card ui-content-session-card ui-tone-${accentTone}`}
     >
       <span aria-hidden="true" className="ui-accent-rail" />

@@ -10,6 +10,7 @@ export type ArticlesStore = {
 };
 
 export type ContentEntity = {
+  color?: string;
   description?: string;
   id: number;
   links?: Array<{
@@ -47,6 +48,7 @@ export type SessionEntity = {
   beginDisplay: string;
   beginIso: string;
   beginTimestampSeconds: number;
+  color?: string;
   contentId: number;
   end: string;
   endDisplay: string;

@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 
 import PageHeader from "@/components/ui/PageHeader";
+import { getAccentStyle } from "@/lib/color";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getToneFromColor } from "@/lib/tone";
 
@@ -110,11 +111,14 @@ export default function ContentList({ content, tags, conference }: Props) {
           {filtered.map((item) => {
             const visibleTags = item.tags.slice(0, 4);
             const hiddenTagCount = item.tags.length - visibleTags.length;
-            const itemTone = getToneFromColor(item.tags[0]?.colorBackground);
+            const itemColor = item.tags[0]?.colorBackground;
+            const itemTone = getToneFromColor(itemColor);
+            const accentStyle = getAccentStyle(itemColor);
 
             return (
               <li
                 key={item.id}
+                style={accentStyle}
                 className={`ui-card ui-card-interactive ui-accent-card ui-tone-${itemTone}`}
               >
                 <span aria-hidden="true" className="ui-accent-rail" />

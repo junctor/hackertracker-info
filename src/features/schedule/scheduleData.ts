@@ -77,6 +77,8 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
 
       const beginDate = new Date(session.begin);
       const endDate = new Date(session.end);
+      const contentEntity = contentStore?.byId[normalizeId(session.contentId)] ?? null;
+      const color = session.color || contentEntity?.color || tags[0]?.colorBackground || "";
 
       sessions.push({
         id: session.id,
@@ -89,9 +91,9 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
         endDisplay: timeFormatter.format(endDate),
         endIso: endDate.toISOString(),
         endTimestampSeconds: toTimestampSeconds(session.end),
-        color: tags[0]?.colorBackground ?? "",
+        color,
         contentId: session.contentId,
-        contentEntity: contentStore?.byId[normalizeId(session.contentId)] ?? null,
+        contentEntity,
         session: session,
         locationName,
         tags,

@@ -592,7 +592,7 @@
 }
 
 .ui-accent-rail {
-  background: color-mix(in srgb, var(--session-color) 68%, black);
+  background: color-mix(in srgb, var(--accent-color-effective) 68%, black);
 }
 
 .ui-accent-rail-overlay {
@@ -643,6 +643,11 @@
 .ui-detail-card {
   position: relative;
   overflow: hidden;
+}
+
+.ui-accent-card,
+.ui-detail-header-accent {
+  --accent-color-effective: var(--accent-color, var(--session-color));
 }
 
 .ui-accent-card {

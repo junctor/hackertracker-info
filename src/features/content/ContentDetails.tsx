@@ -13,6 +13,7 @@ import type {
 
 import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
+import { getAccentStyle } from "@/lib/color";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { getToneFromColor } from "@/lib/tone";
 import { getSafeExternalHref } from "@/lib/url";
@@ -34,7 +35,7 @@ function safeParseMs(iso: string): number {
   return Number.isFinite(ms) ? ms : Number.MAX_SAFE_INTEGER;
 }
 
-function getSessionAccentColor(
+function getSessionTagAccentColor(
   session: SessionEntity | undefined,
   tags: TagEntity[],
 ): string | undefined {
@@ -76,7 +77,10 @@ export default function ContentDetails(props: Props) {
     return earliest;
   }, [sessions]);
 
-  const accentTone = getToneFromColor(getSessionAccentColor(primarySession, tags));
+  const accentColor =
+    content.color || primarySession?.color || getSessionTagAccentColor(primarySession, tags);
+  const accentTone = getToneFromColor(accentColor);
+  const accentStyle = getAccentStyle(accentColor);
   const sharePath = `${contentsBasePath}/?id=${content.id}`;
   const shareUrl =
     typeof window === "undefined"
@@ -117,7 +121,7 @@ export default function ContentDetails(props: Props) {
 
   return (
     <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
-      <div className={`ui-detail-header-accent ui-tone-${accentTone}`}>
+      <div style={accentStyle} className={`ui-detail-header-accent ui-tone-${accentTone}`}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
@@ -159,7 +163,7 @@ export default function ContentDetails(props: Props) {
                 session={s}
                 contentEntity={content}
                 isBookmarked={bookmarkSet.has(s.id)}
-                accentColor={getSessionAccentColor(s, tags)}
+                accentColor={s.color || accentColor}
                 locationName={locationNameById.get(s.locationId)}
               />
             ))}

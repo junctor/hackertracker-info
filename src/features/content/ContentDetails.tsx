@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import type { ConferenceManifest } from "@/lib/conferences";
 import type {
   ContentEntity,
-  EventEntity,
+  SessionEntity,
   LocationEntity,
   PersonEntity,
   TagEntity,
@@ -21,7 +21,7 @@ import ContentSession from "./ContentSession";
 
 type Props = {
   content: ContentEntity;
-  sessions: EventEntity[];
+  sessions: SessionEntity[];
   locations: LocationEntity[];
   people: PersonEntity[];
   tags: TagEntity[];

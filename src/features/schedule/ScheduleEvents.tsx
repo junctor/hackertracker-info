@@ -7,13 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router";
-import {
-  Virtuoso,
-  type Components,
-  type ItemProps,
-  type ListProps,
-  type VirtuosoHandle,
-} from "react-virtuoso";
+import { Virtuoso, type Components, type VirtuosoHandle } from "react-virtuoso";
 
 import type {
   ScheduleDayView,
@@ -49,37 +43,58 @@ export type ScheduleActivitySummary = {
 };
 
 type VirtuosoContext = unknown;
-type VirtuosoListProps = ListProps & { context: VirtuosoContext };
-type VirtuosoItemProps = ItemProps<ScheduleEventViewModel> & {
-  context: VirtuosoContext;
+
+type VirtuosoListProps = React.ComponentPropsWithoutRef<"div"> & {
+  context?: VirtuosoContext;
+};
+
+type VirtuosoItemProps = React.ComponentPropsWithoutRef<"div"> & {
+  context?: VirtuosoContext;
+  item?: ScheduleEventViewModel;
 };
 
 const VirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(function VirtuosoList(
-  { children, style, "data-testid": dataTestId },
+  { children, className, context, style, ...listProps },
   ref,
 ) {
-  // react-virtuoso owns runtime list sizing here; dropping this breaks window virtualization.
+  void context;
+
+  // react-virtuoso owns runtime list sizing here. Dropping this breaks window virtualization.
   return (
-    <ul
-      ref={ref as unknown as React.Ref<HTMLUListElement>}
+    <div
+      {...listProps}
+      ref={ref}
+      role="list"
       style={style}
-      data-testid={dataTestId}
-      className="ui-schedule-event-list"
+      className={["ui-schedule-event-list", className].filter(Boolean).join(" ")}
     >
       {children}
-    </ul>
+    </div>
   );
 });
 VirtuosoList.displayName = "VirtuosoList";
 
-function VirtuosoItem({ children, style, context, item, ...itemProps }: VirtuosoItemProps) {
+function VirtuosoItem({
+  children,
+  className,
+  style,
+  context,
+  item,
+  ...itemProps
+}: VirtuosoItemProps) {
   void context;
   void item;
+
   // react-virtuoso uses per-item runtime offsets while measuring large schedule days.
   return (
-    <li {...itemProps} style={style} className="ui-schedule-event-list-item">
+    <div
+      {...itemProps}
+      role="listitem"
+      style={style}
+      className={["ui-schedule-event-list-item", className].filter(Boolean).join(" ")}
+    >
       {children}
-    </li>
+    </div>
   );
 }
 VirtuosoItem.displayName = "VirtuosoItem";
@@ -133,13 +148,16 @@ export default function ScheduleEvents({
     if (selectedDay && days.some(({ day }) => day === selectedDay)) {
       return selectedDay;
     }
+
     return days[0]?.day ?? "";
   }, [days, selectedDay]);
 
   useEffect(() => {
     if (!resolvedDay) return;
+
     const heading = headingRef.current;
     if (!heading || typeof window === "undefined") return;
+
     const rect = heading.getBoundingClientRect();
     const scrollMarginTop = Number.parseFloat(window.getComputedStyle(heading).scrollMarginTop);
     const headingScrollOffsetPx = Number.isFinite(scrollMarginTop) ? scrollMarginTop : 0;
@@ -153,6 +171,7 @@ export default function ScheduleEvents({
   const handleTabKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLButtonElement>, index: number, day: string) => {
       if (days.length === 0) return;
+
       const lastIndex = days.length - 1;
       let nextIndex = index;
 
@@ -192,7 +211,9 @@ export default function ScheduleEvents({
 
       const nextDay = days[nextIndex]?.day;
       if (!nextDay) return;
+
       onSelectDay(nextDay);
+
       const nextButton = tabButtonRefs.current[nextDay];
       nextButton?.focus();
       nextButton?.scrollIntoView({ block: "nearest", inline: "nearest" });
@@ -206,12 +227,14 @@ export default function ScheduleEvents({
   const showScheduleViewControls = Boolean(scheduleView && scheduleViewLinks);
   const activeDayLabel = activeDay ? eventDayTable(activeDay.day, conf.timezone) : null;
   const activeDayEventCountLabel = activeDay
-    ? `${activeDay.day.length} ${activeDay.sessions.length === 1 ? "event" : "sessions"}`
+    ? `${activeDay.sessions.length} ${activeDay.sessions.length === 1 ? "session" : "sessions"}`
     : null;
+
   const computeItemKey = useCallback(
     (index: number, evt?: ScheduleEventViewModel) => evt?.id ?? `missing-event-${index}`,
     [],
   );
+
   const itemContent = useCallback(
     (_: number, evt?: ScheduleEventViewModel) =>
       evt ? (
@@ -233,6 +256,7 @@ export default function ScheduleEvents({
     const targetIndex = activeDay.sessions.findIndex(
       (session) => session.id === jumpRequest.eventId,
     );
+
     if (targetIndex < 0) return;
 
     handledJumpRequestRef.current = jumpRequest.requestId;
@@ -260,8 +284,14 @@ export default function ScheduleEvents({
 
     return () => {
       window.cancelAnimationFrame(frameId);
-      if (scrollTimeout) window.clearTimeout(scrollTimeout);
-      if (settleTimeout) window.clearTimeout(settleTimeout);
+
+      if (scrollTimeout) {
+        window.clearTimeout(scrollTimeout);
+      }
+
+      if (settleTimeout) {
+        window.clearTimeout(settleTimeout);
+      }
     };
   }, [activeDay, jumpRequest]);
 

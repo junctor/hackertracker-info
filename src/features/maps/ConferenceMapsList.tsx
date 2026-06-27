@@ -1,5 +1,5 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import type { ConferenceEntity, ConferenceMapEntity } from "@/lib/types/ht-types";
 
@@ -50,6 +50,7 @@ function formatDateRange(conference: ConferenceEntity) {
 }
 
 export default function ConferenceMapsList({ conference }: Props) {
+  const [brokenPreviewIds, setBrokenPreviewIds] = useState<Record<number, true>>({});
   const maps = useMemo(
     () => (conference.maps ?? []).filter(Boolean).toSorted(compareMaps),
     [conference.maps],
@@ -90,12 +91,17 @@ export default function ConferenceMapsList({ conference }: Props) {
                     ) : null}
                   </div>
 
-                  {map.svg_url ? (
+                  {map.svg_url && !brokenPreviewIds[map.id] ? (
                     <div className="ui-map-preview-frame">
                       <Image
                         src={map.svg_url}
                         alt={`Preview of ${name}`}
                         className="ui-map-preview-image"
+                        onError={() =>
+                          setBrokenPreviewIds((current) =>
+                            current[map.id] ? current : { ...current, [map.id]: true },
+                          )
+                        }
                       />
                     </div>
                   ) : null}

@@ -3,7 +3,6 @@ import { Link } from "react-router";
 
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
-import { getToneFromColor } from "@/lib/tone";
 import { TagTypesBrowseView } from "@/lib/types/ht-types";
 
 const formatCategory = (s: string) => s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -28,7 +27,8 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
     <Link
       to={`/${conference.slug}/tag/?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className={`ui-focus-ring ui-tag-chip ui-tag-link ui-tone-${getToneFromColor(tag.colorBackground)}`}
+      className={`ui-focus-ring ui-tag-chip ui-tag-link`}
+      style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
     >
       {tag.label}
     </Link>

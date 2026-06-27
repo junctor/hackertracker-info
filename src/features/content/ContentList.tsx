@@ -7,7 +7,6 @@ import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/
 import PageHeader from "@/components/ui/PageHeader";
 import { getAccentStyle } from "@/lib/color";
 import { ConferenceManifest } from "@/lib/conferences";
-import { getToneFromColor } from "@/lib/tone";
 
 interface Props {
   conference: ConferenceManifest;
@@ -112,14 +111,13 @@ export default function ContentList({ content, tags, conference }: Props) {
             const visibleTags = item.tags.slice(0, 4);
             const hiddenTagCount = item.tags.length - visibleTags.length;
             const itemColor = item.tags[0]?.colorBackground;
-            const itemTone = getToneFromColor(itemColor);
             const accentStyle = getAccentStyle(itemColor);
 
             return (
               <li
                 key={item.id}
                 style={accentStyle}
-                className={`ui-card ui-card-interactive ui-accent-card ui-tone-${itemTone}`}
+                className={`ui-card ui-card-interactive ui-accent-card`}
               >
                 <span aria-hidden="true" className="ui-accent-rail" />
                 <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -141,7 +139,11 @@ export default function ContentList({ content, tags, conference }: Props) {
                           {visibleTags.map((tag) => (
                             <li
                               key={tag.id}
-                              className={`ui-tag-chip ui-tone-${getToneFromColor(tag.colorBackground)}`}
+                              className={`ui-tag-chip ui-tag-chip-strong`}
+                              style={{
+                                backgroundColor: tag.colorBackground,
+                                color: tag.colorForeground,
+                              }}
                             >
                               {tag.label}
                             </li>

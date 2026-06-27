@@ -8,7 +8,6 @@ import { getAccentStyle } from "@/lib/color";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
-import { getToneFromColor } from "@/lib/tone";
 
 import type { ScheduleSessionViewModel } from "./ScheduleSessions";
 
@@ -38,7 +37,6 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   const [actionStatus, setActionStatus] = useTransientStatus();
 
   const href = `/${conf.slug}/content/?id=${session.contentId}`;
-  const sessionTone = getToneFromColor(session.color);
   const accentStyle = getAccentStyle(session.color);
 
   const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -77,7 +75,7 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
     <article
       data-schedule-session-id={session.id}
       style={accentStyle}
-      className={`ui-card ui-card-interactive ui-accent-card ui-tone-${sessionTone}${isHighlighted ? " ui-schedule-session-jump-highlight" : ""}`}
+      className={`ui-card ui-card-interactive ui-accent-card${isHighlighted ? " ui-schedule-session-jump-highlight" : ""}`}
     >
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -119,7 +117,8 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
                   {visibleTags.map((tag) => (
                     <li
                       key={tag.id}
-                      className={`ui-tag-chip ui-tag-chip-strong ui-tone-${getToneFromColor(tag.colorBackground)}`}
+                      className={`ui-tag-chip ui-tag-chip-strong`}
+                      style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
                     >
                       {tag.label}
                     </li>

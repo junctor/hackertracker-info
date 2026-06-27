@@ -60,7 +60,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     dateLabel: "November 11–12, 2026",
     tagline: null,
     timezone: "Asia/Bahrain",
-    logoFile: "logos/conferences/dcme-logo.webp",
+    logoFile: "logos/conferences/dc-middle-east-2026.jpg",
     showOnHome: false,
 
     kickoff: "2026-11-11T06:00:00Z",

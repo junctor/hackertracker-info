@@ -282,6 +282,7 @@ export default function PersonDetails({ person, sessions, locations, conference 
                   session={session}
                   contentEntity={contentEntity}
                   isBookmarked={bookmarkSet.has(session.id)}
+                  accentColor={session.color}
                   locationName={locationNameById.get(session.locationId)}
                   href={`${contentsBasePath}/?id=${session.contentId}`}
                   title={session.title}

@@ -203,6 +203,12 @@
 
 .ui-homepage-archive-link,
 .ui-conferences-home-link {
+  display: inline-flex;
+  min-height: var(--control-min);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-2);
+  padding-inline: var(--space-2);
   color: color-mix(in oklab, var(--text-muted), white 8%);
   font-size: 0.875rem;
   font-weight: 650;

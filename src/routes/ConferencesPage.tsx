@@ -46,7 +46,7 @@ export default function ConferencesPage() {
             <p className="ui-kicker ui-conferences-kicker">Conferences</p>
             <h1 className="ui-heading-1">Available conferences</h1>
             <p className="ui-page-description">
-              Browse schedules, maps, and reference material for main DEF CON events and other
+              Browse schedules, maps, and reference material for main DEF CON sessions and other
               available DEF CON gatherings.
             </p>
           </header>

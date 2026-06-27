@@ -59,9 +59,9 @@ function filterScheduleDaysByView(
   if (view === "next") {
     let nextBeginSeconds: number | null = null;
 
-    for (const { events } of days) {
-      for (const event of events) {
-        const beginsAt = event.beginTimestampSeconds;
+    for (const { sessions } of days) {
+      for (const session of sessions) {
+        const beginsAt = session.beginTimestampSeconds;
         if (!Number.isFinite(beginsAt) || beginsAt <= nowSeconds) continue;
         if (nextBeginSeconds === null || beginsAt < nextBeginSeconds) {
           nextBeginSeconds = beginsAt;
@@ -72,22 +72,22 @@ function filterScheduleDaysByView(
     if (nextBeginSeconds === null) return [];
 
     return days
-      .map(({ day, events }) => ({
+      .map(({ day, sessions }) => ({
         day,
-        events: events.filter((event) => event.beginTimestampSeconds === nextBeginSeconds),
+        sessions: sessions.filter((session) => session.beginTimestampSeconds === nextBeginSeconds),
       }))
-      .filter(({ events }) => events.length > 0);
+      .filter(({ sessions }) => sessions.length > 0);
   }
 
   const result: ScheduleDay[] = [];
 
-  for (const { day, events } of days) {
-    const filteredEvents = events.filter((event) => {
-      return isScheduleEventLive(event, nowSeconds);
+  for (const { day, sessions } of days) {
+    const filteredSessions = sessions.filter((session) => {
+      return isScheduleEventLive(session, nowSeconds);
     });
 
-    if (filteredEvents.length > 0) {
-      result.push({ day, events: filteredEvents });
+    if (filteredSessions.length > 0) {
+      result.push({ day, sessions: filteredSessions });
     }
   }
 
@@ -126,11 +126,11 @@ function getScheduleActivitySummary(
   let liveCount = 0;
   let startingSoonCount = 0;
 
-  for (const { events } of days) {
-    for (const event of events) {
-      if (isScheduleEventLive(event, nowSeconds)) {
+  for (const { sessions } of days) {
+    for (const session of sessions) {
+      if (isScheduleEventLive(session, nowSeconds)) {
         liveCount += 1;
-      } else if (isScheduleEventStartingSoon(event, nowSeconds)) {
+      } else if (isScheduleEventStartingSoon(session, nowSeconds)) {
         startingSoonCount += 1;
       }
     }
@@ -145,17 +145,17 @@ function findScheduleJumpTarget(
 ): { day: string; eventId: number } | null {
   let nextTarget: { day: string; eventId: number; beginsAt: number } | null = null;
 
-  for (const { day, events } of days) {
-    for (const event of events) {
-      if (isScheduleEventLive(event, nowSeconds)) {
-        return { day, eventId: event.id };
+  for (const { day, sessions } of days) {
+    for (const session of sessions) {
+      if (isScheduleEventLive(session, nowSeconds)) {
+        return { day, eventId: session.id };
       }
 
-      const beginsAt = event.beginTimestampSeconds;
+      const beginsAt = session.beginTimestampSeconds;
       if (!Number.isFinite(beginsAt) || beginsAt <= nowSeconds) continue;
 
       if (!nextTarget || beginsAt < nextTarget.beginsAt) {
-        nextTarget = { day, eventId: event.id, beginsAt };
+        nextTarget = { day, eventId: session.id, beginsAt };
       }
     }
   }
@@ -209,10 +209,10 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     // Pick in-progress day first, then fall back to earliest day.
     if (visibleDays.length === 0) return null;
 
-    for (const { day, events } of visibleDays) {
-      for (const event of events) {
-        const begin = event.beginTimestampSeconds;
-        const end = event.endTimestampSeconds;
+    for (const { day, sessions } of visibleDays) {
+      for (const session of sessions) {
+        const begin = session.beginTimestampSeconds;
+        const end = session.endTimestampSeconds;
         if (
           Number.isFinite(begin) &&
           Number.isFinite(end) &&
@@ -263,7 +263,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     if (!target) {
       setJumpRequest(null);
       setHighlightedEventId(null);
-      setJumpStatus("No live or upcoming events are available. Check the full schedule.");
+      setJumpStatus("No live or upcoming sessions are available. Check the full schedule.");
       return;
     }
 
@@ -346,7 +346,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     }
 
     return {
-      message: "No events are listed yet.",
+      message: "No sessions are listed yet.",
     };
   }, [scheduleView, scheduleViewLinks.full]);
 
@@ -366,7 +366,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
         <title>Schedule | {conf.name}</title>
         {aiMetadata({
           title: `Schedule | ${conf.name}`,
-          description: `Full ${conf.name} schedule of sessions, talks, and events.`,
+          description: `Full ${conf.name} schedule of sessions, talks, and sessions.`,
           path: conferencePath(conf, "schedule"),
           jsonFeeds: conferenceDataFeeds(conf),
           structuredData: [collectionStructuredDataPath(conf, "schedule")],

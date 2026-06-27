@@ -8,7 +8,7 @@ import { useMemo, type MouseEvent } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
-import type { ContentEntity, EventEntity } from "@/lib/types/ht-types";
+import type { ContentEntity, SessionEntity } from "@/lib/types/ht-types";
 
 import cal, { encodeICalDataUri } from "@/lib/cal";
 import { eventTime, formatSessionTime } from "@/lib/dates";
@@ -18,7 +18,7 @@ import { getToneFromColor } from "@/lib/tone";
 
 export type ContentSessionProps = {
   conference: ConferenceManifest;
-  session: EventEntity;
+  session: SessionEntity;
   contentEntity: ContentEntity;
   isBookmarked: boolean;
   locationName?: string;
@@ -73,7 +73,7 @@ function ContentSessionCard({
       {titleLabel ? (
         <p className="ui-card-title ui-accent-card-title-md ui-clamp-two">{titleLabel}</p>
       ) : null}
-      <p className="ui-event-time-primary">{timeLabel}</p>
+      <p className="ui-session-time-primary">{timeLabel}</p>
       {locationName ? (
         <div className="ui-card-meta ui-content-session-location">
           <MapPinIcon className="ui-icon-xs" aria-hidden="true" />

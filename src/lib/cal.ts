@@ -1,4 +1,4 @@
-import { ContentEntity, EventEntity } from "@/lib/types/ht-types";
+import { ContentEntity, SessionEntity } from "@/lib/types/ht-types";
 
 const MAX_LINE_LEN = 75;
 const CRLF = "\r\n";
@@ -81,7 +81,7 @@ export const encodeICalDataUri = (ics: string) =>
 export const generateICal = (
   conferenceSlug: string,
   content: ContentEntity,
-  session: EventEntity,
+  session: SessionEntity,
   locationName?: string,
 ): string => {
   const dtstamp = formatICalDate(new Date());

@@ -135,7 +135,7 @@ export function ensureConferenceCacheIsFresh(conf: ConferenceManifest): Promise<
 }
 
 /**
- * Fetch `relativePath` (e.g. `"entities/events.json"`) from the IndexedDB
+ * Fetch `relativePath` (e.g. `"entities/sessions.json"`) from the IndexedDB
  * cache, falling back to the network on a cache miss.  Manifest freshness is
  * always verified before the first read, ensuring stale data is never returned
  * after a conference rebuild.

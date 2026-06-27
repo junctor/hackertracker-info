@@ -2,7 +2,7 @@ import type {
   ArticleEntity,
   ContentEntity,
   DocumentEntity,
-  EventEntity,
+  SessionEntity,
   LocationEntity,
   OrganizationEntity,
   PersonEntity,
@@ -28,7 +28,7 @@ export type DocumentList = {
 };
 export type DocumentsListView = Array<DocumentList>;
 
-export type EventCard = {
+export type SessionCard = {
   begin: string;
   color: string;
   contentId: number;
@@ -44,7 +44,7 @@ export type EventCard = {
   }>;
   title: string;
 };
-export type EventCardsByIdStore = Record<string, EventCard>;
+export type SessionCardsByIdStore = Record<string, SessionCard>;
 
 export type OrganizationCard = {
   id: number;
@@ -86,7 +86,7 @@ export type SearchDataItem = {
 };
 export type SearchDataView = Array<SearchDataItem>;
 
-export type ScheduleEventViewModel = {
+export type ScheduleSessionViewModel = {
   id: number;
   title: string;
   begin: string;
@@ -96,7 +96,7 @@ export type ScheduleEventViewModel = {
   color: string;
   contentId: number;
   contentEntity: ContentEntity | null;
-  session: EventEntity;
+  session: SessionEntity;
   locationName: string;
   tags: Array<{
     id: number;
@@ -113,10 +113,10 @@ export type ScheduleEventViewModel = {
 
 export type ScheduleDayView = {
   day: string;
-  events: ScheduleEventViewModel[];
+  sessions: ScheduleSessionViewModel[];
 };
 export type ScheduleDaysView = ScheduleDayView[];
-export type BookmarkEventsByIdView = Record<string, ScheduleEventViewModel>;
+export type bookmarkSessionsByIdView = Record<string, ScheduleSessionViewModel>;
 
 export type LocationCard = {
   id: number;
@@ -130,7 +130,7 @@ export type AnnouncementsListView = ArticleEntity[];
 
 export type ContentDetailView = {
   content: ContentEntity;
-  sessions: EventEntity[];
+  sessions: SessionEntity[];
   locations: LocationEntity[];
   people: PersonEntity[];
   tags: TagEntity[];
@@ -138,7 +138,7 @@ export type ContentDetailView = {
 
 export type PersonDetailView = {
   person: PersonEntity;
-  events: EventEntity[];
+  sessions: SessionEntity[];
   locations: LocationEntity[];
 };
 

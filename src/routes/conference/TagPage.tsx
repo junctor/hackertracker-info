@@ -45,8 +45,8 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
-    for (const { day, events } of days) {
-      for (const event of events) {
+    for (const { day, sessions } of days) {
+      for (const event of sessions) {
         if (event.beginTimestampSeconds <= nowSeconds && nowSeconds <= event.endTimestampSeconds) {
           return day;
         }
@@ -72,7 +72,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     setSelectedDay(day);
   }, []);
 
-  const emptyMessage = "No events are scheduled for this tag.";
+  const emptyMessage = "No sessions are scheduled for this tag.";
 
   if (!isReady) return <LoadingScreen />;
   if (isIdInvalid) return <ErrorScreen msg="Invalid tag id." />;

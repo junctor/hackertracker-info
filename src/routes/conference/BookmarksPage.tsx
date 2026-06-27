@@ -10,7 +10,7 @@ import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { getBookmarks } from "@/lib/storage";
-import { BookmarkEventsByIdView, ScheduleEventViewModel } from "@/lib/types/ht-types/views";
+import { bookmarkSessionsByIdView, ScheduleSessionViewModel } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type BookmarksPageProps = {
@@ -22,7 +22,7 @@ function normalizeId(id: unknown): string {
   return String(id);
 }
 
-function getEventDay(event: ScheduleEventViewModel, timeZone: string): string {
+function getEventDay(event: ScheduleSessionViewModel, timeZone: string): string {
   const date = new Date(event.begin);
   if (Number.isNaN(date.getTime())) return "";
 
@@ -40,14 +40,14 @@ function getEventDay(event: ScheduleEventViewModel, timeZone: string): string {
   return year && month && day ? `${year}-${month}-${day}` : "";
 }
 
-function groupBookmarkedEventsByDay(
-  bookmarkEventsById: BookmarkEventsByIdView,
+function groupBookmarkedsessionsByDay(
+  bookmarkSessionsById: bookmarkSessionsByIdView,
   bookmarkSet: ReadonlySet<string>,
   timeZone: string,
 ): ScheduleDay[] {
   if (bookmarkSet.size === 0) return [];
 
-  const bookmarkedEvents = Object.values(bookmarkEventsById)
+  const bookmarkedEvents = Object.values(bookmarkSessionsById)
     .filter((event) => bookmarkSet.has(String(event.id)))
     .toSorted((a, b) => {
       if (a.beginTimestampSeconds !== b.beginTimestampSeconds) {
@@ -56,7 +56,7 @@ function groupBookmarkedEventsByDay(
       return a.id - b.id;
     });
 
-  const days = new Map<string, ScheduleEventViewModel[]>();
+  const days = new Map<string, ScheduleSessionViewModel[]>();
   for (const event of bookmarkedEvents) {
     const day = getEventDay(event, timeZone);
     if (!day) continue;
@@ -65,16 +65,16 @@ function groupBookmarkedEventsByDay(
     days.set(day, list);
   }
 
-  return [...days.entries()].map(([day, events]) => ({ day, events }));
+  return [...days.entries()].map(([day, sessions]) => ({ day, sessions }));
 }
 
 export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps) {
   const nowSeconds = useNowSeconds();
   const {
-    data: bookmarkEventsById,
+    data: bookmarkSessionsById,
     error,
     isLoading,
-  } = useConferenceJson<BookmarkEventsByIdView>(conf, "views/bookmarkEventsById.json");
+  } = useConferenceJson<bookmarkSessionsByIdView>(conf, "views/bookmarkSessionsById.json");
 
   const [bookmarks, setBookmarks] = useState<string[]>(() => getBookmarks().map(normalizeId));
 
@@ -103,14 +103,14 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
   }, [bookmarks]);
 
   const days = useMemo(() => {
-    if (!bookmarkEventsById) return [];
-    return groupBookmarkedEventsByDay(bookmarkEventsById, bookmarkSet, conf.timezone);
-  }, [bookmarkEventsById, bookmarkSet, conf.timezone]);
+    if (!bookmarkSessionsById) return [];
+    return groupBookmarkedsessionsByDay(bookmarkSessionsById, bookmarkSet, conf.timezone);
+  }, [bookmarkSessionsById, bookmarkSet, conf.timezone]);
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
-    for (const { day, events } of days) {
-      for (const event of events) {
+    for (const { day, sessions } of days) {
+      for (const event of sessions) {
         if (event.beginTimestampSeconds <= nowSeconds && nowSeconds <= event.endTimestampSeconds) {
           return day;
         }
@@ -133,7 +133,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
   }, []);
 
   if (isLoading) return <LoadingScreen />;
-  if (error || !bookmarkEventsById) return <ErrorScreen />;
+  if (error || !bookmarkSessionsById) return <ErrorScreen />;
 
   return (
     <>
@@ -165,7 +165,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
           />
         ) : (
           <div className="ui-container ui-empty-state ui-page-empty-offset">
-            <p>No upcoming events match your saved bookmarks.</p>
+            <p>No upcoming sessions match your saved bookmarks.</p>
             <Link
               to={`/${conf.slug}/schedule/`}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"

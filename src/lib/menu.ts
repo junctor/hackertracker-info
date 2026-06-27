@@ -115,7 +115,7 @@ const SITE_MENU = {
     sort_order: 40,
     title: "Bookmarks",
     href: conferenceRoute(c, "bookmarks"),
-    description: "Save your favorite talks, workshops, and events.",
+    description: "Save your favorite talks, workshops, and sessions.",
     icon: BookmarkIcon,
   }),
 

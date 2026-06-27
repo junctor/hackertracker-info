@@ -17,7 +17,7 @@ import {
 
 import type {
   ScheduleDayView,
-  ScheduleEventViewModel as ScheduleEventViewModelContract,
+  ScheduleSessionViewModel as ScheduleEventViewModelContract,
 } from "@/lib/types/ht-types/views";
 
 import { ConferenceManifest } from "@/lib/conferences";
@@ -206,7 +206,7 @@ export default function ScheduleEvents({
   const showScheduleViewControls = Boolean(scheduleView && scheduleViewLinks);
   const activeDayLabel = activeDay ? eventDayTable(activeDay.day, conf.timezone) : null;
   const activeDayEventCountLabel = activeDay
-    ? `${activeDay.events.length} ${activeDay.events.length === 1 ? "event" : "events"}`
+    ? `${activeDay.day.length} ${activeDay.sessions.length === 1 ? "event" : "sessions"}`
     : null;
   const computeItemKey = useCallback(
     (index: number, evt?: ScheduleEventViewModel) => evt?.id ?? `missing-event-${index}`,
@@ -230,7 +230,9 @@ export default function ScheduleEvents({
     if (!activeDay || !jumpRequest) return;
     if (handledJumpRequestRef.current === jumpRequest.requestId) return;
 
-    const targetIndex = activeDay.events.findIndex((event) => event.id === jumpRequest.eventId);
+    const targetIndex = activeDay.sessions.findIndex(
+      (session) => session.id === jumpRequest.eventId,
+    );
     if (targetIndex < 0) return;
 
     handledJumpRequestRef.current = jumpRequest.requestId;
@@ -289,7 +291,7 @@ export default function ScheduleEvents({
                   to={scheduleViewLinks.now}
                   className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-view-link"
                   aria-current={scheduleView === "now" ? "page" : undefined}
-                  aria-label="View events happening now"
+                  aria-label="View sessions happening now"
                 >
                   <ClockIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
                   <span className="ui-schedule-compact-label ui-schedule-tool-label">
@@ -301,7 +303,7 @@ export default function ScheduleEvents({
                   to={scheduleViewLinks.next}
                   className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-view-link"
                   aria-current={scheduleView === "next" ? "page" : undefined}
-                  aria-label="View events coming up next"
+                  aria-label="View sessions coming up next"
                 >
                   <ClockIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
                   <span className="ui-schedule-compact-label ui-schedule-tool-label">Up Next</span>
@@ -312,8 +314,8 @@ export default function ScheduleEvents({
 
           {activitySummary ? (
             <p className="ui-schedule-summary" aria-live="polite">
-              <span>Live now: {activitySummary.liveCount} events</span>
-              <span>Starting within 30 minutes: {activitySummary.startingSoonCount} events</span>
+              <span>Live now: {activitySummary.liveCount} sessions</span>
+              <span>Starting within 30 minutes: {activitySummary.startingSoonCount} sessions</span>
             </p>
           ) : null}
         </div>
@@ -377,7 +379,7 @@ export default function ScheduleEvents({
                 className="ui-scrollbar-none ui-schedule-tab-scroll"
               >
                 <div className="ui-schedule-tab-list">
-                  {days.map(({ day, events }, index) => (
+                  {days.map(({ day, sessions }, index) => (
                     <button
                       key={day}
                       ref={(el) => {
@@ -397,8 +399,8 @@ export default function ScheduleEvents({
                         {tabDateTitle(day, conf.timezone)}
                       </span>
                       <span className="ui-schedule-day-count">
-                        {events.length}
-                        <span className="ui-visually-hidden"> events</span>
+                        {sessions.length}
+                        <span className="ui-visually-hidden"> sessions</span>
                       </span>
                     </button>
                   ))}
@@ -434,10 +436,10 @@ export default function ScheduleEvents({
             <Virtuoso
               ref={virtuosoRef}
               useWindowScroll
-              data={activeDay.events}
+              data={activeDay.sessions}
               computeItemKey={computeItemKey}
               components={VIRTUOSO_COMPONENTS}
-              initialItemCount={Math.min(8, activeDay.events.length)}
+              initialItemCount={Math.min(8, activeDay.sessions.length)}
               itemContent={itemContent}
               increaseViewportBy={{ top: 200, bottom: 400 }}
             />

@@ -42,7 +42,7 @@ export type DocumentsStore = {
   byId: Record<string, DocumentEntity>;
 };
 
-export type EventEntity = {
+export type SessionEntity = {
   begin: string;
   beginDisplay: string;
   beginIso: string;
@@ -58,9 +58,9 @@ export type EventEntity = {
   tagIds: Array<number>;
   title: string;
 };
-export type EventsStore = {
+export type SessionsStore = {
   allIds: Array<number>;
-  byId: Record<string, EventEntity>;
+  byId: Record<string, SessionEntity>;
 };
 
 export type LocationEntity = {

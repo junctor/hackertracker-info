@@ -8,7 +8,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getBookmarks } from "@/lib/storage";
 import { getToneFromColor } from "@/lib/tone";
-import { ContentEntity, EventEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
+import { ContentEntity, SessionEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
 import { getSafeExternalHref } from "@/lib/url";
 
 import ContentSession from "../content/ContentSession";
@@ -16,7 +16,7 @@ import { getPersonInitials } from "./personInitials";
 
 type Props = {
   person: PersonEntity;
-  events: EventEntity[];
+  sessions: SessionEntity[];
   locations: LocationEntity[];
   conference: ConferenceManifest;
 };
@@ -94,7 +94,7 @@ function getPersonAccentClassName(name?: string | null): string {
   );
 }
 
-export default function PersonDetails({ person, events, locations, conference }: Props) {
+export default function PersonDetails({ person, sessions, locations, conference }: Props) {
   const [hasAvatarError, setHasAvatarError] = useState(false);
   const contentsBasePath = `/${conference.slug}/content/`;
   const personName = getDisplayName(person.name);
@@ -108,14 +108,14 @@ export default function PersonDetails({ person, events, locations, conference }:
     );
     return new Map<number, string>(entries);
   }, [locations]);
-  const sortedEvents = useMemo(
-    () => events.toSorted((a, b) => safeParseMs(a.beginIso) - safeParseMs(b.beginIso)),
-    [events],
+  const sortedSessions = useMemo(
+    () => sessions.toSorted((a, b) => safeParseMs(a.beginIso) - safeParseMs(b.beginIso)),
+    [sessions],
   );
   const accentClassName = getPersonAccentClassName(person.name);
-  const primaryEventColor = sortedEvents[0]?.color;
-  const headerAccentClassName = primaryEventColor
-    ? `ui-tone-${getToneFromColor(primaryEventColor)}`
+  const primarySessionColor = sortedSessions[0]?.color;
+  const headerAccentClassName = primarySessionColor
+    ? `ui-tone-${getToneFromColor(primarySessionColor)}`
     : accentClassName;
   const affiliations = useMemo(
     () =>
@@ -143,20 +143,20 @@ export default function PersonDetails({ person, events, locations, conference }:
         .toSorted((a, b) => a.sort_order - b.sort_order),
     [person.links],
   );
-  const contentEntityByEventId = useMemo(() => {
-    const entries = sortedEvents.map(
-      (event) =>
+  const contentEntityBySessionId = useMemo(() => {
+    const entries = sortedSessions.map(
+      (session) =>
         [
-          event.id,
+          session.id,
           {
-            id: event.contentId,
-            title: event.title,
+            id: session.contentId,
+            title: session.title,
             tagIds: [],
           } satisfies ContentEntity,
         ] as const,
     );
     return new Map<number, ContentEntity>(entries);
-  }, [sortedEvents]);
+  }, [sortedSessions]);
 
   useEffect(() => {
     setHasAvatarError(false);
@@ -269,26 +269,26 @@ export default function PersonDetails({ person, events, locations, conference }:
         </section>
       ) : null}
 
-      {sortedEvents.length > 0 && (
-        <section aria-labelledby="events-title" className="ui-detail-section">
-          <h2 id="events-title" className="ui-section-label">
+      {sortedSessions.length > 0 && (
+        <section aria-labelledby="sessions-title" className="ui-detail-section">
+          <h2 id="sessions-title" className="ui-section-label">
             Sessions
           </h2>
           <ul className="ui-list-stack">
-            {sortedEvents.map((event) => {
-              const contentEntity = contentEntityByEventId.get(event.id);
+            {sortedSessions.map((session) => {
+              const contentEntity = contentEntityBySessionId.get(session.id);
               if (!contentEntity) return null;
 
               return (
                 <ContentSession
-                  key={event.id}
+                  key={session.id}
                   conference={conference}
-                  session={event}
+                  session={session}
                   contentEntity={contentEntity}
-                  isBookmarked={bookmarkSet.has(event.id)}
-                  locationName={locationNameById.get(event.locationId)}
-                  href={`${contentsBasePath}/?id=${event.contentId}`}
-                  title={event.title}
+                  isBookmarked={bookmarkSet.has(session.id)}
+                  locationName={locationNameById.get(session.locationId)}
+                  href={`${contentsBasePath}/?id=${session.contentId}`}
+                  title={session.title}
                 />
               );
             })}

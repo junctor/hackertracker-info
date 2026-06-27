@@ -77,7 +77,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
       <PersonDetails
         key={personDetail.person.id}
         person={personDetail.person}
-        events={personDetail.events}
+        sessions={personDetail.sessions}
         locations={personDetail.locations}
         conference={conf}
       />

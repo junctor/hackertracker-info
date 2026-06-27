@@ -165,8 +165,8 @@ public/ht/<conference-slug>/
 
 The app expects exported artifacts to match the schemas in `src/lib/types/ht-types/`. Referenced data files include:
 
-- `indexes/eventsByDay.json`
-- `indexes/eventsByTag.json`
+- `indexes/sessionsByDay.json`
+- `indexes/sessionsByTag.json`
 - `derived/tagIdsByLabel.json`
 
 ## Project Structure

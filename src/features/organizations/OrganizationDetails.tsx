@@ -73,7 +73,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
           actions={
             org.tagIdAsOrganizer ? (
               <Link
-                to={`/${conference.slug}/tag?id=${org.tagIdAsOrganizer}`}
+                to={`/${conference.slug}/tag/?id=${org.tagIdAsOrganizer}`}
                 className="ui-focus-ring ui-pill-link"
               >
                 <CalendarIcon className="ui-icon-xs ui-card-external-icon" aria-hidden />

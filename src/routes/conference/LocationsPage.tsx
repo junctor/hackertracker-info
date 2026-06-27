@@ -8,7 +8,7 @@ import LocationsList from "@/features/locations/LocationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { LocationsStore } from "@/lib/types/ht-types";
+import { LocationCardsView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type LocationsPageProps = {
@@ -28,7 +28,7 @@ export default function LocationsPage({
     data: locations,
     error,
     isLoading,
-  } = useConferenceJson<LocationsStore>(conf, "entities/locations.json");
+  } = useConferenceJson<LocationCardsView>(conf, "views/locationCards.json");
 
   if (isLoading) return <LoadingScreen />;
   if (error || !locations) return <ErrorScreen />;

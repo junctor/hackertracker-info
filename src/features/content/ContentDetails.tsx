@@ -1,11 +1,11 @@
 import { ArrowTopRightOnSquareIcon, ShareIcon, UserIcon } from "@heroicons/react/24/outline";
-import { useMemo } from "react";
+import { useId, useMemo } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 import type {
   ContentEntity,
-  EventEntity,
+  SessionEntity,
   LocationEntity,
   PersonEntity,
   TagEntity,
@@ -13,17 +13,17 @@ import type {
 
 import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
-import { getToneFromColor } from "@/lib/tone";
+import { getAccentStyle } from "@/lib/color";
+import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { getSafeExternalHref } from "@/lib/url";
 
 import ContentSession from "./ContentSession";
 
 type Props = {
   content: ContentEntity;
-  sessions: EventEntity[];
+  sessions: SessionEntity[];
   locations: LocationEntity[];
   people: PersonEntity[];
-  related_content: ContentEntity[];
   tags: TagEntity[];
   bookmarks: number[];
   conference: ConferenceManifest;
@@ -34,11 +34,25 @@ function safeParseMs(iso: string): number {
   return Number.isFinite(ms) ? ms : Number.MAX_SAFE_INTEGER;
 }
 
+function getSessionTagAccentColor(
+  session: SessionEntity | undefined,
+  tags: TagEntity[],
+): string | undefined {
+  if (!session) return undefined;
+
+  const firstTagId = session.tagIds[0];
+  if (firstTagId == null) return undefined;
+
+  return tags.find((tag) => tag.id === firstTagId)?.colorBackground;
+}
+
 export default function ContentDetails(props: Props) {
   const { content, sessions, locations, people, tags, bookmarks, conference } = props;
+  const shareStatusId = useId();
+  const [shareStatus, setShareStatus] = useTransientStatus();
 
-  const peopleBasePath = `/${conference.slug}/people`;
-  const contentsBasePath = `/${conference.slug}/content`;
+  const peopleBasePath = `/${conference.slug}/people/`;
+  const contentsBasePath = `/${conference.slug}/content/`;
 
   const locationNameById = useMemo(
     () => new Map<number, string>(locations.map((l) => [l.id, l.name])),
@@ -62,7 +76,9 @@ export default function ContentDetails(props: Props) {
     return earliest;
   }, [sessions]);
 
-  const accentTone = getToneFromColor(primarySession?.color);
+  const accentColor =
+    content.color || primarySession?.color || getSessionTagAccentColor(primarySession, tags);
+  const accentStyle = getAccentStyle(accentColor);
   const sharePath = `${contentsBasePath}/?id=${content.id}`;
   const shareUrl =
     typeof window === "undefined"
@@ -77,6 +93,7 @@ export default function ContentDetails(props: Props) {
     try {
       if (canShare) {
         await navigator.share({ title: content.title, url: shareUrl });
+        setShareStatus("Shared.");
         return;
       }
     } catch {
@@ -85,11 +102,13 @@ export default function ContentDetails(props: Props) {
 
     try {
       if (!canCopyToClipboard) {
+        setShareStatus("Copy unavailable.");
         return;
       }
       await navigator.clipboard.writeText(shareUrl);
+      setShareStatus("Link copied.");
     } catch {
-      console.error("Copy link failed");
+      setShareStatus("Could not copy link.");
     }
   };
 
@@ -100,7 +119,7 @@ export default function ContentDetails(props: Props) {
 
   return (
     <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
-      <div className={`ui-detail-header-accent ui-tone-${accentTone}`}>
+      <div style={accentStyle} className="ui-detail-header-accent">
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
@@ -109,14 +128,22 @@ export default function ContentDetails(props: Props) {
           resultLabel={sessionCountLabel}
           actionsInline
           actions={
-            <button
-              type="button"
-              onClick={handleShare}
-              aria-label="Share content link"
-              className="ui-icon-plain"
-            >
-              <ShareIcon className="ui-icon-sm" aria-hidden="true" />
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={handleShare}
+                aria-label={`Share link to ${content.title}`}
+                aria-describedby={shareStatus ? shareStatusId : undefined}
+                className="ui-icon-plain"
+              >
+                <ShareIcon className="ui-icon-sm" aria-hidden="true" />
+              </button>
+              {shareStatus ? (
+                <span id={shareStatusId} role="status" className="ui-action-status">
+                  {shareStatus}
+                </span>
+              ) : null}
+            </>
           }
         />
       </div>
@@ -134,6 +161,7 @@ export default function ContentDetails(props: Props) {
                 session={s}
                 contentEntity={content}
                 isBookmarked={bookmarkSet.has(s.id)}
+                accentColor={s.color || accentColor}
                 locationName={locationNameById.get(s.locationId)}
               />
             ))}
@@ -150,11 +178,12 @@ export default function ContentDetails(props: Props) {
             {tags.map((tag) => (
               <li key={tag.id}>
                 <Link
-                  to={`/${conference.slug}/tag?id=${tag.id}`}
+                  to={`/${conference.slug}/tag/?id=${tag.id}`}
                   className="ui-focus-ring ui-pill-link"
                 >
                   <span
-                    className={`ui-tag-dot ui-tag-dot-mark ui-tone-${getToneFromColor(tag.colorBackground)}`}
+                    className={`ui-tag-dot ui-tag-dot-mark`}
+                    style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
                     aria-hidden="true"
                   />
                   <span className="ui-pill-label ui-clip-text">{tag.label}</span>

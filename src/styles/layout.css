@@ -202,3 +202,15 @@
 .ui-page-shell > .ui-topbar {
   padding-top: var(--safe-area-top);
 }
+
+.ui-schedule-session-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ui-schedule-session-list-item {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--space-2);
+}

@@ -83,9 +83,9 @@ function ScheduleLoadingContent() {
           <span className="ui-skeleton-line ui-skeleton-line-pill" />
         </div>
 
-        <ul aria-hidden="true" className="ui-schedule-event-list ui-schedule-loading-list">
+        <ul aria-hidden="true" className="ui-schedule-session-list ui-schedule-loading-list">
           {Array.from({ length: 6 }, (_, index) => (
-            <li key={index} className="ui-schedule-event-list-item">
+            <li key={index} className="ui-schedule-session-list-item">
               <span className="ui-card ui-schedule-loading-card" />
             </li>
           ))}

@@ -33,7 +33,7 @@ export const PAGE_META: Record<PageId, { title: string }> = {
   document: { title: "Document" },
   exhibitors: { title: "Exhibitors" },
   locations: { title: "Locations" },
-  maps: { title: "Map" },
+  maps: { title: "Maps" },
   merch: { title: "Merch" },
   organization: { title: "Organizations" },
   people: { title: "People" },

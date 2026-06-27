@@ -1,4 +1,4 @@
-import { JSX, useMemo } from "react";
+import { JSX, lazy } from "react";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 import type { PageId } from "@/lib/types/page-meta";
@@ -7,15 +7,14 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
-import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { getOrganizationDirectoryConfig } from "@/lib/menu";
 import {
   DerivedTagIdsByLabel,
+  OrganizationDetailView,
   OrganizationsCardsView,
-  OrganizationsStore,
 } from "@/lib/types/ht-types";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
@@ -29,6 +28,8 @@ type Props = {
 };
 
 type OrganizationDirectoryPageProps = Pick<Props, "conf" | "activePageId">;
+
+const OrganizationDetails = lazy(() => import("@/features/organizations/OrganizationDetails"));
 
 export function createOrganizationDirectoryRoute(directoryPageId: PageId) {
   const directoryConfig = getOrganizationDirectoryConfig(directoryPageId)!;
@@ -64,33 +65,35 @@ export default function DirectoryPage({
     isMissing: isIdMissing,
     isInvalid: isIdInvalid,
   } = useNumericQueryParam("id");
+  const isDetailsRoute = isReady && !isIdMissing && !isIdInvalid && orgId !== null;
+  const shouldLoadList = isReady && isIdMissing;
 
   const {
     data: organizations,
     error: organizationsError,
     isLoading: organizationsIsLoading,
-  } = useConferenceJson<OrganizationsCardsView>(conf, "views/organizationsCards.json");
+  } = useConferenceJson<OrganizationsCardsView>(
+    conf,
+    shouldLoadList ? "views/organizationsCards.json" : null,
+  );
 
   const {
     data: derivedTagIdsByLabel,
     error: tagError,
     isLoading: tagIsLoading,
-  } = useConferenceJson<DerivedTagIdsByLabel>(conf, "derived/tagIdsByLabel.json");
-
-  const isDetailsRoute = orgId !== null;
-  const {
-    data: organizationsStore,
-    error: organizationsStoreError,
-    isLoading: organizationsStoreLoading,
-  } = useConferenceJson<OrganizationsStore>(
+  } = useConferenceJson<DerivedTagIdsByLabel>(
     conf,
-    isDetailsRoute ? "entities/organizations.json" : null,
+    shouldLoadList ? "derived/tagIdsByLabel.json" : null,
   );
 
-  const selectedOrganization = useMemo(() => {
-    if (!organizationsStore || orgId === null) return null;
-    return organizationsStore.byId[orgId] ?? null;
-  }, [organizationsStore, orgId]);
+  const {
+    data: selectedOrganization,
+    error: organizationsStoreError,
+    isLoading: organizationsStoreLoading,
+  } = useConferenceJson<OrganizationDetailView>(
+    conf,
+    isDetailsRoute && orgId !== null ? `details/organizations/${orgId}.json` : null,
+  );
 
   const isLoading = organizationsIsLoading || tagIsLoading;
   const error = organizationsError || tagError;
@@ -115,7 +118,7 @@ export default function DirectoryPage({
   let pageContent: JSX.Element;
   if (isDetailsRoute) {
     if (organizationsStoreLoading) return <LoadingScreen />;
-    if (organizationsStoreError || !organizationsStore) return <ErrorScreen />;
+    if (organizationsStoreError) return <ErrorScreen />;
     if (!selectedOrganization) return <ErrorScreen msg="Organization not found" />;
 
     pageContent = (
@@ -137,7 +140,7 @@ export default function DirectoryPage({
     }
 
     const matchingOrganizations = organizations[tagId] ?? [];
-    const detailsBasePath = `/${conf.slug}/${routeSlug}`;
+    const detailsBasePath = `/${conf.slug}/${routeSlug}/`;
 
     pageContent = (
       <ConferenceLayout conference={conf} activePageId={activePageId}>

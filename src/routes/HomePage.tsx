@@ -238,7 +238,7 @@ export default function HomePage() {
           </section>
 
           <div className="ui-homepage-archive-link-wrap">
-            <Link to="/conferences" className="ui-focus-ring ui-homepage-archive-link">
+            <Link to="/conferences/" className="ui-focus-ring ui-homepage-archive-link">
               All conferences
             </Link>
           </div>
@@ -255,16 +255,12 @@ function ConferenceCard({
   conference: ConferenceManifest;
   subtitle: string;
 }) {
-  const href = `/${conference.slug}`;
+  const href = `/${conference.slug}/`;
   const src = `/images/${conference.logoFile}`;
   const showCountdown = useHasActiveCountdown(conference.kickoff);
 
   return (
-    <Link
-      to={href}
-      aria-label={`View ${conference.name}`}
-      className="ui-focus-ring ui-home-conference-card"
-    >
+    <Link to={href} className="ui-focus-ring ui-home-conference-card">
       <span aria-hidden="true" className="ui-home-conference-card-accent" />
 
       <span aria-hidden="true" className="ui-home-conference-card-glow">

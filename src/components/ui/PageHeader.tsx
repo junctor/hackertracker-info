@@ -90,10 +90,11 @@ export default function PageHeader({
           {search?.onSubmit ? (
             <button
               type="submit"
+              aria-label={search.label}
+              title="Search"
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-page-header-search-submit"
             >
               <MagnifyingGlassIcon className="ui-icon-sm" aria-hidden="true" />
-              <span>Search</span>
             </button>
           ) : null}
 

@@ -10,6 +10,7 @@ export type ArticlesStore = {
 };
 
 export type ContentEntity = {
+  color?: string;
   description?: string;
   id: number;
   links?: Array<{
@@ -42,25 +43,28 @@ export type DocumentsStore = {
   byId: Record<string, DocumentEntity>;
 };
 
-export type EventEntity = {
+export type SessionEntity = {
   begin: string;
   beginDisplay: string;
   beginIso: string;
-  color: string;
+  beginTimestampSeconds: number;
+  color?: string;
   contentId: number;
   end: string;
   endDisplay: string;
   endIso: string;
+  endTimestampSeconds: number;
   id: number;
   locationId: number;
   personIds?: Array<number>;
-  speakerIds?: Array<number>;
+  recordingPolicyId?: number;
   tagIds: Array<number>;
+  timezoneName?: string;
   title: string;
 };
-export type EventsStore = {
+export type SessionsStore = {
   allIds: Array<number>;
-  byId: Record<string, EventEntity>;
+  byId: Record<string, SessionEntity>;
 };
 
 export type LocationEntity = {
@@ -93,6 +97,30 @@ export type MenuEntity = {
 export type MenusStore = {
   allIds: Array<number>;
   byId: Record<string, MenuEntity>;
+};
+
+export type ConferenceMapEntity = {
+  description?: string;
+  file?: string;
+  filename?: string;
+  id: number;
+  name: string;
+  name_text?: string;
+  sort_order?: number;
+  svg_filename?: string;
+  svg_url?: string;
+  url?: string;
+};
+
+export type ConferenceEntity = {
+  code: string;
+  end_date?: string;
+  id: number;
+  maps?: ConferenceMapEntity[];
+  name: string;
+  start_date?: string;
+  timezone?: string;
+  updated_at?: string;
 };
 
 export type OrganizationEntity = {
@@ -128,6 +156,7 @@ export type PersonEntity = {
   id: number;
   name: string;
   pronouns?: string;
+  title?: string;
   contentIds: number[];
   avatarUrl?: string;
 };

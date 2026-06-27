@@ -5,7 +5,7 @@ import type { ConferenceManifest } from "@/lib/conferences";
 export const SITE_ORIGIN = "https://info.defcon.org";
 export const SITE_NAME = "info.defcon.org";
 export const SITE_DESCRIPTION =
-  "Official DEF CON schedules and conference information for current and upcoming events.";
+  "Official DEF CON schedules and conference information for current and upcoming sessions.";
 
 type JsonFeed = {
   href: string;
@@ -25,15 +25,27 @@ export function absoluteUrl(path: string) {
   return `${SITE_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+function isFileLikePath(path: string) {
+  const lastSegment = path.split("/").filter(Boolean).at(-1) ?? "";
+  return lastSegment.includes(".");
+}
+
+function addDirectorySlash(path: string) {
+  const [pathname, query = ""] = path.split("?", 2);
+  const canonicalPathname =
+    pathname.endsWith("/") || isFileLikePath(pathname) ? pathname : `${pathname}/`;
+  return query ? `${canonicalPathname}?${query}` : canonicalPathname;
+}
+
 export function conferencePath(conf: ConferenceManifest, route?: string) {
   const suffix = route?.trim().replace(/^\/+/, "");
-  return suffix ? `/${conf.slug}/${suffix}` : `/${conf.slug}`;
+  return addDirectorySlash(suffix ? `/${conf.slug}/${suffix}` : `/${conf.slug}`);
 }
 
 export function conferenceDataFeeds(conf: ConferenceManifest): ReadonlyArray<JsonFeed> {
   return [
     { title: `${conf.name} manifest`, href: `${conf.dataRoot}/manifest.json` },
-    { title: `${conf.name} schedule events`, href: `${conf.dataRoot}/entities/events.json` },
+    { title: `${conf.name} schedule sessions`, href: `${conf.dataRoot}/entities/sessions.json` },
     { title: `${conf.name} speakers and people`, href: `${conf.dataRoot}/entities/people.json` },
     { title: `${conf.name} search index`, href: `${conf.dataRoot}/views/searchData.json` },
   ];

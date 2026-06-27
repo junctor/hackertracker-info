@@ -82,6 +82,10 @@ export type SiteMenuItem = {
 // eslint-disable-next-line no-unused-vars
 type MenuBuilder = (conference: ConferenceManifest) => SiteMenuItem;
 
+function conferenceRoute(c: ConferenceManifest, segment: string) {
+  return `/${c.slug}/${segment}/`;
+}
+
 const SITE_MENU = {
   readme: (c) => ({
     sort_order: 10,
@@ -94,7 +98,7 @@ const SITE_MENU = {
   announcements: (c) => ({
     sort_order: 20,
     title: "Announcements",
-    href: `/${c.slug}/announcements`,
+    href: conferenceRoute(c, "announcements"),
     description: "Conference announcements and urgent updates.",
     icon: MegaphoneIcon,
   }),
@@ -102,7 +106,7 @@ const SITE_MENU = {
   schedule: (c) => ({
     sort_order: 30,
     title: "Schedule",
-    href: `/${c.slug}/schedule`,
+    href: `/${c.slug}/schedule/`,
     description: "Session times, rooms, and live status.",
     icon: ListBulletIcon,
   }),
@@ -110,15 +114,15 @@ const SITE_MENU = {
   bookmarks: (c) => ({
     sort_order: 40,
     title: "Bookmarks",
-    href: `/${c.slug}/bookmarks`,
-    description: "Save your favorite talks, workshops, and events.",
+    href: conferenceRoute(c, "bookmarks"),
+    description: "Save your favorite talks, workshops, and sessions.",
     icon: BookmarkIcon,
   }),
 
   content: (c) => ({
     sort_order: 50,
     title: "Content",
-    href: `/${c.slug}/content`,
+    href: conferenceRoute(c, "content"),
     description: "Talks, workshops, and presentation details.",
     icon: ListBulletIcon,
   }),
@@ -128,7 +132,7 @@ const SITE_MENU = {
     return {
       sort_order: 55,
       title: directory?.title ?? "Departments",
-      href: `/${c.slug}/${directory?.slug ?? "departments"}`,
+      href: conferenceRoute(c, directory?.slug ?? "departments"),
       description: directory?.description ?? "Departments and responsibilities.",
       icon: CubeIcon,
     };
@@ -137,7 +141,7 @@ const SITE_MENU = {
   people: (c) => ({
     sort_order: 60,
     title: "People",
-    href: `/${c.slug}/people`,
+    href: conferenceRoute(c, "people"),
     description: "People and their sessions.",
     icon: UserIcon,
   }),
@@ -145,7 +149,7 @@ const SITE_MENU = {
   maps: (c) => ({
     sort_order: 70,
     title: "Maps",
-    href: `/${c.slug}/maps`,
+    href: conferenceRoute(c, "maps"),
     description: "View venue layouts and floor plans.",
     icon: MapIcon,
   }),
@@ -153,7 +157,7 @@ const SITE_MENU = {
   locations: (c) => ({
     sort_order: 80,
     title: "Locations",
-    href: `/${c.slug}/locations`,
+    href: conferenceRoute(c, "locations"),
     description: "Rooms and venue locations.",
     icon: GlobeAltIcon,
   }),
@@ -161,7 +165,7 @@ const SITE_MENU = {
   merch: (c) => ({
     sort_order: 90,
     title: "Merch",
-    href: `/${c.slug}/merch`,
+    href: conferenceRoute(c, "merch"),
     description: "Official merch and purchasing info.",
     icon: ShoppingBagIcon,
   }),
@@ -169,7 +173,7 @@ const SITE_MENU = {
   search: (c) => ({
     sort_order: 100,
     title: "Search Everything",
-    href: `/${c.slug}/search`,
+    href: conferenceRoute(c, "search"),
     description: "Search talks, people, orgs, and more.",
     icon: MagnifyingGlassIcon,
   }),
@@ -179,7 +183,7 @@ const SITE_MENU = {
     return {
       sort_order: 110,
       title: directory?.title ?? "Villages",
-      href: `/${c.slug}/${directory?.slug ?? "villages"}`,
+      href: conferenceRoute(c, directory?.slug ?? "villages"),
       description: directory?.description ?? "Hands-on villages and activities.",
       icon: ArchiveBoxIcon,
     };
@@ -190,7 +194,7 @@ const SITE_MENU = {
     return {
       sort_order: 120,
       title: directory?.title ?? "Communities",
-      href: `/${c.slug}/${directory?.slug ?? "communities"}`,
+      href: conferenceRoute(c, directory?.slug ?? "communities"),
       description: directory?.description ?? "Special-interest groups and meetups.",
       icon: UsersIcon,
     };
@@ -201,7 +205,7 @@ const SITE_MENU = {
     return {
       sort_order: 130,
       title: directory?.title ?? "Contests",
-      href: `/${c.slug}/${directory?.slug ?? "contests"}`,
+      href: conferenceRoute(c, directory?.slug ?? "contests"),
       description: directory?.description ?? "CTFs, challenges, and competitions.",
       icon: BoltIcon,
     };
@@ -212,7 +216,7 @@ const SITE_MENU = {
     return {
       sort_order: 140,
       title: directory?.title ?? "Exhibitors",
-      href: `/${c.slug}/${directory?.slug ?? "exhibitors"}`,
+      href: conferenceRoute(c, directory?.slug ?? "exhibitors"),
       description: directory?.description ?? "Exhibitor booths and products.",
       icon: CubeIcon,
     };
@@ -223,7 +227,7 @@ const SITE_MENU = {
     return {
       sort_order: 150,
       title: directory?.title ?? "Vendors",
-      href: `/${c.slug}/${directory?.slug ?? "vendors"}`,
+      href: conferenceRoute(c, directory?.slug ?? "vendors"),
       description: directory?.description ?? "Vendor booths and offerings.",
       icon: CubeIcon,
     };

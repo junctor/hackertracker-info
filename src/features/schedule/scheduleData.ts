@@ -1,20 +1,22 @@
 import type { ConferenceManifest } from "@/lib/conferences";
 import type {
-  EventsByDayIndex,
-  EventsStore,
+  ContentStore,
   LocationsStore,
   PeopleStore,
   TagsStore,
+  SessionsByDayIndex,
+  SessionsStore,
 } from "@/lib/types/ht-types";
 
-import type { ScheduleDay, ScheduleEventViewModel } from "./ScheduleEvents";
+import type { ScheduleDay, ScheduleSessionViewModel } from "./ScheduleSessions";
 
 type ScheduleSources = {
-  eventsByDay: EventsByDayIndex;
-  eventsStore: EventsStore;
+  sessionsByDay: SessionsByDayIndex;
+  sessionsStore: SessionsStore;
   locationsStore: LocationsStore;
   tagsStore: TagsStore;
-  peopleStore: PeopleStore;
+  peopleStore?: PeopleStore | null;
+  contentStore?: ContentStore | null;
 };
 
 type ScheduleCacheEntry = ScheduleSources & {
@@ -33,8 +35,9 @@ function toTimestampSeconds(value: string): number {
 }
 
 function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): ScheduleDay[] {
-  const { eventsByDay, eventsStore, locationsStore, tagsStore, peopleStore } = sources;
-  const dayKeys = Object.keys(eventsByDay).toSorted();
+  const { sessionsByDay, sessionsStore, locationsStore, tagsStore, peopleStore, contentStore } =
+    sources;
+  const dayKeys = Object.keys(sessionsByDay).toSorted();
   const result: ScheduleDay[] = [];
   const timeFormatter = new Intl.DateTimeFormat(undefined, {
     hour: "2-digit",
@@ -43,18 +46,18 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
   });
 
   for (const day of dayKeys) {
-    const ids = eventsByDay[day] ?? [];
-    const events: ScheduleEventViewModel[] = [];
+    const ids = sessionsByDay[day] ?? [];
+    const sessions: ScheduleSessionViewModel[] = [];
 
-    for (const eventId of ids) {
-      const event = eventsStore.byId[normalizeId(eventId)];
-      if (!event) continue;
+    for (const sessionId of ids) {
+      const session = sessionsStore.byId[normalizeId(sessionId)];
+      if (!session) continue;
 
       const locationName =
-        locationsStore.byId[normalizeId(event.locationId)]?.name ?? "Unknown location";
+        locationsStore.byId[normalizeId(session.locationId)]?.name ?? "Unknown location";
 
-      const tags: ScheduleEventViewModel["tags"] = [];
-      for (const tagId of event.tagIds ?? []) {
+      const tags: ScheduleSessionViewModel["tags"] = [];
+      for (const tagId of session.tagIds ?? []) {
         const tag = tagsStore.byId[normalizeId(tagId)];
         if (!tag) continue;
         tags.push({
@@ -65,39 +68,40 @@ function buildScheduleDays(conf: ConferenceManifest, sources: ScheduleSources): 
         });
       }
 
-      const speakerIds =
-        event.speakerIds && event.speakerIds.length > 0
-          ? event.speakerIds
-          : (event.personIds ?? []);
+      const speakers = peopleStore
+        ? (session.personIds ?? [])
+            .map((id) => peopleStore.byId[normalizeId(id)]?.name)
+            .filter((name): name is string => Boolean(name))
+            .join(", ")
+        : "";
 
-      const speakers = speakerIds
-        .map((id) => peopleStore.byId[normalizeId(id)]?.name)
-        .filter((name): name is string => Boolean(name))
-        .join(", ");
+      const beginDate = new Date(session.begin);
+      const endDate = new Date(session.end);
+      const contentEntity = contentStore?.byId[normalizeId(session.contentId)] ?? null;
+      const color = session.color || contentEntity?.color || tags[0]?.colorBackground || "";
 
-      const beginDate = new Date(event.begin);
-      const endDate = new Date(event.end);
-
-      events.push({
-        id: event.id,
-        title: event.title,
-        begin: event.begin,
-        end: event.end,
+      sessions.push({
+        id: session.id,
+        title: session.title,
+        begin: session.begin,
+        end: session.end,
         beginDisplay: timeFormatter.format(beginDate),
         beginIso: beginDate.toISOString(),
-        beginTimestampSeconds: toTimestampSeconds(event.begin),
+        beginTimestampSeconds: toTimestampSeconds(session.begin),
         endDisplay: timeFormatter.format(endDate),
         endIso: endDate.toISOString(),
-        endTimestampSeconds: toTimestampSeconds(event.end),
-        color: event.color,
-        contentId: event.contentId,
+        endTimestampSeconds: toTimestampSeconds(session.end),
+        color,
+        contentId: session.contentId,
+        contentEntity,
+        session: session,
         locationName,
         tags,
         speakers: speakers.length > 0 ? speakers : null,
       });
     }
 
-    result.push({ day, events });
+    result.push({ day, sessions });
   }
 
   return result;
@@ -111,11 +115,12 @@ export function getScheduleDaysFromStores(
   if (
     cached &&
     cached.timezone === conf.timezone &&
-    cached.eventsByDay === sources.eventsByDay &&
-    cached.eventsStore === sources.eventsStore &&
+    cached.sessionsByDay === sources.sessionsByDay &&
+    cached.sessionsStore === sources.sessionsStore &&
     cached.locationsStore === sources.locationsStore &&
     cached.tagsStore === sources.tagsStore &&
-    cached.peopleStore === sources.peopleStore
+    cached.peopleStore === sources.peopleStore &&
+    cached.contentStore === sources.contentStore
   ) {
     return cached.days;
   }
@@ -132,9 +137,9 @@ export function filterScheduleDaysByBookmarks(
   if (bookmarkIds.size === 0) return [];
 
   const result: ScheduleDay[] = [];
-  for (const { day, events } of days) {
-    const filtered = events.filter((event) => bookmarkIds.has(String(event.id)));
-    if (filtered.length > 0) result.push({ day, events: filtered });
+  for (const { day, sessions } of days) {
+    const filtered = sessions.filter((session) => bookmarkIds.has(String(session.id)));
+    if (filtered.length > 0) result.push({ day, sessions: filtered });
   }
   return result;
 }

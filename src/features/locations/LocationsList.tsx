@@ -1,19 +1,19 @@
 import { useMemo, useState } from "react";
 
 import PageHeader from "@/components/ui/PageHeader";
-import { type LocationEntity, type LocationsStore } from "@/lib/types/ht-types";
+import { type LocationCard, type LocationCardsView } from "@/lib/types/ht-types/views";
 
 type Props = {
-  locations: LocationsStore;
+  locations: LocationCardsView;
   title?: string;
   description?: string;
 };
 
-function getLocationName(location: LocationEntity) {
+function getLocationName(location: LocationCard) {
   return location.name.trim() || location.shortName?.trim() || "Unnamed location";
 }
 
-function getLocationShortName(location: LocationEntity) {
+function getLocationShortName(location: LocationCard) {
   const shortName = location.shortName?.trim();
   if (!shortName || shortName === getLocationName(location)) return null;
   return shortName;
@@ -28,10 +28,7 @@ export default function LocationsList({
   const normalizedSearch = search.trim().toLowerCase();
 
   const orderedLocations = useMemo(
-    () =>
-      locations.allIds
-        .map((id) => locations.byId[id])
-        .filter((location): location is LocationEntity => Boolean(location)),
+    () => locations.filter((location): location is LocationCard => Boolean(location)),
     [locations],
   );
 

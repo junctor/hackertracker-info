@@ -31,7 +31,7 @@ const organizationBackedSiteMenuKeys = new Set([
 
 const primaryFiles = [
   ["manifest.json", "Manifest JSON"],
-  ["entities/events.json", "Schedule JSON"],
+  ["entities/content.json", "Schedule JSON"],
   ["entities/people.json", "People JSON"],
   ["entities/locations.json", "Locations JSON"],
   ["entities/organizations.json", "Organizations JSON"],
@@ -81,8 +81,8 @@ const labelOverrides = new Map([
   ["entities/content.json", "Content JSON"],
   ["entities/documents.json", "Documents JSON"],
   ["entities/tags.json", "Tags JSON"],
-  ["indexes/eventsByDay.json", "Events by day index JSON"],
-  ["indexes/eventsByTag.json", "Events by tag index JSON"],
+  ["indexes/sessionsByDay.json", "Events by day index JSON"],
+  ["indexes/sessionsByTag.json", "Events by tag index JSON"],
   ["views/contentCards.json", "Content cards JSON"],
   ["views/documentsList.json", "Documents list JSON"],
   ["views/organizationsCards.json", "Organization cards JSON"],
@@ -361,7 +361,7 @@ function renderLlmsJsonDataLinks(conference) {
     )}`,
     `- ${markdownLink(
       `${conference.name} schedule events`,
-      absoluteUrl(dataHref(conference, "entities/events.json")),
+      absoluteUrl(dataHref(conference, "entities/sessions.json")),
     )}`,
     `- ${markdownLink(
       `${conference.name} speakers and people`,
@@ -520,7 +520,7 @@ function renderCollectionStructuredData(conference, collection) {
     collection === "schedule"
       ? {
           name: `${conference.name} schedule events JSON`,
-          contentUrl: absoluteUrl(dataHref(conference, "entities/events.json")),
+          contentUrl: absoluteUrl(dataHref(conference, "entities/sessions.json")),
         }
       : {
           name: `${conference.name} search index JSON`,

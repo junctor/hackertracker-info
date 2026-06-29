@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vp dev",
     "generate:public-indexes": "node scripts/generate-public-indexes.mjs",
+    "verify:runtime-json": "node scripts/verify-runtime-json-links.mjs",
     "prebuild": "npm run generate:public-indexes",
     "build": "tsc -b && vp build",
     "postbuild": "node scripts/generate-static-routes.mjs",

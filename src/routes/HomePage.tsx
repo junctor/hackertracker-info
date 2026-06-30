@@ -34,7 +34,8 @@ const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = Object.values
   .map((conference) => ({
     conference,
     subtitle: formatConferenceDate(conference.kickoff, conference.timezone),
-  }));
+  }))
+  .toSorted((a, b) => Date.parse(a.conference.kickoff) - Date.parse(b.conference.kickoff));
 
 const TITLE_CYCLE = ["DEF CON", "D3F CON", "DEF C0N", "D3F C0N", "D3F_C0N", "STAHP IT"] as const;
 const TITLE_SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-/\\[]{}()<>|█▓▒░";

@@ -77,16 +77,6 @@ main {
   box-shadow: 0 1rem 2.25rem var(--shadow);
 }
 
-.brand {
-  margin: 0 0 0.75rem;
-  color: var(--accent);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
 h1 {
   max-width: 8ch;
   margin: 0;

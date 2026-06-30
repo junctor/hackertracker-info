@@ -31,10 +31,10 @@ const organizationBackedSiteMenuKeys = new Set([
 
 const primaryFiles = [
   ["manifest.json", "Manifest JSON"],
-  ["entities/content.json", "Schedule JSON"],
-  ["entities/people.json", "People JSON"],
-  ["entities/locations.json", "Locations JSON"],
-  ["entities/organizations.json", "Organizations JSON"],
+  ["conference.json", "Conference maps JSON"],
+  ["views/scheduleDays.json", "Schedule runtime view JSON"],
+  ["views/contentCards.json", "Content cards JSON"],
+  ["views/peopleCards.json", "People cards JSON"],
   ["views/searchData.json", "Search index JSON"],
 ];
 
@@ -76,19 +76,26 @@ const conferenceRoutesByKey = new Map(
 );
 
 const labelOverrides = new Map([
+  ["conference.json", "Conference maps JSON"],
   ["derived/tagIdsByLabel.json", "Tag IDs by label JSON"],
-  ["entities/articles.json", "Articles JSON"],
-  ["entities/content.json", "Content JSON"],
-  ["entities/documents.json", "Documents JSON"],
-  ["entities/tags.json", "Tags JSON"],
-  ["indexes/sessionsByDay.json", "Events by day index JSON"],
-  ["indexes/sessionsByTag.json", "Events by tag index JSON"],
+  ["views/announcementsList.json", "Announcements list JSON"],
+  ["views/bookmarkSessionsById.json", "Bookmark session lookup JSON"],
   ["views/contentCards.json", "Content cards JSON"],
   ["views/documentsList.json", "Documents list JSON"],
+  ["views/locationCards.json", "Location cards JSON"],
   ["views/organizationsCards.json", "Organization cards JSON"],
   ["views/peopleCards.json", "People cards JSON"],
+  ["views/scheduleDays.json", "Schedule runtime view JSON"],
+  ["views/searchData.json", "Search index JSON"],
   ["views/tagTypesBrowse.json", "Tag browse JSON"],
 ]);
+
+const removedRuntimeDataPattern =
+  /^(?:raw\/|entities\/|indexes\/|details\/(?:sessions|locations)\/)/;
+
+function isPublishedRuntimeJson(relativePath) {
+  return relativePath.endsWith(".json") && !removedRuntimeDataPattern.test(relativePath);
+}
 
 function escapeHtml(value) {
   return value
@@ -219,12 +226,13 @@ async function listJsonFiles(directory, prefix = "") {
     const fullPath = path.join(directory, entry.name);
 
     if (entry.isDirectory()) {
+      if (!isPublishedRuntimeJson(`${relativePath}/placeholder.json`)) continue;
       if (relativePath === "details") continue;
       files.push(...(await listJsonFiles(fullPath, relativePath)));
       continue;
     }
 
-    if (entry.isFile() && entry.name.endsWith(".json")) {
+    if (entry.isFile() && isPublishedRuntimeJson(relativePath)) {
       files.push(relativePath);
     }
   }
@@ -256,7 +264,7 @@ function renderDataIndex(conference, jsonFiles) {
   const supportingItems = jsonFiles
     .filter((relativePath) => !primaryPathSet.has(relativePath))
     .map((relativePath) => [relativePath, labelForFile(relativePath)]);
-  const title = `${conference.name} Machine-Readable Data`;
+  const title = `${conference.name} Runtime JSON`;
   const canonicalUrl = `${SITE_ORIGIN}/${conference.slug}/data/`;
 
   return `<!doctype html>
@@ -267,7 +275,7 @@ ${generatedHeader}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Machine-readable ${escapeHtml(conference.name)} schedule data endpoints for AI agents, crawlers, and search systems."
+      content="Published ${escapeHtml(conference.name)} runtime JSON files used by the info.defcon.org web app."
     />
     <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
     <link rel="alternate" type="text/plain" href="/llms.txt" />
@@ -282,7 +290,7 @@ ${primaryItems
       <h1>${escapeHtml(title)}</h1>
 
 ${renderParagraph(
-  `${escapeHtml(conference.name)} data is published as static JSON and fetched by the web app at runtime. These JSON files are the authoritative sources for agents, crawlers, and search systems. Files may be replaced as conference information changes without rebuilding the site.`,
+  `${escapeHtml(conference.name)} runtime data is published as static JSON and fetched by the web app. These files mirror the route-level data contract used by the React application and may be replaced as conference information changes without rebuilding the site.`,
 )}
 
       <h2>Primary Endpoints</h2>
@@ -290,14 +298,14 @@ ${renderParagraph(
 ${renderLinks(primaryItems, (relativePath) => dataHref(conference, relativePath))}
       </ul>
 
-      <h2>Supporting Data</h2>
+      <h2>Supporting Runtime Files</h2>
       <ul>
 ${renderLinks(supportingItems, (relativePath) => dataHref(conference, relativePath))}
       </ul>
 
       <h2>Structure</h2>
 ${renderParagraph(
-  `Data lives under <code>${escapeHtml(`${conference.dataRoot}/`)}</code>. Entity files contain canonical records, index files map relationships for navigation, view files are precomputed lists for the client UI, and derived files provide app metadata.`,
+  `Runtime JSON lives under <code>${escapeHtml(`${conference.dataRoot}/`)}</code>. View files are precomputed lists for route loading, detail files are fetched lazily from route parameters, and derived files provide small lookup tables for the client UI.`,
 )}
 
       <h2>Human Pages</h2>
@@ -316,7 +324,7 @@ ${renderLinks(
 function renderAliasIndex(conference) {
   const canonicalPath = routeHref(conference.slug, "data") + "/";
   const canonicalUrl = `${SITE_ORIGIN}${canonicalPath}`;
-  const title = `${conference.name} data guide moved`;
+  const title = `${conference.name} runtime data guide moved`;
 
   return `<!doctype html>
 ${generatedHeader}
@@ -326,7 +334,7 @@ ${generatedHeader}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Compatibility page for the ${escapeHtml(conference.name)} machine-readable data guide."
+      content="Compatibility page for the ${escapeHtml(conference.name)} runtime JSON guide."
     />
     <meta http-equiv="refresh" content="0; url=${escapeHtml(canonicalPath)}" />
     <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
@@ -335,7 +343,7 @@ ${generatedHeader}
   <body>
     <main>
       <h1>${escapeHtml(title)}</h1>
-      <p><a href="${escapeHtml(canonicalPath)}">Open the ${escapeHtml(conference.name)} data guide.</a></p>
+      <p><a href="${escapeHtml(canonicalPath)}">Open the ${escapeHtml(conference.name)} runtime JSON guide.</a></p>
     </main>
   </body>
 </html>
@@ -360,20 +368,34 @@ function renderLlmsJsonDataLinks(conference) {
       absoluteUrl(dataHref(conference, "manifest.json")),
     )}`,
     `- ${markdownLink(
-      `${conference.name} schedule events`,
-      absoluteUrl(dataHref(conference, "entities/sessions.json")),
-    )}`,
-    `- ${markdownLink(
-      `${conference.name} speakers and people`,
-      absoluteUrl(dataHref(conference, "entities/people.json")),
+      `${conference.name} schedule runtime view`,
+      absoluteUrl(dataHref(conference, "views/scheduleDays.json")),
     )}`,
   ];
+
+  if (conference.siteMenu.includes("content")) {
+    lines.push(
+      `- ${markdownLink(
+        `${conference.name} content cards`,
+        absoluteUrl(dataHref(conference, "views/contentCards.json")),
+      )}`,
+    );
+  }
+
+  if (conference.siteMenu.includes("people")) {
+    lines.push(
+      `- ${markdownLink(
+        `${conference.name} people cards`,
+        absoluteUrl(dataHref(conference, "views/peopleCards.json")),
+      )}`,
+    );
+  }
 
   if (conference.siteMenu.includes("locations")) {
     lines.push(
       `- ${markdownLink(
-        `${conference.name} locations`,
-        absoluteUrl(dataHref(conference, "entities/locations.json")),
+        `${conference.name} location cards`,
+        absoluteUrl(dataHref(conference, "views/locationCards.json")),
       )}`,
     );
   }
@@ -381,8 +403,8 @@ function renderLlmsJsonDataLinks(conference) {
   if (hasOrganizationBackedSection(conference)) {
     lines.push(
       `- ${markdownLink(
-        `${conference.name} organizations`,
-        absoluteUrl(dataHref(conference, "entities/organizations.json")),
+        `${conference.name} organization cards`,
+        absoluteUrl(dataHref(conference, "views/organizationsCards.json")),
       )}`,
     );
   }
@@ -393,7 +415,7 @@ function renderLlmsJsonDataLinks(conference) {
       absoluteUrl(dataHref(conference, "views/searchData.json")),
     )}`,
     `- ${markdownLink(
-      `${conference.name} data guide`,
+      `${conference.name} runtime JSON guide`,
       `${absoluteUrl(routeHref(conference.slug, "data"))}/`,
     )}`,
   );
@@ -405,7 +427,7 @@ function renderLlmsHumanLinks(conference) {
   const lines = [
     `- ${markdownLink(conference.name, absoluteUrl(humanRouteHref(conference)))}`,
     `- ${markdownLink(
-      `${conference.name} data guide`,
+      `${conference.name} runtime JSON guide`,
       `${absoluteUrl(routeHref(conference.slug, "data"))}/`,
     )}`,
   ];
@@ -446,10 +468,10 @@ ${PUBLIC_CONFERENCE_ALIASES.map((alias) => {
   }
 
   return `- ${markdownLink(
-    `${conference.name} data guide alias`,
+    `${conference.name} runtime JSON guide alias`,
     `${absoluteUrl(routeHref(alias.slug, "data"))}/`,
   )} canonical: ${markdownLink(
-    `${conference.name} data guide`,
+    `${conference.name} runtime JSON guide`,
     `${absoluteUrl(routeHref(conference.slug, "data"))}/`,
   )}`;
 }).join("\n")}`;
@@ -464,9 +486,9 @@ ${generatedTextNotice}
 
 info.defcon.org is the static-first DEF CON conference information site. It provides human pages for conference schedules, speakers, locations, villages, search, and related reference information.
 
-The browser app fetches conference data from JSON at runtime. These JSON files are the authoritative canonical data sources and may be replaced independently of a site rebuild.
+The browser app fetches conference data from JSON at runtime. These JSON files are the route-level data used by the React application and may be replaced independently of a site rebuild.
 
-## Canonical JSON Data
+## Runtime JSON Data
 
 ${conferences.map((conference) => renderLlmsJsonDataLinks(conference)).join("\n\n")}
 
@@ -481,7 +503,7 @@ ${conferences.map((conference) => renderLlmsHumanLinks(conference)).join("\n")}`
 - ${markdownLink("Sitemap", absoluteUrl("/sitemap.xml"))}
 - ${markdownLink("Robots", absoluteUrl("/robots.txt"))}
 
-Prefer the JSON endpoints above for machine-readable conference data. Human pages are client-rendered and may summarize or navigate the same runtime data.`,
+Prefer the JSON endpoints above when mirroring the current website runtime data. Human pages are client-rendered and may summarize or navigate the same runtime data.`,
   ].filter(Boolean);
 
   return `${sections.join("\n\n")}\n`;
@@ -519,8 +541,8 @@ function renderCollectionStructuredData(conference, collection) {
   const dataFeed =
     collection === "schedule"
       ? {
-          name: `${conference.name} schedule events JSON`,
-          contentUrl: absoluteUrl(dataHref(conference, "entities/sessions.json")),
+          name: `${conference.name} schedule runtime view JSON`,
+          contentUrl: absoluteUrl(dataHref(conference, "views/scheduleDays.json")),
         }
       : {
           name: `${conference.name} search index JSON`,

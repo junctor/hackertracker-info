@@ -45,8 +45,12 @@ export function conferencePath(conf: ConferenceManifest, route?: string) {
 export function conferenceDataFeeds(conf: ConferenceManifest): ReadonlyArray<JsonFeed> {
   return [
     { title: `${conf.name} manifest`, href: `${conf.dataRoot}/manifest.json` },
-    { title: `${conf.name} schedule sessions`, href: `${conf.dataRoot}/entities/sessions.json` },
-    { title: `${conf.name} speakers and people`, href: `${conf.dataRoot}/entities/people.json` },
+    {
+      title: `${conf.name} schedule runtime view`,
+      href: `${conf.dataRoot}/views/scheduleDays.json`,
+    },
+    { title: `${conf.name} content cards`, href: `${conf.dataRoot}/views/contentCards.json` },
+    { title: `${conf.name} people cards`, href: `${conf.dataRoot}/views/peopleCards.json` },
     { title: `${conf.name} search index`, href: `${conf.dataRoot}/views/searchData.json` },
   ];
 }

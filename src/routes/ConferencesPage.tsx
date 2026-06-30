@@ -10,8 +10,7 @@ type ConferenceCardConfig = {
   startDateMs: number;
 };
 
-const ARCHIVED_CONFERENCES: ReadonlyArray<ConferenceCardConfig> = Object.values(CONFERENCES)
-  .filter((conference) => !conference.showOnHome)
+const ALL_CONFERENCES: ReadonlyArray<ConferenceCardConfig> = Object.values(CONFERENCES)
   .map((conference) => ({
     conference,
     startDateMs: Date.parse(conference.begin),
@@ -27,9 +26,7 @@ export default function ConferencesPage() {
           title: "Conferences | info.defcon.org",
           description: SITE_DESCRIPTION,
           path: "/conferences",
-          jsonFeeds: ARCHIVED_CONFERENCES.flatMap(({ conference }) =>
-            conferenceDataFeeds(conference),
-          ),
+          jsonFeeds: ALL_CONFERENCES.flatMap(({ conference }) => conferenceDataFeeds(conference)),
         })}
       </Head>
 
@@ -52,8 +49,8 @@ export default function ConferencesPage() {
           </header>
 
           <section aria-label="Available conferences" className="ui-conferences-grid">
-            {ARCHIVED_CONFERENCES.length > 0 ? (
-              ARCHIVED_CONFERENCES.map(({ conference }) => (
+            {ALL_CONFERENCES.length > 0 ? (
+              ALL_CONFERENCES.map(({ conference }) => (
                 <ConferenceArchiveCard key={conference.slug} conference={conference} />
               ))
             ) : (

@@ -140,34 +140,50 @@ data scale changes enough that it is no longer needed.
 
 ## Static Data Export
 
-Conference JSON is produced by the companion exporter: [junctor/info-export](https://github.com/junctor/info-export).
+Conference JSON is produced by the companion exporter: [junctor/hackertracker-export](https://github.com/junctor/hackertracker-export).
 
 Typical local workflow:
 
 ```bash
-git clone https://github.com/junctor/info-export.git
-cd info-export
-npm install
-npm run export -- --conf DEFCON34 --out ./out/ht
-cp -R out/ht/defcon34 ../hackertracker-info/public/ht/
+git clone https://github.com/junctor/hackertracker-export.git
+cd hackertracker-export
+go run ./cmd/hackertracker info --conference DEFCON34 --out ../hackertracker-info/public/ht/defcon34
 ```
 
 Typical data layout:
 
 ```text
 public/ht/<conference-slug>/
+  conference.json
   manifest.json
-  entities/
-  indexes/
   views/
   derived/
+  details/
 ```
 
-The app expects exported artifacts to match the schemas in `src/lib/types/ht-types/`. Referenced data files include:
+The website upload is runtime-only. It intentionally does not publish `raw/`,
+`entities/`, `indexes/`, `details/sessions/`, or `details/locations/`. The app
+expects exported runtime artifacts to match the schemas in `src/lib/types/ht-types/`.
+Referenced data files include:
 
-- `indexes/sessionsByDay.json`
-- `indexes/sessionsByTag.json`
+- `conference.json`
+- `manifest.json`
+- `views/scheduleDays.json`
+- `views/bookmarkSessionsById.json`
+- `views/contentCards.json`
+- `views/tagTypesBrowse.json`
+- `views/peopleCards.json`
+- `views/organizationsCards.json`
+- `views/searchData.json`
+- `views/locationCards.json`
+- `views/documentsList.json`
+- `views/announcementsList.json`
 - `derived/tagIdsByLabel.json`
+- `details/content/*.json`
+- `details/people/*.json`
+- `details/organizations/*.json`
+- `details/documents/*.json`
+- `details/tags/*.json`
 
 ## Project Structure
 

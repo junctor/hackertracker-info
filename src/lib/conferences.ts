@@ -61,11 +61,11 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     tagline: null,
     timezone: "Asia/Bahrain",
     logoFile: "logos/conferences/dc-middle-east-2026.jpg",
-    showOnHome: false,
+    showOnHome: true,
 
-    kickoff: "2026-11-11T06:00:00Z",
-    begin: "2026-11-09T16:00:00Z",
-    end: "2026-11-12T15:59:59Z",
+    kickoff: "2026-11-11T07:00:00Z",
+    begin: "2026-11-10T21:00:00Z",
+    end: "2026-11-12T20:59:00Z",
 
     dataRoot: "/ht/dcme2026",
     siteMenu: ["announcements", "readme", "search"],

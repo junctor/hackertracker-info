@@ -1,4 +1,4 @@
-import React, { lazy, useMemo, type ReactElement } from "react";
+import { lazy, useMemo, type ReactElement } from "react";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
@@ -62,11 +62,8 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   let pageContent: ReactElement;
 
   if (shouldLoadDetails) {
-    const isDetailLoading = personDetailLoading;
-    const detailError = personDetailError;
-
-    if (isDetailLoading) return <LoadingScreen />;
-    if (detailError || !personDetail) {
+    if (personDetailLoading) return <LoadingScreen />;
+    if (personDetailError || !personDetail) {
       return <ErrorScreen />;
     }
 
@@ -94,10 +91,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
         {aiMetadata({
           title: pageTitle,
           description: pageDescription,
-          path: conferencePath(
-            conf,
-            shouldLoadDetails && personId !== null ? `people/?id=${personId}` : "people/",
-          ),
+          path: conferencePath(conf, shouldLoadDetails ? `people/?id=${personId}` : "people/"),
           jsonFeeds: conferenceDataFeeds(conf),
         })}
       </Head>

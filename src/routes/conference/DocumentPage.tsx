@@ -8,7 +8,7 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { DocumentDetailView } from "@/lib/types/ht-types/views";
+import { DocumentDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type DocumentPageProps = {
@@ -28,13 +28,15 @@ export default function DocumentPage({ conf, activePageId }: DocumentPageProps) 
   }, [idParam]);
 
   const {
-    data: selectedDocument,
+    data: documentsById,
     error,
     isLoading,
-  } = useConferenceJson<DocumentDetailView>(
+  } = useConferenceJson<DocumentDetailsById>(
     conf,
-    docId !== null ? `details/documents/${docId}.json` : null,
+    docId !== null ? "details/documents.json" : null,
   );
+
+  const selectedDocument = docId !== null ? documentsById?.[String(docId)] : undefined;
 
   if (isLoading) return <LoadingScreen />;
   if (idParam === null) {

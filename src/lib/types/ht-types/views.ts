@@ -135,6 +135,7 @@ export type ContentDetailView = {
   people: PersonEntity[];
   tags: TagEntity[];
 };
+export type ContentDetailsById = Record<string, ContentDetailView>;
 
 export type SessionDetailView = {
   content: ContentEntity;
@@ -149,11 +150,13 @@ export type PersonDetailView = {
   sessions: SessionEntity[];
   locations: LocationEntity[];
 };
+export type PeopleDetailsById = Record<string, PersonDetailView>;
 
 export type TagDetailView = {
   tag: TagEntity;
   days: ScheduleDaysView;
 };
+export type TagDetailsById = Record<string, TagDetailView>;
 
 export type LocationDetailView = {
   location: LocationEntity;
@@ -161,4 +164,6 @@ export type LocationDetailView = {
 };
 
 export type DocumentDetailView = DocumentEntity;
+export type DocumentDetailsById = Record<string, DocumentDetailView>;
 export type OrganizationDetailView = OrganizationEntity;
+export type OrganizationDetailsById = Record<string, OrganizationDetailView>;

@@ -2,7 +2,7 @@ import React, { lazy, useMemo, type ReactElement } from "react";
 
 import type {
   ContentCardsView,
-  ContentDetailView,
+  ContentDetailsById,
   TagTypesBrowseView,
 } from "@/lib/types/ht-types/views";
 
@@ -52,13 +52,15 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   );
 
   const {
-    data: contentDetail,
+    data: contentDetailsById,
     error: contentDetailError,
     isLoading: contentDetailLoading,
-  } = useConferenceJson<ContentDetailView>(
+  } = useConferenceJson<ContentDetailsById>(
     conf,
-    shouldLoadDetails && contentId !== null ? `details/content/${contentId}.json` : null,
+    shouldLoadDetails ? "details/content.json" : null,
   );
+
+  const contentDetail = contentId !== null ? contentDetailsById?.[String(contentId)] : undefined;
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 

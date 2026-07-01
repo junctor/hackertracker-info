@@ -95,7 +95,7 @@ export default function DirectoryPage({
     isDetailsRoute ? "details/organizations.json" : null,
   );
 
-  const selectedOrganization = orgId !== null ? organizationsById?.[String(orgId)] : undefined;
+  const selectedOrganization = isDetailsRoute ? organizationsById?.[String(orgId)] : undefined;
 
   const isLoading = organizationsIsLoading || tagIsLoading;
   const error = organizationsError || tagError;
@@ -164,10 +164,7 @@ export default function DirectoryPage({
         {aiMetadata({
           title: pageTitle,
           description: metaDescription,
-          path: conferencePath(
-            conf,
-            selectedOrganization && orgId !== null ? `${routeSlug}?id=${orgId}` : routeSlug,
-          ),
+          path: conferencePath(conf, selectedOrganization ? `${routeSlug}?id=${orgId}` : routeSlug),
           jsonFeeds: conferenceDataFeeds(conf),
         })}
       </Head>

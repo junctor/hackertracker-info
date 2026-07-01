@@ -35,7 +35,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     isLoading,
   } = useConferenceJson<TagDetailsById>(conf, shouldLoadTag ? "details/tags.json" : null);
 
-  const tagDetail = tagId !== null ? tagsById?.[String(tagId)] : undefined;
+  const tagDetail = shouldLoadTag ? tagsById?.[String(tagId)] : undefined;
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 

@@ -42,7 +42,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
     isLoading: personDetailLoading,
   } = useConferenceJson<PeopleDetailsById>(conf, shouldLoadDetails ? "details/people.json" : null);
 
-  const personDetail = personId !== null ? peopleDetailsById?.[String(personId)] : undefined;
+  const personDetail = shouldLoadDetails ? peopleDetailsById?.[String(personId)] : undefined;
 
   const metaDescription = useMemo(() => {
     const fallback = `Learn more about ${personDetail?.person.name ?? "this person"} at ${conf.name}.`;

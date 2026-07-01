@@ -28,8 +28,7 @@ export default function OrganizationPage({ conf, activePageId }: OrganizationPag
     shouldLoadDetails ? "details/organizations.json" : null,
   );
 
-  const organization =
-    organizationId !== null ? organizationsById?.[String(organizationId)] : undefined;
+  const organization = shouldLoadDetails ? organizationsById?.[String(organizationId)] : undefined;
 
   if (!isReady) return <LoadingScreen />;
   if (isInvalid) return <ErrorScreen msg="Invalid organization id." />;

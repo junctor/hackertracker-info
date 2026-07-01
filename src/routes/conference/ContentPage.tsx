@@ -60,7 +60,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
     shouldLoadDetails ? "details/content.json" : null,
   );
 
-  const contentDetail = contentId !== null ? contentDetailsById?.[String(contentId)] : undefined;
+  const contentDetail = shouldLoadDetails ? contentDetailsById?.[String(contentId)] : undefined;
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 

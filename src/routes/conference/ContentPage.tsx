@@ -1,8 +1,8 @@
-import React, { lazy, useMemo, type ReactElement } from "react";
+import { lazy, useMemo, type ReactElement } from "react";
 
 import type {
   ContentCardsView,
-  ContentDetailView,
+  ContentDetailsById,
   TagTypesBrowseView,
 } from "@/lib/types/ht-types/views";
 
@@ -52,13 +52,15 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   );
 
   const {
-    data: contentDetail,
+    data: contentDetailsById,
     error: contentDetailError,
     isLoading: contentDetailLoading,
-  } = useConferenceJson<ContentDetailView>(
+  } = useConferenceJson<ContentDetailsById>(
     conf,
-    shouldLoadDetails && contentId !== null ? `details/content/${contentId}.json` : null,
+    shouldLoadDetails ? "details/content.json" : null,
   );
+
+  const contentDetail = shouldLoadDetails ? contentDetailsById?.[String(contentId)] : undefined;
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
@@ -80,11 +82,8 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   let pageContent: ReactElement;
 
   if (shouldLoadDetails) {
-    const isDetailLoading = contentDetailLoading;
-    const detailError = contentDetailError;
-
-    if (isDetailLoading) return <LoadingScreen />;
-    if (detailError || !contentDetail) {
+    if (contentDetailLoading) return <LoadingScreen />;
+    if (contentDetailError || !contentDetail) {
       return <ErrorScreen />;
     }
 
@@ -119,10 +118,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
         {aiMetadata({
           title: pageTitle,
           description: pageDescription,
-          path: conferencePath(
-            conf,
-            shouldLoadDetails && contentId !== null ? `content/?id=${contentId}` : "content/",
-          ),
+          path: conferencePath(conf, shouldLoadDetails ? `content/?id=${contentId}` : "content/"),
           jsonFeeds: conferenceDataFeeds(conf),
         })}
       </Head>

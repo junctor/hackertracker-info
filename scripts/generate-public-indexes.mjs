@@ -88,10 +88,15 @@ const labelOverrides = new Map([
   ["views/scheduleDays.json", "Schedule runtime view JSON"],
   ["views/searchData.json", "Search index JSON"],
   ["views/tagTypesBrowse.json", "Tag browse JSON"],
+  ["details/content.json", "Content detail lookup JSON"],
+  ["details/documents.json", "Document detail lookup JSON"],
+  ["details/organizations.json", "Organization detail lookup JSON"],
+  ["details/people.json", "People detail lookup JSON"],
+  ["details/tags.json", "Tag detail lookup JSON"],
 ]);
 
 const removedRuntimeDataPattern =
-  /^(?:raw\/|entities\/|indexes\/|details\/(?:sessions|locations)\/)/;
+  /^(?:raw\/|entities\/|indexes\/|details\/(?:sessions|locations|content|documents|organizations|people|tags)\/)/;
 
 function isPublishedRuntimeJson(relativePath) {
   return relativePath.endsWith(".json") && !removedRuntimeDataPattern.test(relativePath);
@@ -227,7 +232,6 @@ async function listJsonFiles(directory, prefix = "") {
 
     if (entry.isDirectory()) {
       if (!isPublishedRuntimeJson(`${relativePath}/placeholder.json`)) continue;
-      if (relativePath === "details") continue;
       files.push(...(await listJsonFiles(fullPath, relativePath)));
       continue;
     }
@@ -305,7 +309,7 @@ ${renderLinks(supportingItems, (relativePath) => dataHref(conference, relativePa
 
       <h2>Structure</h2>
 ${renderParagraph(
-  `Runtime JSON lives under <code>${escapeHtml(`${conference.dataRoot}/`)}</code>. View files are precomputed lists for route loading, detail files are fetched lazily from route parameters, and derived files provide small lookup tables for the client UI.`,
+  `Runtime JSON lives under <code>${escapeHtml(`${conference.dataRoot}/`)}</code>. View files are precomputed lists for route loading, aggregate detail lookup files are fetched lazily from route parameters and keyed by id, and derived files provide small lookup tables for the client UI.`,
 )}
 
       <h2>Human Pages</h2>

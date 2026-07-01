@@ -1,4 +1,4 @@
-import React, { lazy, useMemo, type ReactElement } from "react";
+import { lazy, useMemo, type ReactElement } from "react";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
@@ -8,7 +8,7 @@ import PeopleList from "@/features/people/PeopleList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { PeopleCardsView, PersonDetailView } from "@/lib/types/ht-types/views";
+import { PeopleCardsView, PeopleDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
@@ -37,13 +37,12 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   } = useConferenceJson<PeopleCardsView>(conf, shouldLoadList ? "views/peopleCards.json" : null);
 
   const {
-    data: personDetail,
+    data: peopleDetailsById,
     error: personDetailError,
     isLoading: personDetailLoading,
-  } = useConferenceJson<PersonDetailView>(
-    conf,
-    shouldLoadDetails && personId !== null ? `details/people/${personId}.json` : null,
-  );
+  } = useConferenceJson<PeopleDetailsById>(conf, shouldLoadDetails ? "details/people.json" : null);
+
+  const personDetail = shouldLoadDetails ? peopleDetailsById?.[String(personId)] : undefined;
 
   const metaDescription = useMemo(() => {
     const fallback = `Learn more about ${personDetail?.person.name ?? "this person"} at ${conf.name}.`;
@@ -63,11 +62,8 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   let pageContent: ReactElement;
 
   if (shouldLoadDetails) {
-    const isDetailLoading = personDetailLoading;
-    const detailError = personDetailError;
-
-    if (isDetailLoading) return <LoadingScreen />;
-    if (detailError || !personDetail) {
+    if (personDetailLoading) return <LoadingScreen />;
+    if (personDetailError || !personDetail) {
       return <ErrorScreen />;
     }
 
@@ -95,10 +91,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
         {aiMetadata({
           title: pageTitle,
           description: pageDescription,
-          path: conferencePath(
-            conf,
-            shouldLoadDetails && personId !== null ? `people/?id=${personId}` : "people/",
-          ),
+          path: conferencePath(conf, shouldLoadDetails ? `people/?id=${personId}` : "people/"),
           jsonFeeds: conferenceDataFeeds(conf),
         })}
       </Head>

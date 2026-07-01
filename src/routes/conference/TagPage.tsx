@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 
 import Head from "@/components/Head";
@@ -10,7 +10,7 @@ import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { getBookmarks } from "@/lib/storage";
-import { TagDetailView } from "@/lib/types/ht-types/views";
+import { TagDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
@@ -30,13 +30,12 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
   const shouldLoadTag = isReady && !isIdMissing && !isIdInvalid && tagId !== null;
 
   const {
-    data: tagDetail,
+    data: tagsById,
     error,
     isLoading,
-  } = useConferenceJson<TagDetailView>(
-    conf,
-    shouldLoadTag && tagId !== null ? `details/tags/${tagId}.json` : null,
-  );
+  } = useConferenceJson<TagDetailsById>(conf, shouldLoadTag ? "details/tags.json" : null);
+
+  const tagDetail = shouldLoadTag ? tagsById?.[String(tagId)] : undefined;
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 

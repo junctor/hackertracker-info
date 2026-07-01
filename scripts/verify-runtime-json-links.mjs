@@ -7,14 +7,20 @@ const publicDir = process.argv[2] ?? "public";
 const htDir = path.join(publicDir, "ht");
 
 const removedJsonPathPattern =
-  /\/ht\/[^/"'\s<>)]+\/(?:raw|entities|indexes|details\/(?:sessions|locations))\/[^"'\s<>)]+\.json/;
+  /\/ht\/[^/"'\s<>)]+\/(?:raw|entities|indexes|details\/(?:sessions|locations)\/|details\/(?:content|documents|organizations|people|tags)\/)[^"'\s<>)]+\.json/;
 const jsonLinkPattern = /(?:https:\/\/info\.defcon\.org)?(\/ht\/[^"'`\s<>)]+?\.json)/g;
-const removedRelativePattern = /^(?:raw\/|entities\/|indexes\/|details\/(?:sessions|locations)\/)/;
+const removedRelativePattern =
+  /^(?:raw\/|entities\/|indexes\/|details\/(?:sessions|locations)\/|details\/(?:content|documents|organizations|people|tags)\/)/;
 
 const requiredRuntimeFiles = [
   "conference.json",
   "manifest.json",
   "derived/tagIdsByLabel.json",
+  "details/content.json",
+  "details/documents.json",
+  "details/organizations.json",
+  "details/people.json",
+  "details/tags.json",
   "views/announcementsList.json",
   "views/bookmarkSessionsById.json",
   "views/contentCards.json",
@@ -28,7 +34,7 @@ const requiredRuntimeFiles = [
 ];
 
 const counters = {
-  detailFiles: 0,
+  detailLookups: 0,
   generatedFiles: 0,
   jsonLinks: 0,
   requiredFiles: 0,
@@ -79,12 +85,22 @@ function assertFileExists(file, failures) {
   }
 }
 
-function assertDetailFiles(conference, group, ids, failures) {
+function assertDetailLookup(conference, group, ids, failures) {
   const uniqueIds = new Set(ids.filter((id) => id != null).map((id) => String(id)));
+  const file = path.join(htDir, conference.slug, "details", `${group}.json`);
+  const detailsById = readJson(file, failures);
+
+  if (!detailsById || typeof detailsById !== "object" || Array.isArray(detailsById)) {
+    fail(`Detail lookup must be an object keyed by id: ${file}`, failures);
+    return;
+  }
 
   for (const id of uniqueIds) {
-    counters.detailFiles += 1;
-    assertFileExists(path.join(htDir, conference.slug, "details", group, `${id}.json`), failures);
+    counters.detailLookups += 1;
+
+    if (!Object.hasOwn(detailsById, id)) {
+      fail(`Missing ${group} detail id ${id} in ${file}`, failures);
+    }
   }
 }
 
@@ -164,7 +180,7 @@ for (const conference of Object.values(CONFERENCES)) {
   const tagTypesBrowse = readJson(path.join(root, "views", "tagTypesBrowse.json"), failures);
 
   if (Array.isArray(contentCards)) {
-    assertDetailFiles(
+    assertDetailLookup(
       conference,
       "content",
       contentCards.map((item) => item?.id),
@@ -173,7 +189,7 @@ for (const conference of Object.values(CONFERENCES)) {
   }
 
   if (Array.isArray(peopleCards)) {
-    assertDetailFiles(
+    assertDetailLookup(
       conference,
       "people",
       peopleCards.map((item) => item?.id),
@@ -181,10 +197,10 @@ for (const conference of Object.values(CONFERENCES)) {
     );
   }
 
-  assertDetailFiles(conference, "organizations", organizationIds(organizationsCards), failures);
+  assertDetailLookup(conference, "organizations", organizationIds(organizationsCards), failures);
 
   if (Array.isArray(documentsList)) {
-    assertDetailFiles(
+    assertDetailLookup(
       conference,
       "documents",
       documentsList.map((item) => item?.id),
@@ -192,7 +208,7 @@ for (const conference of Object.values(CONFERENCES)) {
     );
   }
 
-  assertDetailFiles(conference, "tags", tagIds(tagTypesBrowse), failures);
+  assertDetailLookup(conference, "tags", tagIds(tagTypesBrowse), failures);
 }
 
 if (failures.length > 0) {
@@ -207,5 +223,5 @@ console.log(
   `Runtime JSON links verified: ${counters.jsonLinks} generated JSON links, ` +
     `${counters.generatedFiles} generated metadata files, ` +
     `${counters.requiredFiles} required runtime files, ` +
-    `${counters.detailFiles} route-derived detail files.`,
+    `${counters.detailLookups} route-derived detail lookup entries.`,
 );

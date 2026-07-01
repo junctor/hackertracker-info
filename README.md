@@ -179,11 +179,11 @@ Referenced data files include:
 - `views/documentsList.json`
 - `views/announcementsList.json`
 - `derived/tagIdsByLabel.json`
-- `details/content/*.json`
-- `details/people/*.json`
-- `details/organizations/*.json`
-- `details/documents/*.json`
-- `details/tags/*.json`
+- `details/content.json` - aggregate content detail lookup keyed by id
+- `details/people.json` - aggregate people detail lookup keyed by id
+- `details/organizations.json` - aggregate organization detail lookup keyed by id
+- `details/documents.json` - aggregate document detail lookup keyed by id
+- `details/tags.json` - aggregate tag detail lookup keyed by id
 
 ## Project Structure
 

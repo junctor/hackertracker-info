@@ -13,7 +13,7 @@ import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { getOrganizationDirectoryConfig } from "@/lib/menu";
 import {
   DerivedTagIdsByLabel,
-  OrganizationDetailView,
+  OrganizationDetailsById,
   OrganizationsCardsView,
 } from "@/lib/types/ht-types";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
@@ -87,13 +87,15 @@ export default function DirectoryPage({
   );
 
   const {
-    data: selectedOrganization,
+    data: organizationsById,
     error: organizationsStoreError,
     isLoading: organizationsStoreLoading,
-  } = useConferenceJson<OrganizationDetailView>(
+  } = useConferenceJson<OrganizationDetailsById>(
     conf,
-    isDetailsRoute && orgId !== null ? `details/organizations/${orgId}.json` : null,
+    isDetailsRoute ? "details/organizations.json" : null,
   );
+
+  const selectedOrganization = isDetailsRoute ? organizationsById?.[String(orgId)] : undefined;
 
   const isLoading = organizationsIsLoading || tagIsLoading;
   const error = organizationsError || tagError;
@@ -162,10 +164,7 @@ export default function DirectoryPage({
         {aiMetadata({
           title: pageTitle,
           description: metaDescription,
-          path: conferencePath(
-            conf,
-            selectedOrganization && orgId !== null ? `${routeSlug}?id=${orgId}` : routeSlug,
-          ),
+          path: conferencePath(conf, selectedOrganization ? `${routeSlug}?id=${orgId}` : routeSlug),
           jsonFeeds: conferenceDataFeeds(conf),
         })}
       </Head>

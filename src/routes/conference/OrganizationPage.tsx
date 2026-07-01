@@ -5,7 +5,7 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { OrganizationDetailView } from "@/lib/types/ht-types/views";
+import { OrganizationDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
@@ -20,15 +20,15 @@ export default function OrganizationPage({ conf, activePageId }: OrganizationPag
   const shouldLoadDetails = isReady && !isMissing && !isInvalid && organizationId !== null;
 
   const {
-    data: organization,
+    data: organizationsById,
     error,
     isLoading,
-  } = useConferenceJson<OrganizationDetailView>(
+  } = useConferenceJson<OrganizationDetailsById>(
     conf,
-    shouldLoadDetails && organizationId !== null
-      ? `details/organizations/${organizationId}.json`
-      : null,
+    shouldLoadDetails ? "details/organizations.json" : null,
   );
+
+  const organization = shouldLoadDetails ? organizationsById?.[String(organizationId)] : undefined;
 
   if (!isReady) return <LoadingScreen />;
   if (isInvalid) return <ErrorScreen msg="Invalid organization id." />;

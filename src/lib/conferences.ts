@@ -89,7 +89,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     end: "2026-08-10T06:59:59Z",
 
     dataRoot: "/ht/defcon34",
-    siteMenu: ["communities", "content", "contests", "readme", "search", "villages"],
+    siteMenu: ["communities", "content", "contests", "readme", "schedule", "search", "villages"],
     schedulePath: "/defcon34/schedule/",
     externalTrackerUrl: "/apps",
   },

@@ -336,15 +336,21 @@
 
 .ui-error-actions {
   display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
   justify-content: center;
   margin-top: 1.75rem;
 }
 
-.ui-error-home-link {
+.ui-error-home-link,
+.ui-error-secondary-link {
   min-width: 11rem;
   gap: var(--space-2);
   border-radius: 0.75rem;
   padding-inline: var(--space-4);
+}
+
+.ui-error-home-link {
   box-shadow: var(--shadow-lg);
 }
 

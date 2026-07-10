@@ -1,6 +1,3 @@
-import { useMemo } from "react";
-import { useSearchParams } from "react-router";
-
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
@@ -10,6 +7,7 @@ import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { DocumentDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
+import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
 
 type DocumentPageProps = {
   conf: ConferenceManifest;
@@ -17,15 +15,9 @@ type DocumentPageProps = {
 };
 
 export default function DocumentPage({ conf, activePageId }: DocumentPageProps) {
-  const [searchParams] = useSearchParams();
-  const idParam = useMemo(() => {
-    return searchParams.get("id");
-  }, [searchParams]);
-  const docId = useMemo(() => {
-    if (!idParam) return null;
-    const parsed = Number(idParam);
-    return Number.isFinite(parsed) ? parsed : null;
-  }, [idParam]);
+  const { value: docId, isReady, isMissing, isInvalid } = useNumericQueryParam("id");
+  const documentsHref = `/${conf.slug}/readme.nfo`;
+  const conferenceHomeHref = `/${conf.slug}/`;
 
   const {
     data: documentsById,
@@ -33,23 +25,62 @@ export default function DocumentPage({ conf, activePageId }: DocumentPageProps) 
     isLoading,
   } = useConferenceJson<DocumentDetailsById>(
     conf,
-    docId !== null ? "details/documents.json" : null,
+    isReady && !isMissing && !isInvalid && docId !== null ? "details/documents.json" : null,
   );
 
   const selectedDocument = docId !== null ? documentsById?.[String(docId)] : undefined;
 
+  if (!isReady) return <LoadingScreen />;
   if (isLoading) return <LoadingScreen />;
-  if (idParam === null) {
-    return <ErrorScreen msg="Missing document id." />;
+  if (isMissing) {
+    return (
+      <ErrorScreen
+        title="Document ID required"
+        copy="This page needs a document ID."
+        primaryActionHref={documentsHref}
+        primaryActionLabel="Browse Documents"
+        secondaryActionHref={conferenceHomeHref}
+        secondaryActionLabel="Conference Home"
+      />
+    );
   }
-  if (docId === null) {
-    return <ErrorScreen msg="Invalid document id." />;
+  if (isInvalid || docId === null) {
+    return (
+      <ErrorScreen
+        title="Document not found"
+        copy="Use a numeric document ID, or browse conference documents."
+        kicker="Not found"
+        primaryActionHref={documentsHref}
+        primaryActionLabel="Browse Documents"
+        secondaryActionHref={conferenceHomeHref}
+        secondaryActionLabel="Conference Home"
+      />
+    );
   }
   if (error) {
-    return <ErrorScreen msg="Unable to load document." />;
+    return (
+      <ErrorScreen
+        title="Couldn't load document"
+        copy="The document could not be loaded. Try the document list instead."
+        primaryActionHref={documentsHref}
+        primaryActionLabel="Browse Documents"
+        secondaryActionHref={conferenceHomeHref}
+        secondaryActionLabel="Conference Home"
+      />
+    );
   }
   if (!selectedDocument) {
-    return <ErrorScreen msg="Document not found." />;
+    return (
+      <ErrorScreen
+        title="Document not found"
+        copy={`No document exists for ID ${docId}.`}
+        kicker="Not found"
+        primaryActionHref={documentsHref}
+        primaryActionLabel="Browse Documents"
+        secondaryActionHref={conferenceHomeHref}
+        secondaryActionLabel="Conference Home"
+      />
+    );
   }
 
   return (

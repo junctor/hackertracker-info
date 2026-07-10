@@ -75,8 +75,43 @@ function NotFound() {
   return (
     <ErrorScreen
       title="Page not found"
-      copy="Check the address, or head back to the conference home page."
-      msg="No route matched this URL."
+      copy="Check the address, or head back to the site home page."
+      kicker="Not found"
+    />
+  );
+}
+
+function UnsupportedConference() {
+  return (
+    <ErrorScreen
+      title="Conference not found"
+      copy="This conference is not available on info.defcon.org."
+      kicker="Not found"
+      primaryActionHref="/conferences"
+      primaryActionLabel="Browse Conferences"
+      secondaryActionHref="/"
+      secondaryActionLabel="Site Home"
+    />
+  );
+}
+
+function ConferenceRouteNotFound() {
+  const conf = useConferenceRouteParam();
+
+  if (!conf) return <UnsupportedConference />;
+
+  const scheduleHref =
+    conf.schedulePath ?? (conf.siteMenu.includes("schedule") ? `/${conf.slug}/schedule/` : null);
+
+  return (
+    <ErrorScreen
+      title="Conference page not found"
+      copy={`That page is not available for ${conf.name}.`}
+      kicker="Not found"
+      primaryActionHref={`/${conf.slug}/`}
+      primaryActionLabel="Conference Home"
+      secondaryActionHref={scheduleHref ?? undefined}
+      secondaryActionLabel={scheduleHref ? "Schedule" : undefined}
     />
   );
 }
@@ -90,7 +125,7 @@ function ConferenceRoute({
 }) {
   const conf = useConferenceRouteParam();
 
-  if (!conf) return <NotFound />;
+  if (!conf) return <UnsupportedConference />;
 
   return <Component conf={conf} activePageId={activePageId} />;
 }
@@ -141,12 +176,15 @@ export default function App() {
           <Routes>
             <Route index element={<HomePage />} />
             <Route path="conferences" element={<ConferencesPage />} />
+            <Route path="conferences/*" element={<NotFound />} />
             <Route path="tv" element={<TVPage />} />
+            <Route path="tv/*" element={<NotFound />} />
 
             <Route path=":conf">
               {CONFERENCE_ROUTE_DEFINITIONS.map(({ key, path, activePageId }) =>
                 conferenceRoute(path, CONFERENCE_ROUTE_COMPONENTS[key], activePageId),
               )}
+              <Route path="*" element={<ConferenceRouteNotFound />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

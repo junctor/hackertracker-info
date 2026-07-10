@@ -15,7 +15,7 @@ import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
 import { getAccentStyle } from "@/lib/color";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
-import { getSafeExternalHref } from "@/lib/url";
+import { buildAbsoluteAppUrl, buildAppPath, getSafeExternalHref } from "@/lib/url";
 
 import ContentSession from "./ContentSession";
 
@@ -51,8 +51,7 @@ export default function ContentDetails(props: Props) {
   const shareStatusId = useId();
   const [shareStatus, setShareStatus] = useTransientStatus();
 
-  const peopleBasePath = `/${conference.slug}/people/`;
-  const contentsBasePath = `/${conference.slug}/content/`;
+  const peopleBasePath = buildAppPath([conference.slug, "people"]);
 
   const locationNameById = useMemo(
     () => new Map<number, string>(locations.map((l) => [l.id, l.name])),
@@ -79,11 +78,7 @@ export default function ContentDetails(props: Props) {
   const accentColor =
     content.color || primarySession?.color || getSessionTagAccentColor(primarySession, tags);
   const accentStyle = getAccentStyle(accentColor);
-  const sharePath = `${contentsBasePath}/?id=${content.id}`;
-  const shareUrl =
-    typeof window === "undefined"
-      ? sharePath
-      : new URL(sharePath, window.location.origin).toString();
+  const shareUrl = buildAbsoluteAppUrl([conference.slug, "content"], { id: content.id });
 
   const canShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
   const canCopyToClipboard =
@@ -255,7 +250,7 @@ export default function ContentDetails(props: Props) {
             {people.map((p) => (
               <li key={p.id}>
                 <Link
-                  to={`${peopleBasePath}/?id=${p.id}`}
+                  to={`${peopleBasePath}?id=${p.id}`}
                   className="ui-focus-ring ui-pill-link"
                   title={p.name}
                 >

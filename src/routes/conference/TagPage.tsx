@@ -75,13 +75,50 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
   }, []);
 
   const emptyMessage = "No sessions are scheduled for this tag.";
+  const tagsHref = `/${conf.slug}/tags/`;
+  const scheduleHref = conf.schedulePath ?? `/${conf.slug}/schedule/`;
 
   if (!isReady) return <LoadingScreen />;
-  if (isIdInvalid) return <ErrorScreen msg="Invalid tag id." />;
-  if (isIdMissing) return <ErrorScreen msg="Missing tag id." />;
+  if (isIdInvalid) {
+    return (
+      <ErrorScreen
+        title="Tag not found"
+        copy="Use a numeric tag ID, or browse all tags."
+        kicker="Not found"
+        primaryActionHref={tagsHref}
+        primaryActionLabel="Browse Tags"
+        secondaryActionHref={scheduleHref}
+        secondaryActionLabel="Schedule"
+      />
+    );
+  }
+  if (isIdMissing) {
+    return (
+      <ErrorScreen
+        title="Tag ID required"
+        copy="This page needs a tag ID."
+        primaryActionHref={tagsHref}
+        primaryActionLabel="Browse Tags"
+        secondaryActionHref={scheduleHref}
+        secondaryActionLabel="Schedule"
+      />
+    );
+  }
   if (isLoading) return <LoadingScreen />;
-  if (error || !tagDetail) return <ErrorScreen />;
-  if (!tag) return <ErrorScreen msg="Tag not found" />;
+  if (error) return <ErrorScreen />;
+  if (!tagDetail || !tag) {
+    return (
+      <ErrorScreen
+        title="Tag not found"
+        copy={`No tag exists for ID ${tagId}.`}
+        kicker="Not found"
+        primaryActionHref={tagsHref}
+        primaryActionLabel="Browse Tags"
+        secondaryActionHref={scheduleHref}
+        secondaryActionLabel="Schedule"
+      />
+    );
+  }
 
   return (
     <>

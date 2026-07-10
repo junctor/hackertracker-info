@@ -54,8 +54,23 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
     return `${normalized.slice(0, 147).trimEnd()}...`;
   }, [personDetail, conf.name]);
 
+  const peopleListHref = `/${conf.slug}/people/`;
+  const conferenceHomeHref = `/${conf.slug}/`;
+
   if (!isReady) return <LoadingScreen />;
-  if (isIdInvalid) return <ErrorScreen msg="Invalid person id." />;
+  if (isIdInvalid) {
+    return (
+      <ErrorScreen
+        title="Person not found"
+        copy="Use a numeric person ID, or browse the people list."
+        kicker="Not found"
+        primaryActionHref={peopleListHref}
+        primaryActionLabel="Browse People"
+        secondaryActionHref={conferenceHomeHref}
+        secondaryActionLabel="Conference Home"
+      />
+    );
+  }
 
   let pageTitle = `People | ${conf.name}`;
   let pageDescription = `People and their sessions at ${conf.name}.`;
@@ -63,8 +78,30 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
 
   if (shouldLoadDetails) {
     if (personDetailLoading) return <LoadingScreen />;
-    if (personDetailError || !personDetail) {
-      return <ErrorScreen />;
+    if (personDetailError) {
+      return (
+        <ErrorScreen
+          title="Couldn't load person"
+          copy="The person details could not be loaded. Try the people list instead."
+          primaryActionHref={peopleListHref}
+          primaryActionLabel="Browse People"
+          secondaryActionHref={conferenceHomeHref}
+          secondaryActionLabel="Conference Home"
+        />
+      );
+    }
+    if (!personDetail) {
+      return (
+        <ErrorScreen
+          title="Person not found"
+          copy={`No person exists for ID ${personId}.`}
+          kicker="Not found"
+          primaryActionHref={peopleListHref}
+          primaryActionLabel="Browse People"
+          secondaryActionHref={conferenceHomeHref}
+          secondaryActionLabel="Conference Home"
+        />
+      );
     }
 
     pageTitle = `${personDetail.person.name} | ${conf.name}`;

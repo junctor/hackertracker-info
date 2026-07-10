@@ -1,7 +1,5 @@
 import type { PageId } from "@/lib/types/page-meta";
 
-export const TOP_LEVEL_STATIC_ROUTE_SEGMENTS = ["conferences", "tv"] as const;
-
 export type ConferenceRouteKey =
   | "announcements"
   | "bookmarks"

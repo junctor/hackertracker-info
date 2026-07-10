@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 
 import Head from "@/components/Head";
@@ -366,7 +366,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
         <title>Schedule | {conf.name}</title>
         {aiMetadata({
           title: `Schedule | ${conf.name}`,
-          description: `Full ${conf.name} schedule of sessions, talks, and sessions.`,
+          description: `Full ${conf.name} schedule of sessions, talks, and workshops.`,
           path: conferencePath(conf, "schedule"),
           jsonFeeds: conferenceDataFeeds(conf),
           structuredData: [collectionStructuredDataPath(conf, "schedule")],

@@ -1,5 +1,3 @@
-import React from "react";
-
 import Head from "@/components/Head";
 import AnnouncementsList from "@/features/announcements/AnnouncementsList";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";

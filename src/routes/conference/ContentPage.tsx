@@ -1,4 +1,4 @@
-import { lazy, useMemo, type ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
 
 import type {
   ContentCardsView,
@@ -8,8 +8,9 @@ import type {
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import ContentDetails from "@/features/content/ContentDetails";
 import ContentList from "@/features/content/ContentList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -22,8 +23,6 @@ type ContentPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
-
-const ContentDetails = lazy(() => import("@/features/content/ContentDetails"));
 
 export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   const {
@@ -74,17 +73,58 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
     return `${normalized.slice(0, 147).trimEnd()}...`;
   }, [conf.name, contentDetail]);
 
-  if (!isReady) return <LoadingScreen />;
-  if (isIdInvalid) return <ErrorScreen msg="Invalid content id." />;
+  const contentListHref = `/${conf.slug}/content/`;
+  const conferenceHomeHref = `/${conf.slug}/`;
+
+  if (!isReady) {
+    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+  }
+  if (isIdInvalid) {
+    return (
+      <ErrorScreen
+        title="Content not found"
+        copy="Use a numeric content ID, or browse all conference content."
+        kicker="Not found"
+        primaryActionHref={contentListHref}
+        primaryActionLabel="Browse Content"
+        secondaryActionHref={conferenceHomeHref}
+        secondaryActionLabel="Conference Home"
+      />
+    );
+  }
 
   let pageTitle = `Content | ${conf.name}`;
   let pageDescription = `Sessions, talks, and presentation details for ${conf.name}.`;
   let pageContent: ReactElement;
 
   if (shouldLoadDetails) {
-    if (contentDetailLoading) return <LoadingScreen />;
-    if (contentDetailError || !contentDetail) {
-      return <ErrorScreen />;
+    if (contentDetailLoading) {
+      return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+    }
+    if (contentDetailError) {
+      return (
+        <ErrorScreen
+          title="Couldn't load content"
+          copy="The content details could not be loaded. Try the content list instead."
+          primaryActionHref={contentListHref}
+          primaryActionLabel="Browse Content"
+          secondaryActionHref={conferenceHomeHref}
+          secondaryActionLabel="Conference Home"
+        />
+      );
+    }
+    if (!contentDetail) {
+      return (
+        <ErrorScreen
+          title="Content not found"
+          copy={`No content item exists for ID ${contentId}.`}
+          kicker="Not found"
+          primaryActionHref={contentListHref}
+          primaryActionLabel="Browse Content"
+          secondaryActionHref={conferenceHomeHref}
+          secondaryActionLabel="Conference Home"
+        />
+      );
     }
 
     const { content, sessions, locations, people, tags } = contentDetail;
@@ -104,7 +144,9 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
       />
     );
   } else {
-    if (contentCardsLoading || tagTypesLoading) return <LoadingScreen />;
+    if (contentCardsLoading || tagTypesLoading) {
+      return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+    }
     if (contentCardsError || tagTypesError || !contentCards || !tagTypes) {
       return <ErrorScreen msg="Failed to load content." />;
     }

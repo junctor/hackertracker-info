@@ -75,7 +75,7 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
     <article
       data-schedule-session-id={session.id}
       style={accentStyle}
-      className={`ui-card ui-card-interactive ui-accent-card${isHighlighted ? " ui-schedule-session-jump-highlight" : ""}`}
+      className={`ui-card ui-card-interactive ui-accent-card ui-schedule-session-card${isHighlighted ? " ui-schedule-session-jump-highlight" : ""}`}
     >
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -83,7 +83,7 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
       <div className="ui-accent-card-row">
         <Link to={href} className="ui-focus-ring ui-radius-inherit ui-item-main">
           <div className="ui-accent-card-layout">
-            <div className="ui-accent-card-time">
+            <div className="ui-accent-card-time ui-schedule-session-time">
               {(isLive || isNext) && (
                 <span
                   className={`ui-status-pill ${isLive ? "ui-status-pill-live" : "ui-status-pill-next"}`}
@@ -94,7 +94,7 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
               <p className="ui-session-time-primary">
                 <time dateTime={session.beginIso}>{session.beginDisplay}</time>
               </p>
-              <p className="ui-card-meta">
+              <p className="ui-card-meta ui-schedule-session-time-end">
                 <time dateTime={session.endIso}>{session.endDisplay}</time>
               </p>
             </div>
@@ -113,18 +113,20 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
               <p className="ui-card-meta ui-clamp-one">{session.locationName}</p>
 
               {visibleTags.length > 0 && (
-                <ul className="ui-chip-list-tight">
+                <ul className="ui-chip-list-tight ui-schedule-session-tags">
                   {visibleTags.map((tag) => (
                     <li
                       key={tag.id}
-                      className={`ui-tag-chip ui-tag-chip-strong`}
+                      className="ui-tag-chip ui-tag-chip-strong ui-schedule-session-tag"
                       style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
                     >
                       {tag.label}
                     </li>
                   ))}
                   {hiddenTagCount > 0 && (
-                    <li className="ui-tag-chip ui-tone-muted">+{hiddenTagCount} more</li>
+                    <li className="ui-tag-chip ui-tone-muted ui-schedule-session-tag-more">
+                      +{hiddenTagCount} more
+                    </li>
                   )}
                 </ul>
               )}

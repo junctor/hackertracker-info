@@ -862,38 +862,32 @@
   isolation: isolate;
   position: relative;
   display: flex;
-  min-height: 8.75rem;
+  min-height: 8rem;
   width: 100%;
   min-width: 0;
   flex-direction: column;
   overflow: hidden;
-  border-radius: var(--radius-3);
+  border-radius: var(--radius-2);
   border-width: 1px;
   border-color: color-mix(in oklab, var(--border), white 8%);
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--surface-elevated), transparent 4%),
-    color-mix(in oklab, var(--surface), black 14%)
-  );
+  background: color-mix(in oklab, var(--surface-muted), transparent 42%);
   padding: var(--space-4);
   text-align: left;
   transition:
-    transform 0.2s ease-out,
     border-color 0.2s ease-out,
-    box-shadow 0.2s ease-out;
-  box-shadow: var(--shadow-sm);
+    background-color 0.2s ease-out;
+  box-shadow: none;
 }
 
 .ui-home-menu-card:hover,
 .ui-home-menu-card:focus-visible {
-  transform: translateY(-0.125rem);
   border-color: color-mix(in oklab, var(--accent-primary), transparent 52%);
-  box-shadow: var(--shadow-md);
+  background: color-mix(in oklab, var(--surface-interactive), transparent 18%);
 }
 
 @media (width >= 40rem) {
   .ui-home-menu-card {
-    min-height: 10.5rem;
+    min-height: 9.5rem;
     padding: var(--space-5);
   }
 }
@@ -904,20 +898,20 @@
 
 .ui-home-menu-card-icon {
   display: flex;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  border-radius: 1rem;
+  border-radius: var(--radius-2);
   border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.025));
+  background: color-mix(in oklab, var(--surface-muted), transparent 20%);
   color: var(--text-muted);
   transition:
     border-color 0.2s ease,
     background-color 0.2s ease,
     color 0.2s ease;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  box-shadow: none;
 }
 
 .ui-home-menu-card:hover .ui-home-menu-card-icon,
@@ -959,24 +953,6 @@
   border-color: var(--border-strong);
   background: var(--surface-interactive);
   color: var(--text-primary);
-}
-
-.ui-home-menu-card-aura {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  background: radial-gradient(
-    circle at top right,
-    color-mix(in oklab, var(--accent-primary), transparent 84%),
-    transparent 42%
-  );
-}
-
-.ui-home-menu-card:hover .ui-home-menu-card-aura,
-.ui-home-menu-card:focus-within .ui-home-menu-card-aura {
-  opacity: 1;
 }
 
 .ui-home-menu-card-content {
@@ -1182,6 +1158,11 @@
   list-style: none;
   gap: 0.875rem;
   align-items: stretch;
+}
+
+.ui-home-menu-grid > li {
+  display: flex;
+  min-width: 0;
 }
 
 @media (width >= 40rem) {

@@ -37,7 +37,13 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
 
 export default function TagsList({ tagTypes, conference }: TagsListProps) {
   const sortedTagTypes = useMemo(
-    () => tagTypes.toSorted((a, b) => a.sortOrder - b.sortOrder),
+    () =>
+      tagTypes
+        .toSorted((a, b) => a.sortOrder - b.sortOrder)
+        .map((tagType) => ({
+          ...tagType,
+          tags: tagType.tags.toSorted((a, b) => a.sortOrder - b.sortOrder),
+        })),
     [tagTypes],
   );
 
@@ -53,23 +59,19 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
           <p>No tags available.</p>
         </div>
       ) : (
-        sortedTagTypes.map((tagType) => {
-          const sortedTags = tagType.tags.toSorted((a, b) => a.sortOrder - b.sortOrder);
+        sortedTagTypes.map((tagType) => (
+          <section key={tagType.id} className="ui-tags-section">
+            <h2 className="ui-heading-2 ui-tags-heading">{formatCategory(tagType.category)}</h2>
 
-          return (
-            <section key={tagType.id} className="ui-tags-section">
-              <h2 className="ui-heading-2 ui-tags-heading">{formatCategory(tagType.category)}</h2>
-
-              <ul className="ui-chip-list-tight">
-                {sortedTags.map((tag) => (
-                  <li key={tag.id}>
-                    <TagPill tag={tag} conference={conference} />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          );
-        })
+            <ul className="ui-chip-list-tight">
+              {tagType.tags.map((tag) => (
+                <li key={tag.id}>
+                  <TagPill tag={tag} conference={conference} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
       )}
     </section>
   );

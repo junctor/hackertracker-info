@@ -1,4 +1,4 @@
-import { JSX, lazy } from "react";
+import { JSX } from "react";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 import type { PageId } from "@/lib/types/page-meta";
@@ -7,6 +7,7 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
+import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
@@ -28,8 +29,6 @@ type Props = {
 };
 
 type OrganizationDirectoryPageProps = Pick<Props, "conf" | "activePageId">;
-
-const OrganizationDetails = lazy(() => import("@/features/organizations/OrganizationDetails"));
 
 export function createOrganizationDirectoryRoute(directoryPageId: PageId) {
   const directoryConfig = getOrganizationDirectoryConfig(directoryPageId)!;
@@ -99,9 +98,23 @@ export default function DirectoryPage({
 
   const isLoading = organizationsIsLoading || tagIsLoading;
   const error = organizationsError || tagError;
+  const directoryHref = `/${conf.slug}/${routeSlug}/`;
+  const conferenceHomeHref = `/${conf.slug}/`;
 
   if (!isReady) return <LoadingScreen />;
-  if (isIdInvalid) return <ErrorScreen msg="Invalid organization id." />;
+  if (isIdInvalid) {
+    return (
+      <ErrorScreen
+        title="Organization not found"
+        copy={`Use a numeric organization ID, or browse ${title.toLowerCase()}.`}
+        kicker="Not found"
+        primaryActionHref={directoryHref}
+        primaryActionLabel={`Browse ${title}`}
+        secondaryActionHref={conferenceHomeHref}
+        secondaryActionLabel="Conference Home"
+      />
+    );
+  }
 
   const listDescription = description?.trim();
   const fallbackDescription =
@@ -121,7 +134,19 @@ export default function DirectoryPage({
   if (isDetailsRoute) {
     if (organizationsStoreLoading) return <LoadingScreen />;
     if (organizationsStoreError) return <ErrorScreen />;
-    if (!selectedOrganization) return <ErrorScreen msg="Organization not found" />;
+    if (!selectedOrganization) {
+      return (
+        <ErrorScreen
+          title="Organization not found"
+          copy={`No organization exists for ID ${orgId}.`}
+          kicker="Not found"
+          primaryActionHref={directoryHref}
+          primaryActionLabel={`Browse ${title}`}
+          secondaryActionHref={conferenceHomeHref}
+          secondaryActionLabel="Conference Home"
+        />
+      );
+    }
 
     pageContent = (
       <ConferenceLayout conference={conf} activePageId={activePageId}>
@@ -142,19 +167,26 @@ export default function DirectoryPage({
     }
 
     const matchingOrganizations = organizations[tagId] ?? [];
-    const detailsBasePath = `/${conf.slug}/${routeSlug}/`;
-
     pageContent = (
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         <OrganizationsList
           organizations={matchingOrganizations}
           title={title}
-          detailsBasePath={detailsBasePath}
+          detailsBasePath={directoryHref}
         />
       </ConferenceLayout>
     );
   } else {
-    return <ErrorScreen msg="Missing organization id." />;
+    return (
+      <ErrorScreen
+        title="Organization ID required"
+        copy="This page needs an organization ID."
+        primaryActionHref={directoryHref}
+        primaryActionLabel={`Browse ${title}`}
+        secondaryActionHref={conferenceHomeHref}
+        secondaryActionLabel="Conference Home"
+      />
+    );
   }
 
   return (

@@ -8,7 +8,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getBookmarks } from "@/lib/storage";
 import { ContentEntity, SessionEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
-import { getSafeExternalHref } from "@/lib/url";
+import { buildAppPath, getSafeExternalHref } from "@/lib/url";
 
 import ContentSession from "../content/ContentSession";
 import { getPersonInitials } from "./personInitials";
@@ -95,7 +95,7 @@ function getPersonAccentClassName(name?: string | null): string {
 
 export default function PersonDetails({ person, sessions, locations, conference }: Props) {
   const [hasAvatarError, setHasAvatarError] = useState(false);
-  const contentsBasePath = `/${conference.slug}/content/`;
+  const contentsBasePath = buildAppPath([conference.slug, "content"]);
   const personName = getDisplayName(person.name);
   const personInitials = getPersonInitials(person.name);
   const personAvatarUrl = getPersonAvatarUrl(person);
@@ -284,7 +284,7 @@ export default function PersonDetails({ person, sessions, locations, conference 
                   isBookmarked={bookmarkSet.has(session.id)}
                   accentColor={session.color}
                   locationName={locationNameById.get(session.locationId)}
-                  href={`${contentsBasePath}/?id=${session.contentId}`}
+                  href={`${contentsBasePath}?id=${session.contentId}`}
                   title={session.title}
                 />
               );

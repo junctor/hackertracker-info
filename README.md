@@ -35,7 +35,6 @@ The app is a fully static Vite+ React application using React Router. Conference
   - Vite+ on Vite 8 tooling
   - Vite+ scripts through `vp`
   - TypeScript project builds
-  - Post-build static route generation
 - Styling and content
   - Vanilla CSS with project design tokens
   - Local fonts and images from `public/`
@@ -103,7 +102,7 @@ vp fmt
 
 The app is static-hosting compatible and does not require a Node server at runtime. Deploy the contents of `dist/`.
 
-After `vp run build`, the `postbuild` script runs `scripts/generate-static-routes.mjs`. It creates route-based `index.html` files, including conference route entries, so direct navigation and refreshes work on static hosts without rewrite rules.
+The production host must serve `/index.html` for unknown application routes so direct navigation and refreshes can boot the React app. Static assets and JSON data should continue to be served from their requested paths.
 
 ## Strict CSP
 

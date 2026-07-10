@@ -1,21 +1,26 @@
 .ui-empty-state {
-  border-radius: 1rem;
-  border: 1px solid color-mix(in oklab, var(--border), white 8%);
-  background: color-mix(in oklab, var(--surface-muted), transparent 8%);
-  padding: 1.5rem;
+  border-radius: var(--radius-2);
+  border: 1px dashed color-mix(in oklab, var(--border), white 10%);
+  background: transparent;
+  padding: var(--space-6);
   text-align: center;
   color: var(--text-muted);
+  box-shadow: none;
 }
 
 @media (width < 40rem) {
   .ui-empty-state {
-    background: color-mix(in oklab, var(--surface-elevated), black 2%);
     padding: var(--space-5);
   }
 }
 
 .ui-empty-state-action {
   margin-top: 1rem;
+}
+
+.ui-content-empty-state {
+  max-width: 38rem;
+  margin-inline: auto;
 }
 
 .ui-screen-glow-loading {
@@ -336,15 +341,21 @@
 
 .ui-error-actions {
   display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
   justify-content: center;
   margin-top: 1.75rem;
 }
 
-.ui-error-home-link {
+.ui-error-home-link,
+.ui-error-secondary-link {
   min-width: 11rem;
   gap: var(--space-2);
   border-radius: 0.75rem;
   padding-inline: var(--space-4);
+}
+
+.ui-error-home-link {
   box-shadow: var(--shadow-lg);
 }
 

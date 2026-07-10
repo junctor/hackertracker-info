@@ -64,6 +64,20 @@ export default function SearchPageContent({ conf, searchData }: Props) {
         ) : results.length === 0 ? (
           <div className="ui-empty-state" role="status">
             <p>No results found for "{trimmedQuery}".</p>
+            <button
+              type="button"
+              onClick={() => {
+                setDraftQuery("");
+                setSearchParams((currentParams) => {
+                  const nextParams = new URLSearchParams(currentParams);
+                  nextParams.delete("q");
+                  return nextParams;
+                });
+              }}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
+            >
+              Clear search
+            </button>
           </div>
         ) : (
           <ul className="ui-list-stack-sm">

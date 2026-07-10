@@ -20,7 +20,9 @@ export default function SearchResultItem({ conf, result }: Props) {
   const typeLabel = getSearchResultLabel(result.type);
 
   return (
-    <article className={`ui-card ui-card-interactive ui-accent-card ui-tone-${tone}`}>
+    <article
+      className={`ui-card ui-card-interactive ui-accent-card ui-search-result-card ui-tone-${tone}`}
+    >
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
 

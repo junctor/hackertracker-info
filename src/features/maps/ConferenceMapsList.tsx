@@ -30,13 +30,15 @@ function compareMaps(a: ConferenceMapEntity, b: ConferenceMapEntity) {
   });
 }
 
+const MAP_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
 function formatDate(date: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(`${date}T12:00:00Z`));
+  return MAP_DATE_FORMATTER.format(new Date(`${date}T12:00:00Z`));
 }
 
 function formatDateRange(conference: ConferenceEntity) {
@@ -110,7 +112,8 @@ export default function ConferenceMapsList({ conference }: Props) {
                     <a
                       href={map.url}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
+                      aria-label={`Open PDF for ${name}`}
                       className="ui-btn-base ui-btn-secondary ui-focus-ring ui-map-pdf-link"
                     >
                       Open PDF

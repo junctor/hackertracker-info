@@ -79,8 +79,7 @@ export type SiteMenuItem = {
   icon: ComponentType<{ className?: string }>;
 };
 
-// eslint-disable-next-line no-unused-vars
-type MenuBuilder = (conference: ConferenceManifest) => SiteMenuItem;
+type MenuBuilder = (_conference: ConferenceManifest) => SiteMenuItem;
 
 function conferenceRoute(c: ConferenceManifest, segment: string) {
   return `/${c.slug}/${segment}/`;

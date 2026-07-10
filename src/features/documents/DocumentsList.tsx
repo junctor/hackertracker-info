@@ -5,6 +5,12 @@ import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { DocumentsListView } from "@/lib/types/ht-types";
 
+const DOCUMENT_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+
 export default function DocumentsList({
   documents,
   conference,
@@ -27,11 +33,7 @@ export default function DocumentsList({
                 <h2 className="ui-card-title ui-document-list-title">{doc.titleText}</h2>
                 <p className="ui-card-meta ui-document-list-meta">
                   <span className="ui-muted-strong">Updated:</span>{" "}
-                  {new Date(doc.updatedAtMs).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
+                  {DOCUMENT_DATE_FORMATTER.format(new Date(doc.updatedAtMs))}
                 </p>
               </div>
               <ChevronRightIcon className="ui-icon-sm ui-document-list-icon" aria-hidden="true" />

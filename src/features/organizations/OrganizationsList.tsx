@@ -66,7 +66,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
               onClick={() => setSearch("")}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
-              Clear Search
+              Clear search
             </button>
           ) : null}
         </div>

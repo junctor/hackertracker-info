@@ -113,7 +113,7 @@ export default function ContentDetails(props: Props) {
       : `${sessions.length} session${sessions.length === 1 ? "" : "s"}`;
 
   return (
-    <article className="ui-container ui-page-content ui-detail-stack ui-detail-page ui-content-detail-page">
+    <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
       <div style={accentStyle} className="ui-detail-header-accent">
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />

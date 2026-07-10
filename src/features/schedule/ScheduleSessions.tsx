@@ -124,8 +124,7 @@ export default function ScheduleSessions({
   conf: ConferenceManifest;
   days: ScheduleDay[];
   selectedDay: string;
-  // eslint-disable-next-line no-unused-vars
-  onSelectDay: (day: string) => void;
+  onSelectDay: (_day: string) => void;
   bookmarks: number[];
   nowSeconds?: number;
   activeFilter?: "bookmarks" | "tags" | null;

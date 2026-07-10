@@ -15,7 +15,7 @@ export default function TVPage() {
           <a
             href={TV_URL}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="ui-btn-base ui-btn-secondary ui-focus-ring"
           >
             Open DEF CON TV

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { Link } from "react-router";
 
 import Head from "@/components/Head";
@@ -22,16 +22,11 @@ function normalizeId(id: unknown): string {
   return String(id);
 }
 
-function getSessionDay(session: ScheduleSessionViewModel, timeZone: string): string {
+function getSessionDay(session: ScheduleSessionViewModel, formatter: Intl.DateTimeFormat): string {
   const date = new Date(session.begin);
   if (Number.isNaN(date.getTime())) return "";
 
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(date);
+  const parts = formatter.formatToParts(date);
   const byType = new Map(parts.map((part) => [part.type, part.value]));
   const year = byType.get("year");
   const month = byType.get("month");
@@ -57,8 +52,15 @@ function groupBookmarkedSessionsByDay(
     });
 
   const days = new Map<string, ScheduleSessionViewModel[]>();
+  const dayFormatter = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
   for (const session of bookmarkedSessions) {
-    const day = getSessionDay(session, timeZone);
+    const day = getSessionDay(session, dayFormatter);
     if (!day) continue;
     const list = days.get(day) ?? [];
     list.push(session);

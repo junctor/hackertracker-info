@@ -640,16 +640,6 @@
   background-image: var(--person-avatar-bg);
 }
 
-.ui-tag-dot {
-  background: var(--tone-dot, var(--color-muted));
-}
-
-.ui-tag-dot-mark {
-  width: 0.75rem;
-  height: 0.75rem;
-  border-radius: var(--radius-pill);
-}
-
 .ui-pill-label {
   max-width: 16rem;
 }

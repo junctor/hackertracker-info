@@ -955,15 +955,6 @@
   color: var(--text-primary);
 }
 
-.ui-home-menu-card-aura {
-  display: none;
-}
-
-.ui-home-menu-card:hover .ui-home-menu-card-aura,
-.ui-home-menu-card:focus-within .ui-home-menu-card-aura {
-  opacity: 0;
-}
-
 .ui-home-menu-card-content {
   position: relative;
   z-index: 10;

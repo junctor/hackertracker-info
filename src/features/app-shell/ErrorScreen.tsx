@@ -42,7 +42,7 @@ export default function ErrorScreen({
           <div aria-hidden="true" className="ui-screen-card-rule-critical" />
 
           <div className="ui-inset-highlight ui-error-icon">
-            <ExclamationTriangleIcon className="ui-icon-lg" />
+            <ExclamationTriangleIcon className="ui-icon-lg" aria-hidden="true" />
           </div>
 
           <p className="ui-kicker ui-kicker-critical ui-screen-kicker">{kicker}</p>

@@ -70,8 +70,6 @@ export default function Menu({ conference }: Props) {
 
             const content = (
               <>
-                <div aria-hidden="true" className="ui-home-menu-card-aura" />
-
                 <div className="ui-home-menu-card-content">
                   <div className="ui-home-menu-card-top">
                     <span className={menuCardIconClassName}>

@@ -81,6 +81,7 @@ export default function PageHeader({
                   value={search.value}
                   onChange={(e) => search.onChange(e.currentTarget.value)}
                   autoComplete="off"
+                  enterKeyHint={search.onSubmit ? "search" : undefined}
                   className="ui-search-input"
                 />
               </span>

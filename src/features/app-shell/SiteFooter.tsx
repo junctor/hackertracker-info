@@ -4,7 +4,7 @@ function SiteFooter() {
       <div className="ui-chrome-container ui-site-footer-inner">
         <div className="ui-site-footer-row">
           <div className="ui-site-footer-brand">
-            <a href="https://info.defcon.org/apps" className="ui-focus-ring ui-site-footer-link">
+            <a href="/apps/" className="ui-focus-ring ui-site-footer-link">
               <p className="ui-section-label ui-site-footer-label hacker-tracker-text">
                 Hacker Tracker
               </p>
@@ -21,6 +21,7 @@ function SiteFooter() {
             >
               <img
                 src="/images/icons/github-invertocat-white.svg"
+                alt=""
                 className="ui-icon-xs"
                 aria-hidden="true"
               />

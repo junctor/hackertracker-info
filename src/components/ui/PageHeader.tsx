@@ -1,4 +1,4 @@
-import type { Dispatch, ReactNode, SetStateAction } from "react";
+import type { ReactNode } from "react";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useId } from "react";
@@ -7,7 +7,7 @@ type SearchProps = {
   label: string;
   placeholder: string;
   value: string;
-  onChange: Dispatch<SetStateAction<string>>;
+  onChange: (value: string) => void;
   onSubmit?: () => void;
 };
 

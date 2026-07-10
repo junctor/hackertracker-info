@@ -1,12 +1,13 @@
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import { useState, useMemo } from "react";
-import { Link } from "react-router";
+import { useEffect, useMemo } from "react";
+import { Link, useSearchParams } from "react-router";
 
 import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 
 import PageHeader from "@/components/ui/PageHeader";
 import { getAccentStyle } from "@/lib/color";
 import { ConferenceManifest } from "@/lib/conferences";
+import { buildAppPath } from "@/lib/url";
 
 interface Props {
   conference: ConferenceManifest;
@@ -15,23 +16,10 @@ interface Props {
 }
 
 export default function ContentList({ content, tags, conference }: Props) {
-  const [search, setSearch] = useState("");
-  const [selectedTag, setSelectedTag] = useState<number | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get("q") ?? "";
+  const tagParam = searchParams.get("tag");
   const normalizedSearch = search.trim().toLowerCase();
-
-  const filtered = useMemo(() => {
-    const result: ContentCardsView = [];
-    for (const item of content) {
-      if (normalizedSearch && !item.title.toLowerCase().includes(normalizedSearch)) {
-        continue;
-      }
-      if (selectedTag && !item.tags.some((tag) => tag.id === selectedTag)) {
-        continue;
-      }
-      result.push(item);
-    }
-    return result;
-  }, [content, normalizedSearch, selectedTag]);
 
   const tagOptions = useMemo(
     () =>
@@ -45,7 +33,76 @@ export default function ContentList({ content, tags, conference }: Props) {
         })),
     [tags],
   );
-  const hasActiveFilters = Boolean(normalizedSearch || selectedTag);
+
+  const validTagIds = useMemo(() => {
+    const ids = new Set<number>();
+    for (const group of tagOptions) {
+      for (const tag of group.tags) {
+        ids.add(tag.id);
+      }
+    }
+    return ids;
+  }, [tagOptions]);
+
+  const selectedTag = useMemo(() => {
+    if (tagParam == null) return null;
+
+    const parsed = Number(tagParam);
+    if (!Number.isInteger(parsed) || !validTagIds.has(parsed)) return null;
+
+    return parsed;
+  }, [tagParam, validTagIds]);
+
+  useEffect(() => {
+    const shouldRemoveTag = tagParam != null && selectedTag === null;
+    const shouldRemoveSearch = search.length > 0 && normalizedSearch.length === 0;
+
+    if (!shouldRemoveTag && !shouldRemoveSearch) return;
+
+    setSearchParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        if (shouldRemoveTag) next.delete("tag");
+        if (shouldRemoveSearch) next.delete("q");
+        return next;
+      },
+      { replace: true },
+    );
+  }, [normalizedSearch.length, search.length, selectedTag, setSearchParams, tagParam]);
+
+  const updateFilterParam = (key: "q" | "tag", value: string) => {
+    setSearchParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        const normalizedValue = value.trim();
+
+        if (normalizedValue) {
+          next.set(key, value);
+        } else {
+          next.delete(key);
+        }
+
+        return next;
+      },
+      { replace: true },
+    );
+  };
+
+  const filtered = useMemo(() => {
+    const result: ContentCardsView = [];
+    for (const item of content) {
+      if (normalizedSearch && !item.title.toLowerCase().includes(normalizedSearch)) {
+        continue;
+      }
+      if (selectedTag !== null && !item.tags.some((tag) => tag.id === selectedTag)) {
+        continue;
+      }
+      result.push(item);
+    }
+    return result;
+  }, [content, normalizedSearch, selectedTag]);
+
+  const hasActiveFilters = Boolean(normalizedSearch || selectedTag !== null);
   const resultCountLabel = `${filtered.length} ${filtered.length === 1 ? "item" : "items"}`;
 
   return (
@@ -58,7 +115,7 @@ export default function ContentList({ content, tags, conference }: Props) {
           label: "Search content",
           placeholder: "Search content...",
           value: search,
-          onChange: setSearch,
+          onChange: (value) => updateFilterParam("q", value),
         }}
       >
         <label className="ui-control-label">
@@ -67,7 +124,7 @@ export default function ContentList({ content, tags, conference }: Props) {
             value={selectedTag ?? ""}
             onChange={(e) => {
               const nextValue = e.target.value;
-              setSelectedTag(nextValue ? Number(nextValue) : null);
+              updateFilterParam("tag", nextValue);
             }}
             className="ui-input-base ui-select-control ui-focus-ring"
           >
@@ -96,8 +153,15 @@ export default function ContentList({ content, tags, conference }: Props) {
             <button
               type="button"
               onClick={() => {
-                setSearch("");
-                setSelectedTag(null);
+                setSearchParams(
+                  (current) => {
+                    const next = new URLSearchParams(current);
+                    next.delete("q");
+                    next.delete("tag");
+                    return next;
+                  },
+                  { replace: true },
+                );
               }}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
@@ -122,7 +186,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                 <span aria-hidden="true" className="ui-accent-rail" />
                 <span aria-hidden="true" className="ui-accent-rail-overlay" />
                 <Link
-                  to={`/${conference.slug}/content/?id=${item.id}`}
+                  to={buildAppPath([conference.slug, "content"], { id: item.id })}
                   className="ui-focus-ring ui-accent-card-link"
                 >
                   <div className="ui-content-list-row">

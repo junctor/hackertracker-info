@@ -143,7 +143,7 @@ export default function ContentList({ content, tags, conference }: Props) {
       </PageHeader>
 
       {filtered.length === 0 ? (
-        <div className="ui-empty-state">
+        <div className="ui-empty-state ui-content-empty-state">
           <p>
             {hasActiveFilters
               ? "No content matches the current search and tag filters."
@@ -181,7 +181,7 @@ export default function ContentList({ content, tags, conference }: Props) {
               <li
                 key={item.id}
                 style={accentStyle}
-                className={`ui-card ui-card-interactive ui-accent-card`}
+                className="ui-card ui-card-interactive ui-accent-card ui-content-list-card"
               >
                 <span aria-hidden="true" className="ui-accent-rail" />
                 <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -198,12 +198,12 @@ export default function ContentList({ content, tags, conference }: Props) {
                         <ArrowRightIcon aria-hidden="true" className="ui-icon-sm ui-card-arrow" />
                       </div>
 
-                      {visibleTags.length > 0 && (
-                        <ul className="ui-chip-list-tight">
+                      {visibleTags.length > 0 ? (
+                        <ul className="ui-chip-list-tight ui-content-list-tags">
                           {visibleTags.map((tag) => (
                             <li
                               key={tag.id}
-                              className={`ui-tag-chip ui-tag-chip-strong`}
+                              className="ui-tag-chip ui-tag-chip-strong ui-content-list-tag"
                               style={{
                                 backgroundColor: tag.colorBackground,
                                 color: tag.colorForeground,
@@ -212,11 +212,13 @@ export default function ContentList({ content, tags, conference }: Props) {
                               {tag.label}
                             </li>
                           ))}
-                          {hiddenTagCount > 0 && (
-                            <li className="ui-tag-chip ui-tone-muted">+{hiddenTagCount} more</li>
-                          )}
+                          {hiddenTagCount > 0 ? (
+                            <li className="ui-tag-chip ui-tone-muted ui-content-list-tag-more">
+                              +{hiddenTagCount} more
+                            </li>
+                          ) : null}
                         </ul>
-                      )}
+                      ) : null}
                     </div>
                   </div>
                 </Link>

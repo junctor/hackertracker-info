@@ -113,7 +113,7 @@ export default function ContentDetails(props: Props) {
       : `${sessions.length} session${sessions.length === 1 ? "" : "s"}`;
 
   return (
-    <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
+    <article className="ui-container ui-page-content ui-detail-stack ui-detail-page ui-content-detail-page">
       <div style={accentStyle} className="ui-detail-header-accent">
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
@@ -174,13 +174,10 @@ export default function ContentDetails(props: Props) {
               <li key={tag.id}>
                 <Link
                   to={`/${conference.slug}/tag/?id=${tag.id}`}
-                  className="ui-focus-ring ui-pill-link"
+                  aria-label={`Show schedule for ${tag.label}`}
+                  className="ui-focus-ring ui-tag-chip ui-tag-chip-strong ui-tag-link ui-tag-link-detail"
+                  style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
                 >
-                  <span
-                    className={`ui-tag-dot ui-tag-dot-mark`}
-                    style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
-                    aria-hidden="true"
-                  />
                   <span className="ui-pill-label ui-clip-text">{tag.label}</span>
                 </Link>
               </li>

@@ -15,6 +15,7 @@ import ContentList from "@/features/content/ContentList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { conferenceMenuPath } from "@/lib/routes";
 import { getBookmarks } from "@/lib/storage";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
@@ -74,7 +75,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   }, [conf.name, contentDetail]);
 
   const contentListHref = `/${conf.slug}/content/`;
-  const conferenceHomeHref = `/${conf.slug}/`;
+  const conferenceHomeHref = conferenceMenuPath(conf);
 
   if (!isReady) {
     return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;

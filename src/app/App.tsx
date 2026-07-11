@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router";
 
 import AppErrorBoundary from "@/features/app-shell/AppErrorBoundary";
 import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
@@ -7,7 +7,11 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import { ConferenceManifest, getConference } from "@/lib/conferences";
 import { useConferenceRouteParam } from "@/lib/hooks/useConferenceRouteParam";
-import { CONFERENCE_ROUTE_DEFINITIONS, type ConferenceRouteKey } from "@/lib/routes";
+import {
+  CONFERENCE_ROUTE_DEFINITIONS,
+  conferenceMenuPath,
+  type ConferenceRouteKey,
+} from "@/lib/routes";
 import { PageId } from "@/lib/types/page-meta";
 
 import AppScrollRestoration from "./AppScrollRestoration";
@@ -108,12 +112,20 @@ function ConferenceRouteNotFound() {
       title="Conference page not found"
       copy={`That page is not available for ${conf.name}.`}
       kicker="Not found"
-      primaryActionHref={`/${conf.slug}/`}
+      primaryActionHref={conferenceMenuPath(conf)}
       primaryActionLabel="Conference Home"
       secondaryActionHref={scheduleHref ?? undefined}
       secondaryActionLabel={scheduleHref ? "Schedule" : undefined}
     />
   );
+}
+
+function ConferenceRootRedirect() {
+  const conf = useConferenceRouteParam();
+
+  if (!conf) return <UnsupportedConference />;
+
+  return <Navigate to={conferenceMenuPath(conf)} replace />;
 }
 
 function ConferenceRoute({
@@ -130,15 +142,10 @@ function ConferenceRoute({
   return <Component conf={conf} activePageId={activePageId} />;
 }
 
-function conferenceRoute(
-  path: string | undefined,
-  component: ConferenceRouteComponent,
-  activePageId: PageId,
-) {
+function conferenceRoute(path: string, component: ConferenceRouteComponent, activePageId: PageId) {
   return (
     <Route
-      key={path ?? "index"}
-      index={path == null}
+      key={path}
       path={path}
       element={<ConferenceRoute component={component} activePageId={activePageId} />}
     />
@@ -181,6 +188,7 @@ export default function App() {
             <Route path="tv/*" element={<NotFound />} />
 
             <Route path=":conf">
+              <Route index element={<ConferenceRootRedirect />} />
               {CONFERENCE_ROUTE_DEFINITIONS.map(({ key, path, activePageId }) =>
                 conferenceRoute(path, CONFERENCE_ROUTE_COMPONENTS[key], activePageId),
               )}

@@ -2,6 +2,7 @@ import { ArrowLeftIcon, ExclamationTriangleIcon, HomeIcon } from "@heroicons/rea
 import { Link, useLocation } from "react-router";
 
 import { getConference } from "@/lib/conferences";
+import { conferenceMenuPath } from "@/lib/routes";
 
 type Props = {
   msg?: string;
@@ -28,7 +29,7 @@ export default function ErrorScreen({
   const hasMessage = Boolean(msg?.trim());
   const [conferenceSegment = ""] = location.pathname.split("/").filter(Boolean);
   const conference = getConference(conferenceSegment);
-  const homeHref = conference ? `/${conference.slug}/` : "/";
+  const homeHref = conference ? conferenceMenuPath(conference) : "/";
   const resolvedPrimaryHref = primaryActionHref ?? homeHref;
   const resolvedPrimaryLabel = primaryActionLabel ?? (conference ? "Conference Home" : "Site Home");
   const showDefaultHomeIcon = !primaryActionHref || resolvedPrimaryHref === homeHref;

@@ -2,7 +2,7 @@ import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { CONFERENCES } from "../src/lib/conferences.ts";
-import { CONFERENCE_ROUTE_DEFINITIONS } from "../src/lib/routes.ts";
+import { CONFERENCE_ROUTE_DEFINITIONS, conferenceMenuPath } from "../src/lib/routes.ts";
 
 const publicDir = "public";
 const dataRootDir = path.join(publicDir, "ht");
@@ -136,6 +136,8 @@ function addDirectorySlash(pathname) {
 }
 
 function humanRouteHref(conference, segment = "") {
+  if (!segment) return conferenceMenuPath(conference);
+
   return addDirectorySlash(routeHref(conference.slug, segment));
 }
 

@@ -10,6 +10,7 @@ import { Link, useLocation } from "react-router";
 
 import { ConferenceManifest } from "@/lib/conferences";
 import { useSiteMenu } from "@/lib/hooks/useSiteMenu";
+import { conferenceMenuPath } from "@/lib/routes";
 import { PageId } from "@/lib/types/page-meta";
 
 const museoFont = {
@@ -24,7 +25,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
   const menuId = useId();
   const menuDetailsRef = useRef<HTMLDetailsElement | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const conferenceRootPath = `/${conference.slug}/`;
+  const conferenceHomePath = conferenceMenuPath(conference);
   const conferenceDisplayTitle = conference.displayTitle ?? conference.name;
   const conferenceShortTitle = conference.shortTitle ?? conferenceDisplayTitle;
   const scheduleHref =
@@ -33,7 +34,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
   const trackerHref = conference.externalTrackerUrl;
   const activeHref =
     activePageId === "menu"
-      ? conferenceRootPath
+      ? conferenceHomePath
       : activePageId === "schedule"
         ? (scheduleHref ?? `/${conference.slug}/schedule/`)
         : activePageId === "readme"
@@ -79,7 +80,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
           </Link>
 
           <Link
-            to={conferenceRootPath}
+            to={conferenceHomePath}
             aria-label={`${conference.name} home`}
             className={`ui-topbar-brand-link ${focusRingClass}`}
           >

@@ -104,6 +104,8 @@ The app is static-hosting compatible and does not require a Node server at runti
 
 The production host must serve `/index.html` for unknown application routes so direct navigation and refreshes can boot the React app. Static assets and JSON data should continue to be served from their requested paths.
 
+Conference landing pages use `/<conference-slug>/menu/` as their canonical URL. First-level conference directories may also exist for static data guide pages such as `/<conference-slug>/data/`, so hosts should not rely on directory indexes for conference roots.
+
 ## Strict CSP
 
 `info.defcon.org` is a static React app and must stay compatible with the

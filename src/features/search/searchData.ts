@@ -1,5 +1,7 @@
 import type { ConferenceSlug } from "@/lib/conferences";
 
+import { conferenceMenuPath } from "@/lib/routes";
+
 export type UniversalSearchResultType = "content" | "person" | "organization";
 
 export type UniversalSearchResult = {
@@ -51,7 +53,7 @@ export function getSearchResultHref(confSlug: ConferenceSlug, result: UniversalS
     case "organization":
       return `/${confSlug}/organization/?id=${result.id}`;
     default:
-      return `/${confSlug}`;
+      return conferenceMenuPath(confSlug);
   }
 }
 

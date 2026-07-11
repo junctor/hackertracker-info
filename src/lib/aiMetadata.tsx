@@ -2,6 +2,8 @@ import type { ReactElement } from "react";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 
+import { conferenceMenuPath } from "@/lib/routes";
+
 export const SITE_ORIGIN = "https://info.defcon.org";
 export const SITE_NAME = "info.defcon.org";
 export const SITE_DESCRIPTION =
@@ -39,7 +41,7 @@ function addDirectorySlash(path: string) {
 
 export function conferencePath(conf: ConferenceManifest, route?: string) {
   const suffix = route?.trim().replace(/^\/+/, "");
-  return addDirectorySlash(suffix ? `/${conf.slug}/${suffix}` : `/${conf.slug}`);
+  return suffix ? addDirectorySlash(`/${conf.slug}/${suffix}`) : conferenceMenuPath(conf);
 }
 
 export function conferenceDataFeeds(conf: ConferenceManifest): ReadonlyArray<JsonFeed> {

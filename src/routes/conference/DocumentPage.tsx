@@ -5,6 +5,7 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { conferenceMenuPath } from "@/lib/routes";
 import { DocumentDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
@@ -17,7 +18,7 @@ type DocumentPageProps = {
 export default function DocumentPage({ conf, activePageId }: DocumentPageProps) {
   const { value: docId, isReady, isMissing, isInvalid } = useNumericQueryParam("id");
   const documentsHref = `/${conf.slug}/readme.nfo`;
-  const conferenceHomeHref = `/${conf.slug}/`;
+  const conferenceHomeHref = conferenceMenuPath(conf);
 
   const {
     data: documentsById,

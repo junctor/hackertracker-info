@@ -130,6 +130,18 @@ export default function ContentDetails(props: Props) {
           title={content.title}
           resultLabel={sessionCountLabel}
           actionsInline
+          media={
+            visibleLogoUrl ? (
+              <div aria-label={`${content.title} logo`} className="ui-content-detail-header-media">
+                <Image
+                  src={visibleLogoUrl}
+                  alt=""
+                  className="ui-image-contain ui-content-detail-logo"
+                  onError={() => setFailedLogoUrl(visibleLogoUrl)}
+                />
+              </div>
+            ) : null
+          }
           actions={
             <>
               <button
@@ -150,27 +162,6 @@ export default function ContentDetails(props: Props) {
           }
         />
       </div>
-
-      {sessions.length > 0 && (
-        <section aria-labelledby="sessions-title" className="ui-detail-section">
-          <h2 id="sessions-title" className="ui-section-label">
-            Sessions
-          </h2>
-          <ul className="ui-list-stack">
-            {sessions.map((s) => (
-              <ContentSession
-                key={s.id}
-                conference={conference}
-                session={s}
-                contentEntity={content}
-                isBookmarked={bookmarkSet.has(s.id)}
-                accentColor={s.color || accentColor}
-                locationName={locationNameById.get(s.locationId)}
-              />
-            ))}
-          </ul>
-        </section>
-      )}
 
       {tags.length > 0 && (
         <section aria-labelledby="tags-title" className="ui-detail-section">
@@ -202,6 +193,62 @@ export default function ContentDetails(props: Props) {
           <div className="ui-document-body ui-detail-body-panel">
             <Markdown content={content.description} />
           </div>
+        </section>
+      )}
+
+      {sessions.length > 0 && (
+        <section aria-labelledby="sessions-title" className="ui-detail-section">
+          <h2 id="sessions-title" className="ui-section-label">
+            Sessions
+          </h2>
+          <ul className="ui-list-stack">
+            {sessions.map((s) => (
+              <ContentSession
+                key={s.id}
+                conference={conference}
+                session={s}
+                contentEntity={content}
+                isBookmarked={bookmarkSet.has(s.id)}
+                accentColor={s.color || accentColor}
+                locationName={locationNameById.get(s.locationId)}
+              />
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {people.length > 0 && (
+        <section aria-labelledby="people-title" className="ui-detail-section">
+          <h2 id="people-title" className="ui-section-label">
+            People
+          </h2>
+          <ul className="ui-chip-list">
+            {people.map((p) => (
+              <li key={p.id}>
+                <Link
+                  to={`${peopleBasePath}?id=${p.id}`}
+                  className="ui-focus-ring ui-pill-link"
+                  title={p.name}
+                >
+                  <UserIcon className="ui-icon-xs ui-card-external-icon" aria-hidden="true" />
+                  <span className="ui-pill-label-narrow ui-clip-text">{p.name}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {relatedContent.length > 0 && (
+        <section aria-labelledby="related-content-title" className="ui-detail-section">
+          <h2 id="related-content-title" className="ui-section-label">
+            Related Content
+          </h2>
+          <ul className="ui-list-stack-sm">
+            {relatedContent.map((item) => (
+              <ContentCard key={item.id} conference={conference} item={item} />
+            ))}
+          </ul>
         </section>
       )}
 
@@ -245,52 +292,6 @@ export default function ContentDetails(props: Props) {
           </ul>
         </section>
       )}
-
-      {people.length > 0 && (
-        <section aria-labelledby="people-title" className="ui-detail-section">
-          <h2 id="people-title" className="ui-section-label">
-            People
-          </h2>
-          <ul className="ui-chip-list">
-            {people.map((p) => (
-              <li key={p.id}>
-                <Link
-                  to={`${peopleBasePath}?id=${p.id}`}
-                  className="ui-focus-ring ui-pill-link"
-                  title={p.name}
-                >
-                  <UserIcon className="ui-icon-xs ui-card-external-icon" aria-hidden="true" />
-                  <span className="ui-pill-label-narrow ui-clip-text">{p.name}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {relatedContent.length > 0 && (
-        <section aria-labelledby="related-content-title" className="ui-detail-section">
-          <h2 id="related-content-title" className="ui-section-label">
-            Related Content
-          </h2>
-          <ul className="ui-list-stack-sm">
-            {relatedContent.map((item) => (
-              <ContentCard key={item.id} conference={conference} item={item} />
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {visibleLogoUrl ? (
-        <section aria-label={`${content.title} logo`} className="ui-detail-section">
-          <Image
-            src={visibleLogoUrl}
-            alt=""
-            className="ui-image-contain ui-content-detail-logo"
-            onError={() => setFailedLogoUrl(visibleLogoUrl)}
-          />
-        </section>
-      ) : null}
     </article>
   );
 }

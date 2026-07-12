@@ -3,6 +3,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  border-radius: inherit;
 }
 
 .ui-image-contain {
@@ -260,14 +261,19 @@
   }
 }
 
-.ui-card.ui-person-list-card {
+.ui-card.ui-person-list-card,
+.ui-card.ui-organization-card {
+  display: flex;
+  min-width: 0;
   height: 100%;
+  align-items: center;
+  gap: var(--space-3);
   border-radius: var(--radius-2);
   background: color-mix(in oklab, var(--surface-muted), transparent 42%);
+  padding: 0.875rem;
   box-shadow: none;
 }
 
-.ui-person-avatar-small,
 .ui-person-avatar-large {
   position: relative;
   display: flex;
@@ -279,10 +285,15 @@
 }
 
 .ui-person-avatar-small {
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 1px solid color-mix(in oklab, white, transparent 90%);
-  background: color-mix(in oklab, white, transparent 96%);
+  position: relative;
+  display: flex;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-3);
 }
 
 .ui-person-avatar-large {
@@ -297,6 +308,11 @@
 }
 
 @media (width >= 40rem) {
+  .ui-person-avatar-small {
+    width: 3.75rem;
+    height: 3.75rem;
+  }
+
   .ui-person-avatar-large {
     width: 7rem;
     height: 7rem;
@@ -304,30 +320,10 @@
   }
 }
 
-.ui-person-avatar-rule {
-  pointer-events: none;
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  height: 1px;
-  background: color-mix(in oklab, white, transparent 92%);
-}
-
-.ui-person-avatar-inner {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
 .ui-person-initials {
   position: relative;
   color: var(--text-primary);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -349,43 +345,32 @@
   padding-inline: 0.125rem;
 }
 
-.ui-organization-card-link {
+.ui-organization-card-link,
+.ui-person-list-link {
   display: block;
   height: 100%;
   border-radius: var(--radius-2);
 }
 
-.ui-card.ui-organization-card {
-  display: flex;
-  min-width: 0;
-  height: 100%;
-  align-items: center;
-  gap: var(--space-3);
-  border-radius: var(--radius-2);
-  background: color-mix(in oklab, var(--surface-muted), transparent 42%);
-  padding: 0.875rem;
-  box-shadow: none;
-}
-
-.ui-logo-frame-sm {
+.ui-logo-media-sm {
   width: 3rem;
   height: 3rem;
   flex-shrink: 0;
 }
 
-.ui-logo-frame-lg {
+.ui-logo-media-lg {
   width: 5rem;
   height: 5rem;
   flex-shrink: 0;
 }
 
 @media (width >= 40rem) {
-  .ui-logo-frame-sm {
+  .ui-logo-media-sm {
     width: 3.75rem;
     height: 3.75rem;
   }
 
-  .ui-logo-frame-lg {
+  .ui-logo-media-lg {
     width: 6rem;
     height: 6rem;
   }
@@ -414,8 +399,15 @@
   font-size: 1.25rem;
 }
 
-.ui-logo-image-pad {
-  padding: var(--space-2);
+.ui-logo-image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-2);
+  clip-path: inset(0 round var(--radius-2));
+  object-fit: contain;
 }
 
 .ui-organization-name {
@@ -498,6 +490,7 @@
   width: 100%;
   max-width: 100%;
   max-height: min(70vh, 34rem);
+  border-radius: inherit;
   object-fit: contain;
 }
 
@@ -506,16 +499,13 @@
   gap: var(--space-2);
 }
 
-.ui-logo-frame {
+.ui-logo-media {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: var(--radius-3);
-  border: 1px solid color-mix(in oklab, var(--border), white 8%);
-  background: color-mix(in oklab, var(--surface-elevated), transparent 12%);
-  box-shadow: inset 0 1px 0 color-mix(in oklab, white, transparent 94%);
+  border-radius: var(--radius-2);
 }
 
 .ui-input-base {
@@ -542,6 +532,20 @@
 
 .ui-input-base::placeholder {
   color: color-mix(in oklab, var(--color-muted), transparent 14%);
+}
+
+.ui-input-base.ui-select-control {
+  background-color: color-mix(in oklab, var(--color-surface), transparent 10%);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.15rem) 50%,
+    calc(100% - 0.85rem) 50%;
+  background-repeat: no-repeat;
+  background-size:
+    0.35rem 0.35rem,
+    0.35rem 0.35rem;
 }
 
 .ui-btn-base {
@@ -1596,27 +1600,6 @@
   flex-shrink: 0;
 }
 
-.ui-person-list-link {
-  position: relative;
-  z-index: 10;
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  padding: 0.875rem var(--space-4) 0.875rem var(--space-5);
-}
-
-@media (width >= 40rem) {
-  .ui-person-list-link {
-    padding: var(--space-4) var(--space-5) var(--space-4) var(--space-6);
-  }
-}
-
-.ui-person-list-row {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-}
-
 .ui-focus-ring:focus-visible,
 .ui-link:focus-visible {
   outline: 2px solid var(--focus);
@@ -1728,17 +1711,13 @@
   flex: 0 0 auto;
   align-self: center;
   border-radius: var(--radius-1);
-  border: 1px solid color-mix(in oklab, var(--border), white 8%);
-  background: color-mix(in oklab, var(--surface-elevated), transparent 8%);
   object-fit: contain;
-  padding: 0.3125rem;
 }
 
 @media (width >= 40rem) {
   .ui-content-card-logo {
     max-width: 5.5rem;
     max-height: 4rem;
-    padding: 0.375rem;
   }
 }
 

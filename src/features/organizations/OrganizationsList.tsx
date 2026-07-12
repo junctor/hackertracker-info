@@ -85,13 +85,12 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
                   className="ui-focus-ring ui-organization-card-link"
                 >
                   <article className="ui-card ui-card-interactive ui-organization-card">
-                    <div className="ui-logo-frame ui-logo-frame-sm">
+                    <div className="ui-logo-media ui-logo-media-sm">
                       {showLogo && logoUrl ? (
                         <Image
                           src={logoUrl}
                           alt={`${organization.name} logo`}
-                          fillContainer
-                          className="ui-image-contain ui-logo-image-pad"
+                          className="ui-image-contain ui-logo-image"
                           sizes="(min-width: 640px) 5rem, 4rem"
                           onError={() =>
                             setBrokenLogoIds((current) =>

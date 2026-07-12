@@ -1,29 +1,19 @@
-import { UserIcon } from "@heroicons/react/24/solid";
 import { useState, useMemo } from "react";
 import { Link } from "react-router";
 
 import Image from "@/components/Image";
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
+import { alphaSort } from "@/lib/misc";
 import { PeopleCardsView } from "@/lib/types/ht-types";
 import { getSafeImageHref } from "@/lib/url";
 
 import { getPersonInitials } from "./personInitials";
 
-type SortMode = "name-asc" | "name-desc";
-
 type Props = {
   people: PeopleCardsView;
   conference: ConferenceManifest;
 };
-
-const PERSON_ACCENT_CLASS_NAMES = [
-  "ui-person-accent-0",
-  "ui-person-accent-1",
-  "ui-person-accent-2",
-  "ui-person-accent-3",
-  "ui-person-accent-4",
-];
 
 type AvatarRecord = {
   avatar?: { url?: string | null } | string | null;
@@ -70,18 +60,6 @@ function getPersonAvatarUrl(person: AvatarRecord): string | null {
   return null;
 }
 
-function getPersonAccentClassName(name?: string | null): string {
-  const normalizedName = getDisplayName(name);
-  let hash = 0;
-  for (const char of normalizedName) {
-    hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
-  }
-  return (
-    PERSON_ACCENT_CLASS_NAMES[hash % PERSON_ACCENT_CLASS_NAMES.length] ??
-    PERSON_ACCENT_CLASS_NAMES[0]
-  );
-}
-
 function highlight(text: string, rawQuery: string) {
   const q = rawQuery.trim();
   if (!q) return text;
@@ -99,27 +77,24 @@ function highlight(text: string, rawQuery: string) {
 
 export default function PeopleList({ people, conference }: Props) {
   const [query, setQuery] = useState("");
-  const [sortMode, setSortMode] = useState<SortMode>("name-asc");
   const [brokenAvatarIds, setBrokenAvatarIds] = useState<Record<number, true>>({});
-  const collator = useMemo(() => new Intl.Collator(undefined, { sensitivity: "base" }), []);
   const trimmedQuery = query.trim();
+
+  const sortedPeople = useMemo(
+    () => people.toSorted((a, b) => alphaSort(getDisplayName(a.name), getDisplayName(b.name))),
+    [people],
+  );
+
   const filtered = useMemo(() => {
     const q = trimmedQuery.toLowerCase();
-    const base = q
-      ? people.filter((person) => {
-          const personName = getDisplayName(person.name).toLowerCase();
-          const personTitle = getDisplayTitle(person.title)?.toLowerCase() ?? "";
-          return personName.includes(q) || personTitle.includes(q);
-        })
-      : [...people];
+    if (!q) return sortedPeople;
 
-    base.sort((a, b) => {
-      const cmp = collator.compare(getDisplayName(a.name), getDisplayName(b.name));
-      return sortMode === "name-asc" ? cmp : -cmp;
+    return sortedPeople.filter((person) => {
+      const personName = getDisplayName(person.name).toLowerCase();
+      const personTitle = getDisplayTitle(person.title)?.toLowerCase() ?? "";
+      return personName.includes(q) || personTitle.includes(q);
     });
-
-    return base;
-  }, [people, trimmedQuery, sortMode, collator]);
+  }, [sortedPeople, trimmedQuery]);
   const hasSearch = trimmedQuery.length > 0;
   const resultCountLabel = `${filtered.length} ${filtered.length === 1 ? "person" : "people"}`;
 
@@ -135,22 +110,10 @@ export default function PeopleList({ people, conference }: Props) {
           value: query,
           onChange: setQuery,
         }}
-      >
-        <label className="ui-control-label">
-          <span className="ui-visually-hidden">Sort people</span>
-          <select
-            value={sortMode}
-            onChange={(e) => setSortMode(e.currentTarget.value as SortMode)}
-            className="ui-input-base ui-select-control ui-focus-ring"
-          >
-            <option value="name-asc">Name (A-Z)</option>
-            <option value="name-desc">Name (Z-A)</option>
-          </select>
-        </label>
-      </PageHeader>
+      />
 
       {filtered.length === 0 ? (
-        <div className="ui-empty-state">
+        <div role="status" className="ui-empty-state ui-page-empty-offset">
           <p>
             {trimmedQuery ? `No people found for "${trimmedQuery}".` : "No people are listed yet."}
           </p>
@@ -169,70 +132,46 @@ export default function PeopleList({ people, conference }: Props) {
           {filtered.map((person) => {
             const personName = getDisplayName(person.name);
             const personTitle = getDisplayTitle(person.title);
-            const personInitials = getPersonInitials(person.name);
+            const personInitials = getPersonInitials(person.name) || getPersonInitials(personName);
             const avatarUrl = getPersonAvatarUrl(person);
             const showAvatarImage = Boolean(avatarUrl) && !brokenAvatarIds[person.id];
-            const accentClassName = getPersonAccentClassName(person.name);
 
             return (
               <li key={person.id} className="ui-grid-card-item">
-                <article
-                  className={`ui-card ui-card-interactive ui-accent-card ui-person-list-card ${accentClassName}`}
+                <Link
+                  to={`/${conference.slug}/people/?id=${person.id}`}
+                  className="ui-focus-ring ui-person-list-link"
                 >
-                  <span aria-hidden="true" className="ui-accent-rail" />
-                  <span aria-hidden="true" className="ui-accent-rail-overlay" />
-
-                  <Link
-                    to={`/${conference.slug}/people/?id=${person.id}`}
-                    className="ui-focus-ring ui-person-list-link"
-                  >
-                    <div className="ui-person-list-row">
-                      <div className="ui-person-avatar ui-inset-highlight-soft ui-person-avatar-small">
-                        <div className="ui-person-avatar-rule" />
-                        <div className="ui-person-avatar-inner">
-                          {showAvatarImage && avatarUrl ? (
-                            <Image
-                              src={avatarUrl}
-                              alt={personName}
-                              fillContainer
-                              sizes="48px"
-                              className="ui-image-cover"
-                              onError={() =>
-                                setBrokenAvatarIds((current) =>
-                                  current[person.id] ? current : { ...current, [person.id]: true },
-                                )
-                              }
-                            />
-                          ) : (
-                            <>
-                              <div
-                                aria-hidden="true"
-                                className="ui-avatar-fallback-glow ui-fill-layer"
-                              />
-                              {personInitials ? (
-                                <span className="ui-person-initials">{personInitials}</span>
-                              ) : (
-                                <UserIcon
-                                  className="ui-icon-sm ui-layer-above"
-                                  aria-hidden="true"
-                                />
-                              )}
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="ui-person-card-copy">
-                        <h2 className="ui-card-title">
-                          <span className="ui-clamp-two">{highlight(personName, query)}</span>
-                        </h2>
-                        {personTitle ? (
-                          <p className="ui-card-meta ui-clamp-two">{personTitle}</p>
-                        ) : null}
-                      </div>
+                  <article className="ui-card ui-card-interactive ui-person-list-card">
+                    <div className="ui-person-avatar ui-person-avatar-small">
+                      {showAvatarImage && avatarUrl ? (
+                        <Image
+                          src={avatarUrl}
+                          alt={personName}
+                          fillContainer
+                          sizes="(min-width: 640px) 3.75rem, 3rem"
+                          className="ui-image-cover"
+                          onError={() =>
+                            setBrokenAvatarIds((current) =>
+                              current[person.id] ? current : { ...current, [person.id]: true },
+                            )
+                          }
+                        />
+                      ) : (
+                        <span className="ui-person-initials">{personInitials}</span>
+                      )}
                     </div>
-                  </Link>
-                </article>
+
+                    <div className="ui-person-card-copy">
+                      <h2 className="ui-card-title">
+                        <span className="ui-clamp-two">{highlight(personName, query)}</span>
+                      </h2>
+                      {personTitle ? (
+                        <p className="ui-card-meta ui-clamp-two">{personTitle}</p>
+                      ) : null}
+                    </div>
+                  </article>
+                </Link>
               </li>
             );
           })}

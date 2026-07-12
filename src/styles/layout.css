@@ -127,6 +127,7 @@
 
 .ui-people-grid {
   gap: var(--space-4);
+  margin-top: var(--space-6);
 }
 
 .ui-organization-grid {

@@ -17,6 +17,7 @@ type Props = {
   actionsInline?: boolean;
   description?: ReactNode;
   kicker?: ReactNode;
+  media?: ReactNode;
   resultLabel?: ReactNode;
   search?: SearchProps;
   children?: ReactNode;
@@ -28,6 +29,7 @@ export default function PageHeader({
   actionsInline,
   description,
   kicker,
+  media,
   resultLabel,
   search,
   children,
@@ -59,6 +61,8 @@ export default function PageHeader({
           </div>
         ) : null}
       </div>
+
+      {media ? <div className="ui-page-header-media">{media}</div> : null}
 
       {hasControls ? (
         <form

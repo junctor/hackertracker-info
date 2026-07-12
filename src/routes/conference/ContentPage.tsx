@@ -2,6 +2,7 @@ import { useMemo, type ReactElement } from "react";
 
 import type {
   ContentCardsView,
+  ContentDetailView,
   ContentDetailsById,
   TagTypesBrowseView,
 } from "@/lib/types/ht-types/views";
@@ -24,6 +25,34 @@ type ContentPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
+
+export function resolveRelatedContentCards(
+  contentDetail: ContentDetailView,
+  contentDetailsById: ContentDetailsById,
+): ContentCardsView {
+  const relatedIds = contentDetail.content.relatedContentIds ?? [];
+  const seenIds = new Set<number>();
+  const relatedContent: ContentCardsView = [];
+
+  for (const relatedId of relatedIds) {
+    if (relatedId === contentDetail.content.id || seenIds.has(relatedId)) {
+      continue;
+    }
+
+    seenIds.add(relatedId);
+
+    const relatedDetail = contentDetailsById[String(relatedId)];
+    if (!relatedDetail) continue;
+
+    relatedContent.push({
+      id: relatedDetail.content.id,
+      tags: relatedDetail.tags,
+      title: relatedDetail.content.title,
+    });
+  }
+
+  return relatedContent;
+}
 
 export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   const {
@@ -129,6 +158,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
     }
 
     const { content, sessions, locations, people, tags } = contentDetail;
+    const relatedContent = resolveRelatedContentCards(contentDetail, contentDetailsById ?? {});
 
     pageTitle = `${content.title} | ${conf.name}`;
     pageDescription = metaDescription;
@@ -140,6 +170,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
         locations={locations}
         people={people}
         tags={tags}
+        relatedContent={relatedContent}
         bookmarks={bookmarks}
         conference={conf}
       />

@@ -1,13 +1,12 @@
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useEffect, useMemo } from "react";
-import { Link, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 
 import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 
 import PageHeader from "@/components/ui/PageHeader";
-import { getAccentStyle } from "@/lib/color";
 import { ConferenceManifest } from "@/lib/conferences";
-import { buildAppPath } from "@/lib/url";
+
+import ContentCard from "./ContentCard";
 
 interface Props {
   conference: ConferenceManifest;
@@ -171,60 +170,9 @@ export default function ContentList({ content, tags, conference }: Props) {
         </div>
       ) : (
         <ul className="ui-list-stack-sm">
-          {filtered.map((item) => {
-            const visibleTags = item.tags.slice(0, 4);
-            const hiddenTagCount = item.tags.length - visibleTags.length;
-            const itemColor = item.tags[0]?.colorBackground;
-            const accentStyle = getAccentStyle(itemColor);
-
-            return (
-              <li
-                key={item.id}
-                style={accentStyle}
-                className="ui-card ui-card-interactive ui-accent-card ui-content-list-card"
-              >
-                <span aria-hidden="true" className="ui-accent-rail" />
-                <span aria-hidden="true" className="ui-accent-rail-overlay" />
-                <Link
-                  to={buildAppPath([conference.slug, "content"], { id: item.id })}
-                  className="ui-focus-ring ui-accent-card-link"
-                >
-                  <div className="ui-content-list-row">
-                    <div className="ui-item-main ui-item-copy">
-                      <div className="ui-content-card-title-row">
-                        <h2 className="ui-card-title ui-accent-card-title-md ui-clamp-two">
-                          {item.title}
-                        </h2>
-                        <ArrowRightIcon aria-hidden="true" className="ui-icon-sm ui-card-arrow" />
-                      </div>
-
-                      {visibleTags.length > 0 ? (
-                        <ul className="ui-chip-list-tight ui-content-list-tags">
-                          {visibleTags.map((tag) => (
-                            <li
-                              key={tag.id}
-                              className="ui-tag-chip ui-tag-chip-strong ui-content-list-tag"
-                              style={{
-                                backgroundColor: tag.colorBackground,
-                                color: tag.colorForeground,
-                              }}
-                            >
-                              {tag.label}
-                            </li>
-                          ))}
-                          {hiddenTagCount > 0 ? (
-                            <li className="ui-tag-chip ui-tone-muted ui-content-list-tag-more">
-                              +{hiddenTagCount} more
-                            </li>
-                          ) : null}
-                        </ul>
-                      ) : null}
-                    </div>
-                  </div>
-                </Link>
-              </li>
-            );
-          })}
+          {filtered.map((item) => (
+            <ContentCard key={item.id} conference={conference} item={item} />
+          ))}
         </ul>
       )}
     </section>

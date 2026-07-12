@@ -10,6 +10,7 @@ import type {
   PersonEntity,
   TagEntity,
 } from "@/lib/types/ht-types";
+import type { ContentCardsView } from "@/lib/types/ht-types/views";
 
 import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
@@ -17,6 +18,7 @@ import { getAccentStyle } from "@/lib/color";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { buildAbsoluteAppUrl, buildAppPath, getSafeExternalHref } from "@/lib/url";
 
+import ContentCard from "./ContentCard";
 import ContentSession from "./ContentSession";
 
 type Props = {
@@ -25,6 +27,7 @@ type Props = {
   locations: LocationEntity[];
   people: PersonEntity[];
   tags: TagEntity[];
+  relatedContent: ContentCardsView;
   bookmarks: number[];
   conference: ConferenceManifest;
 };
@@ -47,7 +50,8 @@ function getSessionTagAccentColor(
 }
 
 export default function ContentDetails(props: Props) {
-  const { content, sessions, locations, people, tags, bookmarks, conference } = props;
+  const { content, sessions, locations, people, tags, relatedContent, bookmarks, conference } =
+    props;
   const shareStatusId = useId();
   const [shareStatus, setShareStatus] = useTransientStatus();
 
@@ -255,6 +259,19 @@ export default function ContentDetails(props: Props) {
                   <span className="ui-pill-label-narrow ui-clip-text">{p.name}</span>
                 </Link>
               </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {relatedContent.length > 0 && (
+        <section aria-labelledby="related-content-title" className="ui-detail-section">
+          <h2 id="related-content-title" className="ui-section-label">
+            Related Content
+          </h2>
+          <ul className="ui-list-stack-sm">
+            {relatedContent.map((item) => (
+              <ContentCard key={item.id} conference={conference} item={item} />
             ))}
           </ul>
         </section>

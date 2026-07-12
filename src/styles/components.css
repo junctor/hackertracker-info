@@ -534,6 +534,20 @@
   color: color-mix(in oklab, var(--color-muted), transparent 14%);
 }
 
+.ui-input-base.ui-select-control {
+  background-color: color-mix(in oklab, var(--color-surface), transparent 10%);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.15rem) 50%,
+    calc(100% - 0.85rem) 50%;
+  background-repeat: no-repeat;
+  background-size:
+    0.35rem 0.35rem,
+    0.35rem 0.35rem;
+}
+
 .ui-btn-base {
   display: inline-flex;
   min-height: var(--control-min);

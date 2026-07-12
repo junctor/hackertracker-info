@@ -1,5 +1,5 @@
 import {
-  CalendarIcon,
+  CalendarDaysIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   HomeIcon,
@@ -104,7 +104,7 @@ export default function SiteHeader({ conference, activePageId }: Props) {
               title="Schedule"
               className="ui-topbar-action-link ui-topbar-schedule-link"
             >
-              <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
+              <CalendarDaysIcon className="ui-icon-sm" aria-hidden="true" />
               <span className="ui-topbar-schedule-label">Schedule</span>
             </Link>
           ) : null}

@@ -1,4 +1,4 @@
-import { ArrowTopRightOnSquareIcon, CalendarIcon } from "@heroicons/react/24/outline";
+import { ArrowTopRightOnSquareIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { useMemo } from "react";
 import { Link } from "react-router";
 
@@ -76,7 +76,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
                 to={`/${conference.slug}/tag/?id=${org.tagIdAsOrganizer}`}
                 className="ui-focus-ring ui-pill-link"
               >
-                <CalendarIcon className="ui-icon-xs ui-card-external-icon" aria-hidden />
+                <CalendarDaysIcon className="ui-icon-xs ui-card-external-icon" aria-hidden />
                 <span>View Schedule</span>
               </Link>
             ) : undefined

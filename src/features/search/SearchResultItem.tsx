@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
@@ -36,7 +36,7 @@ export default function SearchResultItem({ conf, result }: Props) {
           <h2 className="ui-card-title ui-search-result-title ui-clamp-three">{result.text}</h2>
         </div>
 
-        <ArrowRightIcon aria-hidden="true" className="ui-icon-sm ui-card-arrow" />
+        <ChevronRightIcon aria-hidden="true" className="ui-icon-sm ui-card-arrow" />
       </Link>
     </article>
   );

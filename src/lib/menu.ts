@@ -1,18 +1,20 @@
 import type { ComponentType } from "react";
 
 import {
-  ArchiveBoxIcon,
-  BoltIcon,
   BookmarkIcon,
-  CubeIcon,
-  GlobeAltIcon,
-  InformationCircleIcon,
-  ListBulletIcon,
+  BuildingOffice2Icon,
+  BuildingOfficeIcon,
+  BuildingStorefrontIcon,
+  CalendarDaysIcon,
+  ClipboardDocumentListIcon,
+  DocumentTextIcon,
   MagnifyingGlassIcon,
   MapIcon,
+  MapPinIcon,
   MegaphoneIcon,
   ShoppingBagIcon,
-  UserIcon,
+  TrophyIcon,
+  UserGroupIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
 
@@ -91,7 +93,7 @@ const SITE_MENU = {
     title: "readme.nfo",
     href: `/${c.slug}/readme.nfo`,
     description: "Reference docs, FAQs, and updates.",
-    icon: InformationCircleIcon,
+    icon: DocumentTextIcon,
   }),
 
   announcements: (c) => ({
@@ -107,7 +109,7 @@ const SITE_MENU = {
     title: "Schedule",
     href: `/${c.slug}/schedule/`,
     description: "Session times, rooms, and live status.",
-    icon: ListBulletIcon,
+    icon: CalendarDaysIcon,
   }),
 
   bookmarks: (c) => ({
@@ -123,7 +125,7 @@ const SITE_MENU = {
     title: "Content",
     href: conferenceRoute(c, "content"),
     description: "Talks, workshops, and presentation details.",
-    icon: ListBulletIcon,
+    icon: ClipboardDocumentListIcon,
   }),
 
   departments: (c) => {
@@ -133,7 +135,7 @@ const SITE_MENU = {
       title: directory?.title ?? "Departments",
       href: conferenceRoute(c, directory?.slug ?? "departments"),
       description: directory?.description ?? "Departments and responsibilities.",
-      icon: CubeIcon,
+      icon: BuildingOffice2Icon,
     };
   },
 
@@ -142,7 +144,7 @@ const SITE_MENU = {
     title: "People",
     href: conferenceRoute(c, "people"),
     description: "People and their sessions.",
-    icon: UserIcon,
+    icon: UsersIcon,
   }),
 
   maps: (c) => ({
@@ -158,7 +160,7 @@ const SITE_MENU = {
     title: "Locations",
     href: conferenceRoute(c, "locations"),
     description: "Rooms and venue locations.",
-    icon: GlobeAltIcon,
+    icon: MapPinIcon,
   }),
 
   merch: (c) => ({
@@ -184,7 +186,7 @@ const SITE_MENU = {
       title: directory?.title ?? "Villages",
       href: conferenceRoute(c, directory?.slug ?? "villages"),
       description: directory?.description ?? "Hands-on villages and activities.",
-      icon: ArchiveBoxIcon,
+      icon: BuildingOfficeIcon,
     };
   },
 
@@ -195,7 +197,7 @@ const SITE_MENU = {
       title: directory?.title ?? "Communities",
       href: conferenceRoute(c, directory?.slug ?? "communities"),
       description: directory?.description ?? "Special-interest groups and meetups.",
-      icon: UsersIcon,
+      icon: UserGroupIcon,
     };
   },
 
@@ -206,7 +208,7 @@ const SITE_MENU = {
       title: directory?.title ?? "Contests",
       href: conferenceRoute(c, directory?.slug ?? "contests"),
       description: directory?.description ?? "CTFs, challenges, and competitions.",
-      icon: BoltIcon,
+      icon: TrophyIcon,
     };
   },
 
@@ -217,7 +219,7 @@ const SITE_MENU = {
       title: directory?.title ?? "Exhibitors",
       href: conferenceRoute(c, directory?.slug ?? "exhibitors"),
       description: directory?.description ?? "Exhibitor booths and products.",
-      icon: CubeIcon,
+      icon: BuildingOfficeIcon,
     };
   },
 
@@ -228,7 +230,7 @@ const SITE_MENU = {
       title: directory?.title ?? "Vendors",
       href: conferenceRoute(c, directory?.slug ?? "vendors"),
       description: directory?.description ?? "Vendor booths and offerings.",
-      icon: CubeIcon,
+      icon: BuildingStorefrontIcon,
     };
   },
 } satisfies Record<SiteMenuKey, MenuBuilder>;

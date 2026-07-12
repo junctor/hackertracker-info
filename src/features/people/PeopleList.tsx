@@ -6,6 +6,7 @@ import Image from "@/components/Image";
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { PeopleCardsView } from "@/lib/types/ht-types";
+import { getSafeImageHref } from "@/lib/url";
 
 import { getPersonInitials } from "./personInitials";
 
@@ -62,7 +63,8 @@ function getPersonAvatarUrl(person: AvatarRecord): string | null {
 
   for (const candidate of candidates) {
     const normalized = getTrimmedText(candidate);
-    if (normalized) return normalized;
+    const safeUrl = getSafeImageHref(normalized);
+    if (safeUrl) return safeUrl;
   }
 
   return null;

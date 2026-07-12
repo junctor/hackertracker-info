@@ -8,7 +8,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getBookmarks } from "@/lib/storage";
 import { ContentEntity, SessionEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
-import { buildAppPath, getSafeExternalHref } from "@/lib/url";
+import { buildAppPath, getSafeExternalHref, getSafeImageHref } from "@/lib/url";
 
 import ContentSession from "../content/ContentSession";
 import { getPersonInitials } from "./personInitials";
@@ -69,7 +69,8 @@ function getPersonAvatarUrl(person: AvatarRecord): string | null {
 
   for (const candidate of candidates) {
     const normalized = getTrimmedText(candidate);
-    if (normalized) return normalized;
+    const safeUrl = getSafeImageHref(normalized);
+    if (safeUrl) return safeUrl;
   }
 
   return null;

@@ -1,5 +1,5 @@
 import { ArrowTopRightOnSquareIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 
 import Image from "@/components/Image";
@@ -7,7 +7,7 @@ import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { OrganizationEntity } from "@/lib/types/ht-types";
-import { getSafeExternalHref } from "@/lib/url";
+import { getSafeExternalHref, getSafeImageHref } from "@/lib/url";
 
 type Props = {
   org: OrganizationEntity;
@@ -23,6 +23,7 @@ function getHostname(url: string) {
 }
 
 export default function OrganizationDetails({ org, conference }: Props) {
+  const [hasLogoError, setHasLogoError] = useState(false);
   const initials = useMemo(
     () =>
       org.name
@@ -37,6 +38,12 @@ export default function OrganizationDetails({ org, conference }: Props) {
 
   const description = org.description?.trim();
   const hasLinks = org.links.length > 0;
+  const logoUrl = getSafeImageHref(org.logoUrl);
+  const showLogo = Boolean(logoUrl) && !hasLogoError;
+
+  useEffect(() => {
+    setHasLogoError(false);
+  }, [logoUrl]);
 
   return (
     <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
@@ -49,14 +56,15 @@ export default function OrganizationDetails({ org, conference }: Props) {
           title={
             <div className="ui-organization-header-row">
               <div className="ui-logo-frame ui-logo-frame-lg">
-                {org.logoUrl ? (
+                {showLogo && logoUrl ? (
                   <Image
-                    src={org.logoUrl}
+                    src={logoUrl}
                     alt={`${org.name} logo`}
                     fillContainer
                     className="ui-image-contain ui-logo-image-pad"
                     loading="eager"
                     sizes="(min-width: 640px) 6rem, 5rem"
+                    onError={() => setHasLogoError(true)}
                   />
                 ) : (
                   <div className="ui-logo-initials-fill" role="img" aria-label={`${org.name} logo`}>

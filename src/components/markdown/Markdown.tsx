@@ -3,6 +3,8 @@ import type { ComponentPropsWithoutRef, ReactNode, TableHTMLAttributes } from "r
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import { getSafeExternalHref, getSafeImageHref } from "@/lib/url";
+
 type Props = {
   content: string;
 };
@@ -15,10 +17,35 @@ type CodeProps = {
 
 type TableProps = TableHTMLAttributes<HTMLTableElement>;
 
-function MarkdownLink(props: ComponentPropsWithoutRef<"a">) {
-  const className = [props.className, "ui-link ui-focus-ring"].filter(Boolean).join(" ");
+function getSafeMarkdownHref(value?: string | null): string | null {
+  const trimmed = value?.trim();
+  if (!trimmed) return null;
 
-  return <a {...props} className={className} />;
+  if (trimmed.startsWith("#")) return trimmed;
+  if (trimmed.startsWith("/") && !trimmed.startsWith("//")) return trimmed;
+
+  return getSafeExternalHref(trimmed);
+}
+
+function isExternalNavigationHref(value: string): boolean {
+  return /^https?:/i.test(value);
+}
+
+function MarkdownLink({ href, children, className, ...props }: ComponentPropsWithoutRef<"a">) {
+  const safeHref = getSafeMarkdownHref(href);
+
+  if (!safeHref) return <>{children}</>;
+
+  const resolvedClassName = [className, "ui-link ui-focus-ring"].filter(Boolean).join(" ");
+  const externalProps = isExternalNavigationHref(safeHref)
+    ? { target: "_blank", rel: "noopener noreferrer" }
+    : {};
+
+  return (
+    <a {...props} {...externalProps} href={safeHref} className={resolvedClassName}>
+      {children}
+    </a>
+  );
 }
 
 function MarkdownCode({ inline, className, children, ...other }: CodeProps) {
@@ -41,12 +68,17 @@ function MarkdownHr(props: ComponentPropsWithoutRef<"hr">) {
   return <hr {...props} />;
 }
 
-function MarkdownImage(props: ComponentPropsWithoutRef<"img">) {
+function MarkdownImage({ src, alt, ...props }: ComponentPropsWithoutRef<"img">) {
+  const safeSrc = getSafeImageHref(src);
+
+  if (!safeSrc) return null;
+
   return (
     // Markdown images have unknown sizes; keep native img for now.
     <img
       {...props}
-      alt={props.alt ?? ""}
+      src={safeSrc}
+      alt={alt ?? ""}
       loading="lazy"
       decoding="async"
       className="ui-markdown-image"

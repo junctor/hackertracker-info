@@ -418,9 +418,11 @@
 
 .ui-home-conference-card-logo {
   position: relative;
+  overflow: hidden;
   width: 100%;
   aspect-ratio: 16 / 6;
   margin-top: var(--space-4);
+  border-radius: var(--radius-2);
 }
 
 @media (width >= 40rem) {
@@ -525,8 +527,10 @@
 .ui-conference-archive-logo {
   position: relative;
   display: block;
+  overflow: hidden;
   width: 5rem;
   aspect-ratio: 1;
+  border-radius: var(--radius-2);
 }
 
 .ui-conference-archive-logo-image {
@@ -1028,10 +1032,12 @@
 
 .ui-home-hero-logo {
   position: relative;
+  overflow: hidden;
   width: 91.6667%;
   max-width: 42rem;
   height: 10rem;
   margin-inline: auto;
+  border-radius: var(--radius-2);
 }
 
 @media (width >= 40rem) {
@@ -1067,9 +1073,11 @@
 }
 
 .ui-home-menu-logo {
+  overflow: hidden;
   width: 100%;
   max-width: 31rem;
   height: clamp(8rem, 26vw, 14rem);
+  border-radius: var(--radius-2);
 }
 
 @media (width < 48rem) {

@@ -55,13 +55,12 @@ export default function OrganizationDetails({ org, conference }: Props) {
           actionsInline
           title={
             <div className="ui-organization-header-row">
-              <div className="ui-logo-frame ui-logo-frame-lg">
+              <div className="ui-logo-media ui-logo-media-lg">
                 {showLogo && logoUrl ? (
                   <Image
                     src={logoUrl}
                     alt={`${org.name} logo`}
-                    fillContainer
-                    className="ui-image-contain ui-logo-image-pad"
+                    className="ui-image-contain ui-logo-image"
                     loading="eager"
                     sizes="(min-width: 640px) 6rem, 5rem"
                     onError={() => setHasLogoError(true)}

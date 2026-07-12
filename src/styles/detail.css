@@ -225,6 +225,7 @@
   width: auto;
   max-width: min(100%, 18rem);
   max-height: 10rem;
+  border-radius: var(--radius-2);
   object-fit: contain;
 }
 

@@ -221,6 +221,14 @@
   color: var(--text-muted);
 }
 
+.ui-content-detail-logo {
+  width: auto;
+  max-width: min(100%, 18rem);
+  max-height: 10rem;
+  border-radius: var(--radius-2);
+  object-fit: contain;
+}
+
 .ui-details-summary::-webkit-details-marker {
   display: none;
 }

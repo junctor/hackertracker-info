@@ -1,4 +1,5 @@
 const SAFE_EXTERNAL_PROTOCOLS = new Set(["http:", "https:", "mailto:"]);
+const SAFE_IMAGE_PROTOCOLS = new Set(["https:"]);
 
 type AppUrlSearchValue = string | number | boolean | null | undefined;
 
@@ -46,6 +47,18 @@ export function getSafeExternalHref(value?: string | null): string | null {
   try {
     const url = new URL(candidate);
     return SAFE_EXTERNAL_PROTOCOLS.has(url.protocol) ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+
+export function getSafeImageHref(value?: string | null): string | null {
+  const trimmed = value?.trim();
+  if (!trimmed) return null;
+
+  try {
+    const url = new URL(trimmed);
+    return SAFE_IMAGE_PROTOCOLS.has(url.protocol) ? url.href : null;
   } catch {
     return null;
   }

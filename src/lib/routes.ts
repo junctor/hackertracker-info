@@ -1,5 +1,7 @@
 import type { PageId } from "@/lib/types/page-meta";
 
+import type { ConferenceManifest, ConferenceSlug } from "./conferences";
+
 export type ConferenceRouteKey =
   | "announcements"
   | "bookmarks"
@@ -26,13 +28,23 @@ export type ConferenceRouteKey =
 
 export type ConferenceRouteDefinition = {
   key: ConferenceRouteKey;
-  path?: string;
+  path: string;
   activePageId: PageId;
   staticSegment: string;
 };
 
+type ConferencePathInput = ConferenceManifest | ConferenceSlug | string;
+
+function conferenceSlug(input: ConferencePathInput) {
+  return typeof input === "string" ? input : input.slug;
+}
+
+export function conferenceMenuPath(conference: ConferencePathInput) {
+  return `/${conferenceSlug(conference)}/menu/`;
+}
+
 export const CONFERENCE_ROUTE_DEFINITIONS = [
-  { key: "menu", path: undefined, activePageId: "menu", staticSegment: "" },
+  { key: "menu", path: "menu", activePageId: "menu", staticSegment: "menu" },
   {
     key: "announcements",
     path: "announcements",
@@ -63,7 +75,6 @@ export const CONFERENCE_ROUTE_DEFINITIONS = [
   },
   { key: "locations", path: "locations", activePageId: "locations", staticSegment: "locations" },
   { key: "maps", path: "maps", activePageId: "maps", staticSegment: "maps" },
-  { key: "menu", path: "menu", activePageId: "menu", staticSegment: "menu" },
   { key: "merch", path: "merch", activePageId: "merch", staticSegment: "merch" },
   {
     key: "organization",

@@ -12,6 +12,7 @@ import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { getOrganizationDirectoryConfig } from "@/lib/menu";
+import { conferenceMenuPath } from "@/lib/routes";
 import {
   DerivedTagIdsByLabel,
   OrganizationDetailsById,
@@ -99,7 +100,7 @@ export default function DirectoryPage({
   const isLoading = organizationsIsLoading || tagIsLoading;
   const error = organizationsError || tagError;
   const directoryHref = `/${conf.slug}/${routeSlug}/`;
-  const conferenceHomeHref = `/${conf.slug}/`;
+  const conferenceHomeHref = conferenceMenuPath(conf);
 
   if (!isReady) return <LoadingScreen />;
   if (isIdInvalid) {

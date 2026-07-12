@@ -2,6 +2,7 @@ import { useMemo, type ReactElement } from "react";
 
 import type {
   ContentCardsView,
+  ContentDetailView,
   ContentDetailsById,
   TagTypesBrowseView,
 } from "@/lib/types/ht-types/views";
@@ -15,6 +16,7 @@ import ContentList from "@/features/content/ContentList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { conferenceMenuPath } from "@/lib/routes";
 import { getBookmarks } from "@/lib/storage";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
@@ -23,6 +25,40 @@ type ContentPageProps = {
   conf: ConferenceManifest;
   activePageId: PageId;
 };
+
+export function resolveRelatedContentCards(
+  contentDetail: ContentDetailView,
+  contentDetailsById: ContentDetailsById,
+): ContentCardsView {
+  const relatedIds = contentDetail.content.relatedContentIds ?? [];
+  const seenIds = new Set<number>();
+  const relatedContent: ContentCardsView = [];
+
+  for (const relatedId of relatedIds) {
+    if (relatedId === contentDetail.content.id || seenIds.has(relatedId)) {
+      continue;
+    }
+
+    seenIds.add(relatedId);
+
+    const relatedDetail = contentDetailsById[String(relatedId)];
+    if (!relatedDetail) continue;
+
+    const card = {
+      id: relatedDetail.content.id,
+      tags: relatedDetail.tags,
+      title: relatedDetail.content.title,
+    };
+
+    if (relatedDetail.content.logoUrl) {
+      relatedContent.push({ ...card, logoUrl: relatedDetail.content.logoUrl });
+    } else {
+      relatedContent.push(card);
+    }
+  }
+
+  return relatedContent;
+}
 
 export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   const {
@@ -74,7 +110,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   }, [conf.name, contentDetail]);
 
   const contentListHref = `/${conf.slug}/content/`;
-  const conferenceHomeHref = `/${conf.slug}/`;
+  const conferenceHomeHref = conferenceMenuPath(conf);
 
   if (!isReady) {
     return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
@@ -128,6 +164,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
     }
 
     const { content, sessions, locations, people, tags } = contentDetail;
+    const relatedContent = resolveRelatedContentCards(contentDetail, contentDetailsById ?? {});
 
     pageTitle = `${content.title} | ${conf.name}`;
     pageDescription = metaDescription;
@@ -139,6 +176,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
         locations={locations}
         people={people}
         tags={tags}
+        relatedContent={relatedContent}
         bookmarks={bookmarks}
         conference={conf}
       />

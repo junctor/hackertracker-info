@@ -5,6 +5,7 @@ import type { ConferenceEntity, ConferenceMapEntity } from "@/lib/types/ht-types
 
 import Image from "@/components/Image";
 import PageHeader from "@/components/ui/PageHeader";
+import { getSafeExternalHref, getSafeImageHref } from "@/lib/url";
 
 type Props = {
   conference: ConferenceEntity;
@@ -78,6 +79,8 @@ export default function ConferenceMapsList({ conference }: Props) {
           {maps.map((map) => {
             const name = getMapName(map);
             const filename = getMapFilename(map);
+            const previewUrl = getSafeImageHref(map.svg_url);
+            const pdfUrl = getSafeExternalHref(map.url);
 
             return (
               <li key={map.id}>
@@ -93,10 +96,10 @@ export default function ConferenceMapsList({ conference }: Props) {
                     ) : null}
                   </div>
 
-                  {map.svg_url && !brokenPreviewIds[map.id] ? (
+                  {previewUrl && !brokenPreviewIds[map.id] ? (
                     <div className="ui-map-preview-frame">
                       <Image
-                        src={map.svg_url}
+                        src={previewUrl}
                         alt={`Preview of ${name}`}
                         className="ui-map-preview-image"
                         onError={() =>
@@ -108,9 +111,9 @@ export default function ConferenceMapsList({ conference }: Props) {
                     </div>
                   ) : null}
 
-                  {map.url ? (
+                  {pdfUrl ? (
                     <a
-                      href={map.url}
+                      href={pdfUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Open PDF for ${name}`}

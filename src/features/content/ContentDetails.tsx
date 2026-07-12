@@ -1,5 +1,5 @@
 import { ArrowTopRightOnSquareIcon, ShareIcon, UserIcon } from "@heroicons/react/24/outline";
-import { useId, useMemo } from "react";
+import { useId, useMemo, useState } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
@@ -10,13 +10,17 @@ import type {
   PersonEntity,
   TagEntity,
 } from "@/lib/types/ht-types";
+import type { ContentCardsView } from "@/lib/types/ht-types/views";
 
+import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
 import { getAccentStyle } from "@/lib/color";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { buildAbsoluteAppUrl, buildAppPath, getSafeExternalHref } from "@/lib/url";
 
+import ContentCard from "./ContentCard";
+import { getVisibleContentLogoUrl } from "./contentLogo";
 import ContentSession from "./ContentSession";
 
 type Props = {
@@ -25,6 +29,7 @@ type Props = {
   locations: LocationEntity[];
   people: PersonEntity[];
   tags: TagEntity[];
+  relatedContent: ContentCardsView;
   bookmarks: number[];
   conference: ConferenceManifest;
 };
@@ -47,11 +52,14 @@ function getSessionTagAccentColor(
 }
 
 export default function ContentDetails(props: Props) {
-  const { content, sessions, locations, people, tags, bookmarks, conference } = props;
+  const { content, sessions, locations, people, tags, relatedContent, bookmarks, conference } =
+    props;
   const shareStatusId = useId();
   const [shareStatus, setShareStatus] = useTransientStatus();
+  const [failedLogoUrl, setFailedLogoUrl] = useState<string | null>(null);
 
   const peopleBasePath = buildAppPath([conference.slug, "people"]);
+  const visibleLogoUrl = getVisibleContentLogoUrl(content.logoUrl, failedLogoUrl);
 
   const locationNameById = useMemo(
     () => new Map<number, string>(locations.map((l) => [l.id, l.name])),
@@ -169,7 +177,7 @@ export default function ContentDetails(props: Props) {
           <h2 id="tags-title" className="ui-section-label">
             Tags
           </h2>
-          <ul className="ui-chip-list">
+          <ul className="ui-chip-list-tight">
             {tags.map((tag) => (
               <li key={tag.id}>
                 <Link
@@ -178,7 +186,7 @@ export default function ContentDetails(props: Props) {
                   className="ui-focus-ring ui-tag-chip ui-tag-chip-strong ui-tag-link ui-tag-link-detail"
                   style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
                 >
-                  <span className="ui-pill-label ui-clip-text">{tag.label}</span>
+                  {tag.label}
                 </Link>
               </li>
             ))}
@@ -259,6 +267,30 @@ export default function ContentDetails(props: Props) {
           </ul>
         </section>
       )}
+
+      {relatedContent.length > 0 && (
+        <section aria-labelledby="related-content-title" className="ui-detail-section">
+          <h2 id="related-content-title" className="ui-section-label">
+            Related Content
+          </h2>
+          <ul className="ui-list-stack-sm">
+            {relatedContent.map((item) => (
+              <ContentCard key={item.id} conference={conference} item={item} />
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {visibleLogoUrl ? (
+        <section aria-label={`${content.title} logo`} className="ui-detail-section">
+          <Image
+            src={visibleLogoUrl}
+            alt=""
+            className="ui-image-contain ui-content-detail-logo"
+            onError={() => setFailedLogoUrl(visibleLogoUrl)}
+          />
+        </section>
+      ) : null}
     </article>
   );
 }

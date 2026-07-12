@@ -4,6 +4,7 @@ import Head from "@/components/Head";
 import Image from "@/components/Image";
 import { aiMetadata, conferenceDataFeeds, SITE_DESCRIPTION } from "@/lib/aiMetadata";
 import { CONFERENCES, type ConferenceManifest } from "@/lib/conferences";
+import { conferenceMenuPath } from "@/lib/routes";
 
 type ConferenceCardConfig = {
   conference: ConferenceManifest;
@@ -65,7 +66,7 @@ export default function ConferencesPage() {
 
 function ConferenceArchiveCard({ conference }: { conference: ConferenceManifest }) {
   return (
-    <Link to={`/${conference.slug}/`} className="ui-focus-ring ui-conference-archive-card">
+    <Link to={conferenceMenuPath(conference)} className="ui-focus-ring ui-conference-archive-card">
       <span className="ui-conference-archive-logo">
         <Image
           src={`/images/${conference.logoFile}`}

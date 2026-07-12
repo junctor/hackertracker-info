@@ -8,6 +8,7 @@ import PeopleList from "@/features/people/PeopleList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { conferenceMenuPath } from "@/lib/routes";
 import { PeopleCardsView, PeopleDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
@@ -55,7 +56,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   }, [personDetail, conf.name]);
 
   const peopleListHref = `/${conf.slug}/people/`;
-  const conferenceHomeHref = `/${conf.slug}/`;
+  const conferenceHomeHref = conferenceMenuPath(conf);
 
   if (!isReady) return <LoadingScreen />;
   if (isIdInvalid) {

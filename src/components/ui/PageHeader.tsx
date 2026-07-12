@@ -68,6 +68,7 @@ export default function PageHeader({
             search?.onSubmit?.();
           }}
           className="ui-control-panel"
+          data-has-submit={search?.onSubmit ? "true" : undefined}
         >
           {search ? (
             <label htmlFor={searchInputId} className="ui-page-header-search-label">

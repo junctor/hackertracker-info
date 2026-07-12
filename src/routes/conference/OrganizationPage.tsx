@@ -5,6 +5,7 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { conferenceMenuPath } from "@/lib/routes";
 import { OrganizationDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
@@ -30,7 +31,7 @@ export default function OrganizationPage({ conf, activePageId }: OrganizationPag
 
   const organization = shouldLoadDetails ? organizationsById?.[String(organizationId)] : undefined;
   const organizationsHref = `/${conf.slug}/communities/`;
-  const conferenceHomeHref = `/${conf.slug}/`;
+  const conferenceHomeHref = conferenceMenuPath(conf);
 
   if (!isReady) return <LoadingScreen />;
   if (isInvalid) {

@@ -9,6 +9,7 @@ import Image from "@/components/Image";
 import Countdown from "@/features/home/Countdown";
 import { aiMetadata, conferenceDataFeeds, SITE_DESCRIPTION } from "@/lib/aiMetadata";
 import { CONFERENCES, type ConferenceManifest } from "@/lib/conferences";
+import { conferenceMenuPath } from "@/lib/routes";
 
 gsap.registerPlugin(useGSAP, ScrambleTextPlugin);
 
@@ -256,7 +257,7 @@ function ConferenceCard({
   conference: ConferenceManifest;
   subtitle: string;
 }) {
-  const href = `/${conference.slug}/`;
+  const href = conferenceMenuPath(conference);
   const src = `/images/${conference.logoFile}`;
   const showCountdown = useHasActiveCountdown(conference.kickoff);
 

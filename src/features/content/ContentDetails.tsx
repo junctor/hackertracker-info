@@ -177,7 +177,7 @@ export default function ContentDetails(props: Props) {
           <h2 id="tags-title" className="ui-section-label">
             Tags
           </h2>
-          <ul className="ui-chip-list">
+          <ul className="ui-chip-list-tight">
             {tags.map((tag) => (
               <li key={tag.id}>
                 <Link
@@ -186,7 +186,7 @@ export default function ContentDetails(props: Props) {
                   className="ui-focus-ring ui-tag-chip ui-tag-chip-strong ui-tag-link ui-tag-link-detail"
                   style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
                 >
-                  <span className="ui-pill-label ui-clip-text">{tag.label}</span>
+                  {tag.label}
                 </Link>
               </li>
             ))}

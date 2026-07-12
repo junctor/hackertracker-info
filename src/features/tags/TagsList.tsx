@@ -27,7 +27,7 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
     <Link
       to={`/${conference.slug}/tag/?id=${tag.id}`}
       aria-label={`Show schedule for ${tag.label}`}
-      className={`ui-focus-ring ui-tag-chip ui-tag-link`}
+      className="ui-focus-ring ui-tag-chip ui-tag-chip-strong ui-tag-link"
       style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
     >
       {tag.label}

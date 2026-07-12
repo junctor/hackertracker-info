@@ -44,11 +44,17 @@ export function resolveRelatedContentCards(
     const relatedDetail = contentDetailsById[String(relatedId)];
     if (!relatedDetail) continue;
 
-    relatedContent.push({
+    const card = {
       id: relatedDetail.content.id,
       tags: relatedDetail.tags,
       title: relatedDetail.content.title,
-    });
+    };
+
+    if (relatedDetail.content.logoUrl) {
+      relatedContent.push({ ...card, logoUrl: relatedDetail.content.logoUrl });
+    } else {
+      relatedContent.push(card);
+    }
   }
 
   return relatedContent;

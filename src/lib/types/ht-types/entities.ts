@@ -18,6 +18,7 @@ export type ContentEntity = {
     type: string;
     url: string;
   }>;
+  logoUrl?: string;
   people?: Array<{
     personId: number;
     sortOrder: number;

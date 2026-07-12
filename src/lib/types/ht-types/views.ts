@@ -11,6 +11,7 @@ import type {
 
 export type ContentCard = {
   id: number;
+  logoUrl?: string;
   tags: Array<{
     colorBackground: string;
     colorForeground: string;

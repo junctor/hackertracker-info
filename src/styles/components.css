@@ -806,13 +806,6 @@
   color: var(--text-primary);
 }
 
-.ui-content-card-title-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-3);
-}
-
 .ui-site-footer-brand {
   flex: 1 1 auto;
   min-width: 0;
@@ -1720,6 +1713,27 @@
   border-color: var(--border);
   background: transparent;
   color: var(--text-subtle);
+}
+
+.ui-content-card-logo {
+  width: auto;
+  max-width: 4.5rem;
+  max-height: 3.25rem;
+  flex: 0 0 auto;
+  align-self: center;
+  border-radius: var(--radius-1);
+  border: 1px solid color-mix(in oklab, var(--border), white 8%);
+  background: color-mix(in oklab, var(--surface-elevated), transparent 8%);
+  object-fit: contain;
+  padding: 0.3125rem;
+}
+
+@media (width >= 40rem) {
+  .ui-content-card-logo {
+    max-width: 5.5rem;
+    max-height: 4rem;
+    padding: 0.375rem;
+  }
 }
 
 .ui-site-footer {

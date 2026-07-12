@@ -1,11 +1,14 @@
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 import type { ContentCard as ContentCardView } from "@/lib/types/ht-types/views";
 
+import Image from "@/components/Image";
 import { getAccentStyle } from "@/lib/color";
 import { buildAppPath } from "@/lib/url";
+
+import { getVisibleContentLogoUrl } from "./contentLogo";
 
 type Props = {
   conference: ConferenceManifest;
@@ -13,10 +16,12 @@ type Props = {
 };
 
 export default function ContentCard({ conference, item }: Props) {
+  const [failedLogoUrl, setFailedLogoUrl] = useState<string | null>(null);
   const visibleTags = item.tags.slice(0, 4);
   const hiddenTagCount = item.tags.length - visibleTags.length;
   const itemColor = item.tags[0]?.colorBackground;
   const accentStyle = getAccentStyle(itemColor);
+  const visibleLogoUrl = getVisibleContentLogoUrl(item.logoUrl, failedLogoUrl);
 
   return (
     <li
@@ -31,10 +36,7 @@ export default function ContentCard({ conference, item }: Props) {
       >
         <div className="ui-content-list-row">
           <div className="ui-item-main ui-item-copy">
-            <div className="ui-content-card-title-row">
-              <h2 className="ui-card-title ui-accent-card-title-md ui-clamp-two">{item.title}</h2>
-              <ArrowRightIcon aria-hidden="true" className="ui-icon-sm ui-card-arrow" />
-            </div>
+            <h2 className="ui-card-title ui-accent-card-title-md ui-clamp-two">{item.title}</h2>
 
             {visibleTags.length > 0 ? (
               <ul className="ui-chip-list-tight ui-content-list-tags">
@@ -58,6 +60,15 @@ export default function ContentCard({ conference, item }: Props) {
               </ul>
             ) : null}
           </div>
+
+          {visibleLogoUrl ? (
+            <Image
+              src={visibleLogoUrl}
+              alt=""
+              className="ui-image-contain ui-content-card-logo"
+              onError={() => setFailedLogoUrl(visibleLogoUrl)}
+            />
+          ) : null}
         </div>
       </Link>
     </li>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useSearchParams } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
@@ -16,29 +16,27 @@ type Props = {
 export default function SearchPageContent({ conf, searchData }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") ?? "";
-  const [draftQuery, setDraftQuery] = useState(query);
   const trimmedQuery = query.trim();
   const results = useMemo(() => filterSearchResults(searchData, query), [searchData, query]);
   const hasQuery = trimmedQuery.length > 0;
   const resultCountLabel = `${results.length} ${results.length === 1 ? "result" : "results"}`;
 
-  useEffect(() => {
-    setDraftQuery(query);
-  }, [query]);
+  const submitSearch = (nextQuery: string) => {
+    setSearchParams(
+      (currentParams) => {
+        const nextParams = new URLSearchParams(currentParams);
+        const value = nextQuery.trim();
 
-  const submitSearch = () => {
-    setSearchParams((currentParams) => {
-      const nextParams = new URLSearchParams(currentParams);
-      const value = draftQuery.trim();
+        if (value) {
+          nextParams.set("q", value);
+        } else {
+          nextParams.delete("q");
+        }
 
-      if (value) {
-        nextParams.set("q", value);
-      } else {
-        nextParams.delete("q");
-      }
-
-      return nextParams;
-    });
+        return nextParams;
+      },
+      { replace: true },
+    );
   };
 
   return (
@@ -51,8 +49,7 @@ export default function SearchPageContent({ conf, searchData }: Props) {
           search={{
             label: `Search ${conf.name}`,
             placeholder: "Search everything...",
-            value: draftQuery,
-            onChange: setDraftQuery,
+            value: query,
             onSubmit: submitSearch,
           }}
         />
@@ -67,12 +64,7 @@ export default function SearchPageContent({ conf, searchData }: Props) {
             <button
               type="button"
               onClick={() => {
-                setDraftQuery("");
-                setSearchParams((currentParams) => {
-                  const nextParams = new URLSearchParams(currentParams);
-                  nextParams.delete("q");
-                  return nextParams;
-                });
+                submitSearch("");
               }}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >

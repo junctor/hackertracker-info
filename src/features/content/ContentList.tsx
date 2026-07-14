@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
 
 import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
@@ -13,6 +13,23 @@ interface Props {
   content: ContentCardsView;
   tags: TagTypesBrowseView;
 }
+
+type TagOption = {
+  id: number;
+  label: string;
+  tags: Array<{
+    id: number;
+    label: string;
+  }>;
+};
+
+type ContentListHeaderProps = {
+  currentSearch: string;
+  onUpdateFilterParam: (key: "q" | "tag", value: string) => void;
+  resultLabel?: string;
+  selectedTag: number | null;
+  tagOptions: TagOption[];
+};
 
 export function updateContentFilterSearchParams(
   current: URLSearchParams,
@@ -29,6 +46,52 @@ export function updateContentFilterSearchParams(
   }
 
   return next;
+}
+
+function ContentListHeader({
+  currentSearch,
+  onUpdateFilterParam,
+  resultLabel,
+  selectedTag,
+  tagOptions,
+}: ContentListHeaderProps) {
+  return (
+    <PageHeader
+      title="Content"
+      description="Browse talks, sessions, and other conference content."
+      resultLabel={resultLabel}
+      search={{
+        label: "Search content",
+        placeholder: "Search content...",
+        value: currentSearch,
+        onSubmit: (value) => onUpdateFilterParam("q", value),
+      }}
+    >
+      <label className="ui-control-label ui-content-tag-filter">
+        <span className="ui-visually-hidden">Filter by tag</span>
+        <select
+          title="Filter by tag"
+          value={selectedTag ?? ""}
+          onChange={(e) => {
+            const nextValue = e.target.value;
+            onUpdateFilterParam("tag", nextValue);
+          }}
+          className="ui-input-base ui-select-control ui-focus-ring"
+        >
+          <option value="">All tags</option>
+          {tagOptions.map((tag) => (
+            <optgroup key={tag.id} label={tag.label}>
+              {tag.tags.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.label}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </label>
+    </PageHeader>
+  );
 }
 
 export default function ContentList({ content, tags, conference }: Props) {
@@ -71,7 +134,7 @@ export default function ContentList({ content, tags, conference }: Props) {
 
   useEffect(() => {
     const shouldRemoveTag = tagParam != null && selectedTag === null;
-    const shouldRemoveSearch = search.length > 0 && normalizedSearch.length === 0;
+    const shouldRemoveSearch = search.length > 0 && search.trim().length === 0;
 
     if (!shouldRemoveTag && !shouldRemoveSearch) return;
 
@@ -84,13 +147,16 @@ export default function ContentList({ content, tags, conference }: Props) {
       },
       { replace: true },
     );
-  }, [normalizedSearch.length, search.length, selectedTag, setSearchParams, tagParam]);
+  }, [search, selectedTag, setSearchParams, tagParam]);
 
-  const updateFilterParam = (key: "q" | "tag", value: string) => {
-    setSearchParams((current) => updateContentFilterSearchParams(current, key, value), {
-      replace: true,
-    });
-  };
+  const updateFilterParam = useCallback(
+    (key: "q" | "tag", value: string) => {
+      setSearchParams((current) => updateContentFilterSearchParams(current, key, value), {
+        replace: true,
+      });
+    },
+    [setSearchParams],
+  );
 
   const filtered = useMemo(() => {
     const result: ContentCardsView = [];
@@ -111,40 +177,13 @@ export default function ContentList({ content, tags, conference }: Props) {
 
   return (
     <section className="ui-container ui-section">
-      <PageHeader
-        title="Content"
-        description="Browse talks, sessions, and other conference content."
+      <ContentListHeader
+        currentSearch={search}
+        onUpdateFilterParam={updateFilterParam}
         resultLabel={hasActiveFilters ? `${resultCountLabel} found` : undefined}
-        search={{
-          label: "Search content",
-          placeholder: "Search content...",
-          value: search,
-          onChange: (value) => updateFilterParam("q", value),
-        }}
-      >
-        <label className="ui-control-label">
-          <span className="ui-visually-hidden">Filter by tag</span>
-          <select
-            value={selectedTag ?? ""}
-            onChange={(e) => {
-              const nextValue = e.target.value;
-              updateFilterParam("tag", nextValue);
-            }}
-            className="ui-input-base ui-select-control ui-focus-ring"
-          >
-            <option value="">All tags</option>
-            {tagOptions.map((tag) => (
-              <optgroup key={tag.id} label={tag.label}>
-                {tag.tags.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.label}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
-        </label>
-      </PageHeader>
+        selectedTag={selectedTag}
+        tagOptions={tagOptions}
+      />
 
       {filtered.length === 0 ? (
         <div className="ui-empty-state ui-content-empty-state">

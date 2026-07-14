@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router";
+import { VirtuosoGrid, type GridComponents, type VirtuosoGridHandle } from "react-virtuoso";
 
 import Image from "@/components/Image";
 import PageHeader from "@/components/ui/PageHeader";
@@ -15,6 +16,16 @@ type Props = {
   conference: ConferenceManifest;
 };
 
+type VirtuosoContext = unknown;
+
+type PeopleGridListProps = React.ComponentPropsWithoutRef<"div"> & {
+  context?: VirtuosoContext;
+};
+
+type PeopleGridItemProps = React.ComponentPropsWithoutRef<"div"> & {
+  context?: VirtuosoContext;
+};
+
 type AvatarRecord = {
   avatar?: { url?: string | null } | string | null;
   avatarUrl?: string | null;
@@ -22,6 +33,63 @@ type AvatarRecord = {
   imageUrl?: string | null;
   name?: string | null;
   title?: string | null;
+};
+
+type PersonCardProps = {
+  brokenAvatarIds: Record<number, true>;
+  conference: ConferenceManifest;
+  onAvatarError: (personId: number) => void;
+  person: PeopleCardsView[number];
+  query: string;
+};
+
+const VIRTUALIZE_PEOPLE_THRESHOLD = 250;
+const PEOPLE_SEARCH_DEBOUNCE_MS = 300;
+
+const PeopleVirtuosoGridList = React.forwardRef<HTMLDivElement, PeopleGridListProps>(
+  function PeopleVirtuosoGridList({ children, className, context, style, ...listProps }, ref) {
+    void context;
+
+    return (
+      <div
+        {...listProps}
+        ref={ref}
+        role="list"
+        style={style}
+        className={["ui-people-grid", className].filter(Boolean).join(" ")}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+PeopleVirtuosoGridList.displayName = "PeopleVirtuosoGridList";
+
+function PeopleVirtuosoGridItem({
+  children,
+  className,
+  context,
+  style,
+  ...itemProps
+}: PeopleGridItemProps) {
+  void context;
+
+  return (
+    <div
+      {...itemProps}
+      role="listitem"
+      style={style}
+      className={["ui-grid-card-item", className].filter(Boolean).join(" ")}
+    >
+      {children}
+    </div>
+  );
+}
+PeopleVirtuosoGridItem.displayName = "PeopleVirtuosoGridItem";
+
+const PEOPLE_GRID_COMPONENTS: GridComponents<VirtuosoContext> = {
+  List: PeopleVirtuosoGridList,
+  Item: PeopleVirtuosoGridItem,
 };
 
 function getTrimmedText(value?: string | null): string {
@@ -75,46 +143,144 @@ function highlight(text: string, rawQuery: string) {
   );
 }
 
+function PersonCard({
+  brokenAvatarIds,
+  conference,
+  onAvatarError,
+  person,
+  query,
+}: PersonCardProps) {
+  const personName = getDisplayName(person.name);
+  const personTitle = getDisplayTitle(person.title);
+  const personInitials = getPersonInitials(person.name) || getPersonInitials(personName);
+  const avatarUrl = getPersonAvatarUrl(person);
+  const showAvatarImage = Boolean(avatarUrl) && !brokenAvatarIds[person.id];
+
+  return (
+    <Link
+      to={`/${conference.slug}/people/?id=${person.id}`}
+      className="ui-focus-ring ui-person-list-link"
+    >
+      <article className="ui-card ui-card-interactive ui-person-list-card">
+        <div className="ui-person-avatar ui-person-avatar-small">
+          {showAvatarImage && avatarUrl ? (
+            <Image
+              src={avatarUrl}
+              alt={personName}
+              fillContainer
+              sizes="(min-width: 640px) 3.75rem, 3rem"
+              className="ui-image-cover"
+              onError={() => onAvatarError(person.id)}
+            />
+          ) : (
+            <span className="ui-person-initials">{personInitials}</span>
+          )}
+        </div>
+
+        <div className="ui-person-card-copy">
+          <h2 className="ui-card-title">
+            <span className="ui-clamp-two">{highlight(personName, query)}</span>
+          </h2>
+          {personTitle ? <p className="ui-card-meta ui-clamp-two">{personTitle}</p> : null}
+        </div>
+      </article>
+    </Link>
+  );
+}
+
 export default function PeopleList({ people, conference }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") ?? "";
+  const resultsStartRef = useRef<HTMLDivElement | null>(null);
+  const virtuosoRef = useRef<VirtuosoGridHandle | null>(null);
+  const previousQueryRef = useRef(query);
   const [brokenAvatarIds, setBrokenAvatarIds] = useState<Record<number, true>>({});
   const trimmedQuery = query.trim();
-  const submitSearch = (nextQuery: string) => {
-    setSearchParams(
-      (currentParams) => {
-        const nextParams = new URLSearchParams(currentParams);
-        const value = nextQuery.trim();
+  const submitSearch = useCallback(
+    (nextQuery: string) => {
+      const value = nextQuery.trim();
+      if (query === value) return;
 
-        if (value) {
-          nextParams.set("q", value);
-        } else {
-          nextParams.delete("q");
-        }
+      setSearchParams(
+        (currentParams) => {
+          const nextParams = new URLSearchParams(currentParams);
+          const currentValue = currentParams.get("q") ?? "";
 
-        return nextParams;
-      },
-      { replace: true },
-    );
-  };
+          if (currentValue === value) return currentParams;
+
+          if (value) {
+            nextParams.set("q", value);
+          } else {
+            nextParams.delete("q");
+          }
+
+          return nextParams;
+        },
+        { replace: true },
+      );
+    },
+    [query, setSearchParams],
+  );
 
   const sortedPeople = useMemo(
     () => people.toSorted((a, b) => alphaSort(getDisplayName(a.name), getDisplayName(b.name))),
     [people],
   );
 
+  const searchablePeople = useMemo(
+    () =>
+      sortedPeople.map((person) => ({
+        person,
+        searchableName: getDisplayName(person.name).toLowerCase(),
+        searchableTitle: getDisplayTitle(person.title)?.toLowerCase() ?? "",
+      })),
+    [sortedPeople],
+  );
+
   const filtered = useMemo(() => {
     const q = trimmedQuery.toLowerCase();
     if (!q) return sortedPeople;
 
-    return sortedPeople.filter((person) => {
-      const personName = getDisplayName(person.name).toLowerCase();
-      const personTitle = getDisplayTitle(person.title)?.toLowerCase() ?? "";
-      return personName.includes(q) || personTitle.includes(q);
-    });
-  }, [sortedPeople, trimmedQuery]);
+    return searchablePeople
+      .filter(
+        ({ searchableName, searchableTitle }) =>
+          searchableName.includes(q) || searchableTitle.includes(q),
+      )
+      .map(({ person }) => person);
+  }, [searchablePeople, sortedPeople, trimmedQuery]);
   const hasSearch = trimmedQuery.length > 0;
   const resultCountLabel = `${filtered.length} ${filtered.length === 1 ? "person" : "people"}`;
+  const shouldVirtualize = filtered.length > VIRTUALIZE_PEOPLE_THRESHOLD;
+
+  const handleAvatarError = useCallback((personId: number) => {
+    setBrokenAvatarIds((current) =>
+      current[personId] ? current : { ...current, [personId]: true },
+    );
+  }, []);
+
+  const renderPerson = useCallback(
+    (_: number, person: PeopleCardsView[number]) => (
+      <PersonCard
+        brokenAvatarIds={brokenAvatarIds}
+        conference={conference}
+        onAvatarError={handleAvatarError}
+        person={person}
+        query={query}
+      />
+    ),
+    [brokenAvatarIds, conference, handleAvatarError, query],
+  );
+
+  useEffect(() => {
+    if (previousQueryRef.current === query) return;
+
+    previousQueryRef.current = query;
+    virtuosoRef.current?.scrollToIndex({ index: 0, align: "start", behavior: "auto" });
+
+    if (window.scrollY > (resultsStartRef.current?.offsetTop ?? 0)) {
+      resultsStartRef.current?.scrollIntoView({ block: "start", inline: "nearest" });
+    }
+  }, [query]);
 
   return (
     <section className="ui-container ui-section">
@@ -126,9 +292,13 @@ export default function PeopleList({ people, conference }: Props) {
           label: "Search people",
           placeholder: "Search people...",
           value: query,
+          debounceMs: PEOPLE_SEARCH_DEBOUNCE_MS,
+          onDebouncedSubmit: submitSearch,
           onSubmit: submitSearch,
         }}
       />
+
+      <div ref={resultsStartRef} />
 
       {filtered.length === 0 ? (
         <div role="status" className="ui-empty-state ui-page-empty-offset">
@@ -145,54 +315,30 @@ export default function PeopleList({ people, conference }: Props) {
             </button>
           ) : null}
         </div>
+      ) : shouldVirtualize ? (
+        <VirtuosoGrid
+          ref={virtuosoRef}
+          useWindowScroll
+          data={filtered}
+          computeItemKey={(_, person) => person.id}
+          components={PEOPLE_GRID_COMPONENTS}
+          initialItemCount={Math.min(16, filtered.length)}
+          itemContent={renderPerson}
+          increaseViewportBy={{ top: 300, bottom: 700 }}
+        />
       ) : (
         <ul className="ui-people-grid">
-          {filtered.map((person) => {
-            const personName = getDisplayName(person.name);
-            const personTitle = getDisplayTitle(person.title);
-            const personInitials = getPersonInitials(person.name) || getPersonInitials(personName);
-            const avatarUrl = getPersonAvatarUrl(person);
-            const showAvatarImage = Boolean(avatarUrl) && !brokenAvatarIds[person.id];
-
-            return (
-              <li key={person.id} className="ui-grid-card-item">
-                <Link
-                  to={`/${conference.slug}/people/?id=${person.id}`}
-                  className="ui-focus-ring ui-person-list-link"
-                >
-                  <article className="ui-card ui-card-interactive ui-person-list-card">
-                    <div className="ui-person-avatar ui-person-avatar-small">
-                      {showAvatarImage && avatarUrl ? (
-                        <Image
-                          src={avatarUrl}
-                          alt={personName}
-                          fillContainer
-                          sizes="(min-width: 640px) 3.75rem, 3rem"
-                          className="ui-image-cover"
-                          onError={() =>
-                            setBrokenAvatarIds((current) =>
-                              current[person.id] ? current : { ...current, [person.id]: true },
-                            )
-                          }
-                        />
-                      ) : (
-                        <span className="ui-person-initials">{personInitials}</span>
-                      )}
-                    </div>
-
-                    <div className="ui-person-card-copy">
-                      <h2 className="ui-card-title">
-                        <span className="ui-clamp-two">{highlight(personName, query)}</span>
-                      </h2>
-                      {personTitle ? (
-                        <p className="ui-card-meta ui-clamp-two">{personTitle}</p>
-                      ) : null}
-                    </div>
-                  </article>
-                </Link>
-              </li>
-            );
-          })}
+          {filtered.map((person) => (
+            <li key={person.id} className="ui-grid-card-item">
+              <PersonCard
+                brokenAvatarIds={brokenAvatarIds}
+                conference={conference}
+                onAvatarError={handleAvatarError}
+                person={person}
+                query={query}
+              />
+            </li>
+          ))}
         </ul>
       )}
     </section>

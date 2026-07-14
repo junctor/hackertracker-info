@@ -14,6 +14,23 @@ interface Props {
   tags: TagTypesBrowseView;
 }
 
+export function updateContentFilterSearchParams(
+  current: URLSearchParams,
+  key: "q" | "tag",
+  value: string,
+) {
+  const next = new URLSearchParams(current);
+  const normalizedValue = value.trim();
+
+  if (normalizedValue) {
+    next.set(key, value);
+  } else {
+    next.delete(key);
+  }
+
+  return next;
+}
+
 export default function ContentList({ content, tags, conference }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
@@ -70,21 +87,9 @@ export default function ContentList({ content, tags, conference }: Props) {
   }, [normalizedSearch.length, search.length, selectedTag, setSearchParams, tagParam]);
 
   const updateFilterParam = (key: "q" | "tag", value: string) => {
-    setSearchParams(
-      (current) => {
-        const next = new URLSearchParams(current);
-        const normalizedValue = value.trim();
-
-        if (normalizedValue) {
-          next.set(key, value);
-        } else {
-          next.delete(key);
-        }
-
-        return next;
-      },
-      { replace: true },
-    );
+    setSearchParams((current) => updateContentFilterSearchParams(current, key, value), {
+      replace: true,
+    });
   };
 
   const filtered = useMemo(() => {
@@ -108,7 +113,7 @@ export default function ContentList({ content, tags, conference }: Props) {
     <section className="ui-container ui-section">
       <PageHeader
         title="Content"
-        description="Search talks, sessions, and reference material without changing result order."
+        description="Browse talks, sessions, and other conference content."
         resultLabel={hasActiveFilters ? `${resultCountLabel} found` : undefined}
         search={{
           label: "Search content",

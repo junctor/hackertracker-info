@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router";
+import { Virtuoso, type Components, type VirtuosoHandle } from "react-virtuoso";
 
 import type { ConferenceManifest } from "@/lib/conferences";
 
@@ -13,31 +14,116 @@ type Props = {
   searchData: UniversalSearchResult[];
 };
 
+type VirtuosoContext = unknown;
+
+type VirtuosoListProps = React.ComponentPropsWithoutRef<"div"> & {
+  context?: VirtuosoContext;
+};
+
+type VirtuosoItemProps = React.ComponentPropsWithoutRef<"div"> & {
+  context?: VirtuosoContext;
+  item?: UniversalSearchResult;
+};
+
+const VIRTUALIZE_SEARCH_THRESHOLD = 250;
+const SEARCH_DEBOUNCE_MS = 300;
+
+const SearchVirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(
+  function SearchVirtuosoList({ children, className, context, style, ...listProps }, ref) {
+    void context;
+
+    return (
+      <div
+        {...listProps}
+        ref={ref}
+        role="list"
+        style={style}
+        className={["ui-list-stack-sm", className].filter(Boolean).join(" ")}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+SearchVirtuosoList.displayName = "SearchVirtuosoList";
+
+function SearchVirtuosoItem({
+  children,
+  className,
+  context,
+  item,
+  style,
+  ...itemProps
+}: VirtuosoItemProps) {
+  void context;
+  void item;
+
+  return (
+    <div {...itemProps} role="listitem" style={style} className={className}>
+      {children}
+    </div>
+  );
+}
+SearchVirtuosoItem.displayName = "SearchVirtuosoItem";
+
+const SEARCH_VIRTUOSO_COMPONENTS: Components<UniversalSearchResult, VirtuosoContext> = {
+  List: SearchVirtuosoList,
+  Item: SearchVirtuosoItem,
+};
+
 export default function SearchPageContent({ conf, searchData }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") ?? "";
+  const resultsStartRef = useRef<HTMLDivElement | null>(null);
+  const virtuosoRef = useRef<VirtuosoHandle | null>(null);
+  const previousQueryRef = useRef(query);
   const trimmedQuery = query.trim();
   const results = useMemo(() => filterSearchResults(searchData, query), [searchData, query]);
   const hasQuery = trimmedQuery.length > 0;
   const resultCountLabel = `${results.length} ${results.length === 1 ? "result" : "results"}`;
+  const shouldVirtualize = results.length > VIRTUALIZE_SEARCH_THRESHOLD;
 
-  const submitSearch = (nextQuery: string) => {
-    setSearchParams(
-      (currentParams) => {
-        const nextParams = new URLSearchParams(currentParams);
-        const value = nextQuery.trim();
+  const submitSearch = useCallback(
+    (nextQuery: string) => {
+      const value = nextQuery.trim();
+      if (query === value) return;
 
-        if (value) {
-          nextParams.set("q", value);
-        } else {
-          nextParams.delete("q");
-        }
+      setSearchParams(
+        (currentParams) => {
+          const nextParams = new URLSearchParams(currentParams);
+          const currentValue = currentParams.get("q") ?? "";
 
-        return nextParams;
-      },
-      { replace: true },
-    );
-  };
+          if (currentValue === value) return currentParams;
+
+          if (value) {
+            nextParams.set("q", value);
+          } else {
+            nextParams.delete("q");
+          }
+
+          return nextParams;
+        },
+        { replace: true },
+      );
+    },
+    [query, setSearchParams],
+  );
+
+  const renderVirtualizedResult = useCallback(
+    (_: number, result: UniversalSearchResult) => <SearchResultItem conf={conf} result={result} />,
+    [conf],
+  );
+
+  useEffect(() => {
+    if (previousQueryRef.current === query) return;
+
+    previousQueryRef.current = query;
+    virtuosoRef.current?.scrollToIndex({ index: 0, align: "start", behavior: "auto" });
+
+    if (window.scrollY > (resultsStartRef.current?.offsetTop ?? 0)) {
+      resultsStartRef.current?.scrollIntoView({ block: "start", inline: "nearest" });
+    }
+  }, [query]);
 
   return (
     <section>
@@ -50,9 +136,13 @@ export default function SearchPageContent({ conf, searchData }: Props) {
             label: `Search ${conf.name}`,
             placeholder: "Search everything...",
             value: query,
+            debounceMs: SEARCH_DEBOUNCE_MS,
+            onDebouncedSubmit: submitSearch,
             onSubmit: submitSearch,
           }}
         />
+
+        <div ref={resultsStartRef} />
 
         {!hasQuery ? (
           <div className="ui-empty-state ui-search-empty-start">
@@ -71,6 +161,17 @@ export default function SearchPageContent({ conf, searchData }: Props) {
               Clear search
             </button>
           </div>
+        ) : shouldVirtualize ? (
+          <Virtuoso
+            ref={virtuosoRef}
+            useWindowScroll
+            data={results}
+            computeItemKey={(_, result) => `${result.type}:${result.id}`}
+            components={SEARCH_VIRTUOSO_COMPONENTS}
+            initialItemCount={Math.min(12, results.length)}
+            itemContent={renderVirtualizedResult}
+            increaseViewportBy={{ top: 200, bottom: 500 }}
+          />
         ) : (
           <ul className="ui-list-stack-sm">
             {results.map((result) => (

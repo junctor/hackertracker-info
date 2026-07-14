@@ -24,7 +24,7 @@ export default function ContentCard({ conference, item }: Props) {
   const visibleLogoUrl = getVisibleContentLogoUrl(item.logoUrl, failedLogoUrl);
 
   return (
-    <li
+    <article
       style={accentStyle}
       className="ui-card ui-card-interactive ui-accent-card ui-content-list-card"
     >
@@ -71,6 +71,6 @@ export default function ContentCard({ conference, item }: Props) {
           ) : null}
         </div>
       </Link>
-    </li>
+    </article>
   );
 }

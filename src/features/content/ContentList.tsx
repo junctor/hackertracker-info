@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
+import { Virtuoso, type Components } from "react-virtuoso";
 
 import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 
@@ -29,6 +30,61 @@ type ContentListHeaderProps = {
   resultLabel?: string;
   selectedTag: number | null;
   tagOptions: TagOption[];
+};
+
+type VirtuosoContext = unknown;
+
+type VirtuosoListProps = React.ComponentPropsWithoutRef<"div"> & {
+  context?: VirtuosoContext;
+};
+
+type VirtuosoItemProps = React.ComponentPropsWithoutRef<"div"> & {
+  context?: VirtuosoContext;
+  item?: ContentCardsView[number];
+};
+
+const VIRTUALIZE_CONTENT_THRESHOLD = 250;
+
+const ContentVirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(
+  function ContentVirtuosoList({ children, className, context, style, ...listProps }, ref) {
+    void context;
+
+    return (
+      <div
+        {...listProps}
+        ref={ref}
+        role="list"
+        style={style}
+        className={["ui-list-stack-sm", className].filter(Boolean).join(" ")}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+ContentVirtuosoList.displayName = "ContentVirtuosoList";
+
+function ContentVirtuosoItem({
+  children,
+  className,
+  context,
+  item,
+  style,
+  ...itemProps
+}: VirtuosoItemProps) {
+  void context;
+  void item;
+
+  return (
+    <div {...itemProps} role="listitem" style={style} className={className}>
+      {children}
+    </div>
+  );
+}
+
+const CONTENT_VIRTUOSO_COMPONENTS: Components<ContentCardsView[number], VirtuosoContext> = {
+  List: ContentVirtuosoList,
+  Item: ContentVirtuosoItem,
 };
 
 export function updateContentFilterSearchParams(
@@ -173,14 +229,22 @@ export default function ContentList({ content, tags, conference }: Props) {
   }, [content, normalizedSearch, selectedTag]);
 
   const hasActiveFilters = Boolean(normalizedSearch || selectedTag !== null);
-  const resultCountLabel = `${filtered.length} ${filtered.length === 1 ? "item" : "items"}`;
+  const contentCountLabel = `${filtered.length} content`;
+  const resultCountLabel = hasActiveFilters ? `${contentCountLabel} found` : contentCountLabel;
+  const shouldVirtualize = filtered.length > VIRTUALIZE_CONTENT_THRESHOLD;
+  const renderVirtualizedContent = useCallback(
+    (_: number, item: ContentCardsView[number]) => (
+      <ContentCard conference={conference} item={item} />
+    ),
+    [conference],
+  );
 
   return (
     <section className="ui-container ui-section">
       <ContentListHeader
         currentSearch={search}
         onUpdateFilterParam={updateFilterParam}
-        resultLabel={hasActiveFilters ? `${resultCountLabel} found` : undefined}
+        resultLabel={resultCountLabel}
         selectedTag={selectedTag}
         tagOptions={tagOptions}
       />
@@ -213,11 +277,27 @@ export default function ContentList({ content, tags, conference }: Props) {
           ) : null}
         </div>
       ) : (
-        <ul className="ui-list-stack-sm">
-          {filtered.map((item) => (
-            <ContentCard key={item.id} conference={conference} item={item} />
-          ))}
-        </ul>
+        <>
+          {shouldVirtualize ? (
+            <Virtuoso
+              useWindowScroll
+              data={filtered}
+              computeItemKey={(_, item) => item.id}
+              components={CONTENT_VIRTUOSO_COMPONENTS}
+              initialItemCount={Math.min(12, filtered.length)}
+              itemContent={renderVirtualizedContent}
+              increaseViewportBy={{ top: 200, bottom: 500 }}
+            />
+          ) : (
+            <ul className="ui-list-stack-sm">
+              {filtered.map((item) => (
+                <li key={item.id}>
+                  <ContentCard conference={conference} item={item} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </section>
   );

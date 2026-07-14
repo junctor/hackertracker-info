@@ -266,8 +266,31 @@
   outline: none;
 }
 
+.ui-search-input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
 .ui-search-input::placeholder {
   color: var(--text-subtle);
+}
+
+.ui-search-clear-button {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius-2);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.ui-search-clear-button:hover {
+  background: color-mix(in oklab, var(--surface-elevated), transparent 28%);
+  color: var(--text-primary);
 }
 
 .ui-select-control {

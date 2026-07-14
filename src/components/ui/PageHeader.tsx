@@ -1,14 +1,14 @@
 import type { ReactNode } from "react";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useId } from "react";
+import { useEffect, useId, useState } from "react";
 
 type SearchProps = {
   label: string;
   placeholder: string;
   value: string;
-  onChange: (value: string) => void;
-  onSubmit?: () => void;
+  onChange?: (value: string) => void;
+  onSubmit?: (value: string) => void;
 };
 
 type Props = {
@@ -35,11 +35,18 @@ export default function PageHeader({
   children,
 }: Props) {
   const searchInputId = useId();
+  const [draftSearchValue, setDraftSearchValue] = useState(search?.value ?? "");
   const hasControls = Boolean(search || children);
   const hasHeaderAside = Boolean(resultLabel || actions);
   const isInlineHeader = Boolean(actionsInline && hasHeaderAside);
+  const isSubmitSearch = Boolean(search?.onSubmit);
+  const searchValue = isSubmitSearch ? draftSearchValue : (search?.value ?? "");
   const titleContent =
     typeof title === "string" ? <h1 className="ui-heading-1">{title}</h1> : title;
+
+  useEffect(() => {
+    setDraftSearchValue(search?.value ?? "");
+  }, [search?.value]);
 
   return (
     <header className="ui-page-header">
@@ -69,9 +76,12 @@ export default function PageHeader({
           role={search ? "search" : undefined}
           onSubmit={(e) => {
             e.preventDefault();
-            search?.onSubmit?.();
+            if (search?.onSubmit) {
+              search.onSubmit(draftSearchValue);
+            }
           }}
           className="ui-control-panel"
+          data-has-extra={children ? "true" : undefined}
           data-has-submit={search?.onSubmit ? "true" : undefined}
         >
           {search ? (
@@ -83,8 +93,15 @@ export default function PageHeader({
                   id={searchInputId}
                   type="search"
                   placeholder={search.placeholder}
-                  value={search.value}
-                  onChange={(e) => search.onChange(e.currentTarget.value)}
+                  value={searchValue}
+                  onChange={(e) => {
+                    const nextValue = e.currentTarget.value;
+                    if (isSubmitSearch) {
+                      setDraftSearchValue(nextValue);
+                    } else {
+                      search.onChange?.(nextValue);
+                    }
+                  }}
                   autoComplete="off"
                   enterKeyHint={search.onSubmit ? "search" : undefined}
                   className="ui-search-input"

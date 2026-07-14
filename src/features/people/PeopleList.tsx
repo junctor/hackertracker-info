@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 import Image from "@/components/Image";
 import PageHeader from "@/components/ui/PageHeader";
@@ -76,9 +76,27 @@ function highlight(text: string, rawQuery: string) {
 }
 
 export default function PeopleList({ people, conference }: Props) {
-  const [query, setQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get("q") ?? "";
   const [brokenAvatarIds, setBrokenAvatarIds] = useState<Record<number, true>>({});
   const trimmedQuery = query.trim();
+  const submitSearch = (nextQuery: string) => {
+    setSearchParams(
+      (currentParams) => {
+        const nextParams = new URLSearchParams(currentParams);
+        const value = nextQuery.trim();
+
+        if (value) {
+          nextParams.set("q", value);
+        } else {
+          nextParams.delete("q");
+        }
+
+        return nextParams;
+      },
+      { replace: true },
+    );
+  };
 
   const sortedPeople = useMemo(
     () => people.toSorted((a, b) => alphaSort(getDisplayName(a.name), getDisplayName(b.name))),
@@ -108,7 +126,7 @@ export default function PeopleList({ people, conference }: Props) {
           label: "Search people",
           placeholder: "Search people...",
           value: query,
-          onChange: setQuery,
+          onSubmit: submitSearch,
         }}
       />
 
@@ -120,7 +138,7 @@ export default function PeopleList({ people, conference }: Props) {
           {trimmedQuery ? (
             <button
               type="button"
-              onClick={() => setQuery("")}
+              onClick={() => submitSearch("")}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Clear search

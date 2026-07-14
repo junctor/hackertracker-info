@@ -37,11 +37,17 @@ class AppErrorBoundaryInner extends Component<Props, State> {
   }
 }
 
+export function getAppErrorBoundaryKey(pathname: string, search: string) {
+  const routeId = new URLSearchParams(search).get("id");
+
+  return routeId === null ? pathname : `${pathname}?id=${routeId}`;
+}
+
 export default function AppErrorBoundary({ children }: Props) {
   const location = useLocation();
 
   return (
-    <AppErrorBoundaryInner key={`${location.pathname}?${location.search}`}>
+    <AppErrorBoundaryInner key={getAppErrorBoundaryKey(location.pathname, location.search)}>
       {children}
     </AppErrorBoundaryInner>
   );

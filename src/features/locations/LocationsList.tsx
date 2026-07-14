@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useSearchParams } from "react-router";
 
 import PageHeader from "@/components/ui/PageHeader";
 import { type LocationCard, type LocationCardsView } from "@/lib/types/ht-types/views";
@@ -24,8 +25,26 @@ export default function LocationsList({
   title = "Locations",
   description = "Find rooms, villages, and venue references used across the schedule.",
 }: Props) {
-  const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get("q") ?? "";
   const normalizedSearch = search.trim().toLowerCase();
+  const submitSearch = (nextQuery: string) => {
+    setSearchParams(
+      (currentParams) => {
+        const nextParams = new URLSearchParams(currentParams);
+        const value = nextQuery.trim();
+
+        if (value) {
+          nextParams.set("q", value);
+        } else {
+          nextParams.delete("q");
+        }
+
+        return nextParams;
+      },
+      { replace: true },
+    );
+  };
 
   const orderedLocations = useMemo(
     () => locations.filter((location): location is LocationCard => Boolean(location)),
@@ -54,7 +73,7 @@ export default function LocationsList({
           label: "Search locations",
           placeholder: "Search locations...",
           value: search,
-          onChange: setSearch,
+          onSubmit: submitSearch,
         }}
       />
 
@@ -68,7 +87,7 @@ export default function LocationsList({
           {normalizedSearch ? (
             <button
               type="button"
-              onClick={() => setSearch("")}
+              onClick={() => submitSearch("")}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Clear search

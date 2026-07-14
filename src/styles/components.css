@@ -190,10 +190,22 @@
   align-items: center;
 }
 
+.ui-control-panel[data-has-extra="true"] .ui-page-header-extra {
+  grid-column: 1 / -1;
+}
+
 @media (width >= 40rem) {
   .ui-control-panel {
     grid-template-columns: minmax(16rem, 1fr) auto;
     align-items: center;
+  }
+
+  .ui-control-panel[data-has-submit="true"][data-has-extra="true"] {
+    grid-template-columns: minmax(16rem, 1fr) auto minmax(10rem, 16rem);
+  }
+
+  .ui-control-panel[data-has-extra="true"] .ui-page-header-extra {
+    grid-column: auto;
   }
 }
 
@@ -204,6 +216,10 @@
 
   .ui-control-panel[data-has-submit="true"] {
     max-width: 44rem;
+  }
+
+  .ui-control-panel[data-has-submit="true"][data-has-extra="true"] {
+    max-width: 58rem;
   }
 }
 
@@ -276,6 +292,19 @@
   .ui-select-control {
     min-height: var(--control-min);
   }
+}
+
+.ui-content-tag-filter {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ui-content-tag-filter .ui-select-control {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ui-card.ui-person-list-card,

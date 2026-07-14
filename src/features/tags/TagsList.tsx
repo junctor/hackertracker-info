@@ -5,8 +5,6 @@ import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { TagTypesBrowseView } from "@/lib/types/ht-types";
 
-const formatCategory = (s: string) => s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-
 type TagPillProps = {
   tag: {
     colorBackground: string;
@@ -25,8 +23,8 @@ type TagsListProps = {
 function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceManifest }) {
   return (
     <Link
-      to={`/${conference.slug}/tag/?id=${tag.id}`}
-      aria-label={`Show schedule for ${tag.label}`}
+      to={`/${conference.slug}/content/?tag=${tag.id}`}
+      aria-label={`Browse content tagged ${tag.label}`}
       className="ui-focus-ring ui-tag-chip ui-tag-chip-strong ui-tag-link"
       style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
     >
@@ -36,14 +34,11 @@ function TagPill({ tag, conference }: TagPillProps & { conference: ConferenceMan
 }
 
 export default function TagsList({ tagTypes, conference }: TagsListProps) {
-  const sortedTagTypes = useMemo(
+  const visibleTagTypes = useMemo(
     () =>
       tagTypes
-        .toSorted((a, b) => a.sortOrder - b.sortOrder)
-        .map((tagType) => ({
-          ...tagType,
-          tags: tagType.tags.toSorted((a, b) => a.sortOrder - b.sortOrder),
-        })),
+        .filter((tagType) => tagType.tags.length > 0)
+        .map((tagType) => ({ ...tagType, tags: tagType.tags.filter(Boolean) })),
     [tagTypes],
   );
 
@@ -54,14 +49,14 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
         description="Browse tags that group schedule items across the conference."
       />
 
-      {sortedTagTypes.length === 0 ? (
+      {visibleTagTypes.length === 0 ? (
         <div className="ui-empty-state" role="status">
           <p>No tags available.</p>
         </div>
       ) : (
-        sortedTagTypes.map((tagType) => (
+        visibleTagTypes.map((tagType) => (
           <section key={tagType.id} className="ui-tags-section">
-            <h2 className="ui-heading-2 ui-tags-heading">{formatCategory(tagType.category)}</h2>
+            <h2 className="ui-heading-2 ui-tags-heading">{tagType.label}</h2>
 
             <ul className="ui-chip-list-tight">
               {tagType.tags.map((tag) => (

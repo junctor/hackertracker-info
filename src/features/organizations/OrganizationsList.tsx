@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 import Image from "@/components/Image";
 import PageHeader from "@/components/ui/PageHeader";
@@ -23,9 +23,27 @@ const getInitials = (name: string) =>
     .toUpperCase();
 
 export default function OrganizationsList({ organizations, title, detailsBasePath }: Props) {
-  const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get("q") ?? "";
   const [brokenLogoIds, setBrokenLogoIds] = useState<Record<number, true>>({});
   const normalizedSearch = search.trim().toLowerCase();
+  const submitSearch = (nextQuery: string) => {
+    setSearchParams(
+      (currentParams) => {
+        const nextParams = new URLSearchParams(currentParams);
+        const value = nextQuery.trim();
+
+        if (value) {
+          nextParams.set("q", value);
+        } else {
+          nextParams.delete("q");
+        }
+
+        return nextParams;
+      },
+      { replace: true },
+    );
+  };
 
   const sortedOrganizations = useMemo(
     () => organizations.toSorted((a, b) => alphaSort(a.name, b.name)),
@@ -51,7 +69,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
           label: `Search ${title}`,
           placeholder: `Search ${title}...`,
           value: search,
-          onChange: setSearch,
+          onSubmit: submitSearch,
         }}
       />
 
@@ -65,7 +83,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
           {normalizedSearch ? (
             <button
               type="button"
-              onClick={() => setSearch("")}
+              onClick={() => submitSearch("")}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
               Clear search

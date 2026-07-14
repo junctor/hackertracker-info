@@ -246,7 +246,9 @@ export default function ContentDetails(props: Props) {
           </h2>
           <ul className="ui-list-stack-sm">
             {relatedContent.map((item) => (
-              <ContentCard key={item.id} conference={conference} item={item} />
+              <li key={item.id}>
+                <ContentCard conference={conference} item={item} />
+              </li>
             ))}
           </ul>
         </section>

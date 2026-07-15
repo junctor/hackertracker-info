@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 
 import Image from "@/components/Image";
@@ -22,28 +22,38 @@ const getInitials = (name: string) =>
     .join("")
     .toUpperCase();
 
+const ORGANIZATION_SEARCH_DEBOUNCE_MS = 300;
+
 export default function OrganizationsList({ organizations, title, detailsBasePath }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
   const [brokenLogoIds, setBrokenLogoIds] = useState<Record<number, true>>({});
   const normalizedSearch = search.trim().toLowerCase();
-  const submitSearch = (nextQuery: string) => {
-    setSearchParams(
-      (currentParams) => {
-        const nextParams = new URLSearchParams(currentParams);
-        const value = nextQuery.trim();
+  const submitSearch = useCallback(
+    (nextQuery: string) => {
+      const value = nextQuery.trim();
+      if (search === value) return;
 
-        if (value) {
-          nextParams.set("q", value);
-        } else {
-          nextParams.delete("q");
-        }
+      setSearchParams(
+        (currentParams) => {
+          const nextParams = new URLSearchParams(currentParams);
+          const currentValue = currentParams.get("q") ?? "";
 
-        return nextParams;
-      },
-      { replace: true },
-    );
-  };
+          if (currentValue === value) return currentParams;
+
+          if (value) {
+            nextParams.set("q", value);
+          } else {
+            nextParams.delete("q");
+          }
+
+          return nextParams;
+        },
+        { replace: true },
+      );
+    },
+    [search, setSearchParams],
+  );
 
   const sortedOrganizations = useMemo(
     () => organizations.toSorted((a, b) => alphaSort(a.name, b.name)),
@@ -69,6 +79,8 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
           label: `Search ${title}`,
           placeholder: `Search ${title}...`,
           value: search,
+          debounceMs: ORGANIZATION_SEARCH_DEBOUNCE_MS,
+          onDebouncedSubmit: submitSearch,
           onSubmit: submitSearch,
         }}
       />

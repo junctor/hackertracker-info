@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router";
 
 import PageHeader from "@/components/ui/PageHeader";
@@ -20,6 +20,8 @@ function getLocationShortName(location: LocationCard) {
   return shortName;
 }
 
+const LOCATION_SEARCH_DEBOUNCE_MS = 300;
+
 export default function LocationsList({
   locations,
   title = "Locations",
@@ -28,23 +30,31 @@ export default function LocationsList({
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
   const normalizedSearch = search.trim().toLowerCase();
-  const submitSearch = (nextQuery: string) => {
-    setSearchParams(
-      (currentParams) => {
-        const nextParams = new URLSearchParams(currentParams);
-        const value = nextQuery.trim();
+  const submitSearch = useCallback(
+    (nextQuery: string) => {
+      const value = nextQuery.trim();
+      if (search === value) return;
 
-        if (value) {
-          nextParams.set("q", value);
-        } else {
-          nextParams.delete("q");
-        }
+      setSearchParams(
+        (currentParams) => {
+          const nextParams = new URLSearchParams(currentParams);
+          const currentValue = currentParams.get("q") ?? "";
 
-        return nextParams;
-      },
-      { replace: true },
-    );
-  };
+          if (currentValue === value) return currentParams;
+
+          if (value) {
+            nextParams.set("q", value);
+          } else {
+            nextParams.delete("q");
+          }
+
+          return nextParams;
+        },
+        { replace: true },
+      );
+    },
+    [search, setSearchParams],
+  );
 
   const orderedLocations = useMemo(
     () => locations.filter((location): location is LocationCard => Boolean(location)),
@@ -73,6 +83,8 @@ export default function LocationsList({
           label: "Search locations",
           placeholder: "Search locations...",
           value: search,
+          debounceMs: LOCATION_SEARCH_DEBOUNCE_MS,
+          onDebouncedSubmit: submitSearch,
           onSubmit: submitSearch,
         }}
       />

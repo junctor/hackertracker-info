@@ -44,6 +44,7 @@ type VirtuosoItemProps = React.ComponentPropsWithoutRef<"div"> & {
 };
 
 const VIRTUALIZE_CONTENT_THRESHOLD = 250;
+const CONTENT_SEARCH_DEBOUNCE_MS = 300;
 
 const ContentVirtuosoList = React.forwardRef<HTMLDivElement, VirtuosoListProps>(
   function ContentVirtuosoList({ children, className, context, style, ...listProps }, ref) {
@@ -94,9 +95,12 @@ export function updateContentFilterSearchParams(
 ) {
   const next = new URLSearchParams(current);
   const normalizedValue = value.trim();
+  const currentValue = current.get(key) ?? "";
+
+  if (currentValue === normalizedValue) return current;
 
   if (normalizedValue) {
-    next.set(key, value);
+    next.set(key, normalizedValue);
   } else {
     next.delete(key);
   }
@@ -120,6 +124,8 @@ function ContentListHeader({
         label: "Search content",
         placeholder: "Search content...",
         value: currentSearch,
+        debounceMs: CONTENT_SEARCH_DEBOUNCE_MS,
+        onDebouncedSubmit: (value) => onUpdateFilterParam("q", value),
         onSubmit: (value) => onUpdateFilterParam("q", value),
       }}
     >
@@ -207,17 +213,30 @@ export default function ContentList({ content, tags, conference }: Props) {
 
   const updateFilterParam = useCallback(
     (key: "q" | "tag", value: string) => {
+      const normalizedValue = value.trim();
+      if ((searchParams.get(key) ?? "") === normalizedValue) return;
+
       setSearchParams((current) => updateContentFilterSearchParams(current, key, value), {
         replace: true,
       });
     },
-    [setSearchParams],
+    [searchParams, setSearchParams],
+  );
+
+  const searchableContent = useMemo(
+    () =>
+      content.map((item) => ({
+        item,
+        searchableTitle: item.title.toLowerCase(),
+      })),
+    [content],
   );
 
   const filtered = useMemo(() => {
     const result: ContentCardsView = [];
-    for (const item of content) {
-      if (normalizedSearch && !item.title.toLowerCase().includes(normalizedSearch)) {
+
+    for (const { item, searchableTitle } of searchableContent) {
+      if (normalizedSearch && !searchableTitle.includes(normalizedSearch)) {
         continue;
       }
       if (selectedTag !== null && !item.tags.some((tag) => tag.id === selectedTag)) {
@@ -226,11 +245,11 @@ export default function ContentList({ content, tags, conference }: Props) {
       result.push(item);
     }
     return result;
-  }, [content, normalizedSearch, selectedTag]);
+  }, [normalizedSearch, searchableContent, selectedTag]);
 
   const hasActiveFilters = Boolean(normalizedSearch || selectedTag !== null);
   const contentCountLabel = `${filtered.length} content`;
-  const resultCountLabel = hasActiveFilters ? `${contentCountLabel} found` : contentCountLabel;
+  const resultCountLabel = hasActiveFilters ? `${contentCountLabel} found` : undefined;
   const shouldVirtualize = filtered.length > VIRTUALIZE_CONTENT_THRESHOLD;
   const renderVirtualizedContent = useCallback(
     (_: number, item: ContentCardsView[number]) => (

@@ -99,9 +99,17 @@ function VirtuosoItem({
 }
 VirtuosoItem.displayName = "VirtuosoItem";
 
+function VirtuosoFooter({ context }: { context?: VirtuosoContext }) {
+  void context;
+
+  return <div aria-hidden="true" className="ui-schedule-session-list-footer" />;
+}
+VirtuosoFooter.displayName = "VirtuosoFooter";
+
 const VIRTUOSO_COMPONENTS: Components<ScheduleSessionViewModel, VirtuosoContext> = {
   List: VirtuosoList,
   Item: VirtuosoItem,
+  Footer: VirtuosoFooter,
 };
 
 export default function ScheduleSessions({

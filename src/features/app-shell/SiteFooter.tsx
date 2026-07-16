@@ -1,6 +1,8 @@
-function SiteFooter() {
+import { forwardRef } from "react";
+
+const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
   return (
-    <footer className="ui-site-footer">
+    <footer ref={ref} className="ui-site-footer">
       <div className="ui-chrome-container ui-site-footer-inner">
         <div className="ui-site-footer-row">
           <div className="ui-site-footer-brand">
@@ -31,6 +33,6 @@ function SiteFooter() {
       </div>
     </footer>
   );
-}
+});
 
 export default SiteFooter;

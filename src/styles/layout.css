@@ -37,6 +37,8 @@
 }
 
 .ui-page-shell {
+  --site-footer-block-size: 0px;
+
   display: flex;
   width: 100%;
   min-width: 0;

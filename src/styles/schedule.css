@@ -316,8 +316,11 @@
 }
 
 .ui-schedule-session-list {
-  margin-bottom: var(--space-8);
   list-style: none;
+}
+
+.ui-schedule-session-list-footer {
+  height: calc(var(--site-footer-block-size, 0px) + var(--space-8));
 }
 
 .ui-schedule-loading-content {

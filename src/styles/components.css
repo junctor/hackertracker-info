@@ -339,7 +339,7 @@
   gap: var(--space-3);
   border-radius: var(--radius-2);
   background: color-mix(in oklab, var(--surface-muted), transparent 42%);
-  padding: 0.875rem;
+  padding: 0.75rem;
   box-shadow: none;
 }
 
@@ -356,13 +356,15 @@
 .ui-person-avatar-small {
   position: relative;
   display: flex;
-  width: 3rem;
-  height: 3rem;
+  width: 2.75rem;
+  height: 2.75rem;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   border-radius: var(--radius-3);
+  border: 1px solid color-mix(in oklab, var(--border), white 6%);
+  background: color-mix(in oklab, var(--surface-elevated), transparent 18%);
 }
 
 .ui-person-avatar-large {
@@ -378,8 +380,8 @@
 
 @media (width >= 40rem) {
   .ui-person-avatar-small {
-    width: 3.75rem;
-    height: 3.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
   }
 
   .ui-person-avatar-large {
@@ -391,10 +393,10 @@
 
 .ui-person-initials {
   position: relative;
-  color: var(--text-primary);
-  font-size: 0.875rem;
+  color: color-mix(in oklab, var(--text-muted), white 16%);
+  font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -405,6 +407,22 @@
 
 .ui-person-card-copy > * + * {
   margin-top: var(--space-1);
+}
+
+.ui-people-group-heading {
+  position: sticky;
+  top: var(--site-header-sticky-offset);
+  z-index: 30;
+  border-bottom: 1px solid color-mix(in oklab, var(--border), white 8%);
+  background: color-mix(in oklab, var(--color-bg), black 6%);
+  padding: 0.375rem 0.125rem;
+  color: color-mix(in oklab, var(--text-muted), white 12%);
+  font-family: "Lato", "Atkinson Hyperlegible", "Segoe UI", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .ui-search-highlight {
@@ -422,9 +440,11 @@
 }
 
 .ui-logo-media-sm {
-  width: 3rem;
-  height: 3rem;
+  width: 2.75rem;
+  height: 2.75rem;
   flex-shrink: 0;
+  border: 1px solid color-mix(in oklab, var(--border), white 6%);
+  background: color-mix(in oklab, var(--surface-elevated), transparent 18%);
 }
 
 .ui-logo-media-lg {
@@ -435,8 +455,8 @@
 
 @media (width >= 40rem) {
   .ui-logo-media-sm {
-    width: 3.75rem;
-    height: 3.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
   }
 
   .ui-logo-media-lg {
@@ -450,16 +470,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: color-mix(in oklab, var(--text-muted), white 16%);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
 }
 
 .ui-logo-initials {
   width: 100%;
   height: 100%;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .ui-logo-initials-fill {
@@ -470,7 +490,8 @@
 
 .ui-logo-image {
   display: block;
-  width: auto;
+  width: 100%;
+  height: 100%;
   max-width: 100%;
   max-height: 100%;
   overflow: hidden;
@@ -489,13 +510,13 @@
   min-height: var(--control-min);
   border-radius: var(--radius-2);
   background: color-mix(in oklab, var(--surface-muted), transparent 42%);
-  padding: 0.875rem var(--space-4);
+  padding: 0.75rem var(--space-3);
   box-shadow: none;
 }
 
 @media (width >= 40rem) {
   .ui-location-card {
-    padding: var(--space-4);
+    padding: 0.875rem var(--space-4);
   }
 }
 
@@ -521,12 +542,12 @@
 .ui-map-card {
   display: grid;
   gap: var(--space-4);
-  padding: var(--space-4);
+  padding: 0.875rem;
 }
 
 @media (width >= 40rem) {
   .ui-map-card {
-    padding: var(--space-5);
+    padding: var(--space-4);
   }
 }
 
@@ -736,14 +757,6 @@
   background-image: var(--person-avatar-bg);
 }
 
-.ui-pill-label {
-  max-width: 16rem;
-}
-
-.ui-pill-label-narrow {
-  max-width: 14rem;
-}
-
 .ui-accent-card,
 .ui-detail-card {
   position: relative;
@@ -770,12 +783,12 @@
 
 .ui-accent-card-link {
   display: block;
-  padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5);
+  padding: 0.875rem 0.875rem 0.875rem 1.125rem;
 }
 
 @media (width >= 40rem) {
   .ui-accent-card-link {
-    padding: var(--space-4) var(--space-5) var(--space-4) var(--space-6);
+    padding: var(--space-4) 1.125rem var(--space-4) 1.375rem;
   }
 }
 
@@ -783,12 +796,12 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5);
+  padding: 0.875rem 0.875rem 0.875rem 1.125rem;
 }
 
 @media (width >= 40rem) {
   .ui-accent-card-row {
-    padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
+    padding: var(--space-4) 1.125rem var(--space-4) 1.375rem;
   }
 }
 
@@ -1705,29 +1718,6 @@
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
 }
 
-.ui-pill-link {
-  display: inline-flex;
-  min-width: 0;
-  min-height: var(--control-min);
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background: color-mix(in oklab, var(--surface-elevated), transparent 6%);
-  padding: 0.375rem 0.75rem;
-  font-size: 0.875rem;
-  color: rgb(226 232 240);
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.ui-pill-link:hover {
-  border-color: rgb(1 127 164 / 0.65);
-  background: rgb(1 127 164 / 0.28);
-}
-
 .ui-content-list-row {
   display: flex;
   min-width: 0;
@@ -1748,12 +1738,12 @@
 }
 
 .ui-content-list-card .ui-accent-card-link {
-  padding-block: 0.875rem;
+  padding-block: 0.75rem;
 }
 
 @media (width >= 40rem) {
   .ui-content-list-card .ui-accent-card-link {
-    padding-block: var(--space-4);
+    padding-block: 0.875rem;
   }
 }
 

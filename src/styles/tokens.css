@@ -103,6 +103,7 @@
   /* Standalone display safe areas */
   --safe-area-top: 0px;
   --safe-area-bottom: 0px;
+  --site-header-sticky-offset: calc(4rem + var(--safe-area-top));
 
   /* Hacker Tracker custom colors */
   --ht-cyan: #00ffff;

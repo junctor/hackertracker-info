@@ -13,10 +13,7 @@ export default function AnnouncementsList({ announcements, conference }: Props) 
   if (!announcements.length) {
     return (
       <div className="ui-container ui-page-content">
-        <PageHeader
-          title="Announcements"
-          description="Official conference updates in publish order."
-        />
+        <PageHeader title="Announcements" description="Conference announcements and updates." />
         <div className="ui-empty-state" role="status">
           <p>No announcements at this time.</p>
         </div>
@@ -28,8 +25,8 @@ export default function AnnouncementsList({ announcements, conference }: Props) 
     <section className="ui-container ui-page-content">
       <PageHeader
         title="Announcements"
-        description="Official conference updates in publish order."
-        resultLabel={`${announcements.length} ${announcements.length === 1 ? "update" : "updates"}`}
+        description="Conference announcements and updates."
+        resultLabel={`${announcements.length} ${announcements.length === 1 ? "announcement" : "announcements"}`}
       />
 
       <ul className="ui-announcement-list" role="list">

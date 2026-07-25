@@ -263,7 +263,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     if (!target) {
       setJumpRequest(null);
       setHighlightedSessionId(null);
-      setJumpStatus("No live or upcoming sessions are available. Check the full schedule.");
+      setJumpStatus("No sessions are happening now or scheduled later. Check the full schedule.");
       return;
     }
 
@@ -366,7 +366,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
         <title>Schedule | {conf.name}</title>
         {aiMetadata({
           title: `Schedule | ${conf.name}`,
-          description: `Full ${conf.name} schedule of sessions, talks, and workshops.`,
+          description: `${conf.name} schedule of sessions, talks, and workshops.`,
           path: conferencePath(conf, "schedule"),
           jsonFeeds: conferenceDataFeeds(conf),
           structuredData: [collectionStructuredDataPath(conf, "schedule")],

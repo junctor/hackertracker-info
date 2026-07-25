@@ -197,7 +197,7 @@ export default function PersonDetails({ person, sessions, locations, conference 
                   <div className="ui-person-title-row">
                     <h1 className="ui-heading-1">{personName}</h1>
                     {personPronouns ? (
-                      <span className="ui-meta-pill ui-person-pronouns">{personPronouns}</span>
+                      <span className="ui-person-pronouns">{personPronouns}</span>
                     ) : null}
                   </div>
 

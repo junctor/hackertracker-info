@@ -14,13 +14,13 @@ export default function MerchPage({ conf, activePageId }: MerchPageProps) {
     <>
       <Head>
         <title>Merch | {conf.name}</title>
-        <meta name="description" content={`Official merch information for ${conf.name}.`} />
+        <meta name="description" content={`Merch information for ${conf.name}.`} />
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         <section className="ui-container ui-section">
-          <PageHeader title="Merch" description={`Official merch information for ${conf.name}.`} />
+          <PageHeader title="Merch" description={`Merch information for ${conf.name}.`} />
           <div className="ui-empty-state ui-page-empty-offset" role="status">
-            <p>Merch information is not available yet.</p>
+            <p>Merch information is not listed yet.</p>
           </div>
         </section>
       </ConferenceLayout>

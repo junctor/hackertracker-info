@@ -222,16 +222,16 @@ export default function ContentDetails(props: Props) {
           <h2 id="people-title" className="ui-section-label">
             People
           </h2>
-          <ul className="ui-chip-list">
+          <ul className="ui-detail-identity-list">
             {people.map((p) => (
               <li key={p.id}>
                 <Link
                   to={`${peopleBasePath}?id=${p.id}`}
-                  className="ui-focus-ring ui-pill-link"
+                  className="ui-focus-ring ui-detail-identity-link"
                   title={p.name}
                 >
-                  <UserIcon className="ui-icon-xs ui-card-external-icon" aria-hidden="true" />
-                  <span className="ui-pill-label-narrow ui-clip-text">{p.name}</span>
+                  <UserIcon className="ui-icon-xs ui-detail-identity-icon" aria-hidden="true" />
+                  <span className="ui-detail-identity-label">{p.name}</span>
                 </Link>
               </li>
             ))}

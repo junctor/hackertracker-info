@@ -134,7 +134,7 @@ export default function SearchPageContent({ conf, searchData }: Props) {
           resultLabel={hasQuery ? resultCountLabel : undefined}
           search={{
             label: `Search ${conf.name}`,
-            placeholder: "Search everything...",
+            placeholder: "Search sessions, people, organizations...",
             value: query,
             debounceMs: SEARCH_DEBOUNCE_MS,
             onDebouncedSubmit: submitSearch,

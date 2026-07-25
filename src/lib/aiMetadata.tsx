@@ -6,8 +6,7 @@ import { conferenceMenuPath } from "@/lib/routes";
 
 export const SITE_ORIGIN = "https://info.defcon.org";
 export const SITE_NAME = "info.defcon.org";
-export const SITE_DESCRIPTION =
-  "Official DEF CON schedules and conference information for current and upcoming sessions.";
+export const SITE_DESCRIPTION = "DEF CON schedules and conference information.";
 
 type JsonFeed = {
   href: string;
@@ -48,11 +47,11 @@ export function conferenceDataFeeds(conf: ConferenceManifest): ReadonlyArray<Jso
   return [
     { title: `${conf.name} manifest`, href: `${conf.dataRoot}/manifest.json` },
     {
-      title: `${conf.name} schedule runtime view`,
+      title: `${conf.name} schedule data`,
       href: `${conf.dataRoot}/views/scheduleDays.json`,
     },
-    { title: `${conf.name} content cards`, href: `${conf.dataRoot}/views/contentCards.json` },
-    { title: `${conf.name} people cards`, href: `${conf.dataRoot}/views/peopleCards.json` },
+    { title: `${conf.name} content data`, href: `${conf.dataRoot}/views/contentCards.json` },
+    { title: `${conf.name} people data`, href: `${conf.dataRoot}/views/peopleCards.json` },
     { title: `${conf.name} search index`, href: `${conf.dataRoot}/views/searchData.json` },
   ];
 }

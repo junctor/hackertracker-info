@@ -81,7 +81,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
             org.tagIdAsOrganizer ? (
               <Link
                 to={`/${conference.slug}/tag/?id=${org.tagIdAsOrganizer}`}
-                className="ui-focus-ring ui-pill-link"
+                className="ui-btn-base ui-btn-secondary ui-focus-ring ui-detail-action-link"
               >
                 <CalendarDaysIcon className="ui-icon-xs ui-card-external-icon" aria-hidden />
                 <span>View Schedule</span>

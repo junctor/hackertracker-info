@@ -17,6 +17,7 @@ import type {
 import { ConferenceManifest } from "@/lib/conferences";
 import { sessionDayTable, tabDateTitle } from "@/lib/dates";
 
+import ScheduleExportMenu from "./ScheduleExportMenu";
 import ScheduleSessionItem from "./ScheduleSessionItem";
 
 export type ScheduleSessionViewModel = ScheduleSessionViewModelContract;
@@ -352,7 +353,7 @@ export default function ScheduleSessions({
 
           {activitySummary ? (
             <p className="ui-schedule-summary" aria-live="polite">
-              <span>Live now: {activitySummary.liveCount} sessions</span>
+              <span>Happening now: {activitySummary.liveCount} sessions</span>
               <span>Starting within 30 minutes: {activitySummary.startingSoonCount} sessions</span>
             </p>
           ) : null}
@@ -394,6 +395,8 @@ export default function ScheduleSessions({
               <TagIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
               <span className="ui-schedule-compact-label ui-schedule-tool-label">Tags</span>
             </Link>
+
+            <ScheduleExportMenu conf={conf} />
           </div>
         </nav>
       </div>

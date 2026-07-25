@@ -88,7 +88,7 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
                 <span
                   className={`ui-status-pill ${isLive ? "ui-status-pill-live" : "ui-status-pill-next"}`}
                 >
-                  {isLive ? "Live" : "Next"}
+                  {isLive ? "Now" : "Next"}
                 </span>
               )}
               <p className="ui-session-time-primary">

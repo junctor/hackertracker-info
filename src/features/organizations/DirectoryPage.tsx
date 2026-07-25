@@ -12,13 +12,13 @@ import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { getOrganizationDirectoryConfig } from "@/lib/menu";
-import { conferenceMenuPath } from "@/lib/routes";
+import { conferenceCollectionPath, conferenceEntityPath, conferenceMenuPath } from "@/lib/routes";
 import {
   DerivedTagIdsByLabel,
   OrganizationDetailsById,
   OrganizationsCardsView,
 } from "@/lib/types/ht-types";
-import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
+import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
 type Props = {
   conf: ConferenceManifest;
@@ -59,12 +59,15 @@ export default function DirectoryPage({
   description,
   routeSlug,
 }: Props) {
+  const directoryHref = conferenceCollectionPath(conf, routeSlug);
+  const conferenceHomeHref = conferenceMenuPath(conf);
   const {
     value: orgId,
     isReady,
     isMissing: isIdMissing,
     isInvalid: isIdInvalid,
-  } = useNumericQueryParam("id");
+    isRedirectingLegacyUrl,
+  } = useNumericRouteParam("id", { legacyCanonicalBasePath: directoryHref });
   const isDetailsRoute = isReady && !isIdMissing && !isIdInvalid && orgId !== null;
   const shouldLoadList = isReady && isIdMissing;
 
@@ -99,10 +102,7 @@ export default function DirectoryPage({
 
   const isLoading = organizationsIsLoading || tagIsLoading;
   const error = organizationsError || tagError;
-  const directoryHref = `/${conf.slug}/${routeSlug}/`;
-  const conferenceHomeHref = conferenceMenuPath(conf);
-
-  if (!isReady) return <LoadingScreen />;
+  if (!isReady || isRedirectingLegacyUrl) return <LoadingScreen />;
   if (isIdInvalid) {
     return (
       <ErrorScreen
@@ -197,7 +197,10 @@ export default function DirectoryPage({
         {aiMetadata({
           title: pageTitle,
           description: metaDescription,
-          path: conferencePath(conf, selectedOrganization ? `${routeSlug}?id=${orgId}` : routeSlug),
+          path:
+            selectedOrganization && orgId !== null
+              ? conferenceEntityPath(conf, routeSlug, orgId)
+              : conferencePath(conf, routeSlug),
           jsonFeeds: conferenceDataFeeds(conf),
         })}
       </Head>

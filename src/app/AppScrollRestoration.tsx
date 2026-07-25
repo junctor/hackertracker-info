@@ -13,12 +13,29 @@ type ScrollPosition = {
   y: number;
 };
 
-function getQueryId(search: string) {
-  return new URLSearchParams(search).get("id");
-}
-
 function hasQueryId(search: string) {
   return new URLSearchParams(search).has("id");
+}
+
+function hasPathId(pathname: string) {
+  const [, routeSegment, idSegment] = pathname.split("/").filter(Boolean);
+
+  return Boolean(
+    idSegment &&
+    [
+      "communities",
+      "contests",
+      "content",
+      "departments",
+      "documents",
+      "exhibitors",
+      "organizations",
+      "people",
+      "tags",
+      "vendors",
+      "villages",
+    ].includes(routeSegment ?? ""),
+  );
 }
 
 function shouldResetScroll(previous: RouteSnapshot | null, current: RouteSnapshot) {
@@ -26,7 +43,7 @@ function shouldResetScroll(previous: RouteSnapshot | null, current: RouteSnapsho
   if (current.hash && current.hash !== previous.hash) return true;
   if (current.pathname !== previous.pathname) return true;
 
-  return getQueryId(current.search) !== getQueryId(previous.search);
+  return false;
 }
 
 function scrollToHash(hash: string) {
@@ -100,7 +117,7 @@ export default function AppScrollRestoration() {
     const currentLocation = toSnapshot(location);
     const previousLocation = previousLocationRef.current;
     const scrollPositions = scrollPositionsRef.current;
-    const isDetailRoute = hasQueryId(currentLocation.search);
+    const isDetailRoute = hasPathId(currentLocation.pathname) || hasQueryId(currentLocation.search);
     let cancelPendingScroll: (() => void) | undefined;
 
     if (navigationType === "POP" && !isDetailRoute) {

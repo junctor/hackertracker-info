@@ -9,6 +9,8 @@ import { ConferenceManifest, getConference } from "@/lib/conferences";
 import { useConferenceRouteParam } from "@/lib/hooks/useConferenceRouteParam";
 import {
   CONFERENCE_ROUTE_DEFINITIONS,
+  conferenceRouteMatchesSegment,
+  conferenceRoutePaths,
   conferenceMenuPath,
   type ConferenceRouteKey,
 } from "@/lib/routes";
@@ -32,6 +34,7 @@ const MapsPage = lazy(() => import("@/routes/conference/MapsPage"));
 const MenuPage = lazy(() => import("@/routes/conference/MenuPage"));
 const MerchPage = lazy(() => import("@/routes/conference/MerchPage"));
 const OrganizationPage = lazy(() => import("@/routes/conference/OrganizationPage"));
+const OrganizationsPage = lazy(() => import("@/routes/conference/OrganizationsPage"));
 const PeoplePage = lazy(() => import("@/routes/conference/PeoplePage"));
 const ReadmePage = lazy(() => import("@/routes/conference/ReadmePage"));
 const SchedulePage = lazy(() => import("@/routes/conference/SchedulePage"));
@@ -55,6 +58,7 @@ const CONFERENCE_ROUTE_COMPONENTS = {
   menu: MenuPage,
   merch: MerchPage,
   organization: OrganizationPage,
+  organizations: OrganizationsPage,
   people: PeoplePage,
   readme: ReadmePage,
   schedule: SchedulePage,
@@ -159,8 +163,8 @@ function RouteLoadingFallback() {
 
   if (!conference) return <LoadingScreen />;
 
-  const route = CONFERENCE_ROUTE_DEFINITIONS.find(
-    ({ staticSegment }) => staticSegment === routeSegment,
+  const route = CONFERENCE_ROUTE_DEFINITIONS.find((definition) =>
+    conferenceRouteMatchesSegment(definition, routeSegment),
   );
 
   if (!route) return <LoadingScreen />;
@@ -189,8 +193,14 @@ export default function App() {
 
             <Route path=":conf">
               <Route index element={<ConferenceRootRedirect />} />
-              {CONFERENCE_ROUTE_DEFINITIONS.map(({ key, path, activePageId }) =>
-                conferenceRoute(path, CONFERENCE_ROUTE_COMPONENTS[key], activePageId),
+              {CONFERENCE_ROUTE_DEFINITIONS.flatMap((definition) =>
+                conferenceRoutePaths(definition).map((path) =>
+                  conferenceRoute(
+                    path,
+                    CONFERENCE_ROUTE_COMPONENTS[definition.key],
+                    definition.activePageId,
+                  ),
+                ),
               )}
               <Route path="*" element={<ConferenceRouteNotFound />} />
             </Route>

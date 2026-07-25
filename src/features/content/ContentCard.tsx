@@ -6,7 +6,7 @@ import type { ContentCard as ContentCardView } from "@/lib/types/ht-types/views"
 
 import Image from "@/components/Image";
 import { getAccentStyle } from "@/lib/color";
-import { buildAppPath } from "@/lib/url";
+import { contentPath } from "@/lib/routes";
 
 import { getVisibleContentLogoUrl } from "./contentLogo";
 
@@ -30,10 +30,7 @@ export default function ContentCard({ conference, item }: Props) {
     >
       <span aria-hidden="true" className="ui-accent-rail" />
       <span aria-hidden="true" className="ui-accent-rail-overlay" />
-      <Link
-        to={buildAppPath([conference.slug, "content"], { id: item.id })}
-        className="ui-focus-ring ui-accent-card-link"
-      >
+      <Link to={contentPath(conference, item.id)} className="ui-focus-ring ui-accent-card-link">
         <div className="ui-content-list-row">
           <div className="ui-item-main ui-item-copy">
             <h2 className="ui-card-title ui-accent-card-title-md ui-clamp-two">{item.title}</h2>

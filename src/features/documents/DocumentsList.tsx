@@ -3,6 +3,7 @@ import { Link } from "react-router";
 
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
+import { documentPath } from "@/lib/routes";
 import { DocumentsListView } from "@/lib/types/ht-types";
 
 const DOCUMENT_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
@@ -26,7 +27,7 @@ export default function DocumentsList({
         {documents.map((doc) => (
           <li key={doc.id}>
             <Link
-              to={`/${conference.slug}/document/?id=${doc.id}`}
+              to={documentPath(conference, doc.id)}
               className="ui-focus-ring ui-card ui-card-interactive ui-document-list-link"
             >
               <div className="ui-item-main">

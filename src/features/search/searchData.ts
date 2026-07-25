@@ -1,6 +1,6 @@
 import type { ConferenceSlug } from "@/lib/conferences";
 
-import { conferenceMenuPath } from "@/lib/routes";
+import { contentPath, organizationPath, personPath, conferenceMenuPath } from "@/lib/routes";
 
 export type UniversalSearchResultType = "content" | "person" | "organization";
 
@@ -47,11 +47,11 @@ export function getSearchResultTone(type: string): string {
 export function getSearchResultHref(confSlug: ConferenceSlug, result: UniversalSearchResult) {
   switch (result.type) {
     case "content":
-      return `/${confSlug}/content/?id=${result.id}`;
+      return contentPath(confSlug, result.id);
     case "person":
-      return `/${confSlug}/people/?id=${result.id}`;
+      return personPath(confSlug, result.id);
     case "organization":
-      return `/${confSlug}/organization/?id=${result.id}`;
+      return organizationPath(confSlug, result.id);
     default:
       return conferenceMenuPath(confSlug);
   }

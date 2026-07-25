@@ -5,10 +5,10 @@ import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { conferenceMenuPath } from "@/lib/routes";
+import { conferenceCollectionPath, conferenceMenuPath } from "@/lib/routes";
 import { DocumentDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
-import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
+import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
 type DocumentPageProps = {
   conf: ConferenceManifest;
@@ -16,7 +16,15 @@ type DocumentPageProps = {
 };
 
 export default function DocumentPage({ conf, activePageId }: DocumentPageProps) {
-  const { value: docId, isReady, isMissing, isInvalid } = useNumericQueryParam("id");
+  const {
+    value: docId,
+    isReady,
+    isMissing,
+    isInvalid,
+    isRedirectingLegacyUrl,
+  } = useNumericRouteParam("id", {
+    legacyCanonicalBasePath: conferenceCollectionPath(conf, "documents"),
+  });
   const documentsHref = `/${conf.slug}/readme.nfo`;
   const conferenceHomeHref = conferenceMenuPath(conf);
 
@@ -31,7 +39,7 @@ export default function DocumentPage({ conf, activePageId }: DocumentPageProps) 
 
   const selectedDocument = docId !== null ? documentsById?.[String(docId)] : undefined;
 
-  if (!isReady) return <LoadingScreen />;
+  if (!isReady || isRedirectingLegacyUrl) return <LoadingScreen />;
   if (isLoading) return <LoadingScreen />;
   if (isMissing) {
     return (

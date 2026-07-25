@@ -8,6 +8,7 @@ import { getAccentStyle } from "@/lib/color";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
+import { contentPath } from "@/lib/routes";
 
 import type { ScheduleSessionViewModel } from "./ScheduleSessions";
 
@@ -36,7 +37,7 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   const actionStatusId = `schedule-session-action-status-${session.id}`;
   const [actionStatus, setActionStatus] = useTransientStatus();
 
-  const href = `/${conf.slug}/content/?id=${session.contentId}`;
+  const href = contentPath(conf, session.contentId);
   const accentStyle = getAccentStyle(session.color);
 
   const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {

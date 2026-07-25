@@ -6,6 +6,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getDirectorySectionInitial } from "@/lib/directoryText";
 import { alphaSort } from "@/lib/misc";
+import { personPath } from "@/lib/routes";
 import { PeopleCardsView } from "@/lib/types/ht-types";
 import { getSafeImageHref } from "@/lib/url";
 
@@ -117,10 +118,7 @@ function PersonCard({
   const showAvatarImage = Boolean(avatarUrl) && !brokenAvatarIds[person.id];
 
   return (
-    <Link
-      to={`/${conference.slug}/people/?id=${person.id}`}
-      className="ui-focus-ring ui-person-list-link"
-    >
+    <Link to={personPath(conference, person.id)} className="ui-focus-ring ui-person-list-link">
       <article className="ui-card ui-card-interactive ui-person-list-card">
         <div className="ui-person-avatar ui-person-avatar-small">
           {showAvatarImage && avatarUrl ? (

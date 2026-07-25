@@ -6,6 +6,7 @@ import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
+import { tagPath } from "@/lib/routes";
 import { OrganizationEntity } from "@/lib/types/ht-types";
 import { getSafeExternalHref, getSafeImageHref } from "@/lib/url";
 
@@ -80,7 +81,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
           actions={
             org.tagIdAsOrganizer ? (
               <Link
-                to={`/${conference.slug}/tag/?id=${org.tagIdAsOrganizer}`}
+                to={tagPath(conference, org.tagIdAsOrganizer)}
                 className="ui-btn-base ui-btn-secondary ui-focus-ring ui-detail-action-link"
               >
                 <CalendarDaysIcon className="ui-icon-xs ui-card-external-icon" aria-hidden />

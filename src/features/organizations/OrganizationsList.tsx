@@ -103,7 +103,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
             return (
               <li key={organization.id} className="ui-grid-card-item">
                 <Link
-                  to={`${detailsBasePath}?id=${organization.id}`}
+                  to={`${detailsBasePath}${encodeURIComponent(String(organization.id))}`}
                   className="ui-focus-ring ui-organization-card-link"
                 >
                   <article className="ui-card ui-card-interactive ui-organization-card">

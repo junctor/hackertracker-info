@@ -8,10 +8,10 @@ import PeopleList from "@/features/people/PeopleList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { conferenceMenuPath } from "@/lib/routes";
+import { conferenceCollectionPath, conferenceMenuPath, personPath } from "@/lib/routes";
 import { PeopleCardsView, PeopleDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
-import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
+import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
 type PeoplePageProps = {
   conf: ConferenceManifest;
@@ -21,12 +21,15 @@ type PeoplePageProps = {
 const PersonDetails = lazy(() => import("@/features/people/PersonDetails"));
 
 export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
+  const peopleListHref = conferenceCollectionPath(conf, "people");
+  const conferenceHomeHref = conferenceMenuPath(conf);
   const {
     value: personId,
     isReady,
     isMissing: isIdMissing,
     isInvalid: isIdInvalid,
-  } = useNumericQueryParam("id");
+    isRedirectingLegacyUrl,
+  } = useNumericRouteParam("id", { legacyCanonicalBasePath: peopleListHref });
 
   const shouldLoadDetails = isReady && !isIdMissing && !isIdInvalid && personId !== null;
   const shouldLoadList = isReady && isIdMissing;
@@ -55,10 +58,7 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
     return `${normalized.slice(0, 147).trimEnd()}...`;
   }, [personDetail, conf.name]);
 
-  const peopleListHref = `/${conf.slug}/people/`;
-  const conferenceHomeHref = conferenceMenuPath(conf);
-
-  if (!isReady) return <LoadingScreen />;
+  if (!isReady || isRedirectingLegacyUrl) return <LoadingScreen />;
   if (isIdInvalid) {
     return (
       <ErrorScreen
@@ -129,7 +129,10 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
         {aiMetadata({
           title: pageTitle,
           description: pageDescription,
-          path: conferencePath(conf, shouldLoadDetails ? `people/?id=${personId}` : "people/"),
+          path:
+            shouldLoadDetails && personId !== null
+              ? personPath(conf, personId)
+              : conferencePath(conf, "people/"),
           jsonFeeds: conferenceDataFeeds(conf),
         })}
       </Head>

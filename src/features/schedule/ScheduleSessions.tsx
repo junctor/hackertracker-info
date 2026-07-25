@@ -2,10 +2,12 @@ import {
   ArrowDownCircleIcon,
   BookmarkIcon,
   ClockIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   ListBulletIcon,
   TagIcon,
 } from "@heroicons/react/24/outline";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { Virtuoso, type Components, type VirtuosoHandle } from "react-virtuoso";
 
@@ -113,6 +115,13 @@ const VIRTUOSO_COMPONENTS: Components<ScheduleSessionViewModel, VirtuosoContext>
   Footer: VirtuosoFooter,
 };
 
+const TAB_SCROLL_EDGE_TOLERANCE_PX = 2;
+const TAB_SCROLL_SETTLE_DELAY_MS = 360;
+
+function prefersReducedMotion() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+}
+
 export default function ScheduleSessions({
   conf,
   days,
@@ -147,10 +156,19 @@ export default function ScheduleSessions({
   activitySummary?: ScheduleActivitySummary | null;
 }) {
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
+  const [tabScrollState, setTabScrollState] = useState({
+    canScrollEarlier: false,
+    canScrollLater: false,
+  });
+  const tabScrollRef = useRef<HTMLDivElement | null>(null);
   const tabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const headingRef = useRef<HTMLHeadingElement | null>(null);
   const virtuosoRef = useRef<VirtuosoHandle | null>(null);
   const handledJumpRequestRef = useRef<number | null>(null);
+  const pendingTabScrollUpdateRef = useRef<{
+    frameId: number | null;
+    timeoutId: number | null;
+  }>({ frameId: null, timeoutId: null });
 
   const resolvedDay = useMemo(() => {
     if (selectedDay && days.some(({ day }) => day === selectedDay)) {
@@ -159,6 +177,70 @@ export default function ScheduleSessions({
 
     return days[0]?.day ?? "";
   }, [days, selectedDay]);
+  const dayKeys = useMemo(() => days.map(({ day }) => day).join("|"), [days]);
+
+  const updateTabScrollState = useCallback(() => {
+    const scrollEl = tabScrollRef.current;
+
+    if (!scrollEl) {
+      setTabScrollState({ canScrollEarlier: false, canScrollLater: false });
+      return;
+    }
+
+    const maxScrollLeft = Math.max(0, scrollEl.scrollWidth - scrollEl.clientWidth);
+    const canScrollEarlier = scrollEl.scrollLeft > TAB_SCROLL_EDGE_TOLERANCE_PX;
+    const canScrollLater = maxScrollLeft - scrollEl.scrollLeft > TAB_SCROLL_EDGE_TOLERANCE_PX;
+
+    setTabScrollState((current) => {
+      if (
+        current.canScrollEarlier === canScrollEarlier &&
+        current.canScrollLater === canScrollLater
+      ) {
+        return current;
+      }
+
+      return { canScrollEarlier, canScrollLater };
+    });
+  }, []);
+
+  const queueTabScrollStateUpdate = useCallback(
+    (settleDelayMs = 120) => {
+      const pending = pendingTabScrollUpdateRef.current;
+
+      if (pending.frameId !== null) {
+        window.cancelAnimationFrame(pending.frameId);
+      }
+
+      if (pending.timeoutId !== null) {
+        window.clearTimeout(pending.timeoutId);
+      }
+
+      pending.frameId = window.requestAnimationFrame(() => {
+        pending.frameId = null;
+        updateTabScrollState();
+      });
+
+      pending.timeoutId = window.setTimeout(() => {
+        pending.timeoutId = null;
+        updateTabScrollState();
+      }, settleDelayMs);
+    },
+    [updateTabScrollState],
+  );
+
+  useEffect(() => {
+    const pending = pendingTabScrollUpdateRef.current;
+
+    return () => {
+      if (pending.frameId !== null) {
+        window.cancelAnimationFrame(pending.frameId);
+      }
+
+      if (pending.timeoutId !== null) {
+        window.clearTimeout(pending.timeoutId);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!resolvedDay) return;
@@ -225,8 +307,73 @@ export default function ScheduleSessions({
       const nextButton = tabButtonRefs.current[nextDay];
       nextButton?.focus();
       nextButton?.scrollIntoView({ block: "nearest", inline: "nearest" });
+      queueTabScrollStateUpdate();
     },
-    [days, onSelectDay, resolvedDay],
+    [days, onSelectDay, queueTabScrollStateUpdate, resolvedDay],
+  );
+
+  useEffect(() => {
+    const scrollEl = tabScrollRef.current;
+    if (!scrollEl) return;
+
+    updateTabScrollState();
+
+    const handleScrollStateChange = () => queueTabScrollStateUpdate();
+    let resizeObserver: ResizeObserver | null = null;
+
+    scrollEl.addEventListener("scroll", handleScrollStateChange, { passive: true });
+    window.addEventListener("resize", handleScrollStateChange);
+
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(handleScrollStateChange);
+      resizeObserver.observe(scrollEl);
+
+      const tabList = scrollEl.firstElementChild;
+      if (tabList) {
+        resizeObserver.observe(tabList);
+      }
+    }
+
+    return () => {
+      scrollEl.removeEventListener("scroll", handleScrollStateChange);
+      window.removeEventListener("resize", handleScrollStateChange);
+      resizeObserver?.disconnect();
+    };
+  }, [dayKeys, queueTabScrollStateUpdate, updateTabScrollState]);
+
+  useEffect(() => {
+    if (!resolvedDay) {
+      updateTabScrollState();
+      return;
+    }
+
+    tabButtonRefs.current[resolvedDay]?.scrollIntoView({
+      block: "nearest",
+      inline: "nearest",
+      behavior: "auto",
+    });
+    queueTabScrollStateUpdate();
+  }, [dayKeys, queueTabScrollStateUpdate, resolvedDay, updateTabScrollState]);
+
+  const scrollDayTabs = useCallback(
+    (direction: "earlier" | "later") => {
+      const scrollEl = tabScrollRef.current;
+      if (!scrollEl) return;
+
+      const maxScrollLeft = Math.max(0, scrollEl.scrollWidth - scrollEl.clientWidth);
+      const scrollDistance = Math.max(scrollEl.clientWidth - 48, scrollEl.clientWidth * 0.75);
+      const left =
+        direction === "earlier"
+          ? Math.max(0, scrollEl.scrollLeft - scrollDistance)
+          : Math.min(maxScrollLeft, scrollEl.scrollLeft + scrollDistance);
+
+      scrollEl.scrollTo({
+        left,
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+      });
+      queueTabScrollStateUpdate(TAB_SCROLL_SETTLE_DELAY_MS);
+    },
+    [queueTabScrollStateUpdate],
   );
 
   const activeDay = days.find(({ day }) => day === resolvedDay) ?? null;
@@ -412,8 +559,24 @@ export default function ScheduleSessions({
       {days.length > 0 ? (
         <div className="ui-topbar ui-schedule-day-tabs">
           <div className="ui-container ui-schedule-tabs-inner">
-            <div className="ui-inset-highlight-soft ui-schedule-tabs-tray">
+            <div
+              className="ui-inset-highlight-soft ui-schedule-tabs-tray"
+              data-can-scroll-earlier={tabScrollState.canScrollEarlier ? "true" : undefined}
+              data-can-scroll-later={tabScrollState.canScrollLater ? "true" : undefined}
+            >
+              {tabScrollState.canScrollEarlier ? (
+                <button
+                  type="button"
+                  className="ui-btn-base ui-focus-ring ui-schedule-tab-scroll-button ui-schedule-tab-scroll-button-earlier"
+                  aria-label="Scroll to earlier days"
+                  onClick={() => scrollDayTabs("earlier")}
+                >
+                  <ChevronLeftIcon className="ui-icon-sm" aria-hidden="true" />
+                </button>
+              ) : null}
+
               <div
+                ref={tabScrollRef}
                 role="tablist"
                 aria-label="Schedule days"
                 aria-orientation="horizontal"
@@ -447,6 +610,17 @@ export default function ScheduleSessions({
                   ))}
                 </div>
               </div>
+
+              {tabScrollState.canScrollLater ? (
+                <button
+                  type="button"
+                  className="ui-btn-base ui-focus-ring ui-schedule-tab-scroll-button ui-schedule-tab-scroll-button-later"
+                  aria-label="Scroll to later days"
+                  onClick={() => scrollDayTabs("later")}
+                >
+                  <ChevronRightIcon className="ui-icon-sm" aria-hidden="true" />
+                </button>
+              ) : null}
             </div>
           </div>
         </div>

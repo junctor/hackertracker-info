@@ -265,6 +265,7 @@
 }
 
 .ui-schedule-tabs-tray {
+  position: relative;
   border-radius: 1rem;
   border: 1px solid color-mix(in oklab, white, transparent 90%);
   background: color-mix(in oklab, var(--color-surface), transparent 18%);
@@ -282,6 +283,17 @@
   min-width: 0;
   overflow-x: auto;
   overscroll-behavior-x: contain;
+  scroll-padding-inline: var(--space-1);
+}
+
+.ui-schedule-tabs-tray[data-can-scroll-earlier="true"] .ui-schedule-tab-scroll {
+  padding-left: calc(var(--control-min) - var(--space-1));
+  scroll-padding-left: calc(var(--control-min) + var(--space-2));
+}
+
+.ui-schedule-tabs-tray[data-can-scroll-later="true"] .ui-schedule-tab-scroll {
+  padding-right: calc(var(--control-min) - var(--space-1));
+  scroll-padding-right: calc(var(--control-min) + var(--space-2));
 }
 
 .ui-schedule-tab-list {
@@ -290,6 +302,32 @@
   align-items: center;
   gap: var(--space-2);
   padding-right: var(--space-1);
+}
+
+.ui-schedule-tab-scroll-button {
+  position: absolute;
+  top: var(--space-1);
+  bottom: var(--space-1);
+  z-index: 2;
+  width: var(--control-min);
+  min-height: 0;
+  border-color: color-mix(in oklab, white, transparent 90%);
+  background: color-mix(in oklab, var(--surface-elevated), black 10%);
+  color: var(--text-muted);
+}
+
+.ui-schedule-tab-scroll-button:hover,
+.ui-schedule-tab-scroll-button:focus-visible {
+  border-color: color-mix(in oklab, var(--accent-success), transparent 62%);
+  color: var(--text-primary);
+}
+
+.ui-schedule-tab-scroll-button-earlier {
+  left: var(--space-1);
+}
+
+.ui-schedule-tab-scroll-button-later {
+  right: var(--space-1);
 }
 
 .ui-schedule-day-tab {

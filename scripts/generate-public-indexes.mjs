@@ -374,7 +374,7 @@ function renderLlmsJsonDataLinks(conference) {
       absoluteUrl(dataHref(conference, "manifest.json")),
     )}`,
     `- ${markdownLink(
-      `${conference.name} schedule runtime view`,
+      `${conference.name} schedule data`,
       absoluteUrl(dataHref(conference, "views/scheduleDays.json")),
     )}`,
   ];
@@ -382,7 +382,7 @@ function renderLlmsJsonDataLinks(conference) {
   if (conference.siteMenu.includes("content")) {
     lines.push(
       `- ${markdownLink(
-        `${conference.name} content cards`,
+        `${conference.name} content data`,
         absoluteUrl(dataHref(conference, "views/contentCards.json")),
       )}`,
     );
@@ -391,7 +391,7 @@ function renderLlmsJsonDataLinks(conference) {
   if (conference.siteMenu.includes("people")) {
     lines.push(
       `- ${markdownLink(
-        `${conference.name} people cards`,
+        `${conference.name} people data`,
         absoluteUrl(dataHref(conference, "views/peopleCards.json")),
       )}`,
     );
@@ -400,7 +400,7 @@ function renderLlmsJsonDataLinks(conference) {
   if (conference.siteMenu.includes("locations")) {
     lines.push(
       `- ${markdownLink(
-        `${conference.name} location cards`,
+        `${conference.name} location data`,
         absoluteUrl(dataHref(conference, "views/locationCards.json")),
       )}`,
     );
@@ -490,7 +490,7 @@ function renderLlmsTxt(conferences) {
 
 ${generatedTextNotice}
 
-info.defcon.org is the static-first DEF CON conference information site. It provides human pages for conference schedules, speakers, locations, villages, search, and related reference information.
+info.defcon.org is a DEF CON conference information site. It provides human pages for conference schedules, speakers, locations, villages, search, and related reference information.
 
 The browser app fetches conference data from JSON at runtime. These JSON files are the route-level data used by the React application and may be replaced independently of a site rebuild.
 
@@ -509,7 +509,7 @@ ${conferences.map((conference) => renderLlmsHumanLinks(conference)).join("\n")}`
 - ${markdownLink("Sitemap", absoluteUrl("/sitemap.xml"))}
 - ${markdownLink("Robots", absoluteUrl("/robots.txt"))}
 
-Prefer the JSON endpoints above when mirroring the current website runtime data. Human pages are client-rendered and may summarize or navigate the same runtime data.`,
+Prefer the JSON endpoints above when mirroring the published JSON data. Human pages are client-rendered and may summarize or navigate the same data.`,
   ].filter(Boolean);
 
   return `${sections.join("\n\n")}\n`;
@@ -522,8 +522,7 @@ function renderWebsiteStructuredData() {
     "@id": `${SITE_ORIGIN}/#website`,
     name: "info.defcon.org",
     url: `${SITE_ORIGIN}/`,
-    description:
-      "Official DEF CON schedules and conference information for current and upcoming events.",
+    description: "DEF CON schedules and conference information.",
   });
 }
 
@@ -547,7 +546,7 @@ function renderCollectionStructuredData(conference, collection) {
   const dataFeed =
     collection === "schedule"
       ? {
-          name: `${conference.name} schedule runtime view JSON`,
+          name: `${conference.name} schedule data JSON`,
           contentUrl: absoluteUrl(dataHref(conference, "views/scheduleDays.json")),
         }
       : {

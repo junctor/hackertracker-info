@@ -9,14 +9,36 @@ import { conferenceMenuPath } from "@/lib/routes";
 type ConferenceCardConfig = {
   conference: ConferenceManifest;
   startDateMs: number;
+  endDateMs: number;
 };
+
+function compareConferenceNames(a: ConferenceCardConfig, b: ConferenceCardConfig) {
+  return a.conference.name.localeCompare(b.conference.name);
+}
+
+function compareConferencesByRelevance(a: ConferenceCardConfig, b: ConferenceCardConfig) {
+  const nowMs = Date.now();
+  const aIsCurrentOrUpcoming = a.endDateMs >= nowMs;
+  const bIsCurrentOrUpcoming = b.endDateMs >= nowMs;
+
+  if (aIsCurrentOrUpcoming !== bIsCurrentOrUpcoming) {
+    return aIsCurrentOrUpcoming ? -1 : 1;
+  }
+
+  if (aIsCurrentOrUpcoming) {
+    return a.startDateMs - b.startDateMs || compareConferenceNames(a, b);
+  }
+
+  return b.startDateMs - a.startDateMs || compareConferenceNames(a, b);
+}
 
 const ALL_CONFERENCES: ReadonlyArray<ConferenceCardConfig> = Object.values(CONFERENCES)
   .map((conference) => ({
     conference,
+    endDateMs: Date.parse(conference.end),
     startDateMs: Date.parse(conference.begin),
   }))
-  .toSorted((a, b) => b.startDateMs - a.startDateMs);
+  .toSorted(compareConferencesByRelevance);
 
 export default function ConferencesPage() {
   return (

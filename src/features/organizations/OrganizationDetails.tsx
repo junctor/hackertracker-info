@@ -48,7 +48,7 @@ export default function OrganizationDetails({ org, conference }: Props) {
 
   return (
     <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
-      <div className="ui-detail-header-accent ui-tone-secondary">
+      <div className="ui-detail-header-accent ui-detail-header-inline ui-organization-detail-header ui-tone-secondary">
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 

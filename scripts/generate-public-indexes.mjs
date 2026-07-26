@@ -377,6 +377,14 @@ function renderLlmsJsonDataLinks(conference) {
       `${conference.name} schedule data`,
       absoluteUrl(dataHref(conference, "views/scheduleDays.json")),
     )}`,
+    `- ${markdownLink(
+      `${conference.name} schedule export CSV`,
+      absoluteUrl(dataHref(conference, "exports/schedule.csv")),
+    )}`,
+    `- ${markdownLink(
+      `${conference.name} schedule export JSON`,
+      absoluteUrl(dataHref(conference, "exports/schedule.json")),
+    )}`,
   ];
 
   if (conference.siteMenu.includes("content")) {

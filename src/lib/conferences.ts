@@ -69,7 +69,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     end: "2026-10-02T15:59:00Z",
 
     dataRoot: "/ht/dctsg202610",
-    siteMenu: ["announcements", "readme", "search"],
+    siteMenu: ["announcements", "content", "readme", "search"],
     externalTrackerUrl: "/apps",
   },
 

@@ -1,6 +1,7 @@
 export type ConferenceSlug =
   | "dcme2026"
   | "dcsg2026"
+  | "dctsg202610"
   | "defcon33"
   | "defcon34"
   | "defconbahrain2025";
@@ -51,6 +52,27 @@ export type ConferenceManifest = {
 };
 
 export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
+  dctsg202610: {
+    slug: "dctsg202610",
+    code: "DCTSG202610",
+    name: "DEF CON Training Singapore October 2026",
+    shortTitle: "DC Training Singapore",
+
+    dateLabel: "September 30–October 2, 2026",
+    tagline: null,
+    timezone: "Asia/Singapore",
+    logoFile: "logos/conferences/defcon-training.WEBP",
+    showOnHome: true,
+
+    kickoff: "2026-10-01T00:00:00Z",
+    begin: "2026-09-30T16:00:00Z",
+    end: "2026-10-02T15:59:00Z",
+
+    dataRoot: "/ht/dctsg202610",
+    siteMenu: ["announcements", "readme", "search"],
+    externalTrackerUrl: "/apps",
+  },
+
   dcme2026: {
     slug: "dcme2026",
     code: "DCME2026",
@@ -89,7 +111,17 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     end: "2026-08-10T06:59:59Z",
 
     dataRoot: "/ht/defcon34",
-    siteMenu: ["communities", "content", "contests", "readme", "schedule", "search", "villages"],
+    siteMenu: [
+      "announcements",
+      "communities",
+      "content",
+      "contests",
+      "people",
+      "readme",
+      "schedule",
+      "search",
+      "villages",
+    ],
     schedulePath: "/defcon34/schedule/",
     externalTrackerUrl: "/apps",
   },

@@ -9,10 +9,11 @@ import ScheduleSessions from "@/features/schedule/ScheduleSessions";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
+import { conferenceCollectionPath } from "@/lib/routes";
 import { getBookmarks } from "@/lib/storage";
 import { TagDetailsById } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
-import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
+import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
 type TagPageProps = {
   conf: ConferenceManifest;
@@ -26,7 +27,10 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
     isReady,
     isMissing: isIdMissing,
     isInvalid: isIdInvalid,
-  } = useNumericQueryParam("id");
+    isRedirectingLegacyUrl,
+  } = useNumericRouteParam("id", {
+    legacyCanonicalBasePath: conferenceCollectionPath(conf, "tags"),
+  });
   const shouldLoadTag = isReady && !isIdMissing && !isIdInvalid && tagId !== null;
 
   const {
@@ -78,7 +82,7 @@ export default function TagPage({ conf, activePageId }: TagPageProps) {
   const tagsHref = `/${conf.slug}/tags/`;
   const scheduleHref = conf.schedulePath ?? `/${conf.slug}/schedule/`;
 
-  if (!isReady) return <LoadingScreen />;
+  if (!isReady || isRedirectingLegacyUrl) return <LoadingScreen />;
   if (isIdInvalid) {
     return (
       <ErrorScreen

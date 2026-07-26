@@ -118,7 +118,7 @@ function ContentListHeader({
   return (
     <PageHeader
       title="Content"
-      description="Browse talks, sessions, and other conference content."
+      description="Browse talks, workshops, and other content."
       resultLabel={resultLabel}
       search={{
         label: "Search content",
@@ -248,7 +248,7 @@ export default function ContentList({ content, tags, conference }: Props) {
   }, [normalizedSearch, searchableContent, selectedTag]);
 
   const hasActiveFilters = Boolean(normalizedSearch || selectedTag !== null);
-  const contentCountLabel = `${filtered.length} content`;
+  const contentCountLabel = `${filtered.length} ${filtered.length === 1 ? "item" : "items"}`;
   const resultCountLabel = hasActiveFilters ? `${contentCountLabel} found` : undefined;
   const shouldVirtualize = filtered.length > VIRTUALIZE_CONTENT_THRESHOLD;
   const renderVirtualizedContent = useCallback(

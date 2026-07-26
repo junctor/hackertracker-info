@@ -16,6 +16,7 @@ export type ConferenceRouteKey =
   | "menu"
   | "merch"
   | "organization"
+  | "organizations"
   | "people"
   | "readme"
   | "schedule"
@@ -29,6 +30,8 @@ export type ConferenceRouteKey =
 export type ConferenceRouteDefinition = {
   key: ConferenceRouteKey;
   path: string;
+  detailPaths?: readonly string[];
+  legacyPaths?: readonly string[];
   activePageId: PageId;
   staticSegment: string;
 };
@@ -39,8 +42,60 @@ function conferenceSlug(input: ConferencePathInput) {
   return typeof input === "string" ? input : input.slug;
 }
 
+function encodePathSegment(value: string | number) {
+  return encodeURIComponent(
+    String(value)
+      .trim()
+      .replace(/^\/+|\/+$/g, ""),
+  );
+}
+
+function conferenceBasePath(conference: ConferencePathInput) {
+  return `/${encodePathSegment(conferenceSlug(conference))}`;
+}
+
 export function conferenceMenuPath(conference: ConferencePathInput) {
-  return `/${conferenceSlug(conference)}/menu/`;
+  return `${conferenceBasePath(conference)}/menu/`;
+}
+
+export function conferenceCollectionPath(conference: ConferencePathInput, routeSlug: string) {
+  return `${conferenceBasePath(conference)}/${encodePathSegment(routeSlug)}/`;
+}
+
+export function conferenceEntityPath(
+  conference: ConferencePathInput,
+  routeSlug: string,
+  id: string | number,
+) {
+  return `${conferenceBasePath(conference)}/${encodePathSegment(routeSlug)}/${encodePathSegment(id)}`;
+}
+
+export function contentPath(conference: ConferencePathInput, id: string | number) {
+  return conferenceEntityPath(conference, "content", id);
+}
+
+export function personPath(conference: ConferencePathInput, id: string | number) {
+  return conferenceEntityPath(conference, "people", id);
+}
+
+export function organizationPath(conference: ConferencePathInput, id: string | number) {
+  return conferenceEntityPath(conference, "organizations", id);
+}
+
+export function documentPath(conference: ConferencePathInput, id: string | number) {
+  return conferenceEntityPath(conference, "documents", id);
+}
+
+export function tagPath(conference: ConferencePathInput, id: string | number) {
+  return conferenceEntityPath(conference, "tags", id);
+}
+
+export function conferenceRoutePaths(route: ConferenceRouteDefinition): string[] {
+  return [route.path, ...(route.detailPaths ?? []), ...(route.legacyPaths ?? [])];
+}
+
+export function conferenceRouteMatchesSegment(route: ConferenceRouteDefinition, segment: string) {
+  return conferenceRoutePaths(route).some((path) => path.split("/", 1)[0] === segment);
 }
 
 export const CONFERENCE_ROUTE_DEFINITIONS = [
@@ -55,21 +110,43 @@ export const CONFERENCE_ROUTE_DEFINITIONS = [
   {
     key: "communities",
     path: "communities",
+    detailPaths: ["communities/:id"],
     activePageId: "communities",
     staticSegment: "communities",
   },
-  { key: "contests", path: "contests", activePageId: "contests", staticSegment: "contests" },
-  { key: "content", path: "content", activePageId: "content", staticSegment: "content" },
+  {
+    key: "contests",
+    path: "contests",
+    detailPaths: ["contests/:id"],
+    activePageId: "contests",
+    staticSegment: "contests",
+  },
+  {
+    key: "content",
+    path: "content",
+    detailPaths: ["content/:id"],
+    activePageId: "content",
+    staticSegment: "content",
+  },
   {
     key: "departments",
     path: "departments",
+    detailPaths: ["departments/:id"],
     activePageId: "departments",
     staticSegment: "departments",
   },
-  { key: "document", path: "document", activePageId: "document", staticSegment: "document" },
+  {
+    key: "document",
+    path: "documents",
+    detailPaths: ["documents/:id"],
+    legacyPaths: ["document"],
+    activePageId: "document",
+    staticSegment: "documents",
+  },
   {
     key: "exhibitors",
     path: "exhibitors",
+    detailPaths: ["exhibitors/:id"],
     activePageId: "exhibitors",
     staticSegment: "exhibitors",
   },
@@ -78,17 +155,48 @@ export const CONFERENCE_ROUTE_DEFINITIONS = [
   { key: "merch", path: "merch", activePageId: "merch", staticSegment: "merch" },
   {
     key: "organization",
-    path: "organization",
+    path: "organizations/:id",
+    legacyPaths: ["organization"],
     activePageId: "organization",
-    staticSegment: "organization",
+    staticSegment: "organizations",
   },
-  { key: "people", path: "people", activePageId: "people", staticSegment: "people" },
+  {
+    key: "organizations",
+    path: "organizations",
+    activePageId: "organization",
+    staticSegment: "organizations",
+  },
+  {
+    key: "people",
+    path: "people",
+    detailPaths: ["people/:id"],
+    activePageId: "people",
+    staticSegment: "people",
+  },
   { key: "readme", path: "readme.nfo", activePageId: "readme", staticSegment: "readme.nfo" },
   { key: "schedule", path: "schedule", activePageId: "schedule", staticSegment: "schedule" },
   { key: "search", path: "search", activePageId: "search", staticSegment: "search" },
   { key: "speakers", path: "speakers", activePageId: "people", staticSegment: "speakers" },
-  { key: "tag", path: "tag", activePageId: "tag", staticSegment: "tag" },
+  {
+    key: "tag",
+    path: "tags/:id",
+    legacyPaths: ["tag"],
+    activePageId: "tag",
+    staticSegment: "tags",
+  },
   { key: "tags", path: "tags", activePageId: "tags", staticSegment: "tags" },
-  { key: "vendors", path: "vendors", activePageId: "vendors", staticSegment: "vendors" },
-  { key: "villages", path: "villages", activePageId: "villages", staticSegment: "villages" },
+  {
+    key: "vendors",
+    path: "vendors",
+    detailPaths: ["vendors/:id"],
+    activePageId: "vendors",
+    staticSegment: "vendors",
+  },
+  {
+    key: "villages",
+    path: "villages",
+    detailPaths: ["villages/:id"],
+    activePageId: "villages",
+    staticSegment: "villages",
+  },
 ] as const satisfies ReadonlyArray<ConferenceRouteDefinition>;

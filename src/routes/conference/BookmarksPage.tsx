@@ -144,7 +144,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     <>
       <Head>
         <title>Bookmarks | {conf.name}</title>
-        <meta name="description" content={`${conf.name} schedule for bookmarks`} />
+        <meta name="description" content={`${conf.name} saved schedule sessions.`} />
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         <h1 className="ui-heading-1 ui-container ui-page-title-centered">Bookmarks</h1>
@@ -170,12 +170,12 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
           />
         ) : (
           <div className="ui-container ui-empty-state ui-page-empty-offset">
-            <p>No upcoming sessions match your saved bookmarks.</p>
+            <p>No saved sessions are available in this conference data.</p>
             <Link
               to={`/${conf.slug}/schedule/`}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
             >
-              View Full Schedule
+              View Schedule
             </Link>
           </div>
         )}

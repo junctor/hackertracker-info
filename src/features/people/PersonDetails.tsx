@@ -6,9 +6,10 @@ import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
+import { contentPath } from "@/lib/routes";
 import { getBookmarks } from "@/lib/storage";
 import { ContentEntity, SessionEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
-import { buildAppPath, getSafeExternalHref, getSafeImageHref } from "@/lib/url";
+import { getSafeExternalHref, getSafeImageHref } from "@/lib/url";
 
 import ContentSession from "../content/ContentSession";
 import { getPersonInitials } from "./personInitials";
@@ -96,7 +97,6 @@ function getPersonAccentClassName(name?: string | null): string {
 
 export default function PersonDetails({ person, sessions, locations, conference }: Props) {
   const [hasAvatarError, setHasAvatarError] = useState(false);
-  const contentsBasePath = buildAppPath([conference.slug, "content"]);
   const personName = getDisplayName(person.name);
   const personInitials = getPersonInitials(person.name);
   const personAvatarUrl = getPersonAvatarUrl(person);
@@ -197,7 +197,7 @@ export default function PersonDetails({ person, sessions, locations, conference 
                   <div className="ui-person-title-row">
                     <h1 className="ui-heading-1">{personName}</h1>
                     {personPronouns ? (
-                      <span className="ui-meta-pill ui-person-pronouns">{personPronouns}</span>
+                      <span className="ui-person-pronouns">{personPronouns}</span>
                     ) : null}
                   </div>
 
@@ -285,7 +285,7 @@ export default function PersonDetails({ person, sessions, locations, conference 
                   isBookmarked={bookmarkSet.has(session.id)}
                   accentColor={session.color}
                   locationName={locationNameById.get(session.locationId)}
-                  href={`${contentsBasePath}?id=${session.contentId}`}
+                  href={contentPath(conference, session.contentId)}
                   title={session.title}
                 />
               );

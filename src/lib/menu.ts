@@ -35,19 +35,19 @@ export const ORGANIZATION_DIRECTORY_CONFIG: Readonly<
     title: "Communities",
     tagLabel: "community",
     slug: "communities",
-    description: "Special-interest groups and meetups.",
+    description: "Community groups and meetups.",
   },
   departments: {
     title: "Departments",
     tagLabel: "def_con_department",
     slug: "departments",
-    description: "Departments and responsibilities.",
+    description: "Conference departments and responsibilities.",
   },
   villages: {
     title: "Villages",
     tagLabel: "village",
     slug: "villages",
-    description: "Hands-on villages and activities.",
+    description: "Villages, activities, and sessions.",
   },
   contests: {
     title: "Contests",
@@ -59,13 +59,13 @@ export const ORGANIZATION_DIRECTORY_CONFIG: Readonly<
     title: "Exhibitors",
     tagLabel: "exhibitor",
     slug: "exhibitors",
-    description: "Exhibitor booths and products.",
+    description: "Exhibitor booths and listings.",
   },
   vendors: {
     title: "Vendors",
     tagLabel: "vendor",
     slug: "vendors",
-    description: "Vendor booths and offerings.",
+    description: "Vendor booths and listings.",
   },
 });
 
@@ -92,7 +92,7 @@ const SITE_MENU = {
     sort_order: 10,
     title: "readme.nfo",
     href: `/${c.slug}/readme.nfo`,
-    description: "Reference docs, FAQs, and updates.",
+    description: "Conference reference files and updates.",
     icon: DocumentTextIcon,
   }),
 
@@ -100,7 +100,7 @@ const SITE_MENU = {
     sort_order: 20,
     title: "Announcements",
     href: conferenceRoute(c, "announcements"),
-    description: "Conference announcements and urgent updates.",
+    description: "Conference announcements and updates.",
     icon: MegaphoneIcon,
   }),
 
@@ -108,7 +108,7 @@ const SITE_MENU = {
     sort_order: 30,
     title: "Schedule",
     href: `/${c.slug}/schedule/`,
-    description: "Session times, rooms, and live status.",
+    description: "Browse sessions by day, time, and location.",
     icon: CalendarDaysIcon,
   }),
 
@@ -116,7 +116,7 @@ const SITE_MENU = {
     sort_order: 40,
     title: "Bookmarks",
     href: conferenceRoute(c, "bookmarks"),
-    description: "Save your favorite talks, workshops, and sessions.",
+    description: "Saved sessions from this browser.",
     icon: BookmarkIcon,
   }),
 
@@ -124,7 +124,7 @@ const SITE_MENU = {
     sort_order: 50,
     title: "Content",
     href: conferenceRoute(c, "content"),
-    description: "Talks, workshops, and presentation details.",
+    description: "Talks, workshops, and other content.",
     icon: ClipboardDocumentListIcon,
   }),
 
@@ -134,7 +134,7 @@ const SITE_MENU = {
       sort_order: 55,
       title: directory?.title ?? "Departments",
       href: conferenceRoute(c, directory?.slug ?? "departments"),
-      description: directory?.description ?? "Departments and responsibilities.",
+      description: directory?.description ?? "Conference departments and responsibilities.",
       icon: BuildingOffice2Icon,
     };
   },
@@ -143,7 +143,7 @@ const SITE_MENU = {
     sort_order: 60,
     title: "People",
     href: conferenceRoute(c, "people"),
-    description: "People and their sessions.",
+    description: "Speakers, contributors, and their sessions.",
     icon: UsersIcon,
   }),
 
@@ -151,7 +151,7 @@ const SITE_MENU = {
     sort_order: 70,
     title: "Maps",
     href: conferenceRoute(c, "maps"),
-    description: "View venue layouts and floor plans.",
+    description: "Venue maps and floor plans.",
     icon: MapIcon,
   }),
 
@@ -159,7 +159,7 @@ const SITE_MENU = {
     sort_order: 80,
     title: "Locations",
     href: conferenceRoute(c, "locations"),
-    description: "Rooms and venue locations.",
+    description: "Rooms and venues used in the schedule.",
     icon: MapPinIcon,
   }),
 
@@ -167,15 +167,15 @@ const SITE_MENU = {
     sort_order: 90,
     title: "Merch",
     href: conferenceRoute(c, "merch"),
-    description: "Official merch and purchasing info.",
+    description: "Merch information and purchase links.",
     icon: ShoppingBagIcon,
   }),
 
   search: (c) => ({
     sort_order: 100,
-    title: "Search Everything",
+    title: "Search",
     href: conferenceRoute(c, "search"),
-    description: "Search talks, people, orgs, and more.",
+    description: "Search sessions, people, and organizations.",
     icon: MagnifyingGlassIcon,
   }),
 
@@ -185,7 +185,7 @@ const SITE_MENU = {
       sort_order: 110,
       title: directory?.title ?? "Villages",
       href: conferenceRoute(c, directory?.slug ?? "villages"),
-      description: directory?.description ?? "Hands-on villages and activities.",
+      description: directory?.description ?? "Villages, activities, and sessions.",
       icon: BuildingOfficeIcon,
     };
   },
@@ -196,7 +196,7 @@ const SITE_MENU = {
       sort_order: 120,
       title: directory?.title ?? "Communities",
       href: conferenceRoute(c, directory?.slug ?? "communities"),
-      description: directory?.description ?? "Special-interest groups and meetups.",
+      description: directory?.description ?? "Community groups and meetups.",
       icon: UserGroupIcon,
     };
   },
@@ -218,7 +218,7 @@ const SITE_MENU = {
       sort_order: 140,
       title: directory?.title ?? "Exhibitors",
       href: conferenceRoute(c, directory?.slug ?? "exhibitors"),
-      description: directory?.description ?? "Exhibitor booths and products.",
+      description: directory?.description ?? "Exhibitor booths and listings.",
       icon: BuildingOfficeIcon,
     };
   },
@@ -229,7 +229,7 @@ const SITE_MENU = {
       sort_order: 150,
       title: directory?.title ?? "Vendors",
       href: conferenceRoute(c, directory?.slug ?? "vendors"),
-      description: directory?.description ?? "Vendor booths and offerings.",
+      description: directory?.description ?? "Vendor booths and listings.",
       icon: BuildingStorefrontIcon,
     };
   },

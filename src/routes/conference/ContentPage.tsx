@@ -16,10 +16,10 @@ import ContentList from "@/features/content/ContentList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { conferenceMenuPath } from "@/lib/routes";
+import { conferenceCollectionPath, conferenceMenuPath, contentPath } from "@/lib/routes";
 import { getBookmarks } from "@/lib/storage";
 import { PageId } from "@/lib/types/page-meta";
-import useNumericQueryParam from "@/lib/utils/useNumericQueryParam";
+import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
 type ContentPageProps = {
   conf: ConferenceManifest;
@@ -61,12 +61,15 @@ export function resolveRelatedContentCards(
 }
 
 export default function ContentPage({ conf, activePageId }: ContentPageProps) {
+  const contentListHref = conferenceCollectionPath(conf, "content");
+  const conferenceHomeHref = conferenceMenuPath(conf);
   const {
     value: contentId,
     isReady,
     isMissing: isIdMissing,
     isInvalid: isIdInvalid,
-  } = useNumericQueryParam("id");
+    isRedirectingLegacyUrl,
+  } = useNumericRouteParam("id", { legacyCanonicalBasePath: contentListHref });
 
   const shouldLoadDetails = isReady && !isIdMissing && !isIdInvalid && contentId !== null;
   const shouldLoadList = isReady && isIdMissing;
@@ -109,10 +112,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
     return `${normalized.slice(0, 147).trimEnd()}...`;
   }, [conf.name, contentDetail]);
 
-  const contentListHref = `/${conf.slug}/content/`;
-  const conferenceHomeHref = conferenceMenuPath(conf);
-
-  if (!isReady) {
+  if (!isReady || isRedirectingLegacyUrl) {
     return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
   }
   if (isIdInvalid) {
@@ -198,7 +198,10 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
         {aiMetadata({
           title: pageTitle,
           description: pageDescription,
-          path: conferencePath(conf, shouldLoadDetails ? `content/?id=${contentId}` : "content/"),
+          path:
+            shouldLoadDetails && contentId !== null
+              ? contentPath(conf, contentId)
+              : conferencePath(conf, "content/"),
           jsonFeeds: conferenceDataFeeds(conf),
         })}
       </Head>

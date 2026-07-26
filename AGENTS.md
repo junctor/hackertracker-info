@@ -19,7 +19,7 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 - This is a Vite+ React app using React Router for client-side routes.
 - Route components live under `src/routes`; shared UI and domain logic live under `src/components`, `src/features`, and `src/lib`.
 - Conference data is loaded client-side from static JSON under `public/ht/<conference-slug>/`.
-- Static route entry files are generated after build so direct navigation works on static hosts without rewrite rules.
+- Direct navigation relies on the production host serving the root application entry point for nested app routes.
 
 ## Commands
 

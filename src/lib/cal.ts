@@ -1,4 +1,6 @@
-import { ContentEntity, SessionEntity } from "@/lib/types/ht-types";
+import type { ContentEntity, SessionEntity } from "@/lib/types/ht-types";
+
+import { contentPath } from "./routes";
 
 const MAX_LINE_LEN = 75;
 const CRLF = "\r\n";
@@ -91,7 +93,7 @@ export const generateICal = (
   const summary = escapeICalText(content.title);
   const description = escapeICalText(content.description ?? "");
   const location = escapeICalText(locationName ?? "");
-  const url = `https://info.defcon.org/${conferenceSlug}/content/?id=${content.id}`;
+  const url = `https://info.defcon.org${contentPath(conferenceSlug, content.id)}`;
 
   const lines: string[] = [
     "BEGIN:VCALENDAR",

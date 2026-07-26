@@ -17,7 +17,8 @@ import Markdown from "@/components/markdown/Markdown";
 import PageHeader from "@/components/ui/PageHeader";
 import { getAccentStyle } from "@/lib/color";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
-import { buildAbsoluteAppUrl, buildAppPath, getSafeExternalHref } from "@/lib/url";
+import { contentPath, personPath, tagPath } from "@/lib/routes";
+import { buildAbsoluteAppUrlFromPath, getSafeExternalHref } from "@/lib/url";
 
 import ContentCard from "./ContentCard";
 import { getVisibleContentLogoUrl } from "./contentLogo";
@@ -58,7 +59,6 @@ export default function ContentDetails(props: Props) {
   const [shareStatus, setShareStatus] = useTransientStatus();
   const [failedLogoUrl, setFailedLogoUrl] = useState<string | null>(null);
 
-  const peopleBasePath = buildAppPath([conference.slug, "people"]);
   const visibleLogoUrl = getVisibleContentLogoUrl(content.logoUrl, failedLogoUrl);
 
   const locationNameById = useMemo(
@@ -86,7 +86,7 @@ export default function ContentDetails(props: Props) {
   const accentColor =
     content.color || primarySession?.color || getSessionTagAccentColor(primarySession, tags);
   const accentStyle = getAccentStyle(accentColor);
-  const shareUrl = buildAbsoluteAppUrl([conference.slug, "content"], { id: content.id });
+  const shareUrl = buildAbsoluteAppUrlFromPath(contentPath(conference, content.id));
 
   const canShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
   const canCopyToClipboard =
@@ -122,7 +122,10 @@ export default function ContentDetails(props: Props) {
 
   return (
     <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
-      <div style={accentStyle} className="ui-detail-header-accent">
+      <div
+        style={accentStyle}
+        className="ui-detail-header-accent ui-detail-header-inline ui-content-detail-header"
+      >
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 
@@ -172,7 +175,7 @@ export default function ContentDetails(props: Props) {
             {tags.map((tag) => (
               <li key={tag.id}>
                 <Link
-                  to={`/${conference.slug}/tag/?id=${tag.id}`}
+                  to={tagPath(conference, tag.id)}
                   aria-label={`Show schedule for ${tag.label}`}
                   className="ui-focus-ring ui-tag-chip ui-tag-chip-strong ui-tag-link ui-tag-link-detail"
                   style={{ backgroundColor: tag.colorBackground, color: tag.colorForeground }}
@@ -222,16 +225,16 @@ export default function ContentDetails(props: Props) {
           <h2 id="people-title" className="ui-section-label">
             People
           </h2>
-          <ul className="ui-chip-list">
+          <ul className="ui-detail-identity-list">
             {people.map((p) => (
               <li key={p.id}>
                 <Link
-                  to={`${peopleBasePath}?id=${p.id}`}
-                  className="ui-focus-ring ui-pill-link"
+                  to={personPath(conference, p.id)}
+                  className="ui-focus-ring ui-detail-identity-link"
                   title={p.name}
                 >
-                  <UserIcon className="ui-icon-xs ui-card-external-icon" aria-hidden="true" />
-                  <span className="ui-pill-label-narrow ui-clip-text">{p.name}</span>
+                  <UserIcon className="ui-icon-xs ui-detail-identity-icon" aria-hidden="true" />
+                  <span className="ui-detail-identity-label">{p.name}</span>
                 </Link>
               </li>
             ))}

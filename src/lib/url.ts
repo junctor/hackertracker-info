@@ -33,9 +33,15 @@ export function buildAbsoluteAppUrl(
 ): string {
   const path = buildAppPath(segments, search);
 
-  if (typeof window === "undefined") return path;
+  return buildAbsoluteAppUrlFromPath(path);
+}
 
-  return new URL(path, window.location.origin).toString();
+export function buildAbsoluteAppUrlFromPath(path: string): string {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+
+  if (typeof window === "undefined") return normalizedPath;
+
+  return new URL(normalizedPath, window.location.origin).toString();
 }
 
 export function getSafeExternalHref(value?: string | null): string | null {

@@ -132,6 +132,20 @@
   margin-top: var(--space-6);
 }
 
+.ui-people-directory {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.ui-people-group {
+  min-width: 0;
+}
+
+.ui-people-group-list {
+  margin-top: var(--space-2);
+}
+
 .ui-organization-grid {
   gap: var(--space-4);
   margin-top: var(--space-6);

@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router";
 
 import Image from "@/components/Image";
 import PageHeader from "@/components/ui/PageHeader";
+import { getDirectoryInitials } from "@/lib/directoryText";
 import { alphaSort } from "@/lib/misc";
 import { OrganizationCard } from "@/lib/types/ht-types";
 import { getSafeImageHref } from "@/lib/url";
@@ -12,15 +13,6 @@ type Props = {
   title: string;
   detailsBasePath: string;
 };
-
-const getInitials = (name: string) =>
-  name
-    .split(" ")
-    .map((word) => word[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 
 const ORGANIZATION_SEARCH_DEBOUNCE_MS = 300;
 
@@ -73,7 +65,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
     <section className="ui-container ui-section">
       <PageHeader
         title={title}
-        description="Browse conference groups and jump to their schedule or reference links."
+        description="Browse conference groups and related links."
         resultLabel={showResultCount ? `${filteredOrganizations.length} found` : undefined}
         search={{
           label: `Search ${title}`,
@@ -111,7 +103,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
             return (
               <li key={organization.id} className="ui-grid-card-item">
                 <Link
-                  to={`${detailsBasePath}?id=${organization.id}`}
+                  to={`${detailsBasePath}${encodeURIComponent(String(organization.id))}`}
                   className="ui-focus-ring ui-organization-card-link"
                 >
                   <article className="ui-card ui-card-interactive ui-organization-card">
@@ -121,7 +113,7 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
                           src={logoUrl}
                           alt={`${organization.name} logo`}
                           className="ui-image-contain ui-logo-image"
-                          sizes="(min-width: 640px) 5rem, 4rem"
+                          sizes="2.75rem"
                           onError={() =>
                             setBrokenLogoIds((current) =>
                               current[organization.id]
@@ -131,7 +123,9 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
                           }
                         />
                       ) : (
-                        <div className="ui-logo-initials">{getInitials(organization.name)}</div>
+                        <div className="ui-logo-initials" aria-hidden="true">
+                          {getDirectoryInitials(organization.name)}
+                        </div>
                       )}
                     </div>
 

@@ -44,10 +44,7 @@ export default function TagsList({ tagTypes, conference }: TagsListProps) {
 
   return (
     <section className="ui-container ui-page-content">
-      <PageHeader
-        title="Tags"
-        description="Browse tags that group schedule items across the conference."
-      />
+      <PageHeader title="Tags" description="Browse tags that group conference content." />
 
       {visibleTagTypes.length === 0 ? (
         <div className="ui-empty-state" role="status">

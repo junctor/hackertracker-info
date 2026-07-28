@@ -185,6 +185,16 @@
   color: var(--accent-success);
 }
 
+.ui-schedule-filter-active-button[aria-current="page"] {
+  border-color: color-mix(in oklab, var(--accent-success), transparent 46%);
+  background: color-mix(in oklab, var(--accent-success), transparent 86%);
+  color: color-mix(in oklab, white, var(--accent-success) 8%);
+}
+
+.ui-schedule-filter-active-button[aria-current="page"] .ui-schedule-tool-icon {
+  color: color-mix(in oklab, var(--accent-success), white 12%);
+}
+
 .ui-schedule-tool-link[aria-current="page"] .ui-schedule-tool-icon {
   color: color-mix(in oklab, var(--accent-success), var(--text-muted) 22%);
 }
@@ -207,6 +217,18 @@
 
 .ui-schedule-jump-button .ui-schedule-tool-icon {
   color: currentColor;
+}
+
+.ui-schedule-clear-filter-button {
+  color: color-mix(in oklab, var(--text-muted), var(--warning) 16%);
+}
+
+.ui-schedule-clear-filter-button:not([aria-current="page"]) {
+  border-color: color-mix(in oklab, var(--border), var(--warning) 12%);
+}
+
+.ui-schedule-clear-filter-button:hover .ui-schedule-tool-icon {
+  color: color-mix(in oklab, var(--warning), white 18%);
 }
 
 .ui-schedule-summary {

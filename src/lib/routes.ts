@@ -11,6 +11,7 @@ export type ConferenceRouteKey =
   | "departments"
   | "document"
   | "exhibitors"
+  | "filters"
   | "locations"
   | "maps"
   | "menu"
@@ -87,7 +88,10 @@ export function documentPath(conference: ConferencePathInput, id: string | numbe
 }
 
 export function tagPath(conference: ConferencePathInput, id: string | number) {
-  return conferenceEntityPath(conference, "tags", id);
+  const params = new URLSearchParams();
+  params.append("tag_group", String(id));
+
+  return `${conferenceCollectionPath(conference, "schedule")}?${params.toString()}`;
 }
 
 export function conferenceRoutePaths(route: ConferenceRouteDefinition): string[] {
@@ -150,6 +154,7 @@ export const CONFERENCE_ROUTE_DEFINITIONS = [
     activePageId: "exhibitors",
     staticSegment: "exhibitors",
   },
+  { key: "filters", path: "filters", activePageId: "filters", staticSegment: "filters" },
   { key: "locations", path: "locations", activePageId: "locations", staticSegment: "locations" },
   { key: "maps", path: "maps", activePageId: "maps", staticSegment: "maps" },
   { key: "merch", path: "merch", activePageId: "merch", staticSegment: "merch" },

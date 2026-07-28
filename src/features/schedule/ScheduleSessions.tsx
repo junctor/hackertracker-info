@@ -4,8 +4,9 @@ import {
   ClockIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  FunnelIcon,
   ListBulletIcon,
-  TagIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
@@ -33,6 +34,8 @@ type ScheduleEmptyState = {
   message: string;
   actionHref?: string;
   actionLabel?: string;
+  secondaryActionLabel?: string;
+  onSecondaryAction?: () => void;
 };
 
 export type ScheduleJumpRequest = {
@@ -138,6 +141,9 @@ export default function ScheduleSessions({
   highlightedSessionId,
   jumpStatus,
   activitySummary,
+  activeTagFilterCount = 0,
+  tagFilterHref,
+  onClearTagFilters,
 }: {
   conf: ConferenceManifest;
   days: ScheduleDay[];
@@ -154,6 +160,9 @@ export default function ScheduleSessions({
   highlightedSessionId?: number | null;
   jumpStatus?: string | null;
   activitySummary?: ScheduleActivitySummary | null;
+  activeTagFilterCount?: number;
+  tagFilterHref?: string;
+  onClearTagFilters?: () => void;
 }) {
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
   const [tabScrollState, setTabScrollState] = useState({
@@ -379,6 +388,7 @@ export default function ScheduleSessions({
   const activeDay = days.find(({ day }) => day === resolvedDay) ?? null;
   const isBookmarksFilterActive = activeFilter === "bookmarks";
   const isTagsFilterActive = activeFilter === "tags";
+  const isTagGroupFilterActive = activeTagFilterCount > 0;
   const showScheduleViewControls = Boolean(scheduleView && scheduleViewLinks);
   const activeDayLabel = activeDay ? sessionDayTable(activeDay.day, conf.timezone) : null;
   const activeDaySessionCountLabel = activeDay
@@ -534,14 +544,39 @@ export default function ScheduleSessions({
             </Link>
 
             <Link
-              to={`/${conf.slug}/tags/`}
-              className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link"
-              aria-label="Browse schedule tags"
-              aria-current={isTagsFilterActive ? "page" : undefined}
+              to={tagFilterHref ?? `/${conf.slug}/filters/`}
+              className={[
+                "ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link",
+                isTagGroupFilterActive ? "ui-schedule-filter-active-button" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              aria-label={
+                isTagGroupFilterActive
+                  ? `Edit ${activeTagFilterCount} selected schedule filters`
+                  : "Browse schedule filters"
+              }
+              aria-current={isTagsFilterActive || isTagGroupFilterActive ? "page" : undefined}
             >
-              <TagIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
-              <span className="ui-schedule-compact-label ui-schedule-tool-label">Tags</span>
+              <FunnelIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
+              <span className="ui-schedule-compact-label ui-schedule-tool-label">
+                {isTagGroupFilterActive ? `Filters (${activeTagFilterCount})` : "Filters"}
+              </span>
             </Link>
+
+            {onClearTagFilters ? (
+              <button
+                type="button"
+                onClick={onClearTagFilters}
+                className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link ui-schedule-clear-filter-button"
+                aria-label="Clear selected schedule filters"
+              >
+                <XMarkIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
+                <span className="ui-schedule-compact-label ui-schedule-tool-label">
+                  Clear filters
+                </span>
+              </button>
+            ) : null}
 
             <ScheduleExportMenu conf={conf} />
           </div>
@@ -672,6 +707,15 @@ export default function ScheduleSessions({
             >
               {emptyState.actionLabel}
             </Link>
+          ) : null}
+          {emptyState.onSecondaryAction && emptyState.secondaryActionLabel ? (
+            <button
+              type="button"
+              onClick={emptyState.onSecondaryAction}
+              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-empty-state-action"
+            >
+              {emptyState.secondaryActionLabel}
+            </button>
           ) : null}
         </div>
       ) : null}

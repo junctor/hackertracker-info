@@ -41,6 +41,7 @@ const SchedulePage = lazy(() => import("@/routes/conference/SchedulePage"));
 const SearchPage = lazy(() => import("@/routes/conference/SearchPage"));
 const TagPage = lazy(() => import("@/routes/conference/TagPage"));
 const TagsPage = lazy(() => import("@/routes/conference/TagsPage"));
+const TagsRedirectPage = lazy(() => import("@/routes/conference/TagsRedirectPage"));
 const VendorsPage = lazy(() => import("@/routes/conference/VendorsPage"));
 const VillagesPage = lazy(() => import("@/routes/conference/VillagesPage"));
 
@@ -53,6 +54,7 @@ const CONFERENCE_ROUTE_COMPONENTS = {
   departments: DepartmentsPage,
   document: DocumentPage,
   exhibitors: ExhibitorsPage,
+  filters: TagsPage,
   locations: LocationsPage,
   maps: MapsPage,
   menu: MenuPage,
@@ -65,7 +67,7 @@ const CONFERENCE_ROUTE_COMPONENTS = {
   search: SearchPage,
   speakers: PeoplePage,
   tag: TagPage,
-  tags: TagsPage,
+  tags: TagsRedirectPage,
   vendors: VendorsPage,
   villages: VillagesPage,
 } satisfies Record<ConferenceRouteKey, ConferenceRouteComponent>;

@@ -5,6 +5,14 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import {
+  buildScheduleFilterPath,
+  countSelectedTags,
+  filterScheduleDaysByTagGroups,
+  parseTagGroups,
+  serializeTagGroups,
+  TAG_GROUP_PARAM,
+} from "@/features/schedule/scheduleFilters";
 import ScheduleSessions, {
   type ScheduleActivitySummary,
   type ScheduleDay,
@@ -190,17 +198,40 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     () => getScheduleView(searchParams.get("view")),
     [searchParams],
   );
+  const tagGroups = useMemo(() => parseTagGroups(searchParams), [searchParams]);
+  const selectedTagCount = useMemo(() => countSelectedTags(tagGroups), [tagGroups]);
+  const isTagFilterActive = tagGroups.length > 0;
+
+  useEffect(() => {
+    const normalizedParams = serializeTagGroups(searchParams, tagGroups);
+    if (normalizedParams.toString() === searchParams.toString()) return;
+
+    setSearchParams(() => normalizedParams, { replace: true });
+  }, [searchParams, setSearchParams, tagGroups]);
 
   const scheduleView: ScheduleViewMode = isLiveScheduleAvailable ? requestedScheduleView : "full";
 
+  const tagFilteredDays = useMemo(
+    () => filterScheduleDaysByTagGroups(days, tagGroups),
+    [days, tagGroups],
+  );
+
+  const tagFilteredSessionCount = useMemo(
+    () => tagFilteredDays.reduce((count, day) => count + day.sessions.length, 0),
+    [tagFilteredDays],
+  );
+
   const visibleDays = useMemo(
-    () => filterScheduleDaysByView(days, scheduleView, effectiveNowSeconds),
-    [days, effectiveNowSeconds, scheduleView],
+    () => filterScheduleDaysByView(tagFilteredDays, scheduleView, effectiveNowSeconds),
+    [effectiveNowSeconds, scheduleView, tagFilteredDays],
   );
 
   const activitySummary = useMemo(
-    () => (isLiveScheduleAvailable ? getScheduleActivitySummary(days, effectiveNowSeconds) : null),
-    [days, effectiveNowSeconds, isLiveScheduleAvailable],
+    () =>
+      isLiveScheduleAvailable
+        ? getScheduleActivitySummary(tagFilteredDays, effectiveNowSeconds)
+        : null,
+    [effectiveNowSeconds, isLiveScheduleAvailable, tagFilteredDays],
   );
 
   const daySet = useMemo(() => new Set(visibleDays.map((d) => d.day)), [visibleDays]);
@@ -254,11 +285,23 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     () => getScheduleViewLinks(conf.slug, searchParams),
     [conf.slug, searchParams],
   );
+  const tagFilterHref = useMemo(
+    () => buildScheduleFilterPath(conf.slug, searchParams),
+    [conf.slug, searchParams],
+  );
+
+  const handleClearTagFilters = useCallback(() => {
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current);
+      next.delete(TAG_GROUP_PARAM);
+      return next;
+    });
+  }, [setSearchParams]);
 
   const handleJumpToNow = useCallback(() => {
     if (!isLiveScheduleAvailable) return;
 
-    const target = findScheduleJumpTarget(days, effectiveNowSeconds);
+    const target = findScheduleJumpTarget(tagFilteredDays, effectiveNowSeconds);
 
     if (!target) {
       setJumpRequest(null);
@@ -279,7 +322,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
       next.set("now", "1");
       return next;
     });
-  }, [days, effectiveNowSeconds, isLiveScheduleAvailable, setSearchParams]);
+  }, [effectiveNowSeconds, isLiveScheduleAvailable, setSearchParams, tagFilteredDays]);
 
   useEffect(() => {
     if (isLiveScheduleAvailable || !hasLiveScheduleParams(searchParams)) return;
@@ -312,11 +355,17 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   useEffect(() => {
     if (!isLiveScheduleAvailable) return;
     if (searchParams.get("now") !== "1" || autoNowHandledRef.current) return;
-    if (days.length === 0 || effectiveNowSeconds <= 0) return;
+    if (tagFilteredDays.length === 0 || effectiveNowSeconds <= 0) return;
 
     autoNowHandledRef.current = true;
     handleJumpToNow();
-  }, [days.length, effectiveNowSeconds, handleJumpToNow, isLiveScheduleAvailable, searchParams]);
+  }, [
+    effectiveNowSeconds,
+    handleJumpToNow,
+    isLiveScheduleAvailable,
+    searchParams,
+    tagFilteredDays.length,
+  ]);
 
   useEffect(() => {
     if (highlightedSessionId === null) return;
@@ -329,6 +378,16 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   }, [highlightedSessionId]);
 
   const emptyState = useMemo(() => {
+    if (isTagFilterActive && tagFilteredSessionCount === 0) {
+      return {
+        message: "No sessions match the selected filters.",
+        actionHref: tagFilterHref,
+        actionLabel: "Edit Filters",
+        secondaryActionLabel: "Clear filters",
+        onSecondaryAction: handleClearTagFilters,
+      };
+    }
+
     if (scheduleView === "now") {
       return {
         message: "Nothing is happening right now.",
@@ -348,7 +407,14 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     return {
       message: "No sessions are listed yet.",
     };
-  }, [scheduleView, scheduleViewLinks.full]);
+  }, [
+    handleClearTagFilters,
+    isTagFilterActive,
+    scheduleView,
+    scheduleViewLinks.full,
+    tagFilterHref,
+    tagFilteredSessionCount,
+  ]);
 
   if (scheduleDaysLoading) {
     return (
@@ -393,6 +459,9 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
           highlightedSessionId={highlightedSessionId}
           jumpStatus={jumpStatus}
           activitySummary={activitySummary}
+          activeTagFilterCount={selectedTagCount}
+          tagFilterHref={tagFilterHref}
+          onClearTagFilters={isTagFilterActive ? handleClearTagFilters : undefined}
         />
       </ConferenceLayout>
     </>

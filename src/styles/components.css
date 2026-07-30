@@ -663,6 +663,19 @@
   color: var(--color-fg);
 }
 
+.ui-btn-primary {
+  border-color: color-mix(in oklab, var(--accent-success), transparent 36%);
+  background: color-mix(in oklab, var(--accent-success), transparent 12%);
+  color: var(--accent-on-success);
+  box-shadow: var(--shadow-md);
+}
+
+.ui-btn-primary:hover,
+.ui-btn-primary:focus-visible {
+  border-color: color-mix(in oklab, var(--accent-success), white 12%);
+  background: color-mix(in oklab, var(--accent-success), white 8%);
+}
+
 .ui-btn-secondary:hover {
   border-color: color-mix(in oklab, var(--accent-primary), transparent 52%);
   background: color-mix(in oklab, var(--color-surface-elevated), transparent 4%);

@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "react-router";
 
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import { TAG_GROUP_PARAM } from "@/features/schedule/scheduleFilters";
 import { ConferenceManifest } from "@/lib/conferences";
 import { conferenceCollectionPath } from "@/lib/routes";
@@ -22,7 +22,7 @@ function buildFilteredSchedulePath(confSlug: string, tagId: number, search: stri
   return `/${confSlug}/schedule/${query ? `?${query}` : ""}${hash}`;
 }
 
-export default function TagPage({ conf }: TagPageProps) {
+export default function TagPage({ conf, activePageId }: TagPageProps) {
   const location = useLocation();
   const {
     value: tagId,
@@ -36,7 +36,11 @@ export default function TagPage({ conf }: TagPageProps) {
   const filtersHref = `/${conf.slug}/filters/`;
   const scheduleHref = conf.schedulePath ?? `/${conf.slug}/schedule/`;
 
-  if (!isReady || isRedirectingLegacyUrl) return <LoadingScreen />;
+  if (!isReady || isRedirectingLegacyUrl) {
+    return (
+      <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="filters" />
+    );
+  }
 
   if (isIdMissing) {
     return <Navigate to={filtersHref} replace />;

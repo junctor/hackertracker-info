@@ -1,4 +1,9 @@
-import { ArrowLeftIcon, ExclamationTriangleIcon, HomeIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLeftIcon,
+  ArrowPathIcon,
+  ExclamationTriangleIcon,
+  HomeIcon,
+} from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router";
 
 import { getConference } from "@/lib/conferences";
@@ -13,7 +18,12 @@ type Props = {
   primaryActionLabel?: string;
   secondaryActionHref?: string;
   secondaryActionLabel?: string;
+  retryActionLabel?: string;
 };
+
+function reloadPage() {
+  window.location.reload();
+}
 
 export default function ErrorScreen({
   msg,
@@ -24,6 +34,7 @@ export default function ErrorScreen({
   primaryActionLabel,
   secondaryActionHref,
   secondaryActionLabel,
+  retryActionLabel,
 }: Props) {
   const location = useLocation();
   const hasMessage = Boolean(msg?.trim());
@@ -62,6 +73,16 @@ export default function ErrorScreen({
           ) : null}
 
           <div className="ui-error-actions">
+            {retryActionLabel ? (
+              <button
+                type="button"
+                className="ui-btn-base ui-btn-primary ui-focus-ring ui-error-retry-button"
+                onClick={reloadPage}
+              >
+                <ArrowPathIcon className="ui-icon-sm" aria-hidden="true" />
+                <span>{retryActionLabel}</span>
+              </button>
+            ) : null}
             <Link
               to={resolvedPrimaryHref}
               className="ui-btn-base ui-btn-secondary ui-focus-ring ui-error-home-link"

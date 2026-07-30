@@ -29,6 +29,7 @@ class AppErrorBoundaryInner extends Component<Props, State> {
           title="This page hit an error"
           copy="The app could not render this view. Try another page, or refresh after the data updates."
           msg={this.state.error.message}
+          retryActionLabel="Retry"
         />
       );
     }

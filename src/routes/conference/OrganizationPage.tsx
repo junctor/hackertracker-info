@@ -1,7 +1,7 @@
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
@@ -41,7 +41,11 @@ export default function OrganizationPage({ conf, activePageId }: OrganizationPag
   const organizationsHref = `/${conf.slug}/communities/`;
   const conferenceHomeHref = conferenceMenuPath(conf);
 
-  if (!isReady || isRedirectingLegacyUrl) return <LoadingScreen />;
+  if (!isReady || isRedirectingLegacyUrl) {
+    return (
+      <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="organization" />
+    );
+  }
   if (isInvalid) {
     return (
       <ErrorScreen
@@ -67,8 +71,24 @@ export default function OrganizationPage({ conf, activePageId }: OrganizationPag
       />
     );
   }
-  if (isLoading) return <LoadingScreen />;
-  if (error) return <ErrorScreen />;
+  if (isLoading) {
+    return (
+      <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="organization" />
+    );
+  }
+  if (error) {
+    return (
+      <ErrorScreen
+        title="Couldn't load organization"
+        copy="The organization details could not be loaded. Try again, or browse conference communities."
+        retryActionLabel="Retry"
+        primaryActionHref={organizationsHref}
+        primaryActionLabel="Browse Communities"
+        secondaryActionHref={conferenceHomeHref}
+        secondaryActionLabel="Conference Home"
+      />
+    );
+  }
   if (!organization) {
     return (
       <ErrorScreen

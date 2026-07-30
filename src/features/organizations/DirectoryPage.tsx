@@ -5,8 +5,8 @@ import type { PageId } from "@/lib/types/page-meta";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
@@ -102,7 +102,15 @@ export default function DirectoryPage({
 
   const isLoading = organizationsIsLoading || tagIsLoading;
   const error = organizationsError || tagError;
-  if (!isReady || isRedirectingLegacyUrl) return <LoadingScreen />;
+  if (!isReady || isRedirectingLegacyUrl) {
+    return (
+      <ConferenceLoadingScreen
+        conference={conf}
+        activePageId={activePageId}
+        label="organizations"
+      />
+    );
+  }
   if (isIdInvalid) {
     return (
       <ErrorScreen
@@ -133,8 +141,28 @@ export default function DirectoryPage({
 
   let pageContent: JSX.Element;
   if (isDetailsRoute) {
-    if (organizationsStoreLoading) return <LoadingScreen />;
-    if (organizationsStoreError) return <ErrorScreen />;
+    if (organizationsStoreLoading) {
+      return (
+        <ConferenceLoadingScreen
+          conference={conf}
+          activePageId={activePageId}
+          label="organization"
+        />
+      );
+    }
+    if (organizationsStoreError) {
+      return (
+        <ErrorScreen
+          title="Couldn't load organization"
+          copy={`The organization details could not be loaded. Try again, or browse ${title.toLowerCase()}.`}
+          retryActionLabel="Retry"
+          primaryActionHref={directoryHref}
+          primaryActionLabel={`Browse ${title}`}
+          secondaryActionHref={conferenceHomeHref}
+          secondaryActionLabel="Conference Home"
+        />
+      );
+    }
     if (!selectedOrganization) {
       return (
         <ErrorScreen
@@ -159,8 +187,26 @@ export default function DirectoryPage({
       </ConferenceLayout>
     );
   } else if (isIdMissing) {
-    if (isLoading) return <LoadingScreen />;
-    if (error || !organizations) return <ErrorScreen />;
+    if (isLoading) {
+      return (
+        <ConferenceLoadingScreen
+          conference={conf}
+          activePageId={activePageId}
+          label={title.toLowerCase()}
+        />
+      );
+    }
+    if (error || !organizations) {
+      return (
+        <ErrorScreen
+          title={`Couldn't load ${title.toLowerCase()}`}
+          copy={`The ${title.toLowerCase()} list could not be loaded. Try again, or return to the conference home page.`}
+          retryActionLabel="Retry"
+          primaryActionHref={conferenceHomeHref}
+          primaryActionLabel="Conference Home"
+        />
+      );
+    }
 
     const tagId = derivedTagIdsByLabel?.byLabel[tagLabel];
     if (!tagId) {

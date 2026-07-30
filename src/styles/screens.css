@@ -210,6 +210,78 @@
   min-height: calc(100dvh + 8rem);
 }
 
+.ui-loading-status {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+  max-width: 42rem;
+  margin-bottom: var(--space-6);
+  border-radius: var(--radius-2);
+  border: 1px solid color-mix(in oklab, var(--accent-success), transparent 68%);
+  background: color-mix(in oklab, var(--surface-elevated), transparent 14%);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-loading-status-spinner {
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--radius-pill);
+  border-width: 2px;
+  border-color: color-mix(in oklab, var(--accent-success), transparent 64%);
+  border-top-color: var(--accent-success);
+  animation: ui-spin 1s linear infinite;
+}
+
+.ui-loading-status-copy {
+  display: grid;
+  min-width: 0;
+  gap: 0.125rem;
+}
+
+.ui-loading-status-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.ui-loading-status-detail {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.ui-loading-status-bar {
+  grid-column: 1 / -1;
+  position: relative;
+  height: 2px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, white, transparent 92%);
+}
+
+.ui-loading-status-bar-fill {
+  position: absolute;
+  inset-block: 0;
+  width: 38%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--accent-success), white 12%),
+    transparent
+  );
+  animation: ui-loading-status-progress 1.35s ease-in-out infinite;
+}
+
+.ui-schedule-loading-status {
+  padding-top: var(--space-6);
+}
+
 .ui-route-loading-header {
   display: grid;
   gap: var(--space-3);
@@ -347,6 +419,7 @@
   margin-top: 1.75rem;
 }
 
+.ui-error-retry-button,
 .ui-error-home-link,
 .ui-error-secondary-link {
   min-width: 11rem;
@@ -355,6 +428,7 @@
   padding-inline: var(--space-4);
 }
 
+.ui-error-retry-button,
 .ui-error-home-link {
   box-shadow: var(--shadow-lg);
 }
@@ -405,6 +479,14 @@
   .ui-link,
   .ui-input-base,
   .ui-skip-link,
+  .ui-loading-ring,
+  .ui-loading-spinner,
+  .ui-loading-pulse-dot,
+  .ui-loading-skeleton-line,
+  .ui-loading-status-spinner,
+  .ui-loading-status-bar-fill,
+  .ui-skeleton-line,
+  .ui-skeleton-control,
   .ui-homepage-grid,
   .ui-homepage-title,
   .ui-home-conference-card,
@@ -430,5 +512,15 @@
 @keyframes ui-pulse {
   50% {
     opacity: 0.5;
+  }
+}
+
+@keyframes ui-loading-status-progress {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(280%);
   }
 }

@@ -113,7 +113,9 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   }, [conf.name, contentDetail]);
 
   if (!isReady || isRedirectingLegacyUrl) {
-    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+    return (
+      <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="content" />
+    );
   }
   if (isIdInvalid) {
     return (
@@ -135,13 +137,16 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
 
   if (shouldLoadDetails) {
     if (contentDetailLoading) {
-      return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+      return (
+        <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="content" />
+      );
     }
     if (contentDetailError) {
       return (
         <ErrorScreen
           title="Couldn't load content"
           copy="The content details could not be loaded. Try the content list instead."
+          retryActionLabel="Retry"
           primaryActionHref={contentListHref}
           primaryActionLabel="Browse Content"
           secondaryActionHref={conferenceHomeHref}
@@ -183,10 +188,21 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
     );
   } else {
     if (contentCardsLoading || tagTypesLoading) {
-      return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+      return (
+        <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="content" />
+      );
     }
     if (contentCardsError || tagTypesError || !contentCards || !tagTypes) {
-      return <ErrorScreen msg="Failed to load content." />;
+      return (
+        <ErrorScreen
+          title="Couldn't load content"
+          copy="The content list could not be loaded. Try again, or return to the conference home page."
+          msg="Failed to load content."
+          retryActionLabel="Retry"
+          primaryActionHref={conferenceHomeHref}
+          primaryActionLabel="Conference Home"
+        />
+      );
     }
     pageContent = <ContentList content={contentCards} tags={tagTypes} conference={conf} />;
   }

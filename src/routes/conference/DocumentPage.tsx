@@ -1,7 +1,7 @@
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
@@ -39,8 +39,16 @@ export default function DocumentPage({ conf, activePageId }: DocumentPageProps) 
 
   const selectedDocument = docId !== null ? documentsById?.[String(docId)] : undefined;
 
-  if (!isReady || isRedirectingLegacyUrl) return <LoadingScreen />;
-  if (isLoading) return <LoadingScreen />;
+  if (!isReady || isRedirectingLegacyUrl) {
+    return (
+      <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="document" />
+    );
+  }
+  if (isLoading) {
+    return (
+      <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="document" />
+    );
+  }
   if (isMissing) {
     return (
       <ErrorScreen
@@ -71,6 +79,7 @@ export default function DocumentPage({ conf, activePageId }: DocumentPageProps) 
       <ErrorScreen
         title="Couldn't load document"
         copy="The document could not be loaded. Try the document list instead."
+        retryActionLabel="Retry"
         primaryActionHref={documentsHref}
         primaryActionLabel="Browse Documents"
         secondaryActionHref={conferenceHomeHref}

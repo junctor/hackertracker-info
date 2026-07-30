@@ -34,6 +34,7 @@ import {
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
+import { conferenceMenuPath } from "@/lib/routes";
 import { getBookmarks } from "@/lib/storage";
 import { ScheduleDaysView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
@@ -423,7 +424,15 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   }
 
   if (scheduleDaysError || !scheduleDays) {
-    return <ErrorScreen />;
+    return (
+      <ErrorScreen
+        title="Couldn't load schedule"
+        copy="The schedule could not be loaded. Try again, or return to the conference home page."
+        retryActionLabel="Retry"
+        primaryActionHref={conferenceMenuPath(conf)}
+        primaryActionLabel="Conference Home"
+      />
+    );
   }
 
   return (

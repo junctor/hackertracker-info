@@ -2,8 +2,8 @@ import { lazy, useMemo, type ReactElement } from "react";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import PeopleList from "@/features/people/PeopleList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -58,7 +58,9 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
     return `${normalized.slice(0, 147).trimEnd()}...`;
   }, [personDetail, conf.name]);
 
-  if (!isReady || isRedirectingLegacyUrl) return <LoadingScreen />;
+  if (!isReady || isRedirectingLegacyUrl) {
+    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="people" />;
+  }
   if (isIdInvalid) {
     return (
       <ErrorScreen
@@ -78,12 +80,17 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   let pageContent: ReactElement;
 
   if (shouldLoadDetails) {
-    if (personDetailLoading) return <LoadingScreen />;
+    if (personDetailLoading) {
+      return (
+        <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="person" />
+      );
+    }
     if (personDetailError) {
       return (
         <ErrorScreen
           title="Couldn't load person"
           copy="The person details could not be loaded. Try the people list instead."
+          retryActionLabel="Retry"
           primaryActionHref={peopleListHref}
           primaryActionLabel="Browse People"
           secondaryActionHref={conferenceHomeHref}
@@ -117,8 +124,22 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
       />
     );
   } else {
-    if (isLoading) return <LoadingScreen />;
-    if (error || !people) return <ErrorScreen />;
+    if (isLoading) {
+      return (
+        <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="people" />
+      );
+    }
+    if (error || !people) {
+      return (
+        <ErrorScreen
+          title="Couldn't load people"
+          copy="The people list could not be loaded. Try again, or return to the conference home page."
+          retryActionLabel="Retry"
+          primaryActionHref={conferenceHomeHref}
+          primaryActionLabel="Conference Home"
+        />
+      );
+    }
     pageContent = <PeopleList people={people} conference={conf} />;
   }
 

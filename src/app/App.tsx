@@ -2,7 +2,9 @@ import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "re
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router";
 
 import AppErrorBoundary from "@/features/app-shell/AppErrorBoundary";
-import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
+import ConferenceLoadingScreen, {
+  getConferenceLoadingLabel,
+} from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import { ConferenceManifest, getConference } from "@/lib/conferences";
@@ -158,24 +160,61 @@ function conferenceRoute(path: string, component: ConferenceRouteComponent, acti
   );
 }
 
-function RouteLoadingFallback() {
-  const location = useLocation();
-  const [conferenceSegment = "", routeSegment = ""] = location.pathname.split("/").filter(Boolean);
+export function getRouteLoadingFallbackContext(pathname: string) {
+  const [conferenceSegment = "", routeSegment = "", detailSegment = ""] = pathname
+    .split("/")
+    .filter(Boolean);
   const conference = getConference(conferenceSegment);
 
-  if (!conference) return <LoadingScreen />;
+  if (!conference) return null;
 
   const route = CONFERENCE_ROUTE_DEFINITIONS.find((definition) =>
     conferenceRouteMatchesSegment(definition, routeSegment),
   );
 
-  if (!route) return <LoadingScreen />;
+  if (!route) return null;
+
+  const isDetailRoute = detailSegment.length > 0;
+  const isOrganizationDetailRoute =
+    isDetailRoute &&
+    [
+      "communities",
+      "contests",
+      "departments",
+      "exhibitors",
+      "organization",
+      "vendors",
+      "villages",
+    ].includes(route.activePageId);
+  const label =
+    route.activePageId === "people" && isDetailRoute
+      ? "person"
+      : route.activePageId === "document" && isDetailRoute
+        ? "document"
+        : isOrganizationDetailRoute
+          ? "organization"
+          : getConferenceLoadingLabel(route.activePageId);
+
+  return {
+    conference,
+    activePageId: route.activePageId,
+    variant: route.activePageId === "schedule" ? "schedule" : "default",
+    label,
+  } as const;
+}
+
+function RouteLoadingFallback() {
+  const location = useLocation();
+  const fallbackContext = getRouteLoadingFallbackContext(location.pathname);
+
+  if (!fallbackContext) return <LoadingScreen />;
 
   return (
     <ConferenceLoadingScreen
-      conference={conference}
-      activePageId={route.activePageId}
-      variant={route.activePageId === "schedule" ? "schedule" : "default"}
+      conference={fallbackContext.conference}
+      activePageId={fallbackContext.activePageId}
+      variant={fallbackContext.variant}
+      label={fallbackContext.label}
     />
   );
 }

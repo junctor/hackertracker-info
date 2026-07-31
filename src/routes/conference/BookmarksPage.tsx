@@ -6,6 +6,7 @@ import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ScheduleSessions, { ScheduleDay } from "@/features/schedule/ScheduleSessions";
+import { isScheduleSessionLive } from "@/features/schedule/scheduleTime";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
@@ -113,10 +114,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     if (days.length === 0) return null;
     for (const { day, sessions } of days) {
       for (const session of sessions) {
-        if (
-          session.beginTimestampSeconds <= nowSeconds &&
-          nowSeconds <= session.endTimestampSeconds
-        ) {
+        if (isScheduleSessionLive(session, nowSeconds)) {
           return day;
         }
       }

@@ -7,7 +7,9 @@ import { type ConferenceManifest } from "@/lib/conferences";
  * SWR-backed hook that fetches conference JSON through the IndexedDB cache
  * layer.  On first use per session the cache is validated against a fresh
  * manifest; subsequent calls within the same session are served from IndexedDB
- * with no extra network round-trips.
+ * with no extra network round-trips once that manifest has been confirmed.
+ * If the manifest cannot be reached, cached data remains available and a later
+ * request can retry the freshness check.
  *
  * Mirrors the `useSWR<T>(url | null, loader, options)` contract used
  * throughout the [conf] pages:

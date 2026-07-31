@@ -3,27 +3,42 @@ type TimedScheduleSession = {
   endTimestampSeconds: number;
 };
 
-type TimedConference = {
-  begin: string;
-  end: string;
+type TimedScheduleDay = {
+  sessions: readonly TimedScheduleSession[];
 };
 
 export const NEXT_WINDOW_SECONDS = 30 * 60;
 
-function toTimestampSeconds(value: string): number {
-  const timestampMs = Date.parse(value);
-  return Number.isFinite(timestampMs) ? Math.floor(timestampMs / 1000) : Number.NaN;
-}
+export function isScheduleLiveWindowAvailable(
+  days: readonly TimedScheduleDay[],
+  nowSeconds: number,
+): boolean {
+  if (nowSeconds <= 0) return false;
 
-export function isConferenceInProgress(conference: TimedConference, nowSeconds: number): boolean {
-  const beginsAt = toTimestampSeconds(conference.begin);
-  const endsAt = toTimestampSeconds(conference.end);
+  let earliestBeginSeconds: number | null = null;
+  let latestEndSeconds: number | null = null;
+
+  for (const { sessions } of days) {
+    for (const session of sessions) {
+      const beginsAt = session.beginTimestampSeconds;
+      const endsAt = session.endTimestampSeconds;
+      if (!Number.isFinite(beginsAt) || !Number.isFinite(endsAt) || endsAt < beginsAt) continue;
+
+      if (earliestBeginSeconds === null || beginsAt < earliestBeginSeconds) {
+        earliestBeginSeconds = beginsAt;
+      }
+
+      if (latestEndSeconds === null || endsAt > latestEndSeconds) {
+        latestEndSeconds = endsAt;
+      }
+    }
+  }
 
   return (
-    Number.isFinite(beginsAt) &&
-    Number.isFinite(endsAt) &&
-    beginsAt <= nowSeconds &&
-    nowSeconds <= endsAt
+    earliestBeginSeconds !== null &&
+    latestEndSeconds !== null &&
+    earliestBeginSeconds - NEXT_WINDOW_SECONDS <= nowSeconds &&
+    nowSeconds < latestEndSeconds
   );
 }
 

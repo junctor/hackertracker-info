@@ -5,15 +5,19 @@
  *  1. Fetch a fresh manifest (with cache-busting) and compare it to the stored
  *     manifest in IndexedDB.  If buildTimestamp or schemaVersion differs,
  *     delete all cached JSON for that conference and store the new manifest.
- *  2. Serve conference JSON from IndexedDB when available, populate it on cache
- *     miss, and always verify manifest freshness before the first read in a
- *     browser session.
+ *  2. Serve conference JSON from IndexedDB when available and trusted, populate
+ *     it on cache miss, and always verify manifest freshness before the first
+ *     read in a browser session.
+ *  3. Keep IndexedDB entries until a manifest change or manual reset removes
+ *     them; there is no time-based expiration.
  *
  * Concurrency guarantees:
  *  - Only ONE manifest check runs per conference per session.  Concurrent
  *    callers receive the same in-flight Promise.
  *  - Only ONE JSON fetch runs per (conference + path) at a time.  Parallel
  *    hooks on the same page share a single in-flight fetch.
+ *  - New JSON reads wait while a manual reset is deleting data for the same
+ *    conference.
  */
 
 import { type ConferenceManifest } from "@/lib/conferences";
@@ -21,11 +25,14 @@ import { type Manifest } from "@/lib/types/ht-types";
 
 import {
   deleteAllJsonForConf,
+  deleteStoredManifest,
   getStoredJson,
   getStoredManifest,
   putStoredJson,
   putStoredManifest,
 } from "./indexeddb";
+
+type ManifestCheckResult = "confirmed" | "unconfirmed" | "untrusted-cache";
 
 // ---------------------------------------------------------------------------
 // Session-level manifest freshness tracking
@@ -37,10 +44,13 @@ import {
 const manifestConfirmedFresh = new Set<string>();
 
 // Deduplication: at most one in-flight manifest check per conference.
-const manifestCheckInFlight = new Map<string, Promise<void>>();
+const manifestCheckInFlight = new Map<string, Promise<ManifestCheckResult>>();
 
 // Deduplication: at most one in-flight JSON fetch per "confKey::path".
 const jsonFetchInFlight = new Map<string, Promise<unknown>>();
+
+// Deduplication and coordination for manual cache resets.
+const cacheResetInFlight = new Map<string, Promise<void>>();
 
 // ---------------------------------------------------------------------------
 // Internal helpers
@@ -61,7 +71,7 @@ async function fetchFreshManifest(conf: ConferenceManifest): Promise<Manifest> {
   return res.json() as Promise<Manifest>;
 }
 
-async function runManifestCheck(conf: ConferenceManifest): Promise<void> {
+async function runManifestCheck(conf: ConferenceManifest): Promise<ManifestCheckResult> {
   const confKey = conf.code;
 
   let freshManifest: Manifest;
@@ -69,9 +79,8 @@ async function runManifestCheck(conf: ConferenceManifest): Promise<void> {
     freshManifest = await fetchFreshManifest(conf);
   } catch {
     // Cannot reach the server (offline, CORS, etc.) — keep the existing cache
-    // intact and mark as fresh to avoid retrying on every subsequent request.
-    manifestConfirmedFresh.add(confKey);
-    return;
+    // intact, but leave freshness unconfirmed so a later data request may retry.
+    return "unconfirmed";
   }
 
   let storedRecord;
@@ -96,11 +105,14 @@ async function runManifestCheck(conf: ConferenceManifest): Promise<void> {
         updatedAt: Date.now(),
       });
     } catch {
-      // IndexedDB write failed — the app will fall back to network-only mode.
+      // The manifest changed, but IndexedDB invalidation failed. Do not trust
+      // cached JSON for this request or mark the conference fresh.
+      return "untrusted-cache";
     }
   }
 
   manifestConfirmedFresh.add(confKey);
+  return "confirmed";
 }
 
 // ---------------------------------------------------------------------------
@@ -111,16 +123,20 @@ async function runManifestCheck(conf: ConferenceManifest): Promise<void> {
  * Verify that the IndexedDB cache for `conf` is consistent with the current
  * remote manifest.  The first call per conference per session triggers a
  * network fetch and, when the manifest has changed, invalidates stale data.
- * Subsequent calls within the same session return immediately (no network).
+ * Once the manifest is confirmed, later calls in the same session return
+ * immediately. If the manifest cannot be reached, cached data can still be
+ * used and a later call may retry.
  *
  * Multiple concurrent callers share a single in-flight Promise so only one
  * manifest request is ever in-flight per conference.
  */
-export function ensureConferenceCacheIsFresh(conf: ConferenceManifest): Promise<void> {
+export function ensureConferenceCacheIsFresh(
+  conf: ConferenceManifest,
+): Promise<ManifestCheckResult> {
   const confKey = conf.code;
 
   // Fast path: already confirmed fresh this session.
-  if (manifestConfirmedFresh.has(confKey)) return Promise.resolve();
+  if (manifestConfirmedFresh.has(confKey)) return Promise.resolve("confirmed");
 
   // Deduplicate: reuse an in-flight check if one is already running.
   let pending = manifestCheckInFlight.get(confKey);
@@ -135,14 +151,70 @@ export function ensureConferenceCacheIsFresh(conf: ConferenceManifest): Promise<
 }
 
 /**
+ * Remove downloaded data for one conference.  Bookmarks and user preferences
+ * live outside this cache and are not touched.  The next data request fetches a
+ * fresh manifest and repopulates IndexedDB as cache misses occur.
+ */
+export function resetConferenceCache(conf: ConferenceManifest): Promise<void> {
+  const confKey = conf.code;
+
+  let pending = cacheResetInFlight.get(confKey);
+  if (!pending) {
+    pending = runResetConferenceCache(conf).finally(() => {
+      cacheResetInFlight.delete(confKey);
+    });
+    cacheResetInFlight.set(confKey, pending);
+  }
+
+  return pending;
+}
+
+async function runResetConferenceCache(conf: ConferenceManifest): Promise<void> {
+  const confKey = conf.code;
+  const jsonPrefix = `${confKey}::`;
+
+  manifestConfirmedFresh.delete(confKey);
+
+  const manifestPending = manifestCheckInFlight.get(confKey);
+  const jsonPending = [...jsonFetchInFlight.entries()]
+    .filter(([key]) => key.startsWith(jsonPrefix))
+    .map(([, pending]) => pending);
+
+  await Promise.allSettled([manifestPending, ...jsonPending].filter((pending) => pending != null));
+
+  manifestConfirmedFresh.delete(confKey);
+  manifestCheckInFlight.delete(confKey);
+  for (const key of jsonFetchInFlight.keys()) {
+    if (key.startsWith(jsonPrefix)) {
+      jsonFetchInFlight.delete(key);
+    }
+  }
+
+  await Promise.all([deleteAllJsonForConf(confKey), deleteStoredManifest(confKey)]);
+
+  manifestConfirmedFresh.delete(confKey);
+  manifestCheckInFlight.delete(confKey);
+  for (const key of jsonFetchInFlight.keys()) {
+    if (key.startsWith(jsonPrefix)) {
+      jsonFetchInFlight.delete(key);
+    }
+  }
+}
+
+/**
  * Fetch `relativePath` (e.g. `"views/scheduleDays.json"`) from the IndexedDB
  * cache, falling back to the network on a cache miss.  Manifest freshness is
- * always verified before the first read, ensuring stale data is never returned
- * after a conference rebuild.
+ * checked before the first read.  If the manifest cannot be reached, existing
+ * IndexedDB data remains available and freshness is retried on a later request.
  *
  * Multiple concurrent calls for the same conf + path share one in-flight fetch.
  */
 export function getConferenceJson<T>(conf: ConferenceManifest, relativePath: string): Promise<T> {
+  const resetPending = cacheResetInFlight.get(conf.code);
+  if (resetPending) {
+    return resetPending.then(() => getConferenceJson<T>(conf, relativePath));
+  }
+
   const key = `${conf.code}::${relativePath}`;
 
   let pending = jsonFetchInFlight.get(key) as Promise<T> | undefined;
@@ -157,24 +229,26 @@ export function getConferenceJson<T>(conf: ConferenceManifest, relativePath: str
 }
 
 async function runGetConferenceJson<T>(conf: ConferenceManifest, relativePath: string): Promise<T> {
-  // Ensure the manifest is fresh before reading from the cache.
+  // Check the manifest before reading from the cache.
   // ensureConferenceCacheIsFresh is itself deduplicated, so many concurrent
   // calls on the same page trigger at most one manifest request per conf.
-  await ensureConferenceCacheIsFresh(conf);
+  const manifestStatus = await ensureConferenceCacheIsFresh(conf);
 
   const confKey = conf.code;
 
   // Serve from IndexedDB if available.
-  try {
-    const cached = await getStoredJson(confKey, relativePath);
-    if (cached) return cached.data as T;
-  } catch {
-    // IndexedDB read error — fall through to network fetch.
+  if (manifestStatus !== "untrusted-cache") {
+    try {
+      const cached = await getStoredJson(confKey, relativePath);
+      if (cached) return cached.data as T;
+    } catch {
+      // IndexedDB read error — fall through to network fetch.
+    }
   }
 
   // Cache miss: fetch from the network.
   const url = `${conf.dataRoot}/${relativePath}`;
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
   const data = (await res.json()) as T;
 

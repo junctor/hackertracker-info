@@ -56,7 +56,7 @@ export default function ConferenceLayout({ conference, activePageId, children, c
       <main id="main-content" className="ui-page-main">
         {children}
       </main>
-      <SiteFooter ref={footerRef} />
+      <SiteFooter ref={footerRef} conference={conference} />
     </div>
   );
 }

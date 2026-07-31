@@ -253,6 +253,11 @@
     column-gap: var(--space-4);
   }
 
+  .ui-content-detail-header-no-media > .ui-page-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "copy aside";
+  }
+
   .ui-content-detail-header .ui-page-header-row {
     display: contents;
   }

@@ -78,8 +78,10 @@ export type TagTypeBrowse = {
 };
 export type TagTypesBrowseView = Array<TagTypeBrowse>;
 
-export type SearchDataType = "content" | "organization" | "person";
+export type SearchDataType = "content" | "organization" | "person" | "tag";
 export type SearchDataItem = {
+  contentCount?: number;
+  contentIds?: number[];
   id: number;
   norm: string;
   text: string;

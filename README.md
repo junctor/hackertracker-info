@@ -11,7 +11,7 @@ Official DEF CON schedule and event guide, published as static files.
 
 `info.defcon.org` is the static web guide for DEF CON conference information. It browses talks, villages, workshops, contests, people, organizations, announcements, documents, and related event data from pre-generated JSON exports.
 
-The app is a fully static Vite+ React application using React Router. Conference data is generated ahead of time, served from `public/ht/<conference-slug>/`, loaded client-side, and cached by the browser. Bookmarks are stored locally with browser `localStorage`.
+The app is a fully static Vite+ React application using React Router. Conference data is generated ahead of time, served from `public/ht/<conference-slug>/`, loaded client-side, and cached in IndexedDB after manifest validation. Bookmarks are stored locally with browser `localStorage`.
 
 ## Table of Contents
 
@@ -185,6 +185,16 @@ Referenced data files include:
 - `details/organizations.json` - aggregate organization detail lookup keyed by id
 - `details/documents.json` - aggregate document detail lookup keyed by id
 - `details/tags.json` - aggregate tag detail lookup keyed by id
+
+`views/searchData.json` powers conference search. It contains compact records
+for content titles, people names, organization names, and content tags. Tag
+records are distinct from content records and include stable tag IDs,
+`contentIds`, and `contentCount`; search renders matching tags above ordinary
+results and links them to `/content/?tag=<id>`. Content shown only because a tag
+matched is labeled separately from direct title, person, or organization
+matches. Ranking is deterministic: exact tag names, tag prefixes, and tag
+substrings appear before other direct matches; tag-associated content appears
+after direct results and is deduplicated by content ID.
 
 ## Project Structure
 

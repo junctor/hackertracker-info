@@ -34,6 +34,9 @@ export default function SearchResultItem({ conf, result }: Props) {
           <span className={`ui-tag-chip ui-tag-chip-strong ui-tone-${tone}`}>{typeLabel}</span>
 
           <h2 className="ui-card-title ui-search-result-title ui-clamp-three">{result.text}</h2>
+          {result.matchedTag ? (
+            <p className="ui-search-result-context">Matched through "{result.matchedTag.text}"</p>
+          ) : null}
         </div>
 
         <ChevronRightIcon aria-hidden="true" className="ui-icon-sm ui-card-arrow" />

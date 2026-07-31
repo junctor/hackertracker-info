@@ -21,7 +21,7 @@ import ScheduleSessions, {
   type ScheduleViewMode,
 } from "@/features/schedule/ScheduleSessions";
 import {
-  isConferenceInProgress,
+  isScheduleLiveWindowAvailable,
   isScheduleSessionLive,
   isScheduleSessionStartingSoon,
 } from "@/features/schedule/scheduleTime";
@@ -176,7 +176,6 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   const [searchParams, setSearchParams] = useSearchParams();
   const nowSeconds = useNowSeconds();
   const effectiveNowSeconds = nowSeconds > 0 ? nowSeconds : Math.floor(Date.now() / 1000);
-  const isLiveScheduleAvailable = isConferenceInProgress(conf, effectiveNowSeconds);
   const autoNowHandledRef = useRef(false);
   const jumpRequestIdRef = useRef(0);
   const [jumpRequest, setJumpRequest] = useState<ScheduleJumpRequest | null>(null);
@@ -194,6 +193,10 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   const days = useMemo(() => {
     return scheduleDays ?? [];
   }, [scheduleDays]);
+  const isLiveScheduleAvailable = useMemo(
+    () => isScheduleLiveWindowAvailable(days, effectiveNowSeconds),
+    [days, effectiveNowSeconds],
+  );
 
   const requestedScheduleView = useMemo(
     () => getScheduleView(searchParams.get("view")),
@@ -243,14 +246,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
 
     for (const { day, sessions } of visibleDays) {
       for (const session of sessions) {
-        const begin = session.beginTimestampSeconds;
-        const end = session.endTimestampSeconds;
-        if (
-          Number.isFinite(begin) &&
-          Number.isFinite(end) &&
-          begin <= effectiveNowSeconds &&
-          effectiveNowSeconds <= end
-        ) {
+        if (isScheduleSessionLive(session, effectiveNowSeconds)) {
           return day;
         }
       }

@@ -1,4 +1,4 @@
-import type { UniversalSearchResult } from "@/features/search/searchData";
+import type { SearchDataItem } from "@/features/search/searchData";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
@@ -25,7 +25,7 @@ export default function SearchPage({ conf, activePageId }: SearchPageProps) {
     data: searchData,
     error,
     isLoading,
-  } = useConferenceJson<UniversalSearchResult[]>(conf, "views/searchData.json");
+  } = useConferenceJson<SearchDataItem[]>(conf, "views/searchData.json");
 
   if (isLoading) return <LoadingScreen />;
   if (error || !searchData) return <ErrorScreen msg="Failed to load search data." />;
@@ -36,7 +36,7 @@ export default function SearchPage({ conf, activePageId }: SearchPageProps) {
         <title>Search | {conf.name}</title>
         {aiMetadata({
           title: `Search | ${conf.name}`,
-          description: `Search sessions, people, and organizations for ${conf.name}.`,
+          description: `Search sessions, people, organizations, and tags for ${conf.name}.`,
           path: conferencePath(conf, "search"),
           jsonFeeds: conferenceDataFeeds(conf),
           structuredData: [collectionStructuredDataPath(conf, "search")],

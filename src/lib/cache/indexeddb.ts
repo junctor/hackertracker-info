@@ -92,6 +92,21 @@ export async function putStoredManifest(record: StoredManifest): Promise<void> {
   });
 }
 
+export async function deleteStoredManifest(confKey: string): Promise<void> {
+  const db = await openDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("manifests", "readwrite");
+    const req = tx.objectStore("manifests").delete(confKey);
+
+    req.addEventListener("error", () => reject(req.error));
+    tx.addEventListener("complete", () => resolve());
+    tx.addEventListener("error", () => reject(tx.error));
+    tx.addEventListener("abort", () =>
+      reject(new Error("Transaction aborted while deleting conference manifest")),
+    );
+  });
+}
+
 // ---------------------------------------------------------------------------
 // JSON store
 // ---------------------------------------------------------------------------

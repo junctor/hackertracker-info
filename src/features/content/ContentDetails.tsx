@@ -87,6 +87,12 @@ export default function ContentDetails(props: Props) {
     content.color || primarySession?.color || getSessionTagAccentColor(primarySession, tags);
   const accentStyle = getAccentStyle(accentColor);
   const shareUrl = buildAbsoluteAppUrlFromPath(contentPath(conference, content.id));
+  const detailHeaderClassName = [
+    "ui-detail-header-accent",
+    "ui-detail-header-inline",
+    "ui-content-detail-header",
+    visibleLogoUrl ? "ui-content-detail-header-with-media" : "ui-content-detail-header-no-media",
+  ].join(" ");
 
   const canShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
   const canCopyToClipboard =
@@ -122,10 +128,7 @@ export default function ContentDetails(props: Props) {
 
   return (
     <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">
-      <div
-        style={accentStyle}
-        className="ui-detail-header-accent ui-detail-header-inline ui-content-detail-header"
-      >
+      <div style={accentStyle} className={detailHeaderClassName}>
         <span aria-hidden="true" className="ui-accent-rail" />
         <span aria-hidden="true" className="ui-accent-rail-overlay" />
 

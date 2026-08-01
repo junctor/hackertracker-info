@@ -2,8 +2,8 @@ import { useMemo } from "react";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -49,7 +49,9 @@ export default function OrganizationsPage({ conf, activePageId }: OrganizationsP
   );
   const pageTitle = `Organizations | ${conf.name}`;
 
-  if (isRedirectingLegacyUrl || isLoading) return <LoadingScreen />;
+  if (isRedirectingLegacyUrl || isLoading) {
+    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+  }
   if (legacyIdIsInvalid) {
     return (
       <ErrorScreen

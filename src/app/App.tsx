@@ -1,4 +1,11 @@
-import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  type ComponentType,
+  type LazyExoticComponent,
+} from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router";
 
 import AppErrorBoundary from "@/features/app-shell/AppErrorBoundary";
@@ -20,9 +27,11 @@ import { PageId } from "@/lib/types/page-meta";
 
 import AppScrollRestoration from "./AppScrollRestoration";
 
+const MERCH_URL = "https://junctor.github.io/defcon-microsites/merch";
+const TV_URL = "https://junctor.github.io/defcon-microsites/tv";
+
 const HomePage = lazy(() => import("@/routes/HomePage"));
 const ConferencesPage = lazy(() => import("@/routes/ConferencesPage"));
-const TVPage = lazy(() => import("@/routes/TVPage"));
 const AnnouncementsPage = lazy(() => import("@/routes/conference/AnnouncementsPage"));
 const BookmarksPage = lazy(() => import("@/routes/conference/BookmarksPage"));
 const CommunitiesPage = lazy(() => import("@/routes/conference/CommunitiesPage"));
@@ -34,7 +43,6 @@ const ExhibitorsPage = lazy(() => import("@/routes/conference/ExhibitorsPage"));
 const LocationsPage = lazy(() => import("@/routes/conference/LocationsPage"));
 const MapsPage = lazy(() => import("@/routes/conference/MapsPage"));
 const MenuPage = lazy(() => import("@/routes/conference/MenuPage"));
-const MerchPage = lazy(() => import("@/routes/conference/MerchPage"));
 const OrganizationPage = lazy(() => import("@/routes/conference/OrganizationPage"));
 const OrganizationsPage = lazy(() => import("@/routes/conference/OrganizationsPage"));
 const PeoplePage = lazy(() => import("@/routes/conference/PeoplePage"));
@@ -60,7 +68,7 @@ const CONFERENCE_ROUTE_COMPONENTS = {
   locations: LocationsPage,
   maps: MapsPage,
   menu: MenuPage,
-  merch: MerchPage,
+  merch: ConferenceMerchRedirect,
   organization: OrganizationPage,
   organizations: OrganizationsPage,
   people: PeoplePage,
@@ -134,6 +142,31 @@ function ConferenceRootRedirect() {
   if (!conf) return <UnsupportedConference />;
 
   return <Navigate to={conferenceMenuPath(conf)} replace />;
+}
+
+function DocumentRedirect({ href }: { href: string }) {
+  const hasRedirected = useRef(false);
+
+  useEffect(() => {
+    if (hasRedirected.current) return;
+
+    hasRedirected.current = true;
+    window.location.replace(href);
+  }, [href]);
+
+  return null;
+}
+
+function ConferenceMerchRedirect() {
+  return <Navigate to="/merch/" replace />;
+}
+
+function ConferenceTVRedirect() {
+  const conf = useConferenceRouteParam();
+
+  if (!conf) return <UnsupportedConference />;
+
+  return <Navigate to="/tv/" replace />;
 }
 
 function ConferenceRoute({
@@ -227,13 +260,18 @@ export default function App() {
         <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
             <Route index element={<HomePage />} />
+            <Route path="apps" element={<DocumentRedirect href="/apps/" />} />
+            <Route path="apps/*" element={<NotFound />} />
             <Route path="conferences" element={<ConferencesPage />} />
             <Route path="conferences/*" element={<NotFound />} />
-            <Route path="tv" element={<TVPage />} />
+            <Route path="merch" element={<DocumentRedirect href={MERCH_URL} />} />
+            <Route path="merch/*" element={<NotFound />} />
+            <Route path="tv" element={<DocumentRedirect href={TV_URL} />} />
             <Route path="tv/*" element={<NotFound />} />
 
             <Route path=":conf">
               <Route index element={<ConferenceRootRedirect />} />
+              <Route path="tv/*" element={<ConferenceTVRedirect />} />
               {CONFERENCE_ROUTE_DEFINITIONS.flatMap((definition) =>
                 conferenceRoutePaths(definition).map((path) =>
                   conferenceRoute(

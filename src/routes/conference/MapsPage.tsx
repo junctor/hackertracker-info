@@ -1,7 +1,7 @@
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ConferenceMapsList from "@/features/maps/ConferenceMapsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { type ConferenceManifest } from "@/lib/conferences";
@@ -21,7 +21,9 @@ export default function MapsPage({ conf, activePageId }: MapsPageProps) {
     isLoading,
   } = useConferenceJson<ConferenceEntity>(conf, "conference.json");
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading) {
+    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+  }
   if (error || !conference) return <ErrorScreen />;
 
   const title = `Maps | ${conference.name}`;

@@ -1,7 +1,7 @@
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import DocumentsList from "@/features/documents/DocumentsList";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
@@ -20,7 +20,9 @@ export default function ReadmePage({ conf, activePageId }: ReadmePageProps) {
     isLoading,
   } = useConferenceJson<DocumentsListView>(conf, "views/documentsList.json");
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading) {
+    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+  }
   if (error || !documents) return <ErrorScreen />;
 
   return (

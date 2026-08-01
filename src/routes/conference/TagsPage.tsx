@@ -3,8 +3,8 @@ import { useSearchParams } from "react-router";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import {
   countMatchingSessions,
   filterTagGroupsToKnownIds,
@@ -126,7 +126,9 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
     );
   }, [setSearchParams]);
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading) {
+    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+  }
   if (error || !tags) return <ErrorScreen />;
 
   return (

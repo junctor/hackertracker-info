@@ -163,10 +163,10 @@ const SITE_MENU = {
     icon: MapPinIcon,
   }),
 
-  merch: (c) => ({
+  merch: () => ({
     sort_order: 90,
     title: "Merch",
-    href: conferenceRoute(c, "merch"),
+    href: "/merch/",
     description: "Merch information and purchase links.",
     icon: ShoppingBagIcon,
   }),

@@ -2,8 +2,8 @@ import type { SearchDataItem } from "@/features/search/searchData";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import SearchPageContent from "@/features/search/SearchPageContent";
 import {
   aiMetadata,
@@ -27,7 +27,9 @@ export default function SearchPage({ conf, activePageId }: SearchPageProps) {
     isLoading,
   } = useConferenceJson<SearchDataItem[]>(conf, "views/searchData.json");
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading) {
+    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+  }
   if (error || !searchData) return <ErrorScreen msg="Failed to load search data." />;
 
   return (

@@ -3,19 +3,33 @@ import { type IncomingMessage, type ServerResponse } from "node:http";
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite-plus";
 
-const devAppsHtml = fileURLToPath(new URL("./public/apps/index.html", import.meta.url));
-const previewAppsHtml = fileURLToPath(new URL("./dist/apps/index.html", import.meta.url));
+const staticPageNames = ["apps", "merch", "tv"] as const;
+const devStaticPageHtml = new Map(
+  staticPageNames.map((name) => [
+    name,
+    fileURLToPath(new URL(`./public/${name}/index.html`, import.meta.url)),
+  ]),
+);
+const previewStaticPageHtml = new Map(
+  staticPageNames.map((name) => [
+    name,
+    fileURLToPath(new URL(`./dist/${name}/index.html`, import.meta.url)),
+  ]),
+);
 type MiddlewareNext = (error?: unknown) => void;
 
-function isAppsPath(url: string | undefined) {
+function getStaticPageName(url: string | undefined) {
   const { pathname } = new URL(url ?? "/", "http://localhost");
 
-  return pathname === "/apps" || pathname === "/apps/";
+  return staticPageNames.find((name) => pathname === `/${name}` || pathname === `/${name}/`);
 }
 
-function serveAppsPage(pathname: string) {
+function serveStaticPage(pathnames: ReadonlyMap<string, string>) {
   return async (request: IncomingMessage, response: ServerResponse, next: MiddlewareNext) => {
-    if (!isAppsPath(request.url)) {
+    const pageName = getStaticPageName(request.url);
+    const pathname = pageName ? pathnames.get(pageName) : undefined;
+
+    if (!pathname) {
       next();
       return;
     }
@@ -36,12 +50,12 @@ function serveAppsPage(pathname: string) {
 export default defineConfig({
   plugins: [
     {
-      name: "static-apps-page",
+      name: "static-pages",
       configureServer(server) {
-        server.middlewares.use(serveAppsPage(devAppsHtml));
+        server.middlewares.use(serveStaticPage(devStaticPageHtml));
       },
       configurePreviewServer(server) {
-        server.middlewares.use(serveAppsPage(previewAppsHtml));
+        server.middlewares.use(serveStaticPage(previewStaticPageHtml));
       },
     },
   ],

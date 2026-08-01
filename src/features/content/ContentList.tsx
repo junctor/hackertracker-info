@@ -5,6 +5,18 @@ import { Virtuoso, type Components } from "react-virtuoso";
 import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 
 import PageHeader from "@/components/ui/PageHeader";
+import ClearFilterButton from "@/features/filters/ClearFilterButton";
+import FilterButton from "@/features/filters/FilterButton";
+import { buildFilterPath } from "@/features/filters/filterRoutes";
+import {
+  countSelectedTags,
+  filterContentByTagGroups,
+  filterTagGroupsToKnownIds,
+  parseTagGroups,
+  parseTagId,
+  serializeTagGroups,
+  TAG_GROUP_PARAM,
+} from "@/features/filters/tagFilters";
 import { ConferenceManifest } from "@/lib/conferences";
 
 import ContentCard from "./ContentCard";
@@ -15,21 +27,13 @@ interface Props {
   tags: TagTypesBrowseView;
 }
 
-type TagOption = {
-  id: number;
-  label: string;
-  tags: Array<{
-    id: number;
-    label: string;
-  }>;
-};
-
 type ContentListHeaderProps = {
   currentSearch: string;
-  onUpdateFilterParam: (key: "q" | "tag", value: string) => void;
+  filterHref: string;
+  onClearTagFilters: () => void;
+  onUpdateSearch: (value: string) => void;
   resultLabel?: string;
-  selectedTag: number | null;
-  tagOptions: TagOption[];
+  selectedTagCount: number;
 };
 
 type VirtuosoContext = unknown;
@@ -110,10 +114,11 @@ export function updateContentFilterSearchParams(
 
 function ContentListHeader({
   currentSearch,
-  onUpdateFilterParam,
+  filterHref,
+  onClearTagFilters,
+  onUpdateSearch,
   resultLabel,
-  selectedTag,
-  tagOptions,
+  selectedTagCount,
 }: ContentListHeaderProps) {
   return (
     <PageHeader
@@ -125,33 +130,20 @@ function ContentListHeader({
         placeholder: "Search content...",
         value: currentSearch,
         debounceMs: CONTENT_SEARCH_DEBOUNCE_MS,
-        onDebouncedSubmit: (value) => onUpdateFilterParam("q", value),
-        onSubmit: (value) => onUpdateFilterParam("q", value),
+        onDebouncedSubmit: onUpdateSearch,
+        onSubmit: onUpdateSearch,
       }}
     >
-      <label className="ui-control-label ui-content-tag-filter">
-        <span className="ui-visually-hidden">Filter by tag</span>
-        <select
-          title="Filter by tag"
-          value={selectedTag ?? ""}
-          onChange={(e) => {
-            const nextValue = e.target.value;
-            onUpdateFilterParam("tag", nextValue);
-          }}
-          className="ui-input-base ui-select-control ui-focus-ring"
-        >
-          <option value="">All tags</option>
-          {tagOptions.map((tag) => (
-            <optgroup key={tag.id} label={tag.label}>
-              {tag.tags.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.label}
-                </option>
-              ))}
-            </optgroup>
-          ))}
-        </select>
-      </label>
+      <div className="ui-schedule-tool-list">
+        <FilterButton
+          destinationLabel="Content"
+          href={filterHref}
+          selectedCount={selectedTagCount}
+        />
+        {selectedTagCount > 0 ? (
+          <ClearFilterButton destinationLabel="Content" onClear={onClearTagFilters} />
+        ) : null}
+      </div>
     </PageHeader>
   );
 }
@@ -159,69 +151,51 @@ function ContentListHeader({
 export default function ContentList({ content, tags, conference }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
-  const tagParam = searchParams.get("tag");
   const normalizedSearch = search.trim().toLowerCase();
 
-  const tagOptions = useMemo(
-    () =>
-      tags
-        .filter((tag) => tag.tags.length > 0 && tag.category === "content")
-        .toSorted((a, b) => a.sortOrder - b.sortOrder)
-        .map((tag) => ({
-          id: tag.id,
-          label: tag.label,
-          tags: tag.tags.toSorted((a, b) => a.sortOrder - b.sortOrder),
-        })),
-    [tags],
+  const normalizedTagGroups = useMemo(() => {
+    const parsedGroups = parseTagGroups(searchParams);
+    if (parsedGroups.length > 0) return filterTagGroupsToKnownIds(parsedGroups, tags);
+
+    const legacyTagId = parseTagId(searchParams.get("tag") ?? "");
+    return legacyTagId === null ? [] : filterTagGroupsToKnownIds([[legacyTagId]], tags);
+  }, [searchParams, tags]);
+  const selectedTagCount = useMemo(
+    () => countSelectedTags(normalizedTagGroups),
+    [normalizedTagGroups],
   );
-
-  const validTagIds = useMemo(() => {
-    const ids = new Set<number>();
-    for (const group of tagOptions) {
-      for (const tag of group.tags) {
-        ids.add(tag.id);
-      }
-    }
-    return ids;
-  }, [tagOptions]);
-
-  const selectedTag = useMemo(() => {
-    if (tagParam == null) return null;
-
-    const parsed = Number(tagParam);
-    if (!Number.isInteger(parsed) || !validTagIds.has(parsed)) return null;
-
-    return parsed;
-  }, [tagParam, validTagIds]);
+  const normalizedParams = useMemo(() => {
+    const next = serializeTagGroups(searchParams, normalizedTagGroups);
+    next.delete("tag");
+    if (search && !search.trim()) next.delete("q");
+    return next;
+  }, [normalizedTagGroups, search, searchParams]);
 
   useEffect(() => {
-    const shouldRemoveTag = tagParam != null && selectedTag === null;
-    const shouldRemoveSearch = search.length > 0 && search.trim().length === 0;
+    if (normalizedParams.toString() === searchParams.toString()) return;
+    setSearchParams(normalizedParams, { replace: true });
+  }, [normalizedParams, searchParams, setSearchParams]);
 
-    if (!shouldRemoveTag && !shouldRemoveSearch) return;
-
-    setSearchParams(
-      (current) => {
-        const next = new URLSearchParams(current);
-        if (shouldRemoveTag) next.delete("tag");
-        if (shouldRemoveSearch) next.delete("q");
-        return next;
-      },
-      { replace: true },
-    );
-  }, [search, selectedTag, setSearchParams, tagParam]);
-
-  const updateFilterParam = useCallback(
-    (key: "q" | "tag", value: string) => {
+  const updateSearch = useCallback(
+    (value: string) => {
       const normalizedValue = value.trim();
-      if ((searchParams.get(key) ?? "") === normalizedValue) return;
+      if ((searchParams.get("q") ?? "") === normalizedValue) return;
 
-      setSearchParams((current) => updateContentFilterSearchParams(current, key, value), {
+      setSearchParams((current) => updateContentFilterSearchParams(current, "q", value), {
         replace: true,
       });
     },
     [searchParams, setSearchParams],
   );
+
+  const clearTagFilters = useCallback(() => {
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current);
+      next.delete("tag");
+      next.delete(TAG_GROUP_PARAM);
+      return next;
+    });
+  }, [setSearchParams]);
 
   const searchableContent = useMemo(
     () =>
@@ -235,21 +209,27 @@ export default function ContentList({ content, tags, conference }: Props) {
   const filtered = useMemo(() => {
     const result: ContentCardsView = [];
 
+    const tagFilteredIds = new Set(
+      filterContentByTagGroups(content, normalizedTagGroups).map((item) => item.id),
+    );
+
     for (const { item, searchableTitle } of searchableContent) {
       if (normalizedSearch && !searchableTitle.includes(normalizedSearch)) {
         continue;
       }
-      if (selectedTag !== null && !item.tags.some((tag) => tag.id === selectedTag)) {
-        continue;
-      }
+      if (!tagFilteredIds.has(item.id)) continue;
       result.push(item);
     }
     return result;
-  }, [normalizedSearch, searchableContent, selectedTag]);
+  }, [content, normalizedSearch, normalizedTagGroups, searchableContent]);
 
-  const hasActiveFilters = Boolean(normalizedSearch || selectedTag !== null);
+  const hasActiveFilters = Boolean(normalizedSearch || selectedTagCount > 0);
   const contentCountLabel = `${filtered.length} ${filtered.length === 1 ? "item" : "items"}`;
   const resultCountLabel = hasActiveFilters ? `${contentCountLabel} found` : undefined;
+  const filterHref = useMemo(
+    () => buildFilterPath(conference.slug, "content", normalizedParams),
+    [conference.slug, normalizedParams],
+  );
   const shouldVirtualize = filtered.length > VIRTUALIZE_CONTENT_THRESHOLD;
   const renderVirtualizedContent = useCallback(
     (_: number, item: ContentCardsView[number]) => (
@@ -262,10 +242,11 @@ export default function ContentList({ content, tags, conference }: Props) {
     <section className="ui-container ui-section">
       <ContentListHeader
         currentSearch={search}
-        onUpdateFilterParam={updateFilterParam}
+        filterHref={filterHref}
+        onClearTagFilters={clearTagFilters}
+        onUpdateSearch={updateSearch}
         resultLabel={resultCountLabel}
-        selectedTag={selectedTag}
-        tagOptions={tagOptions}
+        selectedTagCount={selectedTagCount}
       />
 
       {filtered.length === 0 ? (
@@ -284,6 +265,7 @@ export default function ContentList({ content, tags, conference }: Props) {
                     const next = new URLSearchParams(current);
                     next.delete("q");
                     next.delete("tag");
+                    next.delete(TAG_GROUP_PARAM);
                     return next;
                   },
                   { replace: true },

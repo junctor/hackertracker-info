@@ -160,7 +160,7 @@ function isKnownSearchType(type: string): type is UniversalSearchResultType {
 
 export function tagContentHref(confSlug: ConferenceSlug, tagId: number) {
   const params = new URLSearchParams();
-  params.set("tag", String(tagId));
+  params.set("tag_group", String(tagId));
   return `${conferenceCollectionPath(confSlug, "content")}?${params.toString()}`;
 }
 

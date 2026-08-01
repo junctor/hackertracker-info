@@ -639,6 +639,8 @@ function renderSitemapXml(conferences) {
   const paths = [
     "/",
     "/apps/",
+    "/merch/",
+    "/tv/",
     "/conferences/",
     ...conferences.flatMap((conference) => sitemapConferencePaths(conference)),
     ...sitemapAliasPaths(),

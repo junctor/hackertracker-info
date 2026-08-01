@@ -3,8 +3,8 @@ import { Link } from "react-router";
 
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import ScheduleSessions, { ScheduleDay } from "@/features/schedule/ScheduleSessions";
 import { isScheduleSessionLive } from "@/features/schedule/scheduleTime";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -135,7 +135,9 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     setSelectedDay(day);
   }, []);
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading) {
+    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+  }
   if (error || !bookmarkSessionsById) return <ErrorScreen />;
 
   return (

@@ -317,19 +317,6 @@
   }
 }
 
-.ui-content-tag-filter {
-  min-width: 0;
-  max-width: 100%;
-}
-
-.ui-content-tag-filter .ui-select-control {
-  width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .ui-card.ui-person-list-card,
 .ui-card.ui-organization-card {
   display: flex;

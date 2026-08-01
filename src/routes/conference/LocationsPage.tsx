@@ -1,7 +1,7 @@
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
+import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import LoadingScreen from "@/features/app-shell/LoadingScreen";
 import LocationsList from "@/features/locations/LocationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
@@ -28,7 +28,9 @@ export default function LocationsPage({
     isLoading,
   } = useConferenceJson<LocationCardsView>(conf, "views/locationCards.json");
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading) {
+    return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
+  }
   if (error || !locations) return <ErrorScreen />;
 
   return (

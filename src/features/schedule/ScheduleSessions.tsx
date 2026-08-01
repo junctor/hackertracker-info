@@ -4,9 +4,7 @@ import {
   ClockIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  FunnelIcon,
   ListBulletIcon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
@@ -20,6 +18,8 @@ import type {
 import { ConferenceManifest } from "@/lib/conferences";
 import { sessionDayTable, tabDateTitle } from "@/lib/dates";
 
+import ClearFilterButton from "../filters/ClearFilterButton";
+import FilterButton from "../filters/FilterButton";
 import ScheduleExportMenu from "./ScheduleExportMenu";
 import ScheduleSessionItem from "./ScheduleSessionItem";
 
@@ -543,39 +543,15 @@ export default function ScheduleSessions({
               <span className="ui-schedule-compact-label ui-schedule-tool-label">Bookmarks</span>
             </Link>
 
-            <Link
-              to={tagFilterHref ?? `/${conf.slug}/filters/`}
-              className={[
-                "ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link",
-                isTagGroupFilterActive ? "ui-schedule-filter-active-button" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              aria-label={
-                isTagGroupFilterActive
-                  ? `Edit ${activeTagFilterCount} selected schedule filters`
-                  : "Browse schedule filters"
-              }
-              aria-current={isTagsFilterActive || isTagGroupFilterActive ? "page" : undefined}
-            >
-              <FunnelIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
-              <span className="ui-schedule-compact-label ui-schedule-tool-label">
-                {isTagGroupFilterActive ? `Filters (${activeTagFilterCount})` : "Filters"}
-              </span>
-            </Link>
+            <FilterButton
+              destinationLabel="Schedule"
+              href={tagFilterHref ?? `/${conf.slug}/filters/`}
+              isActive={isTagsFilterActive || isTagGroupFilterActive}
+              selectedCount={activeTagFilterCount}
+            />
 
             {onClearTagFilters ? (
-              <button
-                type="button"
-                onClick={onClearTagFilters}
-                className="ui-btn-base ui-focus-ring ui-inset-highlight-soft ui-schedule-compact-button ui-schedule-tool-link ui-schedule-clear-filter-button"
-                aria-label="Clear selected schedule filters"
-              >
-                <XMarkIcon className="ui-icon-menu ui-schedule-tool-icon" aria-hidden="true" />
-                <span className="ui-schedule-compact-label ui-schedule-tool-label">
-                  Clear filters
-                </span>
-              </button>
+              <ClearFilterButton destinationLabel="Schedule" onClear={onClearTagFilters} />
             ) : null}
 
             <ScheduleExportMenu conf={conf} />

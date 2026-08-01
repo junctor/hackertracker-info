@@ -5,14 +5,14 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
+import { buildFilterPath } from "@/features/filters/filterRoutes";
 import {
-  buildScheduleFilterPath,
   countSelectedTags,
   filterScheduleDaysByTagGroups,
   parseTagGroups,
   serializeTagGroups,
   TAG_GROUP_PARAM,
-} from "@/features/schedule/scheduleFilters";
+} from "@/features/filters/tagFilters";
 import ScheduleSessions, {
   type ScheduleActivitySummary,
   type ScheduleDay,
@@ -283,7 +283,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     [conf.slug, searchParams],
   );
   const tagFilterHref = useMemo(
-    () => buildScheduleFilterPath(conf.slug, searchParams),
+    () => buildFilterPath(conf.slug, "schedule", searchParams),
     [conf.slug, searchParams],
   );
 

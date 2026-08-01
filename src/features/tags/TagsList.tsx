@@ -1,9 +1,8 @@
-import { CalendarDaysIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useMemo, type CSSProperties } from "react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useMemo, type ComponentType, type CSSProperties, type SVGProps } from "react";
 import { Link } from "react-router";
 
 import PageHeader from "@/components/ui/PageHeader";
-import { ConferenceManifest } from "@/lib/conferences";
 import { TagTypesBrowseView } from "@/lib/types/ht-types";
 
 type TagPillProps = {
@@ -18,13 +17,23 @@ type TagPillProps = {
 
 type TagsListProps = {
   tagTypes: TagTypesBrowseView;
-  conference: ConferenceManifest;
   selectedIds: Set<number>;
   unavailableTagIds: Set<number>;
-  matchingSessionCount: number | null;
+  matchingResultCount: number | null;
+  resultNouns: {
+    singular: string;
+    plural: string;
+    empty: string;
+    combination: string;
+    combinationVerb: "match" | "matches";
+    counting: string;
+  };
   isPreviewLoading: boolean;
   isPreviewUnavailable: boolean;
-  scheduleHref: string;
+  destinationHref: string;
+  destinationLabel: string;
+  destinationIcon: ComponentType<SVGProps<SVGSVGElement>>;
+  description: string;
   onClear: () => void;
   onToggleTag: (tagId: number) => void;
 };
@@ -33,10 +42,14 @@ function TagPill({
   tag,
   isSelected,
   isUnavailable,
+  unavailableResultLabel,
+  unavailableResultVerb,
   onToggleTag,
 }: TagPillProps & {
   isSelected: boolean;
   isUnavailable: boolean;
+  unavailableResultLabel: string;
+  unavailableResultVerb: "match" | "matches";
   onToggleTag: (tagId: number) => void;
 }) {
   const style = {
@@ -50,7 +63,7 @@ function TagPill({
       aria-pressed={isSelected}
       aria-label={
         isUnavailable
-          ? `${tag.label}. No sessions match if added to the current filters.`
+          ? `${tag.label}. No ${unavailableResultLabel} ${unavailableResultVerb} if added to the current filters.`
           : undefined
       }
       disabled={isUnavailable}
@@ -65,13 +78,16 @@ function TagPill({
 
 export default function TagsList({
   tagTypes,
-  conference,
   selectedIds,
   unavailableTagIds,
-  matchingSessionCount,
+  matchingResultCount,
+  resultNouns,
   isPreviewLoading,
   isPreviewUnavailable,
-  scheduleHref,
+  destinationHref,
+  destinationLabel,
+  destinationIcon: DestinationIcon,
+  description,
   onClear,
   onToggleTag,
 }: TagsListProps) {
@@ -88,30 +104,26 @@ export default function TagsList({
     hasSelections &&
     !isPreviewLoading &&
     !isPreviewUnavailable &&
-    matchingSessionCount !== null &&
-    matchingSessionCount === 0;
-  const isScheduleDisabled =
+    matchingResultCount !== null &&
+    matchingResultCount === 0;
+  const isDestinationDisabled =
     !isPreviewLoading &&
     !isPreviewUnavailable &&
-    matchingSessionCount !== null &&
-    matchingSessionCount === 0;
+    matchingResultCount !== null &&
+    matchingResultCount === 0;
   const previewLabel = isPreviewLoading ? (
-    "Counting sessions..."
-  ) : isPreviewUnavailable || matchingSessionCount === null ? (
+    resultNouns.counting
+  ) : isPreviewUnavailable || matchingResultCount === null ? (
     "Matching count unavailable"
   ) : hasNoMatchingSelection ? (
-    <span className="ui-filter-preview-count-empty">No matching sessions</span>
+    <span className="ui-filter-preview-count-empty">{resultNouns.empty}</span>
   ) : (
-    `${matchingSessionCount} ${matchingSessionCount === 1 ? "session" : "sessions"} match`
+    `${matchingResultCount} ${matchingResultCount === 1 ? resultNouns.singular : resultNouns.plural} ${matchingResultCount === 1 ? "matches" : "match"}`
   );
 
   return (
     <section className="ui-container ui-page-content">
-      <PageHeader
-        title="Filters"
-        description={`Filter ${conference.name} schedule sessions by tag.`}
-        resultLabel={previewLabel}
-      >
+      <PageHeader title="Filters" description={description} resultLabel={previewLabel}>
         <div className="ui-filter-controls">
           <p
             id="filter-preview-status"
@@ -124,7 +136,7 @@ export default function TagsList({
             aria-live="polite"
           >
             {hasNoMatchingSelection
-              ? `${selectedCount} ${selectedCount === 1 ? "filter" : "filters"} selected, but no sessions match this combination.`
+              ? `${selectedCount} ${selectedCount === 1 ? "filter" : "filters"} selected, but no ${resultNouns.combination} ${resultNouns.combinationVerb} this combination.`
               : selectedCount === 0
                 ? "No filters selected."
                 : `${selectedCount} ${selectedCount === 1 ? "filter" : "filters"} selected.`}
@@ -139,23 +151,23 @@ export default function TagsList({
               <XMarkIcon className="ui-icon-xs" aria-hidden="true" />
               <span>Clear</span>
             </button>
-            {isScheduleDisabled ? (
+            {isDestinationDisabled ? (
               <button
                 type="button"
                 disabled
                 className="ui-btn-base ui-focus-ring ui-filter-action-button ui-filter-action-primary"
                 aria-describedby="filter-preview-status"
               >
-                <CalendarDaysIcon className="ui-icon-xs" aria-hidden="true" />
-                <span>View Schedule</span>
+                <DestinationIcon className="ui-icon-xs" aria-hidden="true" />
+                <span>{destinationLabel}</span>
               </button>
             ) : (
               <Link
-                to={scheduleHref}
+                to={destinationHref}
                 className="ui-btn-base ui-focus-ring ui-filter-action-button ui-filter-action-primary"
               >
-                <CalendarDaysIcon className="ui-icon-xs" aria-hidden="true" />
-                <span>View Schedule</span>
+                <DestinationIcon className="ui-icon-xs" aria-hidden="true" />
+                <span>{destinationLabel}</span>
               </Link>
             )}
           </div>
@@ -178,6 +190,8 @@ export default function TagsList({
                     tag={tag}
                     isSelected={selectedIds.has(tag.id)}
                     isUnavailable={unavailableTagIds.has(tag.id)}
+                    unavailableResultLabel={resultNouns.combination}
+                    unavailableResultVerb={resultNouns.combinationVerb}
                     onToggleTag={onToggleTag}
                   />
                 </li>

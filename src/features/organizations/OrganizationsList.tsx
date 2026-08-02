@@ -4,7 +4,6 @@ import { Link, useSearchParams } from "react-router";
 import Image from "@/components/Image";
 import PageHeader from "@/components/ui/PageHeader";
 import { getDirectoryInitials } from "@/lib/directoryText";
-import { alphaSort } from "@/lib/misc";
 import { OrganizationCard } from "@/lib/types/ht-types";
 import { getSafeImageHref } from "@/lib/url";
 
@@ -47,18 +46,13 @@ export default function OrganizationsList({ organizations, title, detailsBasePat
     [search, setSearchParams],
   );
 
-  const sortedOrganizations = useMemo(
-    () => organizations.toSorted((a, b) => alphaSort(a.name, b.name)),
-    [organizations],
-  );
-
   const filteredOrganizations = useMemo(() => {
-    if (!normalizedSearch) return sortedOrganizations;
+    if (!normalizedSearch) return organizations;
 
-    return sortedOrganizations.filter((organization) =>
+    return organizations.filter((organization) =>
       organization.name.toLowerCase().includes(normalizedSearch),
     );
-  }, [sortedOrganizations, normalizedSearch]);
+  }, [organizations, normalizedSearch]);
   const showResultCount = normalizedSearch.length > 0;
 
   return (

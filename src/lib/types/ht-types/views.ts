@@ -6,6 +6,7 @@ export type CompactTag = {
   colorForeground: string;
   id: number;
   label: string;
+  sortOrder: number;
 };
 
 export type ContentCard = {

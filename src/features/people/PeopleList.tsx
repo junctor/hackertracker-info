@@ -5,7 +5,6 @@ import Image from "@/components/Image";
 import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { getDirectorySectionInitial } from "@/lib/directoryText";
-import { alphaSort } from "@/lib/misc";
 import { personPath } from "@/lib/routes";
 import { PeopleCardsView } from "@/lib/types/ht-types";
 import { getSafeImageHref } from "@/lib/url";
@@ -181,24 +180,19 @@ export default function PeopleList({ people, conference }: Props) {
     [query, setSearchParams],
   );
 
-  const sortedPeople = useMemo(
-    () => people.toSorted((a, b) => alphaSort(getDisplayName(a.name), getDisplayName(b.name))),
-    [people],
-  );
-
   const searchablePeople = useMemo(
     () =>
-      sortedPeople.map((person) => ({
+      people.map((person) => ({
         person,
         searchableName: getDisplayName(person.name).toLowerCase(),
         searchableTitle: getDisplayTitle(person.title)?.toLowerCase() ?? "",
       })),
-    [sortedPeople],
+    [people],
   );
 
   const filtered = useMemo(() => {
     const q = trimmedQuery.toLowerCase();
-    if (!q) return sortedPeople;
+    if (!q) return people;
 
     return searchablePeople
       .filter(
@@ -206,7 +200,7 @@ export default function PeopleList({ people, conference }: Props) {
           searchableName.includes(q) || searchableTitle.includes(q),
       )
       .map(({ person }) => person);
-  }, [searchablePeople, sortedPeople, trimmedQuery]);
+  }, [people, searchablePeople, trimmedQuery]);
   const hasSearch = trimmedQuery.length > 0;
   const resultCountLabel = `${filtered.length} ${filtered.length === 1 ? "person" : "people"}`;
   const groupedPeople = useMemo(() => groupPeopleByInitial(filtered), [filtered]);

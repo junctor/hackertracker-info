@@ -4,9 +4,9 @@ import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScree
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import { ConferenceManifest } from "@/lib/conferences";
-import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { useConferenceDetailJson } from "@/lib/hooks/useConferenceJson";
 import { conferenceCollectionPath, conferenceMenuPath } from "@/lib/routes";
-import { OrganizationDetailsById } from "@/lib/types/ht-types/views";
+import { OrganizationDetailView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
@@ -29,15 +29,16 @@ export default function OrganizationPage({ conf, activePageId }: OrganizationPag
   const shouldLoadDetails = isReady && !isMissing && !isInvalid && organizationId !== null;
 
   const {
-    data: organizationsById,
+    data: organizationResource,
     error,
     isLoading,
-  } = useConferenceJson<OrganizationDetailsById>(
+  } = useConferenceDetailJson<OrganizationDetailView>(
     conf,
-    shouldLoadDetails ? "details/organizations.json" : null,
+    "organizations",
+    shouldLoadDetails ? organizationId : null,
   );
 
-  const organization = shouldLoadDetails ? organizationsById?.[String(organizationId)] : undefined;
+  const organization = shouldLoadDetails ? organizationResource : undefined;
   const organizationsHref = `/${conf.slug}/communities/`;
   const conferenceHomeHref = conferenceMenuPath(conf);
 

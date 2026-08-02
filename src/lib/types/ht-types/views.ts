@@ -1,23 +1,18 @@
-import type {
-  ArticleEntity,
-  ContentEntity,
-  DocumentEntity,
-  SessionEntity,
-  LocationEntity,
-  OrganizationEntity,
-  PersonEntity,
-  TagEntity,
-} from "./entities";
+import type { DerivedTagIdsByLabel } from "./derived";
+import type { ArticleEntity, DocumentEntity, OrganizationEntity } from "./entities";
+
+export type CompactTag = {
+  colorBackground: string;
+  colorForeground: string;
+  id: number;
+  label: string;
+};
 
 export type ContentCard = {
   id: number;
   logoUrl?: string;
-  tags: Array<{
-    colorBackground: string;
-    colorForeground: string;
-    id: number;
-    label: string;
-  }>;
+  tagCount: number;
+  tags: CompactTag[];
   title: string;
 };
 export type ContentCardsView = Array<ContentCard>;
@@ -29,31 +24,17 @@ export type DocumentList = {
 };
 export type DocumentsListView = Array<DocumentList>;
 
-export type SessionCard = {
-  begin: string;
-  color: string;
-  contentId: number;
-  end: string;
-  id: number;
-  location: string;
-  speakers: null | string;
-  tags: Array<{
-    colorBackground: string;
-    colorForeground: string;
-    id: number;
-    label: string;
-  }>;
-  title: string;
-};
-export type SessionCardsByIdStore = Record<string, SessionCard>;
-
 export type OrganizationCard = {
   id: number;
   logoUrl?: string;
   name: string;
 };
 
-export type OrganizationsCardsView = Record<string, Array<OrganizationCard>>;
+export type OrganizationsBrowseView = {
+  all: OrganizationCard[];
+  byTag: Record<string, OrganizationCard[]>;
+  tagIdsByLabel: DerivedTagIdsByLabel;
+};
 
 export type PersonCard = {
   id: number;
@@ -92,21 +73,13 @@ export type SearchDataView = Array<SearchDataItem>;
 export type ScheduleSessionViewModel = {
   id: number;
   title: string;
-  begin: string;
-  end: string;
   beginTimestampSeconds: number;
   endTimestampSeconds: number;
   color: string;
   contentId: number;
-  contentEntity: ContentEntity | null;
-  session: SessionEntity;
   locationName: string;
-  tags: Array<{
-    id: number;
-    label: string;
-    colorBackground: string;
-    colorForeground?: string;
-  }>;
+  tagCount: number;
+  tags: CompactTag[];
   speakers: string | null;
   beginDisplay: string;
   beginIso: string;
@@ -119,7 +92,20 @@ export type ScheduleDayView = {
   sessions: ScheduleSessionViewModel[];
 };
 export type ScheduleDaysView = ScheduleDayView[];
-export type BookmarkSessionsByIdView = Record<string, ScheduleSessionViewModel>;
+export type ScheduleSessionPosition = {
+  dayIndex: number;
+  sessionIndex: number;
+};
+
+export type ScheduleBrowseView = {
+  days: ScheduleDaysView;
+  sessionPositionsById: Record<string, ScheduleSessionPosition>;
+};
+
+export type FilterIndexView = {
+  itemCount: number;
+  itemIdsByTag: Record<string, number[]>;
+};
 
 export type LocationCard = {
   id: number;
@@ -131,42 +117,44 @@ export type LocationCardsView = LocationCard[];
 
 export type AnnouncementsListView = ArticleEntity[];
 
-export type ContentDetailView = {
-  content: ContentEntity;
-  sessions: SessionEntity[];
-  locations: LocationEntity[];
-  people: PersonEntity[];
-  tags: TagEntity[];
+export type DetailSessionView = {
+  begin: string;
+  color?: string;
+  contentId: number;
+  end: string;
+  id: number;
+  locationName?: string;
+  title: string;
 };
-export type ContentDetailsById = Record<string, ContentDetailView>;
 
-export type SessionDetailView = {
-  content: ContentEntity;
-  session: SessionEntity;
-  location: LocationEntity;
-  people: PersonEntity[];
-  tags: TagEntity[];
+export type ContentDetailView = {
+  accentColor?: string;
+  content: {
+    color?: string;
+    description?: string;
+    id: number;
+    links?: Array<{ label?: string; type?: string; url?: string }>;
+    logoUrl?: string;
+    title: string;
+  };
+  sessions: DetailSessionView[];
+  people: Array<{ id: number; name: string }>;
+  tags: CompactTag[];
+  relatedContent: ContentCardsView;
 };
 
 export type PersonDetailView = {
-  person: PersonEntity;
-  sessions: SessionEntity[];
-  locations: LocationEntity[];
-};
-export type PeopleDetailsById = Record<string, PersonDetailView>;
-
-export type TagDetailView = {
-  tag: TagEntity;
-  days: ScheduleDaysView;
-};
-export type TagDetailsById = Record<string, TagDetailView>;
-
-export type LocationDetailView = {
-  location: LocationEntity;
-  days: ScheduleDaysView;
+  person: {
+    affiliations?: string[];
+    avatarUrl?: string;
+    description?: string;
+    id: number;
+    links?: Array<{ label?: string; type?: string; url?: string }>;
+    name: string;
+    pronouns?: string;
+  };
+  sessions: DetailSessionView[];
 };
 
 export type DocumentDetailView = DocumentEntity;
-export type DocumentDetailsById = Record<string, DocumentDetailView>;
 export type OrganizationDetailView = OrganizationEntity;
-export type OrganizationDetailsById = Record<string, OrganizationDetailView>;

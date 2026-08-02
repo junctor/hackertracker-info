@@ -1,6 +1,11 @@
 import useSWR, { type SWRConfiguration, type SWRResponse } from "swr";
 
-import { getConferenceJson } from "@/lib/cache/conference-cache";
+import {
+  getConferenceDetailJson,
+  getConferenceJson,
+  getConferenceResourceJson,
+  type ConferenceDetailGroup,
+} from "@/lib/cache/conference-cache";
 import { type ConferenceManifest } from "@/lib/conferences";
 
 /**
@@ -18,7 +23,7 @@ import { type ConferenceManifest } from "@/lib/conferences";
  *     on the same page share one SWR cache entry and one in-flight request.
  *
  * @param conf         Conference manifest from the active route.
- * @param relativePath Path relative to `conf.dataRoot`, e.g. `"views/scheduleDays.json"`.
+ * @param relativePath Path relative to `conf.dataRoot`, e.g. `"views/scheduleBrowse.json"`.
  *                     Pass `null` to suspend fetching.
  * @param options      Optional SWR configuration overrides.
  */
@@ -26,15 +31,37 @@ export function useConferenceJson<T>(
   conf: ConferenceManifest,
   relativePath: string | null,
   options?: SWRConfiguration,
-): SWRResponse<T> {
+): SWRResponse<T | undefined> {
   // Build a stable SWR key from the full URL (consistent with existing patterns).
   const swrKey = relativePath != null ? `${conf.dataRoot}/${relativePath}` : null;
 
-  return useSWR<T>(
+  return useSWR<T | undefined>(
     swrKey,
     // The loader ignores the key and delegates to the cache layer, which
     // handles IndexedDB reads/writes and manifest-based invalidation.
     () => getConferenceJson<T>(conf, relativePath!),
     options,
   );
+}
+
+export function useConferenceResourceJson<T>(
+  conf: ConferenceManifest,
+  resource: "scheduleBrowse",
+  shouldLoad = true,
+  options?: SWRConfiguration,
+): SWRResponse<T> {
+  const swrKey = shouldLoad ? `${conf.dataRoot}/resource/${resource}` : null;
+
+  return useSWR<T>(swrKey, () => getConferenceResourceJson<T>(conf, resource), options);
+}
+
+export function useConferenceDetailJson<T>(
+  conf: ConferenceManifest,
+  group: ConferenceDetailGroup,
+  id: number | null,
+  options?: SWRConfiguration,
+): SWRResponse<T | undefined> {
+  const swrKey = id === null ? null : `${conf.dataRoot}/detail/${group}/${id}`;
+
+  return useSWR<T | undefined>(swrKey, () => getConferenceDetailJson<T>(conf, group, id!), options);
 }

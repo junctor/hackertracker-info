@@ -4,9 +4,9 @@ import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScree
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import DocumentDetails from "@/features/documents/DocumentDetails";
 import { ConferenceManifest } from "@/lib/conferences";
-import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { useConferenceDetailJson } from "@/lib/hooks/useConferenceJson";
 import { conferenceCollectionPath, conferenceMenuPath } from "@/lib/routes";
-import { DocumentDetailsById } from "@/lib/types/ht-types/views";
+import { DocumentDetailView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
@@ -29,15 +29,16 @@ export default function DocumentPage({ conf, activePageId }: DocumentPageProps) 
   const conferenceHomeHref = conferenceMenuPath(conf);
 
   const {
-    data: documentsById,
+    data: documentResource,
     error,
     isLoading,
-  } = useConferenceJson<DocumentDetailsById>(
+  } = useConferenceDetailJson<DocumentDetailView>(
     conf,
-    isReady && !isMissing && !isInvalid && docId !== null ? "details/documents.json" : null,
+    "documents",
+    isReady && !isMissing && !isInvalid ? docId : null,
   );
 
-  const selectedDocument = docId !== null ? documentsById?.[String(docId)] : undefined;
+  const selectedDocument = docId !== null ? documentResource : undefined;
 
   if (!isReady || isRedirectingLegacyUrl) {
     return (

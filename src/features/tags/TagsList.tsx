@@ -1,5 +1,5 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useMemo, type ComponentType, type CSSProperties, type SVGProps } from "react";
+import { type ComponentType, type CSSProperties, type SVGProps } from "react";
 import { Link } from "react-router";
 
 import PageHeader from "@/components/ui/PageHeader";
@@ -91,13 +91,7 @@ export default function TagsList({
   onClear,
   onToggleTag,
 }: TagsListProps) {
-  const visibleTagTypes = useMemo(
-    () =>
-      tagTypes
-        .filter((tagType) => tagType.tags.length > 0)
-        .map((tagType) => ({ ...tagType, tags: tagType.tags.filter(Boolean) })),
-    [tagTypes],
-  );
+  const visibleTagTypes = tagTypes;
   const selectedCount = selectedIds.size;
   const hasSelections = selectedCount > 0;
   const hasNoMatchingSelection =

@@ -8,19 +8,18 @@ import PageHeader from "@/components/ui/PageHeader";
 import { ConferenceManifest } from "@/lib/conferences";
 import { contentPath } from "@/lib/routes";
 import { getBookmarks } from "@/lib/storage";
-import { ContentEntity, SessionEntity, LocationEntity, PersonEntity } from "@/lib/types/ht-types";
+import { PersonDetailView } from "@/lib/types/ht-types";
 import { getSafeExternalHref, getSafeImageHref } from "@/lib/url";
 
 import ContentSession from "../content/ContentSession";
 import { getPersonInitials } from "./personInitials";
 
 type Props = {
-  person: PersonEntity;
-  sessions: SessionEntity[];
-  locations: LocationEntity[];
+  person: PersonDetailView["person"];
+  sessions: PersonDetailView["sessions"];
   conference: ConferenceManifest;
 };
-type PersonLinkView = NonNullable<PersonEntity["links"]>[number] & {
+type PersonLinkView = NonNullable<PersonDetailView["person"]["links"]>[number] & {
   title: string;
   url: string;
 };
@@ -77,12 +76,6 @@ function getPersonAvatarUrl(person: AvatarRecord): string | null {
   return null;
 }
 
-function safeParseMs(value?: string | null): number {
-  if (!value) return Number.MAX_SAFE_INTEGER;
-  const ms = Date.parse(value);
-  return Number.isFinite(ms) ? ms : Number.MAX_SAFE_INTEGER;
-}
-
 function getPersonAccentClassName(name?: string | null): string {
   const normalizedName = getDisplayName(name);
   let hash = 0;
@@ -95,31 +88,21 @@ function getPersonAccentClassName(name?: string | null): string {
   );
 }
 
-export default function PersonDetails({ person, sessions, locations, conference }: Props) {
+export default function PersonDetails({ person, sessions, conference }: Props) {
   const [hasAvatarError, setHasAvatarError] = useState(false);
   const personName = getDisplayName(person.name);
   const personInitials = getPersonInitials(person.name);
   const personAvatarUrl = getPersonAvatarUrl(person);
   const personPronouns = getOptionalText(person.pronouns);
   const personDescription = getOptionalText(person.description);
-  const locationNameById = useMemo(() => {
-    const entries = locations.map(
-      (location) => [location.id, getTrimmedText(location.name) || "Location TBD"] as const,
-    );
-    return new Map<number, string>(entries);
-  }, [locations]);
-  const sortedSessions = useMemo(
-    () => sessions.toSorted((a, b) => safeParseMs(a.beginIso) - safeParseMs(b.beginIso)),
-    [sessions],
-  );
   const accentClassName = getPersonAccentClassName(person.name);
   const headerAccentClassName = accentClassName;
   const affiliations = useMemo(
     () =>
       (person.affiliations ?? [])
-        .map((affiliation) => ({
-          organization: getOptionalText(affiliation.organization),
-          title: getOptionalText(affiliation.title),
+        .map((affiliation): { organization: string | null; title: string | null } => ({
+          organization: getOptionalText(affiliation),
+          title: null,
         }))
         .filter(
           (affiliation): affiliation is { organization: string | null; title: string | null } =>
@@ -133,27 +116,12 @@ export default function PersonDetails({ person, sessions, locations, conference 
       [...(person.links ?? [])]
         .map((link) => ({
           ...link,
-          title: getOptionalText(link.title) ?? getOptionalText(link.url) ?? "External link",
+          title: getOptionalText(link.label) ?? getOptionalText(link.url) ?? "External link",
           url: getSafeExternalHref(link.url),
         }))
-        .filter((link): link is PersonLinkView => Boolean(link.url))
-        .toSorted((a, b) => a.sort_order - b.sort_order),
+        .filter((link): link is PersonLinkView => Boolean(link.url)),
     [person.links],
   );
-  const contentEntityBySessionId = useMemo(() => {
-    const entries = sortedSessions.map(
-      (session) =>
-        [
-          session.id,
-          {
-            id: session.contentId,
-            title: session.title,
-            tagIds: [],
-          } satisfies ContentEntity,
-        ] as const,
-    );
-    return new Map<number, ContentEntity>(entries);
-  }, [sortedSessions]);
 
   useEffect(() => {
     setHasAvatarError(false);
@@ -266,30 +234,23 @@ export default function PersonDetails({ person, sessions, locations, conference 
         </section>
       ) : null}
 
-      {sortedSessions.length > 0 && (
+      {sessions.length > 0 && (
         <section aria-labelledby="sessions-title" className="ui-detail-section">
           <h2 id="sessions-title" className="ui-section-label">
             Sessions
           </h2>
           <ul className="ui-list-stack">
-            {sortedSessions.map((session) => {
-              const contentEntity = contentEntityBySessionId.get(session.id);
-              if (!contentEntity) return null;
-
-              return (
-                <ContentSession
-                  key={session.id}
-                  conference={conference}
-                  session={session}
-                  contentEntity={contentEntity}
-                  isBookmarked={bookmarkSet.has(session.id)}
-                  accentColor={session.color}
-                  locationName={locationNameById.get(session.locationId)}
-                  href={contentPath(conference, session.contentId)}
-                  title={session.title}
-                />
-              );
-            })}
+            {sessions.map((session) => (
+              <ContentSession
+                key={session.id}
+                conference={conference}
+                session={session}
+                isBookmarked={bookmarkSet.has(session.id)}
+                accentColor={session.color}
+                href={contentPath(conference, session.contentId)}
+                title={session.title}
+              />
+            ))}
           </ul>
         </section>
       )}

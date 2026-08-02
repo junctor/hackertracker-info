@@ -15,8 +15,7 @@ import {
   parseFilterDestination,
 } from "@/features/filters/filterRoutes";
 import {
-  countMatchingContent,
-  countMatchingSessions,
+  countMatchingItems,
   filterTagGroupsToKnownIds,
   flattenTagGroups,
   getUnavailableTagIds,
@@ -27,8 +26,9 @@ import {
 } from "@/features/filters/tagFilters";
 import TagsList from "@/features/tags/TagsList";
 import { ConferenceManifest } from "@/lib/conferences";
+import { CONTENT_FILTER_INDEX_PATH, SCHEDULE_FILTER_INDEX_PATH } from "@/lib/dataContract";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
-import { ContentCardsView, ScheduleDaysView, TagTypesBrowseView } from "@/lib/types/ht-types";
+import { FilterIndexView, TagTypesBrowseView } from "@/lib/types/ht-types";
 import { PageId } from "@/lib/types/page-meta";
 
 type TagsPageProps = {
@@ -98,21 +98,12 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
   } = useConferenceJson<TagTypesBrowseView>(conf, "views/tagTypesBrowse.json");
 
   const {
-    data: scheduleDays,
-    error: scheduleDaysError,
-    isLoading: scheduleDaysLoading,
-  } = useConferenceJson<ScheduleDaysView>(
+    data: filterIndex,
+    error: filterIndexError,
+    isLoading: filterIndexLoading,
+  } = useConferenceJson<FilterIndexView>(
     conf,
-    destination === "schedule" ? "views/scheduleDays.json" : null,
-  );
-
-  const {
-    data: contentCards,
-    error: contentCardsError,
-    isLoading: contentCardsLoading,
-  } = useConferenceJson<ContentCardsView>(
-    conf,
-    destination === "content" ? "views/contentCards.json" : null,
+    destination === "content" ? CONTENT_FILTER_INDEX_PATH : SCHEDULE_FILTER_INDEX_PATH,
   );
 
   const normalizedUrlTagGroups = useMemo(() => {
@@ -139,28 +130,17 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
   }, [conf, normalizedUrlTagGroups, searchParams]);
 
   const matchingResultCount = useMemo(() => {
-    if (destination === "content") {
-      return contentCards ? countMatchingContent(contentCards, normalizedUrlTagGroups) : null;
-    }
-
-    return scheduleDays ? countMatchingSessions(scheduleDays, normalizedUrlTagGroups) : null;
-  }, [contentCards, destination, normalizedUrlTagGroups, scheduleDays]);
+    return filterIndex ? countMatchingItems(filterIndex, normalizedUrlTagGroups) : null;
+  }, [filterIndex, normalizedUrlTagGroups]);
 
   const unavailableTagIds = useMemo(() => {
     if (!tags) return new Set<number>();
 
-    if (destination === "content") {
-      if (!contentCards) return new Set<number>();
-      return getUnavailableTagIds(tags, selectedIds, (groups) =>
-        countMatchingContent(contentCards, groups),
-      );
-    }
-
-    if (!scheduleDays) return new Set<number>();
+    if (!filterIndex) return new Set<number>();
     return getUnavailableTagIds(tags, selectedIds, (groups) =>
-      countMatchingSessions(scheduleDays, groups),
+      countMatchingItems(filterIndex, groups),
     );
-  }, [contentCards, destination, scheduleDays, selectedIds, tags]);
+  }, [filterIndex, selectedIds, tags]);
 
   const handleToggleTag = useCallback(
     (tagId: number) => {
@@ -197,11 +177,8 @@ export default function TagsPage({ conf, activePageId }: TagsPageProps) {
   }
   if (error || !tags) return <ErrorScreen />;
 
-  const isPreviewLoading = destination === "content" ? contentCardsLoading : scheduleDaysLoading;
-  const isPreviewUnavailable =
-    destination === "content"
-      ? Boolean(contentCardsError) || (!contentCardsLoading && !contentCards)
-      : Boolean(scheduleDaysError) || (!scheduleDaysLoading && !scheduleDays);
+  const isPreviewLoading = filterIndexLoading;
+  const isPreviewUnavailable = Boolean(filterIndexError) || (!filterIndexLoading && !filterIndex);
 
   return (
     <>

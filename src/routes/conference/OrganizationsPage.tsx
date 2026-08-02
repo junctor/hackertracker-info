@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
@@ -7,9 +5,10 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
+import { ORGANIZATIONS_BROWSE_PATH } from "@/lib/dataContract";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { conferenceCollectionPath } from "@/lib/routes";
-import { OrganizationCard, OrganizationsCardsView } from "@/lib/types/ht-types";
+import { OrganizationsBrowseView } from "@/lib/types/ht-types";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
@@ -18,34 +17,18 @@ type OrganizationsPageProps = {
   activePageId: PageId;
 };
 
-function flattenOrganizations(organizationsByTag: OrganizationsCardsView) {
-  const byId = new Map<number, OrganizationCard>();
-
-  for (const organizations of Object.values(organizationsByTag)) {
-    for (const organization of organizations) {
-      byId.set(organization.id, organization);
-    }
-  }
-
-  return Array.from(byId.values());
-}
-
 export default function OrganizationsPage({ conf, activePageId }: OrganizationsPageProps) {
   const organizationsHref = conferenceCollectionPath(conf, "organizations");
   const { isInvalid: legacyIdIsInvalid, isRedirectingLegacyUrl } = useNumericRouteParam("id", {
     legacyCanonicalBasePath: organizationsHref,
   });
   const {
-    data: organizationsByTag,
+    data: organizationsBrowse,
     error,
     isLoading,
-  } = useConferenceJson<OrganizationsCardsView>(
+  } = useConferenceJson<OrganizationsBrowseView>(
     conf,
-    isRedirectingLegacyUrl ? null : "views/organizationsCards.json",
-  );
-  const organizations = useMemo(
-    () => (organizationsByTag ? flattenOrganizations(organizationsByTag) : []),
-    [organizationsByTag],
+    isRedirectingLegacyUrl ? null : ORGANIZATIONS_BROWSE_PATH,
   );
   const pageTitle = `Organizations | ${conf.name}`;
 
@@ -63,7 +46,7 @@ export default function OrganizationsPage({ conf, activePageId }: OrganizationsP
       />
     );
   }
-  if (error || !organizationsByTag) return <ErrorScreen />;
+  if (error || !organizationsBrowse) return <ErrorScreen />;
 
   return (
     <>
@@ -78,7 +61,7 @@ export default function OrganizationsPage({ conf, activePageId }: OrganizationsP
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         <OrganizationsList
-          organizations={organizations}
+          organizations={organizationsBrowse.all}
           title="Organizations"
           detailsBasePath={organizationsHref}
         />

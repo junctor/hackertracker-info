@@ -1,9 +1,10 @@
 import { useMemo, type ReactElement } from "react";
+import { useSearchParams } from "react-router";
 
 import type {
   ContentCardsView,
   ContentDetailView,
-  ContentDetailsById,
+  FilterIndexView,
   TagTypesBrowseView,
 } from "@/lib/types/ht-types/views";
 
@@ -15,7 +16,8 @@ import ContentDetails from "@/features/content/ContentDetails";
 import ContentList from "@/features/content/ContentList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
-import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { CONTENT_FILTER_INDEX_PATH } from "@/lib/dataContract";
+import { useConferenceDetailJson, useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { conferenceCollectionPath, conferenceMenuPath, contentPath } from "@/lib/routes";
 import { getBookmarks } from "@/lib/storage";
 import { PageId } from "@/lib/types/page-meta";
@@ -26,41 +28,8 @@ type ContentPageProps = {
   activePageId: PageId;
 };
 
-export function resolveRelatedContentCards(
-  contentDetail: ContentDetailView,
-  contentDetailsById: ContentDetailsById,
-): ContentCardsView {
-  const relatedIds = contentDetail.content.relatedContentIds ?? [];
-  const seenIds = new Set<number>();
-  const relatedContent: ContentCardsView = [];
-
-  for (const relatedId of relatedIds) {
-    if (relatedId === contentDetail.content.id || seenIds.has(relatedId)) {
-      continue;
-    }
-
-    seenIds.add(relatedId);
-
-    const relatedDetail = contentDetailsById[String(relatedId)];
-    if (!relatedDetail) continue;
-
-    const card = {
-      id: relatedDetail.content.id,
-      tags: relatedDetail.tags,
-      title: relatedDetail.content.title,
-    };
-
-    if (relatedDetail.content.logoUrl) {
-      relatedContent.push({ ...card, logoUrl: relatedDetail.content.logoUrl });
-    } else {
-      relatedContent.push(card);
-    }
-  }
-
-  return relatedContent;
-}
-
 export default function ContentPage({ conf, activePageId }: ContentPageProps) {
+  const [searchParams] = useSearchParams();
   const contentListHref = conferenceCollectionPath(conf, "content");
   const conferenceHomeHref = conferenceMenuPath(conf);
   const {
@@ -73,6 +42,8 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
 
   const shouldLoadDetails = isReady && !isIdMissing && !isIdInvalid && contentId !== null;
   const shouldLoadList = isReady && isIdMissing;
+  const shouldLoadFilterIndex =
+    shouldLoadList && (searchParams.has("tag_group") || searchParams.has("tag"));
 
   const {
     data: contentCards,
@@ -90,15 +61,25 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
   );
 
   const {
-    data: contentDetailsById,
-    error: contentDetailError,
-    isLoading: contentDetailLoading,
-  } = useConferenceJson<ContentDetailsById>(
+    data: contentFilterIndex,
+    error: contentFilterError,
+    isLoading: contentFilterLoading,
+  } = useConferenceJson<FilterIndexView>(
     conf,
-    shouldLoadDetails ? "details/content.json" : null,
+    shouldLoadFilterIndex ? CONTENT_FILTER_INDEX_PATH : null,
   );
 
-  const contentDetail = shouldLoadDetails ? contentDetailsById?.[String(contentId)] : undefined;
+  const {
+    data: contentDetailResource,
+    error: contentDetailError,
+    isLoading: contentDetailLoading,
+  } = useConferenceDetailJson<ContentDetailView>(
+    conf,
+    "content",
+    shouldLoadDetails ? contentId : null,
+  );
+
+  const contentDetail = shouldLoadDetails ? contentDetailResource : undefined;
 
   const bookmarks = useMemo(() => getBookmarks(), []);
 
@@ -168,8 +149,8 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
       );
     }
 
-    const { content, sessions, locations, people, tags } = contentDetail;
-    const relatedContent = resolveRelatedContentCards(contentDetail, contentDetailsById ?? {});
+    const { content, sessions, people, tags } = contentDetail;
+    const relatedContent = contentDetail.relatedContent;
 
     pageTitle = `${content.title} | ${conf.name}`;
     pageDescription = metaDescription;
@@ -178,7 +159,7 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
         key={content.id}
         content={content}
         sessions={sessions}
-        locations={locations}
+        accentColor={contentDetail.accentColor}
         people={people}
         tags={tags}
         relatedContent={relatedContent}
@@ -187,12 +168,19 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
       />
     );
   } else {
-    if (contentCardsLoading || tagTypesLoading) {
+    if (contentCardsLoading || tagTypesLoading || contentFilterLoading) {
       return (
         <ConferenceLoadingScreen conference={conf} activePageId={activePageId} label="content" />
       );
     }
-    if (contentCardsError || tagTypesError || !contentCards || !tagTypes) {
+    if (
+      contentCardsError ||
+      tagTypesError ||
+      contentFilterError ||
+      !contentCards ||
+      !tagTypes ||
+      (shouldLoadFilterIndex && !contentFilterIndex)
+    ) {
       return (
         <ErrorScreen
           title="Couldn't load content"
@@ -204,7 +192,14 @@ export default function ContentPage({ conf, activePageId }: ContentPageProps) {
         />
       );
     }
-    pageContent = <ContentList content={contentCards} tags={tagTypes} conference={conf} />;
+    pageContent = (
+      <ContentList
+        content={contentCards}
+        filterIndex={contentFilterIndex}
+        tags={tagTypes}
+        conference={conf}
+      />
+    );
   }
 
   return (

@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { Virtuoso, type Components } from "react-virtuoso";
 
-import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
+import type {
+  ContentCardsView,
+  FilterIndexView,
+  TagTypesBrowseView,
+} from "@/lib/types/ht-types/views";
 
 import PageHeader from "@/components/ui/PageHeader";
 import ClearFilterButton from "@/features/filters/ClearFilterButton";
@@ -24,6 +28,7 @@ import ContentCard from "./ContentCard";
 interface Props {
   conference: ConferenceManifest;
   content: ContentCardsView;
+  filterIndex?: FilterIndexView;
   tags: TagTypesBrowseView;
 }
 
@@ -148,7 +153,7 @@ function ContentListHeader({
   );
 }
 
-export default function ContentList({ content, tags, conference }: Props) {
+export default function ContentList({ content, filterIndex, tags, conference }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
   const normalizedSearch = search.trim().toLowerCase();
@@ -210,7 +215,7 @@ export default function ContentList({ content, tags, conference }: Props) {
     const result: ContentCardsView = [];
 
     const tagFilteredIds = new Set(
-      filterContentByTagGroups(content, normalizedTagGroups).map((item) => item.id),
+      filterContentByTagGroups(content, normalizedTagGroups, filterIndex).map((item) => item.id),
     );
 
     for (const { item, searchableTitle } of searchableContent) {
@@ -221,7 +226,7 @@ export default function ContentList({ content, tags, conference }: Props) {
       result.push(item);
     }
     return result;
-  }, [content, normalizedSearch, normalizedTagGroups, searchableContent]);
+  }, [content, filterIndex, normalizedSearch, normalizedTagGroups, searchableContent]);
 
   const hasActiveFilters = Boolean(normalizedSearch || selectedTagCount > 0);
   const contentCountLabel = `${filtered.length} ${filtered.length === 1 ? "item" : "items"}`;

@@ -5,13 +5,14 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import ConferenceLoadingScreen from "@/features/app-shell/ConferenceLoadingScreen";
 import ErrorScreen from "@/features/app-shell/ErrorScreen";
-import ScheduleSessions, { ScheduleDay } from "@/features/schedule/ScheduleSessions";
+import ScheduleSessions from "@/features/schedule/ScheduleSessions";
 import { isScheduleSessionLive } from "@/features/schedule/scheduleTime";
 import { ConferenceManifest } from "@/lib/conferences";
-import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { useConferenceResourceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
+import { bookmarkedScheduleDaysFromResource } from "@/lib/scheduleBrowse";
 import { getBookmarks } from "@/lib/storage";
-import { BookmarkSessionsByIdView, ScheduleSessionViewModel } from "@/lib/types/ht-types/views";
+import { ScheduleBrowseView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type BookmarksPageProps = {
@@ -23,61 +24,13 @@ function normalizeId(id: unknown): string {
   return String(id);
 }
 
-function getSessionDay(session: ScheduleSessionViewModel, formatter: Intl.DateTimeFormat): string {
-  const date = new Date(session.begin);
-  if (Number.isNaN(date.getTime())) return "";
-
-  const parts = formatter.formatToParts(date);
-  const byType = new Map(parts.map((part) => [part.type, part.value]));
-  const year = byType.get("year");
-  const month = byType.get("month");
-  const day = byType.get("day");
-
-  return year && month && day ? `${year}-${month}-${day}` : "";
-}
-
-function groupBookmarkedSessionsByDay(
-  bookmarkSessionsById: BookmarkSessionsByIdView,
-  bookmarkSet: ReadonlySet<string>,
-  timeZone: string,
-): ScheduleDay[] {
-  if (bookmarkSet.size === 0) return [];
-
-  const bookmarkedSessions = Object.values(bookmarkSessionsById)
-    .filter((session) => bookmarkSet.has(String(session.id)))
-    .toSorted((a, b) => {
-      if (a.beginTimestampSeconds !== b.beginTimestampSeconds) {
-        return a.beginTimestampSeconds - b.beginTimestampSeconds;
-      }
-      return a.id - b.id;
-    });
-
-  const days = new Map<string, ScheduleSessionViewModel[]>();
-  const dayFormatter = new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-
-  for (const session of bookmarkedSessions) {
-    const day = getSessionDay(session, dayFormatter);
-    if (!day) continue;
-    const list = days.get(day) ?? [];
-    list.push(session);
-    days.set(day, list);
-  }
-
-  return [...days.entries()].map(([day, sessions]) => ({ day, sessions }));
-}
-
 export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps) {
   const nowSeconds = useNowSeconds();
   const {
-    data: bookmarkSessionsById,
+    data: scheduleResource,
     error,
     isLoading,
-  } = useConferenceJson<BookmarkSessionsByIdView>(conf, "views/bookmarkSessionsById.json");
+  } = useConferenceResourceJson<ScheduleBrowseView>(conf, "scheduleBrowse");
 
   const [bookmarks, setBookmarks] = useState<string[]>(() => getBookmarks().map(normalizeId));
 
@@ -97,8 +50,6 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     };
   }, []);
 
-  const bookmarkSet = useMemo(() => new Set(bookmarks.map(normalizeId)), [bookmarks]);
-
   const scheduleBookmarks = useMemo(() => {
     return bookmarks
       .map((bookmark) => Number(bookmark))
@@ -106,9 +57,8 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
   }, [bookmarks]);
 
   const days = useMemo(() => {
-    if (!bookmarkSessionsById) return [];
-    return groupBookmarkedSessionsByDay(bookmarkSessionsById, bookmarkSet, conf.timezone);
-  }, [bookmarkSessionsById, bookmarkSet, conf.timezone]);
+    return bookmarkedScheduleDaysFromResource(scheduleResource, scheduleBookmarks);
+  }, [scheduleBookmarks, scheduleResource]);
 
   const defaultDay = useMemo(() => {
     if (days.length === 0) return null;
@@ -138,7 +88,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
   if (isLoading) {
     return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
   }
-  if (error || !bookmarkSessionsById) return <ErrorScreen />;
+  if (error || !scheduleResource) return <ErrorScreen />;
 
   return (
     <>

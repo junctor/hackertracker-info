@@ -54,23 +54,36 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   };
 
   const calendarContent = useMemo(() => {
-    if (!session.contentEntity) return null;
-    return { ...session.contentEntity, title: session.title };
-  }, [session.contentEntity, session.title]);
+    return {
+      id: session.contentId,
+      title: session.title,
+    };
+  }, [session.contentId, session.title]);
 
   const icsHref = useMemo(() => {
-    if (!calendarContent) return null;
-    const ics = cal(conf.slug, calendarContent, session.session, session.locationName);
+    const calendarSession = {
+      begin: session.beginIso,
+      end: session.endIso,
+      id: session.id,
+    };
+    const ics = cal(conf.slug, calendarContent, calendarSession, session.locationName);
     return encodeICalDataUri(ics);
-  }, [calendarContent, conf.slug, session.locationName, session.session]);
+  }, [
+    calendarContent,
+    conf.slug,
+    session.beginIso,
+    session.endIso,
+    session.id,
+    session.locationName,
+  ]);
 
   const isLive = isScheduleSessionLive(session, nowSeconds);
   const isNext = isScheduleSessionStartingSoon(session, nowSeconds);
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${session.title}`
     : `Add bookmark for ${session.title}`;
-  const visibleTags = session.tags.slice(0, 4);
-  const hiddenTagCount = session.tags.length - visibleTags.length;
+  const visibleTags = session.tags;
+  const hiddenTagCount = session.tagCount - visibleTags.length;
 
   return (
     <article

@@ -17,9 +17,9 @@ type Props = {
 
 export default function ContentCard({ conference, item }: Props) {
   const [failedLogoUrl, setFailedLogoUrl] = useState<string | null>(null);
-  const visibleTags = item.tags.slice(0, 4);
-  const hiddenTagCount = item.tags.length - visibleTags.length;
-  const itemColor = item.tags[0]?.colorBackground;
+  const visibleTags = item.tags;
+  const hiddenTagCount = item.tagCount - visibleTags.length;
+  const itemColor = visibleTags[0]?.colorBackground;
   const accentStyle = getAccentStyle(itemColor);
   const visibleLogoUrl = getVisibleContentLogoUrl(item.logoUrl, failedLogoUrl);
 

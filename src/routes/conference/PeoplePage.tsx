@@ -7,9 +7,9 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import PeopleList from "@/features/people/PeopleList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
 import { ConferenceManifest } from "@/lib/conferences";
-import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { useConferenceDetailJson, useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { conferenceCollectionPath, conferenceMenuPath, personPath } from "@/lib/routes";
-import { PeopleCardsView, PeopleDetailsById } from "@/lib/types/ht-types/views";
+import { PeopleCardsView, PersonDetailView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
@@ -41,12 +41,16 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
   } = useConferenceJson<PeopleCardsView>(conf, shouldLoadList ? "views/peopleCards.json" : null);
 
   const {
-    data: peopleDetailsById,
+    data: personDetailResource,
     error: personDetailError,
     isLoading: personDetailLoading,
-  } = useConferenceJson<PeopleDetailsById>(conf, shouldLoadDetails ? "details/people.json" : null);
+  } = useConferenceDetailJson<PersonDetailView>(
+    conf,
+    "people",
+    shouldLoadDetails ? personId : null,
+  );
 
-  const personDetail = shouldLoadDetails ? peopleDetailsById?.[String(personId)] : undefined;
+  const personDetail = shouldLoadDetails ? personDetailResource : undefined;
 
   const metaDescription = useMemo(() => {
     const fallback = `Learn more about ${personDetail?.person.name ?? "this person"} at ${conf.name}.`;
@@ -119,7 +123,6 @@ export default function PeoplePage({ conf, activePageId }: PeoplePageProps) {
         key={personDetail.person.id}
         person={personDetail.person}
         sessions={personDetail.sessions}
-        locations={personDetail.locations}
         conference={conf}
       />
     );

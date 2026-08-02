@@ -100,7 +100,10 @@ vp fmt
 
 ## Static Hosting
 
-The app is static-hosting compatible and does not require a Node server at runtime. Deploy the contents of `dist/`.
+The app is static-hosting compatible and does not require a Node server at runtime. Deploy the
+application bundle from `dist/` and serve the conference data directory at `/ht/`. Vite copies the
+current `public/ht` tree into `dist/ht` unchanged for an initial deployment, but `/ht/` may be
+replaced independently afterward without rebuilding the application bundle.
 
 The production host must serve `/index.html` for unknown application routes so direct navigation and refreshes can boot the React app. Static assets and JSON data should continue to be served from their requested paths.
 
@@ -143,13 +146,19 @@ data scale changes enough that it is no longer needed.
 
 Conference JSON is produced by the companion exporter: [junctor/hackertracker-export](https://github.com/junctor/hackertracker-export).
 
-Typical local workflow:
+Typical local refresh workflow from a sibling exporter checkout:
 
 ```bash
-git clone https://github.com/junctor/hackertracker-export.git
 cd hackertracker-export
-go run ./cmd/hackertracker info --conference DEFCON34 --out ../hackertracker-info/public/ht/defcon34
+go run ./cmd/hackertracker info --conference DCSG2026 DEFCON34 DEFCON33 DEFCONBAHRAIN2025 DCME2026 DCTSG202610
+rm -rf ../hackertracker-info/public/ht
+cp -r out/ht ../hackertracker-info/public/
 ```
+
+Replacing the whole directory prevents removed schema files from surviving a merge. Production
+data refreshes should likewise publish `out/ht` directly to the host's `/ht` directory. No Vite
+build or public-index generation is required; the browser reads the JSON at runtime and uses the
+64-byte manifest to invalidate its IndexedDB cache.
 
 Typical data layout:
 
@@ -158,33 +167,34 @@ public/ht/<conference-slug>/
   conference.json
   manifest.json
   views/
-  derived/
-  details/
+  details/content/00.json ... 07.json
+  details/people/00.json ... 07.json
+  details/organizations/00.json ... 03.json
+  details/documents/00.json
 ```
 
-The website upload is runtime-only. It intentionally does not publish `raw/`,
-`entities/`, `indexes/`, `details/sessions/`, or `details/locations/`. The app
-expects exported runtime artifacts to match the schemas in `src/lib/types/ht-types/`.
-Referenced data files include:
+The website upload is schema-4 runtime data only. It does not publish schema-3 aggregate details,
+`raw/`, `entities/`, `indexes/`, or unused session, location, and tag detail views. The app expects
+exported runtime artifacts to match the fixed contract in `src/lib/dataContract.ts` and the types
+in `src/lib/types/ht-types/`. Referenced data files include:
 
 - `conference.json`
 - `manifest.json`
-- `views/scheduleDays.json`
-- `views/bookmarkSessionsById.json`
+- `views/scheduleBrowse.json`
 - `views/contentCards.json`
 - `views/tagTypesBrowse.json`
 - `views/peopleCards.json`
-- `views/organizationsCards.json`
+- `views/organizationsBrowse.json`
+- `views/contentFilterIndex.json`
+- `views/scheduleFilterIndex.json`
 - `views/searchData.json`
 - `views/locationCards.json`
 - `views/documentsList.json`
 - `views/announcementsList.json`
-- `derived/tagIdsByLabel.json`
-- `details/content.json` - aggregate content detail lookup keyed by id
-- `details/people.json` - aggregate people detail lookup keyed by id
-- `details/organizations.json` - aggregate organization detail lookup keyed by id
-- `details/documents.json` - aggregate document detail lookup keyed by id
-- `details/tags.json` - aggregate tag detail lookup keyed by id
+- `details/content/00.json` through `07.json` - ID-keyed content detail shards
+- `details/people/00.json` through `07.json` - ID-keyed people detail shards
+- `details/organizations/00.json` through `03.json` - ID-keyed organization detail shards
+- `details/documents/00.json` - ID-keyed document details
 
 `views/searchData.json` powers conference search. It contains compact records
 for content titles, people names, organization names, and content tags. Tag

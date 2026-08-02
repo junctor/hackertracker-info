@@ -32,7 +32,7 @@ const organizationBackedSiteMenuKeys = new Set([
 const primaryFiles = [
   ["manifest.json", "Manifest JSON"],
   ["conference.json", "Conference maps JSON"],
-  ["views/scheduleDays.json", "Schedule runtime view JSON"],
+  ["views/scheduleBrowse.json", "Schedule runtime view JSON"],
   ["views/contentCards.json", "Content cards JSON"],
   ["views/peopleCards.json", "People cards JSON"],
   ["views/searchData.json", "Search index JSON"],
@@ -77,29 +77,23 @@ const conferenceRoutesByKey = new Map(
 
 const labelOverrides = new Map([
   ["conference.json", "Conference maps JSON"],
-  ["derived/tagIdsByLabel.json", "Tag IDs by label JSON"],
   ["views/announcementsList.json", "Announcements list JSON"],
-  ["views/bookmarkSessionsById.json", "Bookmark session lookup JSON"],
   ["views/contentCards.json", "Content cards JSON"],
   ["views/documentsList.json", "Documents list JSON"],
   ["views/locationCards.json", "Location cards JSON"],
-  ["views/organizationsCards.json", "Organization cards JSON"],
+  ["views/contentFilterIndex.json", "Content filter index JSON"],
+  ["views/organizationsBrowse.json", "Organization browse JSON"],
   ["views/peopleCards.json", "People cards JSON"],
-  ["views/scheduleDays.json", "Schedule runtime view JSON"],
+  ["views/scheduleBrowse.json", "Schedule runtime view JSON"],
+  ["views/scheduleFilterIndex.json", "Schedule filter index JSON"],
   ["views/searchData.json", "Search index JSON"],
   ["views/tagTypesBrowse.json", "Tag browse JSON"],
-  ["details/content.json", "Content detail lookup JSON"],
-  ["details/documents.json", "Document detail lookup JSON"],
-  ["details/organizations.json", "Organization detail lookup JSON"],
-  ["details/people.json", "People detail lookup JSON"],
-  ["details/tags.json", "Tag detail lookup JSON"],
 ]);
 
-const removedRuntimeDataPattern =
-  /^(?:raw\/|entities\/|indexes\/|details\/(?:sessions|locations|content|documents|organizations|people|tags)\/)/;
+const unlistedRuntimeDataPattern = /^(?:raw\/|entities\/|indexes\/|details\/)/;
 
 function isPublishedRuntimeJson(relativePath) {
-  return relativePath.endsWith(".json") && !removedRuntimeDataPattern.test(relativePath);
+  return relativePath.endsWith(".json") && !unlistedRuntimeDataPattern.test(relativePath);
 }
 
 function escapeHtml(value) {
@@ -311,7 +305,7 @@ ${renderLinks(supportingItems, (relativePath) => dataHref(conference, relativePa
 
       <h2>Structure</h2>
 ${renderParagraph(
-  `Runtime JSON lives under <code>${escapeHtml(`${conference.dataRoot}/`)}</code>. View files are precomputed lists for route loading, aggregate detail lookup files are fetched lazily from route parameters and keyed by id, and derived files provide small lookup tables for the client UI.`,
+  `Runtime JSON lives under <code>${escapeHtml(`${conference.dataRoot}/`)}</code>. View files are precomputed lists for route loading, targeted detail files are fetched lazily from route parameters, and derived files provide small lookup tables for the client UI.`,
 )}
 
       <h2>Human Pages</h2>
@@ -375,7 +369,7 @@ function renderLlmsJsonDataLinks(conference) {
     )}`,
     `- ${markdownLink(
       `${conference.name} schedule data`,
-      absoluteUrl(dataHref(conference, "views/scheduleDays.json")),
+      absoluteUrl(dataHref(conference, "views/scheduleBrowse.json")),
     )}`,
     `- ${markdownLink(
       `${conference.name} schedule export CSV`,
@@ -418,7 +412,7 @@ function renderLlmsJsonDataLinks(conference) {
     lines.push(
       `- ${markdownLink(
         `${conference.name} organization cards`,
-        absoluteUrl(dataHref(conference, "views/organizationsCards.json")),
+        absoluteUrl(dataHref(conference, "views/organizationsBrowse.json")),
       )}`,
     );
   }
@@ -555,7 +549,7 @@ function renderCollectionStructuredData(conference, collection) {
     collection === "schedule"
       ? {
           name: `${conference.name} schedule data JSON`,
-          contentUrl: absoluteUrl(dataHref(conference, "views/scheduleDays.json")),
+          contentUrl: absoluteUrl(dataHref(conference, "views/scheduleBrowse.json")),
         }
       : {
           name: `${conference.name} search index JSON`,

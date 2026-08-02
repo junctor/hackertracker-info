@@ -2,39 +2,35 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
 import { CONFERENCES } from "../src/lib/conferences.ts";
+import {
+  DETAIL_SHARD_SPECS,
+  CONTENT_FILTER_INDEX_PATH,
+  HT_SCHEMA_VERSION,
+  ORGANIZATIONS_BROWSE_PATH,
+  SCHEDULE_BROWSE_PATH,
+  SCHEDULE_FILTER_INDEX_PATH,
+} from "../src/lib/dataContract.ts";
 
 const publicDir = process.argv[2] ?? "public";
 const htDir = path.join(publicDir, "ht");
-
-const removedJsonPathPattern =
-  /\/ht\/[^/"'\s<>)]+\/(?:raw|entities|indexes|details\/(?:sessions|locations)\/|details\/(?:content|documents|organizations|people|tags)\/)[^"'\s<>)]+\.json/;
 const jsonLinkPattern = /(?:https:\/\/info\.defcon\.org)?(\/ht\/[^"'`\s<>)]+?\.json)/g;
-const removedRelativePattern =
-  /^(?:raw\/|entities\/|indexes\/|details\/(?:sessions|locations)\/|details\/(?:content|documents|organizations|people|tags)\/)/;
-
 const requiredRuntimeFiles = [
   "conference.json",
   "manifest.json",
-  "derived/tagIdsByLabel.json",
-  "details/content.json",
-  "details/documents.json",
-  "details/organizations.json",
-  "details/people.json",
-  "details/tags.json",
   "views/announcementsList.json",
-  "views/bookmarkSessionsById.json",
   "views/contentCards.json",
+  CONTENT_FILTER_INDEX_PATH,
   "views/documentsList.json",
   "views/locationCards.json",
-  "views/organizationsCards.json",
+  ORGANIZATIONS_BROWSE_PATH,
   "views/peopleCards.json",
-  "views/scheduleDays.json",
+  SCHEDULE_BROWSE_PATH,
+  SCHEDULE_FILTER_INDEX_PATH,
   "views/searchData.json",
   "views/tagTypesBrowse.json",
 ];
-
 const counters = {
-  detailLookups: 0,
+  detailRecords: 0,
   generatedFiles: 0,
   jsonLinks: 0,
   requiredFiles: 0,
@@ -42,21 +38,12 @@ const counters = {
 
 function walkFiles(root) {
   if (!existsSync(root)) return [];
-
   const out = [];
-  const entries = readdirSync(root, { withFileTypes: true });
 
-  for (const entry of entries) {
+  for (const entry of readdirSync(root, { withFileTypes: true })) {
     const fullPath = path.join(root, entry.name);
-
-    if (entry.isDirectory()) {
-      out.push(...walkFiles(fullPath));
-      continue;
-    }
-
-    if (entry.isFile()) {
-      out.push(fullPath);
-    }
+    if (entry.isDirectory()) out.push(...walkFiles(fullPath));
+    if (entry.isFile()) out.push(fullPath);
   }
 
   return out;
@@ -85,76 +72,114 @@ function assertFileExists(file, failures) {
   }
 }
 
-function assertDetailLookup(conference, group, ids, failures) {
-  const uniqueIds = new Set(ids.filter((id) => id != null).map((id) => String(id)));
-  const file = path.join(htDir, conference.slug, "details", `${group}.json`);
-  const detailsById = readJson(file, failures);
+function isForbiddenRuntimePath(relativePath) {
+  return (
+    /^(?:raw|entities|indexes)\//.test(relativePath) ||
+    relativePath === "derived/tagIdsByLabel.json" ||
+    /^details\/(?:sessions|locations|tags)\//.test(relativePath) ||
+    /^details\/(?:content|documents|organizations|people|tags)\.json$/.test(relativePath) ||
+    /^views\/(?:scheduleDays|bookmarkSessionsById|organizationsCards)\.json$/.test(relativePath)
+  );
+}
 
-  if (!detailsById || typeof detailsById !== "object" || Array.isArray(detailsById)) {
-    fail(`Detail lookup must be an object keyed by id: ${file}`, failures);
-    return;
+function linkedConferenceRelativePath(href) {
+  return href.split("/").slice(3).join("/");
+}
+
+function organizationIds(value) {
+  return Array.isArray(value?.all) ? value.all.map((item) => item?.id) : [];
+}
+
+function expectedShardPath(spec, id) {
+  const index = ((id % spec.shardCount) + spec.shardCount) % spec.shardCount;
+  return spec.pathTemplate.replace("{shard}", String(index).padStart(spec.shardDigits, "0"));
+}
+
+function assertDetailRecords(conference, group, ids, failures) {
+  const spec = DETAIL_SHARD_SPECS[group];
+
+  const shards = new Map();
+  for (let index = 0; index < spec.shardCount; index += 1) {
+    const relativePath = spec.pathTemplate.replace(
+      "{shard}",
+      String(index).padStart(spec.shardDigits, "0"),
+    );
+    const file = path.join(htDir, conference.slug, relativePath);
+    assertFileExists(file, failures);
+    shards.set(relativePath, readJson(file, failures));
   }
 
-  for (const id of uniqueIds) {
-    counters.detailLookups += 1;
-
-    if (!Object.hasOwn(detailsById, id)) {
-      fail(`Missing ${group} detail id ${id} in ${file}`, failures);
+  for (const id of new Set(ids.filter((value) => value != null).map(Number))) {
+    counters.detailRecords += 1;
+    const relativePath = expectedShardPath(spec, id);
+    const records = shards.get(relativePath);
+    if (!records || !Object.hasOwn(records, String(id))) {
+      fail(`Missing ${group} detail id ${id} in ${conference.slug}/${relativePath}`, failures);
     }
   }
 }
 
-function organizationIds(value) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return [];
+function assertScheduleBrowse(conference, value, failures) {
+  if (
+    !value ||
+    !Array.isArray(value.days) ||
+    !value.sessionPositionsById ||
+    typeof value.sessionPositionsById !== "object" ||
+    Array.isArray(value.sessionPositionsById)
+  ) {
+    fail(`Invalid schedule browse view for ${conference.slug}`, failures);
+    return;
+  }
 
-  return Object.values(value)
-    .filter(Array.isArray)
-    .flatMap((items) => items.map((item) => item?.id));
-}
+  let sessionCount = 0;
+  value.days.forEach((day, dayIndex) => {
+    if (!Array.isArray(day?.sessions)) {
+      fail(`Invalid schedule day ${dayIndex} for ${conference.slug}`, failures);
+      return;
+    }
+    day.sessions.forEach((session, sessionIndex) => {
+      sessionCount += 1;
+      const position = value.sessionPositionsById[String(session?.id)];
+      if (position?.dayIndex !== dayIndex || position?.sessionIndex !== sessionIndex) {
+        fail(
+          `Invalid schedule position for session ${session?.id} in ${conference.slug}`,
+          failures,
+        );
+      }
+    });
+  });
 
-function tagIds(value) {
-  if (!Array.isArray(value)) return [];
-
-  return value.flatMap((tagType) =>
-    Array.isArray(tagType?.tags) ? tagType.tags.map((tag) => tag?.id) : [],
-  );
+  if (Object.keys(value.sessionPositionsById).length !== sessionCount) {
+    fail(`Schedule position count mismatch for ${conference.slug}`, failures);
+  }
 }
 
 const failures = [];
 
 for (const file of walkFiles(publicDir)) {
-  const relative = path.relative(publicDir, file);
-  const normalized = relative.split(path.sep).join("/");
+  const normalized = path.relative(publicDir, file).split(path.sep).join("/");
 
   if (normalized.startsWith("ht/")) {
     if (normalized.endsWith(".json")) {
       const conferenceRelativePath = normalized.split("/").slice(2).join("/");
-      if (removedRelativePattern.test(conferenceRelativePath)) {
-        fail(`Forbidden runtime JSON file exists: ${file}`, failures);
+      if (isForbiddenRuntimePath(conferenceRelativePath)) {
+        fail(`Forbidden schema-3 runtime JSON file exists: ${file}`, failures);
       }
     }
     continue;
   }
 
-  if (!/\.(?:html|json|txt|xml)$/.test(normalized)) {
-    continue;
-  }
+  if (!/\.(?:html|json|txt|xml)$/.test(normalized)) continue;
 
   counters.generatedFiles += 1;
   const text = readFileSync(file, "utf8");
-  const removedMatch = text.match(removedJsonPathPattern);
-  if (removedMatch) {
-    fail(`Removed JSON path linked from ${file}: ${removedMatch[0]}`, failures);
-  }
-
   for (const match of text.matchAll(jsonLinkPattern)) {
     const href = match[1];
     counters.jsonLinks += 1;
-    if (removedJsonPathPattern.test(href)) {
-      fail(`Removed JSON path linked from ${file}: ${href}`, failures);
+    if (isForbiddenRuntimePath(linkedConferenceRelativePath(href))) {
+      fail(`Schema-3 JSON path linked from ${file}: ${href}`, failures);
       continue;
     }
-
     const target = publicPath(href);
     if (!existsSync(target) || !statSync(target).isFile()) {
       fail(`Missing public JSON target linked from ${file}: ${href}`, failures);
@@ -164,58 +189,52 @@ for (const file of walkFiles(publicDir)) {
 
 for (const conference of Object.values(CONFERENCES)) {
   const root = path.join(htDir, conference.slug);
-
   for (const relativePath of requiredRuntimeFiles) {
     counters.requiredFiles += 1;
     assertFileExists(path.join(root, relativePath), failures);
   }
 
+  const manifest = readJson(path.join(root, "manifest.json"), failures);
+  if (manifest?.schemaVersion !== HT_SCHEMA_VERSION) {
+    fail(`Manifest must use schema version 4: ${conference.slug}`, failures);
+  }
+  if (
+    Object.keys(manifest ?? {}).some((key) => !["buildTimestamp", "schemaVersion"].includes(key))
+  ) {
+    fail(`Manifest contains non-cache metadata: ${conference.slug}`, failures);
+  }
+
   const contentCards = readJson(path.join(root, "views", "contentCards.json"), failures);
   const peopleCards = readJson(path.join(root, "views", "peopleCards.json"), failures);
-  const organizationsCards = readJson(
-    path.join(root, "views", "organizationsCards.json"),
+  const organizationsBrowse = readJson(path.join(root, ORGANIZATIONS_BROWSE_PATH), failures);
+  const documentsList = readJson(path.join(root, "views", "documentsList.json"), failures);
+  const scheduleBrowse = readJson(path.join(root, "views", "scheduleBrowse.json"), failures);
+
+  assertScheduleBrowse(conference, scheduleBrowse, failures);
+  assertDetailRecords(
+    conference,
+    "content",
+    Array.isArray(contentCards) ? contentCards.map((item) => item?.id) : [],
     failures,
   );
-  const documentsList = readJson(path.join(root, "views", "documentsList.json"), failures);
-  const tagTypesBrowse = readJson(path.join(root, "views", "tagTypesBrowse.json"), failures);
-
-  if (Array.isArray(contentCards)) {
-    assertDetailLookup(
-      conference,
-      "content",
-      contentCards.map((item) => item?.id),
-      failures,
-    );
-  }
-
-  if (Array.isArray(peopleCards)) {
-    assertDetailLookup(
-      conference,
-      "people",
-      peopleCards.map((item) => item?.id),
-      failures,
-    );
-  }
-
-  assertDetailLookup(conference, "organizations", organizationIds(organizationsCards), failures);
-
-  if (Array.isArray(documentsList)) {
-    assertDetailLookup(
-      conference,
-      "documents",
-      documentsList.map((item) => item?.id),
-      failures,
-    );
-  }
-
-  assertDetailLookup(conference, "tags", tagIds(tagTypesBrowse), failures);
+  assertDetailRecords(
+    conference,
+    "people",
+    Array.isArray(peopleCards) ? peopleCards.map((item) => item?.id) : [],
+    failures,
+  );
+  assertDetailRecords(conference, "organizations", organizationIds(organizationsBrowse), failures);
+  assertDetailRecords(
+    conference,
+    "documents",
+    Array.isArray(documentsList) ? documentsList.map((item) => item?.id) : [],
+    failures,
+  );
 }
 
 if (failures.length > 0) {
   console.error("Runtime JSON verification failed:");
-  for (const failure of failures) {
-    console.error(`- ${failure}`);
-  }
+  for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
@@ -223,5 +242,5 @@ console.log(
   `Runtime JSON links verified: ${counters.jsonLinks} generated JSON links, ` +
     `${counters.generatedFiles} generated metadata files, ` +
     `${counters.requiredFiles} required runtime files, ` +
-    `${counters.detailLookups} route-derived detail lookup entries.`,
+    `${counters.detailRecords} route-derived sharded detail records.`,
 );

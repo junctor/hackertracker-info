@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { Virtuoso, type Components } from "react-virtuoso";
 
-import type { ContentCardsView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
+import type {
+  ContentCardsView,
+  FilterIndexView,
+  TagTypesBrowseView,
+} from "@/lib/types/ht-types/views";
 
 import PageHeader from "@/components/ui/PageHeader";
 import ClearFilterButton from "@/features/filters/ClearFilterButton";
@@ -18,13 +22,13 @@ import {
   TAG_GROUP_PARAM,
 } from "@/features/filters/tagFilters";
 import { ConferenceManifest } from "@/lib/conferences";
-import { createTagSortOrders } from "@/lib/tags";
 
 import ContentCard from "./ContentCard";
 
 interface Props {
   conference: ConferenceManifest;
   content: ContentCardsView;
+  filterIndex?: FilterIndexView;
   tags: TagTypesBrowseView;
 }
 
@@ -149,11 +153,10 @@ function ContentListHeader({
   );
 }
 
-export default function ContentList({ content, tags, conference }: Props) {
+export default function ContentList({ content, filterIndex, tags, conference }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
   const normalizedSearch = search.trim().toLowerCase();
-  const tagSortOrders = useMemo(() => createTagSortOrders(tags), [tags]);
 
   const normalizedTagGroups = useMemo(() => {
     const parsedGroups = parseTagGroups(searchParams);
@@ -212,7 +215,7 @@ export default function ContentList({ content, tags, conference }: Props) {
     const result: ContentCardsView = [];
 
     const tagFilteredIds = new Set(
-      filterContentByTagGroups(content, normalizedTagGroups).map((item) => item.id),
+      filterContentByTagGroups(content, normalizedTagGroups, filterIndex).map((item) => item.id),
     );
 
     for (const { item, searchableTitle } of searchableContent) {
@@ -223,7 +226,7 @@ export default function ContentList({ content, tags, conference }: Props) {
       result.push(item);
     }
     return result;
-  }, [content, normalizedSearch, normalizedTagGroups, searchableContent]);
+  }, [content, filterIndex, normalizedSearch, normalizedTagGroups, searchableContent]);
 
   const hasActiveFilters = Boolean(normalizedSearch || selectedTagCount > 0);
   const contentCountLabel = `${filtered.length} ${filtered.length === 1 ? "item" : "items"}`;
@@ -235,9 +238,9 @@ export default function ContentList({ content, tags, conference }: Props) {
   const shouldVirtualize = filtered.length > VIRTUALIZE_CONTENT_THRESHOLD;
   const renderVirtualizedContent = useCallback(
     (_: number, item: ContentCardsView[number]) => (
-      <ContentCard conference={conference} item={item} tagSortOrders={tagSortOrders} />
+      <ContentCard conference={conference} item={item} />
     ),
-    [conference, tagSortOrders],
+    [conference],
   );
 
   return (
@@ -295,7 +298,7 @@ export default function ContentList({ content, tags, conference }: Props) {
             <ul className="ui-list-stack-sm">
               {filtered.map((item) => (
                 <li key={item.id}>
-                  <ContentCard conference={conference} item={item} tagSortOrders={tagSortOrders} />
+                  <ContentCard conference={conference} item={item} />
                 </li>
               ))}
             </ul>

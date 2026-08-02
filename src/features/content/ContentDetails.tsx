@@ -3,14 +3,7 @@ import { useId, useMemo, useState } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
-import type {
-  ContentEntity,
-  SessionEntity,
-  LocationEntity,
-  PersonEntity,
-  TagEntity,
-} from "@/lib/types/ht-types";
-import type { ContentCardsView } from "@/lib/types/ht-types/views";
+import type { ContentCardsView, ContentDetailView } from "@/lib/types/ht-types/views";
 
 import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
@@ -18,7 +11,6 @@ import PageHeader from "@/components/ui/PageHeader";
 import { getAccentStyle } from "@/lib/color";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { contentPath, personPath, tagPath } from "@/lib/routes";
-import { sortTags } from "@/lib/tags";
 import { buildAbsoluteAppUrlFromPath, getSafeExternalHref } from "@/lib/url";
 
 import ContentCard from "./ContentCard";
@@ -26,35 +18,18 @@ import { getVisibleContentLogoUrl } from "./contentLogo";
 import ContentSession from "./ContentSession";
 
 type Props = {
-  content: ContentEntity;
-  sessions: SessionEntity[];
-  locations: LocationEntity[];
-  people: PersonEntity[];
-  tags: TagEntity[];
+  accentColor?: string;
+  content: ContentDetailView["content"];
+  sessions: ContentDetailView["sessions"];
+  people: ContentDetailView["people"];
+  tags: ContentDetailView["tags"];
   relatedContent: ContentCardsView;
   bookmarks: number[];
   conference: ConferenceManifest;
 };
 
-function safeParseMs(iso: string): number {
-  const ms = Date.parse(iso);
-  return Number.isFinite(ms) ? ms : Number.MAX_SAFE_INTEGER;
-}
-
-function getSessionTagAccentColor(
-  session: SessionEntity | undefined,
-  tags: TagEntity[],
-): string | undefined {
-  if (!session) return undefined;
-
-  const firstTagId = session.tagIds[0];
-  if (firstTagId == null) return undefined;
-
-  return tags.find((tag) => tag.id === firstTagId)?.colorBackground;
-}
-
 export default function ContentDetails(props: Props) {
-  const { content, sessions, locations, people, tags, relatedContent, bookmarks, conference } =
+  const { accentColor, content, sessions, people, tags, relatedContent, bookmarks, conference } =
     props;
   const shareStatusId = useId();
   const [shareStatus, setShareStatus] = useTransientStatus();
@@ -62,31 +37,7 @@ export default function ContentDetails(props: Props) {
 
   const visibleLogoUrl = getVisibleContentLogoUrl(content.logoUrl, failedLogoUrl);
 
-  const locationNameById = useMemo(
-    () => new Map<number, string>(locations.map((l) => [l.id, l.name])),
-    [locations],
-  );
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
-  const sortedTags = useMemo(() => sortTags(tags), [tags]);
-
-  // Deterministic accent color from the earliest session without sorting.
-  const primarySession = useMemo(() => {
-    if (sessions.length === 0) return undefined;
-    let earliest = sessions[0];
-    let earliestMs = safeParseMs(earliest.beginIso);
-    for (let i = 1; i < sessions.length; i += 1) {
-      const session = sessions[i];
-      const ms = safeParseMs(session.beginIso);
-      if (ms < earliestMs) {
-        earliest = session;
-        earliestMs = ms;
-      }
-    }
-    return earliest;
-  }, [sessions]);
-
-  const accentColor =
-    content.color || primarySession?.color || getSessionTagAccentColor(primarySession, tags);
   const accentStyle = getAccentStyle(accentColor);
   const shareUrl = buildAbsoluteAppUrlFromPath(contentPath(conference, content.id));
   const detailHeaderClassName = [
@@ -171,13 +122,13 @@ export default function ContentDetails(props: Props) {
         />
       </div>
 
-      {sortedTags.length > 0 && (
+      {tags.length > 0 && (
         <section aria-labelledby="tags-title" className="ui-detail-section">
           <h2 id="tags-title" className="ui-section-label">
             Tags
           </h2>
           <ul className="ui-chip-list-tight">
-            {sortedTags.map((tag) => (
+            {tags.map((tag) => (
               <li key={tag.id}>
                 <Link
                   to={tagPath(conference, tag.id)}
@@ -215,10 +166,10 @@ export default function ContentDetails(props: Props) {
                 key={s.id}
                 conference={conference}
                 session={s}
-                contentEntity={content}
                 isBookmarked={bookmarkSet.has(s.id)}
                 accentColor={s.color || accentColor}
-                locationName={locationNameById.get(s.locationId)}
+                calendarDescription={content.description}
+                calendarTitle={content.title}
               />
             ))}
           </ul>

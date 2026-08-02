@@ -8,7 +8,7 @@ import { useMemo, type MouseEvent } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
-import type { ContentEntity, SessionEntity } from "@/lib/types/ht-types";
+import type { DetailSessionView } from "@/lib/types/ht-types";
 
 import cal, { encodeICalDataUri } from "@/lib/cal";
 import { getAccentStyle } from "@/lib/color";
@@ -18,11 +18,11 @@ import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 
 export type ContentSessionProps = {
   conference: ConferenceManifest;
-  session: SessionEntity;
-  contentEntity: ContentEntity;
+  session: DetailSessionView;
   isBookmarked: boolean;
   accentColor?: string;
-  locationName?: string;
+  calendarDescription?: string;
+  calendarTitle?: string;
   href?: string;
   title?: string;
 };
@@ -30,10 +30,10 @@ export type ContentSessionProps = {
 function ContentSessionCard({
   conference,
   session,
-  contentEntity,
   isBookmarked,
   accentColor,
-  locationName,
+  calendarDescription,
+  calendarTitle,
   href,
   title,
 }: ContentSessionProps) {
@@ -50,9 +50,18 @@ function ContentSessionCard({
     : formatSessionTime(begin, end, conference.timezone);
 
   const icsHref = useMemo(() => {
-    const ics = cal(conference.slug, contentEntity, session, locationName);
+    const ics = cal(
+      conference.slug,
+      {
+        description: calendarDescription,
+        id: session.contentId,
+        title: calendarTitle ?? session.title,
+      },
+      session,
+      session.locationName,
+    );
     return encodeICalDataUri(ics);
-  }, [conference.slug, contentEntity, session, locationName]);
+  }, [calendarDescription, calendarTitle, conference.slug, session]);
 
   const handleBookmarkClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -76,10 +85,10 @@ function ContentSessionCard({
         <p className="ui-card-title ui-accent-card-title-md ui-clamp-two">{titleLabel}</p>
       ) : null}
       <p className="ui-session-time-primary">{timeLabel}</p>
-      {locationName ? (
+      {session.locationName ? (
         <div className="ui-card-meta ui-content-session-location">
           <MapPinIcon className="ui-icon-xs" aria-hidden="true" />
-          <span className="ui-clip-text">{locationName}</span>
+          <span className="ui-clip-text">{session.locationName}</span>
         </div>
       ) : null}
     </div>
@@ -105,9 +114,9 @@ function ContentSessionCard({
         <div className="ui-content-session-actions">
           <a
             href={icsHref}
-            download={`DEF_CON_${contentEntity.id}-${session.id}.ics`}
-            title={`Download calendar invite for ${contentEntity.title}`}
-            aria-label={`Download calendar invite for ${contentEntity.title}`}
+            download={`DEF_CON_${session.contentId}-${session.id}.ics`}
+            title={`Download calendar invite for ${calendarTitle ?? session.title}`}
+            aria-label={`Download calendar invite for ${calendarTitle ?? session.title}`}
             aria-describedby={actionStatus ? actionStatusId : undefined}
             onClick={handleCalendarClick}
             className="ui-icon-plain"

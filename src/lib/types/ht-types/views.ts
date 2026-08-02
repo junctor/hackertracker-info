@@ -17,6 +17,7 @@ export type ContentCard = {
     colorForeground: string;
     id: number;
     label: string;
+    sortOrder?: number;
   }>;
   title: string;
 };
@@ -42,6 +43,7 @@ export type SessionCard = {
     colorForeground: string;
     id: number;
     label: string;
+    sortOrder?: number;
   }>;
   title: string;
 };
@@ -106,6 +108,7 @@ export type ScheduleSessionViewModel = {
     label: string;
     colorBackground: string;
     colorForeground?: string;
+    sortOrder?: number;
   }>;
   speakers: string | null;
   beginDisplay: string;

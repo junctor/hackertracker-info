@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
 import type { ConferenceManifest } from "@/lib/conferences";
@@ -7,19 +7,22 @@ import type { ContentCard as ContentCardView } from "@/lib/types/ht-types/views"
 import Image from "@/components/Image";
 import { getAccentStyle } from "@/lib/color";
 import { contentPath } from "@/lib/routes";
+import { sortTags, type TagSortOrders } from "@/lib/tags";
 
 import { getVisibleContentLogoUrl } from "./contentLogo";
 
 type Props = {
   conference: ConferenceManifest;
   item: ContentCardView;
+  tagSortOrders?: TagSortOrders;
 };
 
-export default function ContentCard({ conference, item }: Props) {
+export default function ContentCard({ conference, item, tagSortOrders }: Props) {
   const [failedLogoUrl, setFailedLogoUrl] = useState<string | null>(null);
-  const visibleTags = item.tags.slice(0, 4);
-  const hiddenTagCount = item.tags.length - visibleTags.length;
-  const itemColor = item.tags[0]?.colorBackground;
+  const sortedTags = useMemo(() => sortTags(item.tags, tagSortOrders), [item.tags, tagSortOrders]);
+  const visibleTags = sortedTags.slice(0, 4);
+  const hiddenTagCount = sortedTags.length - visibleTags.length;
+  const itemColor = sortedTags[0]?.colorBackground;
   const accentStyle = getAccentStyle(itemColor);
   const visibleLogoUrl = getVisibleContentLogoUrl(item.logoUrl, failedLogoUrl);
 

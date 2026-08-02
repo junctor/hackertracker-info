@@ -11,7 +11,12 @@ import { ConferenceManifest } from "@/lib/conferences";
 import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { getBookmarks } from "@/lib/storage";
-import { BookmarkSessionsByIdView, ScheduleSessionViewModel } from "@/lib/types/ht-types/views";
+import { createTagSortOrders } from "@/lib/tags";
+import {
+  BookmarkSessionsByIdView,
+  ScheduleSessionViewModel,
+  TagTypesBrowseView,
+} from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type BookmarksPageProps = {
@@ -79,7 +84,14 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     isLoading,
   } = useConferenceJson<BookmarkSessionsByIdView>(conf, "views/bookmarkSessionsById.json");
 
+  const {
+    data: tagTypes,
+    error: tagTypesError,
+    isLoading: tagTypesLoading,
+  } = useConferenceJson<TagTypesBrowseView>(conf, "views/tagTypesBrowse.json");
+
   const [bookmarks, setBookmarks] = useState<string[]>(() => getBookmarks().map(normalizeId));
+  const tagSortOrders = useMemo(() => createTagSortOrders(tagTypes ?? []), [tagTypes]);
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
@@ -135,10 +147,10 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
     setSelectedDay(day);
   }, []);
 
-  if (isLoading) {
+  if (isLoading || tagTypesLoading) {
     return <ConferenceLoadingScreen conference={conf} activePageId={activePageId} />;
   }
-  if (error || !bookmarkSessionsById) return <ErrorScreen />;
+  if (error || tagTypesError || !bookmarkSessionsById || !tagTypes) return <ErrorScreen />;
 
   return (
     <>
@@ -167,6 +179,7 @@ export default function BookmarksPage({ conf, activePageId }: BookmarksPageProps
             bookmarks={scheduleBookmarks}
             nowSeconds={nowSeconds}
             activeFilter="bookmarks"
+            tagSortOrders={tagSortOrders}
           />
         ) : (
           <div className="ui-container ui-empty-state ui-page-empty-offset">

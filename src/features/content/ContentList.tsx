@@ -18,6 +18,7 @@ import {
   TAG_GROUP_PARAM,
 } from "@/features/filters/tagFilters";
 import { ConferenceManifest } from "@/lib/conferences";
+import { createTagSortOrders } from "@/lib/tags";
 
 import ContentCard from "./ContentCard";
 
@@ -152,6 +153,7 @@ export default function ContentList({ content, tags, conference }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
   const normalizedSearch = search.trim().toLowerCase();
+  const tagSortOrders = useMemo(() => createTagSortOrders(tags), [tags]);
 
   const normalizedTagGroups = useMemo(() => {
     const parsedGroups = parseTagGroups(searchParams);
@@ -233,9 +235,9 @@ export default function ContentList({ content, tags, conference }: Props) {
   const shouldVirtualize = filtered.length > VIRTUALIZE_CONTENT_THRESHOLD;
   const renderVirtualizedContent = useCallback(
     (_: number, item: ContentCardsView[number]) => (
-      <ContentCard conference={conference} item={item} />
+      <ContentCard conference={conference} item={item} tagSortOrders={tagSortOrders} />
     ),
-    [conference],
+    [conference, tagSortOrders],
   );
 
   return (
@@ -293,7 +295,7 @@ export default function ContentList({ content, tags, conference }: Props) {
             <ul className="ui-list-stack-sm">
               {filtered.map((item) => (
                 <li key={item.id}>
-                  <ContentCard conference={conference} item={item} />
+                  <ContentCard conference={conference} item={item} tagSortOrders={tagSortOrders} />
                 </li>
               ))}
             </ul>

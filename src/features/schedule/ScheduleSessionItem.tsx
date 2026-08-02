@@ -9,6 +9,7 @@ import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { contentPath } from "@/lib/routes";
+import { sortTags, type TagSortOrders } from "@/lib/tags";
 
 import type { ScheduleSessionViewModel } from "./ScheduleSessions";
 
@@ -20,6 +21,7 @@ type Props = {
   isBookmarked: boolean;
   nowSeconds: number;
   isHighlighted?: boolean;
+  tagSortOrders?: TagSortOrders;
 };
 
 function stopCalendarClickPropagation(e: React.MouseEvent<HTMLAnchorElement>) {
@@ -32,6 +34,7 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   isBookmarked,
   nowSeconds,
   isHighlighted = false,
+  tagSortOrders,
 }: Props) {
   const [bookmark, toggleBookmark] = useBookmarks(session.id, isBookmarked);
   const actionStatusId = `schedule-session-action-status-${session.id}`;
@@ -69,8 +72,12 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${session.title}`
     : `Add bookmark for ${session.title}`;
-  const visibleTags = session.tags.slice(0, 4);
-  const hiddenTagCount = session.tags.length - visibleTags.length;
+  const sortedTags = useMemo(
+    () => sortTags(session.tags, tagSortOrders),
+    [session.tags, tagSortOrders],
+  );
+  const visibleTags = sortedTags.slice(0, 4);
+  const hiddenTagCount = sortedTags.length - visibleTags.length;
 
   return (
     <article

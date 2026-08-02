@@ -36,7 +36,8 @@ import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { useNowSeconds } from "@/lib/hooks/useNowSeconds";
 import { conferenceMenuPath } from "@/lib/routes";
 import { getBookmarks } from "@/lib/storage";
-import { ScheduleDaysView } from "@/lib/types/ht-types/views";
+import { createTagSortOrders } from "@/lib/tags";
+import { ScheduleDaysView, TagTypesBrowseView } from "@/lib/types/ht-types/views";
 import { PageId } from "@/lib/types/page-meta";
 
 type SchedulePageProps = {
@@ -188,7 +189,14 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     isLoading: scheduleDaysLoading,
   } = useConferenceJson<ScheduleDaysView>(conf, "views/scheduleDays.json");
 
+  const {
+    data: tagTypes,
+    error: tagTypesError,
+    isLoading: tagTypesLoading,
+  } = useConferenceJson<TagTypesBrowseView>(conf, "views/tagTypesBrowse.json");
+
   const bookmarks = useMemo(() => getBookmarks(), []);
+  const tagSortOrders = useMemo(() => createTagSortOrders(tagTypes ?? []), [tagTypes]);
 
   const days = useMemo(() => {
     return scheduleDays ?? [];
@@ -413,13 +421,13 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     tagFilteredSessionCount,
   ]);
 
-  if (scheduleDaysLoading) {
+  if (scheduleDaysLoading || tagTypesLoading) {
     return (
       <ConferenceLoadingScreen conference={conf} activePageId={activePageId} variant="schedule" />
     );
   }
 
-  if (scheduleDaysError || !scheduleDays) {
+  if (scheduleDaysError || tagTypesError || !scheduleDays || !tagTypes) {
     return (
       <ErrorScreen
         title="Couldn't load schedule"
@@ -467,6 +475,7 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
           activeTagFilterCount={selectedTagCount}
           tagFilterHref={tagFilterHref}
           onClearTagFilters={isTagFilterActive ? handleClearTagFilters : undefined}
+          tagSortOrders={tagSortOrders}
         />
       </ConferenceLayout>
     </>

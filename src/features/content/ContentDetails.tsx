@@ -18,6 +18,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import { getAccentStyle } from "@/lib/color";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { contentPath, personPath, tagPath } from "@/lib/routes";
+import { sortTags } from "@/lib/tags";
 import { buildAbsoluteAppUrlFromPath, getSafeExternalHref } from "@/lib/url";
 
 import ContentCard from "./ContentCard";
@@ -66,6 +67,7 @@ export default function ContentDetails(props: Props) {
     [locations],
   );
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
+  const sortedTags = useMemo(() => sortTags(tags), [tags]);
 
   // Deterministic accent color from the earliest session without sorting.
   const primarySession = useMemo(() => {
@@ -169,13 +171,13 @@ export default function ContentDetails(props: Props) {
         />
       </div>
 
-      {tags.length > 0 && (
+      {sortedTags.length > 0 && (
         <section aria-labelledby="tags-title" className="ui-detail-section">
           <h2 id="tags-title" className="ui-section-label">
             Tags
           </h2>
           <ul className="ui-chip-list-tight">
-            {tags.map((tag) => (
+            {sortedTags.map((tag) => (
               <li key={tag.id}>
                 <Link
                   to={tagPath(conference, tag.id)}

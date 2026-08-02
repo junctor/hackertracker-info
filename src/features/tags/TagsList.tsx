@@ -1,10 +1,9 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useMemo, type ComponentType, type CSSProperties, type SVGProps } from "react";
+import { type ComponentType, type CSSProperties, type SVGProps } from "react";
 import { Link } from "react-router";
 
 import PageHeader from "@/components/ui/PageHeader";
-import { sortTags, sortTagTypes } from "@/lib/tags";
-import { TagTypeBrowse, TagTypesBrowseView } from "@/lib/types/ht-types";
+import { TagTypesBrowseView } from "@/lib/types/ht-types";
 
 type TagPillProps = {
   tag: {
@@ -38,10 +37,6 @@ type TagsListProps = {
   onClear: () => void;
   onToggleTag: (tagId: number) => void;
 };
-
-function isPresent<T>(value: T | null | undefined | false): value is T {
-  return Boolean(value);
-}
 
 function TagPill({
   tag,
@@ -96,24 +91,7 @@ export default function TagsList({
   onClear,
   onToggleTag,
 }: TagsListProps) {
-  const visibleTagTypes = useMemo(() => {
-    const validTagTypes = (
-      tagTypes as readonly (TagTypeBrowse | null | undefined | false)[]
-    ).filter(isPresent);
-
-    const tagTypesWithSortedTags = validTagTypes
-      .map((tagType) => ({
-        ...tagType,
-        tags: sortTags(
-          (
-            tagType.tags as readonly (TagTypeBrowse["tags"][number] | null | undefined | false)[]
-          ).filter(isPresent),
-        ),
-      }))
-      .filter((tagType) => tagType.tags.length > 0);
-
-    return sortTagTypes(tagTypesWithSortedTags);
-  }, [tagTypes]);
+  const visibleTagTypes = tagTypes;
   const selectedCount = selectedIds.size;
   const hasSelections = selectedCount > 0;
   const hasNoMatchingSelection =

@@ -10,7 +10,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Link } from "react-router";
 import { Virtuoso, type Components, type VirtuosoHandle } from "react-virtuoso";
 
-import type { TagSortOrders } from "@/lib/tags";
 import type {
   ScheduleDayView,
   ScheduleSessionViewModel as ScheduleSessionViewModelContract,
@@ -145,7 +144,6 @@ export default function ScheduleSessions({
   activeTagFilterCount = 0,
   tagFilterHref,
   onClearTagFilters,
-  tagSortOrders,
 }: {
   conf: ConferenceManifest;
   days: ScheduleDay[];
@@ -165,7 +163,6 @@ export default function ScheduleSessions({
   activeTagFilterCount?: number;
   tagFilterHref?: string;
   onClearTagFilters?: () => void;
-  tagSortOrders?: TagSortOrders;
 }) {
   const bookmarkSet = useMemo(() => new Set(bookmarks), [bookmarks]);
   const [tabScrollState, setTabScrollState] = useState({
@@ -413,10 +410,9 @@ export default function ScheduleSessions({
           isBookmarked={bookmarkSet.has(session.id)}
           nowSeconds={nowSeconds}
           isHighlighted={highlightedSessionId === session.id}
-          tagSortOrders={tagSortOrders}
         />
       ) : null,
-    [bookmarkSet, conf, highlightedSessionId, nowSeconds, tagSortOrders],
+    [bookmarkSet, conf, highlightedSessionId, nowSeconds],
   );
 
   useEffect(() => {

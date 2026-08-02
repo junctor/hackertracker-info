@@ -10,14 +10,11 @@ import ErrorScreen from "@/features/app-shell/ErrorScreen";
 import OrganizationDetails from "@/features/organizations/OrganizationDetails";
 import OrganizationsList from "@/features/organizations/OrganizationsList";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
-import { useConferenceJson } from "@/lib/hooks/useConferenceJson";
+import { ORGANIZATIONS_BROWSE_PATH } from "@/lib/dataContract";
+import { useConferenceDetailJson, useConferenceJson } from "@/lib/hooks/useConferenceJson";
 import { getOrganizationDirectoryConfig } from "@/lib/menu";
 import { conferenceCollectionPath, conferenceEntityPath, conferenceMenuPath } from "@/lib/routes";
-import {
-  DerivedTagIdsByLabel,
-  OrganizationDetailsById,
-  OrganizationsCardsView,
-} from "@/lib/types/ht-types";
+import { OrganizationDetailView, OrganizationsBrowseView } from "@/lib/types/ht-types";
 import useNumericRouteParam from "@/lib/utils/useNumericRouteParam";
 
 type Props = {
@@ -72,36 +69,28 @@ export default function DirectoryPage({
   const shouldLoadList = isReady && isIdMissing;
 
   const {
-    data: organizations,
+    data: organizationsBrowse,
     error: organizationsError,
     isLoading: organizationsIsLoading,
-  } = useConferenceJson<OrganizationsCardsView>(
+  } = useConferenceJson<OrganizationsBrowseView>(
     conf,
-    shouldLoadList ? "views/organizationsCards.json" : null,
+    shouldLoadList ? ORGANIZATIONS_BROWSE_PATH : null,
   );
 
   const {
-    data: derivedTagIdsByLabel,
-    error: tagError,
-    isLoading: tagIsLoading,
-  } = useConferenceJson<DerivedTagIdsByLabel>(
-    conf,
-    shouldLoadList ? "derived/tagIdsByLabel.json" : null,
-  );
-
-  const {
-    data: organizationsById,
+    data: organizationResource,
     error: organizationsStoreError,
     isLoading: organizationsStoreLoading,
-  } = useConferenceJson<OrganizationDetailsById>(
+  } = useConferenceDetailJson<OrganizationDetailView>(
     conf,
-    isDetailsRoute ? "details/organizations.json" : null,
+    "organizations",
+    isDetailsRoute ? orgId : null,
   );
 
-  const selectedOrganization = isDetailsRoute ? organizationsById?.[String(orgId)] : undefined;
+  const selectedOrganization = isDetailsRoute ? organizationResource : undefined;
 
-  const isLoading = organizationsIsLoading || tagIsLoading;
-  const error = organizationsError || tagError;
+  const isLoading = organizationsIsLoading;
+  const error = organizationsError;
   if (!isReady || isRedirectingLegacyUrl) {
     return (
       <ConferenceLoadingScreen
@@ -196,7 +185,7 @@ export default function DirectoryPage({
         />
       );
     }
-    if (error || !organizations) {
+    if (error || !organizationsBrowse) {
       return (
         <ErrorScreen
           title={`Couldn't load ${title.toLowerCase()}`}
@@ -208,12 +197,12 @@ export default function DirectoryPage({
       );
     }
 
-    const tagId = derivedTagIdsByLabel?.byLabel[tagLabel];
+    const tagId = organizationsBrowse.tagIdsByLabel.byLabel[tagLabel];
     if (!tagId) {
       return <ErrorScreen msg={`No '${tagLabel}' tag found for this conference.`} />;
     }
 
-    const matchingOrganizations = organizations[tagId] ?? [];
+    const matchingOrganizations = organizationsBrowse.byTag[tagId] ?? [];
     pageContent = (
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         <OrganizationsList

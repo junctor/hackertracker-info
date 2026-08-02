@@ -9,7 +9,6 @@ import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
 import { useTransientStatus } from "@/lib/hooks/useTransientStatus";
 import { contentPath } from "@/lib/routes";
-import { sortTags, type TagSortOrders } from "@/lib/tags";
 
 import type { ScheduleSessionViewModel } from "./ScheduleSessions";
 
@@ -21,7 +20,6 @@ type Props = {
   isBookmarked: boolean;
   nowSeconds: number;
   isHighlighted?: boolean;
-  tagSortOrders?: TagSortOrders;
 };
 
 function stopCalendarClickPropagation(e: React.MouseEvent<HTMLAnchorElement>) {
@@ -34,7 +32,6 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   isBookmarked,
   nowSeconds,
   isHighlighted = false,
-  tagSortOrders,
 }: Props) {
   const [bookmark, toggleBookmark] = useBookmarks(session.id, isBookmarked);
   const actionStatusId = `schedule-session-action-status-${session.id}`;
@@ -57,27 +54,36 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   };
 
   const calendarContent = useMemo(() => {
-    if (!session.contentEntity) return null;
-    return { ...session.contentEntity, title: session.title };
-  }, [session.contentEntity, session.title]);
+    return {
+      id: session.contentId,
+      title: session.title,
+    };
+  }, [session.contentId, session.title]);
 
   const icsHref = useMemo(() => {
-    if (!calendarContent) return null;
-    const ics = cal(conf.slug, calendarContent, session.session, session.locationName);
+    const calendarSession = {
+      begin: session.beginIso,
+      end: session.endIso,
+      id: session.id,
+    };
+    const ics = cal(conf.slug, calendarContent, calendarSession, session.locationName);
     return encodeICalDataUri(ics);
-  }, [calendarContent, conf.slug, session.locationName, session.session]);
+  }, [
+    calendarContent,
+    conf.slug,
+    session.beginIso,
+    session.endIso,
+    session.id,
+    session.locationName,
+  ]);
 
   const isLive = isScheduleSessionLive(session, nowSeconds);
   const isNext = isScheduleSessionStartingSoon(session, nowSeconds);
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${session.title}`
     : `Add bookmark for ${session.title}`;
-  const sortedTags = useMemo(
-    () => sortTags(session.tags, tagSortOrders),
-    [session.tags, tagSortOrders],
-  );
-  const visibleTags = sortedTags.slice(0, 4);
-  const hiddenTagCount = sortedTags.length - visibleTags.length;
+  const visibleTags = session.tags;
+  const hiddenTagCount = session.tagCount - visibleTags.length;
 
   return (
     <article

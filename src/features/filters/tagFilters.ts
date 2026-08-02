@@ -1,7 +1,7 @@
 import type {
   ContentCardsView,
+  FilterIndexView,
   ScheduleDayView,
-  ScheduleSessionViewModel,
   TagTypesBrowseView,
 } from "@/lib/types/ht-types/views";
 
@@ -142,94 +142,71 @@ export function filterTagGroupsToKnownIds(
   );
 }
 
-function tagIdsMatchNormalizedGroups(
-  ids: ReadonlySet<TagId>,
-  normalizedGroups: TagGroups,
-): boolean {
-  if (normalizedGroups.length === 0) return true;
-
-  return normalizedGroups.every((group) => group.some((tagId) => ids.has(tagId)));
-}
-
-function sessionTagIds(session: ScheduleSessionViewModel): Set<TagId> {
-  const ids =
-    session.session.tagIds.length > 0 ? session.session.tagIds : session.tags.map((tag) => tag.id);
-  return new Set(ids);
-}
-
-function sessionMatchesNormalizedTagGroups(
-  session: ScheduleSessionViewModel,
-  normalizedGroups: TagGroups,
-): boolean {
-  return tagIdsMatchNormalizedGroups(sessionTagIds(session), normalizedGroups);
-}
-
-export function sessionMatchesTagGroups(
-  session: ScheduleSessionViewModel,
+export function matchingItemIds(
+  index: FilterIndexView,
   groups: TagGroups,
-): boolean {
-  return sessionMatchesNormalizedTagGroups(session, normalizeTagGroups(groups));
+): ReadonlySet<number> | null {
+  const normalizedGroups = normalizeTagGroups(groups);
+  if (normalizedGroups.length === 0) return null;
+
+  let matching: Set<number> | null = null;
+  for (const group of normalizedGroups) {
+    const groupMatches = new Set<number>();
+    for (const tagId of group) {
+      for (const itemId of index.itemIdsByTag[String(tagId)] ?? []) {
+        groupMatches.add(itemId);
+      }
+    }
+
+    if (matching === null) {
+      matching = groupMatches;
+    } else {
+      const intersection = new Set<number>();
+      for (const itemId of matching as Set<number>) {
+        if (groupMatches.has(itemId)) intersection.add(itemId);
+      }
+      matching = intersection;
+    }
+    if (matching.size === 0) break;
+  }
+
+  return matching ?? new Set<number>();
+}
+
+export function countMatchingItems(index: FilterIndexView, groups: TagGroups): number {
+  return matchingItemIds(index, groups)?.size ?? index.itemCount;
 }
 
 export function filterScheduleDaysByTagGroups(
   days: ScheduleDayView[],
   groups: TagGroups,
+  index?: FilterIndexView,
 ): ScheduleDayView[] {
   const normalizedGroups = normalizeTagGroups(groups);
   if (normalizedGroups.length === 0) return days.map(({ day, sessions }) => ({ day, sessions }));
+  if (!index) return [];
+
+  const ids = matchingItemIds(index, normalizedGroups);
 
   return days
     .map(({ day, sessions }) => ({
       day,
-      sessions: sessions.filter((session) =>
-        sessionMatchesNormalizedTagGroups(session, normalizedGroups),
-      ),
+      sessions: sessions.filter((session) => ids?.has(session.id)),
     }))
     .filter(({ sessions }) => sessions.length > 0);
-}
-
-export function countMatchingSessions(days: ScheduleDayView[], groups: TagGroups): number {
-  const normalizedGroups = normalizeTagGroups(groups);
-  if (normalizedGroups.length === 0) {
-    return days.reduce((count, day) => count + day.sessions.length, 0);
-  }
-
-  let count = 0;
-
-  for (const { sessions } of days) {
-    for (const session of sessions) {
-      if (sessionMatchesNormalizedTagGroups(session, normalizedGroups)) count += 1;
-    }
-  }
-
-  return count;
 }
 
 export function filterContentByTagGroups(
   content: ContentCardsView,
   groups: TagGroups,
+  index?: FilterIndexView,
 ): ContentCardsView {
   const normalizedGroups = normalizeTagGroups(groups);
   if (normalizedGroups.length === 0) return content;
+  if (!index) return [];
 
-  return content.filter((item) =>
-    tagIdsMatchNormalizedGroups(new Set(item.tags.map((tag) => tag.id)), normalizedGroups),
-  );
-}
-
-export function countMatchingContent(content: ContentCardsView, groups: TagGroups): number {
-  const normalizedGroups = normalizeTagGroups(groups);
-  if (normalizedGroups.length === 0) return content.length;
-
-  let count = 0;
-
-  for (const item of content) {
-    if (tagIdsMatchNormalizedGroups(new Set(item.tags.map((tag) => tag.id)), normalizedGroups)) {
-      count += 1;
-    }
-  }
-
-  return count;
+  const ids = matchingItemIds(index, normalizedGroups);
+  return content.filter((item) => ids?.has(item.id));
 }
 
 export function getUnavailableTagIds(

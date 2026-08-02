@@ -1,6 +1,16 @@
-import type { ContentEntity, SessionEntity } from "@/lib/types/ht-types";
-
 import { contentPath } from "./routes";
+
+type CalendarContent = {
+  description?: string;
+  id: number;
+  title: string;
+};
+
+type CalendarSession = {
+  begin: string;
+  end: string;
+  id: number;
+};
 
 const MAX_LINE_LEN = 75;
 const CRLF = "\r\n";
@@ -82,8 +92,8 @@ export const encodeICalDataUri = (ics: string) =>
 /** Generate a full iCal string for a session */
 export const generateICal = (
   conferenceSlug: string,
-  content: ContentEntity,
-  session: SessionEntity,
+  content: CalendarContent,
+  session: CalendarSession,
   locationName?: string,
 ): string => {
   const dtstamp = formatICalDate(new Date());

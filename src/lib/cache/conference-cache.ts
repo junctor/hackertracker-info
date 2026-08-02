@@ -21,6 +21,12 @@
  */
 
 import { type ConferenceManifest } from "@/lib/conferences";
+import {
+  DETAIL_SHARD_SPECS,
+  HT_SCHEMA_VERSION,
+  SCHEDULE_BROWSE_PATH,
+  type ConferenceDetailGroup,
+} from "@/lib/dataContract";
 import { type Manifest } from "@/lib/types/ht-types";
 
 import {
@@ -34,6 +40,8 @@ import {
 
 type ManifestCheckResult = "confirmed" | "unconfirmed" | "untrusted-cache";
 
+export type { ConferenceDetailGroup } from "@/lib/dataContract";
+
 // ---------------------------------------------------------------------------
 // Session-level manifest freshness tracking
 // ---------------------------------------------------------------------------
@@ -42,6 +50,11 @@ type ManifestCheckResult = "confirmed" | "unconfirmed" | "untrusted-cache";
 // The Set is cleared automatically on page reload because it lives in module
 // scope without persistence.
 const manifestConfirmedFresh = new Set<string>();
+
+// The confirmed manifest also acts as the resource contract for this session.
+// Keeping it here avoids fetching or parsing a second copy when resolving
+// schema-versioned resources such as compact schedule and per-entity details.
+const confirmedManifests = new Map<string, Manifest>();
 
 // Deduplication: at most one in-flight manifest check per conference.
 const manifestCheckInFlight = new Map<string, Promise<ManifestCheckResult>>();
@@ -111,6 +124,7 @@ async function runManifestCheck(conf: ConferenceManifest): Promise<ManifestCheck
     }
   }
 
+  confirmedManifests.set(confKey, freshManifest);
   manifestConfirmedFresh.add(confKey);
   return "confirmed";
 }
@@ -174,6 +188,7 @@ async function runResetConferenceCache(conf: ConferenceManifest): Promise<void> 
   const jsonPrefix = `${confKey}::`;
 
   manifestConfirmedFresh.delete(confKey);
+  confirmedManifests.delete(confKey);
 
   const manifestPending = manifestCheckInFlight.get(confKey);
   const jsonPending = [...jsonFetchInFlight.entries()]
@@ -183,6 +198,7 @@ async function runResetConferenceCache(conf: ConferenceManifest): Promise<void> 
   await Promise.allSettled([manifestPending, ...jsonPending].filter((pending) => pending != null));
 
   manifestConfirmedFresh.delete(confKey);
+  confirmedManifests.delete(confKey);
   manifestCheckInFlight.delete(confKey);
   for (const key of jsonFetchInFlight.keys()) {
     if (key.startsWith(jsonPrefix)) {
@@ -193,6 +209,7 @@ async function runResetConferenceCache(conf: ConferenceManifest): Promise<void> 
   await Promise.all([deleteAllJsonForConf(confKey), deleteStoredManifest(confKey)]);
 
   manifestConfirmedFresh.delete(confKey);
+  confirmedManifests.delete(confKey);
   manifestCheckInFlight.delete(confKey);
   for (const key of jsonFetchInFlight.keys()) {
     if (key.startsWith(jsonPrefix)) {
@@ -201,8 +218,67 @@ async function runResetConferenceCache(conf: ConferenceManifest): Promise<void> 
   }
 }
 
+async function getConferenceManifestContract(conf: ConferenceManifest): Promise<Manifest | null> {
+  await ensureConferenceCacheIsFresh(conf);
+
+  const confirmed = confirmedManifests.get(conf.code);
+  if (confirmed) return confirmed;
+
+  // Offline sessions can still validate against the last successfully stored
+  // manifest before resolving the fixed schema-4 resource contract.
+  try {
+    const stored = await getStoredManifest(conf.code);
+    return stored ? (stored.manifest as unknown as Manifest) : null;
+  } catch {
+    return null;
+  }
+}
+
+function requireSchemaFourManifest(manifest: Manifest | null): Manifest {
+  if (manifest?.schemaVersion !== HT_SCHEMA_VERSION) {
+    throw new Error("Conference data must use manifest schema version 4");
+  }
+  return manifest;
+}
+
 /**
- * Fetch `relativePath` (e.g. `"views/scheduleDays.json"`) from the IndexedDB
+ * Resolve a named resource from the fixed schema-4 client contract.
+ */
+export async function getConferenceResourceJson<T>(
+  conf: ConferenceManifest,
+  _resource: "scheduleBrowse",
+): Promise<T> {
+  requireSchemaFourManifest(await getConferenceManifestContract(conf));
+  return getConferenceJson<T>(conf, SCHEDULE_BROWSE_PATH);
+}
+
+function detailShardPath(
+  template: string,
+  id: number,
+  shardCount: number,
+  shardDigits: number,
+): string {
+  const shardIndex = ((id % shardCount) + shardCount) % shardCount;
+  return template.replace("{shard}", String(shardIndex).padStart(shardDigits, "0"));
+}
+
+/**
+ * Load one focused ID-keyed detail shard and select the requested record.
+ */
+export async function getConferenceDetailJson<T>(
+  conf: ConferenceManifest,
+  group: ConferenceDetailGroup,
+  id: number,
+): Promise<T | undefined> {
+  requireSchemaFourManifest(await getConferenceManifestContract(conf));
+  const shard = DETAIL_SHARD_SPECS[group];
+  const path = detailShardPath(shard.pathTemplate, id, shard.shardCount, shard.shardDigits);
+  const records = await getConferenceJson<Record<string, T>>(conf, path);
+  return records[String(id)];
+}
+
+/**
+ * Fetch `relativePath` (e.g. `"views/scheduleBrowse.json"`) from the IndexedDB
  * cache, falling back to the network on a cache miss.  Manifest freshness is
  * checked before the first read.  If the manifest cannot be reached, existing
  * IndexedDB data remains available and freshness is retried on a later request.

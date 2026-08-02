@@ -36,7 +36,7 @@
   },
   "overrides": {
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
-    "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+    "vitest": "4.1.10"
   },
   "packageManager": "npm@11.13.0"
 }

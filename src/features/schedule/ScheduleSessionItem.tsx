@@ -1,9 +1,9 @@
 import { BookmarkIcon as BookmarkIconOutline, CalendarIcon } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import React, { useMemo } from "react";
+import React from "react";
 import { Link } from "react-router";
 
-import cal, { encodeICalDataUri } from "@/lib/cal";
+import { addSessionToCalendar } from "@/lib/cal";
 import { getAccentStyle } from "@/lib/color";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
@@ -21,10 +21,6 @@ type Props = {
   nowSeconds: number;
   isHighlighted?: boolean;
 };
-
-function stopCalendarClickPropagation(e: React.MouseEvent<HTMLAnchorElement>) {
-  e.stopPropagation();
-}
 
 const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
   conf,
@@ -48,34 +44,24 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
     setActionStatus(nextBookmarked ? "Bookmark added." : "Bookmark removed.");
   };
 
-  const handleCalendarClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    stopCalendarClickPropagation(e);
-    setActionStatus("Calendar download started.");
+  const handleCalendarClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    addSessionToCalendar(
+      conf.slug,
+      {
+        id: session.contentId,
+        title: session.title,
+      },
+      {
+        begin: session.beginIso,
+        end: session.endIso,
+        id: session.id,
+      },
+      session.locationName,
+      `DEF_CON_${session.contentId}-${session.id}.ics`,
+      setActionStatus,
+    );
   };
-
-  const calendarContent = useMemo(() => {
-    return {
-      id: session.contentId,
-      title: session.title,
-    };
-  }, [session.contentId, session.title]);
-
-  const icsHref = useMemo(() => {
-    const calendarSession = {
-      begin: session.beginIso,
-      end: session.endIso,
-      id: session.id,
-    };
-    const ics = cal(conf.slug, calendarContent, calendarSession, session.locationName);
-    return encodeICalDataUri(ics);
-  }, [
-    calendarContent,
-    conf.slug,
-    session.beginIso,
-    session.endIso,
-    session.id,
-    session.locationName,
-  ]);
 
   const isLive = isScheduleSessionLive(session, nowSeconds);
   const isNext = isScheduleSessionStartingSoon(session, nowSeconds);
@@ -149,19 +135,16 @@ const ScheduleSessionItem = React.memo(function ScheduleSessionItem({
         </Link>
 
         <div className="ui-schedule-card-actions">
-          {icsHref ? (
-            <a
-              href={icsHref}
-              download={`DEF_CON_${session.contentId}-${session.id}.ics`}
-              title={`Download calendar invite for ${session.title}`}
-              aria-label={`Download calendar invite for ${session.title}`}
-              aria-describedby={actionStatus ? actionStatusId : undefined}
-              onClick={handleCalendarClick}
-              className="ui-icon-plain"
-            >
-              <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
-            </a>
-          ) : null}
+          <button
+            type="button"
+            title={`Add to calendar for ${session.title}`}
+            aria-label={`Add to calendar for ${session.title}`}
+            aria-describedby={actionStatus ? actionStatusId : undefined}
+            onClick={handleCalendarClick}
+            className="ui-icon-plain"
+          >
+            <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
+          </button>
 
           <button
             type="button"

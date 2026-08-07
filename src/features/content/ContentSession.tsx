@@ -10,7 +10,7 @@ import { Link } from "react-router";
 import type { ConferenceManifest } from "@/lib/conferences";
 import type { DetailSessionView } from "@/lib/types/ht-types";
 
-import cal, { encodeICalDataUri } from "@/lib/cal";
+import { addSessionToCalendar } from "@/lib/cal";
 import { getAccentStyle } from "@/lib/color";
 import { sessionTime, formatSessionTime } from "@/lib/dates";
 import { useBookmarks } from "@/lib/hooks/useBookmarks";
@@ -49,8 +49,16 @@ function ContentSessionCard({
     ? sessionTime(begin, true, conference.timezone)
     : formatSessionTime(begin, end, conference.timezone);
 
-  const icsHref = useMemo(() => {
-    const ics = cal(
+  const handleBookmarkClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    const nextBookmarked = !bookmark;
+    toggleBookmark();
+    setActionStatus(nextBookmarked ? "Bookmark added." : "Bookmark removed.");
+  };
+
+  const handleCalendarClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    addSessionToCalendar(
       conference.slug,
       {
         description: calendarDescription,
@@ -59,19 +67,9 @@ function ContentSessionCard({
       },
       session,
       session.locationName,
+      `DEF_CON_${session.contentId}-${session.id}.ics`,
+      setActionStatus,
     );
-    return encodeICalDataUri(ics);
-  }, [calendarDescription, calendarTitle, conference.slug, session]);
-
-  const handleBookmarkClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    const nextBookmarked = !bookmark;
-    toggleBookmark();
-    setActionStatus(nextBookmarked ? "Bookmark added." : "Bookmark removed.");
-  };
-
-  const handleCalendarClick = () => {
-    setActionStatus("Calendar download started.");
   };
   const bookmarkLabel = bookmark
     ? `Remove bookmark for ${session.title}`
@@ -112,17 +110,16 @@ function ContentSessionCard({
         )}
 
         <div className="ui-content-session-actions">
-          <a
-            href={icsHref}
-            download={`DEF_CON_${session.contentId}-${session.id}.ics`}
-            title={`Download calendar invite for ${calendarTitle ?? session.title}`}
-            aria-label={`Download calendar invite for ${calendarTitle ?? session.title}`}
+          <button
+            type="button"
+            title={`Add to calendar for ${calendarTitle ?? session.title}`}
+            aria-label={`Add to calendar for ${calendarTitle ?? session.title}`}
             aria-describedby={actionStatus ? actionStatusId : undefined}
             onClick={handleCalendarClick}
             className="ui-icon-plain"
           >
             <CalendarIcon className="ui-icon-sm" aria-hidden="true" />
-          </a>
+          </button>
 
           <button
             type="button"

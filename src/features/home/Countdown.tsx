@@ -214,133 +214,111 @@ type Props = {
   size?: CountdownSize;
 };
 
+type CountdownState = {
+  expired: boolean;
+  timer: CountdownTimer;
+  changedUnits: Record<TimerUnitKey, boolean>;
+};
+
+const UNCHANGED_COUNTDOWN_UNITS: Record<TimerUnitKey, boolean> = {
+  days: false,
+  hours: false,
+  minutes: false,
+  seconds: false,
+};
+
+function getCountdownState(kickoffDateMs: number, nowMs: number): CountdownState {
+  const expired = hasKickoffPassed(kickoffDateMs, nowMs);
+  return {
+    expired,
+    timer: expired ? EMPTY_COUNTDOWN_TIMER : getCountdown(kickoffDateMs, nowMs),
+    changedUnits: UNCHANGED_COUNTDOWN_UNITS,
+  };
+}
+
+function CountdownUnit({
+  unit,
+  value,
+  changed,
+  isLast,
+  variant,
+  prefersReducedMotion,
+}: {
+  unit: (typeof COUNTDOWN_UNITS)[number];
+  value: number;
+  changed: boolean;
+  isLast: boolean;
+  variant: (typeof COUNTDOWN_VARIANTS)[CountdownSize];
+  prefersReducedMotion: boolean;
+}) {
+  const valueRef = useRef<HTMLSpanElement | null>(null);
+  const glowRef = useRef<HTMLSpanElement | null>(null);
+
+  useDigitAnimation(
+    valueRef,
+    glowRef,
+    value,
+    COUNTDOWN_UNIT_COLORS[unit.key],
+    variant.settledValueColor,
+    prefersReducedMotion,
+    changed,
+  );
+
+  return (
+    <div className={variant.itemClassName}>
+      {!isLast && <span aria-hidden="true" className={variant.separatorClassName} />}
+
+      <div className={variant.valueWrapClassName}>
+        <span
+          ref={glowRef}
+          aria-hidden="true"
+          className={`ui-countdown-glow ${variant.glowSize} ${COUNTDOWN_UNIT_TEXT_CLASS_NAMES[unit.key]}`}
+        />
+        <span aria-hidden="true" className="ui-countdown-rule" />
+        <span ref={valueRef} className={`${variant.valueClassName} ${atkinsonFont.className}`}>
+          {formatCountdownValue(value)}
+        </span>
+      </div>
+
+      <span className={`${variant.labelClassName} ${museoFont.className}`}>{unit.label}</span>
+    </div>
+  );
+}
+
 export default function Countdown({ conference, size = "large" }: Props) {
   const home = useHomeModel(conference);
   const variant = COUNTDOWN_VARIANTS[size];
   const prefersReducedMotion = usePrefersReducedMotion();
-
-  const [expired, setExpired] = useState(false);
-  const [timer, setTimer] = useState<CountdownTimer>(EMPTY_COUNTDOWN_TIMER);
-  const [hasMounted, setHasMounted] = useState(false);
-
-  const previousTimerRef = useRef<CountdownTimer | null>(null);
-
-  const daysValueRef = useRef<HTMLSpanElement | null>(null);
-  const hoursValueRef = useRef<HTMLSpanElement | null>(null);
-  const minutesValueRef = useRef<HTMLSpanElement | null>(null);
-  const secondsValueRef = useRef<HTMLSpanElement | null>(null);
-
-  const daysGlowRef = useRef<HTMLSpanElement | null>(null);
-  const hoursGlowRef = useRef<HTMLSpanElement | null>(null);
-  const minutesGlowRef = useRef<HTMLSpanElement | null>(null);
-  const secondsGlowRef = useRef<HTMLSpanElement | null>(null);
+  const [countdownState, setCountdownState] = useState(() =>
+    getCountdownState(home.kickoffDateMs, Date.now()),
+  );
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { expired, timer, changedUnits } = countdownState;
 
   useEffect(() => {
-    setHasMounted(true);
-
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
     const tick = () => {
       const nowMs = Date.now();
-
-      if (hasKickoffPassed(home.kickoffDateMs, nowMs)) {
-        setExpired(true);
-        setTimer(EMPTY_COUNTDOWN_TIMER);
-        return;
+      const nextState = getCountdownState(home.kickoffDateMs, nowMs);
+      setCountdownState((current) => ({
+        ...nextState,
+        changedUnits: {
+          days: current.timer.days !== nextState.timer.days,
+          hours: current.timer.hours !== nextState.timer.hours,
+          minutes: current.timer.minutes !== nextState.timer.minutes,
+          seconds: current.timer.seconds !== nextState.timer.seconds,
+        },
+      }));
+      if (!nextState.expired) {
+        timeoutRef.current = setTimeout(tick, 1000 - (nowMs % 1000));
       }
-
-      setExpired(false);
-      setTimer(getCountdown(home.kickoffDateMs));
-      timeoutId = setTimeout(tick, 1000 - (nowMs % 1000));
     };
 
-    tick();
+    timeoutRef.current = setTimeout(tick, 1000 - (Date.now() % 1000));
 
     return () => {
-      if (timeoutId) clearTimeout(timeoutId);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [home.kickoffDateMs]);
-
-  const valueRefs: Record<TimerUnitKey, RefObject<HTMLSpanElement | null>> = useMemo(
-    () => ({
-      days: daysValueRef,
-      hours: hoursValueRef,
-      minutes: minutesValueRef,
-      seconds: secondsValueRef,
-    }),
-    [],
-  );
-
-  const glowRefs: Record<TimerUnitKey, RefObject<HTMLSpanElement | null>> = useMemo(
-    () => ({
-      days: daysGlowRef,
-      hours: hoursGlowRef,
-      minutes: minutesGlowRef,
-      seconds: secondsGlowRef,
-    }),
-    [],
-  );
-
-  const changedUnits = useMemo<Record<TimerUnitKey, boolean>>(() => {
-    const previous = previousTimerRef.current;
-
-    if (!previous || !hasMounted) {
-      return {
-        days: false,
-        hours: false,
-        minutes: false,
-        seconds: false,
-      };
-    }
-
-    return {
-      days: previous.days !== timer.days,
-      hours: previous.hours !== timer.hours,
-      minutes: previous.minutes !== timer.minutes,
-      seconds: previous.seconds !== timer.seconds,
-    };
-  }, [hasMounted, timer]);
-
-  useEffect(() => {
-    previousTimerRef.current = timer;
-  }, [timer]);
-
-  useDigitAnimation(
-    daysValueRef,
-    daysGlowRef,
-    timer.days,
-    COUNTDOWN_UNIT_COLORS.days,
-    variant.settledValueColor,
-    prefersReducedMotion,
-    changedUnits.days,
-  );
-  useDigitAnimation(
-    hoursValueRef,
-    hoursGlowRef,
-    timer.hours,
-    COUNTDOWN_UNIT_COLORS.hours,
-    variant.settledValueColor,
-    prefersReducedMotion,
-    changedUnits.hours,
-  );
-  useDigitAnimation(
-    minutesValueRef,
-    minutesGlowRef,
-    timer.minutes,
-    COUNTDOWN_UNIT_COLORS.minutes,
-    variant.settledValueColor,
-    prefersReducedMotion,
-    changedUnits.minutes,
-  );
-  useDigitAnimation(
-    secondsValueRef,
-    secondsGlowRef,
-    timer.seconds,
-    COUNTDOWN_UNIT_COLORS.seconds,
-    variant.settledValueColor,
-    prefersReducedMotion,
-    changedUnits.seconds,
-  );
 
   const liveLabel = useMemo(() => formatCountdownLiveLabel(timer), [timer]);
 
@@ -364,28 +342,15 @@ export default function Countdown({ conference, size = "large" }: Props) {
           const isLast = index === COUNTDOWN_UNITS.length - 1;
 
           return (
-            <div key={unit.key} className={variant.itemClassName}>
-              {!isLast && <span aria-hidden="true" className={variant.separatorClassName} />}
-
-              <div className={variant.valueWrapClassName}>
-                <span
-                  aria-hidden="true"
-                  className={`ui-countdown-glow ${variant.glowSize} ${COUNTDOWN_UNIT_TEXT_CLASS_NAMES[unit.key]}`}
-                  ref={glowRefs[unit.key]}
-                />
-                <span aria-hidden="true" className="ui-countdown-rule" />
-                <span
-                  ref={valueRefs[unit.key]}
-                  className={`${variant.valueClassName} ${atkinsonFont.className}`}
-                >
-                  {formatCountdownValue(timer[unit.key])}
-                </span>
-              </div>
-
-              <span className={`${variant.labelClassName} ${museoFont.className}`}>
-                {unit.label}
-              </span>
-            </div>
+            <CountdownUnit
+              key={unit.key}
+              unit={unit}
+              value={timer[unit.key]}
+              changed={changedUnits[unit.key]}
+              isLast={isLast}
+              variant={variant}
+              prefersReducedMotion={prefersReducedMotion}
+            />
           );
         })}
       </div>

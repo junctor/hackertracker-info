@@ -150,7 +150,7 @@ Typical local refresh workflow from a sibling exporter checkout:
 
 ```bash
 cd hackertracker-export
-go run ./cmd/hackertracker info --conference DCSG2026 DEFCON34 DEFCON33 DEFCONBAHRAIN2025 DCME2026 DCTSG202610
+go run ./cmd/hackertracker info --conference DCTME2026 DCSG2 DEFCON35 DCSG2026 DEFCON34 DEFCON33 DEFCONBAHRAIN2025 DCTSG202610
 rm -rf ../hackertracker-info/public/ht
 cp -r out/ht ../hackertracker-info/public/
 ```

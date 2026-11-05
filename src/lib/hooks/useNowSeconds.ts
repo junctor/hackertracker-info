@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function useNowSeconds() {
-  const [nowSeconds, setNowSeconds] = useState(0);
+  const [nowSeconds, setNowSeconds] = useState(() => Math.floor(Date.now() / 1000));
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
     const tick = () => {
       const nowMs = Date.now();
       setNowSeconds(Math.floor(nowMs / 1000));
-      timeoutId = setTimeout(tick, 1000 - (nowMs % 1000));
+      timeoutRef.current = setTimeout(tick, 1000 - (nowMs % 1000));
     };
 
-    tick();
+    timeoutRef.current = setTimeout(tick, 1000 - (Date.now() % 1000));
     return () => {
-      if (timeoutId) clearTimeout(timeoutId);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
 

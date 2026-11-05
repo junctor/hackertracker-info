@@ -9,6 +9,7 @@ import { getSafeExternalHref, getSafeImageHref } from "@/lib/url";
 
 type Props = {
   conference: ConferenceEntity;
+  displayName: string;
 };
 
 function getMapName(map: ConferenceMapEntity) {
@@ -52,7 +53,7 @@ function formatDateRange(conference: ConferenceEntity) {
   return `${formatDate(conference.start_date)} - ${formatDate(conference.end_date)}`;
 }
 
-export default function ConferenceMapsList({ conference }: Props) {
+export default function ConferenceMapsList({ conference, displayName }: Props) {
   const [brokenPreviewIds, setBrokenPreviewIds] = useState<Record<number, true>>({});
   const maps = useMemo(
     () => (conference.maps ?? []).filter(Boolean).toSorted(compareMaps),
@@ -65,8 +66,8 @@ export default function ConferenceMapsList({ conference }: Props) {
     <section className="ui-container ui-section">
       <PageHeader
         kicker={headerMeta || undefined}
-        title={`${conference.name} Maps`}
-        description={`Venue maps for ${conference.name}.`}
+        title={`${displayName} Maps`}
+        description={`Venue maps for ${displayName}.`}
         resultLabel={maps.length > 0 ? `${maps.length} maps` : undefined}
       />
 

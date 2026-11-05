@@ -1,9 +1,11 @@
 export type ConferenceSlug =
-  | "dcme2026"
+  | "dcsg2"
   | "dcsg2026"
+  | "dctme2026"
   | "dctsg202610"
   | "defcon33"
   | "defcon34"
+  | "defcon35"
   | "defconbahrain2025";
 
 export type SiteMenuKey =
@@ -62,7 +64,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     tagline: null,
     timezone: "Asia/Singapore",
     logoFile: "logos/conferences/defcon-training.WEBP",
-    showOnHome: true,
+    showOnHome: false,
 
     kickoff: "2026-10-01T00:00:00Z",
     begin: "2026-09-30T16:00:00Z",
@@ -73,24 +75,93 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     externalTrackerUrl: "/apps",
   },
 
-  dcme2026: {
-    slug: "dcme2026",
-    code: "DCME2026",
-    name: "DEF CON Middle East 2026",
-    shortTitle: "DC Middle East",
+  dctme2026: {
+    slug: "dctme2026",
+    code: "DCTME2026",
+    name: "DEF CON Training Middle East 2026",
+    shortTitle: "DC Training Middle East",
 
-    dateLabel: "November 11–12, 2026",
+    dateLabel: "November 9–11, 2026",
     tagline: null,
     timezone: "Asia/Bahrain",
-    logoFile: "logos/conferences/dc-middle-east-2026.jpg",
+    logoFile: "logos/conferences/dcme-logo.webp",
     showOnHome: true,
 
-    kickoff: "2026-11-11T07:00:00Z",
-    begin: "2026-11-10T21:00:00Z",
-    end: "2026-11-12T20:59:00Z",
+    kickoff: "2026-11-09T06:00:00Z",
+    begin: "2026-11-08T21:00:00Z",
+    end: "2026-11-11T20:59:59Z",
 
-    dataRoot: "/ht/dcme2026",
-    siteMenu: ["announcements", "readme", "search"],
+    dataRoot: "/ht/dctme2026",
+    siteMenu: ["announcements", "content", "readme", "search"],
+    externalTrackerUrl: "/apps",
+  },
+
+  dcsg2: {
+    slug: "dcsg2",
+    code: "DCSG2",
+    name: "DEF CON Singapore 2",
+    shortTitle: "DC Singapore 2",
+
+    dateLabel: "March 4–6, 2027",
+    tagline: null,
+    timezone: "Asia/Singapore",
+    logoFile: "logos/conferences/dcsingapore.webp",
+    showOnHome: true,
+
+    kickoff: "2027-03-04T01:00:00Z",
+    begin: "2027-03-03T16:00:00Z",
+    end: "2027-03-06T15:59:59Z",
+
+    dataRoot: "/ht/dcsg2",
+    siteMenu: [
+      "announcements",
+      "communities",
+      "content",
+      "contests",
+      "maps",
+      "people",
+      "readme",
+      "schedule",
+      "search",
+      "villages",
+    ],
+    schedulePath: "/dcsg2/schedule/",
+    externalTrackerUrl: "/apps",
+  },
+
+  defcon35: {
+    slug: "defcon35",
+    code: "DEFCON35",
+    name: "DEF CON 35",
+    shortTitle: "DEF CON 35",
+
+    dateLabel: "August 5–8, 2027",
+    tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
+    timezone: "America/Los_Angeles",
+    logoFile: "logos/conferences/dc-34-logo.svg",
+    showOnHome: true,
+
+    kickoff: "2027-08-06T17:00:00Z",
+    begin: "2027-08-05T07:00:00Z",
+    end: "2027-08-09T06:59:59Z",
+
+    dataRoot: "/ht/defcon35",
+    siteMenu: [
+      "announcements",
+      "communities",
+      "content",
+      "contests",
+      "exhibitors",
+      "locations",
+      "maps",
+      "people",
+      "readme",
+      "schedule",
+      "search",
+      "vendors",
+      "villages",
+    ],
+    schedulePath: "/defcon35/schedule/",
     externalTrackerUrl: "/apps",
   },
 
@@ -104,7 +175,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
     timezone: "America/Los_Angeles",
     logoFile: "logos/conferences/dc-34-logo.svg",
-    showOnHome: true,
+    showOnHome: false,
 
     kickoff: "2026-08-07T17:00:00Z",
     begin: "2026-08-06T07:00:00Z",

@@ -247,8 +247,8 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     showOnHome: false,
 
     kickoff: "2025-11-05T06:00:00Z",
-    begin: "2025-11-03T16:00:00Z",
-    end: "2025-11-06T15:59:59Z",
+    begin: "2025-11-02T21:00:00Z",
+    end: "2025-11-06T20:59:59Z",
 
     dataRoot: "/ht/defconbahrain2025",
     siteMenu: [
@@ -278,9 +278,9 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     logoFile: "logos/conferences/dc33-logo.webp",
     showOnHome: false,
 
-    kickoff: "2025-08-07T17:00:00Z",
-    begin: "2025-08-06T07:00:00Z",
-    end: "2025-08-10T06:59:59Z",
+    kickoff: "2025-08-08T17:00:00Z",
+    begin: "2025-08-07T07:00:00Z",
+    end: "2025-08-11T06:59:59Z",
 
     dataRoot: "/ht/defcon33",
     siteMenu: [

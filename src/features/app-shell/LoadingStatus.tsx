@@ -24,10 +24,8 @@ export default function LoadingStatus({ label }: Props) {
   const initialMessage = getInitialLoadingMessage(label);
 
   useEffect(() => {
-    setIsStillLoading(false);
-
     return startDelayedLoadingMessage(() => setIsStillLoading(true));
-  }, [label]);
+  }, []);
 
   return (
     <div

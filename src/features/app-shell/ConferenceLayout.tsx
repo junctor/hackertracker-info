@@ -18,6 +18,7 @@ type Props = {
 export default function ConferenceLayout({ conference, activePageId, children, className }: Props) {
   const shellRef = useRef<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLElement | null>(null);
+  const footerBlockSizeRef = useRef("");
 
   useLayoutEffect(() => {
     const shell = shellRef.current;
@@ -25,15 +26,13 @@ export default function ConferenceLayout({ conference, activePageId, children, c
 
     if (!shell || !footer) return;
 
-    let lastBlockSize = "";
-
     const updateFooterBlockSize = () => {
       const nextBlockSize = `${footer.getBoundingClientRect().height}px`;
 
-      if (nextBlockSize === lastBlockSize) return;
+      if (nextBlockSize === footerBlockSizeRef.current) return;
 
       shell.style.setProperty(SITE_FOOTER_BLOCK_SIZE_VAR, nextBlockSize);
-      lastBlockSize = nextBlockSize;
+      footerBlockSizeRef.current = nextBlockSize;
     };
 
     updateFooterBlockSize();

@@ -176,7 +176,7 @@ function findScheduleJumpTarget(
 export default function SchedulePage({ conf, activePageId }: SchedulePageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const nowSeconds = useNowSeconds();
-  const effectiveNowSeconds = nowSeconds > 0 ? nowSeconds : Math.floor(Date.now() / 1000);
+  const effectiveNowSeconds = nowSeconds;
   const autoNowHandledRef = useRef(false);
   const jumpRequestIdRef = useRef(0);
   const [jumpRequest, setJumpRequest] = useState<ScheduleJumpRequest | null>(null);
@@ -331,23 +331,27 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
   useEffect(() => {
     if (isLiveScheduleAvailable || !hasLiveScheduleParams(searchParams)) return;
 
-    setJumpRequest(null);
-    setHighlightedSessionId(null);
-    setJumpStatus(null);
     autoNowHandledRef.current = false;
 
-    setSearchParams(
-      (current) => {
-        const next = new URLSearchParams(current);
-        const view = next.get("view");
-        if (view === "now" || view === "next") {
-          next.delete("view");
-        }
-        next.delete("now");
-        return next;
-      },
-      { replace: true },
-    );
+    const timeoutId = window.setTimeout(() => {
+      setJumpRequest(null);
+      setHighlightedSessionId(null);
+      setJumpStatus(null);
+      setSearchParams(
+        (current) => {
+          const next = new URLSearchParams(current);
+          const view = next.get("view");
+          if (view === "now" || view === "next") {
+            next.delete("view");
+          }
+          next.delete("now");
+          return next;
+        },
+        { replace: true },
+      );
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, [isLiveScheduleAvailable, searchParams, setSearchParams]);
 
   useEffect(() => {
@@ -361,8 +365,13 @@ export default function SchedulePage({ conf, activePageId }: SchedulePageProps) 
     if (searchParams.get("now") !== "1" || autoNowHandledRef.current) return;
     if (tagFilteredDays.length === 0 || effectiveNowSeconds <= 0) return;
 
-    autoNowHandledRef.current = true;
-    handleJumpToNow();
+    const timeoutId = window.setTimeout(() => {
+      if (autoNowHandledRef.current) return;
+      autoNowHandledRef.current = true;
+      handleJumpToNow();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, [
     effectiveNowSeconds,
     handleJumpToNow,

@@ -26,8 +26,8 @@ export default function MapsPage({ conf, activePageId }: MapsPageProps) {
   }
   if (error || !conference) return <ErrorScreen />;
 
-  const title = `Maps | ${conference.name}`;
-  const description = `Venue maps for ${conference.name}.`;
+  const title = `Maps | ${conf.name}`;
+  const description = `Venue maps for ${conf.name}.`;
 
   return (
     <>

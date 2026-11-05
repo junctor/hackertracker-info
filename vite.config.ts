@@ -48,6 +48,14 @@ function serveStaticPage(pathnames: ReadonlyMap<string, string>) {
 }
 
 export default defineConfig({
+  build: {
+    rolldownOptions: {
+      checks: {
+        // This is a browser-only SPA; React Server Component boundaries have no runtime meaning.
+        moduleLevelDirective: false,
+      },
+    },
+  },
   plugins: [
     {
       name: "static-pages",

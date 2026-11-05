@@ -87,9 +87,9 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     logoFile: "logos/conferences/dcme-logo.webp",
     showOnHome: true,
 
-    kickoff: "2026-11-09T06:00:00Z",
+    kickoff: "2026-11-09T07:00:00Z",
     begin: "2026-11-08T21:00:00Z",
-    end: "2026-11-11T20:59:59Z",
+    end: "2026-11-11T20:59:00Z",
 
     dataRoot: "/ht/dctme2026",
     siteMenu: ["announcements", "content", "readme", "search"],
@@ -108,9 +108,9 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     logoFile: "logos/conferences/dcsingapore.webp",
     showOnHome: true,
 
-    kickoff: "2027-03-04T01:00:00Z",
+    kickoff: "2027-03-04T02:00:00Z",
     begin: "2027-03-03T16:00:00Z",
-    end: "2027-03-06T15:59:59Z",
+    end: "2027-03-06T15:59:00Z",
 
     dataRoot: "/ht/dcsg2",
     siteMenu: [
@@ -143,7 +143,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
 
     kickoff: "2027-08-06T17:00:00Z",
     begin: "2027-08-05T07:00:00Z",
-    end: "2027-08-09T06:59:59Z",
+    end: "2027-08-09T06:59:00Z",
 
     dataRoot: "/ht/defcon35",
     siteMenu: [

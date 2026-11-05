@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vite-plus/test";
 
 import { CONFERENCES } from "./conferences";
+import { getConferenceMenuDescription } from "./menu";
 
 describe("conference registry", () => {
   it("keeps identity, data paths, dates, and logos internally consistent", () => {
@@ -11,6 +12,7 @@ describe("conference registry", () => {
     for (const [slug, conference] of Object.entries(CONFERENCES)) {
       expect(conference.slug).toBe(slug);
       expect(conference.dataRoot).toBe(`/ht/${slug}`);
+      expect(conference.externalTrackerUrl).toBe("/apps/");
       expect(codes.has(conference.code)).toBe(false);
       codes.add(conference.code);
 
@@ -44,5 +46,14 @@ describe("conference registry", () => {
     expect(Object.values(CONFERENCES).some((conference) => conference.code === "DCME2026")).toBe(
       false,
     );
+  });
+
+  it("describes only menu sections that a conference provides", () => {
+    const trainingDescription = getConferenceMenuDescription(CONFERENCES.dctme2026);
+    expect(trainingDescription).toContain("announcements");
+    expect(trainingDescription).not.toContain("the schedule");
+    expect(trainingDescription).not.toContain("maps");
+
+    expect(getConferenceMenuDescription(CONFERENCES.defcon35)).toContain("the schedule");
   });
 });

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 type SearchProps = {
   label: string;
@@ -57,12 +57,12 @@ export default function PageHeader({
   const titleContent =
     typeof title === "string" ? <h1 className="ui-heading-1">{title}</h1> : title;
 
-  const clearDebounceTimer = () => {
+  const clearDebounceTimer = useCallback(() => {
     if (debounceTimerRef.current !== null) {
       window.clearTimeout(debounceTimerRef.current);
       debounceTimerRef.current = null;
     }
-  };
+  }, []);
 
   const submitCurrentSearch = (value: string) => {
     clearDebounceTimer();
@@ -116,9 +116,9 @@ export default function PageHeader({
     }, searchDebounceMs);
 
     return clearDebounceTimer;
-  }, [draftSearchValue, hasDebouncedSubmit, isSubmitSearch, searchDebounceMs]);
+  }, [clearDebounceTimer, draftSearchValue, hasDebouncedSubmit, isSubmitSearch, searchDebounceMs]);
 
-  useEffect(() => clearDebounceTimer, []);
+  useEffect(() => clearDebounceTimer, [clearDebounceTimer]);
 
   return (
     <header className="ui-page-header">

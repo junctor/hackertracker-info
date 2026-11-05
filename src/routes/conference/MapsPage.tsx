@@ -44,7 +44,7 @@ export default function MapsPage({ conf, activePageId }: MapsPageProps) {
         })}
       </Head>
       <ConferenceLayout conference={conf} activePageId={activePageId}>
-        <ConferenceMapsList conference={conference} />
+        <ConferenceMapsList conference={conference} displayName={conf.name} />
       </ConferenceLayout>
     </>
   );

@@ -35,7 +35,7 @@ const organizationBackedSiteMenuKeys = new Set([
 
 const primaryFiles = [
   ["manifest.json", "Manifest JSON"],
-  ["conference.json", "Conference maps JSON"],
+  ["conference.json", "Conference details JSON"],
   ["views/scheduleBrowse.json", "Schedule runtime view JSON"],
   ["views/contentCards.json", "Content cards JSON"],
   ["views/peopleCards.json", "People cards JSON"],
@@ -80,7 +80,7 @@ const conferenceRoutesByKey = new Map(
 );
 
 const labelOverrides = new Map([
-  ["conference.json", "Conference maps JSON"],
+  ["conference.json", "Conference details JSON"],
   ["views/announcementsList.json", "Announcements list JSON"],
   ["views/contentCards.json", "Content cards JSON"],
   ["views/documentsList.json", "Documents list JSON"],

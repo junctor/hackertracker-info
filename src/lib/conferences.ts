@@ -72,7 +72,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
 
     dataRoot: "/ht/dctsg202610",
     siteMenu: ["announcements", "content", "readme", "search"],
-    externalTrackerUrl: "/apps",
+    externalTrackerUrl: "/apps/",
   },
 
   dctme2026: {
@@ -93,7 +93,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
 
     dataRoot: "/ht/dctme2026",
     siteMenu: ["announcements", "content", "readme", "search"],
-    externalTrackerUrl: "/apps",
+    externalTrackerUrl: "/apps/",
   },
 
   dcsg2: {
@@ -126,7 +126,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "villages",
     ],
     schedulePath: "/dcsg2/schedule/",
-    externalTrackerUrl: "/apps",
+    externalTrackerUrl: "/apps/",
   },
 
   defcon35: {
@@ -162,7 +162,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "villages",
     ],
     schedulePath: "/defcon35/schedule/",
-    externalTrackerUrl: "/apps",
+    externalTrackerUrl: "/apps/",
   },
 
   defcon34: {
@@ -198,7 +198,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "villages",
     ],
     schedulePath: "/defcon34/schedule/",
-    externalTrackerUrl: "/apps",
+    externalTrackerUrl: "/apps/",
   },
 
   dcsg2026: {
@@ -231,7 +231,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "villages",
     ],
     schedulePath: "/dcsg2026/schedule/",
-    externalTrackerUrl: "/apps",
+    externalTrackerUrl: "/apps/",
   },
 
   defconbahrain2025: {
@@ -263,7 +263,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "villages",
     ],
     schedulePath: "/defconbahrain2025/schedule/",
-    externalTrackerUrl: "/apps",
+    externalTrackerUrl: "/apps/",
   },
 
   defcon33: {
@@ -296,7 +296,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
       "villages",
     ],
     schedulePath: "/defcon33/schedule/",
-    externalTrackerUrl: "/apps",
+    externalTrackerUrl: "/apps/",
   },
 } as const;
 

@@ -239,3 +239,28 @@ export function getSiteMenu(conference: ConferenceManifest): SiteMenuItem[] {
   const items = conference.siteMenu.map((key) => SITE_MENU[key](conference));
   return items.toSorted((a, b) => a.sort_order - b.sort_order);
 }
+
+const MENU_SUMMARY_LABELS: ReadonlyArray<readonly [SiteMenuKey, string]> = [
+  ["schedule", "the schedule"],
+  ["announcements", "announcements"],
+  ["people", "people"],
+  ["maps", "maps"],
+  ["content", "content"],
+  ["readme", "reference docs"],
+  ["search", "search"],
+];
+
+function formatList(items: string[]) {
+  if (items.length < 2) return items[0] ?? "conference resources";
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+
+  return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
+}
+
+export function getConferenceMenuDescription(conference: ConferenceManifest) {
+  const labels = MENU_SUMMARY_LABELS.filter(([key]) => conference.siteMenu.includes(key))
+    .slice(0, 4)
+    .map(([, label]) => label);
+
+  return `Explore ${formatList(labels)} for ${conference.name}.`;
+}

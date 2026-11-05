@@ -154,6 +154,26 @@ function assertScheduleBrowse(conference, value, failures) {
   }
 }
 
+function assertConferenceMetadata(conference, value, failures) {
+  const expectedFields = {
+    code: conference.code,
+    timezone: conference.timezone,
+    begin_tsz: conference.begin,
+    kickoff_tsz: conference.kickoff,
+    end_tsz: conference.end,
+  };
+
+  for (const [field, expected] of Object.entries(expectedFields)) {
+    if (value?.[field] !== expected) {
+      fail(
+        `Conference metadata mismatch for ${conference.slug}.${field}: ` +
+          `expected ${JSON.stringify(expected)}, received ${JSON.stringify(value?.[field])}`,
+        failures,
+      );
+    }
+  }
+}
+
 const failures = [];
 
 for (const file of walkFiles(publicDir)) {
@@ -204,12 +224,14 @@ for (const conference of Object.values(CONFERENCES)) {
     fail(`Manifest contains non-cache metadata: ${conference.slug}`, failures);
   }
 
+  const conferenceMetadata = readJson(path.join(root, "conference.json"), failures);
   const contentCards = readJson(path.join(root, "views", "contentCards.json"), failures);
   const peopleCards = readJson(path.join(root, "views", "peopleCards.json"), failures);
   const organizationsBrowse = readJson(path.join(root, ORGANIZATIONS_BROWSE_PATH), failures);
   const documentsList = readJson(path.join(root, "views", "documentsList.json"), failures);
   const scheduleBrowse = readJson(path.join(root, "views", "scheduleBrowse.json"), failures);
 
+  assertConferenceMetadata(conference, conferenceMetadata, failures);
   assertScheduleBrowse(conference, scheduleBrowse, failures);
   assertDetailRecords(
     conference,

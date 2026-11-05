@@ -18,6 +18,10 @@ const PUBLIC_CONFERENCE_ALIASES = [
     slug: "dc34",
     canonicalSlug: "defcon34",
   },
+  {
+    slug: "dc35",
+    canonicalSlug: "defcon35",
+  },
 ];
 
 const organizationBackedSiteMenuKeys = new Set([

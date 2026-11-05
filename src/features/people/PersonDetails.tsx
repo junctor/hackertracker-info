@@ -1,6 +1,6 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import Image from "@/components/Image";
 import Markdown from "@/components/markdown/Markdown";
@@ -122,10 +122,6 @@ export default function PersonDetails({ person, sessions, conference }: Props) {
         .filter((link): link is PersonLinkView => Boolean(link.url)),
     [person.links],
   );
-
-  useEffect(() => {
-    setHasAvatarError(false);
-  }, [personAvatarUrl]);
 
   return (
     <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">

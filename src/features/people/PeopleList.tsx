@@ -205,11 +205,14 @@ export default function PeopleList({ people, conference }: Props) {
   const resultCountLabel = `${filtered.length} ${filtered.length === 1 ? "person" : "people"}`;
   const groupedPeople = useMemo(() => groupPeopleByInitial(filtered), [filtered]);
 
-  const handleAvatarError = useCallback((personId: number) => {
-    setBrokenAvatarIds((current) =>
-      current[personId] ? current : { ...current, [personId]: true },
-    );
-  }, []);
+  const handleAvatarError = useCallback(
+    (personId: number) => {
+      setBrokenAvatarIds((current) =>
+        current[personId] ? current : { ...current, [personId]: true },
+      );
+    },
+    [setBrokenAvatarIds],
+  );
 
   useEffect(() => {
     if (previousQueryRef.current === query) return;
@@ -219,7 +222,7 @@ export default function PeopleList({ people, conference }: Props) {
     if (window.scrollY > (resultsStartRef.current?.offsetTop ?? 0)) {
       resultsStartRef.current?.scrollIntoView({ block: "start", inline: "nearest" });
     }
-  }, [query]);
+  }, [previousQueryRef, query, resultsStartRef]);
 
   return (
     <section className="ui-container ui-section">

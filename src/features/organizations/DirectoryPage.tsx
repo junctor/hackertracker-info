@@ -28,6 +28,14 @@ type Props = {
 
 type OrganizationDirectoryPageProps = Pick<Props, "conf" | "activePageId">;
 
+export function getOrganizationsByTag(
+  organizationsBrowse: OrganizationsBrowseView,
+  tagLabel: string,
+) {
+  const tagId = organizationsBrowse.tagIdsByLabel.byLabel[tagLabel];
+  return tagId ? (organizationsBrowse.byTag[tagId] ?? []) : [];
+}
+
 export function createOrganizationDirectoryRoute(directoryPageId: PageId) {
   const directoryConfig = getOrganizationDirectoryConfig(directoryPageId)!;
 
@@ -197,12 +205,7 @@ export default function DirectoryPage({
       );
     }
 
-    const tagId = organizationsBrowse.tagIdsByLabel.byLabel[tagLabel];
-    if (!tagId) {
-      return <ErrorScreen msg={`No '${tagLabel}' tag found for this conference.`} />;
-    }
-
-    const matchingOrganizations = organizationsBrowse.byTag[tagId] ?? [];
+    const matchingOrganizations = getOrganizationsByTag(organizationsBrowse, tagLabel);
     pageContent = (
       <ConferenceLayout conference={conf} activePageId={activePageId}>
         <OrganizationsList

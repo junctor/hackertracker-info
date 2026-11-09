@@ -39,9 +39,7 @@ class AppErrorBoundaryInner extends Component<Props, State> {
 }
 
 export function getAppErrorBoundaryKey(pathname: string, search: string) {
-  void search;
-
-  return pathname;
+  return `${pathname}${search}`;
 }
 
 export default function AppErrorBoundary({ children }: Props) {

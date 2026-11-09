@@ -7,7 +7,7 @@
     "dev": "vp dev",
     "generate:public-indexes": "node scripts/generate-public-indexes.mjs",
     "verify:runtime-json": "node scripts/verify-runtime-json-links.mjs",
-    "build": "tsc -b && vp build",
+    "build": "node scripts/generate-public-indexes.mjs && tsc -b && vp build",
     "check": "vp check",
     "lint": "vp lint",
     "fmt": "vp fmt",
@@ -31,7 +31,11 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "typescript": "^7.0.2",
-    "vite-plus": "latest"
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.5.0",
+    "vite-plus": "1.5.0"
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.5.0"
   },
   "packageManager": "npm@11.13.0"
 }

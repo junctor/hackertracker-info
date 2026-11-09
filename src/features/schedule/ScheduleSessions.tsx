@@ -178,6 +178,11 @@ export default function ScheduleSessions({
     frameId: number | null;
     timeoutId: number | null;
   }>({ frameId: null, timeoutId: null });
+  const jumpTimersRef = useRef<{
+    frameId: number | null;
+    scrollTimeoutId: number | null;
+    settleTimeoutId: number | null;
+  }>({ frameId: null, scrollTimeoutId: null, settleTimeoutId: null });
 
   const resolvedDay = useMemo(() => {
     if (selectedDay && days.some(({ day }) => day === selectedDay)) {
@@ -326,6 +331,7 @@ export default function ScheduleSessions({
     if (!scrollEl) return;
 
     updateTabScrollState();
+    if (dayKeys.length === 0) return;
 
     const handleScrollStateChange = () => queueTabScrollStateUpdate();
     let resizeObserver: ResizeObserver | null = null;
@@ -351,7 +357,7 @@ export default function ScheduleSessions({
   }, [dayKeys, queueTabScrollStateUpdate, updateTabScrollState]);
 
   useEffect(() => {
-    if (!resolvedDay) {
+    if (!resolvedDay || dayKeys.length === 0) {
       updateTabScrollState();
       return;
     }
@@ -427,19 +433,17 @@ export default function ScheduleSessions({
 
     handledJumpRequestRef.current = jumpRequest.requestId;
 
-    let frameId = 0;
-    let scrollTimeout: number | null = null;
-    let settleTimeout: number | null = null;
+    const timers = jumpTimersRef.current;
 
-    frameId = window.requestAnimationFrame(() => {
-      scrollTimeout = window.setTimeout(() => {
+    timers.frameId = window.requestAnimationFrame(() => {
+      timers.scrollTimeoutId = window.setTimeout(() => {
         virtuosoRef.current?.scrollToIndex({
           index: targetIndex,
           align: "start",
           behavior: "smooth",
         });
 
-        settleTimeout = window.setTimeout(() => {
+        timers.settleTimeoutId = window.setTimeout(() => {
           const target = document.querySelector<HTMLElement>(
             `[data-schedule-session-id="${jumpRequest.sessionId}"]`,
           );
@@ -449,14 +453,19 @@ export default function ScheduleSessions({
     });
 
     return () => {
-      window.cancelAnimationFrame(frameId);
-
-      if (scrollTimeout) {
-        window.clearTimeout(scrollTimeout);
+      if (timers.frameId !== null) {
+        window.cancelAnimationFrame(timers.frameId);
+        timers.frameId = null;
       }
 
-      if (settleTimeout) {
-        window.clearTimeout(settleTimeout);
+      if (timers.scrollTimeoutId !== null) {
+        window.clearTimeout(timers.scrollTimeoutId);
+        timers.scrollTimeoutId = null;
+      }
+
+      if (timers.settleTimeoutId !== null) {
+        window.clearTimeout(timers.settleTimeoutId);
+        timers.settleTimeoutId = null;
       }
     };
   }, [activeDay, jumpRequest]);

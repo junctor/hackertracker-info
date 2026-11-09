@@ -1,5 +1,5 @@
 import { ArrowTopRightOnSquareIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
 import Image from "@/components/Image";
@@ -41,10 +41,6 @@ export default function OrganizationDetails({ org, conference }: Props) {
   const hasLinks = org.links.length > 0;
   const logoUrl = getSafeImageHref(org.logoUrl);
   const showLogo = Boolean(logoUrl) && !hasLogoError;
-
-  useEffect(() => {
-    setHasLogoError(false);
-  }, [logoUrl]);
 
   return (
     <article className="ui-container ui-page-content ui-detail-stack ui-detail-page">

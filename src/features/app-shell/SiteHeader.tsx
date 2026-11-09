@@ -19,8 +19,13 @@ const museoFont = {
 
 const focusRingClass = "ui-focus-ring";
 
-export default function SiteHeader({ conference, activePageId }: Props) {
+export default function SiteHeader(props: Props) {
   const location = useLocation();
+
+  return <SiteHeaderContent key={`${location.pathname}?${location.search}`} {...props} />;
+}
+
+function SiteHeaderContent({ conference, activePageId }: Props) {
   const menuItems = useSiteMenu(conference);
   const menuId = useId();
   const menuDetailsRef = useRef<HTMLDetailsElement | null>(null);
@@ -40,10 +45,6 @@ export default function SiteHeader({ conference, activePageId }: Props) {
         : activePageId === "readme"
           ? `/${conference.slug}/readme.nfo`
           : `/${conference.slug}/${activePageId}/`;
-
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [location.pathname, location.search]);
 
   useEffect(() => {
     if (!isMenuOpen) return undefined;

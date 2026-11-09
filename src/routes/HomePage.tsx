@@ -7,6 +7,7 @@ import { Link } from "react-router";
 import Head from "@/components/Head";
 import Image from "@/components/Image";
 import Countdown from "@/features/home/Countdown";
+import { getCountdownRefreshDelay, hasActiveCountdown } from "@/features/home/countdownVisibility";
 import { aiMetadata, conferenceDataFeeds, SITE_DESCRIPTION } from "@/lib/aiMetadata";
 import { CONFERENCES, type ConferenceManifest } from "@/lib/conferences";
 import { conferenceMenuPath } from "@/lib/routes";
@@ -41,23 +42,6 @@ const HOME_CONFERENCE_CARDS: ReadonlyArray<ConferenceCardConfig> = Object.values
 const TITLE_CYCLE = ["DEF CON", "D3F CON", "DEF C0N", "D3F C0N", "D3F_C0N", "STAHP IT"] as const;
 const TITLE_SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-/\\[]{}()<>|█▓▒░";
 const TITLE_INTERACTION_COOLDOWN_MS = 200;
-const MAX_COUNTDOWN_REFRESH_DELAY_MS = 2_147_483_647;
-
-function hasActiveCountdown(kickoff: string, nowMs = Date.now()) {
-  const kickoffMs = Date.parse(kickoff);
-  return Number.isFinite(kickoffMs) && kickoffMs > nowMs;
-}
-
-function getCountdownRefreshDelay(kickoff: string) {
-  const kickoffMs = Date.parse(kickoff);
-  if (!Number.isFinite(kickoffMs)) return null;
-
-  const remainingMs = kickoffMs - Date.now();
-  if (remainingMs <= 0) return 0;
-
-  return Math.min(remainingMs + 1000, MAX_COUNTDOWN_REFRESH_DELAY_MS);
-}
-
 function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
 }
@@ -66,16 +50,24 @@ function useHasActiveCountdown(kickoff: string) {
   const [isActive, setIsActive] = useState(() => hasActiveCountdown(kickoff));
 
   useEffect(() => {
-    setIsActive(hasActiveCountdown(kickoff));
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-    const refreshDelay = getCountdownRefreshDelay(kickoff);
-    if (refreshDelay === null || refreshDelay <= 0) return;
+    const scheduleRefresh = () => {
+      const refreshDelay = getCountdownRefreshDelay(kickoff);
+      if (refreshDelay === null || refreshDelay <= 0) return;
 
-    const timeoutId = setTimeout(() => {
-      setIsActive(hasActiveCountdown(kickoff));
-    }, refreshDelay);
+      timeoutId = setTimeout(() => {
+        const nextIsActive = hasActiveCountdown(kickoff);
+        setIsActive(nextIsActive);
+        if (nextIsActive) scheduleRefresh();
+      }, refreshDelay);
+    };
 
-    return () => clearTimeout(timeoutId);
+    scheduleRefresh();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [kickoff]);
 
   return isActive;

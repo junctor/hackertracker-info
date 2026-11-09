@@ -9,6 +9,7 @@ import {
 } from "@/features/home/homeModel";
 import { ConferenceManifest } from "@/lib/conferences";
 import { useSiteMenu } from "@/lib/hooks/useSiteMenu";
+import { getConferenceMenuDescription } from "@/lib/menu";
 
 type Props = {
   conference: ConferenceManifest;
@@ -23,9 +24,7 @@ const menuCardActionClassName = "ui-home-menu-card-action";
 export default function Menu({ conference }: Props) {
   const home = useHomeModel(conference);
   const navMenu = useSiteMenu(conference);
-  const description =
-    conference.tagline ??
-    "Find the conference schedule, announcements, people, maps, and key resources.";
+  const description = conference.tagline ?? getConferenceMenuDescription(conference);
 
   return (
     <section

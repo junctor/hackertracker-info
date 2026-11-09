@@ -1,6 +1,5 @@
-export function getCountdown(kickoffDateMs: number) {
-  const now = Date.now();
-  const diff = kickoffDateMs - now;
+export function getCountdown(kickoffDateMs: number, nowMs = Date.now()) {
+  const diff = kickoffDateMs - nowMs;
   const d = diff / (24 * 60 * 60 * 1e3);
   const h = (d % 1) * 24;
   const m = (h % 1) * 60;

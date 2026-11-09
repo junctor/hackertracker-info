@@ -4,13 +4,15 @@ type HeadProps = {
   children: React.ReactNode;
 };
 
-function setAttributes(element: HTMLElement, props: Record<string, unknown>) {
-  for (const [key, value] of Object.entries(props)) {
-    if (key === "children" || value == null || typeof value === "boolean") continue;
-    const attr = key === "httpEquiv" ? "http-equiv" : key;
-    element.setAttribute(attr, String(value));
-  }
-}
+type HeadTag = {
+  type: "link" | "meta";
+  attributes: Record<string, string>;
+};
+
+type HeadState = {
+  title: string | null;
+  tags: HeadTag[];
+};
 
 function getTextContent(node: React.ReactNode): string {
   if (node == null || typeof node === "boolean") return "";
@@ -26,26 +28,48 @@ function getTextContent(node: React.ReactNode): string {
   return "";
 }
 
+function getHeadState(children: React.ReactNode): HeadState {
+  const state: HeadState = { title: null, tags: [] };
+
+  React.Children.forEach(children, (child) => {
+    if (!React.isValidElement<Record<string, unknown>>(child)) return;
+
+    if (child.type === "title") {
+      state.title = getTextContent(child.props.children as React.ReactNode);
+      return;
+    }
+
+    if (child.type !== "meta" && child.type !== "link") return;
+
+    const attributes: Record<string, string> = {};
+    for (const [key, value] of Object.entries(child.props)) {
+      if (key === "children" || value == null || typeof value === "boolean") continue;
+      attributes[key === "httpEquiv" ? "http-equiv" : key] = String(value);
+    }
+    state.tags.push({ type: child.type, attributes });
+  });
+
+  return state;
+}
+
 export default function Head({ children }: HeadProps) {
+  const serializedHead = JSON.stringify(getHeadState(children));
+
   useEffect(() => {
+    const state = JSON.parse(serializedHead) as HeadState;
     document.head.querySelectorAll("[data-router-head]").forEach((node) => node.remove());
 
-    React.Children.forEach(children, (child) => {
-      if (!React.isValidElement<Record<string, unknown>>(child)) return;
+    if (state.title !== null) document.title = state.title;
 
-      if (child.type === "title") {
-        document.title = getTextContent(child.props.children as React.ReactNode);
-        return;
-      }
-
-      if (child.type !== "meta" && child.type !== "link") return;
-
-      const element = document.createElement(child.type);
+    for (const tag of state.tags) {
+      const element = document.createElement(tag.type);
       element.dataset.routerHead = "true";
-      setAttributes(element, child.props);
+      for (const [key, value] of Object.entries(tag.attributes)) {
+        element.setAttribute(key, value);
+      }
       document.head.append(element);
-    });
-  }, [children]);
+    }
+  }, [serializedHead]);
 
   return null;
 }

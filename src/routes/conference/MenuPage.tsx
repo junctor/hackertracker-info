@@ -5,6 +5,7 @@ import Head from "@/components/Head";
 import ConferenceLayout from "@/features/app-shell/ConferenceLayout";
 import Menu from "@/features/home/Menu";
 import { aiMetadata, conferenceDataFeeds, conferencePath } from "@/lib/aiMetadata";
+import { getConferenceMenuDescription } from "@/lib/menu";
 
 type MenuPageProps = {
   conf: ConferenceManifest;
@@ -13,7 +14,7 @@ type MenuPageProps = {
 
 export default function MenuPage({ conf, activePageId }: MenuPageProps) {
   const pageTitle = `${conf.name} | info.defcon.org`;
-  const pageDescription = `${conf.name} schedule, announcements, maps, people, and conference resources.`;
+  const pageDescription = getConferenceMenuDescription(conf);
 
   return (
     <>

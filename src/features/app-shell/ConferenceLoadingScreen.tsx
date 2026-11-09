@@ -89,7 +89,7 @@ function DefaultLoadingContent({ label }: LoadingContentProps) {
       aria-busy="true"
       className="ui-container ui-page-content ui-route-loading"
     >
-      <LoadingStatus label={label} />
+      <LoadingStatus key={label} label={label} />
 
       <div aria-hidden="true" className="ui-route-loading-header">
         <span className="ui-skeleton-line ui-skeleton-line-kicker" />
@@ -116,7 +116,7 @@ function ScheduleLoadingContent({ label }: LoadingContentProps) {
       className="ui-schedule-shell ui-schedule-loading-shell"
     >
       <div className="ui-container ui-schedule-loading-status">
-        <LoadingStatus label={label} />
+        <LoadingStatus key={label} label={label} />
       </div>
 
       <div className="ui-container ui-schedule-tools">

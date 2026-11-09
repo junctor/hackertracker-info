@@ -113,19 +113,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     end: "2027-03-06T15:59:00Z",
 
     dataRoot: "/ht/dcsg2",
-    siteMenu: [
-      "announcements",
-      "communities",
-      "content",
-      "contests",
-      "maps",
-      "people",
-      "readme",
-      "schedule",
-      "search",
-      "villages",
-    ],
-    schedulePath: "/dcsg2/schedule/",
+    siteMenu: ["announcements", "readme"],
     externalTrackerUrl: "/apps/",
   },
 
@@ -146,22 +134,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     end: "2027-08-09T06:59:00Z",
 
     dataRoot: "/ht/defcon35",
-    siteMenu: [
-      "announcements",
-      "communities",
-      "content",
-      "contests",
-      "exhibitors",
-      "locations",
-      "maps",
-      "people",
-      "readme",
-      "schedule",
-      "search",
-      "vendors",
-      "villages",
-    ],
-    schedulePath: "/defcon35/schedule/",
+    siteMenu: ["announcements", "readme"],
     externalTrackerUrl: "/apps/",
   },
 
@@ -251,17 +224,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     end: "2025-11-06T20:59:59Z",
 
     dataRoot: "/ht/defconbahrain2025",
-    siteMenu: [
-      "announcements",
-      "communities",
-      "content",
-      "contests",
-      "people",
-      "readme",
-      "schedule",
-      "search",
-      "villages",
-    ],
+    siteMenu: ["announcements", "content", "people", "readme", "schedule", "search", "villages"],
     schedulePath: "/defconbahrain2025/schedule/",
     externalTrackerUrl: "/apps/",
   },
@@ -284,7 +247,6 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
 
     dataRoot: "/ht/defcon33",
     siteMenu: [
-      "announcements",
       "communities",
       "content",
       "contests",

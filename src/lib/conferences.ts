@@ -138,7 +138,7 @@ export const CONFERENCES: Record<ConferenceSlug, ConferenceManifest> = {
     dateLabel: "August 5–8, 2027",
     tagline: "Welcome to DEF CON - the largest hacker conference in the world.",
     timezone: "America/Los_Angeles",
-    logoFile: "logos/conferences/dc-34-logo.svg",
+    logoFile: "logos/conferences/conference-placeholder.png",
     showOnHome: true,
 
     kickoff: "2027-08-06T17:00:00Z",

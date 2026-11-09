@@ -6,6 +6,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router";
 
+import Head from "@/components/Head";
 import { getConference } from "@/lib/conferences";
 import { conferenceMenuPath } from "@/lib/routes";
 
@@ -46,66 +47,72 @@ export default function ErrorScreen({
   const showDefaultHomeIcon = !primaryActionHref || resolvedPrimaryHref === homeHref;
 
   return (
-    <main id="main-content" className="ui-page-shell ui-detail-card">
-      <div aria-hidden="true" className="ui-screen-glow-error" />
+    <>
+      <Head>
+        <title>{title} | info.defcon.org</title>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
+      <main id="main-content" className="ui-page-shell ui-detail-card">
+        <div aria-hidden="true" className="ui-screen-glow-error" />
 
-      <section className="ui-page-main ui-screen-main">
-        <div className="ui-card ui-error-card">
-          <div aria-hidden="true" className="ui-screen-card-rule-critical" />
+        <section className="ui-page-main ui-screen-main">
+          <div className="ui-card ui-error-card">
+            <div aria-hidden="true" className="ui-screen-card-rule-critical" />
 
-          <div className="ui-inset-highlight ui-error-icon">
-            <ExclamationTriangleIcon className="ui-icon-lg" aria-hidden="true" />
-          </div>
-
-          <p className="ui-kicker ui-kicker-critical ui-screen-kicker">{kicker}</p>
-          <h1 className="ui-error-title">{title}</h1>
-          <p role={hasMessage ? undefined : "alert"} className="ui-error-copy">
-            {copy}
-          </p>
-
-          {hasMessage ? (
-            <div className="ui-inset-highlight-soft ui-error-details">
-              <p className="ui-error-details-label">Error details</p>
-              <pre role="alert" className="ui-error-message">
-                {msg}
-              </pre>
+            <div className="ui-inset-highlight ui-error-icon">
+              <ExclamationTriangleIcon className="ui-icon-lg" aria-hidden="true" />
             </div>
-          ) : null}
 
-          <div className="ui-error-actions">
-            {retryActionLabel ? (
-              <button
-                type="button"
-                className="ui-btn-base ui-btn-primary ui-focus-ring ui-error-retry-button"
-                onClick={reloadPage}
-              >
-                <ArrowPathIcon className="ui-icon-sm" aria-hidden="true" />
-                <span>{retryActionLabel}</span>
-              </button>
+            <p className="ui-kicker ui-kicker-critical ui-screen-kicker">{kicker}</p>
+            <h1 className="ui-error-title">{title}</h1>
+            <p role={hasMessage ? undefined : "alert"} className="ui-error-copy">
+              {copy}
+            </p>
+
+            {hasMessage ? (
+              <div className="ui-inset-highlight-soft ui-error-details">
+                <p className="ui-error-details-label">Error details</p>
+                <pre role="alert" className="ui-error-message">
+                  {msg}
+                </pre>
+              </div>
             ) : null}
-            <Link
-              to={resolvedPrimaryHref}
-              className="ui-btn-base ui-btn-secondary ui-focus-ring ui-error-home-link"
-            >
-              {showDefaultHomeIcon ? (
-                <HomeIcon className="ui-icon-sm" aria-hidden="true" />
-              ) : (
-                <ArrowLeftIcon className="ui-icon-sm" aria-hidden="true" />
-              )}
-              <span>{resolvedPrimaryLabel}</span>
-            </Link>
-            {secondaryActionHref && secondaryActionLabel ? (
+
+            <div className="ui-error-actions">
+              {retryActionLabel ? (
+                <button
+                  type="button"
+                  className="ui-btn-base ui-btn-primary ui-focus-ring ui-error-retry-button"
+                  onClick={reloadPage}
+                >
+                  <ArrowPathIcon className="ui-icon-sm" aria-hidden="true" />
+                  <span>{retryActionLabel}</span>
+                </button>
+              ) : null}
               <Link
-                to={secondaryActionHref}
-                className="ui-btn-base ui-btn-secondary ui-focus-ring ui-error-secondary-link"
+                to={resolvedPrimaryHref}
+                className="ui-btn-base ui-btn-secondary ui-focus-ring ui-error-home-link"
               >
-                <HomeIcon className="ui-icon-sm" aria-hidden="true" />
-                <span>{secondaryActionLabel}</span>
+                {showDefaultHomeIcon ? (
+                  <HomeIcon className="ui-icon-sm" aria-hidden="true" />
+                ) : (
+                  <ArrowLeftIcon className="ui-icon-sm" aria-hidden="true" />
+                )}
+                <span>{resolvedPrimaryLabel}</span>
               </Link>
-            ) : null}
+              {secondaryActionHref && secondaryActionLabel ? (
+                <Link
+                  to={secondaryActionHref}
+                  className="ui-btn-base ui-btn-secondary ui-focus-ring ui-error-secondary-link"
+                >
+                  <HomeIcon className="ui-icon-sm" aria-hidden="true" />
+                  <span>{secondaryActionLabel}</span>
+                </Link>
+              ) : null}
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 }
